@@ -2,6 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean id="userService" class="org.btkj.user.service.UserServiceImpl" />
+	
+	<bean id="courierService" class="org.btkj.courier.service.CourierServiceImpl">
+		<property name="redisService" ref="redisService" />
+	</bean>
+	
+	<bean id="config" class="org.btkj.courier.Config">
+		<property name="env" value="${env}" />
+		<property name="captchaLen" value="${captcha.len}" />
+		<property name="captchaMaximum" value="${captcha.maximum}" />
+		<property name="captchaLifeTime" value="${captcha.life.time}" />
+		<property name="captchaCountLifeTime" value="${captcha.count.life.time}" />
+	</bean>
 </beans>

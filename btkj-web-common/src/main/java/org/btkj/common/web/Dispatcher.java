@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.btkj.common.web.session.HttpSession;
 import org.rapid.util.common.SerializeUtil;
 import org.rapid.util.common.consts.Const;
-import org.rapid.util.common.consts.code.ICode.CommonCode;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.reflect.ClassUtil;
@@ -88,7 +88,7 @@ public class Dispatcher extends HttpServlet {
 		try {
 			IAction action = actions.get(session.getParam(Params.ACTION));
 			if (null == action) {
-				session.write(Result.jsonError(Code.ACTION_NOT_EXIST));
+				session.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
 				return;
 			}
 			
@@ -98,10 +98,10 @@ public class Dispatcher extends HttpServlet {
 			Const<?> constant = e.constant();
 			session.write(Result.jsonResult(constant.id(), 
 							MessageFormat.format(
-									e.isNil() ? CommonCode.PARAM_MISS.value() : CommonCode.PARAM_ERROR.value(), constant.key())));
+									e.isNil() ? Code.PARAM_MISS.value() : Code.PARAM_ERROR.value(), constant.key())));
 		} catch (Exception e) {
 			logger.error("Server exception!", e);
-			session.write(Result.jsonError(CommonCode.SYSTEM_ERROR));
+			session.write(Result.jsonResult(Code.SYSTEM_ERROR));
 		}
 	}
 	

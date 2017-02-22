@@ -13,7 +13,7 @@
 		<File>${logback.path}/root.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/%d{yyyy-MM-dd}/root-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+			<fileNamePattern>${logback.path}/%d{yyyy-MM-dd}/root-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
 			<!-- 单个日志文件最多 100MB, 60天的日志周期，最大不能超过20GB -->
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>60</maxHistory>
@@ -21,18 +21,16 @@
 		</rollingPolicy>
 		<encoder>
 			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
-				%msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
 			</pattern>
 		</encoder>
 	</appender>
 
-	<appender name="btkj"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>${logback.path}/user.log</File>
+	<appender name="btkj" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logback.path}/biz.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/%d{yyyy-MM-dd}/biz-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+			<fileNamePattern>${logback.path}/%d{yyyy-MM-dd}/biz-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
 			<!-- 单个日志文件最多 100MB, 60天的日志周期，最大不能超过20GB -->
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>60</maxHistory>
@@ -40,15 +38,22 @@
 		</rollingPolicy>
 		<encoder>
 			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
-				%msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
 			</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="org.btkj" additivity="${logback.btkj.additivity}">
+	<logger name="org.btkj" additivity="false">
 		<level value="${logback.btkj.level}" />
-		<appender-ref ref="btkj" />
+		<if condition='"${logback.console.open}".equals("true")'>
+			<then>
+				<appender-ref ref="console" />
+				<appender-ref ref="btkj" />
+			</then>
+			<else>
+				<appender-ref ref="btkj" />
+			</else>
+		</if>
 	</logger>
 
 	<root level="${logback.root.level}">

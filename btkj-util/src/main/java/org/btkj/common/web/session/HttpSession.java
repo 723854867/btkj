@@ -45,12 +45,12 @@ public class HttpSession implements ISession {
 	 * @return
 	 * @throws IllegalConstException
 	 */
-	public <T> T getParam(Const<T> constant) throws ConstConvertFailureException {
+	public <T> T getParam(StrConstConverter<T> constant) throws ConstConvertFailureException {
 		String val = request.getParameter(constant.key());
 		if (!StringUtils.hasText(val))
 			throw ConstConvertFailureException.nullConstException(constant);
 		try {
-			return constant instanceof StrConstConverter ? ((StrConstConverter<T>) constant).convert(val) : constant.value();
+			return constant.convert(val);
 		} catch (Exception e) {
 			throw new ConstConvertFailureException(constant, e);
 		}
@@ -62,7 +62,7 @@ public class HttpSession implements ISession {
 	 * @param constant
 	 * @return
 	 */
-	public <T> T getOptionalParam(Const<T> constant) {
+	public <T> T getOptionalParam(StrConstConverter<T> constant) {
 		try {
 			return getParam(constant);
 		} catch (ConstConvertFailureException e) {

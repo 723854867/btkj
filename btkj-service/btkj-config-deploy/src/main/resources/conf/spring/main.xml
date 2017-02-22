@@ -2,6 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean id="userService" class="org.btkj.user.service.UserServiceImpl" />
+	
+	<bean id="configService" class="org.btkj.config.service.ConfigServiceImpl">
+		<property name="redisService" ref="redisService" />
+	</bean>
+	
+	<bean id="config" class="org.btkj.config.Config">
+		<property name="env" value="${env}" />
+	</bean>
 </beans>
