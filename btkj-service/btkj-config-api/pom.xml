@@ -66,5 +66,7 @@
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>minlog</artifactId>
 		</dependency>
+		
+		
 	</dependencies>
 </project>

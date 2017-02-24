@@ -46,7 +46,7 @@
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
 		</dependency>
-
+		
 		<!-- dubbo service dependencies -->
 		<dependency>
 			<groupId>org.btkj</groupId>

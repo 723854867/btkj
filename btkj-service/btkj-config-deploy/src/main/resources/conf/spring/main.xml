@@ -3,6 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
+	<bean class="org.btkj.config.deploy.Btkj">
+		<property name="redisService" ref="redisService" />
+	</bean>
+	
 	<bean id="configService" class="org.btkj.config.service.ConfigServiceImpl">
 		<property name="redisService" ref="redisService" />
 	</bean>

@@ -12,5 +12,5 @@
 	
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.courier.SerializationOptimizerImpl" />
 	
-	<dubbo:service interface="org.btkj.courier.api.CourierService" ref="courierService" loadbalance="${dubbo.service.loadbalance}"/>
+	<dubbo:service interface="org.btkj.courier.api.CourierService" ref="courierService" loadbalance="${dubbo.service.loadbalance}" />
 </beans>

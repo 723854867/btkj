@@ -4,8 +4,8 @@ import org.btkj.courier.Config;
 import org.btkj.courier.pojo.model.CaptchaReceiver;
 import org.rapid.redis.Redis;
 import org.rapid.util.common.Env;
-import org.rapid.util.common.KeyUtil;
 import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.key.KeyUtil;
 import org.rapid.util.common.message.Result;
 
 public class RedisService extends RedisKeyGenerator {
