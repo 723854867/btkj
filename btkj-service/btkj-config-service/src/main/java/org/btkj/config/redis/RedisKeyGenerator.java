@@ -2,7 +2,7 @@ package org.btkj.config.redis;
 
 import java.text.MessageFormat;
 
-import org.rapid.util.common.db.Table;
+import org.btkj.config.persistence.Table;
 
 public class RedisKeyGenerator {
 
@@ -14,27 +14,27 @@ public class RedisKeyGenerator {
 	
 	private static final String TABLE_LOCK				= "string:tmp:lock:table:{0}";		// 表锁
 	
-	public static final String appDataKey() { 
+	public final static String appDataKey() { 
 		return APP_DATA;
 	}
 	
-	public static final String insuranceDataKey() {
+	public final static String insuranceDataKey() {
 		return INSURANCE_DATA;
 	}
 	
-	public static final String regionCityDataKey() {
+	public final static String regionCityDataKey() {
 		return REGION_CITY_DATA;
 	}
 	
-	public static final String regionDistrictDataKey() { 
+	public final static String regionDistrictDataKey() { 
 		return REGION_DISTRICT_DATA;
 	}
 	
-	public static final String regionProvinceDataKey() {
+	public final static String regionProvinceDataKey() {
 		return REGION_PROVINCE_DATA;
 	}
 	
-	public static final String tableLockKey(Table<?, ?> table) {
+	public final static String tableLockKey(Table table) {
 		return MessageFormat.format(TABLE_LOCK, table.key());
 	}
 }

@@ -35,14 +35,5 @@
 		<constructor-arg index="0" value="classpath:conf/lua" /> -->
 		<property name="jedisPool" ref="jedisPool" />
 	</bean>
-	
-	<bean id="redisService" class="org.btkj.config.redis.RedisService">
-		<property name="redis" ref="redis" />
-		<property name="appMapper" ref="appMapper" />
-		<property name="insuranceMapper" ref="insuranceMapper" />
-		<property name="regionCityMapper" ref="regionCityMapper" />
-		<property name="regionDistrictMapper" ref="regionDistrictMapper" />
-		<property name="regionProvinceMapper" ref="regionProvinceMapper" />
-	</bean>
 </beans>
 

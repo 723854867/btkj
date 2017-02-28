@@ -1,7 +1,7 @@
 package org.btkj.config.persistence.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.config.persistence.BtkjTable;
+import org.btkj.config.persistence.Table;
 
 public class AppSQLProvider {
 
@@ -9,7 +9,7 @@ public class AppSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTable.APP.key());
+				FROM(Table.APP.key());
 			}
 		}.toString();
 	}

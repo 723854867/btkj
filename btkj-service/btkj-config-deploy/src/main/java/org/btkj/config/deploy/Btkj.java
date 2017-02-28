@@ -1,22 +1,39 @@
 package org.btkj.config.deploy;
 
-import org.btkj.config.redis.RedisService;
-import org.rapid.util.common.Application;
+import javax.annotation.Resource;
 
+import org.btkj.config.redis.service.AppRedisService;
+import org.btkj.config.redis.service.InsuranceRedisService;
+import org.btkj.config.redis.service.RegionCityRedisService;
+import org.btkj.config.redis.service.RegionDistrictRedisService;
+import org.btkj.config.redis.service.RegionProvinceRedisService;
+import org.rapid.util.common.Application;
+import org.springframework.stereotype.Service;
+
+@Service
 public class Btkj extends Application {
 	
-	private RedisService redisService;
+	@Resource
+	private AppRedisService appRedisService;
+	@Resource
+	private InsuranceRedisService insuranceRedisService;
+	@Resource
+	private RegionCityRedisService regionCityRedisService;
+	@Resource
+	private RegionDistrictRedisService regionDistrictRedisService;
+	@Resource
+	private RegionProvinceRedisService regionProvinceRedisService;
 
 	@Override
 	protected void start() {
-		redisService.preLoading();
-	}
-
-	@Override
-	protected void stop() {
+		appRedisService.load();
+		insuranceRedisService.load();
+		regionCityRedisService.load();
+		regionDistrictRedisService.load();
+		regionProvinceRedisService.load();
 	}
 	
-	public void setRedisService(RedisService redisService) {
-		this.redisService = redisService;
+	@Override
+	protected void stop() {
 	}
 }

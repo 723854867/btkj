@@ -1,7 +1,7 @@
 package org.btkj.config.persistence.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.config.persistence.BtkjTable;
+import org.btkj.config.persistence.Table;
 
 public class InsuranceSQLMapper {
 
@@ -9,7 +9,7 @@ public class InsuranceSQLMapper {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTable.INSURANCE.key());
+				FROM(Table.INSURANCE.key());
 			}
 		}.toString();
 	}

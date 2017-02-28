@@ -1,7 +1,7 @@
 package org.btkj.config.persistence.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.config.persistence.BtkjTable;
+import org.btkj.config.persistence.Table;
 
 public class RegionProvinceSQLProvider {
 	
@@ -9,7 +9,7 @@ public class RegionProvinceSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTable.REGION_PROVINCE.key());
+				FROM(Table.REGION_PROVINCE.key());
 			}
 		}.toString();
 	}
