@@ -2,12 +2,14 @@ package org.btkj.common.web.action.common;
 
 import org.btkj.common.service.ParamUtil;
 import org.btkj.common.web.Beans;
+import org.btkj.common.web.Request;
 import org.btkj.common.web.action.CommonAction;
 import org.btkj.common.web.pojo.info.LoginInfo;
-import org.btkj.common.web.session.UserSession;
+import org.btkj.pojo.model.CaptchaReceiver.Type;
+import org.btkj.web.util.Params;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.pojo.model.UserLoginModel;
-import org.btkj.pojo.model.CaptchaReceiver.Type;
+import org.rapid.data.storage.redis.DistributeSession;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -19,12 +21,12 @@ import org.rapid.util.common.message.Result;
 public class LOGIN extends CommonAction {
 
 	@Override
-	public Result<LoginInfo> execute(UserSession session) {
-		CaptchaVerifier verifier = ParamUtil.captchaVerifier(session);
+	public Result<LoginInfo> execute(Request request) {
+		CaptchaVerifier verifier = ParamUtil.captchaVerifier(request);
 		Result<String> result = Beans.courierService.captchaVerify(verifier);
 		if (result.getCode() == -1) 
 			return Result.result(Code.CAPTCHA_ERROR);
-		return _onLogin(session, verifier);
+		return _onLogin(request, verifier);
 	}
 	
 	/**
@@ -33,13 +35,17 @@ public class LOGIN extends CommonAction {
 	 * @param session
 	 * @param verifier
 	 */
-	private Result<LoginInfo> _onLogin(UserSession session, CaptchaVerifier verifier) { 
+	private Result<LoginInfo> _onLogin(Request request, CaptchaVerifier verifier) { 
 		Type type = verifier.getType();
 		switch (type) {
 		case MOBILE:
 			Result<UserLoginModel> result = Beans.userService.loginWithMobile(verifier.getAppId(), verifier.getIdentity());
-			if (result.getCode() == -2)
+			if (result.getCode() == -2) {
+				DistributeSession session = request.distributeSession(redis);
+				session.put(Params.MOBILE.key(), verifier.getIdentity());
+				session.put(Params.APP_ID.key(), String.valueOf(verifier.getAppId()));
 				return Result.result(Code.USER_NOT_EXIST, result.getDesc());
+			}
 			if (result.getCode() == -1)
 				return Result.result(Code.USER_STATUS_CHANGED);
 			return Result.result(new LoginInfo(result.attach().getToken(), result.attach().getUser()));

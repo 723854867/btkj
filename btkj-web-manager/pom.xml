@@ -16,12 +16,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.btkj</groupId>
-			<artifactId>btkj-util</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>

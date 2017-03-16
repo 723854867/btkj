@@ -50,4 +50,14 @@ public interface UserService {
 	 * @param token 登录 token
 	 */
 	void memberJoinTenantApply(InviterModel inviter, String mobile);
+	
+	/**
+	 * 招募验证
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param mobile
+	 * @return
+	 */
+	boolean recruitAuth(int appId, int tid, String mobile);
 }

@@ -3,10 +3,10 @@ package org.btkj.web.util;
 import java.math.BigInteger;
 
 import org.btkj.pojo.model.Version;
-import org.btkj.web.util.session.ISession;
+import org.btkj.web.util.request.NetworkRequest;
 import org.rapid.util.common.message.Result;
 
-public interface IAction<SESSION extends ISession> {
+public interface IAction<REQUEST extends NetworkRequest> {
 	
 	/**
 	 * 该接口的模值，用在权限判断。如果该接口属于公共接口(所有人都可以调用)则返回null
@@ -30,7 +30,7 @@ public interface IAction<SESSION extends ISession> {
 	 * @param session
 	 * @return
 	 */
-	Result<?> execute(SESSION session);
+	Result<?> execute(REQUEST session);
 	
 	/**
 	 * 该 action 的版本，默认为 1.0

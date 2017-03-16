@@ -4,14 +4,11 @@ import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.user.Config;
-import org.btkj.user.model.CreateMarker;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.persistence.dao.UserDao;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.UserLuaCmd;
 import org.rapid.data.storage.mapper.O2OMapper;
-import org.rapid.data.storage.redis.RedisOption.EXPX;
-import org.rapid.data.storage.redis.RedisOption.NXXX;
 import org.rapid.util.common.RapidSecurity;
 import org.rapid.util.common.SerializeUtil;
 import org.rapid.util.common.message.Result;
@@ -85,32 +82,6 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 		} else 
 			user = serializer.antiConvet(data, User.class);
 		return user;
-	}
-	
-	/**
-	 * 因为创建用户在验证码验证之后，因此要缓存验证结果一段时间，在这段时间内创建用户只需要记得 token，是不需要再次获取验证码的，否则要重新走登录逻辑
-	 * 
-	 * @return
-	 */
-	public String recordCreateMark(int appId, String mobile) {
-		CreateMarker marker = new CreateMarker(appId, mobile);
-		String token = RapidSecurity.encodeToken(mobile);
-		String key = RedisKeyGenerator.tokenCreateKey(token);
-		redis.setwithoptions(SerializeUtil.RedisUtil.encode(key), 
-				SerializeUtil.ProtostuffUtil.serial(marker), NXXX.NX, EXPX.PX, Config.getCaptchaTokenExpire());
-		return token;
-	}
-	
-	/**
-	 * 删除验证码校验 token，同时获取该 token 对应的信息
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public CreateMarker eraseCreateMark(String token) { 
-		String key = RedisKeyGenerator.tokenCreateKey(token);
-		byte[] data = redis.getAndDel(key);
-		return null == data ? null : SerializeUtil.ProtostuffUtil.deserial(data, CreateMarker.class);
 	}
 	
 	public Result<TokenReplaceModel> tokenReplace(int appId, int uid, String mobile) { 

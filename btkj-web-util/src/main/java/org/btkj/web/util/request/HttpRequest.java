@@ -1,10 +1,13 @@
-package org.btkj.web.util.session;
+package org.btkj.web.util.request;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.btkj.web.util.Params;
+import org.rapid.data.storage.redis.DistributeSession;
+import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Constants;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.conveter.StrConstConverter;
@@ -13,12 +16,12 @@ import org.rapid.util.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
 
 /**
- * Http Session
+ * Http 请求
  * 
  * @author ahab
  */
-public class HttpSession implements ISession {
-
+public class HttpRequest implements NetworkRequest {
+	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
@@ -28,11 +31,21 @@ public class HttpSession implements ISession {
 	 * @param request
 	 * @param response
 	 */
-	public HttpSession(HttpServletRequest request, HttpServletResponse response) {
+	public HttpRequest(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 		response.setHeader(HttpHeaders.CONTENT_TYPE, Constants.MimeType.TEXT_JSON_UTF_8);
 		response.setCharacterEncoding(Constants.UTF_8.name());
+	}
+	
+	/**
+	 * 获取分布式 session
+	 * 
+	 * @return
+	 */
+	public DistributeSession distributeSession(Redis redis) {
+		String sessionId = getOptionalHeader(Params.SESSION_ID);
+		return StringUtils.hasText(sessionId) ? new DistributeSession(sessionId, redis) : new DistributeSession(redis);
 	}
 	
 	/**
@@ -70,12 +83,12 @@ public class HttpSession implements ISession {
 		}
 	}
 	
-	public HttpSession addHeader(String name, String value) {
+	public HttpRequest addHeader(String name, String value) {
 		response.addHeader(name, value);
 		return this;
 	}
 
-	public HttpSession setHeader(String name, String value) {
+	public HttpRequest setHeader(String name, String value) {
 		response.setHeader(name, value);
 		return this;
 	}

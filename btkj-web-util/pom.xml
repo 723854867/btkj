@@ -17,8 +17,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapid</groupId>
-			<artifactId>rapid-util</artifactId>
-			<version>1.0</version>
+			<artifactId>rapid-data</artifactId>
+			<version>${rapid.version}</version>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>

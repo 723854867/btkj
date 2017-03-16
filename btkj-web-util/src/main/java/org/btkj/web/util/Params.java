@@ -18,6 +18,11 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
  *
  */
 public interface Params {
+	
+	/**
+	 * 头部信息是可选的，因此这里不需要 id
+	 */
+	final Str2StrConstConverter SESSION_ID				= new Str2StrConstConverter("sessionId");
 
 	/**
 	 * 登陆或者注册时需要传递的参数，用来区分不同的 app、tenant

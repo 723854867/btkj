@@ -33,12 +33,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.btkj</groupId>
-			<artifactId>btkj-util</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
 		</dependency>

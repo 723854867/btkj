@@ -7,7 +7,6 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.InviterModel;
 import org.btkj.pojo.model.UserLoginModel;
 import org.btkj.user.api.UserService;
-import org.btkj.user.model.CreateMarker;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.mapper.UserMapper;
@@ -40,10 +39,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Result<UserLoginModel> loginWithMobile(int appId, String mobile) {
 		User user = userMapper.getUserByMobile(appId, mobile);
-		if (null == user) {				// 生成创建验证码校验临时 token，在该 token 失效之前，可以创建一个新的用户，否则需要重新获取验证码走登录逻辑
-			String token = userMapper.recordCreateMark(appId, mobile);
-			return Result.result(-2, token, null);
-		} else {
+		if (null == user)				// 生成创建验证码校验临时 token，在该 token 失效之前，可以创建一个新的用户，否则需要重新获取验证码走登录逻辑
+			return Result.result(-2);
+		else {
 			Result<TokenReplaceModel> result = userMapper.tokenReplace(appId, user.getUid(), mobile);
 			if (result.getCode() != 0)
 				return Result.result(-1);
@@ -70,9 +68,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void touristJoinTenantApply(InviterModel inviter, String token, String name, String identity) {
-		CreateMarker cm = userMapper.eraseCreateMark(token);
-		if (null == cm)
-			return;
 		
 	}
 	
@@ -84,6 +79,12 @@ public class UserServiceImpl implements UserService {
 		
 		
 	}
+	
+	@Override
+	public boolean recruitAuth(int appId, int tid, String mobile) {
+		return false;
+	}
+	
 //	Result<User> result = userMapper.lockUserByToken(inviter.getApp(), token);
 //	if (null == result)
 //		return;

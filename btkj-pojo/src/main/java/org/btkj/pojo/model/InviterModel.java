@@ -8,9 +8,6 @@ import org.btkj.pojo.entity.User;
 
 public class InviterModel implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -828584577019847673L;
 
 	private App app;

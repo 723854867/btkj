@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.btkj.common.web.session.UserSession;
 import org.btkj.pojo.model.Version;
 import org.btkj.web.util.ActionContainer;
 import org.btkj.web.util.BtkjCode;
@@ -66,7 +65,7 @@ public class Dispatcher extends HttpServlet {
 			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
 				continue;
 			try {
-				ActionContainer.INSTANCE.addAction((IAction<UserSession>)clazz.newInstance());
+				ActionContainer.INSTANCE.addAction((IAction<Request>)clazz.newInstance());
 			} catch (Exception e) {
 				logger.error("Action load failure, system will closed!", e);
 				System.exit(1);
@@ -85,26 +84,25 @@ public class Dispatcher extends HttpServlet {
 	}
 	
 	private void _receive(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(request.getHeader(HttpHeaders.USER_AGENT));
-		UserSession session = new UserSession(request, response);
+		Request req = new Request(request, response);
 		try {
-			Version version = session.getOptionalParam(Params.VERSION);
-			IAction<UserSession> action = ActionContainer.INSTANCE.getAction(session.getParam(Params.ACTION), version);
+			Version version = req.getOptionalParam(Params.VERSION);
+			IAction<Request> action = ActionContainer.INSTANCE.getAction(req.getParam(Params.ACTION), version);
 			if (null == action) {
-				session.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
+				req.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
 				return;
 			}
 			
-			Result<?> result = action.execute(session);
-			session.write(SerializeUtil.JsonUtil.GSON.toJson(result));
+			Result<?> result = action.execute(req);
+			req.write(SerializeUtil.JsonUtil.GSON.toJson(result));
 		} catch (ConstConvertFailureException e) {
 			Const<?> constant = e.constant();
-			session.write(Result.jsonResult(constant.id(), 
+			req.write(Result.jsonResult(constant.id(), 
 							MessageFormat.format(
 									e.isNil() ? Code.PARAM_MISS.value() : Code.PARAM_ERROR.value(), constant.key())));
 		} catch (Exception e) {
 			logger.error("Server exception!", e);
-			session.write(Result.jsonResult(Code.SYSTEM_ERROR));
+			req.write(Result.jsonResult(Code.SYSTEM_ERROR));
 		}
 	}
 	

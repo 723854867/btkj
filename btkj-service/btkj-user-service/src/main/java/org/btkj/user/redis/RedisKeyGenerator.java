@@ -14,7 +14,6 @@ public class RedisKeyGenerator {
 	private static final String USER_TOKEN				= "hash:app:{0}:user:token";		// 每个 app 中用户 uid 和 token 的映射关系
 	
 	private static final String USER_RELATION			= "hash:user:relation:{0}";			// 用户关系实体数据，有时间限制，其中 {0} 是 tid_uid 的格式
-	private static final String TOKEN_CREATE			= "hash:token:{0}:create";			// 创建用户时需要用到的 token，有时间限制
 	private static final String TENANT_JOIN_APPLY		= "hash:tja:{0}";					// 租户加入申请数据，有时间限制
 	
 	// ************************************** string **************************************
@@ -51,10 +50,6 @@ public class RedisKeyGenerator {
 	
 	public static final String userRelationKey(String key) { 
 		return MessageFormat.format(USER_RELATION, key);
-	}
-	
-	public static final String tokenCreateKey(String token) {
-		return MessageFormat.format(TOKEN_CREATE, token);
 	}
 	
 	public static final String tenantJoinApplyKey(String key) { 
