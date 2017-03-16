@@ -13,5 +13,6 @@
 		<property name="captchaMaximum" value="${captcha.maximum}" />
 		<property name="captchaLifeTime" value="${captcha.life.time}" />
 		<property name="captchaCountLifeTime" value="${captcha.count.life.time}" />
+		<property name="captchaTokenLifeTime" value="${captcha.token.life.time}" />
 	</bean>
 </beans>

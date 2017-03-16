@@ -10,7 +10,10 @@
 	
 	<dubbo:registry address="${dubbo.registry.address}" />
 	
-	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.config.SerializationOptimizerImpl" />
+	<!-- 
+	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo"/> -->
+	
+	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
 	<dubbo:service interface="org.btkj.config.api.ConfigService" ref="configService" loadbalance="${dubbo.service.loadbalance}"/>
 </beans>

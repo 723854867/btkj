@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="${logback.scan}" scanPeriod="${logback.scan.period}"
-	debug="${logback.debug}">
+<configuration scan="${logback.scan}" scanPeriod="${logback.scan.period}" debug="${logback.debug}">
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger - %msg%n
@@ -8,8 +7,7 @@
 		</encoder>
 	</appender>
 
-	<appender name="root"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="root" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>${logback.path}/root.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- rollover daily -->
@@ -42,6 +40,18 @@
 			</pattern>
 		</encoder>
 	</appender>
+	
+	<root level="${logback.root.level}">
+		<if condition='"${logback.console.open}".equals("true")'>
+			<then>
+				<appender-ref ref="console" />
+				<appender-ref ref="root" />
+			</then>
+			<else>
+				<appender-ref ref="root" />
+			</else>
+		</if>
+	</root>
 
 	<logger name="org.btkj" additivity="false">
 		<level value="${logback.btkj.level}" />
@@ -56,18 +66,6 @@
 		</if>
 	</logger>
 
-	<root level="${logback.root.level}">
-		<if condition='"${logback.console.open}".equals("true")'>
-			<then>
-				<appender-ref ref="console" />
-				<appender-ref ref="root" />
-			</then>
-			<else>
-				<appender-ref ref="root" />
-			</else>
-		</if>
-	</root>
-	
 	<!-- kryo序列化的类必须提供无参构造函数，如果没有无惨构造函数则会默认使用 java 的序列化，因此性能较低，但是有些类比如 enum 的构造函数是 private 的因此
 		 kryo 就会显示警告信息，这里把这些警告信息全部屏蔽掉 -->
 	<logger name="com.alibaba.dubbo.common.serialize.support.kryo.CompatibleKryo" additivity="false">

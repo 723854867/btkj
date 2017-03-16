@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -12,19 +13,24 @@
 	<name>btkj-service</name>
 	<url>http://maven.apache.org</url>
 	<packaging>pom</packaging>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-pojo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 
 	<modules>
 		<module>btkj-user-api</module>
 		<module>btkj-user-service</module>
 		<module>btkj-user-deploy</module>
-    <module>btkj-config-api</module>
-    <module>btkj-config-service</module>
-    <module>btkj-config-deploy</module>
-    <module>btkj-tenant-api</module>
-    <module>btkj-tenant-service</module>
-    <module>btkj-tenant-deploy</module>
-    <module>btkj-courier-api</module>
-    <module>btkj-courier-service</module>
-    <module>btkj-courier-deploy</module>
-  </modules>
+		<module>btkj-config-api</module>
+		<module>btkj-config-service</module>
+		<module>btkj-config-deploy</module>
+		<module>btkj-courier-api</module>
+		<module>btkj-courier-service</module>
+		<module>btkj-courier-deploy</module>
+	</modules>
 </project>

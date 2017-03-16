@@ -38,7 +38,7 @@
 	</bean>
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="org.btkj.config.persistence.mapper" />
+		<property name="basePackage" value="org.btkj.config.persistence.dao" />
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

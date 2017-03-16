@@ -1,9 +1,5 @@
 package org.btkj.config.redis;
 
-import java.text.MessageFormat;
-
-import org.btkj.config.persistence.Table;
-
 public class RedisKeyGenerator {
 
 	private static final String APP_DATA				= "hash:db:app";
@@ -11,8 +7,6 @@ public class RedisKeyGenerator {
 	private static final String REGION_CITY_DATA		= "hash:db:region_city";
 	private static final String REGION_PROVINCE_DATA	= "hash:db:region_province";
 	private static final String REGION_DISTRICT_DATA	= "hash:db:region_district";
-	
-	private static final String TABLE_LOCK				= "string:tmp:lock:table:{0}";		// 表锁
 	
 	public final static String appDataKey() { 
 		return APP_DATA;
@@ -32,9 +26,5 @@ public class RedisKeyGenerator {
 	
 	public final static String regionProvinceDataKey() {
 		return REGION_PROVINCE_DATA;
-	}
-	
-	public final static String tableLockKey(Table table) {
-		return MessageFormat.format(TABLE_LOCK, table.key());
 	}
 }

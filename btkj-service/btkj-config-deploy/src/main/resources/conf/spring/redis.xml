@@ -30,7 +30,7 @@
 		<constructor-arg index="4" value="${redis.password}" />
 	</bean>
 	
-	<bean id="redis" class="org.rapid.redis.Redis">
+	<bean id="redis" class="org.rapid.data.storage.redis.Redis">
 		<!-- 
 		<constructor-arg index="0" value="classpath:conf/lua" /> -->
 		<property name="jedisPool" ref="jedisPool" />

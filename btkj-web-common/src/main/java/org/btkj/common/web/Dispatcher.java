@@ -3,16 +3,19 @@ package org.btkj.common.web;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.btkj.common.web.session.HttpSession;
+import org.btkj.common.web.session.UserSession;
+import org.btkj.pojo.model.Version;
+import org.btkj.web.util.ActionContainer;
+import org.btkj.web.util.BtkjCode;
+import org.btkj.web.util.IAction;
+import org.btkj.web.util.Params;
 import org.rapid.util.common.SerializeUtil;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.code.Code;
@@ -45,8 +48,6 @@ public class Dispatcher extends HttpServlet {
 	
 	private static final String ACTION_LOCATION					= "actionLocation";
 	
-	protected Map<String, IAction> actions = new HashMap<String, IAction>();
-	
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -56,6 +57,7 @@ public class Dispatcher extends HttpServlet {
 		_initActions();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void _initActions() {
 		String actionPackage = getServletContext().getInitParameter(ACTION_LOCATION);
 		List<Class<?>> classes = ClassUtil.scanPackage(actionPackage, false);
@@ -64,13 +66,12 @@ public class Dispatcher extends HttpServlet {
 			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
 				continue;
 			try {
-				actions.put(clazz.getSimpleName().toLowerCase(), (IAction) clazz.newInstance());
+				ActionContainer.INSTANCE.addAction((IAction<UserSession>)clazz.newInstance());
 			} catch (Exception e) {
 				logger.error("Action load failure, system will closed!", e);
 				System.exit(1);
 			} 
 		}
-		logger.info("Total {} actions loaded!", actions.size());
 	}
 	
 	@Override
@@ -84,9 +85,11 @@ public class Dispatcher extends HttpServlet {
 	}
 	
 	private void _receive(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = new HttpSession(request, response);
+		System.out.println(request.getHeader(HttpHeaders.USER_AGENT));
+		UserSession session = new UserSession(request, response);
 		try {
-			IAction action = actions.get(session.getParam(Params.ACTION));
+			Version version = session.getOptionalParam(Params.VERSION);
+			IAction<UserSession> action = ActionContainer.INSTANCE.getAction(session.getParam(Params.ACTION), version);
 			if (null == action) {
 				session.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
 				return;

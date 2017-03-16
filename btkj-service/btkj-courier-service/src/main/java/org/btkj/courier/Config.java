@@ -9,6 +9,7 @@ public class Config {
 	private static int captchaMaximum;			// 验证码获取最大次数
 	private static int captchaLifeTime;			// 验证码有效时间，该时间内不能再次获取
 	private static int captchaCountLifeTime;	// 验证码次数有效时间，超过该时间不获取验证码，则次数清0
+	private static int captchaTokenLifeTime;	// 验证码校验成功之后会生成一个 token，再该时间内操作只要带上该 token 都不需要再获取验证码
 	
 	public static Env getEnv() {
 		return env;
@@ -48,5 +49,13 @@ public class Config {
 	
 	public static void setCaptchaCountLifeTime(int captchaCountLifeTime) {
 		Config.captchaCountLifeTime = captchaCountLifeTime;
+	}
+	
+	public static int getCaptchaTokenLifeTime() {
+		return captchaTokenLifeTime;
+	}
+	
+	public static void setCaptchaTokenLifeTime(int captchaTokenLifeTime) {
+		Config.captchaTokenLifeTime = captchaTokenLifeTime;
 	}
 }

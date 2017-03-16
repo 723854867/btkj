@@ -9,5 +9,11 @@
 	
 	<dubbo:registry address="${dubbo.registry.address}"/>
 	
-	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" />
+	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
+	
+	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" /> 
+	
+	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" /> 
+	
+	<dubbo:reference id="tenantService" interface="org.btkj.user.api.TenantService" />
 </beans>

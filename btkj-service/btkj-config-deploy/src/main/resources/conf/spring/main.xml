@@ -6,8 +6,31 @@
 						http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context
         				http://www.springframework.org/schema/context/spring-context.xsd">
-	
-	<bean id="configService" class="org.btkj.config.service.ConfigServiceImpl" />
-	
+        				
 	<context:component-scan base-package="org.btkj.config" />
+	
+	<bean id="jsonEntitySerializer" class="org.rapid.data.storage.mapper.serializer.JsonEntitySerializer" />
+	
+	<bean id="protostuffEntitySerializer" class="org.rapid.data.storage.mapper.serializer.ProtostuffEntitySerializer" />
+	
+	<bean id="O2OMapper" class="org.rapid.data.storage.mapper.O2OMapper" abstract="true">
+		<property name="redis" ref="redis" />
+		<property name="serializer" ref="protostuffEntitySerializer" />
+	</bean>
+	
+	<bean id="insuranceMapper" class="org.btkj.config.redis.mapper.InsuranceMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="insuranceDao" />
+	</bean>
+	
+	<bean id="regionCityMapper" class="org.btkj.config.redis.mapper.RegionCityMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="regionCityDao" />
+	</bean>
+	
+	<bean id="regionDistrictMapper" class="org.btkj.config.redis.mapper.RegionDistrictMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="regionDistrictDao" />
+	</bean>
+	
+	<bean id="regionProvinceMapper" class="org.btkj.config.redis.mapper.RegionProvinceMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="regionProvinceDao" />
+	</bean>
 </beans>

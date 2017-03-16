@@ -20,13 +20,13 @@
 			<artifactId>btkj-config-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.rapid</groupId>
-			<artifactId>rapid-redis</artifactId>
-			<version>1.0</version>
+			<artifactId>rapid-data</artifactId>
+			<version>${rapid.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>

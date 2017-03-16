@@ -1,6 +1,7 @@
 package org.btkj.courier.api;
 
-import org.btkj.courier.pojo.model.CaptchaReceiver;
+import org.btkj.pojo.model.CaptchaReceiver;
+import org.btkj.pojo.model.CaptchaVerifier;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -16,5 +17,13 @@ public interface CourierService {
 	 * @param receiver 
 	 * @return
 	 */
-	Result<String> captchaObtan(CaptchaReceiver receiver);
+	Result<String> captchaObtain(CaptchaReceiver receiver);
+	
+	/**
+	 * 验证验证码
+	 * 
+	 * @param verifier
+	 * @return
+	 */
+	Result<String> captchaVerify(CaptchaVerifier verifier);
 }

@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="userService" class="org.btkj.user.service.UserServiceImpl" />
+	<context:component-scan base-package="org.btkj.user" />
+	
+	<bean id="config" class="org.btkj.user.Config">
+		<property name="userLockExpire" value="${user.lock.expire}" />
+		<property name="captchaTokenExpire" value="${captcha.token.expire}" />
+	</bean>
+	
+	<bean id="protostuffEntitySerializer" class="org.rapid.data.storage.mapper.serializer.ProtostuffEntitySerializer" />
+	
+	<bean id="O2MMapper" class="org.rapid.data.storage.mapper.O2MMapper" abstract="true" init-method="init">
+		<property name="redis" ref="redis" />
+	</bean>
+	
+	<bean id="O2OMapper" class="org.rapid.data.storage.mapper.O2OMapper" abstract="true" init-method="init">
+		<property name="redis" ref="redis" />
+		<property name="serializer" ref="protostuffEntitySerializer" />
+	</bean>
+	
+	<bean id="userMapper" class="org.btkj.user.redis.mapper.UserMapper" parent="O2MMapper" >
+		<property name="dao" ref="userDao" />
+	</bean>
+	
+	<bean id="appMapper" class="org.btkj.user.redis.mapper.AppMapper" parent="O2OMapper">
+		<property name="dao" ref="appDao" />
+	</bean>
+	
+	<bean id="tenantMapper" class="org.btkj.user.redis.mapper.TenantMapper" parent="O2OMapper">
+		<property name="dao" ref="tenantDao" />
+	</bean>
+	
+	<bean id="userRelationMapper" class="org.btkj.user.redis.mapper.UserRelationMapper" parent="O2MMapper">
+		<property name="dao" ref="userRelationDao" />
+	</bean>
 </beans>
