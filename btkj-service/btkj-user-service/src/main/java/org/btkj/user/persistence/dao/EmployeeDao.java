@@ -26,7 +26,4 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndAppId")
 	List<Employee> selectByUidAndAppId(@Param("uid") int uid, @Param("appId") int appId);
-	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByAppIdAndMobile")
-	Employee selectByAppIdAndMobile(@Param("appId") int appId, @Param("mobile") String mobile);
 }

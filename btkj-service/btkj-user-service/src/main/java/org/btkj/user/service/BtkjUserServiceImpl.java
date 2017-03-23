@@ -16,7 +16,7 @@ import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.BtkjUserService;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.redis.hook.ApplyHook;
-import org.btkj.user.redis.hook.EmployeeHook;
+import org.btkj.user.redis.mapper.EmployeeMapper;
 import org.btkj.user.redis.mapper.UserMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -31,7 +31,7 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 	@Resource
 	private ApplyHook applyHook;
 	@Resource
-	private EmployeeHook employeeHook;
+	private EmployeeMapper employeeMapper;
 
 	@Override
 	public Result<Serializable> loginWithMobile(String mobile) {
@@ -57,8 +57,8 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 				
 				BtkjLoginInfo loginInfo = new BtkjLoginInfo(result.attach().getToken(), user);
 				int mainTid = userMapper.btkjUserMainTenant(user.getUid());
-				List<TenantTips> tenantTips = employeeHook.tenantTipsList(user.getUid(), mainTid);
-				List<TenantTips> audittTenantTips = employeeHook.auditTenantTipsList(user.getUid());
+				List<TenantTips> tenantTips = employeeMapper.tenantTipsList(user.getUid(), mainTid);
+				List<TenantTips> audittTenantTips = employeeMapper.auditTenantTipsList(user.getUid());
 				MainTenantTips mainTenantTips = null;
 				if (0 == mainTid) {
 					if (!tenantTips.isEmpty()) 
@@ -78,14 +78,14 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 	}
 
 	@Override
-	public Result<?> apply(String token, int tid, int chief) {
+	public Result<Void> apply(String token, int tid, int chief) {
 		Result<User> result = userMapper.lockUserByToken(BtkjConsts.APP_ID_BAOTU, token);
 		if (!result.isSuccess()) 
-			return result;
+			return Result.result(result.getCode(), result.getDesc(), null);
 		User user = result.attach();
 		String lockId = result.getDesc();
 		try {
-			_doApply(user.getUid(), tid);
+			_doApply(user, tid, chief);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
@@ -96,25 +96,26 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 	 * 先创建用户再申请
 	 */
 	@Override
-	public Result<?> apply(int tid, String mobile, String name, String identity, int chief) {
+	public Result<Void> apply(int tid, String mobile, String name, String identity, int chief) {
 		User user = userMapper.insert(BeanGenerator.newUser(BtkjConsts.APP_ID_BAOTU, mobile, identity, name));
 		String lockId = userMapper.lockUser(user.getUid());
 		if (null == lockId)
 			return Result.result(Code.USER_STATUS_CHANGED);
 		try {
-			_doApply(user.getUid(), tid);
+			_doApply(user, tid, chief);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
 		return null;
 	}
 	
-	private Result<?> _doApply(int uid, int tid) {
-		ApplyInfo ai = applyHook.getApplyInfo(tid, uid);
+	private Result<Void> _doApply(User user, int tid, int chief) {
+		ApplyInfo ai = applyHook.getApplyInfo(tid, user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
-		if (employeeHook.employeeOf(uid, tid))
+		if (null != employeeMapper.get(user.getUid(), tid))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
+		applyHook.addApplyInfo(user.getUid(), tid, chief);
 		return Result.success();
 	}
 }

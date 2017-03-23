@@ -39,19 +39,25 @@ public class HttpRequest implements NetworkRequest {
 	}
 	
 	/**
-	 * 获取分布式 session
+	 * 获取一个全新的分布式 session
 	 * 
 	 * @return
 	 */
 	public DistributeSession distributeSession(Redis redis) {
-		String sessionId = getOptionalHeader(Params.SESSION_ID);
-		if (StringUtils.hasText(sessionId)) 
-			 return new DistributeSession(sessionId, redis);
-		else {
-			DistributeSession session = new DistributeSession(redis);
-			response.setHeader(Params.SESSION_ID.key(), session.sessionId());
-			return session;
-		}
+		DistributeSession session = new DistributeSession(redis);
+		response.setHeader(Params.SESSION_ID.key(), session.sessionId());
+		return session;
+	}
+	
+	/**
+	 * 获取一个已经存在的分布式 session
+	 * 
+	 * @param redis
+	 * @param sessionId
+	 * @return
+	 */
+	public DistributeSession distributeSession(Redis redis, String sessionId) {
+		 return new DistributeSession(sessionId, redis);
 	}
 	
 	/**
@@ -87,14 +93,6 @@ public class HttpRequest implements NetworkRequest {
 		} catch (ConstConvertFailureException e) {
 			return constant.value();
 		}
-	}
-	
-	public boolean containsHeader(StrConstConverter<?> constant) {
-		return response.containsHeader(constant.key());
-	}
-	
-	public boolean containsHeader(String name) {
-		return response.containsHeader(name);
 	}
 	
 	public HttpRequest addHeader(String name, String value) {

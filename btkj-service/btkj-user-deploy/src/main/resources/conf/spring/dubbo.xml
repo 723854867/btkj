@@ -19,6 +19,8 @@
 	
 	<dubbo:service interface="org.btkj.user.api.TenantService" ref="tenantService" loadbalance="${dubbo.service.loadbalance}"/>
 	
+	<dubbo:service interface="org.btkj.user.api.EmployeeService" ref="employeeService" loadbalance="${dubbo.service.loadbalance}"/>
+	
 	<dubbo:service interface="org.btkj.user.api.BtkjUserService" ref="btkjUserService" loadbalance="${dubbo.service.loadbalance}"/>
 	
 	<dubbo:service interface="org.btkj.user.api.IsolateUserService" ref="isolateUserService" loadbalance="${dubbo.service.loadbalance}"/>

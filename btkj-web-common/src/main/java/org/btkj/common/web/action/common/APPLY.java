@@ -19,8 +19,8 @@ import org.rapid.util.exception.ConstConvertFailureException;
 public class APPLY extends CommonAction {
 
 	@Override
-	protected Result<?> execute(Request request, Credential credential) {
-		Credential ucode = request.getOptionalParam(CommonParams.U_CODE);
+	protected Result<Void> execute(Request request, Credential credential) {
+		Credential ucode = request.getParam(CommonParams.UCODE);
 		// 只能申请同一个 app 下的代理公司
 		if (ucode.getApp().getId() != credential.getApp().getId())
 			return Result.result(Code.FORBID);
@@ -28,7 +28,7 @@ public class APPLY extends CommonAction {
 		int chief = 0;
 		try {
 			tid = ucode.getTenant().getTid();
-			chief = null == ucode ? 0 : ucode.getUser().getUid();
+			chief = null == ucode.getUser() ? 0 : ucode.getUser().getUid();
 		} catch (NullPointerException e) {
 			throw ConstConvertFailureException.errorConstException(CommonParams.CREDENTIAL);
 		}
@@ -39,10 +39,11 @@ public class APPLY extends CommonAction {
 			btkjUserService.apply(token, tid, chief);
 		}
 		// 申请之前必须走登录接口往 session 中录入信息
-		if (!request.containsHeader(Params.SESSION_ID))
+		String sessionId = request.getHeader(Params.SESSION_ID);
+		if (null == sessionId)
 			return Result.result(Code.FORBID);
 		
-		DistributeSession session = request.distributeSession(redis);
+		DistributeSession session = request.distributeSession(redis, sessionId);
 		Integer appId = session.getAndDelInt(Params.APP_ID.key());
 		if (null == appId || credential.getApp().getId() != appId)
 			return Result.result(Code.FORBID);
@@ -51,9 +52,8 @@ public class APPLY extends CommonAction {
 		String identity = request.getParam(Params.IDENTITY);
 		
 		if (BtkjUtil.isBaoTuApp(credential))
-			btkjUserService.apply(tid, mobile, name, identity, chief);
+			return btkjUserService.apply(tid, mobile, name, identity, chief);
 		else 
-			isolateUserService.apply(appId, tid, mobile, name, identity, chief);
-		return null;
+			return isolateUserService.apply(appId, tid, mobile, name, identity, chief);
 	}
 }

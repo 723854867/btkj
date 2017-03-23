@@ -9,13 +9,13 @@ public class UserSQLProvider {
 		return new SQL() {
 			{
 				INSERT_INTO(BtkjTables.USER.name());
-				VALUES("app_id", "#appId");
-				VALUES("mobile", "#mobile");
-				VALUES("identity", "#identity");
-				VALUES("name", "#name");
-				VALUES("last_login_time", "#lastLoginTime");
-				VALUES("created", "#created");
-				VALUES("updated", "#updated");
+				VALUES("app_id", "#{appId}");
+				VALUES("mobile", "#{mobile}");
+				VALUES("identity", "#{identity}");
+				VALUES("name", "#{name}");
+				VALUES("last_login_time", "#{lastLoginTime}");
+				VALUES("created", "#{created}");
+				VALUES("updated", "#{updated}");
 			}
 		}.toString();
 	}

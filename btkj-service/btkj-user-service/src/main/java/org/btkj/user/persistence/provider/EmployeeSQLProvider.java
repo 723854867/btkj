@@ -53,16 +53,4 @@ public class EmployeeSQLProvider {
 			}
 		}.toString();
 	}
-	
-	public String selectByAppIdAndMobile() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
-				WHERE("app_id=#{appId}");
-				AND();
-				WHERE("mobile=#{mobile}");
-			}
-		}.toString();
-	}
 }

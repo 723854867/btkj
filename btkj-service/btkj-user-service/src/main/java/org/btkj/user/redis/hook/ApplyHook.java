@@ -50,22 +50,41 @@ public class ApplyHook {
 	}
 	
 	/**
-	 * 添加申请信息
+	 * 添加申请信息：独立 app
 	 * 
 	 * @param tid
 	 * @param mobile
 	 * @param name
 	 * @param identity
 	 */
-	public void addApplyInfo(String mobile, int tid, String name, String identity) {
+	public void addApplyInfo(String mobile, int tid, String name, String identity, int chief) {
 		ApplyInfo ai = new ApplyInfo();
 		ai.setTid(tid);
+		ai.setChief(chief);
 		ai.setName(name);
 		ai.setIdentity(identity);
 		ai.setTime(DateUtils.currentTime());
 		redis.hset(
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)), 
 				SerializeUtil.RedisUtil.encode(mobile), 
+				SerializeUtil.ProtostuffUtil.serial(ai));
+	}
+	
+	/**
+	 * 添加申请信息：保途 app
+	 * 
+	 * @param uid
+	 * @param tid
+	 */
+	public void addApplyInfo(int uid, int tid, int chief) {
+		ApplyInfo ai = new ApplyInfo();
+		ai.setUid(uid);
+		ai.setTid(tid);
+		ai.setChief(chief);
+		ai.setTime(DateUtils.currentTime());
+		redis.hset(
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)), 
+				SerializeUtil.RedisUtil.encode(uid), 
 				SerializeUtil.ProtostuffUtil.serial(ai));
 	}
 }

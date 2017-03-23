@@ -10,10 +10,10 @@ import org.btkj.pojo.entity.User;
 public interface UserService {
 
 	/**
-	 * 通过用户 uid 获取 用户
+	 * 通过 uid 获取用户
 	 * 
 	 * @param uid
 	 * @return
 	 */
-	User getUserByUid(int uid);
+	User getUser(int uid);
 }

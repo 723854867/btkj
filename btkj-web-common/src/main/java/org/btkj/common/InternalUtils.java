@@ -6,6 +6,7 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.Credential;
@@ -22,49 +23,45 @@ public class InternalUtils {
 	 * @return
 	 */
 	public static final Credential parse(String code) {
-		try {
-			App app = _getApp(code);
-			Tenant tenant = null;
-			int index = BtkjConsts.APP_ID_BIT_NUM;
-			if (!BtkjUtil.isBaoTuApp(app.getId())) 
-				tenant = _getIsolateTenant(app.getId());
-			else {
-				if (code.length() != BtkjConsts.APP_ID_BIT_NUM) {
-					tenant = _getBaoTuTenant(code);
-					index += BtkjConsts.TENANT_ID_BIT_NUM;
-				}
-			}
-			if (code.length() == index)
-				return new Credential(app, tenant, null);
-			
-			User user = _getUser(code, index);
-			return new Credential(app, tenant, user);
-		} catch (NumberFormatException e) {
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
-		}
-	}
-	
-	private static final App _getApp(String code) throws ConstConvertFailureException { 
-		if (code.length() < BtkjConsts.APP_ID_BIT_NUM)
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
+		// 现获取 app
 		int appId = Integer.valueOf(code.substring(0, BtkjConsts.APP_ID_BIT_NUM));
 		App app = Beans.cacheService.getById(BtkjTables.APP.name(), appId);
-		if (null == app)
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
-		return app;
+		
+		// 在获取 tenant
+		Tenant tenant = null;
+		int index = BtkjConsts.APP_ID_BIT_NUM;
+		if (!BtkjUtil.isBaoTuApp(app)) 
+			tenant = _getIsolateTenant(app.getId());
+		else {
+			if (code.length() == index)
+				return new Credential(app);
+			tenant = _getBaoTuTenant(code);
+			index += BtkjConsts.TENANT_ID_BIT_NUM;
+		}
+		if (code.length() == index)
+			return new Credential(app, tenant);
+		
+		User user = Beans.userService.getUser(Integer.valueOf(code.substring(index)));
+		if (user.getAppId() != app.getId())
+			throw new RuntimeException();
+		Employee employee = null;
+		if (null != tenant) {
+			employee = Beans.employeeService.getEmplyee(user.getUid(), tenant.getTid());
+			if (null == employee)
+				throw new RuntimeException();
+		}
+		return new Credential(app, tenant, user, employee);
 	}
 	
 	private static final Tenant _getBaoTuTenant(String code) throws ConstConvertFailureException {
-		int index = BtkjConsts.APP_ID_BIT_NUM + BtkjConsts.TENANT_ID_BIT_NUM;
-		if (code.length() < index)
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
-		String sub = code.substring(BtkjConsts.APP_ID_BIT_NUM, index);
+		String sub = code.substring(BtkjConsts.APP_ID_BIT_NUM, BtkjConsts.APP_ID_BIT_NUM + BtkjConsts.TENANT_ID_BIT_NUM);
 		if (!BtkjUtil.hasTenant(sub))
 			return null;
 		int tid = Integer.valueOf(sub);
-		Tenant tenant = Beans.cacheService.getById(BtkjTables.TENANT.name(), tid);
+		TenantCache cache = (TenantCache) Beans.cacheService.getCache(BtkjTables.TENANT.name());
+		Tenant tenant = cache.getBaotuTenant(tid);
 		if (null == tenant)
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
+			throw new RuntimeException();
 		return tenant;
 	}
 	
@@ -72,15 +69,7 @@ public class InternalUtils {
 		TenantCache cache = (TenantCache) Beans.cacheService.getCache(BtkjTables.TENANT.name());
 		Tenant tenant = cache.getIsolateTenant(appId);
 		if (null == tenant)
-			throw new RuntimeException("Configuration error app " + appId + " has no tenant!");
+			throw new RuntimeException();
 		return tenant;
-	}
-	
-	private static final User _getUser(String code, int index) throws ConstConvertFailureException {
-		int uid = Integer.valueOf(code.substring(index));
-		User user = Beans.userService.getUserByUid(uid);
-		if (null == user)
-			throw new ConstConvertFailureException(CommonParams.CREDENTIAL);
-		return user;
 	}
 }

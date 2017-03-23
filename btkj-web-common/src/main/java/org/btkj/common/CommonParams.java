@@ -12,17 +12,25 @@ public interface CommonParams {
 	final Str2ObjConstConverter<Credential> CREDENTIAL		= new Str2ObjConstConverter<Credential>(1500, "credential") {
 		@Override
 		public Credential convert(String credential) throws ConstConvertFailureException {
-			return InternalUtils.parse(credential);
+			try {
+				return InternalUtils.parse(credential);
+			} catch (Exception e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
 		}
 	};
 	
 	/**
 	 * 用户的唯一识别码
 	 */
-	final Str2ObjConstConverter<Credential> U_CODE		= new Str2ObjConstConverter<Credential>(1501, "uCode") {
+	final Str2ObjConstConverter<Credential> UCODE			= new Str2ObjConstConverter<Credential>(1501, "ucode") {
 		@Override
 		public Credential convert(String chiefCode) throws ConstConvertFailureException {
-			return InternalUtils.parse(chiefCode);
+			try {
+				return InternalUtils.parse(chiefCode);
+			} catch (Exception e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
 		}
 	};
 }

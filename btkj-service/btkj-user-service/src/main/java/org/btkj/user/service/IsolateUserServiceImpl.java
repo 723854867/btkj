@@ -12,7 +12,7 @@ import org.btkj.user.api.IsolateUserService;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.hook.ApplyHook;
-import org.btkj.user.redis.hook.EmployeeHook;
+import org.btkj.user.redis.mapper.EmployeeMapper;
 import org.btkj.user.redis.mapper.UserMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
@@ -28,7 +28,7 @@ public class IsolateUserServiceImpl implements IsolateUserService {
 	@Resource
 	private UserMapper userMapper;
 	@Resource
-	private EmployeeHook employeeHook;
+	private EmployeeMapper employeeMapper;
 	@Resource
 	private DistributeLock distributeLock;
 
@@ -67,13 +67,15 @@ public class IsolateUserServiceImpl implements IsolateUserService {
 	}
 	
 	@Override
-	public Result<Serializable> apply(int appId, int tid, String mobile, String name, String identity, int chief) {
+	public Result<Void> apply(int appId, int tid, String mobile, String name, String identity, int chief) {
 		ApplyInfo ai = applyHook.getApplyInfo(tid, mobile);
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
-		if (employeeHook.employeeOf(appId, mobile))
+		// 独立 app 的用户存在就代表已经是雇员了
+		User user = userMapper.getUserByMobile(appId, mobile);
+		if (null != user)
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyHook.addApplyInfo(mobile, tid, name, identity);
+		applyHook.addApplyInfo(mobile, tid, name, identity, chief);
 		return Result.success();
 	}
 }

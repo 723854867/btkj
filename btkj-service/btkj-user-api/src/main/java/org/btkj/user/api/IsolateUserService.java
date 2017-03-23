@@ -30,5 +30,5 @@ public interface IsolateUserService {
 	 * @param chief 上级用户 uid
 	 * @return
 	 */
-	Result<Serializable> apply(int appId, int tid, String mobile, String name, String identity, int chief);
+	Result<Void> apply(int appId, int tid, String mobile, String name, String identity, int chief);
 }

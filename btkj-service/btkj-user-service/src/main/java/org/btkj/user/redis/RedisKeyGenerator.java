@@ -23,7 +23,8 @@ public class RedisKeyGenerator {
 	private static final String APPLY_DATA				= "hash:tenant:{0}:apply";			// 每个 租户的中 mobile 和 申请的映射关系
 	private static final String BTKJ_APPLY				= "set:btkj:apply:{0}";				// 保途 app 中用户 的所有申请数据
 	
-	private static final String BTKJ_USER_EMPLOYEES		= "set:btkj:user:{0}:employees";	// 保途雇员列表					
+	private static final String EMPLOYEE_DATA			= "hash:db:employee";				// 雇员列表	
+	private static final String USER_EMPLOYEE			= "hash:user:{0}:employee";			// 用户的雇员映射： 一般 field 为 tid，value 为 employee_id
 	
 	private static final String USER_RELATION			= "hash:user:relation:{0}";			// 用户关系实体数据，有时间限制，其中 {0} 是 tid_uid 的格式
 	
@@ -83,8 +84,12 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(BTKJ_APPLY, String.valueOf(uid));
 	}
 	
-	public static final String btkjUserEmployees(int uid) { 
-		return MessageFormat.format(BTKJ_USER_EMPLOYEES, String.valueOf(uid));
+	public static final String employeeDataKey() { 
+		return EMPLOYEE_DATA;
+	}
+	
+	public static final String userEmployeeKey(int uid) {
+		return MessageFormat.format(USER_EMPLOYEE, String.valueOf(uid));
 	}
 	
 	public static final String userRelationKey(String key) { 

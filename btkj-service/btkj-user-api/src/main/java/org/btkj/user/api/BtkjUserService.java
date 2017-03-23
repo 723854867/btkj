@@ -27,7 +27,7 @@ public interface BtkjUserService {
 	 * @param chief 上级用户 uid
 	 * @return
 	 */
-	Result<?> apply(String token, int tid, int chief);
+	Result<Void> apply(String token, int tid, int chief);
 	
 	/**
 	 * 用户首次申请加入代理公司(这时用户还没存在)
@@ -39,5 +39,5 @@ public interface BtkjUserService {
 	 * @param chief 上级用户 uid
 	 * @return
 	 */
-	Result<?> apply(int tid, String mobile, String name, String identity, int chief);
+	Result<Void> apply(int tid, String mobile, String name, String identity, int chief);
 }

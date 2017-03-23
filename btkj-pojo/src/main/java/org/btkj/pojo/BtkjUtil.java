@@ -30,6 +30,6 @@ public class BtkjUtil {
 	 * @return
 	 */
 	public static final boolean hasTenant(String credential) {
-		return credential.equals(BtkjConsts.NULL_TENANT_CREDENTIAL);
+		return !credential.equals(BtkjConsts.NULL_TENANT_CREDENTIAL);
 	}
 }
