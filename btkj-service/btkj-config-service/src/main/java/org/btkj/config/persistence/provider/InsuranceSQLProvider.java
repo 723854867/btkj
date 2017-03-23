@@ -8,7 +8,7 @@ public class InsuranceSQLProvider {
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.INSURANCE.name());
+				INSERT_INTO(BtkjTables.INSURER.name());
 				VALUES("name", "#name");
 				VALUES("created", "#created");
 				VALUES("updated", "#updated");
@@ -20,7 +20,7 @@ public class InsuranceSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.INSURANCE.name());
+				FROM(BtkjTables.INSURER.name());
 			}
 		}.toString();
 	}
@@ -29,7 +29,7 @@ public class InsuranceSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.INSURANCE.name());
+				FROM(BtkjTables.INSURER.name());
 				WHERE("id=#{key}");
 			}
 		}.toString();

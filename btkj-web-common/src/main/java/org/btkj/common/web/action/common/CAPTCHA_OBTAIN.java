@@ -1,10 +1,10 @@
 package org.btkj.common.web.action.common;
 
 import org.btkj.common.service.ParamUtil;
-import org.btkj.common.web.Beans;
 import org.btkj.common.web.Request;
 import org.btkj.common.web.action.CommonAction;
 import org.btkj.pojo.model.CaptchaReceiver;
+import org.btkj.pojo.model.Credential;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -16,9 +16,9 @@ import org.rapid.util.common.message.Result;
 public class CAPTCHA_OBTAIN extends CommonAction {
 
 	@Override
-	public Result<String> execute(Request request) {
-		CaptchaReceiver receiver = ParamUtil.captchaReceiver(request);
-		Result<String> result = Beans.courierService.captchaObtain(receiver);
+	protected Result<?> execute(Request request, Credential credential) {
+		CaptchaReceiver receiver = ParamUtil.captchaReceiver(request, credential);
+		Result<String> result = courierService.captchaObtain(receiver);
 		if (result.getCode() == -1)
 			result.setCode(Code.CAPTCHA_GET_CD.id());
 		if (result.getCode() == -2)

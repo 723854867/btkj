@@ -1,10 +1,8 @@
 package org.btkj.common.web.action.common;
 
-import org.btkj.common.CommonParams;
 import org.btkj.common.web.Request;
 import org.btkj.common.web.action.CommonAction;
-import org.btkj.common.web.pojo.info.InviterInfo;
-import org.btkj.pojo.model.InviterModel;
+import org.btkj.pojo.model.Credential;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,9 +12,15 @@ import org.rapid.util.common.message.Result;
  */
 public class INVITER_INFO extends CommonAction {
 
+//	@Override
+//	public Result<InviterInfo> execute(Request request) {
+//		InviterModel inviter = request.getParam(CommonParams.CREDENTIAL);
+//		return Result.result(new InviterInfo(inviter));
+//	}
+
 	@Override
-	public Result<InviterInfo> execute(Request request) {
-		InviterModel inviter = request.getParam(CommonParams.INVITER);
-		return Result.result(new InviterInfo(inviter));
+	protected Result<?> execute(Request request, Credential credential) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

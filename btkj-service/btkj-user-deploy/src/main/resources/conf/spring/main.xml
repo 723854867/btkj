@@ -9,9 +9,24 @@
 
 	<context:component-scan base-package="org.btkj.user" />
 	
+	<bean class="org.rapid.util.common.SpringContextUtil" />
+	
 	<bean id="config" class="org.btkj.user.Config">
 		<property name="userLockExpire" value="${user.lock.expire}" />
-		<property name="captchaTokenExpire" value="${captcha.token.expire}" />
+	</bean>
+	
+	<bean id="globalConfigContainer" class="org.btkj.pojo.config.GlobalConfigContainer">
+		<constructor-arg name="zkClient">
+			<bean class="org.I0Itec.zkclient.ZkClient">
+				<constructor-arg name="zkServers" value="${zookeeper.servers}" />
+				<constructor-arg name="sessionTimeout" value="${zookeeper.session.timeout}" />
+				<constructor-arg name="connectionTimeout" value="${zookeeper.connection.timeout}" />
+				<constructor-arg name="zkSerializer" >
+					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="configPath" value="${zk.config.path}" />
 	</bean>
 	
 	<bean id="protostuffEntitySerializer" class="org.rapid.data.storage.mapper.serializer.ProtostuffEntitySerializer" />
@@ -27,6 +42,7 @@
 	
 	<bean id="userMapper" class="org.btkj.user.redis.mapper.UserMapper" parent="O2MMapper" >
 		<property name="dao" ref="userDao" />
+		<property name="distributeLock" ref="distributeLock" />
 	</bean>
 	
 	<bean id="appMapper" class="org.btkj.user.redis.mapper.AppMapper" parent="O2OMapper">
@@ -35,9 +51,5 @@
 	
 	<bean id="tenantMapper" class="org.btkj.user.redis.mapper.TenantMapper" parent="O2OMapper">
 		<property name="dao" ref="tenantDao" />
-	</bean>
-	
-	<bean id="userRelationMapper" class="org.btkj.user.redis.mapper.UserRelationMapper" parent="O2MMapper">
-		<property name="dao" ref="userRelationDao" />
 	</bean>
 </beans>

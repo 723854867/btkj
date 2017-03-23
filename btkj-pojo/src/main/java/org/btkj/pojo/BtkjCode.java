@@ -1,4 +1,4 @@
-package org.btkj.web.util;
+package org.btkj.pojo;
 
 import org.rapid.util.common.consts.code.ICode;
 
@@ -17,7 +17,18 @@ public enum BtkjCode implements ICode {
 	/**
 	 * app 已经下架了
 	 */
-	APP_OFF_SHELFS(501, "The app is now off the shelfs");
+	APP_OFF_SHELFS(501, "The app is now off the shelfs"),
+	
+	/**
+	 * 已经存在申请了
+	 * 
+	 */
+	APPLY_EXIST(502, "apply exist"),
+	
+	/**
+	 * 已经是雇员了
+	 */
+	ALREADY_IS_EMPLOYEE(503, "already is employee");
 	
 	private int code;
 	private String desc;

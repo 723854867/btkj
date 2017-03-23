@@ -1,16 +1,10 @@
-package org.btkj.common.web.pojo.info;
+package org.btkj.pojo.info;
 
 import org.btkj.pojo.entity.User;
 
-/**
- * 和 MainPage 的唯一区别就是多了一个 token
- * 
- * @author ahab
- *
- */
 public class LoginInfo extends MainPageInfo {
 
-	private static final long serialVersionUID = 205112271436593191L;
+	private static final long serialVersionUID = 895363411400533215L;
 
 	private String token;
 	

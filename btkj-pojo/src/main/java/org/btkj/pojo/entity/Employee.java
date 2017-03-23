@@ -1,20 +1,19 @@
 package org.btkj.pojo.entity;
 
 import org.rapid.data.storage.db.Entity;
-import org.rapid.util.common.key.Pair;
 
 /**
- * 租户用户表：只有保途的租户才会使用该表
  * 
  * @author ahab
  */
-public class UserRelation implements Entity<Pair<Integer, Integer>> {
+public class Employee implements Entity<Integer> {
 
 	private static final long serialVersionUID = -315073031541553807L;
 
 	private int id;
 	private int uid;
 	private int tid;
+	private int appId;
 	private int parentId;
 	private int left;
 	private int right;
@@ -43,6 +42,14 @@ public class UserRelation implements Entity<Pair<Integer, Integer>> {
 
 	public void setTid(int tid) {
 		this.tid = tid;
+	}
+	
+	public int getAppId() {
+		return appId;
+	}
+	
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 	
 	public int getParentId() {
@@ -86,7 +93,7 @@ public class UserRelation implements Entity<Pair<Integer, Integer>> {
 	}
 
 	@Override
-	public Pair<Integer, Integer> key() {
-		return new Pair<Integer, Integer>(tid, uid);
+	public Integer key() {
+		return id;
 	}
 }

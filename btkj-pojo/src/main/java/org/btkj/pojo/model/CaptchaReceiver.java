@@ -11,7 +11,7 @@ public class CaptchaReceiver implements Serializable {
 
 	private static final long serialVersionUID = 3924529610822330871L;
 
-	private int appId;					// 所属 app id
+	private int appId;
 	private Type type;					// 接收设备的类型
 	private String identity;			// 接收设备的识别号：手机则是手机号，邮箱就是邮箱账号
 	

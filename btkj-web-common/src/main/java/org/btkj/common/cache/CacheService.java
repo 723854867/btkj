@@ -7,6 +7,7 @@ import org.btkj.common.cache.impl.InsuranceCache;
 import org.btkj.common.cache.impl.RegionCityCache;
 import org.btkj.common.cache.impl.RegionDistrictCache;
 import org.btkj.common.cache.impl.RegionProvinceCache;
+import org.btkj.common.cache.impl.TenantCache;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.Region;
@@ -28,11 +29,11 @@ public class CacheService extends AbstractCacheService<Cache<?,?>> {
 	@Override
 	public void init() {
 		addCache(new AppCache(tenantService));
+		addCache(new TenantCache(tenantService));
 		addCache(new InsuranceCache(configService));
 		addCache(new RegionCityCache(configService));
 		addCache(new RegionDistrictCache(configService));
 		addCache(new RegionProvinceCache(configService));
-		
 		super.init();
 	}
 	

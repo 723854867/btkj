@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.Version;
 import org.btkj.web.util.ActionContainer;
-import org.btkj.web.util.BtkjCode;
 import org.btkj.web.util.IAction;
 import org.btkj.web.util.Params;
-import org.rapid.util.common.SerializeUtil;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.reflect.ClassUtil;
 import org.slf4j.Logger;

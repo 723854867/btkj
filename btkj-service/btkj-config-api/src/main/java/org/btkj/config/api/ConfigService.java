@@ -2,7 +2,7 @@ package org.btkj.config.api;
 
 import java.util.Map;
 
-import org.btkj.pojo.entity.Insurance;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.RegionCity;
 import org.btkj.pojo.entity.RegionDistrict;
 import org.btkj.pojo.entity.RegionProvince;
@@ -14,7 +14,7 @@ public interface ConfigService {
 	 * 
 	 * @return
 	 */
-	Map<Integer, Insurance> getInsurances();
+	Map<Integer, Insurer> getInsurances();
 	
 	/**
 	 * 获取所有的市级行政区划

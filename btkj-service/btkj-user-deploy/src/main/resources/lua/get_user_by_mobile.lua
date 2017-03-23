@@ -1,4 +1,4 @@
-local uid = redis.call("hget", KEYS[1], ARGV[2])
+local uid = redis.call("hget", KEYS[1], ARGV[1])
 if (not uid)
 then
 	return nil

@@ -16,6 +16,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.btkj</groupId>
 			<artifactId>btkj-user-service</artifactId>
 			<version>${project.version}</version>
@@ -40,7 +45,7 @@
 			<groupId>io.protostuff</groupId>
 			<artifactId>protostuff-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>

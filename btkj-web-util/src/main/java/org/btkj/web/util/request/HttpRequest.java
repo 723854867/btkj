@@ -45,7 +45,13 @@ public class HttpRequest implements NetworkRequest {
 	 */
 	public DistributeSession distributeSession(Redis redis) {
 		String sessionId = getOptionalHeader(Params.SESSION_ID);
-		return StringUtils.hasText(sessionId) ? new DistributeSession(sessionId, redis) : new DistributeSession(redis);
+		if (StringUtils.hasText(sessionId)) 
+			 return new DistributeSession(sessionId, redis);
+		else {
+			DistributeSession session = new DistributeSession(redis);
+			response.setHeader(Params.SESSION_ID.key(), session.sessionId());
+			return session;
+		}
 	}
 	
 	/**
@@ -81,6 +87,14 @@ public class HttpRequest implements NetworkRequest {
 		} catch (ConstConvertFailureException e) {
 			return constant.value();
 		}
+	}
+	
+	public boolean containsHeader(StrConstConverter<?> constant) {
+		return response.containsHeader(constant.key());
+	}
+	
+	public boolean containsHeader(String name) {
+		return response.containsHeader(name);
 	}
 	
 	public HttpRequest addHeader(String name, String value) {

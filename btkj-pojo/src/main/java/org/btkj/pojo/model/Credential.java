@@ -6,22 +6,27 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 
-public class InviterModel implements Serializable {
+/**
+ * 身份识别类
+ * 
+ * @author ahab
+ */
+public class Credential implements Serializable {
 
-	private static final long serialVersionUID = -828584577019847673L;
+	private static final long serialVersionUID = 549957907464373456L;
 
 	private App app;
-	private Tenant tenant;
 	private User user;
+	private Tenant tenant;
 	
-	public InviterModel() {}
+	public Credential() {}
 	
-	public InviterModel(App app, Tenant tenant, User user) {
+	public Credential(App app, Tenant tenant, User user) {
 		this.app = app;
 		this.tenant = tenant;
 		this.user = user;
 	}
-
+	
 	public App getApp() {
 		return app;
 	}
@@ -30,19 +35,19 @@ public class InviterModel implements Serializable {
 		this.app = app;
 	}
 	
-	public Tenant getTenant() {
-		return tenant;
-	}
-	
-	public void setTenant(Tenant tenant) {
-		this.tenant = tenant;
-	}
-	
 	public User getUser() {
 		return user;
 	}
 	
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public Tenant getTenant() {
+		return tenant;
+	}
+	
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
 	}
 }

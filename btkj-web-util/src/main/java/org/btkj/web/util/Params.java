@@ -1,5 +1,6 @@
 package org.btkj.web.util;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.model.Version;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -20,7 +21,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public interface Params {
 	
 	/**
-	 * 头部信息是可选的，因此这里不需要 id
+	 * 头部信息是可选的，因此这里不需要 id, global session id
 	 */
 	final Str2StrConstConverter SESSION_ID				= new Str2StrConstConverter("sessionId");
 
@@ -64,6 +65,9 @@ public interface Params {
 	
 	final Str2StrConstConverter CAPTCHA					= new Str2StrConstConverter(1009, "captcha");
 	
+	/**
+	 * 身份证
+	 */
 	final Str2StrConstConverter IDENTITY				= new Str2StrConstConverter(1010, "identity") {
 		public String convert(String value) throws ConstConvertFailureException {
 			if (!Validator.isIdentity(value))

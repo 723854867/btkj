@@ -4,16 +4,21 @@ import java.io.Serializable;
 
 import org.btkj.pojo.entity.User;
 
-public class UserLoginModel implements Serializable {
+/**
+ * 保途模式的用户登录信息
+ * 
+ * @author ahab
+ */
+public class BtkjUserLoginModel implements Serializable {
 
 	private static final long serialVersionUID = -8326544043927519822L;
 	
 	private User user;
 	private String token;
 	
-	public UserLoginModel() {}
+	public BtkjUserLoginModel() {}
 	
-	public UserLoginModel(User user, String token) {
+	public BtkjUserLoginModel(User user, String token) {
 		this.user = user;
 		this.token = token;
 	}

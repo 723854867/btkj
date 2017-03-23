@@ -1,6 +1,8 @@
-package org.btkj.web.util;
+package org.btkj.pojo;
 
 public interface BtkjConsts {
+	
+	final String ZK_CONFIG_PATH					= "/config/btkj";
 
 	/**
 	 * 保途 app 的 app_id 固定为 0
@@ -16,4 +18,10 @@ public interface BtkjConsts {
 	 * tid 的位数
 	 */
 	final int TENANT_ID_BIT_NUM					= 4;
+	
+	/**
+	 * tenant 的值为 null 的 credential
+	 * 
+	 */
+	final String NULL_TENANT_CREDENTIAL			= "0000";
 }

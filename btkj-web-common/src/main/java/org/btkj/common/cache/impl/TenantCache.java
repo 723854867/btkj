@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.BtkjTables;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.user.api.TenantService;
-import org.btkj.web.util.BtkjUtil;
 import org.rapid.util.common.cache.AbstractCache;
 
 public class TenantCache extends AbstractCache<Integer, Tenant> {
@@ -19,6 +19,7 @@ public class TenantCache extends AbstractCache<Integer, Tenant> {
 
 	public TenantCache(TenantService tenantService) {
 		super(BtkjTables.TENANT.name());
+		this.tenantService = tenantService;
 	}
 
 	@Override

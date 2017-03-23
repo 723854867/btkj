@@ -9,9 +9,11 @@ import org.btkj.user.persistence.dao.UserDao;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.UserLuaCmd;
 import org.rapid.data.storage.mapper.O2OMapper;
+import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.RapidSecurity;
-import org.rapid.util.common.SerializeUtil;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 
 /**
@@ -20,8 +22,11 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  * hash:app:{0}:mobile:user - 手机和用户 id 对应关系
  * hash:app:{0}:user:token - 用户 id 和用户 token 对应关系
  * hash:app:{0}:token:user - 用户 token 和用户 id 对应关系
+ * hash:tenant:{0}:apply - 用户 手机和业务员申请对应关系
  */
 public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
+	
+	private DistributeLock distributeLock;
 
 	public UserMapper() {
 		super(BtkjTables.USER, SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userDataKey()));
@@ -32,36 +37,6 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 		// do nothing
 	}
 	
-	/**
-	 * 通过 token 获取用户并且同时获取用户的资
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public Result<User> lockUserByToken(App app, String token) {
-		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		byte[] data = redis.invokeLua(UserLuaCmd.LOCK_USER_BY_TOKEN, 
-				RedisKeyGenerator.tokenUserKey(app.getId()),
-				RedisKeyGenerator.userDataKey(),
-				token, RedisKeyGenerator.USER_LOCK, lockId,
-				String.valueOf(Config.getUserLockExpire()));
-		return null == data ? null : Result.result(0, lockId, serializer.antiConvet(data, User.class));
-	}
-	
-	/**
-	 * 通过 token 获取用户，不会获取用户锁
-	 * 
-	 * @param app
-	 * @param token
-	 * @return
-	 */
-	public User getUserByToken(App app, String token) {
-		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_TOKEN,
-				RedisKeyGenerator.tokenUserKey(app.getId()),
-				RedisKeyGenerator.userDataKey(), token);
-		return null == data ? null : serializer.antiConvet(data, User.class);
-	}
-
 	/**
 	 * 通过手机获取用户
 	 * 
@@ -84,6 +59,62 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 		return user;
 	}
 	
+	/**
+	 * 获取用户锁
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public String lockUser(int uid) { 
+		String lock = RedisKeyGenerator.userLockKey(uid);
+		return distributeLock.tryLock(lock);
+	}
+	
+	/**
+	 * 通过 token 获取用户并且同时获取用户的资
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public Result<User> lockUserByToken(int appId, String token) {
+		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		Object data = redis.invokeLua(UserLuaCmd.LOCK_USER_BY_TOKEN, 
+				RedisKeyGenerator.tokenUserKey(appId),
+				RedisKeyGenerator.userDataKey(),
+				token, RedisKeyGenerator.USER_LOCK, lockId,
+				String.valueOf(Config.getUserLockExpire()));
+		if (data.equals("1"))
+			return Result.result(Code.USER_NOT_EXIST);
+		if (data.equals("2"))
+			return Result.result(Code.USER_STATUS_CHANGED);
+		return Result.result(Code.OK.id(), lockId, serializer.antiConvet((byte[]) data, User.class));
+	}
+	
+	/**
+	 * 释放用户锁
+	 * 
+	 * @param uid
+	 * @param lockId
+	 */
+	public void releaseUserLock(int uid, String lockId) {
+		distributeLock.unLock(RedisKeyGenerator.userLockKey(uid), lockId);
+
+	}
+	
+	/**
+	 * 通过 token 获取用户，不会获取用户锁
+	 * 
+	 * @param app
+	 * @param token
+	 * @return
+	 */
+	public User getUserByToken(App app, String token) {
+		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_TOKEN,
+				RedisKeyGenerator.tokenUserKey(app.getId()),
+				RedisKeyGenerator.userDataKey(), token);
+		return null == data ? null : serializer.antiConvet(data, User.class);
+	}
+
 	public Result<TokenReplaceModel> tokenReplace(int appId, int uid, String mobile) { 
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		String token = RapidSecurity.encodeToken(mobile);
@@ -102,5 +133,14 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.mobileUserKey(entity.getAppId())),
 				redisKey, SerializeUtil.RedisUtil.encode(entity.getMobile()), 
 				SerializeUtil.RedisUtil.encode(String.valueOf(entity.getUid())), data);
+	}
+	
+	public int btkjUserMainTenant(int uid) {
+		String val = redis.hget(RedisKeyGenerator.btkjUserMainTenantKey(), String.valueOf(uid));
+		return null == val ? 0 : Integer.valueOf(val);
+	}
+	
+	public void setDistributeLock(DistributeLock distributeLock) {
+		this.distributeLock = distributeLock;
 	}
 }

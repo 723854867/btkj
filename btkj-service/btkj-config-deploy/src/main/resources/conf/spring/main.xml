@@ -18,8 +18,8 @@
 		<property name="serializer" ref="protostuffEntitySerializer" />
 	</bean>
 	
-	<bean id="insuranceMapper" class="org.btkj.config.redis.mapper.InsuranceMapper" parent="O2OMapper" init-method="init">
-		<property name="dao" ref="insuranceDao" />
+	<bean id="insurerMapper" class="org.btkj.config.redis.mapper.InsurerMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="insurerDao" />
 	</bean>
 	
 	<bean id="regionCityMapper" class="org.btkj.config.redis.mapper.RegionCityMapper" parent="O2OMapper" init-method="init">

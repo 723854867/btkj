@@ -7,8 +7,8 @@ then
 	then
 		return redis.call("hget", KEYS[2], uid)
 	else
-		return nil
+		return 2
 	end
 else
-	return nil
+	return 1
 end
