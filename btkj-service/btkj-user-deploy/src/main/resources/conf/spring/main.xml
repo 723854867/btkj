@@ -53,8 +53,13 @@
 		<property name="dao" ref="tenantDao" />
 	</bean>
 	
+	<bean id="bannerMapper" class="org.btkj.user.redis.mapper.BannerMapper" parent="O2OMapper">
+		<property name="dao" ref="bannerDao" />
+	</bean>
+	
 	<bean id="employeeMapper" class="org.btkj.user.redis.mapper.EmployeeMapper" parent="mapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="employeeDao" />
+		<property name="userCacheController" ref="userCacheController" />
 	</bean>
 </beans>

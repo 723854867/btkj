@@ -1,4 +1,4 @@
-package org.btkj.common.web;
+package org.btkj.common;
 
 import org.btkj.common.cache.CacheService;
 import org.btkj.courier.api.CourierService;

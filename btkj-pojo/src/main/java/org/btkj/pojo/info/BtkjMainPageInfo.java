@@ -14,8 +14,8 @@ public class BtkjMainPageInfo extends MainPageInfo {
 
 	private static final long serialVersionUID = -1807435574815345534L;
 
-	private List<TenantTips> tenantList;			// 用户商户列表（已经排除了当前租户）
-	private List<TenantTips> tenantAuditList;		// 用户正在审核的商户列表
+	private List<TenantTips> ownTenants;		// 用户商户列表（已经排除了当前租户）
+	private List<TenantTips> auditTenants;		// 用户正在审核的商户列表
 	
 	public BtkjMainPageInfo() {}
 	
@@ -23,19 +23,19 @@ public class BtkjMainPageInfo extends MainPageInfo {
 		super(user);
 	}
 
-	public List<TenantTips> getTenantList() {
-		return tenantList;
+	public List<TenantTips> getOwnTenants() {
+		return ownTenants;
 	}
 	
-	public void setTenantList(List<TenantTips> tenantList) {
-		this.tenantList = tenantList;
+	public void setOwnTenants(List<TenantTips> ownTenants) {
+		this.ownTenants = ownTenants;
 	}
 	
-	public List<TenantTips> getTenantAuditList() {
-		return tenantAuditList;
+	public List<TenantTips> getAuditTenants() {
+		return auditTenants;
 	}
 	
-	public void setTenantAuditList(List<TenantTips> tenantAuditList) {
-		this.tenantAuditList = tenantAuditList;
+	public void setAuditTenants(List<TenantTips> auditTenants) {
+		this.auditTenants = auditTenants;
 	}
 }

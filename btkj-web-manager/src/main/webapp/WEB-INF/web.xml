@@ -3,5 +3,44 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<display-name>manager</display-name>
+	<context-param>
+		<param-name>logbackConfigLocation</param-name>
+		<param-value>classpath:conf/logback.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:conf/spring/*.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>actionLocation</param-name>
+		<param-value>org.btkj.manager.web.action</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.btkj.manager.web.listener.ContextLoaderListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.btkj.manager.web.filter.CharsetEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>manager</servlet-name>
+		<servlet-class>org.btkj.manager.web.Dispatcher</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>manager</servlet-name>
+		<url-pattern>/manager</url-pattern>
+	</servlet-mapping>
 </web-app>

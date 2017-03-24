@@ -1,9 +1,12 @@
 package org.btkj.user.api;
 
+import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.info.ApplyInfo;
 
 public interface TenantService {
 
@@ -20,4 +23,18 @@ public interface TenantService {
 	 * @return
 	 */
 	Map<Integer, Tenant> getTenants();
+	
+	/**
+	 * 获取所有的 banner
+	 * 
+	 * @return
+	 */
+	Map<Integer, Banner> getBanners();
+	
+	/**
+	 * 代理公司获取审核列表
+	 * 
+	 * @return
+	 */
+	List<ApplyInfo> applyList(int tid);
 }

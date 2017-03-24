@@ -19,6 +19,17 @@ public class UserSQLProvider {
 			}
 		}.toString();
 	}
+	
+	public String update() { 
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.USER.name());
+				SET("name=#{name}");
+				SET("last_login_time=#{lastLoginTime}");
+				SET("updated=#{updated}");
+			}
+		}.toString();
+	}
 
 	public String getByAppIdAndMobile() {
 		return new SQL() {

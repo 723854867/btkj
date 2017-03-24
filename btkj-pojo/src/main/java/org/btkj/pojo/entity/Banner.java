@@ -9,7 +9,7 @@ public class Banner implements Entity<Integer> {
 	private int id;
 	private int tid;
 	private int idx;
-	private String url;
+	private String image;
 	private int created;
 	private int update;
 
@@ -37,12 +37,12 @@ public class Banner implements Entity<Integer> {
 		this.idx = idx;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getImage() {
+		return image;
 	}
-
-	public void setUrl(String url) {
-		this.url = url;
+	
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public int getCreated() {

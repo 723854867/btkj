@@ -1,14 +1,24 @@
 package org.btkj.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.btkj.common.cache.impl.BannerCache;
 import org.btkj.common.cache.impl.TenantCache;
-import org.btkj.common.web.Beans;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.BtkjUtil;
+import org.btkj.pojo.Region;
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.BtkjMainPageInfo;
+import org.btkj.pojo.info.MainPageInfo;
+import org.btkj.pojo.info.tips.BannerTips;
+import org.btkj.pojo.info.tips.MainTenantTips;
+import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.pojo.model.Credential;
 import org.rapid.util.exception.ConstConvertFailureException;
 
@@ -71,5 +81,46 @@ public class InternalUtils {
 		if (null == tenant)
 			throw new RuntimeException();
 		return tenant;
+	}
+	
+	public static final void fillTenantInfos(MainPageInfo pageInfo) { 
+		MainTenantTips mainTenant = pageInfo.getTenant();
+		if (null != mainTenant) 
+			_fillMainTenant(pageInfo);
+		if (pageInfo instanceof BtkjMainPageInfo) 
+			_fillBtkjTenantList((BtkjMainPageInfo) pageInfo);
+	}
+	
+	private static final void _fillMainTenant(MainPageInfo pageInfo) { 
+		MainTenantTips mainTenant = pageInfo.getTenant();
+		if (null != mainTenant) {
+			Tenant tenant = Beans.cacheService.getById(BtkjTables.TENANT.name(), mainTenant.getTid());
+			mainTenant.setName(tenant.getName());
+			Region region = Beans.cacheService.getRegionByCode(tenant.getRegionCode());
+			mainTenant.setRegion(region.getName());
+			BannerCache cache = (BannerCache) Beans.cacheService.getCache(BtkjTables.BANNER.name());
+			List<Banner> banners = cache.getTenantBanners(mainTenant.getTid());
+			if (null != banners) {
+				List<BannerTips> tips = new ArrayList<BannerTips>();
+				for (Banner banner : banners)
+					tips.add(new BannerTips(banner));
+				mainTenant.setBannerList(tips);
+			}
+		}
+	}
+	
+	private static final void _fillBtkjTenantList(BtkjMainPageInfo pageInfo) {
+		TenantCache cache = (TenantCache) Beans.cacheService.getCache(BtkjTables.TENANT.name());
+		_fillTenantTips(pageInfo.getOwnTenants(), cache);
+		_fillTenantTips(pageInfo.getAuditTenants(), cache);
+	}
+	
+	private static final void _fillTenantTips(List<TenantTips> list, TenantCache cache) { 
+		if (null != list && !list.isEmpty()) {
+			for (TenantTips tips : list) {
+				Tenant tenant = cache.getById(tips.getTid());
+				tips.setName(tenant.getName());
+			}
+		}
 	}
 }

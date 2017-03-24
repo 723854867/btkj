@@ -2,10 +2,12 @@ package org.btkj.common.web.action.common;
 
 import java.io.Serializable;
 
-import org.btkj.common.service.ParamUtil;
+import org.btkj.common.InternalUtils;
+import org.btkj.common.web.ParamUtil;
 import org.btkj.common.web.Request;
-import org.btkj.common.web.action.CommonAction;
+import org.btkj.common.web.action.Action;
 import org.btkj.pojo.BtkjUtil;
+import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.CaptchaReceiver.Type;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.pojo.model.Credential;
@@ -19,7 +21,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class LOGIN extends CommonAction {
+public class LOGIN extends Action {
 
 	@Override
 	public Result<Serializable> execute(Request request, Credential credential) {
@@ -52,6 +54,9 @@ public class LOGIN extends CommonAction {
 				session.put(Params.APP_ID.key(), String.valueOf(verifier.getAppId()));
 				return result;
 			}
+			if (!result.isSuccess())
+				return result;
+			InternalUtils.fillTenantInfos((MainPageInfo) result.attach());
 			return result;
 		default:
 			throw new UnsupportedOperationException("Illegal login type!");

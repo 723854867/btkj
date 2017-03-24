@@ -3,6 +3,7 @@ package org.btkj.common.cache;
 import javax.annotation.Resource;
 
 import org.btkj.common.cache.impl.AppCache;
+import org.btkj.common.cache.impl.BannerCache;
 import org.btkj.common.cache.impl.InsuranceCache;
 import org.btkj.common.cache.impl.RegionCityCache;
 import org.btkj.common.cache.impl.RegionDistrictCache;
@@ -30,6 +31,7 @@ public class CacheService extends AbstractCacheService<Cache<?,?>> {
 	public void init() {
 		addCache(new AppCache(tenantService));
 		addCache(new TenantCache(tenantService));
+		addCache(new BannerCache(tenantService));
 		addCache(new InsuranceCache(configService));
 		addCache(new RegionCityCache(configService));
 		addCache(new RegionDistrictCache(configService));

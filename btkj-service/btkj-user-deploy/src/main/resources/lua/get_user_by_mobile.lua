@@ -1,7 +1,7 @@
 local uid = redis.call("hget", KEYS[1], ARGV[1])
-if (not uid)
+if (uid)
 then
-	return nil
+	return redis.call("hget", KEYS[2], uid)
 else
-	return redis.call("hget", KEYS[2], ARGV[1])
+	return nil
 end

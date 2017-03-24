@@ -1,7 +1,7 @@
 package org.btkj.common.web.action.common;
 
 import org.btkj.common.web.Request;
-import org.btkj.common.web.action.CommonAction;
+import org.btkj.common.web.action.Action;
 import org.btkj.pojo.model.Credential;
 import org.rapid.util.common.message.Result;
 
@@ -10,7 +10,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class RECRUIT_AUTH extends CommonAction {
+public class RECRUIT_AUTH extends Action {
 
 //	@Override
 //	public Result<?> execute(Request request) {

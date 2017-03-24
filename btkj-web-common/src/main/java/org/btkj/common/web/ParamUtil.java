@@ -1,6 +1,5 @@
-package org.btkj.common.service;
+package org.btkj.common.web;
 
-import org.btkj.common.web.Request;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaReceiver.Type;
 import org.btkj.pojo.model.CaptchaVerifier;

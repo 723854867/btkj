@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.user.redis.RedisKeyGenerator;
+import org.btkj.user.redis.UserLuaCmd;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtils;
@@ -82,9 +83,11 @@ public class ApplyHook {
 		ai.setTid(tid);
 		ai.setChief(chief);
 		ai.setTime(DateUtils.currentTime());
-		redis.hset(
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)), 
-				SerializeUtil.RedisUtil.encode(uid), 
+		redis.invokeLua(UserLuaCmd.BTKJ_APPLY,
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.btkjApplyKey(uid)),
+				SerializeUtil.RedisUtil.encode(uid),
+				SerializeUtil.RedisUtil.encode(tid),
 				SerializeUtil.ProtostuffUtil.serial(ai));
 	}
 }

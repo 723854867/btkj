@@ -16,6 +16,24 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.rapid</groupId>
+			<artifactId>rapid-data</artifactId>
+			<version>${rapid.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-pojo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-web-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
@@ -33,6 +51,16 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
 		</dependency>
 	</dependencies>
 

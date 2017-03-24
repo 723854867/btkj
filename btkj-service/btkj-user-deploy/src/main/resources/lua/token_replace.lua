@@ -3,6 +3,7 @@ if (isLock and (isLock["ok"] == "OK"))
 then
 	local oldToken = redis.call("hget", KEYS[2], ARGV[2])
 	redis.call("hset", KEYS[3], ARGV[3], ARGV[2])
+	redis.call("hset", KEYS[2], ARGV[2], ARGV[3])
 	if (oldToken)
 	then
 		redis.call("hdel", KEYS[3], oldToken)

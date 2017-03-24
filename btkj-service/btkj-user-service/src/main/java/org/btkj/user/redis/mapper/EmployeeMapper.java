@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
-import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.btkj.user.redis.RedisKeyGenerator;
+import org.btkj.user.redis.UserCacheController;
 import org.btkj.user.redis.UserLuaCmd;
 import org.rapid.data.storage.mapper.Mapper;
 import org.rapid.util.common.serializer.SerializeUtil;
 
 public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	
-	private GlobalConfigContainer gcc;
-
+	private UserCacheController userCacheController;
+	
 	public EmployeeMapper() {
 		super(BtkjTables.EMPLOYEE);
 	}
@@ -62,35 +61,14 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	 * 
 	 * @return
 	 */
-	public List<TenantTips> tenantTipsList(int uid, int mainTid) {
-		List<TenantTips> l = new ArrayList<TenantTips>();
-		String key = RedisKeyGenerator.btkjUserEmployees(uid);
-		List<String> tids = redis.hkeysAndRefresh(key, gcc.getGlobalConfig().getCacheExpire());
-		if (null != tids && !tids.isEmpty()) {
-			for (String str : tids) {
-				int tid = Integer.valueOf(str);
-				if (tid != mainTid)
-					l.add(new TenantTips(tid));
-			}
-			return l;
-		} else {
-			List<Employee> employees = dao.selectByUidAndAppId(uid, BtkjConsts.APP_ID_BAOTU);
-			if (null == employees || employees.isEmpty())
-				return l;
-			String[] params = new String[employees.size() * 2 + 2];
-			int index = 0;
-			params[index++] = RedisKeyGenerator.btkjUserEmployees(uid);
-			params[index++] = String.valueOf(gcc.getGlobalConfig().getCacheExpire());
-			for (Employee employee : employees) {
-				int tid = employee.getTid();
-				if (tid != mainTid)
-					l.add(new TenantTips(tid));
-				params[index++] = String.valueOf(tid);
-				params[index++] = String.valueOf(employee.getId()); 
-			}
-			redis.hmsetAndRefresh(params);
-		}
-		return l;
+	public List<TenantTips> tenantTipsList(int appId, int uid, int mainTid) {
+		Set<Integer> tids = userCacheController.tenants(uid, appId);
+		if (null == tids || tids.isEmpty())
+			return null;
+		List<TenantTips> list = new ArrayList<TenantTips>();
+		for (int tid : tids)
+			list.add(new TenantTips(tid));
+		return list;
 	}
 	
 	/**
@@ -116,7 +94,7 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 				SerializeUtil.RedisUtil.encode(employee.getTid()));
 	}
 	
-	public void setGcc(GlobalConfigContainer gcc) {
-		this.gcc = gcc;
+	public void setUserCacheController(UserCacheController userCacheController) {
+		this.userCacheController = userCacheController;
 	}
 }

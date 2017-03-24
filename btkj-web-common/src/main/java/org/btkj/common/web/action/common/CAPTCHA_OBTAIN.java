@@ -1,8 +1,8 @@
 package org.btkj.common.web.action.common;
 
-import org.btkj.common.service.ParamUtil;
+import org.btkj.common.web.ParamUtil;
 import org.btkj.common.web.Request;
-import org.btkj.common.web.action.CommonAction;
+import org.btkj.common.web.action.Action;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.Credential;
 import org.rapid.util.common.consts.code.Code;
@@ -13,7 +13,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CAPTCHA_OBTAIN extends CommonAction {
+public class CAPTCHA_OBTAIN extends Action {
 
 	@Override
 	protected Result<?> execute(Request request, Credential credential) {

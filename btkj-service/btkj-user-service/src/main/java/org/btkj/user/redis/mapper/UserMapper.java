@@ -47,9 +47,9 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	public User getUserByMobile(int appId, String mobile) { 
 		User user = null;
 		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_MOBILE, 
-				RedisKeyGenerator.mobileUserKey(appId),
-				RedisKeyGenerator.userDataKey(),
-				mobile);
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.mobileUserKey(appId)),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userDataKey()),
+				SerializeUtil.RedisUtil.encode(mobile));
 		if (null == data) {
 			user = dao.getByAppIdAndMobile(appId, mobile);
 			if (null != user) 			
@@ -79,15 +79,18 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	public Result<User> lockUserByToken(int appId, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.LOCK_USER_BY_TOKEN, 
-				RedisKeyGenerator.tokenUserKey(appId),
-				RedisKeyGenerator.userDataKey(),
-				token, RedisKeyGenerator.USER_LOCK, lockId,
-				String.valueOf(Config.getUserLockExpire()));
-		if (data.equals("1"))
+				SerializeUtil.RedisUtil.encode(
+						RedisKeyGenerator.tokenUserKey(appId),
+						RedisKeyGenerator.userDataKey(), 
+						token, 
+						RedisKeyGenerator.USER_LOCK, 
+						lockId, 
+						Config.getUserLockExpire()));
+		if (data instanceof byte[])
+			return Result.result(Code.OK.id(), lockId, serializer.antiConvet((byte[]) data, User.class));
+		if ((long) data == 1)
 			return Result.result(Code.USER_NOT_EXIST);
-		if (data.equals("2"))
-			return Result.result(Code.USER_STATUS_CHANGED);
-		return Result.result(Code.OK.id(), lockId, serializer.antiConvet((byte[]) data, User.class));
+		return Result.result(Code.USER_STATUS_CHANGED);
 	}
 	
 	/**
@@ -130,9 +133,10 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	protected void refresh(User entity) {
 		byte[] data = serializer.convert(entity);
 		redis.invokeLua(UserLuaCmd.REFRESH_USER, 
+				redisKey,
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.mobileUserKey(entity.getAppId())),
-				redisKey, SerializeUtil.RedisUtil.encode(entity.getMobile()), 
-				SerializeUtil.RedisUtil.encode(String.valueOf(entity.getUid())), data);
+				SerializeUtil.RedisUtil.encode(entity.getMobile()), 
+				SerializeUtil.RedisUtil.encode(entity.getUid()), data);
 	}
 	
 	public int btkjUserMainTenant(int uid) {

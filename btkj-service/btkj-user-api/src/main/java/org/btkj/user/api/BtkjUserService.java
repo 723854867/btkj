@@ -2,6 +2,7 @@ package org.btkj.user.api;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.info.BtkjLoginInfo;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -39,5 +40,5 @@ public interface BtkjUserService {
 	 * @param chief 上级用户 uid
 	 * @return
 	 */
-	Result<Void> apply(int tid, String mobile, String name, String identity, int chief);
+	Result<BtkjLoginInfo> apply(int tid, String mobile, String name, String identity, int chief);
 }

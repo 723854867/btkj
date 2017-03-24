@@ -59,14 +59,18 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	/**
-	 * 通过 uid 和 tid 获取 employee
-	 */
-	EMPLOYEE_GET_1 {
+	REFRESH_EMPLOYEES {
 		@Override
 		public int keyNum() {
 			return 2;
 		}
+	},
+	
+	BTKJ_APPLY {
+		@Override
+		public int keyNum() {
+			return 2;
+		};
 	};
 	
 	@Override

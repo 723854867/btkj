@@ -1,6 +1,7 @@
 package org.btkj.user.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -57,18 +58,18 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 				
 				BtkjLoginInfo loginInfo = new BtkjLoginInfo(result.attach().getToken(), user);
 				int mainTid = userMapper.btkjUserMainTenant(user.getUid());
-				List<TenantTips> tenantTips = employeeMapper.tenantTipsList(user.getUid(), mainTid);
-				List<TenantTips> audittTenantTips = employeeMapper.auditTenantTipsList(user.getUid());
+				List<TenantTips> owns = employeeMapper.tenantTipsList(BtkjConsts.APP_ID_BAOTU, user.getUid(), mainTid);
+				List<TenantTips> audits = employeeMapper.auditTenantTipsList(user.getUid());
 				MainTenantTips mainTenantTips = null;
 				if (0 == mainTid) {
-					if (!tenantTips.isEmpty()) 
-						mainTenantTips = new MainTenantTips(tenantTips.get(0).getTid());
+					if (null != owns && !owns.isEmpty()) 
+						mainTenantTips = new MainTenantTips(owns.get(0).getTid());
 				} else 
 					mainTenantTips = new MainTenantTips(mainTid);
 				
 				loginInfo.setTenant(mainTenantTips);
-				loginInfo.setTenantList(tenantTips);
-				loginInfo.setTenantAuditList(audittTenantTips);
+				loginInfo.setOwnTenants(owns);
+				loginInfo.setAuditTenants(audits);
 				return Result.result(loginInfo);
 			} finally {
 				// 这里一定别忘记释放锁，因为在 token_replace 的 lua 脚本中我们也获取了 user 的锁资源，因此这里要释放
@@ -85,28 +86,38 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 		User user = result.attach();
 		String lockId = result.getDesc();
 		try {
-			_doApply(user, tid, chief);
+			return _doApply(user, tid, chief);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
-		return null;
 	}
 	
 	/**
 	 * 先创建用户再申请
 	 */
 	@Override
-	public Result<Void> apply(int tid, String mobile, String name, String identity, int chief) {
+	public Result<BtkjLoginInfo> apply(int tid, String mobile, String name, String identity, int chief) {
 		User user = userMapper.insert(BeanGenerator.newUser(BtkjConsts.APP_ID_BAOTU, mobile, identity, name));
-		String lockId = userMapper.lockUser(user.getUid());
-		if (null == lockId)
+		Result<TokenReplaceModel> result = userMapper.tokenReplace(BtkjConsts.APP_ID_BAOTU, user.getUid(), mobile);
+		if (result.getCode() != 0)
 			return Result.result(Code.USER_STATUS_CHANGED);
 		try {
+			/**
+			 * 用户的手机可以修改，假如在 getUserByMobile 时获取的时用户 A，执行到这里的时候用户的手机修改了，
+			 * 这时我们调用 update 有可能会将修改过的手机又重置回去。用户的 uid 是唯一的因此根据 uid 来获取的用户是固定不变的
+			 */
+			user = userMapper.getByKey(user.getUid());		
+			if (!user.getMobile().equals(mobile))
+				return Result.result(Code.USER_STATUS_CHANGED);
 			_doApply(user, tid, chief);
+			BtkjLoginInfo loginInfo = new BtkjLoginInfo(result.attach().getToken(), user);
+			List<TenantTips> list = new ArrayList<TenantTips>();
+			list.add(new TenantTips(tid));
+			loginInfo.setAuditTenants(list);
+			return Result.result(loginInfo);
 		} finally {
-			userMapper.releaseUserLock(user.getUid(), lockId);
+			userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
 		}
-		return null;
 	}
 	
 	private Result<Void> _doApply(User user, int tid, int chief) {
