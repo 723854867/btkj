@@ -13,7 +13,7 @@ public class Tenant implements Entity<Integer> {
 	private int mod;
 	private String privilege;
 	private int created;
-	private int update;
+	private int updated;
 	
 	public enum Mod {
 		/**
@@ -88,12 +88,12 @@ public class Tenant implements Entity<Integer> {
 		this.created = created;
 	}
 
-	public int getUpdate() {
-		return update;
+	public int getUpdated() {
+		return updated;
 	}
-
-	public void setUpdate(int update) {
-		this.update = update;
+	
+	public void setUpdated(int updated) {
+		this.updated = updated;
 	}
 
 	@Override

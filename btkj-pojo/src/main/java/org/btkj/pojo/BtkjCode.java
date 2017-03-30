@@ -26,9 +26,15 @@ public enum BtkjCode implements ICode {
 	APPLY_EXIST(502, "apply exist"),
 	
 	/**
+	 * 申请不存在
+	 */
+	APPLY_NOT_EXIST(503, "apply not exist"),
+	
+	/**
 	 * 已经是雇员了
 	 */
-	ALREADY_IS_EMPLOYEE(503, "already is employee");
+	ALREADY_IS_EMPLOYEE(504, "already is employee");
+	
 	
 	private int code;
 	private String desc;

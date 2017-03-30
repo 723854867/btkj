@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.user.persistence.provider.EmployeeSQLProvider;
 import org.rapid.data.storage.db.Dao;
@@ -22,8 +23,19 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	List<Employee> selectAll();
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndTid")
-	Employee selectByUidAndTid(@Param("uid") int uid, @Param("tid") int tid);
+	Employee selectByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndAppId")
 	List<Employee> selectByUidAndAppId(@Param("uid") int uid, @Param("appId") int appId);
+	
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
+	List<Employee> selectByTidForUpdate(int tid);
+	
+	/**
+	 * 新雇员加入代理公司，需要修改该代理公司一部分雇员的 left 和 right 值
+	 * 
+	 * @param tid
+	 */
+	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateForJoin")
+	void updateForJoin(int tid, int value);
 }

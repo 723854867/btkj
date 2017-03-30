@@ -4,6 +4,21 @@ import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;
 
 public class TenantSQLProvider {
+	
+	public String insert() { 
+		return new SQL() {
+			{
+				INSERT_INTO(BtkjTables.TENANT.name());
+				VALUES("`name`", "#{name}");
+				VALUES("app_id", "#{appId}");
+				VALUES("region_code", "#{regionCode}");
+				VALUES("`mod`", "#{mod}");
+				VALUES("`privilege`", "#{privilege}");
+				VALUES("`created`", "#{created}");
+				VALUES("`updated`", "#{updated}");
+			}
+		}.toString();
+	}
 
 	public String selectAll() {
 		return new SQL() {

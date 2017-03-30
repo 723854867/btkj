@@ -13,8 +13,10 @@ public class EmployeeSQLProvider {
 				VALUES("tid", "#{tid}");
 				VALUES("app_id", "#{appId}");
 				VALUES("parent_id", "#{parentId}");
-				VALUES("left", "#{left}");
-				VALUES("right", "#{right}");
+				VALUES("`mod`", "#{mod}");
+				VALUES("`left`", "#{left}");
+				VALUES("`right`", "#{right}");
+				VALUES("`level`", "#{level}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -26,9 +28,9 @@ public class EmployeeSQLProvider {
 			{
 				SELECT("*");
 				FROM(BtkjTables.EMPLOYEE.name());
-				WHERE("uid=#{uid}");
-				AND();
 				WHERE("tid=#{tid}");
+				AND();
+				WHERE("uid=#{uid}");
 			}
 		}.toString();
 	}
@@ -52,5 +54,13 @@ public class EmployeeSQLProvider {
 				WHERE("app_id=#{appId}");
 			}
 		}.toString();
+	}
+	
+	public String selectByTidForUpdate() {
+		return "select * from employee where `tid`=#{tid} for update";
+	}
+	
+	public String updateForJoin() {
+		return "update employee set `left`=case when `left`>=#{value} then `left`+2 end, `right`=case when `right`>#{value} then `right`+2 end where tid=#{tid}";
 	}
 }

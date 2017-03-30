@@ -15,8 +15,10 @@ public class Employee implements Entity<Integer> {
 	private int tid;
 	private int appId;
 	private int parentId;
+	private int mod;
 	private int left;
 	private int right;
+	private int level;
 	private int created;
 	private int updated;
 
@@ -60,6 +62,14 @@ public class Employee implements Entity<Integer> {
 		this.parentId = parentId;
 	}
 	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
+	}
+	
 	public int getLeft() {
 		return left;
 	}
@@ -74,6 +84,14 @@ public class Employee implements Entity<Integer> {
 	
 	public void setRight(int right) {
 		this.right = right;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public int getCreated() {

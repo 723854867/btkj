@@ -55,7 +55,7 @@ public enum UserLuaCmd implements ILuaCmd {
 	REFRESH_EMPLOYEE {
 		@Override
 		public int keyNum() {
-			return 2;
+			return 3;
 		}
 	},
 	
@@ -66,11 +66,25 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	BTKJ_APPLY {
+	APPLY_ADD {
 		@Override
 		public int keyNum() {
 			return 2;
 		};
+	},
+	
+	APPLY_GET_AND_DEL {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
+	
+	EMPLOYEE_GET_BY_UID_AND_TID {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
 	};
 	
 	@Override

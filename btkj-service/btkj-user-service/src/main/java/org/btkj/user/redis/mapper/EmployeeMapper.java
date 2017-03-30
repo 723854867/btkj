@@ -6,16 +6,22 @@ import java.util.Set;
 
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.tips.TenantTips;
+import org.btkj.user.BeanGenerator;
+import org.btkj.user.persistence.Tx;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.UserCacheController;
 import org.btkj.user.redis.UserLuaCmd;
 import org.rapid.data.storage.mapper.Mapper;
+import org.rapid.util.common.Assert;
 import org.rapid.util.common.serializer.SerializeUtil;
 
 public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
-	
+
+	private Tx tx;
 	private UserCacheController userCacheController;
 	
 	public EmployeeMapper() {
@@ -29,7 +35,9 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 
 	@Override
 	public Employee insert(Employee entity) {
-		return null;
+		dao.insert(entity);
+		userCacheController.refreshEmployee(entity);
+		return entity;
 	}
 
 	@Override
@@ -43,16 +51,16 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	}
 	
 	public Employee get(int uid, int tid) {
-		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_MOBILE,
+		byte[] data = redis.invokeLua(UserLuaCmd.EMPLOYEE_GET_BY_UID_AND_TID,
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(uid)),
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey()),
 				SerializeUtil.RedisUtil.encode(tid));
 		if (null != data)
 			return SerializeUtil.ProtostuffUtil.deserial(data, Employee.class);
-		Employee employee = dao.selectByUidAndTid(uid, tid);
+		Employee employee = dao.selectByTidAndUid(tid, uid);
 		if (null == employee)
 			return null;
-		_refresh(employee);
+		userCacheController.refreshEmployee(employee);
 		return employee;
 	}
 	
@@ -85,13 +93,34 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 		return list;
 	}
 	
-	private void _refresh(Employee employee) {
-		redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEE,
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey()),
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(employee.getUid())),
-				SerializeUtil.RedisUtil.encode(employee.getId()),
-				SerializeUtil.ProtostuffUtil.serial(employee),
-				SerializeUtil.RedisUtil.encode(employee.getTid()));
+	/**
+	 * 加入代理商：保途 app
+	 * 
+	 * @param tenant
+	 * @param user
+	 * @param chief
+	 */
+	public void join(Tenant tenant, User user, User chief) {
+		Employee employee = get(chief.getUid(), tenant.getTid());
+		Assert.notNull(employee);
+		employee = BeanGenerator.newEmployee(user, tenant, employee);
+		tx.tenantJoin(employee);
+	}
+	
+	/**
+	 * 加入代理商：独立 app
+	 * 
+	 * @param tenant
+	 * @param name
+	 * @param identity
+	 * @param chief
+	 */
+	public void join(Tenant tenant, String name, String identity, int chief) {
+		
+	}
+	
+	public void setTx(Tx tx) {
+		this.tx = tx;
 	}
 	
 	public void setUserCacheController(UserCacheController userCacheController) {

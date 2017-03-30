@@ -62,4 +62,16 @@ public class UserCacheController {
 		redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEES, params);
 		return set;
 	}
+	
+	public void refreshEmployee(Employee employee) {
+		redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEE,
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userCacheControllerKey(employee.getUid())),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey()),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(employee.getUid())),
+				SerializeUtil.RedisUtil.encode(TENANTS_LIST),
+				SerializeUtil.RedisUtil.encode(CACHE_VALUE), 
+				SerializeUtil.RedisUtil.encode(employee.getId()),
+				SerializeUtil.ProtostuffUtil.serial(employee),
+				SerializeUtil.RedisUtil.encode(employee.getTid()));
+	}
 }
