@@ -13,7 +13,6 @@ public class Employee implements Entity<Integer> {
 	private int id;
 	private int uid;
 	private int tid;
-	private int appId;
 	private int parentId;
 	private int mod;
 	private int left;
@@ -44,14 +43,6 @@ public class Employee implements Entity<Integer> {
 
 	public void setTid(int tid) {
 		this.tid = tid;
-	}
-	
-	public int getAppId() {
-		return appId;
-	}
-	
-	public void setAppId(int appId) {
-		this.appId = appId;
 	}
 	
 	public int getParentId() {

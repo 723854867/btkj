@@ -25,8 +25,11 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndTid")
 	Employee selectByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndAppId")
-	List<Employee> selectByUidAndAppId(@Param("uid") int uid, @Param("appId") int appId);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidAndLevel")
+	List<Employee> selectByTidAndLevel(@Param("tid") int tid, @Param("level") int level);
+	
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUid")
+	List<Employee> selectByUid(@Param("uid") int uid);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
@@ -37,5 +40,5 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	 * @param tid
 	 */
 	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateForJoin")
-	void updateForJoin(int tid, int value);
+	void updateForJoin(@Param("tid") int tid, @Param("value") int value);
 }

@@ -124,7 +124,7 @@ public class BtkjUserServiceImpl implements BtkjUserService {
 		ApplyInfo ai = applyHook.getApplyInfo(tid, user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
-		if (null != employeeMapper.get(user.getUid(), tid))
+		if (null != employeeMapper.getByUidAndTid(user.getUid(), tid))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
 		applyHook.addApplyInfo(user.getUid(), tid, chief);
 		return Result.success();

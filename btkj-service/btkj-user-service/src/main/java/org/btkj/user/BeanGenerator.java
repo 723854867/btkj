@@ -35,10 +35,9 @@ public class BeanGenerator {
 		Employee employee = new Employee();
 		employee.setUid(user.getUid());
 		employee.setTid(tenant.getTid());
-		employee.setAppId(tenant.getAppId());
-		employee.setParentId(null == parent ? 0 : parent.getId());
-		employee.setLevel(null == parent ? 1 : parent.getLevel() + 1);
-		employee.setLeft(null == parent ? 1 : parent.getRight());
+		employee.setParentId(parent.getId());
+		employee.setLevel(parent.getLevel() + 1);
+		employee.setLeft(parent.getRight());
 		employee.setRight(employee.getLeft() + 1);
 		
 		int time = DateUtils.currentTime();

@@ -82,7 +82,7 @@ public interface Params {
 	
 	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1013, "region");
 	final Str2StrConstConverter APPLY_KEY				= new Str2StrConstConverter(1014, "applyKey");
-	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1015, "aggree", false) {
+	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1015, "agree", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
 		};

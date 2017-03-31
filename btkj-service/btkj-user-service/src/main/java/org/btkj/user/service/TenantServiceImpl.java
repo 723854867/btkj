@@ -9,11 +9,10 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.Region;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.persistence.Tx;
 import org.btkj.user.redis.hook.ApplyHook;
@@ -65,25 +64,23 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<?> applyProcess(int tid, String applyKey, boolean agree) {
+	public Result<Void> applyProcess(int tid, String applyKey, boolean agree) {
 		ApplyInfo info = applyHook.getAndDel(tid, applyKey);
 		if (null == info)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (!agree)				// 拒绝申请直接返回即可
 			return Result.success();
 		
-		User chief = 0 == info.getChief() ? null : userMapper.getByKey(info.getChief());
+		Employee chief = 0 == info.getChief() ? 
+				employeeMapper.getByTidAndLevel(tid, BtkjConsts.EMPLOYEE_ROOT_LEVEL).get(0) : 
+					employeeMapper.getByUidAndTid(info.getChief(), tid);
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
 		Assert.notNull(tenant);
-		if (0 != info.getUid()) {		// 独立 app 的申请
-			// 先创建用户
-			User user = userMapper.insert(BeanGenerator.newUser(tenant.getAppId(), applyKey, info.getIdentity(), info.getName()));
-			
-		} else {						// 保途 app 的申请
-			User user = userMapper.getByKey(info.getUid());
-			employeeMapper.join(tenant, user, chief);
-		}
-		return null;
+		if (0 == info.getUid())		// 独立 app 的申请
+			tx.tenantJoin(info.getName(), info.getIdentity(), applyKey, tenant, chief);
+		else 						// 保途 app 的申请
+			tx.tenantJoin(userMapper.getByKey(info.getUid()), tenant, chief);
+		return Result.success();
 	}
 	
 	@Override

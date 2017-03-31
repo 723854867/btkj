@@ -10,6 +10,7 @@ import org.btkj.pojo.entity.Employee;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.serializer.SerializeUtil;
+import org.rapid.util.lang.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
  * @author ahab
  */
 @Component
+@SuppressWarnings("unchecked")
 public class UserCacheController {
 	
 	private static final String CACHE_VALUE	 = "v";
@@ -34,33 +36,31 @@ public class UserCacheController {
 	 * @param uid
 	 * @return
 	 */
-	public Set<Integer> tenants(int uid, int appId) {
+	public Set<Integer> tenants(int uid) {
 		Set<Integer> set = null;
-		if (!redis.hsetnx(RedisKeyGenerator.userCacheControllerKey(uid), TENANTS_LIST, CACHE_VALUE)) {
-			Set<String> s = redis.hkeys(RedisKeyGenerator.userEmployeeKey(uid));
-			if (null == s || s.isEmpty())
-				return set;
+		Object value = redis.invokeLua(UserLuaCmd.EMPLOYEE_LIST,
+				RedisKeyGenerator.userCacheControllerKey(uid), 
+				RedisKeyGenerator.userEmployeeKey(uid),
+				TENANTS_LIST, CACHE_VALUE);
+		if (value instanceof Long) {
+			List<Employee> employees = employeeDao.selectByUid(uid);
+			if (employees.isEmpty())
+				return null;
 			set = new HashSet<Integer>();
-			for (String str : s)
-				set.add(Integer.valueOf(str));
+			byte[][] params = new byte[employees.size() * 3 + 2][];
+			int index = 0;
+			params[index++] = SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey());
+			params[index++] = SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(uid));
+			for (Employee employee : employees) {
+				params[index++] = SerializeUtil.RedisUtil.encode(employee.getId());
+				params[index++] = SerializeUtil.RedisUtil.encode(employee.getTid());
+				params[index++] = SerializeUtil.ProtostuffUtil.serial(employee);
+				set.add(employee.getTid());
+			}
+			redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEES, params);
 			return set;
-		}
-		List<Employee> employees = employeeDao.selectByUidAndAppId(uid, appId);
-		if (employees.isEmpty())
-			return null;
-		set = new HashSet<Integer>();
-		byte[][] params = new byte[employees.size() * 3 + 2][];
-		int index = 0;
-		params[index++] = SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey());
-		params[index++] = SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(uid));
-		for (Employee employee : employees) {
-			params[index++] = SerializeUtil.RedisUtil.encode(employee.getId());
-			params[index++] = SerializeUtil.RedisUtil.encode(employee.getTid());
-			params[index++] = SerializeUtil.ProtostuffUtil.serial(employee);
-			set.add(employee.getTid());
-		}
-		redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEES, params);
-		return set;
+		} else 
+			return CollectionUtils.toInt((Set<String>) value);
 	}
 	
 	public void refreshEmployee(Employee employee) {
@@ -69,7 +69,6 @@ public class UserCacheController {
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey()),
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userEmployeeKey(employee.getUid())),
 				SerializeUtil.RedisUtil.encode(TENANTS_LIST),
-				SerializeUtil.RedisUtil.encode(CACHE_VALUE), 
 				SerializeUtil.RedisUtil.encode(employee.getId()),
 				SerializeUtil.ProtostuffUtil.serial(employee),
 				SerializeUtil.RedisUtil.encode(employee.getTid()));

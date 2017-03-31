@@ -76,11 +76,18 @@ public enum UserLuaCmd implements ILuaCmd {
 	APPLY_GET_AND_DEL {
 		@Override
 		public int keyNum() {
-			return 2;
+			return 3;
 		}
 	},
 	
 	EMPLOYEE_GET_BY_UID_AND_TID {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
+	
+	EMPLOYEE_LIST {
 		@Override
 		public int keyNum() {
 			return 2;

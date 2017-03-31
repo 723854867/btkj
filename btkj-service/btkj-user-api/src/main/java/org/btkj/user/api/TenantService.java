@@ -47,7 +47,7 @@ public interface TenantService {
 	 * @param applyKey
 	 * @param agree
 	 */
-	Result<?> applyProcess(int tid, String applyKey, boolean agree);
+	Result<Void> applyProcess(int tid, String applyKey, boolean agree);
 	
 	// ****************
 	/**

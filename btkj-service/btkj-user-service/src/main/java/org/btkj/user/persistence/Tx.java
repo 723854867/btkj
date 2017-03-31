@@ -31,14 +31,20 @@ public class Tx {
 	private EmployeeDao employeeDao;
 	
 	@Transactional
-	public void tenantJoin(Employee employee) {
+	public void tenantJoin(User user, Tenant tenant, Employee chief) {
+		Employee employee = BeanGenerator.newEmployee(user, tenant, chief);
 		employeeDao.selectByTidForUpdate(employee.getTid());		// 间隙锁
-		employeeDao.updateForJoin(employee.getTid(), employee.getLeft() - 1);
+		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
 		employeeDao.insert(employee);
 	}
 	
-	public void tenantJoin(int appId, String mobile, String name, String identity) {
-		User user = BeanGenerator.newUser(appId, mobile, identity, name);
+	@Transactional
+	public void tenantJoin(String name, String identity, String mobile, Tenant tenant, Employee chief) {
+		User user = userMapper.insert(BeanGenerator.newUser(tenant.getAppId(), mobile, identity, name));
+		Employee employee = BeanGenerator.newEmployee(user, tenant, chief);
+		employeeDao.selectByTidForUpdate(employee.getTid());		// 间隙锁
+		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
+		employeeDao.insert(employee);
 	}
 	
 	@Transactional

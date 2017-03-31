@@ -24,4 +24,9 @@ public interface BtkjConsts {
 	 * 
 	 */
 	final String NULL_TENANT_CREDENTIAL			= "0000";
+	
+	/**
+	 * 租户顶级用户的 level
+	 */
+	final int EMPLOYEE_ROOT_LEVEL				= 1;
 }

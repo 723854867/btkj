@@ -11,7 +11,6 @@ public class EmployeeSQLProvider {
 				INSERT_INTO(BtkjTables.EMPLOYEE.name());
 				VALUES("uid", "#{uid}");
 				VALUES("tid", "#{tid}");
-				VALUES("app_id", "#{appId}");
 				VALUES("parent_id", "#{parentId}");
 				VALUES("`mod`", "#{mod}");
 				VALUES("`left`", "#{left}");
@@ -35,6 +34,18 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
+	public String selectByTidAndLevel() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(BtkjTables.EMPLOYEE.name());
+				WHERE("tid=#{tid}");
+				AND();
+				WHERE("level=#{level}");
+			}
+		}.toString();
+	}
+	
 	public String selectAll() {
 		return new SQL() {
 			{
@@ -44,14 +55,12 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByUidAndAppId() {
+	public String selectByUid() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("uid=#{uid}");
-				AND();
-				WHERE("app_id=#{appId}");
 			}
 		}.toString();
 	}
@@ -61,6 +70,6 @@ public class EmployeeSQLProvider {
 	}
 	
 	public String updateForJoin() {
-		return "update employee set `left`=case when `left`>=#{value} then `left`+2 end, `right`=case when `right`>#{value} then `right`+2 end where tid=#{tid}";
+		return "update employee set `left`=case when `left`>#{value} then `left`+2 else `left` end, `right`=case when `right`>=#{value} then `right`+2 else `right` end where tid=#{tid}";
 	}
 }
