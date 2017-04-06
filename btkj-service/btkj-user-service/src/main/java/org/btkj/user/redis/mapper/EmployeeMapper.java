@@ -7,7 +7,6 @@ import java.util.Set;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.info.tips.TenantTips;
-import org.btkj.user.persistence.Tx;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.btkj.user.redis.RedisKeyGenerator;
 import org.btkj.user.redis.UserCacheController;
@@ -17,7 +16,6 @@ import org.rapid.util.common.serializer.SerializeUtil;
 
 public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 
-	private Tx tx;
 	private UserCacheController userCacheController;
 	
 	public EmployeeMapper() {
@@ -74,8 +72,11 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 		if (null == tids || tids.isEmpty())
 			return null;
 		List<TenantTips> list = new ArrayList<TenantTips>();
-		for (int tid : tids)
+		for (int tid : tids) {
+			if (tid == mainTid)
+				continue;
 			list.add(new TenantTips(tid));
+		}
 		return list;
 	}
 	
@@ -93,8 +94,14 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 		return list;
 	}
 	
-	public void setTx(Tx tx) {
-		this.tx = tx;
+	/**
+	 * 获取用户拥有的代理公司数量
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public int tenantNum(int uid) { 
+		return userCacheController.tenants(uid).size();
 	}
 	
 	public void setUserCacheController(UserCacheController userCacheController) {

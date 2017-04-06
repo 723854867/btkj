@@ -7,15 +7,20 @@ package org.btkj.pojo.config;
  */
 public class GlobalConfig {
 	
-	public static final GlobalConfig DEFAULT_CONFIG		= new GlobalConfig();
-
-	private int cacheExpire;				// 用户数据缓存失效时间
+	public static GlobalConfig DEFAULT_CONFIG;
 	
-	public int getCacheExpire() {
-		return cacheExpire;
+	static {
+		DEFAULT_CONFIG = new GlobalConfig();
+		DEFAULT_CONFIG.setMaxTenantNum(10);
+	}
+
+	private int maxTenantNum;
+	
+	public int getMaxTenantNum() {
+		return maxTenantNum;
 	}
 	
-	public void setCacheExpire(int cacheExpire) {
-		this.cacheExpire = cacheExpire;
+	public void setMaxTenantNum(int maxTenantNum) {
+		this.maxTenantNum = maxTenantNum;
 	}
 }

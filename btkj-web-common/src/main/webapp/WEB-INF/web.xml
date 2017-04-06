@@ -14,16 +14,16 @@
 	</context-param>
 	<context-param>
 		<param-name>actionLocation</param-name>
-		<param-value>org.btkj.common.web.action</param-value>
+		<param-value>org.btkj.common.action</param-value>
 	</context-param>
 
 	<listener>
-		<listener-class>org.btkj.common.web.listener.ContextLoaderListener</listener-class>
+		<listener-class>org.btkj.web.util.ContextLoaderListener</listener-class>
 	</listener>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.btkj.common.web.filter.CharsetEncodingFilter</filter-class>
+		<filter-class>org.btkj.web.util.CharsetEncodingFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>utf-8</param-value>
@@ -36,7 +36,7 @@
 
 	<servlet>
 		<servlet-name>common</servlet-name>
-		<servlet-class>org.btkj.common.web.Dispatcher</servlet-class>
+		<servlet-class>org.btkj.web.util.Dispatcher</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

@@ -2,6 +2,8 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.info.mainpage.ILoginInfo;
+
 /**
  * 申请信息
  * 
@@ -69,5 +71,35 @@ public class ApplyInfo implements Serializable {
 	
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+	
+	/**
+	 * 独立 app 在登录时如果用户不存在会判断该账号是否已经有申请正在审核，如果有则显示的时审核信息，而不是登录或者主页信息
+	 * 
+	 * @author ahab
+	 *
+	 */
+	public static class ApplyChecker extends ApplyInfo implements ILoginInfo {
+
+		private static final long serialVersionUID = -7130338155291179327L;
+		
+		public ApplyChecker() {}
+		
+		public ApplyChecker(ApplyInfo ai) {
+			setTid(ai.getTid());
+			setChief(ai.getChief());
+			setTime(ai.getTime());
+			setUid(ai.getUid());
+			setName(ai.getName());
+			setIdentity(ai.getIdentity());
+		}
+		
+		@Override
+		public String getToken() {
+			return null;
+		}
+		@Override
+		public void setToken(String token) {
+		}
 	}
 }

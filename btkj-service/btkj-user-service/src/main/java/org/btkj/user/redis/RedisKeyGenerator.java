@@ -2,6 +2,8 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 
+import org.btkj.pojo.model.ClientType;
+
 public class RedisKeyGenerator {
 	
 	public static final String USER_LOCK				= "string:user:{0}:lock";			// 用户锁
@@ -17,8 +19,8 @@ public class RedisKeyGenerator {
 	private static final String USER_DATA				= "hash:db:user";					// 用户数据
 	private static final String BANNER_DATA				= "hash:db:banner";					// banner 条数据
 	private static final String MOBILE_USER				= "hash:app:{0}:mobile:user";		// 每个 app 中用户手机和用户 uid 的映射关系 hash
-	private static final String TOKEN_USER				= "hash:app:{0}:token:user";		// 每个 app 中用户  token 和用户 uid 的映射关系 hash
-	private static final String USER_TOKEN				= "hash:app:{0}:user:token";		// 每个 app 中用户 uid 和 token 的映射关系
+	private static final String TOKEN_USER				= "hash:app:{0}:token:user:{1}";	// 每个 app 中用户  token 和用户 uid 的映射关系 hash, 1 - clientType
+	private static final String USER_TOKEN				= "hash:app:{0}:user:token:{1}";	// 每个 app 中用户 uid 和 token 的映射关系, 1 - clientType
 	
 	// apply
 	private static final String APPLY_DATA				= "hash:tenant:{0}:apply";			// 每个 租户的所有申请信息
@@ -73,12 +75,12 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(MOBILE_USER, String.valueOf(appId));
 	}
 	
-	public static final String tokenUserKey(int appId) { 
-		return MessageFormat.format(TOKEN_USER, String.valueOf(appId));
+	public static final String tokenUserKey(int appId, ClientType ct) { 
+		return MessageFormat.format(TOKEN_USER, String.valueOf(appId), String.valueOf(ct.type()));
 	}
 	
-	public static final String userTokenKey(int appId) {
-		return MessageFormat.format(USER_TOKEN, String.valueOf(appId));
+	public static final String userTokenKey(int appId, ClientType ct) {
+		return MessageFormat.format(USER_TOKEN, String.valueOf(appId), String.valueOf(ct.type()));
 	}
 	
 	public static final String applyDataKey(int tid) { 

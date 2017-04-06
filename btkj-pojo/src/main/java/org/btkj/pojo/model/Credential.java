@@ -20,25 +20,23 @@ public class Credential implements Serializable {
 	private User user;
 	private Tenant tenant;
 	private Employee employee;				// 前提是有 Tenant
+	private ClientType clientType;
 	
 	public Credential() {}
 	
-	public Credential(App app) {
-		this(app, null, null, null);
+	public Credential(ClientType ct, App app) {
+		this(ct, app, null, null, null);
 	}
 	
-	public Credential(App app, Tenant tenant) {
-		this(app, tenant, null, null);
+	public Credential(ClientType ct, App app, Tenant tenant) {
+		this(ct, app, tenant, null, null);
 	}
 	
-	public Credential(App app, Tenant tenant, User user) {
-		this(app, tenant, user, null);
-	}
-	
-	public Credential(App app, Tenant tenant, User user, Employee employee) {
+	public Credential(ClientType ct, App app, Tenant tenant, User user, Employee employee) {
 		this.app = app;
-		this.tenant = tenant;
 		this.user = user;
+		this.tenant = tenant;
+		this.clientType = ct;
 		this.employee = employee;
 	}
 	
@@ -72,5 +70,13 @@ public class Credential implements Serializable {
 	
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+	
+	public ClientType getClientType() {
+		return clientType;
+	}
+	
+	public void setClientType(ClientType clientType) {
+		this.clientType = clientType;
 	}
 }

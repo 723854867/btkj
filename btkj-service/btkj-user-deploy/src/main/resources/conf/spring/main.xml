@@ -15,18 +15,18 @@
 		<property name="userLockExpire" value="${user.lock.expire}" />
 	</bean>
 	
-	<bean id="globalConfigContainer" class="org.btkj.pojo.config.GlobalConfigContainer">
-		<constructor-arg name="zkClient">
+	<bean id="globalConfigContainer" class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
+		<property name="zkClient">
 			<bean class="org.I0Itec.zkclient.ZkClient">
-				<constructor-arg name="zkServers" value="${zookeeper.servers}" />
-				<constructor-arg name="sessionTimeout" value="${zookeeper.session.timeout}" />
-				<constructor-arg name="connectionTimeout" value="${zookeeper.connection.timeout}" />
+				<constructor-arg name="zkServers" value="${zk.servers}" />
+				<constructor-arg name="sessionTimeout" value="${zk.session.timeout}" />
+				<constructor-arg name="connectionTimeout" value="${zk.connection.timeout}" />
 				<constructor-arg name="zkSerializer" >
 					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
 				</constructor-arg>
 			</bean>
-		</constructor-arg>
-		<constructor-arg name="configPath" value="${zk.config.path}" />
+		</property>
+		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
 	<bean id="protostuffEntitySerializer" class="org.rapid.data.storage.mapper.serializer.ProtostuffEntitySerializer" />

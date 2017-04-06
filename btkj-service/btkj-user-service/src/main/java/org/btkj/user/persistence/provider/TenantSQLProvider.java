@@ -11,9 +11,10 @@ public class TenantSQLProvider {
 				INSERT_INTO(BtkjTables.TENANT.name());
 				VALUES("`name`", "#{name}");
 				VALUES("app_id", "#{appId}");
-				VALUES("region_code", "#{regionCode}");
+				VALUES("region_id", "#{regionId}");
 				VALUES("`mod`", "#{mod}");
 				VALUES("`privilege`", "#{privilege}");
+				VALUES("`pwd`", "#{pwd}");
 				VALUES("`created`", "#{created}");
 				VALUES("`updated`", "#{updated}");
 			}

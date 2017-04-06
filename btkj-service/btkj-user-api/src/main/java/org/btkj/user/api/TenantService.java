@@ -2,9 +2,9 @@ package org.btkj.user.api;
 
 import java.util.Map;
 
-import org.btkj.pojo.Region;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
@@ -50,6 +50,18 @@ public interface TenantService {
 	Result<Void> applyProcess(int tid, String applyKey, boolean agree);
 	
 	// ****************
+	
+	/**
+	 * 添加代理公司
+	 * 
+	 * @param region 代理公司地区
+	 * @param tenantName 代理公司租户名字
+	 * @param pwd 密码
+	 * @param uid 管理员用户ID
+	 * @return
+	 */
+	Result<Void> tenantAdd(Region region, String tenantName, String pwd, int uid);
+
 	/**
 	 * 添加代理公司
 	 * 
@@ -59,7 +71,8 @@ public interface TenantService {
 	 * @param name root 账号名字
 	 * @param mobile root 账号手机名字
 	 * @param identity root 账号身份证
+	 * @param pwd 默认所有用户的 pc 和管理后台登录密码
 	 * @return
 	 */
-	Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity);
+	Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity, String pwd);
 }

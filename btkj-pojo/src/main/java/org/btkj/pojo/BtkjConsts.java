@@ -10,6 +10,12 @@ public interface BtkjConsts {
 	final int APP_ID_BAOTU						= 100;
 	
 	/**
+	 * clientType 字段的位数
+	 */
+	final int CLIENT_TYPE_BIT_NUM				= 1;
+
+	
+	/**
 	 * app_id 的位数
 	 */
 	final int APP_ID_BIT_NUM					= 3;

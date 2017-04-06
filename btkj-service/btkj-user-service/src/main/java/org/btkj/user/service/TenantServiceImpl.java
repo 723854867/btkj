@@ -6,11 +6,13 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.Region;
+import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.api.TenantService;
@@ -22,7 +24,9 @@ import org.btkj.user.redis.mapper.EmployeeMapper;
 import org.btkj.user.redis.mapper.TenantMapper;
 import org.btkj.user.redis.mapper.UserMapper;
 import org.rapid.util.common.Assert;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -84,12 +88,36 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity) {
-		if (null == appName) {
+	public Result<Void> tenantAdd(Region region, String tenantName, String pwd, int uid) {
+		User user = userMapper.getByKey(uid);
+		if (null == user)
+			return Result.result(Code.USER_NOT_EXIST);
+		String lockId = userMapper.lockUser(uid);
+		if (null == lockId)
+			return Result.result(Code.USER_STATUS_CHANGED);
+		try {
+			// 判断是否超过最大代理公司数
+			int tenantNum = employeeMapper.tenantNum(uid);
+			if (tenantNum >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum())
+				return Result.result(BtkjCode.TENANT_COUNT_MAXIMUM);
+			tx.tenantAdd(region, tenantName, pwd, user);
+			return Result.success();
+		} finally {
+			userMapper.releaseUserLock(uid, lockId);
+		}
+	}
+	
+	@Override
+	public Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity, String pwd) {
+		if (null == appName) {			// 添加保途租户
 			App app = appMapper.getByKey(BtkjConsts.APP_ID_BAOTU);
-			tx.tenantAdd(app, region, tenantName, mobile, name, identity);
-		} else
-			tx.tenantAdd(appName, region, tenantName, mobile, name, identity);
+			try {
+				tx.tenantAdd(app, region, tenantName, mobile, name, identity, pwd);
+			} catch (DuplicateKeyException e) {
+				return Result.result(BtkjCode.MOBILE_EXIST);
+			}
+		} else							// 添加独立租户
+			tx.tenantAdd(appName, region, tenantName, mobile, name, identity, pwd);
 		return Result.success();
 	}
 }

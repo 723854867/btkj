@@ -18,19 +18,11 @@
 		<property name="serializer" ref="protostuffEntitySerializer" />
 	</bean>
 	
+	<bean id="regionMapper" class="org.btkj.config.redis.mapper.RegionMapper" parent="O2OMapper" init-method="init">
+		<property name="dao" ref="regionDao" />
+	</bean>
+	
 	<bean id="insurerMapper" class="org.btkj.config.redis.mapper.InsurerMapper" parent="O2OMapper" init-method="init">
 		<property name="dao" ref="insurerDao" />
-	</bean>
-	
-	<bean id="regionCityMapper" class="org.btkj.config.redis.mapper.RegionCityMapper" parent="O2OMapper" init-method="init">
-		<property name="dao" ref="regionCityDao" />
-	</bean>
-	
-	<bean id="regionDistrictMapper" class="org.btkj.config.redis.mapper.RegionDistrictMapper" parent="O2OMapper" init-method="init">
-		<property name="dao" ref="regionDistrictDao" />
-	</bean>
-	
-	<bean id="regionProvinceMapper" class="org.btkj.config.redis.mapper.RegionProvinceMapper" parent="O2OMapper" init-method="init">
-		<property name="dao" ref="regionProvinceDao" />
 	</bean>
 </beans>

@@ -3,11 +3,16 @@ package org.btkj.config.api;
 import java.util.Map;
 
 import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.RegionCity;
-import org.btkj.pojo.entity.RegionDistrict;
-import org.btkj.pojo.entity.RegionProvince;
+import org.btkj.pojo.entity.Region;
 
 public interface ConfigService {
+	
+	/**
+	 * 获取所有的市级行政区划
+	 * 
+	 * @return
+	 */
+	Map<Integer, Region> getRegions();
 
 	/**
 	 * 获取所有的保险公司配置信息
@@ -15,25 +20,4 @@ public interface ConfigService {
 	 * @return
 	 */
 	Map<Integer, Insurer> getInsurances();
-	
-	/**
-	 * 获取所有的市级行政区划
-	 * 
-	 * @return
-	 */
-	Map<Integer, RegionCity> getRegionCities();
-	
-	/**
-	 * 获取所有的县级行政区划
-	 * 
-	 * @return
-	 */
-	Map<Integer, RegionDistrict> getRegionDistricts();
-	
-	/**
-	 * 获取所有的省级行政区划
-	 * 
-	 * @return
-	 */
-	Map<Integer, RegionProvince> getRegionProvinces();
 }

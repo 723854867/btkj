@@ -9,10 +9,13 @@ public class User implements Entity<Integer> {
 	private int uid;
 	private int appId;
 	private String mobile;
+	private String pwd;
 	private String identity;
 	private String name;
 	private String avatar;
-	private int lastLoginTime;
+	private int appLoginTime;			
+	private int pcLoginTime;
+	private int managerLoginTime;
 	private int created;
 	private int updated;
 
@@ -40,6 +43,14 @@ public class User implements Entity<Integer> {
 		this.mobile = mobile;
 	}
 	
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
 	public String getIdentity() {
 		return identity;
 	}
@@ -64,12 +75,28 @@ public class User implements Entity<Integer> {
 		this.avatar = avatar;
 	}
 	
-	public int getLastLoginTime() {
-		return lastLoginTime;
+	public int getAppLoginTime() {
+		return appLoginTime;
 	}
 	
-	public void setLastLoginTime(int lastLoginTime) {
-		this.lastLoginTime = lastLoginTime;
+	public void setAppLoginTime(int appLoginTime) {
+		this.appLoginTime = appLoginTime;
+	}
+	
+	public int getPcLoginTime() {
+		return pcLoginTime;
+	}
+	
+	public void setPcLoginTime(int pcLoginTime) {
+		this.pcLoginTime = pcLoginTime;
+	}
+	
+	public int getManagerLoginTime() {
+		return managerLoginTime;
+	}
+	
+	public void setManagerLoginTime(int managerLoginTime) {
+		this.managerLoginTime = managerLoginTime;
 	}
 
 	public int getCreated() {

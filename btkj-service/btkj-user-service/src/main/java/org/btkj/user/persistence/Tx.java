@@ -2,9 +2,10 @@ package org.btkj.user.persistence;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.Region;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.user.BeanGenerator;
@@ -48,9 +49,16 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void tenantAdd(App app, Region region, String tenantName, String mobile, String name, String identity) {
-		Tenant tenant = BeanGenerator.newTenant(region, app.getId(), tenantName);
-		tenant.setPrivilege("0");
+	public void tenantAdd(Region region, String tenantName, String pwd, User user) {
+		Tenant tenant = BeanGenerator.newTenant(region, BtkjConsts.APP_ID_BAOTU, tenantName, pwd);
+		tenantMapper.insert(tenant);
+		Employee employee = BeanGenerator.newEmployee(user, tenant, null);
+		employeeMapper.insert(employee);
+	}
+	
+	@Transactional
+	public void tenantAdd(App app, Region region, String tenantName, String mobile, String name, String identity, String pwd) {
+		Tenant tenant = BeanGenerator.newTenant(region, app.getId(), tenantName, pwd);
 		tenantMapper.insert(tenant);
 		User user = BeanGenerator.newUser(app.getId(), mobile, identity, name);
 		userMapper.insert(user);
@@ -59,11 +67,10 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void tenantAdd(String appName, Region region, String tenantName, String mobile, String name, String identity) {
+	public void tenantAdd(String appName, Region region, String tenantName, String mobile, String name, String identity, String pwd) {
 		App app = BeanGenerator.newApp(appName);
 		appMapper.insert(app);
-		Tenant tenant = BeanGenerator.newTenant(region, app.getId(), tenantName);
-		tenant.setPrivilege("0");
+		Tenant tenant = BeanGenerator.newTenant(region, app.getId(), tenantName, pwd);
 		tenantMapper.insert(tenant);
 		User user = BeanGenerator.newUser(app.getId(), mobile, identity, name);
 		userMapper.insert(user);

@@ -39,25 +39,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- dubbo service dependencies -->
-		<dependency>
-			<groupId>org.btkj</groupId>
-			<artifactId>btkj-courier-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.btkj</groupId>
-			<artifactId>btkj-config-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.btkj</groupId>
-			<artifactId>btkj-user-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
@@ -102,6 +83,31 @@
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>minlog</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- dubbo service dependencies -->
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-courier-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-config-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-user-api</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

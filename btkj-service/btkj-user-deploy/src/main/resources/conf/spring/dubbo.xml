@@ -6,22 +6,19 @@
 						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	
 	<!--  <dubbo:monitor protocol="registry"/> -->
+	<dubbo:provider timeout="${dubbo.timeout}" retries="${dubbo.retries}" />
+	
 	<dubbo:application name="${dubbo.application.name}" owner="btkj" />
 	
-	<dubbo:registry address="${dubbo.registry.address}" />
-	
-	<!-- 
-	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo"/> -->
+	<dubbo:registry address="${dubbo.registry.address}" /> 
 	
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
 	<dubbo:service interface="org.btkj.user.api.UserService" ref="userService" loadbalance="${dubbo.service.loadbalance}"/>
 	
+	<dubbo:service interface="org.btkj.user.api.LoginService" ref="loginService" loadbalance="${dubbo.service.loadbalance}"/>
+	
 	<dubbo:service interface="org.btkj.user.api.TenantService" ref="tenantService" loadbalance="${dubbo.service.loadbalance}"/>
 	
 	<dubbo:service interface="org.btkj.user.api.EmployeeService" ref="employeeService" loadbalance="${dubbo.service.loadbalance}"/>
-	
-	<dubbo:service interface="org.btkj.user.api.BtkjUserService" ref="btkjUserService" loadbalance="${dubbo.service.loadbalance}"/>
-	
-	<dubbo:service interface="org.btkj.user.api.IsolateUserService" ref="isolateUserService" loadbalance="${dubbo.service.loadbalance}"/>
 </beans>

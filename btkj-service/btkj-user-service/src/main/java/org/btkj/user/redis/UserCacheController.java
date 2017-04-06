@@ -1,5 +1,6 @@
 package org.btkj.user.redis;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class UserCacheController {
 			redis.invokeLua(UserLuaCmd.REFRESH_EMPLOYEES, params);
 			return set;
 		} else 
-			return CollectionUtils.toInt((Set<String>) value);
+			return CollectionUtils.toInt((Collection<String>) value);
 	}
 	
 	public void refreshEmployee(Employee employee) {

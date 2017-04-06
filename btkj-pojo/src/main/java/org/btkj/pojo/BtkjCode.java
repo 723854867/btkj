@@ -33,8 +33,17 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 已经是雇员了
 	 */
-	ALREADY_IS_EMPLOYEE(504, "already is employee");
+	ALREADY_IS_EMPLOYEE(504, "already is employee"),
 	
+	/**
+	 * 手机号已经被占用了
+	 */
+	MOBILE_EXIST(505, "mobile exist"),
+	
+	/**
+	 * 代理商个数最大值
+	 */
+	TENANT_COUNT_MAXIMUM(506, "tenant count maximum");
 	
 	private int code;
 	private String desc;

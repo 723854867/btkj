@@ -13,17 +13,12 @@ public class GlobalConfigContainer {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GlobalConfigContainer.class);
 
-	private ZkClient zkClient;
-	private String configPath;
-	private GlobalConfig globalConfig;
+	private static ZkClient zkClient;
+	private static String configPath;
+	private static GlobalConfig globalConfig;
 	
-	public GlobalConfigContainer(ZkClient zkClient, String configPath) {
-		this.zkClient = zkClient;
-		this.configPath = configPath;
-		_init();
-	}
-	
-	private void _init() {
+	@SuppressWarnings("unused")
+	private void init() {
 		if (!zkClient.exists(configPath))
 			zkClient.create(configPath, null, CreateMode.PERSISTENT);
 		GlobalConfig temp = ZkUtil.readJson(zkClient, configPath, GlobalConfig.class);
@@ -54,7 +49,15 @@ public class GlobalConfigContainer {
 		});
 	}
 	
-	public GlobalConfig getGlobalConfig() {
+	public static void setZkClient(ZkClient zkClient) {
+		GlobalConfigContainer.zkClient = zkClient;
+	}
+	
+	public static void setConfigPath(String configPath) {
+		GlobalConfigContainer.configPath = configPath;
+	}
+	
+	public static GlobalConfig getGlobalConfig() {
 		return globalConfig;
 	}
 }

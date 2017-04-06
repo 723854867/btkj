@@ -14,5 +14,10 @@
 	<bean class = "org.btkj.common.web.Config">
 		<property name="userNameLen" value="${user.name.len}" />
 	</bean>
-
+	
+	<bean class="org.btkj.web.util.ParamsUtil">
+		<property name="userService" ref="userService" />
+		<property name="cacheService" ref="cacheService" />
+		<property name="employeeService" ref="employeeService" />
+	</bean>
 </beans>

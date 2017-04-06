@@ -29,7 +29,7 @@ public class BtkjUtil {
 	 * @param credential
 	 * @return
 	 */
-	public static final boolean hasTenant(String credential) {
-		return !credential.equals(BtkjConsts.NULL_TENANT_CREDENTIAL);
+	public static final boolean hasTenant(String tid) {
+		return !tid.equals(BtkjConsts.NULL_TENANT_CREDENTIAL);
 	}
 }
