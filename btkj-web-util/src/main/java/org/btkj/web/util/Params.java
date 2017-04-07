@@ -2,7 +2,7 @@ package org.btkj.web.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.model.ClientType;
+import org.btkj.pojo.enums.ClientType;
 import org.btkj.pojo.model.Credential;
 import org.btkj.pojo.model.Version;
 import org.rapid.util.common.Validator;

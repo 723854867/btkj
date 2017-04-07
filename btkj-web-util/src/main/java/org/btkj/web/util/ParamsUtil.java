@@ -1,30 +1,18 @@
 package org.btkj.web.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.mainpage.AppBtkjMainPageInfo;
-import org.btkj.pojo.info.mainpage.AppMainPageInfo;
-import org.btkj.pojo.info.tips.BannerTips;
-import org.btkj.pojo.info.tips.MainTenantTips;
-import org.btkj.pojo.info.tips.TenantTips;
+import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.CredentialSegment;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
-import org.btkj.pojo.model.ClientType;
 import org.btkj.pojo.model.Credential;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserService;
-import org.btkj.web.util.cache.BannerCache;
-import org.btkj.web.util.cache.RegionCache;
 import org.btkj.web.util.cache.TenantCache;
 import org.rapid.util.common.cache.Cache;
 import org.rapid.util.common.cache.CacheService;
@@ -68,13 +56,13 @@ public class ParamsUtil {
 		int index = 0;
 		ClientType ct = null;
 		if (hasClientType) 
-			ct = ClientType.match(Integer.valueOf(builder.substring(index, index += BtkjConsts.CLIENT_TYPE_BIT_NUM)));
-		App app = cacheService.getById(BtkjTables.APP.name(), Integer.valueOf(builder.substring(index, index += BtkjConsts.APP_ID_BIT_NUM)));
+			ct = ClientType.match(Integer.valueOf(builder.substring(index, index += CredentialSegment.CLIENT_TYPE.digitsNum())));
+		App app = cacheService.getById(BtkjTables.APP.name(), Integer.valueOf(builder.substring(index, index += CredentialSegment.APP_ID.digitsNum())));
 		Tenant tenant = null;
 		if (BtkjUtil.isBaoTuApp(app)) {
 			if (index == code.length())
 				return new Credential(ct, app);
-			String tid = builder.substring(index, index += BtkjConsts.TENANT_ID_BIT_NUM);
+			String tid = builder.substring(index, index += CredentialSegment.TENANT_ID.digitsNum());
 			tenant = BtkjUtil.hasTenant(tid) ? _getBaoTuTenant(constant, Integer.valueOf(tid)) : null;
 			if (index == code.length())
 				return new Credential(ct, app, tenant);
@@ -112,46 +100,18 @@ public class ParamsUtil {
 		return tenant;
 	}
 	
-	public static final void fillTenantInfos(AppMainPageInfo pageInfo) { 
-		MainTenantTips mainTenant = pageInfo.getTenant();
-		if (null != mainTenant) 
-			_fillMainTenant(pageInfo);
-		if (pageInfo instanceof AppBtkjMainPageInfo) 
-			_fillBtkjTenantList((AppBtkjMainPageInfo) pageInfo);
-	}
-	
-	private static final void _fillMainTenant(AppMainPageInfo pageInfo) { 
-		MainTenantTips mainTenant = pageInfo.getTenant();
-		if (null != mainTenant) {
-			Tenant tenant = cacheService.getById(BtkjTables.TENANT.name(), mainTenant.getTid());
-			mainTenant.setName(tenant.getName());
-			RegionCache rc = (RegionCache) cacheService.getCache(BtkjTables.REGION.name());
-			Region region = rc.getById(tenant.getRegionId());
-			mainTenant.setRegion(region.getName());
-			BannerCache cache = (BannerCache) cacheService.getCache(BtkjTables.BANNER.name());
-			List<Banner> banners = cache.getTenantBanners(mainTenant.getTid());
-			if (null != banners) {
-				List<BannerTips> tips = new ArrayList<BannerTips>();
-				for (Banner banner : banners)
-					tips.add(new BannerTips(banner));
-				mainTenant.setBannerList(tips);
-			}
-		}
-	}
-	
-	private static final void _fillBtkjTenantList(AppBtkjMainPageInfo pageInfo) {
-		TenantCache cache = (TenantCache) cacheService.getCache(BtkjTables.TENANT.name());
-		_fillTenantTips(pageInfo.getOwnTenants(), cache);
-		_fillTenantTips(pageInfo.getAuditTenants(), cache);
-	}
-	
-	private static final void _fillTenantTips(List<TenantTips> list, TenantCache cache) { 
-		if (null != list && !list.isEmpty()) {
-			for (TenantTips tips : list) {
-				Tenant tenant = cache.getById(tips.getTid());
-				tips.setName(tenant.getName());
-			}
-		}
+	/**
+	 * 检查 credential 是否满足需求：有些接口只需要 app 部分，有些接口需要 app 和 tenant 部分，不同接口需要不同的部分，因此需要验证此参数
+	 * 
+	 * @param constant
+	 * @param credential
+	 * @param credentialMod
+	 */
+	public static void checkCredential(Const<?> constant, Credential credential, int credentialMod) { 
+		int cmod = credential.credentialMod();
+		int mod = cmod & credentialMod;
+		if (mod != credentialMod)
+			throw ConstConvertFailureException.errorConstException(constant);
 	}
 	
 	public static void setUserService(UserService userService) {

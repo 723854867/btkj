@@ -68,7 +68,7 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	 * @return
 	 */
 	public List<TenantTips> tenantTipsList(int appId, int uid, int mainTid) {
-		Set<Integer> tids = userCacheController.tenants(uid);
+		Set<Integer> tids = userCacheController.tenantList(uid);
 		if (null == tids || tids.isEmpty())
 			return null;
 		List<TenantTips> list = new ArrayList<TenantTips>();
@@ -101,7 +101,7 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	 * @return
 	 */
 	public int tenantNum(int uid) { 
-		return userCacheController.tenants(uid).size();
+		return userCacheController.tenantList(uid).size();
 	}
 	
 	public void setUserCacheController(UserCacheController userCacheController) {

@@ -1,25 +1,17 @@
 package org.btkj.user.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.enums.ClientType;
 import org.btkj.pojo.info.ApplyInfo;
-import org.btkj.pojo.info.mainpage.AppBtkjLoginInfo;
-import org.btkj.pojo.info.mainpage.AppLoginInfo;
-import org.btkj.pojo.info.mainpage.ILoginInfo;
-import org.btkj.pojo.info.mainpage.ManagerLoginInfo;
-import org.btkj.pojo.info.mainpage.PCLoginInfo;
-import org.btkj.pojo.info.tips.MainTenantTips;
-import org.btkj.pojo.info.tips.TenantTips;
-import org.btkj.pojo.model.ClientType;
+import org.btkj.pojo.info.LoginInfo;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.LoginService;
 import org.btkj.user.model.TokenReplaceModel;
@@ -42,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<ILoginInfo> appLogin(App app, Tenant tenant, String mobile) {
+	public Result<LoginInfo> appLogin(App app, Tenant tenant, String mobile) {
 		User user = userMapper.getUserByMobile(app.getId(), mobile);
 		boolean btkj = BtkjUtil.isBaoTuApp(app);
 		if (null == user) {
@@ -53,90 +45,69 @@ public class LoginServiceImpl implements LoginService {
 			if (null != applyInfo)
 				return Result.result(BtkjCode.APPLY_EXIST, new ApplyInfo.ApplyChecker(applyInfo));
 			return Result.result(Code.USER_NOT_EXIST);
-		} else {
-			Result<TokenReplaceModel> result = userMapper.tokenReplace(ClientType.APP, app.getId(), user.getUid(), mobile);
-			if (result.getCode() != 0)
+		} else 
+			return _doLogin(ClientType.APP, app, user, mobile);
+	}
+
+	@Override
+	public Result<LoginInfo> pcLogin(App app, Tenant tenant, String mobile, String pwd) {
+		return _browserLogin(ClientType.PC, app, tenant, mobile, pwd);
+	}
+
+	@Override
+	public Result<LoginInfo> managerLogin(App app, Tenant tenant, String mobile, String pwd) {
+		return _browserLogin(ClientType.MANAGER, app, tenant, mobile, pwd);
+	}
+	
+	/**
+	 * 浏览器登录，主要是分为 pc 端和管理后台
+	 * 
+	 * @param ct
+	 * @param app
+	 * @param tenant
+	 * @param mobile
+	 * @param pwd
+	 * @return
+	 */
+	private Result<LoginInfo> _browserLogin(ClientType ct, App app, Tenant tenant, String mobile, String pwd) {
+		User user = userMapper.getUserByMobile(app.getId(), mobile);
+		if (null == user) 
+			return Result.result(Code.USER_NOT_EXIST);
+		Employee employee = employeeMapper.getByUidAndTid(user.getUid(), tenant.getTid());
+		if (null == employee)
+			return Result.result(Code.FORBID);
+		String cpwd = null == employee.getPwd() ? tenant.getPwd() : employee.getPwd();
+		if (!pwd.equals(cpwd))
+			return Result.result(Code.PWD_ERROR);
+		if (null == employee.getPwd())
+			return Result.result(Code.PWD_NOT_RESET);
+		return _doLogin(ct, app, user, mobile);
+	}
+	
+	private Result<LoginInfo> _doLogin(ClientType ct, App app, User user, String mobile) {
+		Result<TokenReplaceModel> result = userMapper.tokenReplace(ct, app.getId(), user.getUid(), mobile);
+		if (result.getCode() != 0)
+			return Result.result(Code.USER_STATUS_CHANGED);
+		try {
+			user = userMapper.getByKey(user.getUid());		
+			if (!user.getMobile().equals(mobile))
 				return Result.result(Code.USER_STATUS_CHANGED);
-			try {
-				/**
-				 * 用户的手机可以修改，假如在 getUserByMobile 时获取的时用户 A，执行到这里的时候用户的手机修改了，
-				 * 这时我们调用 update 有可能会将修改过的手机又重置回去。用户的 uid 是唯一的因此根据 uid 来获取的用户是固定不变的
-				 */
-				user = userMapper.getByKey(user.getUid());		
-				if (!user.getMobile().equals(mobile))
-					return Result.result(Code.USER_STATUS_CHANGED);
-				
-				int time = DateUtils.currentTime();
+			
+			int time = DateUtils.currentTime();
+			switch (ct) {
+			case PC:
+				user.setPcLoginTime(time);
+				break;
+			case MANAGER:
+				user.setManagerLoginTime(time);
+				break;
+			default:
 				user.setAppLoginTime(time);
-				user.setUpdated(time);
-				userMapper.update(user);
-				
-				if (btkj) {
-					AppBtkjLoginInfo loginInfo = new AppBtkjLoginInfo(result.attach().getToken(), user);
-					int mainTid = userMapper.btkjUserMainTenant(user.getUid());
-					List<TenantTips> owns = employeeMapper.tenantTipsList(BtkjConsts.APP_ID_BAOTU, user.getUid(), mainTid);
-					List<TenantTips> audits = employeeMapper.auditTenantTipsList(user.getUid());
-					MainTenantTips mainTenantTips = null;
-					if (0 == mainTid) {
-						if (null != owns && !owns.isEmpty()) 
-							mainTenantTips = new MainTenantTips(owns.remove(0).getTid());
-					} else 
-						mainTenantTips = new MainTenantTips(mainTid);
-					
-					loginInfo.setTenant(mainTenantTips);
-					loginInfo.setOwnTenants(owns);
-					loginInfo.setAuditTenants(audits);
-					return Result.result(loginInfo);
-				} else
-					return Result.result(new AppLoginInfo(result.attach().getToken(), user));
-			} finally {
-				// 这里一定别忘记释放锁，因为在 token_replace 的 lua 脚本中我们也获取了 user 的锁资源，因此这里要释放
-				userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
+				break;
 			}
-		}
-	}
-
-	@Override
-	public Result<ILoginInfo> pcLogin(App app, String mobile, String pwd) {
-		User user = userMapper.getUserByMobile(app.getId(), mobile);
-		if (null == user) 
-			return Result.result(Code.USER_NOT_EXIST);
-		Result<TokenReplaceModel> result = userMapper.tokenReplace(ClientType.PC, app.getId(), user.getUid(), mobile);
-		if (result.getCode() != 0)
-			return Result.result(Code.USER_STATUS_CHANGED);
-		try {
-			user = userMapper.getByKey(user.getUid());		
-			if (!user.getMobile().equals(mobile))
-				return Result.result(Code.USER_STATUS_CHANGED);
-			
-			int time = DateUtils.currentTime();
-			user.setPcLoginTime(time);
 			user.setUpdated(time);
 			userMapper.update(user);
-			return Result.result(new PCLoginInfo(result.attach().getToken(), user));
-		} finally {
-			userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
-		}
-	}
-
-	@Override
-	public Result<ILoginInfo> managerLogin(App app, String mobile, String pwd) {
-		User user = userMapper.getUserByMobile(app.getId(), mobile);
-		if (null == user) 
-			return Result.result(Code.USER_NOT_EXIST);
-		Result<TokenReplaceModel> result = userMapper.tokenReplace(ClientType.MANAGER, app.getId(), user.getUid(), mobile);
-		if (result.getCode() != 0)
-			return Result.result(Code.USER_STATUS_CHANGED);
-		try {
-			user = userMapper.getByKey(user.getUid());		
-			if (!user.getMobile().equals(mobile))
-				return Result.result(Code.USER_STATUS_CHANGED);
-			
-			int time = DateUtils.currentTime();
-			user.setManagerLoginTime(time);
-			user.setUpdated(time);
-			userMapper.update(user);
-			return Result.result(new ManagerLoginInfo(result.attach().getToken(), user));
+			return Result.result(new LoginInfo(result.attach().getToken(), user));
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
 		}
@@ -146,7 +117,7 @@ public class LoginServiceImpl implements LoginService {
 	public Result<?> apply(String token, Tenant tenant, User chief) {
 		Result<User> result = userMapper.lockUserByToken(ClientType.APP, BtkjConsts.APP_ID_BAOTU, token);
 		if (!result.isSuccess()) 
-			return Result.result(result.getCode(), result.getDesc(), null);
+			return result;
 		User user = result.attach();
 		String lockId = result.getDesc();
 		try {
@@ -172,11 +143,7 @@ public class LoginServiceImpl implements LoginService {
 				if (!user.getMobile().equals(mobile))
 					return Result.result(Code.USER_STATUS_CHANGED);
 				_doApply(tenant, user, chief);
-				AppBtkjLoginInfo loginInfo = new AppBtkjLoginInfo(result.attach().getToken(), user);
-				List<TenantTips> list = new ArrayList<TenantTips>();
-				list.add(new TenantTips(tenant.getTid()));
-				loginInfo.setAuditTenants(list);
-				return Result.result(loginInfo);
+				return Result.result(new LoginInfo(result.attach().getToken(), user));
 			} finally {
 				userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
 			}

@@ -11,13 +11,13 @@
         				
 	<bean class="org.rapid.util.common.SpringContextUtil" />
 	
-	<bean class = "org.btkj.common.web.Config">
-		<property name="userNameLen" value="${user.name.len}" />
-	</bean>
-	
 	<bean class="org.btkj.web.util.ParamsUtil">
 		<property name="userService" ref="userService" />
 		<property name="cacheService" ref="cacheService" />
 		<property name="employeeService" ref="employeeService" />
+	</bean>
+	
+	<bean class="org.btkj.web.util.ResultUtil">
+		<property name="cacheService" ref="cacheService" />
 	</bean>
 </beans>

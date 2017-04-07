@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 
 import org.btkj.master.InternalConstants;
-import org.btkj.master.pojo.info.LoginInfo;
 import org.btkj.master.service.Role;
+import org.btkj.pojo.info.LoginInfo;
 import org.rapid.util.common.RapidSecurity;
 import org.rapid.util.common.cache.CacheService;
 import org.rapid.util.common.consts.code.Code;
@@ -22,7 +22,7 @@ public class RoleService {
 	private Map<String, Role> onlines = new ConcurrentHashMap<String, Role>();
 	private Map<Integer, String> tokens = new ConcurrentHashMap<Integer, String>();
 	
-	public Result<?> login(int id, String pwd) { 
+	public Result<LoginInfo> login(int id, String pwd) { 
 		Role role = cacheService.getById(InternalConstants.ROLE_CACHE_NAME, id);
 		if (null == role)
 			return Result.result(Code.USER_NOT_EXIST);
@@ -39,7 +39,7 @@ public class RoleService {
 			
 			role.login();
 			onlines.put(token, role);
-			return Result.result(new LoginInfo(token, role));
+			return Result.result(new LoginInfo(token, role.getId()));
 		} finally {
 			role.unlock();
 		}

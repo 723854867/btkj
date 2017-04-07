@@ -37,7 +37,7 @@ public class UserCacheController {
 	 * @param uid
 	 * @return
 	 */
-	public Set<Integer> tenants(int uid) {
+	public Set<Integer> tenantList(int uid) {
 		Set<Integer> set = null;
 		Object value = redis.invokeLua(UserLuaCmd.EMPLOYEE_LIST,
 				RedisKeyGenerator.userCacheControllerKey(uid), 

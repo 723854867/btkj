@@ -3,7 +3,7 @@ package org.btkj.user.redis.mapper;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.ClientType;
+import org.btkj.pojo.enums.ClientType;
 import org.btkj.user.Config;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.persistence.dao.UserDao;
@@ -102,7 +102,6 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	 */
 	public void releaseUserLock(int uid, String lockId) {
 		distributeLock.unLock(RedisKeyGenerator.userLockKey(uid), lockId);
-
 	}
 	
 	/**
@@ -114,8 +113,8 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	 */
 	public User getUserByToken(ClientType ct, App app, String token) {
 		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_TOKEN,
-				RedisKeyGenerator.tokenUserKey(app.getId(), ct),
-				RedisKeyGenerator.userDataKey(), token);
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.tokenUserKey(app.getId(), ct),
+						RedisKeyGenerator.userDataKey(), token));
 		return null == data ? null : serializer.antiConvet(data, User.class);
 	}
 
@@ -140,7 +139,7 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 				SerializeUtil.RedisUtil.encode(entity.getUid()), data);
 	}
 	
-	public int btkjUserMainTenant(int uid) {
+	public int mainTenant(int uid) {
 		String val = redis.hget(RedisKeyGenerator.btkjUserMainTenantKey(), String.valueOf(uid));
 		return null == val ? 0 : Integer.valueOf(val);
 	}

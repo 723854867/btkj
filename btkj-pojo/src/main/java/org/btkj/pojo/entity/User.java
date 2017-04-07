@@ -9,7 +9,6 @@ public class User implements Entity<Integer> {
 	private int uid;
 	private int appId;
 	private String mobile;
-	private String pwd;
 	private String identity;
 	private String name;
 	private String avatar;
@@ -41,14 +40,6 @@ public class User implements Entity<Integer> {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-	
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 	
 	public String getIdentity() {

@@ -1,4 +1,4 @@
-package org.btkj.pojo.model;
+package org.btkj.pojo.enums;
 
 public enum AppType {
 

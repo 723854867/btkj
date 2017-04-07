@@ -6,6 +6,8 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.CredentialSegment;
 
 /**
  * 身份识别类
@@ -78,5 +80,18 @@ public class Credential implements Serializable {
 	
 	public void setClientType(ClientType clientType) {
 		this.clientType = clientType;
+	}
+	
+	public int credentialMod() {
+		int mod = 0;
+		if (null != clientType)
+			mod |= CredentialSegment.CLIENT_TYPE.mod();
+		if (null != app)
+			mod |= CredentialSegment.APP_ID.mod();
+		if (null != tenant)
+			mod |= CredentialSegment.TENANT_ID.mod();
+		if (null != user)
+			mod |= CredentialSegment.UID.mod();
+		return mod;
 	}
 }

@@ -2,7 +2,7 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 
-import org.btkj.pojo.model.ClientType;
+import org.btkj.pojo.enums.ClientType;
 
 public class RedisKeyGenerator {
 	

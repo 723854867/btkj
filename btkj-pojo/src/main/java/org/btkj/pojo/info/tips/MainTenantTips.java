@@ -12,7 +12,7 @@ import org.btkj.pojo.info.InsuranceNonAutoTipsInfo;
 public class MainTenantTips extends TenantTips {
 
 	private static final long serialVersionUID = -6017793680818781117L;
-
+	
 	private int privilege;															// 权限模值，客户端自行判断每个模块是否开通
 	private String region;															// 投保地区
 	private List<BannerTips> bannerList;											// banner 列表

@@ -11,7 +11,6 @@ public class UserSQLProvider {
 				INSERT_INTO(BtkjTables.USER.name());
 				VALUES("app_id", "#{appId}");
 				VALUES("mobile", "#{mobile}");
-				VALUES("pwd", "#{pwd}");
 				VALUES("identity", "#{identity}");
 				VALUES("name", "#{name}");
 				VALUES("app_login_time", "#{appLoginTime}");
@@ -28,7 +27,6 @@ public class UserSQLProvider {
 			{
 				UPDATE(BtkjTables.USER.name());
 				SET("name=#{name}");
-				SET("pwd=#{pwd}");
 				SET("app_login_time=#{appLoginTime}");
 				SET("pc_login_time=#{pcLoginTime}");
 				SET("manager_login_time=#{managerLoginTime}");

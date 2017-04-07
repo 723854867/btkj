@@ -3,7 +3,7 @@ package org.btkj.user.api;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.mainpage.ILoginInfo;
+import org.btkj.pojo.info.LoginInfo;
 import org.rapid.util.common.message.Result;
 
 public interface LoginService {
@@ -16,21 +16,21 @@ public interface LoginService {
 	 * @param mobile 手机号
 	 * @return
 	 */
-	Result<ILoginInfo> appLogin(App app, Tenant tenant, String mobile);
+	Result<LoginInfo> appLogin(App app, Tenant tenant, String mobile);
 	
 	/**
 	 * pc 端的登录
 	 * 
 	 * @return
 	 */
-	Result<ILoginInfo> pcLogin(App app, String mobile, String pwd);
+	Result<LoginInfo> pcLogin(App app, Tenant tenant, String mobile, String pwd);
 	
 	/**
 	 * 管理后台的登录
 	 * 
 	 * @return
 	 */
-	Result<ILoginInfo> managerLogin(App app, String mobile, String pwd);
+	Result<LoginInfo> managerLogin(App app, Tenant tenant, String mobile, String pwd);
 	
 	/**
 	 * 仅限保途 app
