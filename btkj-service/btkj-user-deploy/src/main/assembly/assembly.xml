@@ -30,6 +30,12 @@
 			<filtered>true</filtered>
 			<fileMode>0755</fileMode>
 		</fileSet>
+		
+		<fileSet>
+			<directory>src/main/resources/lua</directory>
+			<outputDirectory>lua</outputDirectory>
+			<filtered>false</filtered>
+			<fileMode>0755</fileMode>
+		</fileSet>
 	</fileSets>
-	
 </assembly>
