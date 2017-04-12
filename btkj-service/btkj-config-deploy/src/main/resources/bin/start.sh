@@ -8,7 +8,7 @@ CONF_DIR=$DEPLOY_DIR/conf
 SERVER_NAME=${dubbo.application.name}
 SERVER_PROTOCOL=${dubbo.protocol.name}  
 SERVER_PORT=${dubbo.protocol.port}
-LOG_PATH=${log.path}
+LOG_PATH=${logback.path}
   
 if [ -z "$SERVER_NAME" ]; then  
     SERVER_NAME=`hostname`  
