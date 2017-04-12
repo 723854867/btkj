@@ -1,9 +1,9 @@
 package org.btkj.login.action;
 
 import javax.annotation.Resource;
-import javax.swing.plaf.synth.Region;
 
 import org.btkj.pojo.BtkjTables;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.info.tips.EmployeeTips;
 import org.btkj.user.api.EmployeeService;
