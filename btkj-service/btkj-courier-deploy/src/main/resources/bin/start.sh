@@ -49,13 +49,13 @@ fi
 JAVA_MEM_OPTS=""  
 BITS=`java -version 2>&1 | grep -i 64-bit`  
 if [ -n "$BITS" ]; then  
-    JAVA_MEM_OPTS=" -server -Xmx${vm.64bit.xmx} -Xms${vm.64bit.xms} -Xmn${vm.64bit.xmn} -Xss${vm.64but.xss} -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 "  
+    JAVA_MEM_OPTS=" -server -Xmx${vm.64bit.xmx} -Xms${vm.64bit.xms} -Xmn${vm.64bit.xmn} -Xss${vm.64bit.xss} -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 "  
 else  
     JAVA_MEM_OPTS=" -server -Xmx${vm.32bit.xmx} -Xms${vm.32bit.xms} -XX:SurvivorRatio=2 -XX:+UseParallelGC "  
 fi  
   
 echo -e "Starting the $SERVER_NAME ...\c"  
-nohup java $JAVA_OPTS $JAVA_MEM_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS org.btkj.user.deploy.UserBoot > $STDOUT_FILE 2>&1 &  
+nohup java $JAVA_OPTS $JAVA_MEM_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS ${main.class} > $STDOUT_FILE 2>&1 &  
   
 COUNT=0  
 while [ $COUNT -lt 1 ]; do      
