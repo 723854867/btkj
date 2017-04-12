@@ -21,6 +21,13 @@ public interface UserService {
 	 * @return
 	 */
 	User getUser(int uid);
+
+	/**
+	 * 通过雇员 ID 获取用户
+	 * 
+	 * @return
+	 */
+	User getUserByEmployeeId(int employeeId);
 	
 	/**
 	 * 通过 token 获取用户

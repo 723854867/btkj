@@ -1,9 +1,13 @@
 package org.btkj.common.action;
 
+import javax.annotation.Resource;
+
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.AppMainPageInfo;
+import org.btkj.user.api.UserService;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.message.Result;
@@ -14,6 +18,9 @@ import org.rapid.util.common.message.Result;
  * @author ahab
  */
 public class MAIN_PAGE extends TenantAction {
+	
+	@Resource
+	private UserService userService;
 	
 //	@Override
 //	protected Result<?> execute(Request request, Credential credential) {
@@ -27,7 +34,7 @@ public class MAIN_PAGE extends TenantAction {
 
 	@Override
 	protected Result<?> execute(Request request, Client client, App app, Tenant tenant, User user) {
-		// TODO Auto-generated method stub
+		Result<AppMainPageInfo> result = userService.mainPage(app, tenant, null);
 		return null;
 	}
 }

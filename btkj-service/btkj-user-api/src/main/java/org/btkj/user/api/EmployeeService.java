@@ -1,19 +1,9 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.info.tips.EmployeeTips;
+import org.rapid.util.common.message.Result;
 
-/**
- * 获取雇员信息
- * 
- * @author ahab
- */
 public interface EmployeeService {
 
-	/**
-	 * 获取雇员信息
-	 * 
-	 * @param uid
-	 * @return
-	 */
-	Employee getEmplyee(int uid, int tid);
+	Result<EmployeeTips> employeeTips(int employeeId);
 }

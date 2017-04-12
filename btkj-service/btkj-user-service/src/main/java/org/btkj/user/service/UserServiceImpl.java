@@ -3,6 +3,7 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -28,6 +29,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public User getUserByEmployeeId(int employeeId) {
+		Employee employee = employeeMapper.getByKey(employeeId);
+		return null == employee ? null : userMapper.getByKey(employee.getUid());
+	}
+	
+	@Override
 	public User getUserByToken(Client ct, String token) {
 		return userMapper.getUserByToken(ct, token);
 	}
@@ -44,10 +51,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<AppMainPageInfo> mainPage(App app, Tenant tenant, String token) {
-		User user = userMapper.getUserByToken(Client.APP, token);
-		if (null == user)
-			return Result.result(Code.USER_NOT_EXIST);
-		AppMainPageInfo mainPageInfo = new AppMainPageInfo(user);
+		AppMainPageInfo mainPageInfo = new AppMainPageInfo(null);
 //		if (BtkjUtil.isMultiApp(app)) {
 //			int mainTid = userMapper.mainTenant(user.getUid());
 //			List<TenantTips> list = employeeMapper.tenantTipsList(app.getId(), user.getUid(), mainTid);
