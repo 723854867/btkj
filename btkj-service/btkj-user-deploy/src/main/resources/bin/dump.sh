@@ -6,7 +6,7 @@ DEPLOY_DIR=`pwd`
 CONF_DIR=$DEPLOY_DIR/conf
 
 SERVER_NAME=${dubbo.application.name}
-LOG_PATH=${log.path}
+LOG_PATH=${logback.path}
 
 if [ -z "$SERVER_NAME" ]; then
 	SERVER_NAME=`hostname`
