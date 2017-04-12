@@ -1,13 +1,16 @@
 package org.btkj.login.action;
 
-import org.btkj.login.Beans;
-import org.btkj.pojo.enums.ClientType;
-import org.btkj.pojo.enums.CredentialSegment;
+import javax.annotation.Resource;
+
+import org.btkj.courier.api.CourierService;
+import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.model.CaptchaReceiver;
-import org.btkj.pojo.model.Credential;
+import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.Action;
+import org.rapid.util.common.cache.CacheService;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -16,29 +19,24 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CAPTCHA_OBTAIN extends TenantAction implements Beans {
+public class CAPTCHA_OBTAIN implements Action {
+	
+	@Resource
+	private CacheService<?> cacheService;
+	@Resource
+	private CourierService courierService;
 
 	@Override
-	protected Result<String> execute(Request request, Credential credential) {
-		CaptchaReceiver receiver = ParamsUtil.captchaReceiver(request, credential);
+	public Result<String> execute(Request request) {
+		int appId = request.getParam(Params.APP_ID);
+		if (0 != appId && null == cacheService.getById(BtkjTables.APP.name(), appId)) 
+			return Result.result(BtkjCode.APP_NOT_EXIST);
+		CaptchaReceiver receiver = ParamsUtil.captchaReceiver(request, appId);
 		Result<String> result = courierService.captchaObtain(receiver);
 		if (result.getCode() == -1)
 			result.setCode(Code.CAPTCHA_GET_CD.id());
 		if (result.getCode() == -2)
 			result.setCode(Code.CAPTCHA_COUNT_LIMIT.id());
 		return result;
-	}
-	
-	@Override
-	protected int clientTypeMod(Request request, Credential credential) {
-		return ClientType.APP.type();
-	}
-	
-	/**
-	 * 只需要 appId 即可以了
-	 */
-	@Override
-	protected int credentialMod(Credential credential) {
-		return CredentialSegment.appGradeSegmentMod();
 	}
 }

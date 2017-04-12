@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.App;
 import org.btkj.user.persistence.provider.AppSQLProvider;
 import org.rapid.data.storage.db.Dao;
@@ -15,6 +16,10 @@ public interface AppDao extends Dao<Integer, App> {
 	@InsertProvider(type = AppSQLProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(App entity);
+	
+	@Override
+	@UpdateProvider(type = AppSQLProvider.class, method = "update")
+	void update(App entity);
 
 	@Override
 	@SelectProvider(type = AppSQLProvider.class, method = "selectAll")

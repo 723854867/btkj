@@ -89,7 +89,7 @@ public class User implements Entity<Integer> {
 	public void setManagerLoginTime(int managerLoginTime) {
 		this.managerLoginTime = managerLoginTime;
 	}
-
+	
 	public int getCreated() {
 		return created;
 	}

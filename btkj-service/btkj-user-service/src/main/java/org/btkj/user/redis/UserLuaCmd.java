@@ -59,6 +59,13 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
+	EMPLOYEE_GET {
+		@Override
+		public int keyNum() {
+			return 1;
+		}
+	},
+	
 	REFRESH_EMPLOYEES {
 		@Override
 		public int keyNum() {

@@ -1,54 +1,46 @@
 package org.btkj.login.action;
 
-import org.btkj.login.Beans;
-import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.enums.CredentialSegment;
-import org.btkj.pojo.model.Credential;
+import javax.annotation.Resource;
+
+import org.btkj.user.api.LoginService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.Action;
 import org.rapid.data.storage.redis.DistributeSession;
+import org.rapid.data.storage.redis.Redis;
+import org.rapid.util.common.cache.CacheService;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
+
 /**
- * 申请加入租户
+ * 申请分为两类
  * 
  * @author ahab
  */
-public class APPLY extends TenantAction implements Beans {
+public class APPLY implements Action {
+	
+	@Resource
+	private Redis redis;
+	@Resource
+	private LoginService loginService;
+	@Resource
+	private CacheService<?> cacheService;
 
 	@Override
-	protected Result<?> execute(Request request, Credential credential) {
-		Credential ucode = request.getParam(Params.UCODE);
-		// 只能申请同一个 app 下的代理公司
-		if (ucode.getApp().getId() != credential.getApp().getId())
-			return Result.result(Code.FORBID);
-		ParamsUtil.checkCredential(Params.UCODE, ucode, CredentialSegment.inviteCodeMod());
+	public Result<?> execute(Request request) {
+		int employeeId = request.getParam(Params.EMPLOYEE_ID);
 		String token = request.getOptionalHeader(Params.TOKEN);
-		if (null != token) {
-			if(!BtkjUtil.isBaoTuApp(credential))					// 非保途 app 只能加申请新用户
-				return Result.result(Code.USER_ALREADY_EXIST);
-			return loginService.apply(token, ucode.getTenant(), ucode.getUser());
-		}
-		// 申请之前必须走登录接口往 session 中录入信息
+		if (null != token) 												// 老用户申请
+			return loginService.apply(token, employeeId);
 		String sessionId = request.getHeader(Params.SESSION_ID);
-		if (null == sessionId)
-			return Result.result(Code.FORBID);
-		
 		DistributeSession session = request.distributeSession(redis, sessionId);
 		Integer appId = session.getAndDelInt(Params.APP_ID.key());
-		if (null == appId || credential.getApp().getId() != appId)
-			return Result.result(Code.FORBID);
 		String mobile = session.getAndDel(Params.MOBILE.key());
+		if (null == appId || null == mobile)
+			return Result.result(Code.FORBID);
 		String name = request.getParam(Params.NAME);
 		String identity = request.getParam(Params.IDENTITY);
-		return loginService.apply(credential.getApp(), credential.getTenant(), mobile, name, identity, ucode.getUser());
-	}
-	
-	@Override
-	protected int credentialMod(Credential credential) {
-		return CredentialSegment.tenantGradeSegmentMod();
+		return loginService.apply(appId, mobile, name, identity, employeeId);
 	}
 }

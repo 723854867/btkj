@@ -1,7 +1,7 @@
 package org.btkj.common.action.impl;
 
 import org.btkj.common.Beans;
-import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CredentialSegment;
 import org.btkj.pojo.info.AppMainPageInfo;
 import org.btkj.pojo.model.Credential;
@@ -30,7 +30,7 @@ public class MAIN_PAGE extends TenantAction {
 	
 	@Override
 	protected int clientTypeMod(Request request, Credential credential) {
-		return ClientType.APP.type();
+		return Client.APP.type();
 	}
 	
 	@Override

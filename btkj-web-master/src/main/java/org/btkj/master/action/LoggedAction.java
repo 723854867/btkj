@@ -1,12 +1,19 @@
 package org.btkj.master.action;
 
+import javax.annotation.Resource;
+
 import org.btkj.master.service.Role;
+import org.btkj.master.service.realm.RoleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Action;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
-public abstract class LoggedAction extends MasterAction {
+public abstract class LoggedAction implements Action {
+	
+	@Resource
+	private RoleService roleService;
 
 	@Override
 	public final Result<?> execute(Request request) {

@@ -2,7 +2,7 @@ package org.btkj.user.api;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.LoginInfo;
 import org.rapid.util.common.message.Result;
 
@@ -12,35 +12,26 @@ public interface LoginService {
 	 * 移动端的登录
 	 * 
 	 * @param app 用户所属 app
-	 * @param tenant 用户所属租户(如果是保途 app 则为 null)
 	 * @param mobile 手机号
 	 * @return
 	 */
-	Result<LoginInfo> appLogin(App app, Tenant tenant, String mobile);
+	Result<LoginInfo> appLogin(App app, String mobile);
 	
 	/**
-	 * pc 端的登录
+	 * 浏览器登录
 	 * 
 	 * @return
 	 */
-	Result<LoginInfo> pcLogin(App app, Tenant tenant, String mobile, String pwd);
-	
-	/**
-	 * 管理后台的登录
-	 * 
-	 * @return
-	 */
-	Result<LoginInfo> managerLogin(App app, Tenant tenant, String mobile, String pwd);
+	Result<LoginInfo> browserLogin(Client client, App app, Tenant tenant, String mobile, String pwd);
 	
 	/**
 	 * 仅限保途 app
 	 * 
 	 * @param token 登录 token
-	 * @param tenant 代理商
-	 * @param chief 上级用户 
+	 * @param employeeId 上级的雇员ID
 	 * @return
 	 */
-	Result<?> apply(String token, Tenant tenant, User chief);
+	Result<?> apply(String token, int employeeId);
 	
 	/**
 	 * 申请加入公司
@@ -53,5 +44,5 @@ public interface LoginService {
 	 * @param chief 上级用户
 	 * @return
 	 */
-	Result<?> apply(App app, Tenant tenant, String mobile, String name, String identity, User chief);
+	Result<?> apply(int appId, String mobile, String name, String identity, int employeeId);
 }

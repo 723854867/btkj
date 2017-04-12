@@ -12,11 +12,15 @@ import org.btkj.user.persistence.provider.EmployeeSQLProvider;
 import org.rapid.data.storage.db.Dao;
 
 public interface EmployeeDao extends Dao<Integer, Employee> {
-
+	
 	@Override
 	@InsertProvider(type = EmployeeSQLProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(Employee entity);
+	
+	@Override
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByKey")
+	Employee selectByKey(Integer key);
 	
 	@Override
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectAll")

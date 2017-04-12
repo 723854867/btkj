@@ -2,14 +2,19 @@ package org.btkj.master.service;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.btkj.master.Beans;
+import javax.annotation.Resource;
+
+import org.btkj.master.persistence.dao.AdministratorDao;
 import org.btkj.master.persistence.domain.Administrator;
 import org.rapid.util.lang.DateUtils;
 
-public class Role implements Beans {
+public class Role {
 
 	private AtomicBoolean lock;
 	private Administrator administrator;
+	
+	@Resource
+	private AdministratorDao administratorDao;
 	
 	public Role(Administrator administrator) {
 		this.administrator = administrator;
@@ -31,7 +36,7 @@ public class Role implements Beans {
 	public void unlock() { 
 		lock.set(false);
 	}
-	
+
 	public int getId() {
 		return administrator.getId();
 	}

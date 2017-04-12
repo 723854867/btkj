@@ -13,5 +13,7 @@ public interface Action {
 	
 	Result<?> execute(Request request);
 	
-	Version version();
+	default Version version() {
+		return Version.V_1_0;
+	}
 }

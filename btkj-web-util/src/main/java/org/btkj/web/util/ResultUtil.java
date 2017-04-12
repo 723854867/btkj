@@ -30,7 +30,7 @@ public class ResultUtil {
 		Tenant tenant = cacheService.getById(BtkjTables.TENANT.name(), mainTenant.getTid());
 		mainTenant.setName(tenant.getName());
 		RegionCache rc = (RegionCache) cacheService.getCache(BtkjTables.REGION.name());
-		Region region = rc.getById(tenant.getRegionId());
+		Region region = rc.getById(tenant.getRegion());
 		mainTenant.setRegion(region.getName());
 		BannerCache cache = (BannerCache) cacheService.getCache(BtkjTables.BANNER.name());
 		List<Banner> banners = cache.getTenantBanners(mainTenant.getTid());

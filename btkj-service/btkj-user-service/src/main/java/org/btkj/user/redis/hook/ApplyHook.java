@@ -27,60 +27,16 @@ public class ApplyHook {
 	
 	@Resource
 	private Redis redis;
+	
+	public ApplyInfo getApplyInfo(int tid, int uid) {
+		byte[] data = redis.hget(
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userApplyList(uid)),
+				SerializeUtil.RedisUtil.encode(tid));
+		return null == data ? null : SerializeUtil.ProtostuffUtil.deserial(data, ApplyInfo.class);
+	}
 
 	/**
-	 * 获取申请信息：独立 app 用户
-	 * 
-	 * @param tid
-	 * @param mobile
-	 * @return
-	 */
-	public ApplyInfo getApplyInfo(int tid, String mobile) { 
-		byte[] data = redis.hget(
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)), 
-				SerializeUtil.RedisUtil.encode(mobile));
-		return null == data ? null : SerializeUtil.ProtostuffUtil.deserial(data, ApplyInfo.class);
-	}
-	
-	/**
-	 * 获取申请信息：保途 app 用户
-	 * 
-	 * @param tid
-	 * @param uid
-	 * @return
-	 */
-	public ApplyInfo getApplyInfo(int tid, int uid) { 
-		byte[] data = redis.hget(
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)), 
-				SerializeUtil.RedisUtil.encode(String.valueOf(uid)));
-		return null == data ? null : SerializeUtil.ProtostuffUtil.deserial(data, ApplyInfo.class);
-	}
-	
-	/**
-	 * 添加申请信息：独立 app
-	 * 
-	 * @param tid
-	 * @param mobile
-	 * @param name
-	 * @param identity
-	 */
-	public void addApplyInfo(String mobile, int tid, String name, String identity, int chief) {
-		ApplyInfo ai = new ApplyInfo();
-		ai.setTid(tid);
-		ai.setChief(chief);
-		ai.setName(name);
-		ai.setIdentity(identity);
-		ai.setTime(DateUtils.currentTime());
-		redis.invokeLua(UserLuaCmd.APPLY_ADD, 2, 
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)),
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.tenantApplyListKey(tid)),
-				SerializeUtil.RedisUtil.encode(mobile), 
-				SerializeUtil.RedisUtil.encode(DateUtils.currentTime()),
-				SerializeUtil.ProtostuffUtil.serial(ai));
-	}
-	
-	/**
-	 * 添加申请信息：保途 app
+	 * 添加申请信息
 	 * 
 	 * @param uid
 	 * @param tid
@@ -94,7 +50,7 @@ public class ApplyHook {
 		redis.invokeLua(UserLuaCmd.APPLY_ADD, 3,
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid)),
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.tenantApplyListKey(tid)),
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.btkjApplyKey(uid)),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.userApplyList(uid)),
 				SerializeUtil.RedisUtil.encode(uid),
 				SerializeUtil.RedisUtil.encode(DateUtils.currentTime()),
 				SerializeUtil.ProtostuffUtil.serial(ai),
@@ -130,12 +86,12 @@ public class ApplyHook {
 	 * @param applyKey
 	 * @return
 	 */
-	public ApplyInfo getAndDel(int tid, String applyKey) {
+	public ApplyInfo getAndDel(int tid, int uid) {
 		byte[] buffer = redis.invokeLua(UserLuaCmd.APPLY_GET_AND_DEL, 
 				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.applyDataKey(tid),
 						RedisKeyGenerator.tenantApplyListKey(tid),
-						RedisKeyGenerator.btkjApplyKey(applyKey),
-						applyKey, tid));
+						RedisKeyGenerator.userApplyList(uid),
+						uid, tid));
 		return null == buffer ? null : SerializeUtil.ProtostuffUtil.deserial(buffer, ApplyInfo.class);
 	}
 }

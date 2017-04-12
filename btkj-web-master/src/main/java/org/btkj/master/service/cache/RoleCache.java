@@ -8,6 +8,7 @@ import org.btkj.master.persistence.Tables;
 import org.btkj.master.persistence.dao.AdministratorDao;
 import org.btkj.master.persistence.domain.Administrator;
 import org.btkj.master.service.Role;
+import org.rapid.util.common.SpringContextUtil;
 import org.rapid.util.common.cache.Cache;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,10 @@ public class RoleCache extends Cache<Integer, Role> {
 		if (null == list || list.isEmpty())
 			return;
 		this.cache.clear();
-		for (Administrator administrator : list)
-			cache.put(administrator.getId(), new Role(administrator));
+		for (Administrator administrator : list) {
+			Role role = new Role(administrator);
+			SpringContextUtil.autowireBean(role);
+			cache.put(administrator.getId(), role);
+		}
 	}
 }

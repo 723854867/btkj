@@ -9,7 +9,7 @@ public class Tenant implements Entity<Integer> {
 	private int tid;
 	private String name;
 	private int appId;
-	private int regionId;
+	private int region;
 	private int mod;
 	private String privilege;
 	private String pwd;
@@ -57,12 +57,12 @@ public class Tenant implements Entity<Integer> {
 		this.appId = appId;
 	}
 	
-	public int getRegionId() {
-		return regionId;
+	public int getRegion() {
+		return region;
 	}
 	
-	public void setRegionId(int regionId) {
-		this.regionId = regionId;
+	public void setRegion(int region) {
+		this.region = region;
 	}
 
 	public int getMod() {

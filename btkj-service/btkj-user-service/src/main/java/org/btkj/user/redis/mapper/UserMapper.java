@@ -1,9 +1,8 @@
 package org.btkj.user.redis.mapper;
 
 import org.btkj.pojo.BtkjTables;
-import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.Client;
 import org.btkj.user.Config;
 import org.btkj.user.model.TokenReplaceModel;
 import org.btkj.user.persistence.dao.UserDao;
@@ -77,11 +76,11 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public Result<User> lockUserByToken(ClientType ct, int appId, String token) {
+	public Result<User> lockUserByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.LOCK_USER_BY_TOKEN, 
 				SerializeUtil.RedisUtil.encode(
-						RedisKeyGenerator.tokenUserKey(appId, ct),
+						RedisKeyGenerator.tokenUserKey(client),
 						RedisKeyGenerator.userDataKey(), 
 						token, 
 						RedisKeyGenerator.USER_LOCK, 
@@ -111,20 +110,20 @@ public class UserMapper extends O2OMapper<Integer, User, byte[], UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public User getUserByToken(ClientType ct, App app, String token) {
+	public User getUserByToken(Client client, String token) {
 		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_TOKEN,
-				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.tokenUserKey(app.getId(), ct),
+				SerializeUtil.RedisUtil.encode(RedisKeyGenerator.tokenUserKey(client),
 						RedisKeyGenerator.userDataKey(), token));
 		return null == data ? null : serializer.antiConvet(data, User.class);
 	}
 
-	public Result<TokenReplaceModel> tokenReplace(ClientType ct, int appId, int uid, String mobile) { 
+	public Result<TokenReplaceModel> tokenReplace(Client client, int uid, String mobile) { 
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		String token = RapidSecurity.encodeToken(mobile);
 		long flag = redis.invokeLua(UserLuaCmd.TOKEN_REPLACE, 
 				RedisKeyGenerator.userLockKey(uid), 
-				RedisKeyGenerator.userTokenKey(appId, ct),
-				RedisKeyGenerator.tokenUserKey(appId, ct),
+				RedisKeyGenerator.userTokenKey(client),
+				RedisKeyGenerator.tokenUserKey(client),
 				lockId, String.valueOf(uid), token, String.valueOf(Config.getUserLockExpire()));
 		return 0 == flag ? Result.result((int)flag, new TokenReplaceModel(lockId, token)) : Result.result((int)flag);
 	}

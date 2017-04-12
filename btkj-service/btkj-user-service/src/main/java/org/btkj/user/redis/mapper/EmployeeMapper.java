@@ -36,7 +36,13 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 
 	@Override
 	public Employee getByKey(Integer key) {
-		return null;
+		Employee employee = userCacheController.getEmployeeById(key);
+		if (null == employee) {
+			employee = dao.selectByKey(key);
+			if (null != employee)
+				userCacheController.refreshEmployee(employee);
+		}
+		return employee;
 	}
 
 	@Override
@@ -87,7 +93,7 @@ public class EmployeeMapper extends Mapper<Integer, Employee, EmployeeDao> {
 	 */
 	public List<TenantTips> auditTenantTipsList(int uid) { 
 		List<TenantTips> list = new ArrayList<TenantTips>();
-		String key = RedisKeyGenerator.btkjApplyKey(uid);
+		String key = RedisKeyGenerator.userApplyList(uid);
 		Set<String> set = redis.hkeys(key);
 		for (String str : set) 
 			list.add(new TenantTips(Integer.valueOf(str)));

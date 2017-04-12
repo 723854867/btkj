@@ -17,7 +17,7 @@ public enum BtkjCode implements ICode {
 	/**
 	 * app 已经下架了
 	 */
-	APP_OFF_SHELFS(501, "The app is now off the shelfs"),
+	APP_NOT_EXIST(501, "app not exist"),
 	
 	/**
 	 * 已经存在申请了
@@ -43,7 +43,22 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 代理商个数最大值
 	 */
-	TENANT_COUNT_MAXIMUM(506, "tenant count maximum");
+	TENANT_COUNT_MAXIMUM(506, "tenant count maximum"),
+	
+	/**
+	 * app 添加的租户个数达到最大值
+	 */
+	APP_TENANTS_NUM_MAX(507, "app tenants num max"),
+	
+	/**
+	 * 代理公司不存在
+	 */
+	TENANT_NOT_EXIST(508, "tenant not exist"),
+	
+	/**
+	 * 雇员不存在
+	 */
+	EMPLOYEE_NOT_EXIST(509, "employee not exist");
 	
 	private int code;
 	private String desc;

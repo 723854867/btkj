@@ -1,6 +1,6 @@
 package org.btkj.pojo.enums;
 
-public enum ClientType {
+public enum Client {
 	
 	/**
 	 * 移动 app 端
@@ -19,7 +19,7 @@ public enum ClientType {
 	
 	private int type;
 	
-	private ClientType(int type) {
+	private Client(int type) {
 		this.type = type;
 	}
 	
@@ -27,15 +27,11 @@ public enum ClientType {
 		return type;
 	}
 	
-	public boolean contains(int mod) { 
-		return (mod & this.type) == this.type;
-	}
-	
-	public static final ClientType match(int type) {
-		for (ClientType temp : ClientType.values()) {
+	public static final Client match(int type) {
+		for (Client temp : Client.values()) {
 			if (temp.type == type)
 				return temp;
 		}
-		throw new IllegalArgumentException("clientType");
+		return null;
 	}
 }

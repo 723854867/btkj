@@ -3,7 +3,9 @@ package org.btkj.web.util;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.Version;
 import org.btkj.web.util.action.Action;
-import org.btkj.web.util.action.ActionContainer;
+import org.rapid.util.common.SpringContextUtil;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -22,10 +24,8 @@ import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.reflect.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 只允许 POST, OPTIONS, TRACE
@@ -46,13 +46,18 @@ public class Dispatcher extends HttpServlet {
 	
 	private static final String ACTION_LOCATION					= "actionLocation";
 	
+	private Map<String, Map<Version, Action>>  container = new HashMap<String, Map<Version, Action>>();
+	
+	@Autowired(required = false)
+	private InitialHook initialHook;
+	
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		AutowireCapableBeanFactory factory = context.getAutowireCapableBeanFactory();
-		factory.autowireBean(this);
+		SpringContextUtil.autowireBean(this);
 		_initActions();
+		if (null != initialHook)
+			initialHook.start();
 	}
 	
 	private void _initActions() {
@@ -63,7 +68,8 @@ public class Dispatcher extends HttpServlet {
 			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
 				continue;
 			try {
-				ActionContainer.INSTANCE.addAction((Action)clazz.newInstance());
+				Action action = SpringContextUtil.autowire(clazz);
+				_addAction(action);
 			} catch (Exception e) {
 				logger.error("Action load failure, system will closed!", e);
 				System.exit(1);
@@ -85,7 +91,7 @@ public class Dispatcher extends HttpServlet {
 		Request req = new Request(request, response);
 		try {
 			Version version = req.getOptionalParam(Params.VERSION);
-			Action action = ActionContainer.INSTANCE.getAction(req.getParam(Params.ACTION), version);
+			Action action = _getAction(req.getParam(Params.ACTION), version);
 			if (null == action) {
 				req.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
 				return;
@@ -107,5 +113,20 @@ public class Dispatcher extends HttpServlet {
 	@Override
 	protected final void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setHeader(HttpHeaders.ALLOW, METHOD_ALLOWS);
+	}
+	
+	private void _addAction(Action action) {
+		String name = action.getClass().getSimpleName().toLowerCase();
+		Map<Version, Action> map = container.get(name);
+		if (null == map) {
+			map = new HashMap<Version, Action>();
+			container.put(name, map);
+		}
+		map.put(action.version(), action);
+	}
+	
+	private Action _getAction(String name, Version version) {
+		Map<Version, Action> map = container.get(name);
+		return null == map ? null : map.get(version);
 	}
 }

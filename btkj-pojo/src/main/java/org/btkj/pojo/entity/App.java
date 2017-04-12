@@ -7,7 +7,9 @@ public class App implements Entity<Integer> {
 	private static final long serialVersionUID = 1327257995085623868L;
 
 	private int id;
+	private int region;
 	private int mod;
+	private int maxTenantsCount;
 	private String name;
 	private int created;
 	private int updated;
@@ -39,6 +41,14 @@ public class App implements Entity<Integer> {
 		this.id = id;
 	}
 	
+	public int getRegion() {
+		return region;
+	}
+	
+	public void setRegion(int region) {
+		this.region = region;
+	}
+	
 	public int getMod() {
 		return mod;
 	}
@@ -53,6 +63,14 @@ public class App implements Entity<Integer> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getMaxTenantsCount() {
+		return maxTenantsCount;
+	}
+	
+	public void setMaxTenantsCount(int maxTenantsCount) {
+		this.maxTenantsCount = maxTenantsCount;
 	}
 
 	public int getCreated() {

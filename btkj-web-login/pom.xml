@@ -99,7 +99,7 @@
 							<filtering>true</filtering>
 						</resource>
 					</webResources>
-					<warName>common</warName>
+					<warName>login</warName>
 				</configuration>
 			</plugin>
 		</plugins>

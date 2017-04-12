@@ -1,6 +1,7 @@
 package org.btkj.user.redis;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class UserCacheController {
 		if (value instanceof Long) {
 			List<Employee> employees = employeeDao.selectByUid(uid);
 			if (employees.isEmpty())
-				return null;
+				return Collections.EMPTY_SET;
 			set = new HashSet<Integer>();
 			byte[][] params = new byte[employees.size() * 3 + 2][];
 			int index = 0;
@@ -73,5 +74,10 @@ public class UserCacheController {
 				SerializeUtil.RedisUtil.encode(employee.getId()),
 				SerializeUtil.ProtostuffUtil.serial(employee),
 				SerializeUtil.RedisUtil.encode(employee.getTid()));
+	}
+	
+	public Employee getEmployeeById(int id) { 
+		byte[] data = redis.hget(SerializeUtil.RedisUtil.encode(RedisKeyGenerator.employeeDataKey()), SerializeUtil.RedisUtil.encode(id));
+		return null == data ? null : SerializeUtil.ProtostuffUtil.deserial(data, Employee.class);
 	}
 }

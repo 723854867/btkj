@@ -19,10 +19,6 @@ public class ApplyInfo implements Serializable {
 	// 保途 app 需要改字段
 	private int uid;
 
-	// 独立 app 需要下面这两个字段
-	private String name;
-	private String identity;
-
 	public int getTid() {
 		return tid;
 	}
@@ -53,89 +49,5 @@ public class ApplyInfo implements Serializable {
 
 	public void setUid(int uid) {
 		this.uid = uid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getIdentity() {
-		return identity;
-	}
-
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
-
-	/**
-	 * 独立 app 在登录时如果用户不存在会判断该账号是否已经有申请正在审核，如果有则显示的时审核信息，而不是登录或者主页信息
-	 * 
-	 * @author ahab
-	 *
-	 */
-	public static class ApplyChecker extends LoginInfo {
-
-		private static final long serialVersionUID = -7130338155291179327L;
-
-		private int tid; 
-		private int chief; 
-		private int time; 
-		private String name;
-		private String identity;
-
-		public ApplyChecker() {}
-
-		public ApplyChecker(ApplyInfo ai) {
-			setTid(ai.getTid());
-			setChief(ai.getChief());
-			setTime(ai.getTime());
-			setUid(ai.getUid());
-			setName(ai.getName());
-			setIdentity(ai.getIdentity());
-		}
-
-		public int getTid() {
-			return tid;
-		}
-
-		public void setTid(int tid) {
-			this.tid = tid;
-		}
-
-		public int getChief() {
-			return chief;
-		}
-
-		public void setChief(int chief) {
-			this.chief = chief;
-		}
-
-		public int getTime() {
-			return time;
-		}
-
-		public void setTime(int time) {
-			this.time = time;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getIdentity() {
-			return identity;
-		}
-
-		public void setIdentity(String identity) {
-			this.identity = identity;
-		}
 	}
 }

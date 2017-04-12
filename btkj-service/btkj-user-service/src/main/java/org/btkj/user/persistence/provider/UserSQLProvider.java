@@ -27,10 +27,12 @@ public class UserSQLProvider {
 			{
 				UPDATE(BtkjTables.USER.name());
 				SET("name=#{name}");
+				SET("identity=#{identity}");
 				SET("app_login_time=#{appLoginTime}");
 				SET("pc_login_time=#{pcLoginTime}");
 				SET("manager_login_time=#{managerLoginTime}");
 				SET("updated=#{updated}");
+				WHERE("uid=#{uid}");
 			}
 		}.toString();
 	}

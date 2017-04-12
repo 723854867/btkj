@@ -13,6 +13,14 @@ public class AppCache extends Cache<Integer, App> {
 		super(BtkjTables.APP.name());
 		this.tenantService = tenantService;
 	}
+	
+	/**
+	 * 加载顺序必须大于 tenantCache
+	 */
+	@Override
+	public int priority() {
+		return 1;
+	}
 
 	@Override
 	public void load() throws Exception {

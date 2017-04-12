@@ -6,7 +6,7 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CredentialSegment;
 
 /**
@@ -22,19 +22,15 @@ public class Credential implements Serializable {
 	private User user;
 	private Tenant tenant;
 	private Employee employee;				// 前提是有 Tenant
-	private ClientType clientType;
+	private Client clientType;
 	
 	public Credential() {}
 	
-	public Credential(ClientType ct, App app) {
-		this(ct, app, null, null, null);
-	}
-	
-	public Credential(ClientType ct, App app, Tenant tenant) {
+	public Credential(Client ct, App app, Tenant tenant) {
 		this(ct, app, tenant, null, null);
 	}
 	
-	public Credential(ClientType ct, App app, Tenant tenant, User user, Employee employee) {
+	public Credential(Client ct, App app, Tenant tenant, User user, Employee employee) {
 		this.app = app;
 		this.user = user;
 		this.tenant = tenant;
@@ -74,11 +70,11 @@ public class Credential implements Serializable {
 		this.employee = employee;
 	}
 	
-	public ClientType getClientType() {
+	public Client getClientType() {
 		return clientType;
 	}
 	
-	public void setClientType(ClientType clientType) {
+	public void setClientType(Client clientType) {
 		this.clientType = clientType;
 	}
 	

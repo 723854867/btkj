@@ -3,7 +3,7 @@ package org.btkj.user.api;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppMainPageInfo;
 import org.rapid.util.common.message.Result;
 
@@ -29,7 +29,7 @@ public interface UserService {
 	 * @param token
 	 * @return
 	 */
-	User getUserByToken(ClientType ct, App app, String token);
+	User getUserByToken(Client ct, String token);
 	
 	/**
 	 * 通过 token 获取用户并且获取用户锁
@@ -38,7 +38,7 @@ public interface UserService {
 	 * @param token
 	 * @return
 	 */
-	Result<User> lockUserByToken(ClientType ct, App app, String token);
+	Result<User> lockUserByToken(Client ct, String token);
 	
 	/**
 	 * 释放用户锁
@@ -57,4 +57,14 @@ public interface UserService {
 	 * @return
 	 */
 	Result<AppMainPageInfo> mainPage(App app, Tenant tenant, String token);
+	
+	/**
+	 * 我的团队信息
+	 * 
+	 * @param app
+	 * @param tenant
+	 * @param token
+	 * @return
+	 */
+	Result<?> teamInfo(App app, Tenant tenant, String token);
 }

@@ -10,9 +10,25 @@ public class AppSQLProvider {
 			{
 				INSERT_INTO(BtkjTables.APP.name());
 				VALUES("`name`", "#{name}");
+				VALUES("region", "#{region}");
 				VALUES("`mod`", "#{mod}");
+				VALUES("max_tenants_count", "#{maxTenantsCount}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
+			}
+		}.toString();
+	}
+	
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.APP.name());
+				SET("`name`=#{name}");
+				SET("region=#{region}");
+				SET("max_tenants_count=#{maxTenantsCount}");
+				SET("created=#{created}");
+				SET("updated=#{updated}");
+				WHERE("id=#{id}");
 			}
 		}.toString();
 	}
@@ -31,7 +47,7 @@ public class AppSQLProvider {
 			{
 				SELECT("*");
 				FROM(BtkjTables.APP.name());
-				WHERE("tid=#{key}");
+				WHERE("id=#{key}");
 			}
 		}.toString();
 	}

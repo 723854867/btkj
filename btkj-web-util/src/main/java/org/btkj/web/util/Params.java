@@ -1,9 +1,7 @@
 package org.btkj.web.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.enums.ClientType;
-import org.btkj.pojo.model.Credential;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Version;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
@@ -30,38 +28,15 @@ public interface Params {
 	final Str2StrConstConverter SESSION_ID				= new Str2StrConstConverter("sessionId");
 	
 	/**
-	 * 每次请求都必须要使用的识别码：能识别出客户端的所属的 app、tenant 以及 user
+	 * 雇员 ID
 	 */
-	final Str2ObjConstConverter<Credential> CREDENTIAL		= new Str2ObjConstConverter<Credential>(1000, "credential") {
-		@Override
-		public Credential convert(String credential) throws ConstConvertFailureException {
-			try {
-				return ParamsUtil.parse(this, credential, true);
-			} catch (Exception e) {
-				throw ConstConvertFailureException.errorConstException(this);
-			}
-		}
-	};
+	final Str2IntConstConverter EMPLOYEE_ID				= new Str2IntConstConverter(1000, "employeeId");
 	
-	/**
-	 * 用户的唯一识别码
-	 */
-	final Str2ObjConstConverter<Credential> UCODE			= new Str2ObjConstConverter<Credential>(1001, "ucode") {
-		@Override
-		public Credential convert(String chiefCode) throws ConstConvertFailureException {
-			try {
-				return ParamsUtil.parse(this, chiefCode, false);
-			} catch (Exception e) {
-				throw ConstConvertFailureException.errorConstException(this);
-			}
-		}
-	};
-
 	/**
 	 * 登陆或者注册时需要传递的参数，用来区分不同的 app、tenant
 	 * 
 	 */
-	final Str2IntConstConverter APP_ID					= new Str2IntConstConverter(1002, "appId", BtkjConsts.APP_ID_BAOTU);
+	final Str2IntConstConverter APP_ID					= new Str2IntConstConverter(1002, "appId", 0);
 	final Str2IntConstConverter TYPE					= new Str2IntConstConverter(1003, "type");
 	final Str2StrConstConverter TOKEN					= new Str2StrConstConverter(1004, "token");
 	final Str2StrConstConverter ACTION					= new Str2StrConstConverter(1005, "action");
@@ -112,26 +87,38 @@ public interface Params {
 	};
 	
 	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1015, "region");
-	final Str2StrConstConverter APPLY_KEY				= new Str2StrConstConverter(1016, "applyKey");
-	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1017, "agree", false) {
+	final Str2IntConstConverter TENANT_REGION			= new Str2IntConstConverter(1016, "tenantRegion");
+
+	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1018, "agree", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
 		};
 	};
 	
-	final Str2ObjConstConverter<ClientType> CLIENT_TYPE	= new Str2ObjConstConverter<ClientType>(1018, "clientType", ClientType.APP) {
+	final Str2ObjConstConverter<Client> CLIENT			= new Str2ObjConstConverter<Client>(1019, "client", Client.APP) {
 		@Override
-		public ClientType convert(String k) throws ConstConvertFailureException {
-			return ClientType.match(Integer.valueOf(k));
+		public Client convert(String k) throws ConstConvertFailureException {
+			Client client = Client.match(Integer.valueOf(k));
+			if (null == client)
+				throw ConstConvertFailureException.errorConstException(this);
+			return client;
 		}
 	};
-	final Str2StrConstConverter PWD						= new Str2StrConstConverter(1019, "pwd") {
+	final Str2StrConstConverter PWD						= new Str2StrConstConverter(1020, "pwd") {
 		public String convert(String value) throws ConstConvertFailureException {
 			return DigestUtils.md5Hex(value);
 		};
 	};
-	final Str2IntConstConverter UID						= new Str2IntConstConverter(1020, "uid");
-	final Str2IntConstConverter ID						= new Str2IntConstConverter(1021, "id");
+	final Str2IntConstConverter UID						= new Str2IntConstConverter(1021, "uid");
+	final Str2IntConstConverter ID						= new Str2IntConstConverter(1022, "id");
+	final Str2IntConstConverter MAX_TENANTS_COUNT		= new Str2IntConstConverter(1023, "maxTenantsCount") {
+		public Integer convert(String value) throws ConstConvertFailureException {
+			int val = Integer.valueOf(value);
+			if (val < 0)
+				throw ConstConvertFailureException.errorConstException(this);
+			return val;
+		};
+	};
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

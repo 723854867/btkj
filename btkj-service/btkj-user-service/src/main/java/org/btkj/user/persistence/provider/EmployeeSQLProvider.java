@@ -23,6 +23,16 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
+	public String selectByKey() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(BtkjTables.EMPLOYEE.name());
+				WHERE("id=#{key}");
+			}
+		}.toString();
+	}
+	
 	public String selectByUidAndTid() {
 		return new SQL() {
 			{

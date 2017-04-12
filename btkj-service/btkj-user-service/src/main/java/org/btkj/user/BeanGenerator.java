@@ -2,32 +2,22 @@ package org.btkj.user;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.rapid.util.lang.DateUtils;
 
 public class BeanGenerator {
 
-	/**
-	 * 新用户
-	 * 
-	 * @param cm
-	 * @param identity
-	 * @param name
-	 * @return
-	 */
-	public static final User newUser(int appId, String mobile, String identity, String name) { 
+	public static final User newUser(int appId, String mobile, String name, String identity) { 
 		User user = new User();
+		user.setName(name);
 		user.setAppId(appId);
 		user.setMobile(mobile);
 		user.setIdentity(identity);
-		user.setName(name);
 		
 		int time = DateUtils.currentTime();
 		user.setCreated(time);
 		user.setUpdated(time);
-		user.setAppLoginTime(time);
 		return user;
 	}
 	
@@ -46,17 +36,23 @@ public class BeanGenerator {
 		return employee;
 	}
 	
-	public static final App newApp(String name) {
+	public static final App newApp(int region, String name, int maxTenantsCount) {
 		App app = new App();
+		app.setRegion(region);
 		app.setName(name);
+		app.setMaxTenantsCount(maxTenantsCount);
+
+		int time = DateUtils.currentTime();
+		app.setCreated(time);
+		app.setUpdated(time);
 		return app;
 	}
 	
-	public static final Tenant newTenant(Region region, int appId, String name, String pwd) {
+	public static final Tenant newTenant(int region, int appId, String name, String pwd) {
 		Tenant tenant = new Tenant();
 		tenant.setName(name);
 		tenant.setAppId(appId);
-		tenant.setRegionId(region.getId());
+		tenant.setRegion(region);
 		tenant.setPwd(pwd);
 		tenant.setPrivilege("0");
 		

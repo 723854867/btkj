@@ -1,18 +1,12 @@
 package org.btkj.user.service;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.ClientType;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppMainPageInfo;
-import org.btkj.pojo.info.tips.MainTenantTips;
-import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.user.api.UserService;
 import org.btkj.user.redis.mapper.EmployeeMapper;
 import org.btkj.user.redis.mapper.UserMapper;
@@ -34,13 +28,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User getUserByToken(ClientType ct, App app, String token) {
-		return userMapper.getUserByToken(ct, app, token);
+	public User getUserByToken(Client ct, String token) {
+		return userMapper.getUserByToken(ct, token);
 	}
 	
 	@Override
-	public Result<User> lockUserByToken(ClientType ct, App app, String token) {
-		return userMapper.lockUserByToken(ct, app.getId(), token);
+	public Result<User> lockUserByToken(Client ct, String token) {
+		return userMapper.lockUserByToken(ct, token);
 	}
 	
 	@Override
@@ -50,20 +44,30 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<AppMainPageInfo> mainPage(App app, Tenant tenant, String token) {
-		User user = userMapper.getUserByToken(ClientType.APP, app, token);
+		User user = userMapper.getUserByToken(Client.APP, token);
 		if (null == user)
 			return Result.result(Code.USER_NOT_EXIST);
 		AppMainPageInfo mainPageInfo = new AppMainPageInfo(user);
-		if (BtkjUtil.isBaoTuApp(app)) {
-			int mainTid = userMapper.mainTenant(user.getUid());
-			List<TenantTips> list = employeeMapper.tenantTipsList(BtkjConsts.APP_ID_BAOTU, user.getUid(), mainTid);
-			MainTenantTips mt = 0 == mainTid ? 
-					((null == list || list.isEmpty()) ? new MainTenantTips(BtkjConsts.TENANT_ID_BAOTU) : new MainTenantTips(list.remove(0).getTid())) 
-							: new MainTenantTips(mainTid);
-			mainPageInfo.setTenant(mt);
-			mainPageInfo.setOwnTenants(list);
-			mainPageInfo.setAuditTenants(employeeMapper.auditTenantTipsList(user.getUid()));
-		}
+//		if (BtkjUtil.isMultiApp(app)) {
+//			int mainTid = userMapper.mainTenant(user.getUid());
+//			List<TenantTips> list = employeeMapper.tenantTipsList(app.getId(), user.getUid(), mainTid);
+//			MainTenantTips mt = null;
+//			if (0 == mainTid && null != list && !list.isEmpty()) 
+//				mainTid = list.remove(0).getTid();
+//			if (0 != mainTid)
+//				mt = new MainTenantTips(mainTid);
+//			mainPageInfo.setTenant(mt);
+//			mainPageInfo.setOwnTenants(list);
+//			mainPageInfo.setAuditTenants(employeeMapper.auditTenantTipsList(user.getUid()));
+//		}
 		return Result.result(mainPageInfo);
+	}
+	
+	@Override
+	public Result<?> teamInfo(App app, Tenant tenant, String token) {
+		User user = userMapper.getUserByToken(Client.APP, token);
+		if (null == user)
+			return Result.result(Code.USER_NOT_EXIST);
+		return null;
 	}
 }

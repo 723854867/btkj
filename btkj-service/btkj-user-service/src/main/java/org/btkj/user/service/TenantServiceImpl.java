@@ -23,10 +23,8 @@ import org.btkj.user.redis.mapper.BannerMapper;
 import org.btkj.user.redis.mapper.EmployeeMapper;
 import org.btkj.user.redis.mapper.TenantMapper;
 import org.btkj.user.redis.mapper.UserMapper;
-import org.rapid.util.common.Assert;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -68,8 +66,8 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<Void> applyProcess(int tid, String applyKey, boolean agree) {
-		ApplyInfo info = applyHook.getAndDel(tid, applyKey);
+	public Result<Void> applyProcess(int tid, int uid, boolean agree) {
+		ApplyInfo info = applyHook.getAndDel(tid, uid);
 		if (null == info)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (!agree)				// 拒绝申请直接返回即可
@@ -79,19 +77,17 @@ public class TenantServiceImpl implements TenantService {
 				employeeMapper.getByTidAndLevel(tid, BtkjConsts.EMPLOYEE_ROOT_LEVEL).get(0) : 
 					employeeMapper.getByUidAndTid(info.getChief(), tid);
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Assert.notNull(tenant);
-		if (0 == info.getUid())		// 独立 app 的申请
-			tx.tenantJoin(info.getName(), info.getIdentity(), applyKey, tenant, chief);
-		else 						// 保途 app 的申请
-			tx.tenantJoin(userMapper.getByKey(info.getUid()), tenant, chief);
+		tx.tenantJoin(userMapper.getByKey(info.getUid()), tenant, chief);
 		return Result.success();
 	}
 	
 	@Override
-	public Result<Void> tenantAdd(Region region, String tenantName, String pwd, int uid) {
+	public Result<Void> tenantAdd(App app, Region region, String tenantName, String pwd, int uid) {
 		User user = userMapper.getByKey(uid);
 		if (null == user)
 			return Result.result(Code.USER_NOT_EXIST);
+		if (user.getAppId() != app.getId())
+			return Result.result(Code.FORBID);
 		String lockId = userMapper.lockUser(uid);
 		if (null == lockId)
 			return Result.result(Code.USER_STATUS_CHANGED);
@@ -100,7 +96,7 @@ public class TenantServiceImpl implements TenantService {
 			int tenantNum = employeeMapper.tenantNum(uid);
 			if (tenantNum >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum())
 				return Result.result(BtkjCode.TENANT_COUNT_MAXIMUM);
-			tx.tenantAdd(region, tenantName, pwd, user);
+			tx.tenantAdd(app, region, tenantName, pwd, user);
 			return Result.success();
 		} finally {
 			userMapper.releaseUserLock(uid, lockId);
@@ -108,16 +104,7 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity, String pwd) {
-		if (null == appName) {			// 添加保途租户
-			App app = appMapper.getByKey(BtkjConsts.APP_ID_BAOTU);
-			try {
-				tx.tenantAdd(app, region, tenantName, mobile, name, identity, pwd);
-			} catch (DuplicateKeyException e) {
-				return Result.result(BtkjCode.MOBILE_EXIST);
-			}
-		} else							// 添加独立租户
-			tx.tenantAdd(appName, region, tenantName, mobile, name, identity, pwd);
+	public Result<Void> tenantAdd(App app, Region region, String tenantName, String name, String mobile, String identity, String pwd) {
 		return Result.success();
 	}
 }

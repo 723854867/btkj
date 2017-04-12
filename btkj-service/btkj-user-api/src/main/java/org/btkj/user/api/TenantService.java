@@ -44,29 +44,29 @@ public interface TenantService {
 	 * 处理请求
 	 * 
 	 * @param tid
-	 * @param applyKey
 	 * @param agree
 	 */
-	Result<Void> applyProcess(int tid, String applyKey, boolean agree);
+	Result<Void> applyProcess(int tid, int uid, boolean agree);
 	
 	// ****************
 	
 	/**
 	 * 添加代理公司
 	 * 
+	 * @param app
 	 * @param region 代理公司地区
 	 * @param tenantName 代理公司租户名字
 	 * @param pwd 密码
 	 * @param uid 管理员用户ID
 	 * @return
 	 */
-	Result<Void> tenantAdd(Region region, String tenantName, String pwd, int uid);
+	Result<Void> tenantAdd(App app, Region region, String tenantName, String pwd, int uid);
 
 	/**
 	 * 添加代理公司
 	 * 
+	 * @param app 如果是为多租户app添加代理公司则需要该参数
 	 * @param region 代理公司地区
-	 * @param appName  代理公司 app 名字，如果为 null 则默认添加保途租户
 	 * @param tenantName 代理公司租户名字
 	 * @param name root 账号名字
 	 * @param mobile root 账号手机名字
@@ -74,5 +74,5 @@ public interface TenantService {
 	 * @param pwd 默认所有用户的 pc 和管理后台登录密码
 	 * @return
 	 */
-	Result<Void> tenantAdd(Region region, String appName, String tenantName, String name, String mobile, String identity, String pwd);
+	Result<Void> tenantAdd(App app, Region region, String tenantName, String name, String mobile, String identity, String pwd);
 }

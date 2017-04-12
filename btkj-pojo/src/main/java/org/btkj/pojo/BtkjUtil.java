@@ -1,35 +1,31 @@
 package org.btkj.pojo;
 
-import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.model.Credential;
 
 public class BtkjUtil {
+	
+	/**
+	 * 判断 tar 是否是 src 的子行政区划
+	 * 
+	 * @param src
+	 * @param tar
+	 * @return
+	 */
+	public static final boolean isSubRegion(Region src, Region tar) { 
+		if (src.getLevel() == tar.getLevel())				// 同级别的肯定不是父子关系
+			return false;
+		return false;
+	}
 
 	/**
-	 * 判断是否是保途的app
+	 * 判断两个客户端标识是否是同一个 app
 	 * 
-	 * @param appId
+	 * @param credential1
+	 * @param credential2
 	 * @return
 	 */
-	public static final boolean isBaoTuApp(int appId) {
-		return appId == BtkjConsts.APP_ID_BAOTU;
-	}
-	
-	public static final boolean isBaoTuApp(App app) {
-		return app.getId() == BtkjConsts.APP_ID_BAOTU;
-	}
-	
-	public static final boolean isBaoTuApp(Credential credential) {
-		return credential.getApp().getId() == BtkjConsts.APP_ID_BAOTU;
-	}
-	
-	/**
-	 * 判断 credential 中的 tenant 是否为 null
-	 * 
-	 * @param credential
-	 * @return
-	 */
-	public static final boolean hasTenant(String tid) {
-		return !tid.equals(BtkjConsts.NULL_TENANT_CREDENTIAL);
+	public static final boolean isSameApp(Credential credential1, Credential credential2) {
+		return credential1.getApp().getId() == credential2.getApp().getId();
 	}
 }
