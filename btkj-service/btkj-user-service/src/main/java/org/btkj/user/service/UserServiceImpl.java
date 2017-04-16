@@ -1,5 +1,7 @@
 package org.btkj.user.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.pojo.entity.App;
@@ -8,11 +10,16 @@ import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppMainPageInfo;
+import org.btkj.pojo.info.mainpage.IMainPageInfo;
+import org.btkj.pojo.info.tips.MainTenantTips;
+import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.user.api.UserService;
-import org.btkj.user.redis.mapper.EmployeeMapper;
-import org.btkj.user.redis.mapper.UserMapper;
+import org.btkj.user.redis.EmployeeMapper;
+import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("userService")
@@ -50,21 +57,30 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<AppMainPageInfo> mainPage(App app, Tenant tenant, String token) {
-		AppMainPageInfo mainPageInfo = new AppMainPageInfo(null);
-//		if (BtkjUtil.isMultiApp(app)) {
-//			int mainTid = userMapper.mainTenant(user.getUid());
-//			List<TenantTips> list = employeeMapper.tenantTipsList(app.getId(), user.getUid(), mainTid);
-//			MainTenantTips mt = null;
-//			if (0 == mainTid && null != list && !list.isEmpty()) 
-//				mainTid = list.remove(0).getTid();
-//			if (0 != mainTid)
-//				mt = new MainTenantTips(mainTid);
-//			mainPageInfo.setTenant(mt);
-//			mainPageInfo.setOwnTenants(list);
-//			mainPageInfo.setAuditTenants(employeeMapper.auditTenantTipsList(user.getUid()));
-//		}
-		return Result.result(mainPageInfo);
+	public Result<IMainPageInfo> mainPage(Client client, String token, Tenant tenant) {
+		User user = userMapper.getUserByToken(client, token);
+		if (null == user)
+			return Result.result(Code.TOKEN_INVALID);
+		
+		switch (client) {
+		case PC:
+			AppMainPageInfo mainPageInfo = new AppMainPageInfo(user);
+			int mainTid = userMapper.mainTenant(user.getUid());
+			List<TenantTips> list = employeeMapper.tenantTipsList(user, mainTid);
+			MainTenantTips mt = null;
+			if (0 == mainTid && null != list && !list.isEmpty()) 
+				mainTid = list.remove(0).getTid();
+			if (0 != mainTid)
+				mt = new MainTenantTips(mainTid);
+			mainPageInfo.setTenant(mt);
+			mainPageInfo.setOwnTenants(list);
+			mainPageInfo.setAuditTenants(employeeMapper.auditTenantTipsList(user.getUid()));
+			return Result.result(mainPageInfo);
+		case MANAGER:
+			return null;
+		default:
+			return null;
+		}
 	}
 	
 	@Override
@@ -73,5 +89,16 @@ public class UserServiceImpl implements UserService {
 		if (null == user)
 			return Result.result(Code.USER_NOT_EXIST);
 		return null;
+	}
+	
+	@Override
+	public Result<?> update(User user) {
+		user.setUpdated(DateUtils.currentTime());
+		try {
+			userMapper.update(user);
+		} catch (DuplicateKeyException e) {
+			return Result.result(Code.IDENTITY_ALREADY_EXIST);
+		}
+		return Result.success();
 	}
 }

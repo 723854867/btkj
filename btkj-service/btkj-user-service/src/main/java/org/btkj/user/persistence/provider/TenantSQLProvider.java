@@ -35,7 +35,7 @@ public class TenantSQLProvider {
 			{
 				SELECT("*");
 				FROM(BtkjTables.TENANT.name());
-				WHERE("id=#{key}");
+				WHERE("tid=#{key}");
 			}
 		}.toString();
 	}

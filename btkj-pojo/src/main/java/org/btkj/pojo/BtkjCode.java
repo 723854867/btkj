@@ -58,7 +58,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 雇员不存在
 	 */
-	EMPLOYEE_NOT_EXIST(509, "employee not exist");
+	EMPLOYEE_NOT_EXIST(509, "employee not exist"),
+	
+	/**
+	 * 用户资料不全
+	 */
+	USER_DATA_INCOMPLETE(510, "user data is incomplete");
 	
 	private int code;
 	private String desc;

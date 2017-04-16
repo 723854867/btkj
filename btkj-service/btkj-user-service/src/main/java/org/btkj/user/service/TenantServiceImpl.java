@@ -1,28 +1,23 @@
 package org.btkj.user.service;
 
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.persistence.Tx;
-import org.btkj.user.redis.hook.ApplyHook;
-import org.btkj.user.redis.mapper.AppMapper;
-import org.btkj.user.redis.mapper.BannerMapper;
-import org.btkj.user.redis.mapper.EmployeeMapper;
-import org.btkj.user.redis.mapper.TenantMapper;
-import org.btkj.user.redis.mapper.UserMapper;
+import org.btkj.user.redis.ApplyMapper;
+import org.btkj.user.redis.EmployeeMapper;
+import org.btkj.user.redis.TenantMapper;
+import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
@@ -33,51 +28,57 @@ public class TenantServiceImpl implements TenantService {
 	@Resource
 	private Tx tx;
 	@Resource
-	private AppMapper appMapper;
-	@Resource
-	private ApplyHook applyHook;
-	@Resource
 	private UserMapper userMapper;
 	@Resource
-	private TenantMapper tenantMapper;
+	private ApplyMapper applyMapper;
 	@Resource
-	private BannerMapper bannerMapper;
+	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public Map<Integer, App> getApps() {
-		return appMapper.getAll();
+	public Tenant getTenantById(int tid) {
+		return tenantMapper.getByKey(tid);
 	}
 	
 	@Override
-	public Map<Integer, Tenant> getTenants() {
-		return tenantMapper.getAll();
+	public Result<?> apply(User user, int employeeId) {
+		Employee employee = employeeMapper.getByKey(employeeId);
+		if (null == employee)
+			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+		User chief = userMapper.getByKey(employee.getUid());
+		if (chief.getAppId() != user.getAppId())
+			return Result.result(Code.FORBID);
+		return _doApply(tenantMapper.getByKey(employee.getTid()), user, chief);
 	}
 	
-	@Override
-	public Map<Integer, Banner> getBanners() {
-		return bannerMapper.getAll();
+	private Result<?> _doApply(Tenant tenant, User user, User chief) {
+		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
+		if (null != ai)
+			return Result.result(BtkjCode.APPLY_EXIST);
+		if (null != employeeMapper.getByTidAndUid(tenant.getTid(), user.getUid()))
+			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
+		applyMapper.insert(BeanGenerator.newApply(tenant.getTid(), user.getUid(), chief.getUid()));
+		return Result.success();
 	}
 	
 	@Override
 	public Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize) {
-		return applyHook.applyList(tid, page, pageSize);
+		return applyMapper.applyList(tid, page, pageSize);
 	}
 	
 	@Override
 	public Result<Void> applyProcess(int tid, int uid, boolean agree) {
-		ApplyInfo info = applyHook.getAndDel(tid, uid);
+		ApplyInfo info = applyMapper.getAndDel(tid, uid);
 		if (null == info)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (!agree)				// 拒绝申请直接返回即可
 			return Result.success();
 		
-		Employee chief = 0 == info.getChief() ? 
-				employeeMapper.getByTidAndLevel(tid, BtkjConsts.EMPLOYEE_ROOT_LEVEL).get(0) : 
-					employeeMapper.getByUidAndTid(info.getChief(), tid);
+		Employee chief = employeeMapper.getByTidAndUid(tid, info.getChief());
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		tx.tenantJoin(userMapper.getByKey(info.getUid()), tenant, chief);
+		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
+		tx.tenantJoin(employee);
 		return Result.success();
 	}
 	

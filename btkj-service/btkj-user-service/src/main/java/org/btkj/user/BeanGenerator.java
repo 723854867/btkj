@@ -4,15 +4,27 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.ApplyInfo;
 import org.rapid.util.lang.DateUtils;
 
 public class BeanGenerator {
 
-	public static final User newUser(int appId, String mobile, String name, String identity) { 
+	public static final User newUser(int appId, String mobile) { 
 		User user = new User();
-		user.setName(name);
 		user.setAppId(appId);
 		user.setMobile(mobile);
+		
+		int time = DateUtils.currentTime();
+		user.setCreated(time);
+		user.setUpdated(time);
+		return user;
+	}
+	
+	public static final User newUser(int appId, String mobile, String name, String identity) { 
+		User user = new User();
+		user.setAppId(appId);
+		user.setMobile(mobile);
+		user.setName(name);
 		user.setIdentity(identity);
 		
 		int time = DateUtils.currentTime();
@@ -60,5 +72,14 @@ public class BeanGenerator {
 		tenant.setCreated(time);
 		tenant.setUpdated(time);
 		return tenant;
+	}
+	
+	public static final ApplyInfo newApply(int tid, int uid, int chief) { 
+		ApplyInfo ai = new ApplyInfo();
+		ai.setUid(uid);
+		ai.setTid(tid);
+		ai.setChief(chief);
+		ai.setTime(DateUtils.currentTime());
+		return ai;
 	}
 }

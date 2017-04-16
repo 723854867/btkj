@@ -1,38 +1,32 @@
 package org.btkj.user.api;
 
-import java.util.Map;
-
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
+	
+	/**
+	 * 通过 tid 获取 tenant
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Tenant getTenantById(int tid);
+	
+	/**
+	 * 申请加入代理公司
+	 * 
+	 * @param token
+	 * @param employeeId
+	 * @return
+	 */
+	Result<?> apply(User user, int employeeId);
 
-	/**
-	 * 获取所有的 app 数据
-	 * 
-	 * @return
-	 */
-	Map<Integer, App> getApps();
-	
-	/**
-	 * 获取所有的 tenant 数据
-	 * 
-	 * @return
-	 */
-	Map<Integer, Tenant> getTenants();
-	
-	/**
-	 * 获取所有的 banner
-	 * 
-	 * @return
-	 */
-	Map<Integer, Banner> getBanners();
-	
 	/**
 	 * 代理公司获取审核列表
 	 * 

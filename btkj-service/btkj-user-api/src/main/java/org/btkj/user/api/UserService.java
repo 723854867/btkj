@@ -4,7 +4,7 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.AppMainPageInfo;
+import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -63,7 +63,7 @@ public interface UserService {
 	 * @param tenant
 	 * @return
 	 */
-	Result<AppMainPageInfo> mainPage(App app, Tenant tenant, String token);
+	Result<IMainPageInfo> mainPage(Client client, String token, Tenant tenant);
 	
 	/**
 	 * 我的团队信息
@@ -74,4 +74,12 @@ public interface UserService {
 	 * @return
 	 */
 	Result<?> teamInfo(App app, Tenant tenant, String token);
+	
+	/**
+	 * 修改用户信息
+	 * 
+	 * @param user
+	 * @return
+	 */
+	Result<?> update(User user);
 }

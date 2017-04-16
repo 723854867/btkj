@@ -1,9 +1,18 @@
 package org.btkj.user.api;
 
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.info.AppCreateInfo;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
+	
+	/**
+	 * 通过 appId 获取 App
+	 * 
+	 * @param appId
+	 * @return
+	 */
+	App getAppById(int appId);
 
 	/**
 	 * 添加 app

@@ -37,7 +37,7 @@ public class UserSQLProvider {
 		}.toString();
 	}
 
-	public String getByAppIdAndMobile() {
+	public String selectByMobile() {
 		return new SQL() {
 			{
 				SELECT("*");

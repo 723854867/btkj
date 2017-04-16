@@ -7,7 +7,9 @@
 						
 	<dubbo:application name="user-service" owner="btkj"/>
 	
-	<dubbo:registry address="zookeeper://101.37.30.26:2181"/>
+	<dubbo:registry address="zookeeper://101.37.30.26:2181?backup=101.37.30.26:2182,101.37.30.26:2183"/>
 	
 	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
+	
+	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
 </beans>

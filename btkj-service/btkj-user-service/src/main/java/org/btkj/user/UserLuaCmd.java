@@ -1,4 +1,4 @@
-package org.btkj.user.redis;
+package org.btkj.user;
 
 import org.rapid.data.storage.redis.ILuaCmd;
 
@@ -7,7 +7,7 @@ public enum UserLuaCmd implements ILuaCmd {
 	/**
 	 * 通过手机获取用户
 	 */
-	GET_USER_BY_MOBILE {
+	USER_LOAD_BY_MOBILE {
 		@Override
 		public int keyNum() {
 			return 2;
@@ -21,7 +21,7 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	}, 
 	
-	REFRESH_USER {
+	USER_FLUSH {
 		@Override
 		public int keyNum() {
 			return 2;
@@ -31,7 +31,7 @@ public enum UserLuaCmd implements ILuaCmd {
 	/**
 	 * 通过 token 获取用户，同时获取用户的锁
 	 */
-	LOCK_USER_BY_TOKEN {
+	USER_LOAD_BY_TOKEN_LOCK {
 		@Override
 		public int keyNum() {
 			return 2;
@@ -49,16 +49,6 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	/**
-	 * 刷新 employee
-	 */
-	REFRESH_EMPLOYEE {
-		@Override
-		public int keyNum() {
-			return 3;
-		}
-	},
-	
 	EMPLOYEE_GET {
 		@Override
 		public int keyNum() {
@@ -73,10 +63,10 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	APPLY_ADD {
+	APPLY_FLUSH {
 		@Override
 		public int keyNum() {
-			return 2;
+			return 3;
 		};
 	},
 	
@@ -87,7 +77,14 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	EMPLOYEE_GET_BY_UID_AND_TID {
+	EMPLOYEE_FLUSH {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
+	
+	EMPLOYEE_LOAD_BY_TID_UID {
 		@Override
 		public int keyNum() {
 			return 2;

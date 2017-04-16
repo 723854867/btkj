@@ -1,6 +1,7 @@
 package org.btkj.pojo.model;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +12,9 @@ import java.util.List;
 public class Pager<T> implements Serializable {
 
 	private static final long serialVersionUID = 1530641020396359356L;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Pager EMPLTY				= new Pager(0, Collections.EMPTY_LIST);
 	
 	private int total;
 	private List<T> list;

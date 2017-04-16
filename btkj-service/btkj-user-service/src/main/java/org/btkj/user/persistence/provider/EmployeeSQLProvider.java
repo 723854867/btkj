@@ -33,7 +33,7 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByUidAndTid() {
+	public String selectByTidAndUid() {
 		return new SQL() {
 			{
 				SELECT("*");
@@ -41,18 +41,6 @@ public class EmployeeSQLProvider {
 				WHERE("tid=#{tid}");
 				AND();
 				WHERE("uid=#{uid}");
-			}
-		}.toString();
-	}
-	
-	public String selectByTidAndLevel() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
-				WHERE("tid=#{tid}");
-				AND();
-				WHERE("level=#{level}");
 			}
 		}.toString();
 	}

@@ -2,6 +2,10 @@ package org.btkj.pojo.info.tips;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.User;
+
 public class EmployeeTips implements Serializable {
 
 	private static final long serialVersionUID = -3946965045838944053L;
@@ -10,15 +14,17 @@ public class EmployeeTips implements Serializable {
 	private int uid;
 	private int tid;
 	private String name;
-	private String region;
+	private int regionId;
+	private String regionName;
 	
 	public EmployeeTips() {}
 	
-	public EmployeeTips(int id, int uid, int tid, String name) {
-		this.id = id;
-		this.uid  = uid;
-		this.tid = tid;
-		this.name = name;
+	public EmployeeTips(Tenant tenant, Employee employee, User user) {
+		this.id = employee.getId();
+		this.tid = employee.getTid();
+		this.uid  = user.getUid();
+		this.name = user.getName();
+		this.regionId = tenant.getRegion();
 	}
 	
 	public int getId() {
@@ -53,11 +59,19 @@ public class EmployeeTips implements Serializable {
 		this.name = name;
 	}
 	
-	public String getRegion() {
-		return region;
+	public int getRegionId() {
+		return regionId;
 	}
 	
-	public void setRegion(String region) {
-		this.region = region;
+	public void setRegionId(int regionId) {
+		this.regionId = regionId;
+	}
+	
+	public String getRegionName() {
+		return regionName;
+	}
+	
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 }

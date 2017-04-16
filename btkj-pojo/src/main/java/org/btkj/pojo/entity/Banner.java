@@ -1,15 +1,17 @@
 package org.btkj.pojo.entity;
 
-import org.rapid.data.storage.db.Entity;
+import org.rapid.util.common.model.UniqueModel;
 
-public class Banner implements Entity<Integer> {
+public class Banner implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = -6109714860502169183L;
 	
 	private int id;
+	private int appId;
 	private int tid;
 	private int idx;
 	private String image;
+	private String link;
 	private int created;
 	private int update;
 
@@ -19,6 +21,14 @@ public class Banner implements Entity<Integer> {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getAppId() {
+		return appId;
+	}
+	
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 
 	public int getTid() {
@@ -43,6 +53,14 @@ public class Banner implements Entity<Integer> {
 	
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public String getLink() {
+		return link;
+	}
+	
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 	public int getCreated() {

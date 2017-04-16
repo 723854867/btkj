@@ -24,6 +24,6 @@ public interface UserDao extends Dao<Integer, User> {
 	@SelectProvider(type = UserSQLProvider.class, method = "selectByKey")
 	User selectByKey(Integer key);
 
-	@SelectProvider(type = UserSQLProvider.class, method = "getByAppIdAndMobile")
-	User getByAppIdAndMobile(@Param("appId") int appId, @Param("mobile") String mobile);
+	@SelectProvider(type = UserSQLProvider.class, method = "selectByMobile")
+	User selectByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
 }

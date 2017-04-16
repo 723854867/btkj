@@ -17,13 +17,6 @@ public class TEAM_INFO extends TenantAction {
 
 	@Override
 	protected Result<?> execute(Request request, Client client, App app, Tenant tenant, User user) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-//	@Override
-//	protected Result<?> execute(Request request, Credential credential) {
-//		String token = request.getHeader(Params.TOKEN);
-//		return null;
-//	}
 }

@@ -2,18 +2,16 @@ package org.btkj.master.action.impl;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.courier.api.CourierService;
 import org.btkj.master.action.LoggedAction;
 import org.btkj.master.service.Role;
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.info.AppCreateInfo;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.cache.RegionCache;
-import org.rapid.util.common.cache.CacheService;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.region.RegionUtil;
@@ -29,15 +27,14 @@ public class APP_ADD extends LoggedAction {
 	@Resource
 	private AppService appService;
 	@Resource
-	private CacheService<?> cacheService;
+	private ConfigService  configService;
 	@Resource
 	private CourierService courierService;
 
 	@Override
 	protected Result<AppCreateInfo> execute(Request request, Role role) {
-		RegionCache regionCache = (RegionCache) cacheService.getCache(BtkjTables.REGION.name());
-		Region region = regionCache.getById(request.getParam(Params.REGION));
-		Region tenantRegion = regionCache.getById(request.getParam(Params.TENANT_REGION));
+		Region region = configService.getRegionById(request.getParam(Params.REGION));
+		Region tenantRegion = configService.getRegionById(request.getParam(Params.TENANT_REGION));
 		if (null == region || null == tenantRegion)
 			throw ConstConvertFailureException.errorConstException(Params.REGION);
 		if (!RegionUtil.isSubRegion(region.getId(), tenantRegion.getId()))

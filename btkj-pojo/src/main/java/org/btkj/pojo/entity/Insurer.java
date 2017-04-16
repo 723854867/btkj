@@ -1,8 +1,8 @@
 package org.btkj.pojo.entity;
 
-import org.rapid.data.storage.db.Entity;
+import org.rapid.util.common.model.UniqueModel;
 
-public class Insurer implements Entity<Integer> {
+public class Insurer implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = -4411281170930448555L;
 	

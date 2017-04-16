@@ -1,9 +1,9 @@
 package org.btkj.pojo.info;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.btkj.pojo.info.tips.MainTenantTips;
 import org.btkj.pojo.info.tips.TenantTips;
 
@@ -12,7 +12,7 @@ import org.btkj.pojo.info.tips.TenantTips;
  * 
  * @author ahab
  */
-public class AppMainPageInfo implements Serializable {
+public class AppMainPageInfo implements IMainPageInfo {
 
 	private static final long serialVersionUID = -5659542831623635191L;
 

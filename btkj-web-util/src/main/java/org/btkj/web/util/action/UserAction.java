@@ -2,28 +2,27 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.user.api.AppService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.rapid.util.common.cache.CacheService;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
 /**
- * 用户多 client action
+ * 用户多 client action：只能操作同一个 app 中的资源
  * 
  * @author ahab
  */
 public abstract class UserAction implements Action {
 	
 	@Resource
-	protected UserService userService;
+	protected AppService appService;
 	@Resource
-	protected CacheService<?> cacheService;
+	protected UserService userService;
 
 	@Override
 	public Result<?> execute(Request request) {
@@ -34,8 +33,8 @@ public abstract class UserAction implements Action {
 			if (!result.isSuccess())
 				return result;
 			try {
-				App app = cacheService.getById(BtkjTables.APP.name(), result.attach().getAppId());
-				return execute(request, client, app, result.attach());
+				App app = appService.getAppById(result.attach().getAppId());
+				return execute(request, app, client, result.attach());
 			} finally {
 				userService.releaseUserLock(result.getDesc(), result.attach().getUid());
 			}
@@ -43,11 +42,11 @@ public abstract class UserAction implements Action {
 			User user = userService.getUserByToken(client, token);
 			if (null == user)
 				return Result.result(Code.TOKEN_INVALID);
-			return execute(request, client, cacheService.getById(BtkjTables.APP.name(), user.getAppId()), user);
+			return execute(request, appService.getAppById(user.getAppId()), client, user);
 		}
 	}
 	
-	protected abstract Result<?> execute(Request request, Client client, App app, User user);
+	protected abstract Result<?> execute(Request request, App app, Client client, User user);
 	
 	/**
 	 * 如果返回 true 则已经获取到了 user 的锁

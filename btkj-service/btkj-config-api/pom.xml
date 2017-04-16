@@ -13,4 +13,12 @@
 	<artifactId>btkj-config-api</artifactId>
 	<name>btkj-config-api</name>
 	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.rapid</groupId>
+			<artifactId>rapid-data</artifactId>
+			<version>${rapid.version}</version>
+		</dependency>
+	</dependencies>
 </project>

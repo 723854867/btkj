@@ -9,11 +9,10 @@ import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.AppCreateModel;
 import org.btkj.user.BeanGenerator;
-import org.btkj.user.persistence.dao.EmployeeDao;
-import org.btkj.user.redis.mapper.AppMapper;
-import org.btkj.user.redis.mapper.EmployeeMapper;
-import org.btkj.user.redis.mapper.TenantMapper;
-import org.btkj.user.redis.mapper.UserMapper;
+import org.btkj.user.redis.AppMapper;
+import org.btkj.user.redis.EmployeeMapper;
+import org.btkj.user.redis.TenantMapper;
+import org.btkj.user.redis.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +27,10 @@ public class Tx {
 	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
-	@Resource
-	private EmployeeDao employeeDao;
-
+	
 	@Transactional
-	public void tenantJoin(User user, Tenant tenant, Employee chief) {
-		Employee employee = BeanGenerator.newEmployee(user, tenant, chief);
-		employeeDao.selectByTidForUpdate(employee.getTid()); // 间隙锁
-		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
-		employeeDao.insert(employee);
+	public void tenantJoin(Employee employee) {
+		employeeMapper.insert(employee);
 	}
 
 	@Transactional

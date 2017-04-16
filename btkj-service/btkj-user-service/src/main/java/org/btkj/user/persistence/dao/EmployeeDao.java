@@ -26,11 +26,8 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectAll")
 	List<Employee> selectAll();
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUidAndTid")
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidAndUid")
 	Employee selectByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
-	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidAndLevel")
-	List<Employee> selectByTidAndLevel(@Param("tid") int tid, @Param("level") int level);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUid")
 	List<Employee> selectByUid(@Param("uid") int uid);

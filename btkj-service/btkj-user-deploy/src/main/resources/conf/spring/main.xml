@@ -29,37 +29,25 @@
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
-	<bean id="protostuffEntitySerializer" class="org.rapid.data.storage.mapper.serializer.ProtostuffEntitySerializer" />
 	
-	<bean id="mapper" abstract="true" init-method="init">
-		<property name="redis" ref="redis" />
-	</bean>
-	
-	<bean id="O2OMapper" class="org.rapid.data.storage.mapper.O2OMapper" abstract="true" init-method="init">
-		<property name="redis" ref="redis" />
-		<property name="serializer" ref="protostuffEntitySerializer" />
-	</bean>
-	
-	<bean id="userMapper" class="org.btkj.user.redis.mapper.UserMapper" parent="O2OMapper" >
+	<bean id="userMapper" class="org.btkj.user.redis.UserMapper" >
 		<property name="dao" ref="userDao" />
+		<property name="redis" ref="redis" />
 		<property name="distributeLock" ref="distributeLock" />
 	</bean>
 	
-	<bean id="appMapper" class="org.btkj.user.redis.mapper.AppMapper" parent="O2OMapper">
+	<bean id="appMapper" class="org.btkj.user.redis.AppMapper">
 		<property name="dao" ref="appDao" />
+		<property name="redis" ref="redis" />
 	</bean>
 	
-	<bean id="tenantMapper" class="org.btkj.user.redis.mapper.TenantMapper" parent="O2OMapper">
+	<bean id="tenantMapper" class="org.btkj.user.redis.TenantMapper">
+		<property name="redis" ref="redis" />
 		<property name="dao" ref="tenantDao" />
 	</bean>
 	
-	<bean id="bannerMapper" class="org.btkj.user.redis.mapper.BannerMapper" parent="O2OMapper">
-		<property name="dao" ref="bannerDao" />
-	</bean>
-	
-	<bean id="employeeMapper" class="org.btkj.user.redis.mapper.EmployeeMapper" parent="mapper">
+	<bean id="employeeMapper" class="org.btkj.user.redis.EmployeeMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="employeeDao" />
-		<property name="userCacheController" ref="userCacheController" />
 	</bean>
 </beans>
