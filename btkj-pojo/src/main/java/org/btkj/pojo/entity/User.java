@@ -11,6 +11,7 @@ public class User implements UniqueModel<Integer> {
 	private String mobile;
 	private String identity;
 	private String name;
+	private String pwd;
 	private String avatar;
 	private int appLoginTime;			
 	private int pcLoginTime;
@@ -56,6 +57,14 @@ public class User implements UniqueModel<Integer> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getPwd() {
+		return pwd;
+	}
+	
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 
 	public String getAvatar() {

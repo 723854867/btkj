@@ -1,6 +1,5 @@
 package org.btkj.test;
 
-import org.btkj.pojo.entity.User;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main {

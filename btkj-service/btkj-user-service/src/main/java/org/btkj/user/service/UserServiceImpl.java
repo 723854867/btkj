@@ -14,7 +14,9 @@ import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.btkj.pojo.info.tips.MainTenantTips;
 import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.user.api.UserService;
+import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
+import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -26,7 +28,11 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	
 	@Resource
+	private AppMapper appMapper;
+	@Resource
 	private UserMapper userMapper;
+	@Resource
+	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
 	
@@ -100,5 +106,20 @@ public class UserServiceImpl implements UserService {
 			return Result.result(Code.IDENTITY_ALREADY_EXIST);
 		}
 		return Result.success();
+	}
+	
+	@Override
+	public Result<?> pwdReset(int appId, String mobile, String pwd) {
+		Result<User> result = userMapper.lockUserByMobile(appId, mobile);
+		if (!result.isSuccess())
+			return result;
+		try {
+			User user = result.attach();
+			user.setPwd(pwd);
+			userMapper.update(user);
+			return Result.success();
+		} finally {
+			userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
+		}
 	}
 }

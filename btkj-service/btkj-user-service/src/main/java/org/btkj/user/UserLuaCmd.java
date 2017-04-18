@@ -14,12 +14,26 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
+	USER_LOAD_BY_MOBILE_LOCK {
+		@Override
+		public int keyNum() {
+			return 1;
+		}
+	},
+	
 	TOKEN_REPLACE {
 		@Override
 		public int keyNum() {
-			return 3;
+			return 2;
 		}
 	}, 
+	
+	TOKEN_REMOVE {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
 	
 	USER_FLUSH {
 		@Override

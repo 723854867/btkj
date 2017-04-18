@@ -82,4 +82,14 @@ public interface UserService {
 	 * @return
 	 */
 	Result<?> update(User user);
+	
+	/**
+	 * 密码重置
+	 * 
+	 * @param appId
+	 * @param mobile
+	 * @param pwd
+	 * @return
+	 */
+	Result<?> pwdReset(int appId, String mobile, String pwd);
 }

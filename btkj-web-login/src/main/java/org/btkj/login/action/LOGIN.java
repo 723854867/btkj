@@ -7,7 +7,6 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.LoginInfo;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.LoginService;
@@ -36,26 +35,26 @@ public class LOGIN implements Action {
 	private CourierService courierService;
 	
 	@Override
-	public Result<LoginInfo> execute(Request request) {
+	public Result<?> execute(Request request) {
 		Client client = request.getParam(Params.CLIENT);
 		switch (client) {
 		case PC:
-		case MANAGER:
 			int tid = request.getParam(Params.TID);
 			Tenant tenant = 0 >= tid ? null : tenantService.getTenantById(tid);
 			if (null == tenant)
 				return Result.result(BtkjCode.TENANT_NOT_EXIST);
-			App app = appService.getAppById(tenant.getAppId());
-			return loginService.login(client, app, tenant, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
+			return loginService.login(client, tid, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
+		case MANAGER:
+			return null;
 		default:
 			int appId = request.getParam(Params.APP_ID);
-			app = 0 >= appId ? null : appService.getAppById(appId);
+			App app = 0 >= appId ? null : appService.getAppById(appId);
 			if (null == app)
 				return Result.result(BtkjCode.APP_NOT_EXIST);
 			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, appId);
 			if (courierService.captchaVerify(verifier).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
-			return loginService.login(app, verifier.getIdentity());
+			return loginService.login(appId, verifier.getIdentity());
 		}
 	}
 }

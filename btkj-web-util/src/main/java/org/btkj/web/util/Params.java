@@ -8,6 +8,7 @@ import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
+import org.rapid.util.common.key.Pair;
 import org.rapid.util.exception.ConstConvertFailureException;
 
 import com.google.i18n.phonenumbers.NumberParseException;

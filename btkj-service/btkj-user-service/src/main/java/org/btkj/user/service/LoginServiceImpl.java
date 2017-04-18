@@ -2,7 +2,7 @@ package org.btkj.user.service;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.App;
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
@@ -10,7 +10,7 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.LoginInfo;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.LoginService;
-import org.btkj.user.model.TokenReplaceModel;
+import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
@@ -34,60 +34,87 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<LoginInfo> login(App app, String mobile) {
-		User user = userMapper.getByMobile(app.getId(), mobile);
-		if (null == user) {
+	public Result<?> login(int appId, String mobile) {
+		Result<User> ru = userMapper.lockUserByMobile(appId, mobile);
+		User user = ru.attach();
+		String lockId = ru.getDesc();
+		// 用户不存在则创建用户
+		if (ru.getCode() == Code.USER_NOT_EXIST.id()) {
 			try {
-				user = userMapper.insert(BeanGenerator.newUser(app.getId(), mobile));
-			} catch (DuplicateKeyException e) {
-				user = userMapper.getByMobile(app.getId(), mobile);
+				user = userMapper.insert(BeanGenerator.newUser(appId, mobile));
+				lockId = userMapper.lockUser(user.getUid());
+				if (null == lockId)
+					return Result.result(Code.USER_STATUS_CHANGED);
+			} catch (DuplicateKeyException e) {			// 如果unique冲突则说明 app-mobile 组合已经存在了，则直接再次获取
+				ru = userMapper.lockUserByMobile(appId, mobile);
+				if (!ru.isSuccess())
+					return ru;
+				user = ru.attach();
+				lockId = ru.getDesc();
 			}
 		}
-		return _doLogin(Client.APP, app, user, mobile);
-	}
-
-	@Override
-	public Result<LoginInfo> login(Client client, App app, Tenant tenant, String mobile, String pwd) {
-		User user = userMapper.getByMobile(app.getId(), mobile);
-		if (null == user) 
-			return Result.result(Code.USER_NOT_EXIST);
-		Employee employee = employeeMapper.getByTidAndUid(tenant.getTid(), user.getUid());
-		if (null == employee)
-			return Result.result(Code.FORBID);
-		String cpwd = null == employee.getPwd() ? tenant.getPwd() : employee.getPwd();
-		if (!pwd.equals(cpwd))
-			return Result.result(Code.PWD_ERROR);
-		if (null == employee.getPwd())
-			return Result.result(Code.PWD_NOT_RESET);
-		return _doLogin(client, app, user, mobile);
-	}
-
-	private Result<LoginInfo> _doLogin(Client client, App app, User user, String mobile) {
-		Result<TokenReplaceModel> result = userMapper.tokenReplace(client, user.getUid(), mobile);
-		if (result.getCode() != 0)
-			return Result.result(Code.USER_STATUS_CHANGED);
+		if (!ru.isSuccess())
+			return ru;
 		try {
-			user = userMapper.getByKey(user.getUid());		
-			if (!user.getMobile().equals(mobile))
-				return Result.result(Code.USER_STATUS_CHANGED);
-			
-			int time = DateUtils.currentTime();
-			switch (client) {
-			case PC:
-				user.setPcLoginTime(time);
-				break;
-			case MANAGER:
-				user.setManagerLoginTime(time);
-				break;
-			default:
-				user.setAppLoginTime(time);
-				break;
-			}
-			user.setUpdated(time);
-			userMapper.update(user);
-			return Result.result(new LoginInfo(result.attach().getToken(), user));
+			return _doLogin(Client.APP, user, mobile);
 		} finally {
-			userMapper.releaseUserLock(user.getUid(), result.attach().getLockId());
+			userMapper.releaseUserLock(user.getUid(), lockId);
+		}
+	}
+	
+	@Override
+	public Result<?> login(Client client, int tid, String mobile, String pwd) {
+		Tenant tenant = tenantMapper.getByKey(tid);
+		if (null == tenant)
+			return Result.result(BtkjCode.TENANT_NOT_EXIST);
+		Result<User> ru = userMapper.lockUserByMobile(tenant.getAppId(), mobile);
+		if (!ru.isSuccess()) 
+			return ru;
+		
+		User user = ru.attach();
+		try {
+			Employee employee = employeeMapper.getByTidAndUid(tenant.getTid(), user.getUid());
+			if (null == employee)
+				return Result.result(Code.FORBID);
+			if (null == user.getPwd())
+				return Result.result(Code.PWD_NOT_RESET);
+			if (!pwd.equals(user.getPwd()))
+				return Result.result(Code.PWD_ERROR);
+			return _doLogin(client, user, mobile);
+		} finally {
+			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
+		}
+	}
+
+	private Result<LoginInfo> _doLogin(Client client, User user, String mobile) {
+		String token = userMapper.tokenReplace(client, user.getUid(), mobile);
+		int time = DateUtils.currentTime();
+		switch (client) {
+		case PC:
+			user.setPcLoginTime(time);
+			break;
+		case MANAGER:
+			user.setManagerLoginTime(time);
+			break;
+		default:
+			user.setAppLoginTime(time);
+			break;
+		}
+		user.setUpdated(time);
+		userMapper.update(user);
+		return Result.result(new LoginInfo(token, user));
+	}
+	
+	@Override
+	public Result<?> logout(Client client, String token) {
+		Result<TokenRemoveModel> result = userMapper.tokenRemove(client, token);
+		if (!result.isSuccess())
+			return result;
+		try {
+			// 执行注销逻辑
+			return Result.success();
+		} finally {
+			userMapper.releaseUserLock(result.attach().getUid(), result.attach().getLockId());
 		}
 	}
 }

@@ -13,6 +13,7 @@ public class UserSQLProvider {
 				VALUES("mobile", "#{mobile}");
 				VALUES("identity", "#{identity}");
 				VALUES("name", "#{name}");
+				VALUES("pwd", "#{pwd}");
 				VALUES("app_login_time", "#{appLoginTime}");
 				VALUES("pc_login_time", "#{pcLoginTime}");
 				VALUES("manager_login_time", "#{managerLoginTime}");
@@ -27,6 +28,7 @@ public class UserSQLProvider {
 			{
 				UPDATE(BtkjTables.USER.name());
 				SET("name=#{name}");
+				SET("pwd=#{pwd}");
 				SET("identity=#{identity}");
 				SET("app_login_time=#{appLoginTime}");
 				SET("pc_login_time=#{pcLoginTime}");

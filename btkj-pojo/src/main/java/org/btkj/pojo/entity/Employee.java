@@ -13,7 +13,6 @@ public class Employee implements UniqueModel<Integer> {
 	private int id;
 	private int uid;
 	private int tid;
-	private String pwd;
 	private int parentId;
 	private int mod;
 	private int left;
@@ -44,14 +43,6 @@ public class Employee implements UniqueModel<Integer> {
 
 	public void setTid(int tid) {
 		this.tid = tid;
-	}
-	
-	public String getPwd() {
-		return pwd;
-	}
-	
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 	
 	public int getParentId() {

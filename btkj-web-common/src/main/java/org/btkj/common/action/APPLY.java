@@ -26,7 +26,7 @@ public class APPLY extends UserAction {
 	@Override
 	protected Result<?> execute(Request request, App app, Client client, User user) {
 		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		if (null == user.getIdentity() || null == user.getIdentity())
+		if (null == user.getName() || null == user.getIdentity())
 			return Result.result(BtkjCode.USER_DATA_INCOMPLETE);
 		return tenantService.apply(user, employeeId);
 	}

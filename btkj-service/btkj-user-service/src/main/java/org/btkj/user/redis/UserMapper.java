@@ -7,7 +7,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.user.Config;
 import org.btkj.user.UserLuaCmd;
-import org.btkj.user.model.TokenReplaceModel;
+import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.persistence.dao.UserDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
 import org.rapid.data.storage.redis.DistributeLock;
@@ -37,24 +37,28 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	public UserMapper() {
 		super(BtkjTables.USER, USER_DATA);
 	}
-
-	/**
-	 * 通过手机获取用户
-	 * 
-	 * @param appId
-	 * @param mobile
-	 * @return
-	 */
-	public User getByMobile(int appId, String mobile) {
-		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, SerializeUtil.RedisUtil.encode(mobileUserKey(appId), USER_DATA, mobile));
-		if (null != data)
-			return deserial(data);
-		User user = dao.selectByMobile(appId, mobile);
-		if (null != user)
+	
+	public Result<User> lockUserByMobile(int appId, String mobile) {
+		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, 
+				SerializeUtil.RedisUtil.encode(
+						mobileUserKey(appId),
+						USER_DATA, USER_LOCK,
+						lockId, Config.getUserLockExpire()));
+		if (data instanceof byte[]) 
+			return Result.result(Code.OK, lockId, deserial((byte[]) data));
+		if ((long) data == -2) {
+			User user = dao.selectByMobile(appId, mobile);
+			if (null == user)
+				return Result.result(Code.USER_NOT_EXIST);
 			flush(user);
-		return user;
+			lockId = lockUser(user.getUid());
+			if (null != lockId)
+				return Result.result(Code.OK, lockId, user);
+		}
+		return Result.result(Code.USER_STATUS_CHANGED);
 	}
-
+	
 	/**
 	 * 获取用户锁
 	 * 
@@ -114,20 +118,28 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		return null == data ? null : deserial(data);
 	}
 
-	public Result<TokenReplaceModel> tokenReplace(Client client, int uid, String mobile) {
-		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+	public String tokenReplace(Client client, int uid, String mobile) {
 		String token = RapidSecurity.encodeToken(mobile);
-		long flag = redis.invokeLua(UserLuaCmd.TOKEN_REPLACE, 
-				userLockKey(uid), 
+		redis.invokeLua(UserLuaCmd.TOKEN_REPLACE, 
 				userTokenKey(client),
 				tokenUserKey(client), 
-				lockId, 
 				String.valueOf(uid), 
-				token, 
-				String.valueOf(Config.getUserLockExpire()));
-		return 0 == flag ? Result.result((int) flag, new TokenReplaceModel(lockId, token)) : Result.result((int) flag);
+				token);
+		return token;
 	}
-
+	
+	public Result<TokenRemoveModel> tokenRemove(Client client, String token) {
+		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		long flag = redis.invokeLua(UserLuaCmd.TOKEN_REMOVE,
+				tokenUserKey(client), userTokenKey(client),
+				token, USER_LOCK, lockId, String.valueOf(Config.getUserLockExpire()));
+		if (-1 == flag)
+			return Result.result(Code.USER_STATUS_CHANGED);
+		if (-2 == flag)
+			return Result.result(Code.TOKEN_INVALID);
+		return Result.result(new TokenRemoveModel((int) flag, lockId));
+	}
+	
 	@Override
 	protected void flush(User entity) {
 		redis.invokeLua(UserLuaCmd.USER_FLUSH,
