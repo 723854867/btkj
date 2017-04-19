@@ -2,6 +2,8 @@ package org.btkj.pojo.info.tips;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.entity.Tenant;
+
 /**
  * 代理公司 tips 信息，只显示name、tid
  * 
@@ -17,8 +19,9 @@ public class TenantTips implements Serializable {
 	
 	public TenantTips() {}
 	
-	public TenantTips(int tid) {
-		this.tid = tid;
+	public TenantTips(Tenant tenant) {
+		this.tid = tenant.getTid();
+		this.name = tenant.getName();
 	}
 	
 	public int getTid() {

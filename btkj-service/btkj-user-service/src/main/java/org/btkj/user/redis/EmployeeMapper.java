@@ -49,24 +49,22 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		return employee;
 	}
 	
-	private CacheController cacheController;
-	
 	/**
 	 * 获取用户的所拥有的代理公司列表
 	 * 
 	 * @return
 	 */
 	public List<TenantTips> tenantTipsList(User user, int mainTid) {
-		Set<Integer> tids = cacheController.tenantList(user.getUid());
-		if (null == tids || tids.isEmpty())
-			return null;
-		List<TenantTips> list = new ArrayList<TenantTips>();
-		for (int tid : tids) {
-			if (tid == mainTid)
-				continue;
-			list.add(new TenantTips(tid));
-		}
-		return list;
+//		Set<Integer> tids = cacheController.tenantList(user.getUid());
+//		if (null == tids || tids.isEmpty())
+//			return null;
+//		List<TenantTips> list = new ArrayList<TenantTips>();
+//		for (int tid : tids) {
+//			if (tid == mainTid)
+//				continue;
+//			list.add(new TenantTips(tid));
+//		}
+		return null;
 	}
 	
 	/**
@@ -78,8 +76,8 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		List<TenantTips> list = new ArrayList<TenantTips>();
 //		String key = RedisKeyGenerator.userApplyList(uid);
 		Set<String> set = redis.hkeys(null);
-		for (String str : set) 
-			list.add(new TenantTips(Integer.valueOf(str)));
+//		for (String str : set) 
+//			list.add(new TenantTips(Integer.valueOf(str)));
 		return list;
 	}
 	
@@ -90,7 +88,8 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	 * @return
 	 */
 	public int tenantNum(int uid) { 
-		return cacheController.tenantList(uid).size();
+//		return cacheController.tenantList(uid).size();
+		return 0;
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ public class BannerTips implements Serializable {
 	private int id;
 	private int idx;
 	private String image;
+	private String link;
 	
 	public BannerTips() {}
 	
@@ -23,6 +24,7 @@ public class BannerTips implements Serializable {
 		this.id = banner.getId();
 		this.idx = banner.getIdx();
 		this.image = banner.getImage();
+		this.link = banner.getLink();
 	}
 	
 	public int getId() {
@@ -47,5 +49,13 @@ public class BannerTips implements Serializable {
 	
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public String getLink() {
+		return link;
+	}
+	
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

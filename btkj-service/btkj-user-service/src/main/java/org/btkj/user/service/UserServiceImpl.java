@@ -1,18 +1,14 @@
 package org.btkj.user.service;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.AppMainPageInfo;
-import org.btkj.pojo.info.mainpage.IMainPageInfo;
-import org.btkj.pojo.info.tips.MainTenantTips;
-import org.btkj.pojo.info.tips.TenantTips;
+import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -42,6 +38,17 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Result<UserModel> getUser(String mobile, int appId) {
+		App app = appMapper.getByKey(appId);
+		if (null == app)
+			return Result.result(BtkjCode.APP_NOT_EXIST);
+		User user = userMapper.getUserByMobile(appId, mobile);
+		if (null == user)
+			return Result.result(Code.USER_NOT_EXIST);
+		return Result.result(new UserModel(app, user));
+	}
+	
+	@Override
 	public User getUserByEmployeeId(int employeeId) {
 		Employee employee = employeeMapper.getByKey(employeeId);
 		return null == employee ? null : userMapper.getByKey(employee.getUid());
@@ -60,33 +67,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void releaseUserLock(String lockId, int uid) {
 		userMapper.releaseUserLock(uid, lockId);
-	}
-	
-	@Override
-	public Result<IMainPageInfo> mainPage(Client client, String token, Tenant tenant) {
-		User user = userMapper.getUserByToken(client, token);
-		if (null == user)
-			return Result.result(Code.TOKEN_INVALID);
-		
-		switch (client) {
-		case PC:
-			AppMainPageInfo mainPageInfo = new AppMainPageInfo(user);
-			int mainTid = userMapper.mainTenant(user.getUid());
-			List<TenantTips> list = employeeMapper.tenantTipsList(user, mainTid);
-			MainTenantTips mt = null;
-			if (0 == mainTid && null != list && !list.isEmpty()) 
-				mainTid = list.remove(0).getTid();
-			if (0 != mainTid)
-				mt = new MainTenantTips(mainTid);
-			mainPageInfo.setTenant(mt);
-			mainPageInfo.setOwnTenants(list);
-			mainPageInfo.setAuditTenants(employeeMapper.auditTenantTipsList(user.getUid()));
-			return Result.result(mainPageInfo);
-		case MANAGER:
-			return null;
-		default:
-			return null;
-		}
 	}
 	
 	@Override

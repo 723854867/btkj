@@ -2,6 +2,7 @@ package org.btkj.pojo.info.tips;
 
 import java.util.List;
 
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.info.InsuranceNonAutoTipsInfo;
 
 /**
@@ -20,8 +21,8 @@ public class MainTenantTips extends TenantTips {
 	
 	public MainTenantTips() {}
 	
-	public MainTenantTips(int tid) {
-		super(tid);
+	public MainTenantTips(Tenant tenant) {
+		super(tenant);
 	}
 	
 	public int getPrivilege() {

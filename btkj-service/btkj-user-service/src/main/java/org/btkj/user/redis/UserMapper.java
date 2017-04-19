@@ -38,12 +38,27 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		super(BtkjTables.USER, USER_DATA);
 	}
 	
+	public User getUserByMobile(int appId, String mobile) {
+		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, 
+				SerializeUtil.RedisUtil.encode(
+						mobileUserKey(appId),
+						USER_DATA, mobile));
+		User user = null;
+		if (null == data) {
+			user = dao.selectByMobile(appId, mobile);
+			if (null != user)
+				flush(user);
+		} else
+			user = deserial(data);
+		return user;
+	}
+	
 	public Result<User> lockUserByMobile(int appId, String mobile) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, 
 				SerializeUtil.RedisUtil.encode(
 						mobileUserKey(appId),
-						USER_DATA, USER_LOCK,
+						USER_DATA, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire()));
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, deserial((byte[]) data));

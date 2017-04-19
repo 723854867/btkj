@@ -50,4 +50,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="employeeDao" />
 	</bean>
+	
+	<bean id="bannerMapper" class="org.btkj.user.redis.BannerMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="bannerDao" />
+	</bean>
 </beans>

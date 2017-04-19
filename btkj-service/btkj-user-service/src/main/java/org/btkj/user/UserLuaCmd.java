@@ -10,14 +10,14 @@ public enum UserLuaCmd implements ILuaCmd {
 	USER_LOAD_BY_MOBILE {
 		@Override
 		public int keyNum() {
-			return 2;
+			return 1;
 		}
 	},
 	
 	USER_LOAD_BY_MOBILE_LOCK {
 		@Override
 		public int keyNum() {
-			return 1;
+			return 2;
 		}
 	},
 	
@@ -109,6 +109,27 @@ public enum UserLuaCmd implements ILuaCmd {
 		@Override
 		public int keyNum() {
 			return 2;
+		}
+	},
+	
+	BANNER_FLUSH {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
+	
+	BANNER_LIST_FLUSH {
+		@Override
+		public int keyNum() {
+			return 3;
+		}
+	},
+	
+	BANNER_LIST_LOAD {
+		@Override
+		public int keyNum() {
+			return 3;
 		}
 	};
 	

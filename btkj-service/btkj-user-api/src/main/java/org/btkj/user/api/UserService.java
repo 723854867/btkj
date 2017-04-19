@@ -4,7 +4,7 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.mainpage.IMainPageInfo;
+import org.btkj.pojo.model.UserModel;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -21,6 +21,15 @@ public interface UserService {
 	 * @return
 	 */
 	User getUser(int uid);
+	
+	/**
+	 * 通过账号和 appId 获取用户
+	 * 
+	 * @param mobile
+	 * @param appId
+	 * @return
+	 */
+	Result<UserModel> getUser(String mobile, int appId);
 
 	/**
 	 * 通过雇员 ID 获取用户
@@ -54,16 +63,6 @@ public interface UserService {
 	 * @param user
 	 */
 	void releaseUserLock(String lockId, int uid);
-	
-	/**
-	 * 首页信息
-	 * 
-	 * @param token
-	 * @param app
-	 * @param tenant
-	 * @return
-	 */
-	Result<IMainPageInfo> mainPage(Client client, String token, Tenant tenant);
 	
 	/**
 	 * 我的团队信息
