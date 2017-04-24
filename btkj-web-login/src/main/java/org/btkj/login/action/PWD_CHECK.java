@@ -2,7 +2,6 @@ package org.btkj.login.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -26,20 +25,9 @@ public class PWD_CHECK implements Action {
 
 	@Override
 	public Result<?> execute(Request request) {
-		Client client = request.getParam(Params.CLIENT);
 		String mobile = request.getParam(Params.MOBILE);
 		
-		Result<? extends UserModel> result = null;
-		switch (client) {
-		case PC:		// 需要渠道码(tid)
-			result = tenantService.employee(mobile, request.getParam(Params.TID));
-			break;
-		case MANAGER: 	// 需要平台码(appId)
-			result = userService.getUser(mobile, request.getParam(Params.APP_ID));
-			break;
-		default:
-			return Result.result(Code.FORBID);
-		}
+		Result<UserModel> result = userService.getUser(mobile, request.getParam(Params.APP_ID));
 		if (!result.isSuccess())
 			return result;
 		if (null == result.attach().getUser().getPwd())

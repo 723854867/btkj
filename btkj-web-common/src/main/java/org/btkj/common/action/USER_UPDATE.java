@@ -28,9 +28,4 @@ public class USER_UPDATE extends UserAction {
 	protected boolean userLock() {
 		return true;
 	}
-	
-	@Override
-	protected Client client(Request request) {
-		return Client.APP;
-	}
 }

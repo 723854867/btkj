@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.UserModel;
 import org.btkj.user.Config;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
@@ -26,23 +27,24 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 
 	private static final String USER_LOCK 					= "string:user:{0}:lock"; 			
 
-	private static final String USER_DATA		 			= "hash:db:user"; 				
+	private static final String DATA_KEY		 			= "hash:db:user"; 				
 	private static final String MOBILE_USER 				= "hash:app:{0}:mobile:user"; 
 	private static final String TOKEN_USER 					= "hash:{0}:token:user"; 
 	private static final String USER_TOKEN 					= "hash:{0}:user:token"; 
 	private static final String USER_MAIN_TENANT			= "hash:user:main:tenant";		// 用户的默认显示的代理商
 
+	private AppMapper appMapper;
 	private DistributeLock distributeLock;
 
 	public UserMapper() {
-		super(BtkjTables.USER, USER_DATA);
+		super(BtkjTables.USER, DATA_KEY);
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {
 		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, 
 				SerializeUtil.RedisUtil.encode(
 						mobileUserKey(appId),
-						USER_DATA, mobile));
+						DATA_KEY, mobile));
 		User user = null;
 		if (null == data) {
 			user = dao.selectByMobile(appId, mobile);
@@ -58,7 +60,7 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, 
 				SerializeUtil.RedisUtil.encode(
 						mobileUserKey(appId),
-						USER_DATA, mobile, USER_LOCK,
+						DATA_KEY, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire()));
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, deserial((byte[]) data));
@@ -90,18 +92,20 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public Result<User> lockUserByToken(Client client, String token) {
+	public Result<UserModel> lockUserByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN_LOCK, 
 				SerializeUtil.RedisUtil.encode(
 						tokenUserKey(client), 
-						USER_DATA, 
+						DATA_KEY, 
 						token, 
 						USER_LOCK, 
 						lockId, 
 						Config.getUserLockExpire()));
-		if (data instanceof byte[])
-			return Result.result(Code.OK.id(), lockId, deserial((byte[]) data));
+		if (data instanceof byte[]) {
+			User user = deserial((byte[]) data);
+			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
+		}
 		if ((long) data == 1)
 			return Result.result(Code.USER_NOT_EXIST);
 		return Result.result(Code.USER_STATUS_CHANGED);
@@ -124,13 +128,16 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public User getUserByToken(Client client, String token) {
-		byte[] data = redis.invokeLua(UserLuaCmd.GET_USER_BY_TOKEN,
+	public UserModel getUserByToken(Client client, String token) {
+		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN,
 				SerializeUtil.RedisUtil.encode(
 						tokenUserKey(client), 
-						USER_DATA, 
+						DATA_KEY, 
 						token));
-		return null == data ? null : deserial(data);
+		if (null == data)
+			return null;
+		User user = deserial(data);
+		return new UserModel(appMapper.getByKey(user.getAppId()), user);
 	}
 
 	public String tokenReplace(Client client, int uid, String mobile) {
@@ -169,6 +176,10 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	public int mainTenant(int uid) {
 		String val = redis.hget(USER_MAIN_TENANT, String.valueOf(uid));
 		return null == val ? 0 : Integer.valueOf(val);
+	}
+	
+	public void setAppMapper(AppMapper appMapper) {
+		this.appMapper = appMapper;
 	}
 
 	public void setDistributeLock(DistributeLock distributeLock) {

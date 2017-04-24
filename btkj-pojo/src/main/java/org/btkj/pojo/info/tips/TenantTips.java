@@ -20,8 +20,10 @@ public class TenantTips implements Serializable {
 	public TenantTips() {}
 	
 	public TenantTips(Tenant tenant) {
-		this.tid = tenant.getTid();
-		this.name = tenant.getName();
+		if (null != tenant) {
+			this.tid = tenant.getTid();
+			this.name = tenant.getName();
+		}
 	}
 	
 	public int getTid() {

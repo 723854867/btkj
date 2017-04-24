@@ -2,6 +2,8 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +24,9 @@ import org.rapid.util.common.serializer.SerializeUtil;
 public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, EmployeeDao> {
 	
 	private static final String EMPLOYEE_DATA				= "hash:employee:data";
-	private static final String EMPLOYEE_USER				= "hash:employee:user:{0}"; 			// 用户的雇员列表：tid - employeeId
-
+	private static final String USER_EMPLOYEES				= "hash:user:{0}:employees"; 		// 用户的雇员列表：tid - employeeId
+	private static final String EMPLOYEE_LIST_CONTROLLER	= "employee:list:controller";			// 雇员列表缓存控制键
+	
 	public EmployeeMapper() {
 		super(BtkjTables.EMPLOYEE, EMPLOYEE_DATA);
 	}
@@ -38,7 +41,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	public Employee getByTidAndUid(int tid, int uid) {
 		byte[] data = redis.invokeLua(UserLuaCmd.EMPLOYEE_LOAD_BY_TID_UID, 
 				SerializeUtil.RedisUtil.encode(
-						userEmployeeKey(uid), 
+						userEmployeesKey(uid), 
 						employeeDataKey(), 
 						tid));
 		if (null != data)
@@ -54,17 +57,33 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	 * 
 	 * @return
 	 */
-	public List<TenantTips> tenantTipsList(User user, int mainTid) {
-//		Set<Integer> tids = cacheController.tenantList(user.getUid());
-//		if (null == tids || tids.isEmpty())
-//			return null;
-//		List<TenantTips> list = new ArrayList<TenantTips>();
-//		for (int tid : tids) {
-//			if (tid == mainTid)
-//				continue;
-//			list.add(new TenantTips(tid));
-//		}
-		return null;
+	@SuppressWarnings("unchecked")
+	public Set<String> ownedTenants(User user) {
+		Set<String> set = redis.invokeLua(UserLuaCmd.EMPLOYEE_LIST, 
+						EMPLOYEE_LIST_CONTROLLER, 
+						userEmployeesKey(user.getUid()),
+						String.valueOf(user.getUid()));
+		if (null == set) {
+			List<Employee> employees = dao.selectByUid(user.getUid());
+			if (null == employees || employees.isEmpty())
+				return Collections.EMPTY_SET;
+			set = new HashSet<String>(employees.size());
+			byte[][] data = new byte[employees.size() * 3 + 2][];
+			int index = 0;
+			data[index++] = SerializeUtil.RedisUtil.encode(EMPLOYEE_DATA);
+			data[index++] = SerializeUtil.RedisUtil.encode(userEmployeesKey(user.getUid()));
+			for (Employee employee : employees) {
+				data[index++] = SerializeUtil.RedisUtil.encode(employee.getId());
+				data[index++] = SerializeUtil.RedisUtil.encode(employee.getTid());
+				data[index++] = serial(employee);
+				set.add(String.valueOf(employee.getTid()));
+			}
+			redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, data);
+		} else {
+			if (set.isEmpty())
+				return Collections.EMPTY_SET;
+		}
+		return set;
 	}
 	
 	/**
@@ -72,7 +91,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	 * 
 	 * @return
 	 */
-	public List<TenantTips> auditTenantTipsList(int uid) { 
+	public List<TenantTips> auditTenants(int uid) { 
 		List<TenantTips> list = new ArrayList<TenantTips>();
 //		String key = RedisKeyGenerator.userApplyList(uid);
 		Set<String> set = redis.hkeys(null);
@@ -97,7 +116,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, 
 				SerializeUtil.RedisUtil.encode(
 						redisKey, 
-						userEmployeeKey(entity.getUid()), 
+						userEmployeesKey(entity.getUid()), 
 						entity.getId(), 
 						entity.getTid(), 
 						serial(entity)));
@@ -107,7 +126,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		return EMPLOYEE_DATA;
 	}
 	
-	public static final String userEmployeeKey(int uid) { 
-		return MessageFormat.format(EMPLOYEE_USER, String.valueOf(uid));
+	public static final String userEmployeesKey(int uid) { 
+		return MessageFormat.format(USER_EMPLOYEES, String.valueOf(uid));
 	}
 }

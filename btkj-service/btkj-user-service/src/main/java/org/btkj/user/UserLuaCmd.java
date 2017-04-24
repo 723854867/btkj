@@ -52,31 +52,6 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	/**
-	 * 通过 token 获取用户，不会获取用户的锁
-	 * 
-	 */
-	GET_USER_BY_TOKEN {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
-	EMPLOYEE_GET {
-		@Override
-		public int keyNum() {
-			return 1;
-		}
-	},
-	
-	REFRESH_EMPLOYEES {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
 	APPLY_FLUSH {
 		@Override
 		public int keyNum() {
@@ -98,10 +73,31 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
+	EMPLOYEE_LIST_FLUSH {
+		@Override
+		public int keyNum() {
+			return 2;
+		}
+	},
+	
 	EMPLOYEE_LOAD_BY_TID_UID {
 		@Override
 		public int keyNum() {
 			return 2;
+		}
+	},
+	
+	NON_AUTO_INSURANCE_LIST_FLUSH {
+		@Override
+		public int keyNum() {
+			return 3;
+		}
+	},
+	
+	NON_AUTO_INSURANCE_LIST {
+		@Override
+		public int keyNum() {
+			return 3;
 		}
 	},
 	
@@ -130,6 +126,13 @@ public enum UserLuaCmd implements ILuaCmd {
 		@Override
 		public int keyNum() {
 			return 3;
+		}
+	},
+	
+	USER_LOAD_BY_TOKEN {
+		@Override
+		public int keyNum() {
+			return 2;
 		}
 	};
 	

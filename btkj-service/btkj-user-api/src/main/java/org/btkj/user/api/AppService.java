@@ -1,7 +1,9 @@
 package org.btkj.user.api;
 
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppCreateInfo;
+import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
@@ -13,6 +15,23 @@ public interface AppService {
 	 * @return
 	 */
 	App getAppById(int appId);
+	
+	/**
+	 * 首页:默认 app 首页
+	 * 
+	 * @return
+	 */
+	Result<IMainPageInfo> mainPage(int appId); 
+	
+	/**
+	 * 非游客模式的首页：分为 app 首页、pc 端首页、管理后台首页
+	 * 
+	 * @param client
+	 * @param token
+	 * @param tid
+	 * @return
+	 */
+	Result<IMainPageInfo> mainPage(Client client, String token, int tid);
 
 	/**
 	 * 添加 app

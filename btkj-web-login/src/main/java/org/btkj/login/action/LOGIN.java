@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.AppService;
@@ -39,19 +38,13 @@ public class LOGIN implements Action {
 		Client client = request.getParam(Params.CLIENT);
 		switch (client) {
 		case PC:
-			int tid = request.getParam(Params.TID);
-			Tenant tenant = 0 >= tid ? null : tenantService.getTenantById(tid);
-			if (null == tenant)
-				return Result.result(BtkjCode.TENANT_NOT_EXIST);
-			return loginService.login(client, tid, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
-		case MANAGER:
-			return null;
+			return loginService.login(request.getParam(Params.APP_ID), request.getParam(Params.MOBILE), request.getParam(Params.PWD));
 		default:
 			int appId = request.getParam(Params.APP_ID);
-			App app = 0 >= appId ? null : appService.getAppById(appId);
+			App app = appService.getAppById(appId);
 			if (null == app)
 				return Result.result(BtkjCode.APP_NOT_EXIST);
-			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, appId);
+			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, appId);			// app 登录需要验证码
 			if (courierService.captchaVerify(verifier).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
 			return loginService.login(appId, verifier.getIdentity());

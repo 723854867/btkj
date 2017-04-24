@@ -2,15 +2,16 @@ package org.btkj.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class NonAutoInsurance implements UniqueModel<Integer> {
+public class ApiNode implements UniqueModel<Integer> {
 
-	private static final long serialVersionUID = -7604535648039465818L;
+	private static final long serialVersionUID = -310102110380062348L;
 
 	private int id;
-	private int type;
+	private int parentId;
 	private String name;
-	private int appId;
-	private int tid;
+	private int left;
+	private int right;
+	private int level;
 	private int created;
 	private int updated;
 
@@ -21,13 +22,13 @@ public class NonAutoInsurance implements UniqueModel<Integer> {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	public int getType() {
-		return type;
+
+	public int getParentId() {
+		return parentId;
 	}
-	
-	public void setType(int type) {
-		this.type = type;
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getName() {
@@ -38,20 +39,28 @@ public class NonAutoInsurance implements UniqueModel<Integer> {
 		this.name = name;
 	}
 
-	public int getAppId() {
-		return appId;
+	public int getLeft() {
+		return left;
 	}
-	
-	public void setAppId(int appId) {
-		this.appId = appId;
+
+	public void setLeft(int left) {
+		this.left = left;
 	}
-	
-	public int getTid() {
-		return tid;
+
+	public int getRight() {
+		return right;
 	}
-	
-	public void setTid(int tid) {
-		this.tid = tid;
+
+	public void setRight(int right) {
+		this.right = right;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public int getCreated() {
@@ -72,6 +81,6 @@ public class NonAutoInsurance implements UniqueModel<Integer> {
 
 	@Override
 	public Integer key() {
-		return null;
+		return id;
 	}
 }

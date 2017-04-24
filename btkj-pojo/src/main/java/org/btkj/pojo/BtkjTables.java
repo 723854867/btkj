@@ -7,7 +7,6 @@ public interface BtkjTables {
 	// ******************************* config tables *******************************
 	final Table REGION								= new Table("region");
 	final Table INSURER								= new Table("insurer");
-	final Table NON_AUTO_INSURANCE					= new Table("non_auto_insurance");
 
 	// ******************************* user tables *******************************
 	final Table APP									= new Table("app");
@@ -15,4 +14,6 @@ public interface BtkjTables {
 	final Table BANNER								= new Table("banner");
 	final Table TENANT								= new Table("tenant");
 	final Table EMPLOYEE							= new Table("employee");
+	final Table COMMUNITY							= new Table("community");
+	final Table NON_AUTO_INSURANCE					= new Table("non_auto_insurance");
 }

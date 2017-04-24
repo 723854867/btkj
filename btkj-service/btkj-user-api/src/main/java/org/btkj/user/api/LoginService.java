@@ -18,12 +18,12 @@ public interface LoginService {
 	 * pc 登录:必须要指定代理商
 	 * 
 	 * @param client
-	 * @param tid
+	 * @param code 用户所属 app
 	 * @param mobile
 	 * @param pwd
 	 * @return
 	 */
-	Result<?> login(Client client, int tid, String mobile, String pwd);
+	Result<?> login(int appId, String mobile, String pwd);
 	
 	/**
 	 * 注销

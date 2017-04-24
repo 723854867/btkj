@@ -1,9 +1,14 @@
 package org.btkj.user.redis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.user.persistence.dao.TenantDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.util.common.serializer.SerializeUtil;
 
 public class TenantMapper extends ProtostuffDBMapper<Integer, Tenant, TenantDao> {
 	
@@ -11,5 +16,17 @@ public class TenantMapper extends ProtostuffDBMapper<Integer, Tenant, TenantDao>
 
 	protected TenantMapper() {
 		super(BtkjTables.TENANT, TENANT_DATA);
+	}
+	
+	public List<Tenant> getTenants(Set<String> tids) { 
+		byte[][] fields = new byte[tids.size()][];
+		int index = 0;
+		for (String str : tids)
+			fields[index++] = SerializeUtil.RedisUtil.encode(str);
+		List<byte[]> datas = redis.hmget(SerializeUtil.RedisUtil.encode(TENANT_DATA), fields);
+		List<Tenant> tenants = new ArrayList<Tenant>();
+		for (byte[] data : datas)
+			tenants.add(deserial(data));
+		return tenants;
 	}
 }

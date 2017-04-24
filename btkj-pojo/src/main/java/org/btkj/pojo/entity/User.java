@@ -15,7 +15,6 @@ public class User implements UniqueModel<Integer> {
 	private String avatar;
 	private int appLoginTime;			
 	private int pcLoginTime;
-	private int managerLoginTime;
 	private int created;
 	private int updated;
 
@@ -89,14 +88,6 @@ public class User implements UniqueModel<Integer> {
 	
 	public void setPcLoginTime(int pcLoginTime) {
 		this.pcLoginTime = pcLoginTime;
-	}
-	
-	public int getManagerLoginTime() {
-		return managerLoginTime;
-	}
-	
-	public void setManagerLoginTime(int managerLoginTime) {
-		this.managerLoginTime = managerLoginTime;
 	}
 	
 	public int getCreated() {

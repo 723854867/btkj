@@ -34,6 +34,7 @@
 		<property name="dao" ref="userDao" />
 		<property name="redis" ref="redis" />
 		<property name="distributeLock" ref="distributeLock" />
+		<property name="appMapper" ref="appMapper" />
 	</bean>
 	
 	<bean id="appMapper" class="org.btkj.user.redis.AppMapper">
@@ -54,5 +55,15 @@
 	<bean id="bannerMapper" class="org.btkj.user.redis.BannerMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="bannerDao" />
+	</bean>
+	
+	<bean id="communityMapper" class="org.btkj.user.redis.CommunityMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="communityDao" />
+	</bean>
+	
+	<bean id="nonAutoInsuranceMapper" class="org.btkj.user.redis.NonAutoInsuranceMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="nonAutoInsuranceDao" />
 	</bean>
 </beans>

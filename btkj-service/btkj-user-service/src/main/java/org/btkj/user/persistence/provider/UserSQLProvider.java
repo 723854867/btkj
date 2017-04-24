@@ -16,7 +16,6 @@ public class UserSQLProvider {
 				VALUES("pwd", "#{pwd}");
 				VALUES("app_login_time", "#{appLoginTime}");
 				VALUES("pc_login_time", "#{pcLoginTime}");
-				VALUES("manager_login_time", "#{managerLoginTime}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -32,7 +31,6 @@ public class UserSQLProvider {
 				SET("identity=#{identity}");
 				SET("app_login_time=#{appLoginTime}");
 				SET("pc_login_time=#{pcLoginTime}");
-				SET("manager_login_time=#{managerLoginTime}");
 				SET("updated=#{updated}");
 				WHERE("uid=#{uid}");
 			}

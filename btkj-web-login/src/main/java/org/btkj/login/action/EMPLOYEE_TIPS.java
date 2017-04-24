@@ -16,7 +16,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class EMPLOYEE_INFO implements Action {
+public class EMPLOYEE_TIPS implements Action {
 	
 	@Resource
 	private ConfigService configService;

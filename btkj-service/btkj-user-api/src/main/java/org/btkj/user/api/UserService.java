@@ -1,7 +1,5 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserModel;
@@ -30,6 +28,24 @@ public interface UserService {
 	 * @return
 	 */
 	Result<UserModel> getUser(String mobile, int appId);
+	
+	/**
+	 * 通过 token 获取用户
+	 * 
+	 * @param client
+	 * @param toke
+	 * @return
+	 */
+	Result<UserModel> getUserByToken(Client client, String token);
+	
+	/**
+	 * 获取用户的同时获取用户锁
+	 * 
+	 * @param client
+	 * @param token
+	 * @return
+	 */
+	Result<UserModel> lockUserByToken(Client client, String token);
 
 	/**
 	 * 通过雇员 ID 获取用户
@@ -39,40 +55,12 @@ public interface UserService {
 	User getUserByEmployeeId(int employeeId);
 	
 	/**
-	 * 通过 token 获取用户
-	 * 
-	 * @param ct
-	 * @param token
-	 * @return
-	 */
-	User getUserByToken(Client ct, String token);
-	
-	/**
-	 * 通过 token 获取用户并且获取用户锁
-	 * 
-	 * @param ct
-	 * @param token
-	 * @return
-	 */
-	Result<User> lockUserByToken(Client ct, String token);
-	
-	/**
 	 * 释放用户锁
 	 * 
 	 * @param lockId
 	 * @param user
 	 */
 	void releaseUserLock(String lockId, int uid);
-	
-	/**
-	 * 我的团队信息
-	 * 
-	 * @param app
-	 * @param tenant
-	 * @param token
-	 * @return
-	 */
-	Result<?> teamInfo(App app, Tenant tenant, String token);
 	
 	/**
 	 * 修改用户信息

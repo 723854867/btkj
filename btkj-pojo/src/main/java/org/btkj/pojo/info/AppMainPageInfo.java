@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.mainpage.IMainPageInfo;
-import org.btkj.pojo.info.tips.BannerTips;
 import org.btkj.pojo.info.tips.MainTenantTips;
 import org.btkj.pojo.info.tips.TenantTips;
 
@@ -19,10 +18,9 @@ public class AppMainPageInfo implements IMainPageInfo {
 
 	private int uid;
 	private int msgTips;							// 消息条数显示 tips
-	private MainTenantTips tenant;					// 当前商户信息首页信息
-	private List<TenantTips> ownTenants;			// 用户商户列表（已经排除了当前租户）
+	private MainTenantTips mainTenant;				// 当前商户信息首页信息
+	private List<TenantTips> ownedTenants;			// 用户商户列表（已经排除了当前租户）
 	private List<TenantTips> auditTenants;			// 用户正在审核的商户列表
-	private List<BannerTips> banners;				// banner 条
 	
 	public AppMainPageInfo() {}
 	
@@ -47,20 +45,20 @@ public class AppMainPageInfo implements IMainPageInfo {
 		this.msgTips = msgTips;
 	}
 	
-	public MainTenantTips getTenant() {
-		return tenant;
+	public MainTenantTips getMainTenant() {
+		return mainTenant;
 	}
 	
-	public void setTenant(MainTenantTips tenant) {
-		this.tenant = tenant;
+	public void setMainTenant(MainTenantTips mainTenant) {
+		this.mainTenant = mainTenant;
 	}
 	
-	public List<TenantTips> getOwnTenants() {
-		return ownTenants;
+	public List<TenantTips> getOwnedTenants() {
+		return ownedTenants;
 	}
 	
-	public void setOwnTenants(List<TenantTips> ownTenants) {
-		this.ownTenants = ownTenants;
+	public void setOwnedTenants(List<TenantTips> ownedTenants) {
+		this.ownedTenants = ownedTenants;
 	}
 	
 	public List<TenantTips> getAuditTenants() {
@@ -69,13 +67,5 @@ public class AppMainPageInfo implements IMainPageInfo {
 	
 	public void setAuditTenants(List<TenantTips> auditTenants) {
 		this.auditTenants = auditTenants;
-	}
-	
-	public List<BannerTips> getBanners() {
-		return banners;
-	}
-	
-	public void setBanners(List<BannerTips> banners) {
-		this.banners = banners;
 	}
 }

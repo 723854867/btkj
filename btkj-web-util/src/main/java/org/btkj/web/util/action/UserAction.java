@@ -5,11 +5,10 @@ import javax.annotation.Resource;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.user.api.AppService;
+import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -20,8 +19,6 @@ import org.rapid.util.common.message.Result;
 public abstract class UserAction implements Action {
 	
 	@Resource
-	protected AppService appService;
-	@Resource
 	protected UserService userService;
 
 	@Override
@@ -29,20 +26,19 @@ public abstract class UserAction implements Action {
 		String token = request.getHeader(Params.TOKEN);
 		Client client = client(request);
 		if (userLock()) {
-			Result<User> result = userService.lockUserByToken(client, token);
+			Result<UserModel> result = userService.lockUserByToken(client, token);
 			if (!result.isSuccess())
 				return result;
 			try {
-				App app = appService.getAppById(result.attach().getAppId());
-				return execute(request, app, client, result.attach());
+				return execute(request, result.attach().getApp(), client, result.attach().getUser());
 			} finally {
-				userService.releaseUserLock(result.getDesc(), result.attach().getUid());
+				userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());
 			}
 		} else {
-			User user = userService.getUserByToken(client, token);
-			if (null == user)
-				return Result.result(Code.TOKEN_INVALID);
-			return execute(request, appService.getAppById(user.getAppId()), client, user);
+			Result<UserModel> result = userService.getUserByToken(client, token);
+			if (!result.isSuccess())
+				return result;
+			return execute(request, result.attach().getApp(), client, result.attach().getUser());
 		}
 	}
 	

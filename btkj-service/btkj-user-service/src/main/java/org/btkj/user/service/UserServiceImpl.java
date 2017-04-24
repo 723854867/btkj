@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserModel;
@@ -49,32 +48,27 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Result<UserModel> getUserByToken(Client client, String token) {
+		UserModel userModel = userMapper.getUserByToken(client, token);
+		if (null == userModel)
+			return Result.result(Code.TOKEN_INVALID);
+		return Result.result(userModel);
+	}
+	
+	@Override
+	public Result<UserModel> lockUserByToken(Client client, String token) {
+		return userMapper.lockUserByToken(client, token);
+	}
+	
+	@Override
 	public User getUserByEmployeeId(int employeeId) {
 		Employee employee = employeeMapper.getByKey(employeeId);
 		return null == employee ? null : userMapper.getByKey(employee.getUid());
 	}
 	
 	@Override
-	public User getUserByToken(Client ct, String token) {
-		return userMapper.getUserByToken(ct, token);
-	}
-	
-	@Override
-	public Result<User> lockUserByToken(Client ct, String token) {
-		return userMapper.lockUserByToken(ct, token);
-	}
-	
-	@Override
 	public void releaseUserLock(String lockId, int uid) {
 		userMapper.releaseUserLock(uid, lockId);
-	}
-	
-	@Override
-	public Result<?> teamInfo(App app, Tenant tenant, String token) {
-		User user = userMapper.getUserByToken(Client.APP, token);
-		if (null == user)
-			return Result.result(Code.USER_NOT_EXIST);
-		return null;
 	}
 	
 	@Override

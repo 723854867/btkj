@@ -3,14 +3,14 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.LoginInfo;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.LoginService;
 import org.btkj.user.model.TokenRemoveModel;
+import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
 	
+	@Resource
+	private AppMapper appMapper;
 	@Resource
 	private ApplyMapper applyHook;
 	@Resource
@@ -63,24 +65,20 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public Result<?> login(Client client, int tid, String mobile, String pwd) {
-		Tenant tenant = tenantMapper.getByKey(tid);
-		if (null == tenant)
-			return Result.result(BtkjCode.TENANT_NOT_EXIST);
-		Result<User> ru = userMapper.lockUserByMobile(tenant.getAppId(), mobile);
+	public Result<?> login(int appId, String mobile, String pwd) {
+		App app = appMapper.getByKey(appId);
+		if (null == app)
+			return Result.result(BtkjCode.APP_NOT_EXIST);
+		Result<User> ru = userMapper.lockUserByMobile(appId, mobile);
 		if (!ru.isSuccess()) 
 			return ru;
-		
 		User user = ru.attach();
 		try {
-			Employee employee = employeeMapper.getByTidAndUid(tenant.getTid(), user.getUid());
-			if (null == employee)
-				return Result.result(Code.FORBID);
 			if (null == user.getPwd())
 				return Result.result(Code.PWD_NOT_RESET);
 			if (!pwd.equals(user.getPwd()))
 				return Result.result(Code.PWD_ERROR);
-			return _doLogin(client, user, mobile);
+			return _doLogin(Client.PC, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}
@@ -92,9 +90,6 @@ public class LoginServiceImpl implements LoginService {
 		switch (client) {
 		case PC:
 			user.setPcLoginTime(time);
-			break;
-		case MANAGER:
-			user.setManagerLoginTime(time);
 			break;
 		default:
 			user.setAppLoginTime(time);
