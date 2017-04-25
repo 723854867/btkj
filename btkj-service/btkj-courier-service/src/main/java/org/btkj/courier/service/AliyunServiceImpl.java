@@ -18,9 +18,11 @@ import org.rapid.aliyun.policy.Effect;
 import org.rapid.aliyun.policy.Policy;
 import org.rapid.aliyun.policy.Statement;
 import org.rapid.aliyun.service.sts.StsService;
+import org.rapid.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse.Credentials;
 
 @Service("aliyunService")
 public class AliyunServiceImpl implements AliyunService {
@@ -62,6 +64,7 @@ public class AliyunServiceImpl implements AliyunService {
 		StsInfo stsInfo = aliyunMapper.getByKey(field);
 		if (null == stsInfo) {
 			stsInfo = _doAssumeRole(user);
+			aliyunMapper.insert(stsInfo);
 		}
 		return stsInfo;
 	}
@@ -77,7 +80,8 @@ public class AliyunServiceImpl implements AliyunService {
 		policy.addStatement(ossFullAccess);
 		policy.addStatement(_ossReadOnlyAccess(user));
 		AssumeRoleResponse response = stsService.assumeRole(aliyunConfig.getConfig(AliyunOptions.STS_ROLE_ARN), "user-" + user.getUid(), policy);
-		return null;
+		StsInfo stsInfo = _wrap(response);
+		return stsInfo;
 	}
 	
 	private Statement _ossReadOnlyAccess(User user) {
@@ -90,5 +94,23 @@ public class AliyunServiceImpl implements AliyunService {
 	private String[] _getUserResource(User user) { 
 		String path = ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/app/" + user.getAppId() + "user/" + user.getUid();
 		return new String[]{path, path + "/*"};
+	}
+	
+	private StsInfo _wrap(AssumeRoleResponse response) {
+		StsInfo stsInfo = new StsInfo();
+		stsInfo.setBucket(aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET));
+		stsInfo.setEndpoint(aliyunConfig.getConfig(AliyunOptions.OSS_ENDPOINT));
+		Credentials credentials = response.getCredentials();
+		stsInfo.setExpiration(credentials.getExpiration());
+		stsInfo.setAccessKeyId(credentials.getAccessKeyId());
+		stsInfo.setSecurityToken(credentials.getSecurityToken());
+		stsInfo.setAccessKeySecret(credentials.getAccessKeySecret());
+		
+		// 设置缓存失效时间
+		long expire = DateUtils.getTimeGap(stsInfo.getExpiration(), DateUtils.UTCDate(), DateUtils.ISO8601_UTC, DateUtils.TIMEZONE_UTC);
+		// 提前 1 分钟失效
+		expire -= 60 * 5;
+		stsInfo.setExpire((DateUtils.currentTime() + expire) * 1000);
+		return stsInfo;
 	}
 }

@@ -6,12 +6,21 @@ public class StsInfo implements UniqueModel<String> {
 
 	private static final long serialVersionUID = -7073264768932854538L;
 
+	private long expire;
 	private String bucket;
 	private String endpoint;
 	private String expiration;
 	private String accessKeyId;
 	private String securityToken;
 	private String accessKeySecret;
+	
+	public long getExpire() {
+		return expire;
+	}
+	
+	public void setExpire(long expire) {
+		this.expire = expire;
+	}
 	
 	public String getBucket() {
 		return bucket;

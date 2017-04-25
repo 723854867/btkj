@@ -13,4 +13,8 @@
 		<property name="captchaCountLifeTime" value="${captcha.count.life.time}" />
 		<property name="captchaTokenLifeTime" value="${captcha.token.life.time}" />
 	</bean>
+	
+	<bean id="aliyunConfig" class="org.rapid.aliyun.AliyunConfig">
+		<constructor-arg index="0" value="classpath:conf/aliyun.properties" />
+	</bean>
 </beans>
