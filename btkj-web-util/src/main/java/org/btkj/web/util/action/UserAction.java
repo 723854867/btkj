@@ -9,6 +9,7 @@ import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -35,10 +36,10 @@ public abstract class UserAction implements Action {
 				userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());
 			}
 		} else {
-			Result<UserModel> result = userService.getUserByToken(client, token);
-			if (!result.isSuccess())
-				return result;
-			return execute(request, result.attach().getApp(), client, result.attach().getUser());
+			UserModel userModel = userService.getUserByToken(client, token);
+			if (null == userModel)
+				return Result.result(Code.TOKEN_INVALID);
+			return execute(request, userModel.getApp(), client, userModel.getUser());
 		}
 	}
 	

@@ -36,7 +36,7 @@ public interface UserService {
 	 * @param toke
 	 * @return
 	 */
-	Result<UserModel> getUserByToken(Client client, String token);
+	UserModel getUserByToken(Client client, String token);
 	
 	/**
 	 * 获取用户的同时获取用户锁

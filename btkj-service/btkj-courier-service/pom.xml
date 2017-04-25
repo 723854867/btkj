@@ -20,11 +20,22 @@
 			<artifactId>btkj-courier-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.rapid</groupId>
 			<artifactId>rapid-data</artifactId>
 			<version>${rapid.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.rapid</groupId>
+			<artifactId>rapid-aliyun</artifactId>
+			<version>${rapid.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
 	</dependencies>
 </project>

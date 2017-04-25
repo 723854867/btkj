@@ -2,7 +2,6 @@ package org.btkj.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -17,6 +16,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppCreateInfo;
 import org.btkj.pojo.info.AppMainPageInfo;
+import org.btkj.pojo.info.PCMainPageInfo;
 import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.btkj.pojo.info.tips.BannerTips;
 import org.btkj.pojo.info.tips.MainTenantTips;
@@ -77,7 +77,7 @@ public class AppServiceImpl implements AppService {
 		User user = userModel.getUser();
 		switch (client) {
 		case PC:
-			return _pcMainPageInfo(user);
+			return Result.result(new PCMainPageInfo(user));
 		default:
 			Tenant tenant = 0 == tid ? null : tenantMapper.getByKey(tid);
 			if (0 != tid && null == tenant)
@@ -118,14 +118,6 @@ public class AppServiceImpl implements AppService {
 		return Result.result(pageInfo);
 	}
 	
-	private Result<IMainPageInfo> _pcMainPageInfo(User user) {
-		Set<String> tids = employeeMapper.ownedTenants(user);
-		if (!tids.isEmpty()) {
-			List<Tenant> list = tenantMapper.getTenants(tids);
-		}
-		return null;
-	}
-
 	@Override
 	public Result<AppCreateInfo> addApp(int region, String appName, int maxTenantsCount, int tenantRegion,
 			String tenantName, String pwd, String mobile, String name, String identity) {

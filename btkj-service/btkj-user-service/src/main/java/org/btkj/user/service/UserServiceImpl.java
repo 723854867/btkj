@@ -48,11 +48,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<UserModel> getUserByToken(Client client, String token) {
-		UserModel userModel = userMapper.getUserByToken(client, token);
-		if (null == userModel)
-			return Result.result(Code.TOKEN_INVALID);
-		return Result.result(userModel);
+	public UserModel getUserByToken(Client client, String token) {
+		return userMapper.getUserByToken(client, token);
 	}
 	
 	@Override
