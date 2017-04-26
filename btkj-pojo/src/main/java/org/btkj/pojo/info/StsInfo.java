@@ -6,13 +6,23 @@ public class StsInfo implements UniqueModel<String> {
 
 	private static final long serialVersionUID = -7073264768932854538L;
 
+	private String key;
 	private long expire;
+	
 	private String bucket;
 	private String endpoint;
 	private String expiration;
 	private String accessKeyId;
 	private String securityToken;
 	private String accessKeySecret;
+	
+	public String getKey() {
+		return key;
+	}
+	
+	public void setKey(String key) {
+		this.key = key;
+	}
 	
 	public long getExpire() {
 		return expire;
@@ -72,6 +82,6 @@ public class StsInfo implements UniqueModel<String> {
 
 	@Override
 	public String key() {
-		throw new UnsupportedOperationException("StsInfo has no unique key!");
+		return this.key;
 	}
 }

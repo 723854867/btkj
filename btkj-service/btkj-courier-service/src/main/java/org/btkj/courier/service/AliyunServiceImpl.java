@@ -2,6 +2,7 @@ package org.btkj.courier.service;
 
 import java.text.MessageFormat;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
@@ -18,16 +19,22 @@ import org.rapid.aliyun.policy.Effect;
 import org.rapid.aliyun.policy.Policy;
 import org.rapid.aliyun.policy.Statement;
 import org.rapid.aliyun.service.sts.StsService;
+import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse.Credentials;
 
 @Service("aliyunService")
 public class AliyunServiceImpl implements AliyunService {
 	
-	private static final String USER_KEY			= "app:{0}_{user}:{1}";
+	private static final Logger logger = LoggerFactory.getLogger(AliyunServiceImpl.class);
+	
+	private static final String USER_KEY			= "app:{0}_user:{1}";
 	
 	@Resource
 	private StsService stsService;
@@ -38,13 +45,15 @@ public class AliyunServiceImpl implements AliyunService {
 	
 	private Statement ossFullAccess;
 	private String ossAccess = "acs:oss:*:*:";
-	private String[] sharedResouce = {
-									ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common", 
-									ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common/*"
-									};
-	public AliyunServiceImpl() {
+	private String[] sharedResouce;
+	@PostConstruct
+	private void init() {
 		this.ossFullAccess = new Statement(Effect.Allow);
 		this.ossFullAccess.setAction(Action.OSS_FULL_ACCESS);
+		this.sharedResouce = new String[]{
+					ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common", 
+					ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common/*"
+				};
 		this.ossFullAccess.setResource(sharedResouce);
 	}
 
@@ -64,7 +73,10 @@ public class AliyunServiceImpl implements AliyunService {
 		StsInfo stsInfo = aliyunMapper.getByKey(field);
 		if (null == stsInfo) {
 			stsInfo = _doAssumeRole(user);
-			aliyunMapper.insert(stsInfo);
+			if (null != stsInfo) {
+				stsInfo.setKey(field);
+				aliyunMapper.insert(stsInfo);
+			}
 		}
 		return stsInfo;
 	}
@@ -79,7 +91,16 @@ public class AliyunServiceImpl implements AliyunService {
 		Policy policy = new Policy();
 		policy.addStatement(ossFullAccess);
 		policy.addStatement(_ossReadOnlyAccess(user));
-		AssumeRoleResponse response = stsService.assumeRole(aliyunConfig.getConfig(AliyunOptions.STS_ROLE_ARN), "user-" + user.getUid(), policy);
+		AssumeRoleResponse response;
+		try {
+			response = stsService.assumeRole(
+					aliyunConfig.getConfig(AliyunOptions.STS_ROLE_ARN), 
+					"user-" + user.getUid(), policy,
+					aliyunConfig.getConfig(AliyunOptions.STS_TOKEN_EXPIRATION));
+		} catch (ConstConvertFailureException | ClientException e) {
+			logger.warn("Aliyun sts assume role failure!", e);
+			return null;
+		}
 		StsInfo stsInfo = _wrap(response);
 		return stsInfo;
 	}
@@ -92,7 +113,7 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 	
 	private String[] _getUserResource(User user) { 
-		String path = ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/app/" + user.getAppId() + "user/" + user.getUid();
+		String path = ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common/app/" + user.getAppId() + "/user/" + user.getUid();
 		return new String[]{path, path + "/*"};
 	}
 	

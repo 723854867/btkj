@@ -34,7 +34,8 @@ public class ASSUME_ROLE implements Action {
 			UserModel userModel = userService.getUserByToken(client, token);
 			if (null == userModel)
 				return Result.result(Code.TOKEN_INVALID);
-			return Result.result(aliyunService.assumeRole(userModel.getUser()));
+			StsInfo stsInfo = aliyunService.assumeRole(userModel.getUser());
+			return null == stsInfo ? Result.result(Code.SYSTEM_ERROR) : Result.result(stsInfo);
 		default:
 			break;
 		}
