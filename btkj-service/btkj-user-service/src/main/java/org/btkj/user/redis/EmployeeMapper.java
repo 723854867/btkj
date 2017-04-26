@@ -7,13 +7,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.tips.EmployeeTips;
 import org.btkj.pojo.info.tips.TenantTips;
+import org.btkj.pojo.model.Pager;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.redis.RedisConsts;
+import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 
 /**
@@ -26,6 +33,8 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	private static final String EMPLOYEE_DATA				= "hash:employee:data";
 	private static final String USER_EMPLOYEES				= "hash:user:{0}:employees"; 		// 用户的雇员列表：tid - employeeId
 	private static final String EMPLOYEE_LIST_CONTROLLER	= "employee:list:controller";			// 雇员列表缓存控制键
+	@Resource
+	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
 		super(BtkjTables.EMPLOYEE, EMPLOYEE_DATA);
@@ -36,6 +45,29 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		dao.selectByTidForUpdate(entity.getTid()); // 间隙锁
 		dao.updateForJoin(entity.getTid(), entity.getLeft());
 		return super.insert(entity);
+	}
+	
+	/**
+	 * 分页获取员工信息
+	 * 
+	 * @param pager
+	 * @param tid
+	 */
+	@SuppressWarnings("unchecked")
+	public Result<Pager<EmployeeTips>> employeeList(int tid, int page, int pageSize) {
+			List<EmployeeTips> tipsList=new ArrayList<EmployeeTips>();
+			int total=dao.selectByTidTotal(tid);
+			if(total==0)
+			return Result.result(Pager.EMPLTY);
+			List<Employee> employees = dao.selectByTid(tid,page,pageSize);
+			for (Employee employee :employees){
+				User user = userMapper.getByKey(employee.getUid());
+				EmployeeTips tips = new EmployeeTips(employee, user);
+				User parentUser=userMapper.getByKey(employee.getParentId());
+				tips.setParent_name(parentUser.getName());
+				tipsList.add(tips);
+			}
+		return Result.result(new Pager<EmployeeTips>(total, tipsList));
 	}
 	
 	public Employee getByTidAndUid(int tid, int uid) {

@@ -7,6 +7,7 @@ import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.tips.EmployeeTips;
+import org.btkj.pojo.model.Pager;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
@@ -29,6 +30,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.getByTidAndUid(tid, uid);
 	}
 
+	@Override
+	public Result<Pager<EmployeeTips>> employeeList(int tid, int page, int pageSize) {
+		return employeeMapper.employeeList(tid, page, pageSize);
+	}
+	
 	@Override
 	public Result<EmployeeTips> employeeTips(int employeeId) {
 		Employee employee = employeeMapper.getByKey(employeeId);

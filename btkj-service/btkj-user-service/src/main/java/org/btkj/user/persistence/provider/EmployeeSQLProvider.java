@@ -63,6 +63,20 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
+	public String selectByTid() {
+		return "select * from employee where `tid`=#{tid} limit (#{page}-1)*#{pageSize},#{pageSize}";
+	}
+	
+	public String selectByTidTotal() {
+		return new SQL() {
+			{
+				SELECT("count(1)");
+				FROM(BtkjTables.EMPLOYEE.name());
+				WHERE("tid=#{tid}");
+			}
+		}.toString();
+	}
+	
 	public String selectByTidForUpdate() {
 		return "select * from employee where `tid`=#{tid} for update";
 	}
