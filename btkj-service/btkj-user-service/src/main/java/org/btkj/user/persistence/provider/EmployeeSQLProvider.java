@@ -64,7 +64,7 @@ public class EmployeeSQLProvider {
 	}
 	
 	public String selectByTid() {
-		return "select * from employee where `tid`=#{tid} limit (#{page}-1)*#{pageSize},#{pageSize}";
+		return "select * from employee where `tid`=#{tid} limit #{page},#{pageSize}";
 	}
 	
 	public String selectByTidTotal() {

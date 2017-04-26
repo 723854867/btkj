@@ -59,6 +59,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 			int total=dao.selectByTidTotal(tid);
 			if(total==0)
 			return Result.result(Pager.EMPLTY);
+			page=(page-1)*pageSize;
 			List<Employee> employees = dao.selectByTid(tid,page,pageSize);
 			for (Employee employee :employees){
 				User user = userMapper.getByKey(employee.getUid());
