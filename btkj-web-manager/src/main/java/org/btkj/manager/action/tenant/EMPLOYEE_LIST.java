@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;

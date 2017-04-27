@@ -32,11 +32,11 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUid")
 	List<Employee> selectByUid(@Param("uid") int uid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTid")
-	List<Employee> selectByTid(@Param("tid") int tid, @Param("page") int limitPage, @Param("pageSize") int pageSize);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "countByTid")
+	int countByTid(int tid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidTotal")
-	int selectByTidTotal(@Param("tid") int tid);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTid")
+	List<Employee> selectByTid(@Param("tid") int tid, @Param("start") int start, @Param("count") int count);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
