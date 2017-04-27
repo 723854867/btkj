@@ -10,7 +10,7 @@ public class EmployeeTips implements Serializable {
 
 	private static final long serialVersionUID = -3946965045838944053L;
 
-	private int id;
+	private int id;						//邀请码
 	private int uid;
 	private int tid;
 	private String name;
@@ -18,7 +18,7 @@ public class EmployeeTips implements Serializable {
 	private String regionName;
 	private int app_id;
 	private int parent_id;				//邀请人id
-	private int invitation_code;		//邀请码
+//	private int invitation_code;		//邀请码
 	private String parent_name;			//邀请人姓名
 	private String mobile;				//电话（账号）
 	private String identity;
@@ -112,13 +112,13 @@ public class EmployeeTips implements Serializable {
 		this.parent_id = parent_id;
 	}
 
-	public int getInvitation_code() {
-		return invitation_code;
-	}
-
-	public void setInvitation_code(int invitation_code) {
-		this.invitation_code = invitation_code;
-	}
+//	public int getInvitation_code() {
+//		return invitation_code;
+//	}
+//
+//	public void setInvitation_code(int invitation_code) {
+//		this.invitation_code = invitation_code;
+//	}
 
 	public String getParent_name() {
 		return parent_name;
