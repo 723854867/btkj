@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.tips.EmployeeTips;
 import org.btkj.pojo.info.tips.TenantTips;
@@ -19,7 +18,6 @@ import org.btkj.pojo.model.Pager;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
-import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 
@@ -111,25 +109,8 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 				set.add(String.valueOf(employee.getTid()));
 			}
 			redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, data);
-		} else {
-			if (set.isEmpty())
-				return Collections.EMPTY_SET;
-		}
+		} 
 		return set;
-	}
-	
-	/**
-	 * 正在审核的代理公司列表：只限保途 app
-	 * 
-	 * @return
-	 */
-	public List<TenantTips> auditTenants(int uid) { 
-		List<TenantTips> list = new ArrayList<TenantTips>();
-//		String key = RedisKeyGenerator.userApplyList(uid);
-		Set<String> set = redis.hkeys(null);
-//		for (String str : set) 
-//			list.add(new TenantTips(Integer.valueOf(str)));
-		return list;
 	}
 	
 	/**
