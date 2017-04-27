@@ -65,6 +65,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 				User user = userMapper.getByKey(employee.getUid());
 				EmployeeTips tips = new EmployeeTips(employee, user);
 				User parentUser=userMapper.getByKey(employee.getParentId());
+				if(null !=parentUser)
 				tips.setParent_name(parentUser.getName());
 				tipsList.add(tips);
 			}
