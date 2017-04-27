@@ -21,11 +21,13 @@ import org.btkj.pojo.info.mainpage.IMainPageInfo;
 import org.btkj.pojo.info.tips.BannerTips;
 import org.btkj.pojo.info.tips.MainTenantTips;
 import org.btkj.pojo.info.tips.NonAutoInsuranceTips;
+import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.pojo.model.AppCreateModel;
 import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.AppService;
 import org.btkj.user.persistence.Tx;
 import org.btkj.user.redis.AppMapper;
+import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.CommunityMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -45,6 +47,8 @@ public class AppServiceImpl implements AppService {
 	private AppMapper appMapper;
 	@Resource
 	private UserMapper userMapper;
+	@Resource
+	private ApplyMapper applyMapper;
 	@Resource
 	private BannerMapper bannerMapper;
 	@Resource
@@ -101,13 +105,27 @@ public class AppServiceImpl implements AppService {
 	private Result<IMainPageInfo> _appMainPageInfo(User user, int appId, Tenant tenant) {
 		AppMainPageInfo pageInfo = new AppMainPageInfo(user);
 		
+		// 设置代理公司列表信息
+		// 已经拥有的代理公司列表信息
+		List<TenantTips> owned = new ArrayList<TenantTips>(); 				
+		for (Tenant temp : tenantMapper.getTenants(employeeMapper.ownedTenants(user)))
+			owned.add(new TenantTips(temp));
+		pageInfo.setOwnedTenants(owned);
+		// 正在审核的代理公司列表信息
+		List<TenantTips> audits = new ArrayList<TenantTips>();				
+		for (Tenant temp : tenantMapper.getTenants(applyMapper.applyListTids(user.getUid())))
+			audits.add(new TenantTips(temp));
+		pageInfo.setAuditTenants(audits);
+		
 		// 设置 main tenant 信息
 		MainTenantTips mainTenant = new MainTenantTips(tenant);
-		List<BannerTips> banners = new ArrayList<BannerTips>();				// banner 条
+		// banner 条
+		List<BannerTips> banners = new ArrayList<BannerTips>();				
 		for (Banner banner : bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid())) 
 			banners.add(new BannerTips(banner));
 		mainTenant.setBannerList(banners);
-		List<NonAutoInsuranceTips> insurances = new ArrayList<NonAutoInsuranceTips>();		// 非车险列表
+		// 非车险列表
+		List<NonAutoInsuranceTips> insurances = new ArrayList<NonAutoInsuranceTips>();		
 		for (NonAutoInsurance insurance : nonAutoInsuranceMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid()))
 			insurances.add(new NonAutoInsuranceTips(insurance));
 		mainTenant.setNonAutoInsuranceList(insurances);

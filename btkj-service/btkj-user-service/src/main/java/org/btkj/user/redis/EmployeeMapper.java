@@ -11,15 +11,12 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.tips.EmployeeTips;
-import org.btkj.pojo.info.tips.TenantTips;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
-import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 
@@ -33,6 +30,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	private static final String EMPLOYEE_DATA				= "hash:employee:data";
 	private static final String USER_EMPLOYEES				= "hash:user:{0}:employees"; 		// 用户的雇员列表：tid - employeeId
 	private static final String EMPLOYEE_LIST_CONTROLLER	= "employee:list:controller";			// 雇员列表缓存控制键
+	
 	@Resource
 	private UserMapper userMapper;
 	
@@ -55,20 +53,20 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 	 */
 	@SuppressWarnings("unchecked")
 	public Result<Pager<EmployeeTips>> employeeList(int tid, int page, int pageSize) {
-			List<EmployeeTips> tipsList=new ArrayList<EmployeeTips>();
-			int total=dao.selectByTidTotal(tid);
-			if(total==0)
+		List<EmployeeTips> tipsList = new ArrayList<EmployeeTips>();
+		int total = dao.countByTid(tid);
+		if (total == 0)
 			return Result.result(Pager.EMPLTY);
-			page=(page-1)*pageSize;
-			List<Employee> employees = dao.selectByTid(tid,page,pageSize);
-			for (Employee employee :employees){
-				User user = userMapper.getByKey(employee.getUid());
-				EmployeeTips tips = new EmployeeTips(employee, user);
-				User parentUser=userMapper.getByKey(employee.getParentId());
-				if(null !=parentUser)
-				tips.setParent_name(parentUser.getName());
-				tipsList.add(tips);
-			}
+		page = (page - 1) * pageSize;
+		List<Employee> employees = dao.selectByTid(tid, page, pageSize);
+		for (Employee employee : employees) {
+			User user = userMapper.getByKey(employee.getUid());
+			EmployeeTips tips = new EmployeeTips(employee, user);
+			User parentUser = userMapper.getByKey(employee.getParentId());
+			if (null != parentUser)
+			tips.setParent_name(parentUser.getName());
+			tipsList.add(tips);
+		}
 		return Result.result(new Pager<EmployeeTips>(total, tipsList));
 	}
 	
@@ -113,25 +111,8 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 				set.add(String.valueOf(employee.getTid()));
 			}
 			redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, data);
-		} else {
-			if (set.isEmpty())
-				return Collections.EMPTY_SET;
-		}
+		} 
 		return set;
-	}
-	
-	/**
-	 * 正在审核的代理公司列表：只限保途 app
-	 * 
-	 * @return
-	 */
-	public List<TenantTips> auditTenants(int uid) { 
-		List<TenantTips> list = new ArrayList<TenantTips>();
-//		String key = RedisKeyGenerator.userApplyList(uid);
-		Set<String> set = redis.hkeys(null);
-//		for (String str : set) 
-//			list.add(new TenantTips(Integer.valueOf(str)));
-		return list;
 	}
 	
 	/**

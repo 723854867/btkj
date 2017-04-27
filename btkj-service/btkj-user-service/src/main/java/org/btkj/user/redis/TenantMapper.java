@@ -18,11 +18,11 @@ public class TenantMapper extends ProtostuffDBMapper<Integer, Tenant, TenantDao>
 		super(BtkjTables.TENANT, TENANT_DATA);
 	}
 	
-	public List<Tenant> getTenants(Set<String> tids) { 
+	public List<Tenant> getTenants(Set<?> tids) { 
 		byte[][] fields = new byte[tids.size()][];
 		int index = 0;
-		for (String str : tids)
-			fields[index++] = SerializeUtil.RedisUtil.encode(str);
+		for (Object tid : tids)
+			fields[index++] = SerializeUtil.RedisUtil.encode(tid);
 		List<byte[]> datas = redis.hmget(SerializeUtil.RedisUtil.encode(TENANT_DATA), fields);
 		List<Tenant> tenants = new ArrayList<Tenant>();
 		for (byte[] data : datas)

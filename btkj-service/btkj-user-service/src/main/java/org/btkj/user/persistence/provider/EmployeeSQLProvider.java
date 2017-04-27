@@ -64,13 +64,13 @@ public class EmployeeSQLProvider {
 	}
 	
 	public String selectByTid() {
-		return "select * from employee where `tid`=#{tid} limit #{page},#{pageSize}";
+		return "select * from employee where `tid`=#{tid} limit #{start}, #{count}";
 	}
 	
-	public String selectByTidTotal() {
+	public String countByTid() {
 		return new SQL() {
 			{
-				SELECT("count(1)");
+				SELECT("count(*)");
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("tid=#{tid}");
 			}
