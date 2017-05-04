@@ -6,9 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.Resource;
-
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
@@ -57,17 +55,25 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		int total = dao.countByTid(tid);
 		if (total == 0)
 			return Result.result(Pager.EMPLTY);
-		page = (page - 1) * pageSize;
-		List<Employee> employees = dao.selectByTid(tid, page, pageSize);
+		if(page < 1 )
+			page = 1;
+		if(pageSize < 0)
+			pageSize = 10;
+		int start = (page - 1) * pageSize;
+		int count = pageSize;
+		List<Employee> employees = dao.selectByTid(tid, start, count);
 		for (Employee employee : employees) {
-			User user = userMapper.getByKey(employee.getUid());
-			EmployeeTips tips = new EmployeeTips(employee, user);
-			User parentUser = userMapper.getByKey(employee.getParentId());
-			if (null != parentUser)
-			tips.setParent_name(parentUser.getName());
+			Set<Integer> set = new HashSet<Integer>();
+			set.add(employee.getUid());
+			set.add(employee.getParentId());
+			List<Integer> uids = new ArrayList<Integer>(set);
+			List<User> users = userMapper.getUsers(uids);
+			EmployeeTips tips = new EmployeeTips(employee, users.get(0));
+			if (null != users.get(1))
+			tips.setParentName(users.get(1).getName());
 			tipsList.add(tips);
 		}
-		return Result.result(new Pager<EmployeeTips>(total, tipsList));
+			return Result.result(new Pager<EmployeeTips>(total, tipsList));
 	}
 	
 	public Employee getByTidAndUid(int tid, int uid) {

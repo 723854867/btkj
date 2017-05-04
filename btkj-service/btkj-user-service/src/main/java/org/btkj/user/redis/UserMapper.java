@@ -1,7 +1,8 @@
 package org.btkj.user.redis;
 
 import java.text.MessageFormat;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -38,6 +39,31 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 
 	public UserMapper() {
 		super(BtkjTables.USER, DATA_KEY);
+	}
+	
+	public List<User> getUsers(List<Integer> uids) { 
+		byte[][] fields = new byte[uids.size()][];
+		int index = 0;
+		for (Object uid : uids)
+			fields[index++] = SerializeUtil.RedisUtil.encode(uid);
+		List<byte[]> datas = redis.hmget(SerializeUtil.RedisUtil.encode(DATA_KEY), fields);
+		List<User> users = new ArrayList<User>();
+		if (null == datas){
+		User user = dao.selectByKey(uids.get(0));
+		users.add(user);
+		if (null != user)
+			flush(user);
+		}else{
+			for (byte[] data : datas)
+				users.add(deserial(data));	
+		}
+		if (null == users.get(1)){
+		User parentUser = dao.selectByKey(uids.get(1));
+			users.add(parentUser);
+			if (null != parentUser)
+				flush(parentUser);	
+		}
+		return users;
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {
