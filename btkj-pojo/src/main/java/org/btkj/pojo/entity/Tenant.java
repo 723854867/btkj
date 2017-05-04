@@ -12,7 +12,6 @@ public class Tenant implements UniqueModel<Integer> {
 	private int region;
 	private int mod;
 	private String privilege;
-	private String pwd;
 	private int created;
 	private int updated;
 	
@@ -81,14 +80,6 @@ public class Tenant implements UniqueModel<Integer> {
 		this.privilege = privilege;
 	}
 	
-	public String getPwd() {
-		return pwd;
-	}
-	
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
 	public int getCreated() {
 		return created;
 	}

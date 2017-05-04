@@ -16,6 +16,8 @@ public class ApplyInfo implements UniqueModel<String> {
 	private int chief; 			// 邀请者 uid
 	private int time; 			// 申请时间
 	private int uid;
+	private String name;
+	private String identity;
 
 	public int getTid() {
 		return tid;
@@ -47,6 +49,22 @@ public class ApplyInfo implements UniqueModel<String> {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getIdentity() {
+		return identity;
+	}
+	
+	public void setIdentity(String identity) {
+		this.identity = identity;
 	}
 
 	@Override

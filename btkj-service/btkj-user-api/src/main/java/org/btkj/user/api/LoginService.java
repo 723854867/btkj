@@ -1,5 +1,6 @@
 package org.btkj.user.api;
 
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.enums.Client;
 import org.rapid.util.common.message.Result;
 
@@ -12,7 +13,7 @@ public interface LoginService {
 	 * @param mobile 手机号
 	 * @return
 	 */
-	Result<?> login(int appId, String mobile);
+	Result<?> login(App app, String mobile);
 	
 	/**
 	 * pc 登录:必须要指定代理商
@@ -23,7 +24,7 @@ public interface LoginService {
 	 * @param pwd
 	 * @return
 	 */
-	Result<?> login(int appId, String mobile, String pwd);
+	Result<?> login(App app, String mobile, String pwd);
 	
 	/**
 	 * 注销

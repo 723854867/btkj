@@ -3,13 +3,15 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
+import org.btkj.pojo.entity.App;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.AppAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -18,7 +20,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class PWD_RESET implements Action {
+public class PWD_RESET extends AppAction {
 	
 	@Resource
 	private UserService userService;
@@ -28,12 +30,16 @@ public class PWD_RESET implements Action {
 	private CourierService courierService;
 
 	@Override
-	public Result<?> execute(Request request) {
+	protected Result<?> execute(Request request, Client client, App app) {
 		String pwd = request.getParam(Params.PWD);
-		int appId = request.getParam(Params.APP_ID);
-		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, appId);
+		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, app.getId());
 		if (courierService.captchaVerify(verifier).getCode() == -1)
 			return Result.result(Code.CAPTCHA_ERROR);
-		return userService.pwdReset(appId, verifier.getIdentity(), pwd);
+		return userService.pwdReset(app.getId(), verifier.getIdentity(), pwd);
+	}
+	
+	@Override
+	protected Client client(Request request) {
+		return Client.PC;
 	}
 }

@@ -8,43 +8,25 @@ import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.user.Config;
-import org.btkj.user.UserLuaCmd;
 import org.btkj.user.persistence.dao.BannerDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
-import org.rapid.util.common.serializer.SerializeUtil;
 
 public class BannerMapper extends ProtostuffDBMapper<Integer, Banner, BannerDao> {
 	
-	private static final String DATA_KEY						= "hash:db:banner";
-	private static final String LIST							= "set:banner:list:{0}:{1}";	// 租户 banner 列表
-	private static final String LIST_CONTROLLER					= "banner：{0}：{1}";
+	private String LIST							= "set:banner:list:{0}:{1}";	// 租户 banner 列表
+	private String LIST_CONTROLLER				= "banner：controller:{0}：{1}";
 
 	public BannerMapper() {
-		super(BtkjTables.BANNER, DATA_KEY);
+		super(BtkjTables.BANNER, "hash:db:banner");
 	}
 	
 	public List<Banner> getByAppIdAndTid(int appId, int tid) {
-		String listKey = listKey(appId, tid);
-		List<byte[]> list = redis.invokeLua(UserLuaCmd.BANNER_LIST_LOAD, 
-				SerializeUtil.RedisUtil.encode(
-						Config.CACHE_CONTROLLER,
-						listKey, DATA_KEY,
-						listControllerKey(appId, tid)));
+		String listKey = _listKey(appId, tid);
+		List<byte[]> list = redis.protostuffCacheListLoadWithData(Config.CACHE_CONTROLLER, listKey, redisKey, _listController(appId, tid));
 		List<Banner> banners = null;
 		if (null == list) {
 			banners = dao.selectByAppIdAndTid(appId, tid);
-			byte[][] params = new byte[banners.size() * 2 + 4][];
-			int index = 0;
-			params[index++] = SerializeUtil.RedisUtil.encode(Config.CACHE_CONTROLLER);
-			params[index++] = SerializeUtil.RedisUtil.encode(DATA_KEY);
-			params[index++] = SerializeUtil.RedisUtil.encode(listKey(appId, tid));
-			params[index++] = SerializeUtil.RedisUtil.encode(listControllerKey(appId, tid));
-			for (int i = 0, len = banners.size(); i < len; i++) {
-				Banner banner = banners.get(i);
-				params[index++] = SerializeUtil.RedisUtil.encode(banner.getId());
-				params[index++] = serial(banner);
-			}
-			redis.invokeLua(UserLuaCmd.BANNER_LIST_FLUSH, params);
+			redis.protostuffCacheListFlush(Config.CACHE_CONTROLLER, redisKey, _listKey(appId, tid), _listController(appId, tid), banners);
 		} else {
 			banners = new ArrayList<Banner>(list.size());
 			for (byte[] data : list)
@@ -64,20 +46,15 @@ public class BannerMapper extends ProtostuffDBMapper<Integer, Banner, BannerDao>
 	}
 	
 	@Override
-	protected void flush(Banner entity) {
-		redis.invokeLua(UserLuaCmd.BANNER_FLUSH, 
-				SerializeUtil.RedisUtil.encode(
-						DATA_KEY, 
-						listKey(entity.getAppId(), entity.getTid()),
-						entity.getId(),
-						serial(entity)));
+	public void flush(Banner entity) {
+		redis.protostuffCacheFlush(redisKey, entity, _listKey(entity.getAppId(), entity.getTid()));
 	}
 	
-	public static final String listKey(int appId, int tid) { 
+	public String _listKey(int appId, int tid) { 
 		return MessageFormat.format(LIST, String.valueOf(appId), String.valueOf(tid));
 	}
 	
-	public static final String listControllerKey(int appId, int tid) { 
+	public String _listController(int appId, int tid) { 
 		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(appId), String.valueOf(tid));
 	}
 }

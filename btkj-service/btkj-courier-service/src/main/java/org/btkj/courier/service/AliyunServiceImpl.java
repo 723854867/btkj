@@ -46,6 +46,7 @@ public class AliyunServiceImpl implements AliyunService {
 	private Statement ossFullAccess;
 	private String ossAccess = "acs:oss:*:*:";
 	private String[] sharedResouce;
+	
 	@PostConstruct
 	private void init() {
 		this.ossFullAccess = new Statement(Effect.Allow);

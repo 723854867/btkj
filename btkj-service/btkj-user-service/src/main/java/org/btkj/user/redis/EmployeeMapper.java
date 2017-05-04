@@ -2,21 +2,22 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Set;
+=======
+
+>>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 import javax.annotation.Resource;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.tips.EmployeeTips;
 import org.btkj.pojo.model.Pager;
-import org.btkj.user.UserLuaCmd;
+import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.serializer.SerializeUtil;
 
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
@@ -25,15 +26,14 @@ import org.rapid.util.common.serializer.SerializeUtil;
  */
 public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, EmployeeDao> {
 	
-	private static final String EMPLOYEE_DATA				= "hash:employee:data";
-	private static final String USER_EMPLOYEES				= "hash:user:{0}:employees"; 		// 用户的雇员列表：tid - employeeId
-	private static final String EMPLOYEE_LIST_CONTROLLER	= "employee:list:controller";			// 雇员列表缓存控制键
+	private String LIST							= "set:employee:list:{0}";	// 用户 employee 列表：主要是用来记录有多少个代理公司
+	private String LIST_CONTROLLER				= "employee：controller:{0}";
 	
 	@Resource
 	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
-		super(BtkjTables.EMPLOYEE, EMPLOYEE_DATA);
+		super(BtkjTables.EMPLOYEE, "hash:db:employee");
 	}
 	
 	@Override
@@ -63,6 +63,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		int count = pageSize;
 		List<Employee> employees = dao.selectByTid(tid, start, count);
 		for (Employee employee : employees) {
+<<<<<<< HEAD
 			Set<Integer> set = new HashSet<Integer>();
 			set.add(employee.getUid());
 			set.add(employee.getParentId());
@@ -71,83 +72,51 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 			EmployeeTips tips = new EmployeeTips(employee, users.get(0));
 			if (null != users.get(1))
 			tips.setParentName(users.get(1).getName());
+=======
+			User user = userMapper.getByKey(employee.getUid());
+			EmployeeTips tips = new EmployeeTips(employee, user);
+			User parentUser = userMapper.getByKey(employee.getParentId());
+			if (null != parentUser)
+			tips.setParent_name(employee.getName());
+>>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 			tipsList.add(tips);
 		}
 			return Result.result(new Pager<EmployeeTips>(total, tipsList));
 	}
 	
-	public Employee getByTidAndUid(int tid, int uid) {
-		byte[] data = redis.invokeLua(UserLuaCmd.EMPLOYEE_LOAD_BY_TID_UID, 
-				SerializeUtil.RedisUtil.encode(
-						userEmployeesKey(uid), 
-						employeeDataKey(), 
-						tid));
-		if (null != data)
-			return deserial(data);
-		Employee employee = dao.selectByTidAndUid(tid, uid);
-		if (null != employee)
-			flush(employee);
-		return employee;
-	}
+	public boolean isEmployee(int tid, int uid) {
+		return null != dao.selectByTidAndUid(tid, uid);
+	} 
 	
 	/**
 	 * 获取用户的所拥有的代理公司列表
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public Set<String> ownedTenants(User user) {
-		Set<String> set = redis.invokeLua(UserLuaCmd.EMPLOYEE_LIST, 
-						EMPLOYEE_LIST_CONTROLLER, 
-						userEmployeesKey(user.getUid()),
-						String.valueOf(user.getUid()));
-		if (null == set) {
-			List<Employee> employees = dao.selectByUid(user.getUid());
-			if (null == employees || employees.isEmpty())
-				return Collections.EMPTY_SET;
-			set = new HashSet<String>(employees.size());
-			byte[][] data = new byte[employees.size() * 3 + 2][];
-			int index = 0;
-			data[index++] = SerializeUtil.RedisUtil.encode(EMPLOYEE_DATA);
-			data[index++] = SerializeUtil.RedisUtil.encode(userEmployeesKey(user.getUid()));
-			for (Employee employee : employees) {
-				data[index++] = SerializeUtil.RedisUtil.encode(employee.getId());
-				data[index++] = SerializeUtil.RedisUtil.encode(employee.getTid());
-				data[index++] = serial(employee);
-				set.add(String.valueOf(employee.getTid()));
-			}
-			redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, data);
-		} 
-		return set;
-	}
-	
-	/**
-	 * 获取用户拥有的代理公司数量
-	 * 
-	 * @param uid
-	 * @return
-	 */
-	public int tenantNum(int uid) { 
-//		return cacheController.tenantList(uid).size();
-		return 0;
+	public List<Employee> ownedTenants(User user) {
+		List<Employee> employees = null;
+		List<byte[]> list = redis.protostuffCacheListLoadWithData(Config.CACHE_CONTROLLER, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
+		if (null != list) {
+			employees = new ArrayList<Employee>();
+			for (byte[] buffer : list) 
+				employees.add(deserial(buffer));
+		} else {
+			employees = dao.selectByUid(user.getUid());
+			redis.protostuffCacheListFlush(Config.CACHE_CONTROLLER, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees);
+		}
+		return employees;
 	}
 	
 	@Override
-	protected void flush(Employee entity) {
-		redis.invokeLua(UserLuaCmd.EMPLOYEE_FLUSH, 
-				SerializeUtil.RedisUtil.encode(
-						redisKey, 
-						userEmployeesKey(entity.getUid()), 
-						entity.getId(), 
-						entity.getTid(), 
-						serial(entity)));
+	public void flush(Employee entity) {
+		redis.protostuffCacheFlush(redisKey, entity, _listKey(entity.getUid()));
 	}
 	
-	public static final String employeeDataKey() {
-		return EMPLOYEE_DATA;
+	public String _listKey(int uid) { 
+		return MessageFormat.format(LIST, String.valueOf(uid));
 	}
 	
-	public static final String userEmployeesKey(int uid) { 
-		return MessageFormat.format(USER_EMPLOYEES, String.valueOf(uid));
+	private String _listController(int uid) {
+		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(uid));
 	}
 }

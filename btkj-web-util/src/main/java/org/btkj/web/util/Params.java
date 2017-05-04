@@ -1,5 +1,9 @@
 package org.btkj.web.util;
 
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Version;
@@ -8,9 +12,10 @@ import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
-import org.rapid.util.common.key.Pair;
+import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 
+import com.google.gson.reflect.TypeToken;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
@@ -22,6 +27,8 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
  *
  */
 public interface Params {
+	
+	final Type INT_SET_TYPE								 = new TypeToken<List<Integer>>(){}.getType();
 	
 	/**
 	 * 头部信息是可选的，因此这里不需要 id, global session id
@@ -42,9 +49,15 @@ public interface Params {
 	final Str2StrConstConverter TOKEN					= new Str2StrConstConverter(1004, "token");
 	final Str2StrConstConverter ACTION					= new Str2StrConstConverter(1005, "action");
 	
+	/**
+	 * 泛指名字
+	 */
 	final Str2StrConstConverter NAME					= new Str2StrConstConverter(1006, "name");
-	final Str2StrConstConverter APP_NAME				= new Str2StrConstConverter(1007, "appName");
-	final Str2StrConstConverter TENANT_NAME				= new Str2StrConstConverter(1008, "tenantName");
+	
+	/**
+	 * 租户名
+	 */
+	final Str2StrConstConverter TNAME					= new Str2StrConstConverter(1007, "tname");
 
 	
 	/**
@@ -118,6 +131,23 @@ public interface Params {
 			if (val < 0)
 				throw ConstConvertFailureException.errorConstException(this);
 			return val;
+		};
+	};
+	
+	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1024, "modules") {
+		@Override
+		public Set<Integer> convert(String k) throws ConstConvertFailureException {
+			try {
+				return SerializeUtil.JsonUtil.GSON.fromJson(k, INT_SET_TYPE);
+			} catch (Exception e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+		}
+	};
+	
+	final Str2BoolConstConverter TENANT_ADD_AUTONOMY		= new Str2BoolConstConverter(1025, "tenantAddAutonomy", false) {
+		public Boolean convert(String value) throws ConstConvertFailureException {
+			return Boolean.valueOf(value);
 		};
 	};
 	

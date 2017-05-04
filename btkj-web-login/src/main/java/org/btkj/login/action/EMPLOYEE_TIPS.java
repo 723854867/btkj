@@ -3,8 +3,10 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.info.tips.EmployeeTips;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -26,12 +28,10 @@ public class EMPLOYEE_TIPS implements Action {
 	@Override
 	public Result<EmployeeTips> execute(Request request) {
 		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		Result<EmployeeTips> result = employeeService.employeeTips(employeeId);
-		if (!result.isSuccess())
-			return result;
-		
-		Region region = configService.getRegionById(result.attach().getRegionId());
-		result.attach().setRegionName(region.getName());
-		return result;
+		EmployeeForm form = employeeService.getById(employeeId);
+		if (null == form)
+			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+		Region region = configService.getRegionById(form.getTenant().getRegion());
+		return Result.result(new EmployeeTips(form, region));
 	}
 }

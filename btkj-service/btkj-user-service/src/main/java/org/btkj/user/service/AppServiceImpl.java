@@ -1,6 +1,5 @@
 package org.btkj.user.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,28 +7,22 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.Community;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.NonAutoInsurance;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.AppCreateInfo;
 import org.btkj.pojo.info.AppMainPageInfo;
 import org.btkj.pojo.info.PCMainPageInfo;
 import org.btkj.pojo.info.mainpage.IMainPageInfo;
-import org.btkj.pojo.info.tips.BannerTips;
-import org.btkj.pojo.info.tips.MainTenantTips;
-import org.btkj.pojo.info.tips.NonAutoInsuranceTips;
-import org.btkj.pojo.info.tips.TenantTips;
-import org.btkj.pojo.model.AppCreateModel;
-import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.AppService;
+import org.btkj.user.api.EmployeeService;
 import org.btkj.user.persistence.Tx;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
-import org.btkj.user.redis.CommunityMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.NonAutoInsuranceMapper;
 import org.btkj.user.redis.TenantMapper;
@@ -56,7 +49,7 @@ public class AppServiceImpl implements AppService {
 	@Resource
 	private EmployeeMapper employeeMapper;
 	@Resource
-	private CommunityMapper communityMapper;
+	private EmployeeService employeeService;
 	@Resource
 	private NonAutoInsuranceMapper nonAutoInsuranceMapper;
 	
@@ -66,32 +59,17 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public Result<IMainPageInfo> mainPage(int appId) {
-		App app = appMapper.getByKey(appId);
-		if (null == app)
-			return Result.result(BtkjCode.APP_NOT_EXIST);
-		return _appMainPageInfo(null, appId, null);
-	}
-	
-	@Override
-	public Result<IMainPageInfo> mainPage(Client client, String token, int tid) {
-		UserModel userModel = userMapper.getUserByToken(client, token);
-		if (null == userModel)
-			return Result.result(Code.TOKEN_INVALID);
-		User user = userModel.getUser();
+	public Result<IMainPageInfo> mainPage(Client client, User user, int employeeId) {
 		switch (client) {
 		case PC:
 			return Result.result(new PCMainPageInfo(user));
 		default:
-			Tenant tenant = 0 == tid ? null : tenantMapper.getByKey(tid);
-			if (0 != tid && null == tenant)
-				return Result.result(BtkjCode.TENANT_NOT_EXIST);
-			if (0 != tid) {
-				Employee employee = employeeMapper.getByTidAndUid(tid, user.getUid());
-				if (null == employee)
-					return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-			}
-			return _appMainPageInfo(user, user.getAppId(), tenant);
+			EmployeeForm employeeForm = 0 == employeeId ? null : employeeService.getById(employeeId);
+			if (0 != employeeId && null == employeeForm)
+				return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+			if (null != employeeForm && employeeForm.getUser().getUid() != user.getUid())
+				return Result.result(Code.FORBID);
+			return _appMainPageInfo(user, null == employeeForm ? null : employeeForm.getEmployee(), null == employeeForm ? null : employeeForm.getTenant());
 		}
 	}
 	
@@ -102,48 +80,32 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<IMainPageInfo> _appMainPageInfo(User user, int appId, Tenant tenant) {
-		AppMainPageInfo pageInfo = new AppMainPageInfo(user);
-		
-		// 设置代理公司列表信息
-		// 已经拥有的代理公司列表信息
-		List<TenantTips> owned = new ArrayList<TenantTips>(); 				
-		for (Tenant temp : tenantMapper.getTenants(employeeMapper.ownedTenants(user)))
-			owned.add(new TenantTips(temp));
-		pageInfo.setOwnedTenants(owned);
-		// 正在审核的代理公司列表信息
-		List<TenantTips> audits = new ArrayList<TenantTips>();				
-		for (Tenant temp : tenantMapper.getTenants(applyMapper.applyListTids(user.getUid())))
-			audits.add(new TenantTips(temp));
-		pageInfo.setAuditTenants(audits);
-		
-		// 设置 main tenant 信息
-		MainTenantTips mainTenant = new MainTenantTips(tenant);
-		// banner 条
-		List<BannerTips> banners = new ArrayList<BannerTips>();				
-		for (Banner banner : bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid())) 
-			banners.add(new BannerTips(banner));
-		mainTenant.setBannerList(banners);
-		// 非车险列表
-		List<NonAutoInsuranceTips> insurances = new ArrayList<NonAutoInsuranceTips>();		
-		for (NonAutoInsurance insurance : nonAutoInsuranceMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid()))
-			insurances.add(new NonAutoInsuranceTips(insurance));
-		mainTenant.setNonAutoInsuranceList(insurances);
-		Community community = communityMapper.getByKey(appId);
-		if (null != community)
-			mainTenant.setCommunityBackground(community.getImage());
-		pageInfo.setMainTenant(mainTenant);
-		return Result.result(pageInfo);
+	private Result<IMainPageInfo> _appMainPageInfo(User user, Employee employee, Tenant tenant) {
+		int appId = user.getAppId();
+		if (null == tenant) {
+			int mainTid = userMapper.mainTenant(user.getUid());
+			if (0 == mainTid) {
+				List<Employee> employees = employeeMapper.ownedTenants(user);
+				if (null != employees && !employees.isEmpty()) 
+					mainTid = employees.get(0).getTid();
+			}
+			if (0 != mainTid)
+				tenant = tenantMapper.getByKey(mainTid);
+		}
+		List<Banner> banners = bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
+		List<NonAutoInsurance> insurances = nonAutoInsuranceMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
+		return Result.result(new AppMainPageInfo(user, tenant, banners, insurances));
 	}
 	
 	@Override
-	public Result<AppCreateInfo> addApp(int region, String appName, int maxTenantsCount, int tenantRegion,
-			String tenantName, String pwd, String mobile, String name, String identity) {
-		AppCreateModel acm = tx.addApp(region, appName, maxTenantsCount, tenantRegion, tenantName, pwd, mobile, name, identity);
-		AppCreateInfo aci = new AppCreateInfo();
-		aci.setAppId(acm.getApp().getId());
-		aci.setTid(acm.getTenant().getTid());
-		aci.setUid(acm.getUser().getUid());
-		return Result.result(aci);
+	public App addApp(int region, String name, int maxTenantsCount, boolean tenantAddAutonomy) {
+		App app = BeanGenerator.newApp(region, name, maxTenantsCount, tenantAddAutonomy);
+		appMapper.insert(app);
+		return app;
+	}
+	
+	@Override
+	public int tenantNum(App app) {
+		return tenantMapper.countByAppId(app.getId());
 	}
 }

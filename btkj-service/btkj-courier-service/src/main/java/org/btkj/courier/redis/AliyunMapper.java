@@ -7,14 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AliyunMapper extends JsonMemoryMapper<String, StsInfo> {
 	
-	private static final String DATA_KEY				= "hash:memory:stsinfo";
-
 	public AliyunMapper() {
-		super(DATA_KEY);
+		super("hash:memory:stsinfo");
 	}
 	
 	@Override
 	public StsInfo getByKey(String key) {
-		return redis.hgetJsonValueIfNotExpire(DATA_KEY, key, System.currentTimeMillis(), StsInfo.class);
+		return redis.hgetJsonValueIfNotExpire(redisKey, key, System.currentTimeMillis(), StsInfo.class);
 	}
 }

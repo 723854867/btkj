@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.user.persistence.provider.TenantSQLProvider;
@@ -23,4 +24,14 @@ public interface TenantDao extends Dao<Integer, Tenant> {
 	@Override
 	@SelectProvider(type = TenantSQLProvider.class, method = "selectByKey")
 	Tenant selectByKey(Integer key);
+	
+	@Override
+	@SelectProvider(type = TenantSQLProvider.class, method = "selectWithinKey")
+	List<Tenant> selectWithinKey(@Param("list") List<Integer> keys);
+	
+	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppId")
+	int countByAppId(int appId);
+	
+	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppIdForUpdate")
+	int countByAppIdForUpdate(int appId);
 }

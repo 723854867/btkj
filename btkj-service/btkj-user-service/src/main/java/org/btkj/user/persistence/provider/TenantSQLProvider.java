@@ -1,5 +1,8 @@
 package org.btkj.user.persistence.provider;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;
 
@@ -14,7 +17,6 @@ public class TenantSQLProvider {
 				VALUES("region", "#{region}");
 				VALUES("`mod`", "#{mod}");
 				VALUES("`privilege`", "#{privilege}");
-				VALUES("`pwd`", "#{pwd}");
 				VALUES("`created`", "#{created}");
 				VALUES("`updated`", "#{updated}");
 			}
@@ -38,5 +40,29 @@ public class TenantSQLProvider {
 				WHERE("tid=#{key}");
 			}
 		}.toString();
+	}
+	
+	public String selectWithinKey(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("list");
+		StringBuilder builder = new StringBuilder("select * from tenant where tid in(");
+		for (int key : keys)
+			builder.append(key).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
+	}
+	
+	public String countByAppId() {
+		return new SQL() {
+			{
+				SELECT("COUNT(*)");
+				FROM(BtkjTables.TENANT.name());
+				WHERE("app_id=#{appId}");
+			}
+		}.toString();
+	}
+	
+	public String countByAppIdForUpdate() {
+		return "select count(*) from tenant where app_id=#{appId} for update";
 	}
 }

@@ -28,4 +28,7 @@ public interface AppDao extends Dao<Integer, App> {
 	@Override
 	@SelectProvider(type = AppSQLProvider.class, method = "selectByKey")
 	App selectByKey(Integer key);
+	
+	@SelectProvider(type = AppSQLProvider.class, method = "selectByKeyForUpdate")
+	App selectByKeyForUpdate(Integer id);
 }

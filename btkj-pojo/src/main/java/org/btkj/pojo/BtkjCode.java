@@ -41,14 +41,14 @@ public enum BtkjCode implements ICode {
 	MOBILE_EXIST(505, "mobile exist"),
 	
 	/**
-	 * 代理商个数最大值
+	 * 用户代理商个数最大值
 	 */
-	TENANT_COUNT_MAXIMUM(506, "tenant count maximum"),
+	USER_TENANT_NUM_MAXIMUM(506, "tenant number maximum"),
 	
 	/**
-	 * app 添加的租户个数达到最大值
+	 * app 大力上个数最大值
 	 */
-	APP_TENANTS_NUM_MAX(507, "app tenants num max"),
+	APP_TENANT_NUM_MAXIMUM(507, "tenant number maximum"),
 	
 	/**
 	 * 代理公司不存在

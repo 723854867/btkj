@@ -1,9 +1,11 @@
 package org.btkj.user.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
@@ -12,17 +14,22 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.BeanGenerator;
+import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
+import org.btkj.user.api.UserService;
 import org.btkj.user.persistence.Tx;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.util.common.ResultOnlyCallback;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -35,11 +42,15 @@ public class TenantServiceImpl implements TenantService {
 	@Resource
 	private UserMapper userMapper;
 	@Resource
+	private UserService userService;
+	@Resource
 	private ApplyMapper applyMapper;
 	@Resource
 	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
+	@Resource
+	private EmployeeService employeeService;
 	
 	@Override
 	public Tenant getTenantById(int tid) {
@@ -47,23 +58,35 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<?> apply(User user, int employeeId) {
-		Employee employee = employeeMapper.getByKey(employeeId);
-		if (null == employee)
+	public Result<?> apply(User user, int employeeId, String name, String identity) {
+		EmployeeForm employeeForm = employeeService.getById(employeeId);
+		if (null == employeeForm)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		User chief = userMapper.getByKey(employee.getUid());
-		if (chief.getAppId() != user.getAppId())
+		if (employeeForm.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
-		return _doApply(tenantMapper.getByKey(employee.getTid()), user, chief);
+		return _doApply(employeeForm.getTenant(), user, employeeForm.getEmployee(), name, identity);
 	}
 	
-	private Result<?> _doApply(Tenant tenant, User user, User chief) {
+	@Override
+	public Result<?> apply(String mobile, EmployeeForm chief, String name, String identity) {
+		User user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
+		if (null == user) {
+			try {
+				user = userMapper.insert(BeanGenerator.newUser(chief.getApp().getId(), mobile));
+			} catch (DuplicateKeyException e) {			// 如果unique冲突则说明 app-mobile 组合已经存在了，则直接再次获取
+				user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
+			}
+		}
+		return _doApply(chief.getTenant(), user, chief.getEmployee(), name, identity);
+	}
+	
+	private Result<?> _doApply(Tenant tenant, User user, Employee chief, String name, String identity) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
-		if (null != employeeMapper.getByTidAndUid(tenant.getTid(), user.getUid()))
+		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(BeanGenerator.newApply(tenant.getTid(), user.getUid(), chief.getUid()));
+		applyMapper.insert(BeanGenerator.newApply(tenant.getTid(), user.getUid(), chief.getId(), name, identity));
 		return Result.success();
 	}
 	
@@ -80,43 +103,45 @@ public class TenantServiceImpl implements TenantService {
 		if (!agree)				// 拒绝申请直接返回即可
 			return Result.success();
 		
-		Employee chief = employeeMapper.getByTidAndUid(tid, info.getChief());
+		Employee chief = employeeMapper.getByKey(info.getChief());
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
-		tx.tenantJoin(employee);
+		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief, info.getName(), info.getIdentity());
+		employeeMapper.insert(employee);
 		return Result.success();
 	}
 	
 	@Override
-	public Result<Void> tenantAdd(App app, Region region, String tenantName, String pwd, int uid) {
-		User user = userMapper.getByKey(uid);
-		if (null == user)
-			return Result.result(Code.USER_NOT_EXIST);
-		if (user.getAppId() != app.getId())
-			return Result.result(Code.FORBID);
-		String lockId = userMapper.lockUser(uid);
-		if (null == lockId)
-			return Result.result(Code.USER_STATUS_CHANGED);
-		try {
-			// 判断是否超过最大代理公司数
-			int tenantNum = employeeMapper.tenantNum(uid);
-			if (tenantNum >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum())
-				return Result.result(BtkjCode.TENANT_COUNT_MAXIMUM);
-			tx.tenantAdd(app, region, tenantName, pwd, user);
-			return Result.success();
-		} finally {
-			userMapper.releaseUserLock(uid, lockId);
-		}
-	}
-	
-	@Override
-	public Result<Void> tenantAdd(App app, Region region, String tenantName, String name, String mobile, String identity, String pwd) {
+	public Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity) {
+		Result<User> result = userMapper.lockUserByMobile(app.getId(), mobile);
+		if (result.isSuccess()) {									// 指定一个老用户作为新的租户的顶级用户
+			try {
+				if (userService.tenantNumMax(result.attach()))
+					return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
+				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, result.attach(), name, identity);
+				callback.invoke();
+			} finally {
+				userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
+			}
+		} else if (result.getCode() == Code.USER_NOT_EXIST.id()) {	// 指定一个新用户作为租户的顶级用户
+			try {
+				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, mobile, name, identity);
+				callback.invoke();
+			} catch (DuplicateKeyException e) {			// 说明在这里的时候 mobile 用户刚好也注册了，name再次添加一次
+				return tenantAdd(app, region, tname, mobile, name, identity);
+			}
+		} else 
+			return result;
 		return Result.success();
 	}
 	
 	@Override
 	public TenantListInfo tenantListInfo(Client client, App app, User user) {
-		int mainTid = userMapper.mainTenant(user.getUid());
-		return null;
+		List<Employee> employees = employeeMapper.ownedTenants(user);
+		List<Integer> tids = new ArrayList<Integer>(employees.size());
+		for (Employee employee : employees)
+			tids.add(employee.getTid());
+		List<Tenant> own = tenantMapper.getWithinKey(tids);
+		List<Tenant> audit = tenantMapper.getWithinKey(applyMapper.applyListTids(user));
+		return new TenantListInfo(own, employees, audit);
 	}
 }

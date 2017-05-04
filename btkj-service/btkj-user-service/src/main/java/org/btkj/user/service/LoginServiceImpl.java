@@ -2,7 +2,6 @@ package org.btkj.user.service;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -36,19 +35,20 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<?> login(int appId, String mobile) {
-		Result<User> ru = userMapper.lockUserByMobile(appId, mobile);
+	public Result<?> login(App app, String mobile) {
+		Result<User> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		User user = ru.attach();
 		String lockId = ru.getDesc();
 		// 用户不存在则创建用户
 		if (ru.getCode() == Code.USER_NOT_EXIST.id()) {
 			try {
-				user = userMapper.insert(BeanGenerator.newUser(appId, mobile));
+				user = userMapper.insert(BeanGenerator.newUser(app.getId(), mobile));
 				lockId = userMapper.lockUser(user.getUid());
 				if (null == lockId)
 					return Result.result(Code.USER_STATUS_CHANGED);
+				ru.setCode(Code.OK.id());
 			} catch (DuplicateKeyException e) {			// 如果unique冲突则说明 app-mobile 组合已经存在了，则直接再次获取
-				ru = userMapper.lockUserByMobile(appId, mobile);
+				ru = userMapper.lockUserByMobile(app.getId(), mobile);
 				if (!ru.isSuccess())
 					return ru;
 				user = ru.attach();
@@ -65,11 +65,8 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public Result<?> login(int appId, String mobile, String pwd) {
-		App app = appMapper.getByKey(appId);
-		if (null == app)
-			return Result.result(BtkjCode.APP_NOT_EXIST);
-		Result<User> ru = userMapper.lockUserByMobile(appId, mobile);
+	public Result<?> login(App app, String mobile, String pwd) {
+		Result<User> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		if (!ru.isSuccess()) 
 			return ru;
 		User user = ru.attach();

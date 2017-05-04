@@ -13,7 +13,6 @@ import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.persistence.dao.UserDao;
 import org.rapid.data.storage.mapper.ProtostuffDBMapper;
 import org.rapid.data.storage.redis.DistributeLock;
-import org.rapid.util.common.RapidSecurity;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
@@ -26,19 +25,19 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  */
 public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 
-	private static final String USER_LOCK 					= "string:user:{0}:lock"; 			
+	private String USER_LOCK 					= "string:user:{0}:lock"; 			
 
-	private static final String DATA_KEY		 			= "hash:db:user"; 				
-	private static final String MOBILE_USER 				= "hash:app:{0}:mobile:user"; 
-	private static final String TOKEN_USER 					= "hash:{0}:token:user"; 
-	private static final String USER_TOKEN 					= "hash:{0}:user:token"; 
-	private static final String USER_MAIN_TENANT			= "hash:user:main:tenant";		// 用户的默认显示的代理商
+	private String DATA_TEMP_KEY				= "hash:memory:user";				// 存放一些用户的内存数据
+	private String MOBILE_USER 					= "hash:app:{0}:mobile:user"; 
+	private String TOKEN_USER 					= "hash:token:{0}:user"; 
+	private String USER_TOKEN 					= "hash:user:{0}:token"; 
+	private String USER_MAIN_TENANT				= "hash:user:main:tenant";			// 用户的默认显示的代理商
 
 	private AppMapper appMapper;
 	private DistributeLock distributeLock;
 
 	public UserMapper() {
-		super(BtkjTables.USER, DATA_KEY);
+		super(BtkjTables.USER, "hash:db:user");
 	}
 	
 	public List<User> getUsers(List<Integer> uids) { 
@@ -69,8 +68,8 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	public User getUserByMobile(int appId, String mobile) {
 		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, 
 				SerializeUtil.RedisUtil.encode(
-						mobileUserKey(appId),
-						DATA_KEY, mobile));
+						_mobileUserKey(appId),
+						redisKey, mobile));
 		User user = null;
 		if (null == data) {
 			user = dao.selectByMobile(appId, mobile);
@@ -85,8 +84,8 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, 
 				SerializeUtil.RedisUtil.encode(
-						mobileUserKey(appId),
-						DATA_KEY, mobile, USER_LOCK,
+						_mobileUserKey(appId),
+						redisKey, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire()));
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, deserial((byte[]) data));
@@ -109,7 +108,7 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	 * @return
 	 */
 	public String lockUser(int uid) {
-		return distributeLock.tryLock(userLockKey(uid));
+		return distributeLock.tryLock(_userLockKey(uid));
 	}
 
 	/**
@@ -122,8 +121,8 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN_LOCK, 
 				SerializeUtil.RedisUtil.encode(
-						tokenUserKey(client), 
-						DATA_KEY, 
+						_tokenUserKey(client), 
+						redisKey, 
 						token, 
 						USER_LOCK, 
 						lockId, 
@@ -144,7 +143,7 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	 * @param lockId
 	 */
 	public void releaseUserLock(int uid, String lockId) {
-		distributeLock.unLock(userLockKey(uid), lockId);
+		distributeLock.unLock(_userLockKey(uid), lockId);
 	}
 
 	/**
@@ -157,8 +156,8 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	public UserModel getUserByToken(Client client, String token) {
 		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN,
 				SerializeUtil.RedisUtil.encode(
-						tokenUserKey(client), 
-						DATA_KEY, 
+						_tokenUserKey(client), 
+						redisKey, 
 						token));
 		if (null == data)
 			return null;
@@ -167,20 +166,12 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	}
 
 	public String tokenReplace(Client client, int uid, String mobile) {
-		String token = RapidSecurity.encodeToken(mobile);
-		redis.invokeLua(UserLuaCmd.TOKEN_REPLACE, 
-				userTokenKey(client),
-				tokenUserKey(client), 
-				String.valueOf(uid), 
-				token);
-		return token;
+		return redis.tokenReplace(_userTokenKey(client), _tokenUserKey(client), uid);
 	}
 	
 	public Result<TokenRemoveModel> tokenRemove(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		long flag = redis.invokeLua(UserLuaCmd.TOKEN_REMOVE,
-				tokenUserKey(client), userTokenKey(client),
-				token, USER_LOCK, lockId, String.valueOf(Config.getUserLockExpire()));
+		long flag = redis.tokenRemove(_userTokenKey(client), _tokenUserKey(client), token, USER_LOCK, lockId, Config.getUserLockExpire());
 		if (-1 == flag)
 			return Result.result(Code.USER_STATUS_CHANGED);
 		if (-2 == flag)
@@ -189,11 +180,11 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 	}
 	
 	@Override
-	protected void flush(User entity) {
+	public void flush(User entity) {
 		redis.invokeLua(UserLuaCmd.USER_FLUSH,
 					SerializeUtil.RedisUtil.encode(
 						redisKey,
-						mobileUserKey(entity.getAppId()),
+						_mobileUserKey(entity.getAppId()),
 						entity.getMobile(),
 						entity.getUid(),
 						serial(entity)));
@@ -212,19 +203,19 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		this.distributeLock = distributeLock;
 	}
 
-	public static final String userLockKey(int uid) {
+	public String _userLockKey(int uid) {
 		return MessageFormat.format(USER_LOCK, String.valueOf(uid));
 	}
 
-	public static final String userTokenKey(Client client) {
+	public String _userTokenKey(Client client) {
 		return MessageFormat.format(USER_TOKEN, String.valueOf(client.name().toLowerCase()));
 	}
 
-	public static final String tokenUserKey(Client client) {
+	public String _tokenUserKey(Client client) {
 		return MessageFormat.format(TOKEN_USER, String.valueOf(client.name().toLowerCase()));
 	}
 
-	public static final String mobileUserKey(int appId) {
+	public String _mobileUserKey(int appId) {
 		return MessageFormat.format(MOBILE_USER, String.valueOf(appId));
 	}
 }

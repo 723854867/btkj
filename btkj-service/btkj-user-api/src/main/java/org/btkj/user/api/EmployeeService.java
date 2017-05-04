@@ -1,15 +1,13 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.info.tips.EmployeeTips;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
 
 public interface EmployeeService {
 	
-	Employee getByTidAndUid(int tid, int uid);
-
-	Result<EmployeeTips> employeeTips(int employeeId);
+	EmployeeForm getById(int employeeId);
 	
 	/**
 	 * 代理公司获取员工列表

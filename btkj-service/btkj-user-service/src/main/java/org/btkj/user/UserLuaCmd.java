@@ -21,20 +21,6 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	TOKEN_REPLACE {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	}, 
-	
-	TOKEN_REMOVE {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
 	USER_FLUSH {
 		@Override
 		public int keyNum() {
@@ -66,66 +52,10 @@ public enum UserLuaCmd implements ILuaCmd {
 		}
 	},
 	
-	EMPLOYEE_FLUSH {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
-	EMPLOYEE_LIST_FLUSH {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
 	EMPLOYEE_LOAD_BY_TID_UID {
 		@Override
 		public int keyNum() {
 			return 2;
-		}
-	},
-	
-	NON_AUTO_INSURANCE_LIST_FLUSH {
-		@Override
-		public int keyNum() {
-			return 3;
-		}
-	},
-	
-	NON_AUTO_INSURANCE_LIST {
-		@Override
-		public int keyNum() {
-			return 3;
-		}
-	},
-	
-	EMPLOYEE_LIST {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
-	BANNER_FLUSH {
-		@Override
-		public int keyNum() {
-			return 2;
-		}
-	},
-	
-	BANNER_LIST_FLUSH {
-		@Override
-		public int keyNum() {
-			return 3;
-		}
-	},
-	
-	BANNER_LIST_LOAD {
-		@Override
-		public int keyNum() {
-			return 3;
 		}
 	},
 	

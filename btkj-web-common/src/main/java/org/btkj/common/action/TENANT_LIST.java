@@ -23,6 +23,11 @@ public class TENANT_LIST extends UserAction {
 
 	@Override
 	protected Result<TenantListInfo> execute(Request request, App app, Client client, User user) {
-		return null;
+		return Result.result(tenantService.tenantListInfo(client, app, user));
+	}
+	
+	@Override
+	protected Client client(Request request) {
+		return Client.APP;
 	}
 }
