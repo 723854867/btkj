@@ -45,7 +45,7 @@ public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
 		int index = 0;
 		for (Object uid : uids)
 			fields[index++] = SerializeUtil.RedisUtil.encode(uid);
-		List<byte[]> datas = redis.hmget(SerializeUtil.RedisUtil.encode(DATA_KEY), fields);
+		List<byte[]> datas = redis.hmget(SerializeUtil.RedisUtil.encode(redisKey), fields);
 		List<User> users = new ArrayList<User>();
 		if (null == datas){
 		User user = dao.selectByKey(uids.get(0));

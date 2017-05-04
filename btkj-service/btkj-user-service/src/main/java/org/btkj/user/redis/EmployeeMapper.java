@@ -2,12 +2,9 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Set;
-=======
-
->>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 import javax.annotation.Resource;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
@@ -63,7 +60,6 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 		int count = pageSize;
 		List<Employee> employees = dao.selectByTid(tid, start, count);
 		for (Employee employee : employees) {
-<<<<<<< HEAD
 			Set<Integer> set = new HashSet<Integer>();
 			set.add(employee.getUid());
 			set.add(employee.getParentId());
@@ -72,13 +68,6 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 			EmployeeTips tips = new EmployeeTips(employee, users.get(0));
 			if (null != users.get(1))
 			tips.setParentName(users.get(1).getName());
-=======
-			User user = userMapper.getByKey(employee.getUid());
-			EmployeeTips tips = new EmployeeTips(employee, user);
-			User parentUser = userMapper.getByKey(employee.getParentId());
-			if (null != parentUser)
-			tips.setParent_name(employee.getName());
->>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 			tipsList.add(tips);
 		}
 			return Result.result(new Pager<EmployeeTips>(total, tipsList));

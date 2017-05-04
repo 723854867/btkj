@@ -4,6 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <dependent-module archiveName="rapid-data-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rapid-data/rapid-data">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -20,6 +21,9 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="btkj-user-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-user-api/btkj-user-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="btkj-master-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-master-api/btkj-master-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="rapid-util-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rapid-util/rapid-util">
