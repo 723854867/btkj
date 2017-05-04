@@ -67,7 +67,7 @@ public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, Employ
 			List<User> users = userMapper.getUsers(uids);
 			EmployeeTips tips = new EmployeeTips(employee, users.get(0));
 			if (null != users.get(1))
-			tips.setParentName(users.get(1).getName());
+			tips.setParentName(null);
 			tipsList.add(tips);
 		}
 			return Result.result(new Pager<EmployeeTips>(total, tipsList));
