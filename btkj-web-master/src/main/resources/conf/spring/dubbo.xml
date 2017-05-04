@@ -9,6 +9,8 @@
 	
 	<dubbo:registry address="${dubbo.registry.address}"/>
 	
+	<dubbo:reference id="cloudService" interface="org.btkj.master.api.CloudService" />
+	
 	<dubbo:reference id="appService" interface="org.btkj.user.api.AppService" />
 	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
 	<dubbo:reference id="tenantService" interface="org.btkj.user.api.TenantService" />

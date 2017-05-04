@@ -2,10 +2,9 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.UserLuaCmd;
@@ -79,11 +78,11 @@ public class ApplyMapper extends ProtostuffMemoryMapper<String, ApplyInfo> {
 	 * @param uid
 	 * @return
 	 */
-	public Set<Integer> applyListTids(int uid) {
+	public List<Integer> applyListTids(User user) {
 		List<byte[]> list = redis.hmgetByZsetKeys(
-				SerializeUtil.RedisUtil.encode(userApplyListKey(uid)), 
+				SerializeUtil.RedisUtil.encode(userApplyListKey(user.getUid())), 
 				SerializeUtil.RedisUtil.encode(DATA_KEY), 0, -1);
-		Set<Integer> set = new HashSet<Integer>();
+		List<Integer> set = new ArrayList<Integer>();
 		for (byte[] buffer : list) 
 			set.add(deserial(buffer).getTid());
 		return set;

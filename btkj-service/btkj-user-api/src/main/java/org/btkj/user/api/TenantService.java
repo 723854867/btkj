@@ -7,6 +7,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
 
@@ -25,9 +26,22 @@ public interface TenantService {
 	 * 
 	 * @param token
 	 * @param employeeId
+	 * @param name
+	 * @param identity
 	 * @return
 	 */
-	Result<?> apply(User user, int employeeId);
+	Result<?> apply(User user, int employeeId, String name, String identity);
+	
+	/**
+	 * 申请加入代理公司
+	 * 
+	 * @param mobile
+	 * @param employeeId
+	 * @param name
+	 * @param identity
+	 * @return
+	 */
+	Result<?> apply(String mobile, EmployeeForm chief, String name, String identity);
 
 	/**
 	 * 代理公司获取审核列表
@@ -47,28 +61,15 @@ public interface TenantService {
 	/**
 	 * 添加代理公司
 	 * 
-	 * @param app
-	 * @param region 代理公司地区
-	 * @param tenantName 代理公司租户名字
-	 * @param pwd 密码
-	 * @param uid 管理员用户ID
-	 * @return
-	 */
-	Result<Void> tenantAdd(App app, Region region, String tenantName, String pwd, int uid);
-
-	/**
-	 * 添加代理公司
-	 * 
 	 * @param app 如果是为多租户app添加代理公司则需要该参数
 	 * @param region 代理公司地区
-	 * @param tenantName 代理公司租户名字
+	 * @param tname 代理公司租户名字
 	 * @param name root 账号名字
 	 * @param mobile root 账号手机名字
 	 * @param identity root 账号身份证
-	 * @param pwd 默认所有用户的 pc 和管理后台登录密码
 	 * @return
 	 */
-	Result<Void> tenantAdd(App app, Region region, String tenantName, String name, String mobile, String identity, String pwd);
+	Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity);
 	
 	/**
 	 * 代理公司列表

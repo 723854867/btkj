@@ -9,8 +9,6 @@ public class User implements UniqueModel<Integer> {
 	private int uid;
 	private int appId;
 	private String mobile;
-	private String identity;
-	private String name;
 	private String pwd;
 	private String avatar;
 	private int appLoginTime;			
@@ -25,7 +23,7 @@ public class User implements UniqueModel<Integer> {
 	public void setUid(int uid) {
 		this.uid = uid;
 	}
-
+	
 	public int getAppId() {
 		return appId;
 	}
@@ -40,22 +38,6 @@ public class User implements UniqueModel<Integer> {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-	
-	public String getIdentity() {
-		return identity;
-	}
-	
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public String getPwd() {

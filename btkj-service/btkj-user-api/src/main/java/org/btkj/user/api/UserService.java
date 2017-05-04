@@ -27,7 +27,7 @@ public interface UserService {
 	 * @param appId
 	 * @return
 	 */
-	Result<UserModel> getUser(String mobile, int appId);
+	User getUser(String mobile, int appId);
 	
 	/**
 	 * 通过 token 获取用户
@@ -79,4 +79,12 @@ public interface UserService {
 	 * @return
 	 */
 	Result<?> pwdReset(int appId, String mobile, String pwd);
+	
+	/**
+	 * 判断用户代理公司数是否达到最大值
+	 * 
+	 * @param user
+	 * @return
+	 */
+	boolean tenantNumMax(User user);
 }

@@ -4,10 +4,10 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
@@ -29,19 +29,15 @@ public abstract class TenantAction extends UserAction {
 	
 	@Override
 	protected Result<?> execute(Request request, App app, Client client, User user) {
-		int tid = request.getParam(Params.TID);
-		Tenant tenant = tenantService.getTenantById(tid);
-		if (null == tenant)
-			return Result.result(BtkjCode.TENANT_NOT_EXIST);
-		if (tenant.getAppId() != app.getId() || !checkEmployee(tenant, user))
+		int employeeId = request.getParam(Params.EMPLOYEE_ID);
+		EmployeeForm employeeForm = employeeService.getById(employeeId);
+		if (null == employeeForm)
+			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+		Tenant tenant = employeeForm.getTenant();
+		if (employeeForm.getUser().getUid() != user.getUid())
 			return Result.result(Code.FORBID);
 		return execute(request, client, app, tenant, user);
 	}
 	
 	protected abstract Result<?> execute(Request request, Client client, App app, Tenant tenant, User user);
-	
-	protected boolean checkEmployee(Tenant tenant, User user) {
-		Employee employee = employeeService.getByTidAndUid(tenant.getTid(), user.getUid());
-		return null != employee;
-	}
 }

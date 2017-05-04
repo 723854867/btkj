@@ -22,4 +22,13 @@ public class ParamsUtil {
 		verifier.setCaptcha(captcha);
 		return verifier;
 	}
+	
+	public static final CaptchaVerifier captchaVerifier(Request request, String mobile, int appId) {
+		String captcha = request.getParam(Params.CAPTCHA);
+		CaptchaVerifier verifier = new CaptchaVerifier();
+		verifier.setAppId(appId);
+		verifier.setIdentity(mobile);
+		verifier.setCaptcha(captcha);
+		return verifier;
+	}
 }

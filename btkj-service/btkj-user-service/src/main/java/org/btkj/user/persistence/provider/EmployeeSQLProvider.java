@@ -11,6 +11,8 @@ public class EmployeeSQLProvider {
 				INSERT_INTO(BtkjTables.EMPLOYEE.name());
 				VALUES("uid", "#{uid}");
 				VALUES("tid", "#{tid}");
+				VALUES("name", "#{name}");
+				VALUES("identity", "#{identity}");
 				VALUES("parent_id", "#{parentId}");
 				VALUES("`mod`", "#{mod}");
 				VALUES("`left`", "#{left}");

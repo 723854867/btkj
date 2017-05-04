@@ -57,11 +57,6 @@
 		<property name="dao" ref="bannerDao" />
 	</bean>
 	
-	<bean id="communityMapper" class="org.btkj.user.redis.CommunityMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="communityDao" />
-	</bean>
-	
 	<bean id="nonAutoInsuranceMapper" class="org.btkj.user.redis.NonAutoInsuranceMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="nonAutoInsuranceDao" />

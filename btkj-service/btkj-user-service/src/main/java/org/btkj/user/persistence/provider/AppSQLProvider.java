@@ -13,6 +13,7 @@ public class AppSQLProvider {
 				VALUES("region", "#{region}");
 				VALUES("`mod`", "#{mod}");
 				VALUES("max_tenants_count", "#{maxTenantsCount}");
+				VALUES("tenant_add_autonomy", "#{tenantAddAutonomy}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -24,8 +25,6 @@ public class AppSQLProvider {
 			{
 				UPDATE(BtkjTables.APP.name());
 				SET("`name`=#{name}");
-				SET("region=#{region}");
-				SET("max_tenants_count=#{maxTenantsCount}");
 				SET("created=#{created}");
 				SET("updated=#{updated}");
 				WHERE("id=#{id}");
@@ -50,5 +49,9 @@ public class AppSQLProvider {
 				WHERE("id=#{key}");
 			}
 		}.toString();
+	}
+	
+	public String selectByKeyForUpdate() {
+		return "select * from app where id=#{id} for update";
 	}
 }

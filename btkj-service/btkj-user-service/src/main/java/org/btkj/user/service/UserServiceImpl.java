@@ -2,14 +2,14 @@ package org.btkj.user.service;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.App;
+import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
 import org.btkj.user.redis.AppMapper;
+import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
@@ -27,6 +27,8 @@ public class UserServiceImpl implements UserService {
 	@Resource
 	private UserMapper userMapper;
 	@Resource
+	private ApplyMapper applyMapper;
+	@Resource
 	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
@@ -37,14 +39,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<UserModel> getUser(String mobile, int appId) {
-		App app = appMapper.getByKey(appId);
-		if (null == app)
-			return Result.result(BtkjCode.APP_NOT_EXIST);
-		User user = userMapper.getUserByMobile(appId, mobile);
-		if (null == user)
-			return Result.result(Code.USER_NOT_EXIST);
-		return Result.result(new UserModel(app, user));
+	public User getUser(String mobile, int appId) {
+		return userMapper.getUserByMobile(appId, mobile);
 	}
 	
 	@Override
@@ -92,5 +88,11 @@ public class UserServiceImpl implements UserService {
 		} finally {
 			userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
 		}
+	}
+	
+	@Override
+	public boolean tenantNumMax(User user) {
+		int limit = employeeMapper.ownedTenants(user).size() + applyMapper.applyListTids(user).size();
+		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
 	}
 }
