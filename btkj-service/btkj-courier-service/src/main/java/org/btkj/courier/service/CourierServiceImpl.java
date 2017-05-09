@@ -3,7 +3,7 @@ package org.btkj.courier.service;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
-import org.btkj.courier.redis.RedisService;
+import org.btkj.courier.redis.CourierRedisService;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.rapid.util.common.message.Result;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CourierServiceImpl implements CourierService {
 	
 	@Resource
-	private RedisService redisService;
+	private CourierRedisService redisService;
 
 	@Override
 	public Result<String> captchaObtain(CaptchaReceiver receiver) {
@@ -25,7 +25,7 @@ public class CourierServiceImpl implements CourierService {
 		return redisService.captchaVerifier(verifier);
 	}
 	
-	public void setRedisService(RedisService redisService) {
+	public void setRedisService(CourierRedisService redisService) {
 		this.redisService = redisService;
 	}
 }

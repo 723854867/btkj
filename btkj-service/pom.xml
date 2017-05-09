@@ -34,5 +34,11 @@
     <module>btkj-master-api</module>
     <module>btkj-master-deploy</module>
     <module>btkj-master-service</module>
+    <module>btkj-vehicle-api</module>
+    <module>btkj-vehicle-deploy</module>
+    <module>btkj-vehicle-service</module>
+    <module>btkj-nonauto-api</module>
+    <module>btkj-nonauto-deploy</module>
+    <module>btkj-nonauto-service</module>
   </modules>
 </project>

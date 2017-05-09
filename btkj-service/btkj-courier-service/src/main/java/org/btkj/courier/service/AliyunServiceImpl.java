@@ -43,19 +43,15 @@ public class AliyunServiceImpl implements AliyunService {
 	@Resource
 	private AliyunConfig aliyunConfig;
 	
-	private Statement ossFullAccess;
 	private String ossAccess = "acs:oss:*:*:";
-	private String[] sharedResouce;
+	private Statement bucketReadOnly = null;
 	
 	@PostConstruct
 	private void init() {
-		this.ossFullAccess = new Statement(Effect.Allow);
-		this.ossFullAccess.setAction(Action.OSS_FULL_ACCESS);
-		this.sharedResouce = new String[]{
-					ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common", 
-					ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common/*"
-				};
-		this.ossFullAccess.setResource(sharedResouce);
+		bucketReadOnly = new Statement();
+		bucketReadOnly.setEffect(Effect.Allow);
+		bucketReadOnly.setAction(Action.OSS_READ_ONLY_ACCESS);
+		bucketReadOnly.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/*");
 	}
 
 	@Override
@@ -90,8 +86,8 @@ public class AliyunServiceImpl implements AliyunService {
 	
 	private StsInfo _doAssumeRole(User user) {
 		Policy policy = new Policy();
-		policy.addStatement(ossFullAccess);
-		policy.addStatement(_ossReadOnlyAccess(user));
+		policy.addStatement(bucketReadOnly);
+		policy.addStatement(_ossFullAccess(user));
 		AssumeRoleResponse response;
 		try {
 			response = stsService.assumeRole(
@@ -106,16 +102,11 @@ public class AliyunServiceImpl implements AliyunService {
 		return stsInfo;
 	}
 	
-	private Statement _ossReadOnlyAccess(User user) {
+	private Statement _ossFullAccess(User user) {
 		Statement statement = new Statement(Effect.Allow);
-		statement.setAction(Action.OSS_READ_ONLY_ACCESS);
-		statement.setResource(_getUserResource(user));
+		statement.setAction(Action.OSS_FULL_ACCESS);
+		statement.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/user/" + user.getUid() + "/*");
 		return statement;
-	}
-	
-	private String[] _getUserResource(User user) { 
-		String path = ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/common/app/" + user.getAppId() + "/user/" + user.getUid();
-		return new String[]{path, path + "/*"};
 	}
 	
 	private StsInfo _wrap(AssumeRoleResponse response) {

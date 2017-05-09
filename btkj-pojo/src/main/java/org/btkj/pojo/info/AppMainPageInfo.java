@@ -76,9 +76,11 @@ public class AppMainPageInfo implements IMainPageInfo {
 		private List<NonAutoInsuranceInfo> nonAutoInsurances;						// 非车险信息
 		public MainTenantInfo() {}
 		public MainTenantInfo(Tenant tenant, List<Banner> banners, List<NonAutoInsurance> insurances) {
-			this.tid = tenant.getTid();
-			this.tname = tenant.getName();
-			this.regionId = tenant.getRegion();
+			if (null != tenant) {
+				this.tid = tenant.getTid();
+				this.tname = tenant.getName();
+				this.regionId = tenant.getRegion();
+			}
 			if (null != banners && !banners.isEmpty()) {
 				this.banners = new ArrayList<BannerInfo>(banners.size());
 				for (Banner banner : banners)

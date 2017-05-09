@@ -2,6 +2,7 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.Resource;
 import org.btkj.pojo.BtkjTables;
