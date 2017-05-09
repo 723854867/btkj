@@ -17,16 +17,9 @@ public class EmployeeTips implements Serializable {
 	private String name;
 	private int regionId;
 	private String regionName;
-<<<<<<< HEAD
 	private int parentId;				//邀请人id
 	private String parentName;			//邀请人姓名
-=======
 	private String tname;
-	private int app_id;
-	private int parent_id;				//邀请人id
-	private int invitation_code;		//邀请码
-	private String parent_name;			//邀请人姓名
->>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 	private String mobile;				//电话（账号）
 	private String identity;
 	private int created;				//注册时间
@@ -47,19 +40,12 @@ public class EmployeeTips implements Serializable {
 	public EmployeeTips(Employee employee, User user) {
 		this.id = employee.getId();
 		this.tid = employee.getTid();
-<<<<<<< HEAD
-		this.uid  = user.getUid();
-		this.name = user.getName();
+		this.uid  = employee.getUid();
 		this.parentId = employee.getParentId();
-=======
-		this.uid = user.getUid();
 		this.name = employee.getName();
-		this.app_id = user.getAppId();
-		this.parent_id = employee.getParentId();
->>>>>>> 67bce38fdc1602ee9e38fa10afaa716bd4a3b3de
 		this.mobile = user.getMobile();
 		this.identity = employee.getIdentity();
-		this.created = user.getCreated();
+		this.created = employee.getCreated();
 		this.mod = employee.getMod();
 	}
 	
