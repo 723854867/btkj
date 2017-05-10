@@ -35,6 +35,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
+//	public Result employeeDisable(int id) {
+////		return employeeMapper.UpdateState(id);
+//	}
+	
+	@Override
 	public EmployeeForm getById(int employeeId) {
 		Employee employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)

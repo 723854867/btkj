@@ -14,6 +14,8 @@ import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
 
+import com.mysql.cj.api.x.UpdateStatement;
+
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
  * 
@@ -39,6 +41,13 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	}
 	
 	/**
+	 * 禁用员工
+	 */
+	public void UpdateState(int id){
+		
+	}
+	
+	/**
 	 * 分页获取员工信息
 	 * 
 	 * @param pager
@@ -56,7 +65,7 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 			pageSize = 10;
 		int start = (page - 1) * pageSize;
 		int count = pageSize;
-		String byId = "6";
+		String byId = null;
 		if(null == byId)
 			byId = "1=1"; 
 		else byId = "'id'="+byId;

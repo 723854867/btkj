@@ -15,4 +15,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Result<Pager<EmoloyeeInfo>> employeeList(int tid, int page, int pageSize);
+	
+	/**
+	 * 禁用雇员
+	 * 
+	 * @return
+	 */
+	Result employeeDisable(int id);
 }
