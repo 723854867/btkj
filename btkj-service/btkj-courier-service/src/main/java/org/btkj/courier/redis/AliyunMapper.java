@@ -1,11 +1,11 @@
 package org.btkj.courier.redis;
 
 import org.btkj.pojo.info.StsInfo;
-import org.rapid.data.storage.mapper.JsonMemoryMapper;
+import org.rapid.data.storage.mapper.RedisJsonMemoryMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AliyunMapper extends JsonMemoryMapper<String, StsInfo> {
+public class AliyunMapper extends RedisJsonMemoryMapper<String, StsInfo> {
 	
 	public AliyunMapper() {
 		super("hash:memory:stsinfo");

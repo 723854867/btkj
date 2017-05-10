@@ -9,9 +9,9 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.BannerDao;
-import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
-public class BannerMapper extends ProtostuffDBMapper<Integer, Banner, BannerDao> {
+public class BannerMapper extends RedisProtostuffDBMapper<Integer, Banner, BannerDao> {
 	
 	private String LIST							= "set:banner:list:{0}:{1}";	// 租户 banner 列表
 	private String LIST_CONTROLLER				= "banner：controller:{0}：{1}";

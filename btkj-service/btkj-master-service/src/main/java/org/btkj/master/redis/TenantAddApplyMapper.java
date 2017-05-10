@@ -4,10 +4,10 @@ import java.text.MessageFormat;
 
 import org.btkj.master.MasterLuaCmd;
 import org.btkj.pojo.model.TenantAddApply;
-import org.rapid.data.storage.mapper.ProtostuffMemoryMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffMemoryMapper;
 import org.rapid.util.common.serializer.SerializeUtil;
 
-public class TenantAddApplyMapper extends ProtostuffMemoryMapper<String, TenantAddApply> {
+public class TenantAddApplyMapper extends RedisProtostuffMemoryMapper<String, TenantAddApply> {
 	
 	private String PLATFORM_SET					= "zset:tenant:add:apply:platform";			 // 全平台的所有已提交的申请
 	private String APP_COMMITTED_SET			= "zset:tenant:add:apply:app:{0}:committed"; // app 的所有已提交的申请

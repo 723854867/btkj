@@ -28,5 +28,5 @@ public abstract class AdministratorAction implements Action {
 		return execute(request, administrator);
 	}
 	
-	protected abstract Result<?> execute(Request request, Administrator administrator);
+	protected abstract Result<?> execute(Request request, Administrator operator);
 }

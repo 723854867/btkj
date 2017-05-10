@@ -4,10 +4,10 @@ import org.btkj.master.MasterLuaCmd;
 import org.btkj.master.persistence.dao.AdministratorDao;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Administrator;
-import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.serializer.SerializeUtil;
 
-public class AdministratorMapper extends ProtostuffDBMapper<Integer, Administrator, AdministratorDao> {
+public class AdministratorMapper extends RedisProtostuffDBMapper<Integer, Administrator, AdministratorDao> {
 	
 	private String ADMINISTRATOR_TOKEN		= "hash:administrator:token";
 	private String TOKEN_ADMINISTRATOR		= "hash:token:administrator"; 

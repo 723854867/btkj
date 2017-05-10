@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Version;
 import org.rapid.util.common.Validator;
@@ -153,4 +154,14 @@ public interface Params {
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
+	
+	/**
+	 * 泛指名字
+	 */
+	final Str2ObjConstConverter<NonAutoCategory> NON_AUTO_CATEGORY			= new Str2ObjConstConverter<NonAutoCategory>(1200, "nonAutoCategory") {
+		@Override
+		public NonAutoCategory convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoCategory.class);
+		}
+	};
 }
