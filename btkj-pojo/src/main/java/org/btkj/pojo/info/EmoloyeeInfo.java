@@ -2,6 +2,9 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.User;
+
 /**
  * 员工信息
  * 
@@ -11,35 +14,42 @@ import java.io.Serializable;
 public class EmoloyeeInfo implements Serializable {
 	private static final long serialVersionUID = -2999062720198009694L;
 	
+	private int id;						//邀请码(员工工号)
 	private int uid;
-	private int app_id;
-	private String name;
 	private int tid;
-	private int parent_id;				//邀请人id
-	private int invitation_code;		//邀请码
-	private String parent_name;			//邀请人姓名
+	private String name;
+	private int parentId;				//邀请人id
+	private String parentName;			//邀请人姓名
 	private String mobile;				//电话（账号）
-	private String identity;
 	private int created;				//注册时间
-	private int mod;					//状态模值
+	private int payType;				//支付方式
+	private int state;					//状态
 	
+	public EmoloyeeInfo(){};
+	
+	public EmoloyeeInfo(Employee employee, User user){
+		this.id = employee.getId();
+		this.tid = employee.getTid();
+		this.uid  = employee.getUid();
+		this.parentId = employee.getParentId();
+		this.name = employee.getName();
+		this.mobile = user.getMobile();
+		this.created = employee.getCreated();
+		this.payType = employee.getPayType();
+		this.state=employee.getState();
+	};
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getUid() {
 		return uid;
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
-	}
-	public int getApp_id() {
-		return app_id;
-	}
-	public void setApp_id(int app_id) {
-		this.app_id = app_id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	public int getTid() {
 		return tid;
@@ -47,23 +57,23 @@ public class EmoloyeeInfo implements Serializable {
 	public void setTid(int tid) {
 		this.tid = tid;
 	}
-	public int getParent_id() {
-		return parent_id;
+	public String getName() {
+		return name;
 	}
-	public void setParent_id(int parent_id) {
-		this.parent_id = parent_id;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public int getInvitation_code() {
-		return invitation_code;
+	public int getParentId() {
+		return parentId;
 	}
-	public void setInvitation_code(int invitation_code) {
-		this.invitation_code = invitation_code;
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
-	public String getParent_name() {
-		return parent_name;
+	public String getParentName() {
+		return parentName;
 	}
-	public void setParent_name(String parent_name) {
-		this.parent_name = parent_name;
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 	public String getMobile() {
 		return mobile;
@@ -71,24 +81,25 @@ public class EmoloyeeInfo implements Serializable {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getIdentity() {
-		return identity;
-	}
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
 	public int getCreated() {
 		return created;
 	}
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	public int getMod() {
-		return mod;
+	public int getPayType() {
+		return payType;
 	}
-	public void setMod(int mod) {
-		this.mod = mod;
+	public void setPayType(int payType) {
+		this.payType = payType;
 	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	
 	
 	
 }

@@ -22,6 +22,8 @@ public class Employee implements UniqueModel<Integer> {
 	private int level;
 	private int created;
 	private int updated;
+	private int payType;
+	private int state;
 
 	public int getId() {
 		return id;
@@ -117,6 +119,22 @@ public class Employee implements UniqueModel<Integer> {
 	
 	public void setUpdated(int updated) {
 		this.updated = updated;
+	}
+	
+	public int getPayType() {
+		return payType;
+	}
+
+	public void setPayType(int payType) {
+		this.payType = payType;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	@Override

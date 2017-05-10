@@ -1,6 +1,6 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.info.tips.EmployeeTips;
+import org.btkj.pojo.info.EmoloyeeInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
@@ -14,5 +14,5 @@ public interface EmployeeService {
 	 * 
 	 * @return
 	 */
-	Result<Pager<EmployeeTips>> employeeList(int tid, int page, int pageSize);
+	Result<Pager<EmoloyeeInfo>> employeeList(int tid, int page, int pageSize);
 }

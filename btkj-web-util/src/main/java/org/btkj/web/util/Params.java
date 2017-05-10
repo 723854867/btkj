@@ -153,4 +153,5 @@ public interface Params {
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
+	final Str2StrConstConverter EMPLOYEE_LIST_JSON		= new Str2StrConstConverter(1102, "employeeListJson");
 }

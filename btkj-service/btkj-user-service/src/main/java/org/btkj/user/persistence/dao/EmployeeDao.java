@@ -36,7 +36,7 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	int countByTid(int tid);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTid")
-	List<Employee> selectByTid(@Param("tid") int tid, @Param("start") int start, @Param("count") int count);
+	List<Employee> selectByTid(@Param("tid") int tid, @Param("start") int start, @Param("count") int count, @Param("byId") String byId, @Param("byName") String byName, @Param("byMobile") String byMobile, @Param("byPayType") String byPayType, @Param("byState") String byState);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
