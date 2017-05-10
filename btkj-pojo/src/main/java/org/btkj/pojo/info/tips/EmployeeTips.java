@@ -40,13 +40,12 @@ public class EmployeeTips implements Serializable {
 	public EmployeeTips(Employee employee, User user) {
 		this.id = employee.getId();
 		this.tid = employee.getTid();
-		this.uid  = user.getUid();
+		this.uid  = employee.getUid();
 		this.parentId = employee.getParentId();
-		this.uid = user.getUid();
 		this.name = employee.getName();
 		this.mobile = user.getMobile();
 		this.identity = employee.getIdentity();
-		this.created = user.getCreated();
+		this.created = employee.getCreated();
 		this.mod = employee.getMod();
 	}
 	

@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.Resource;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
@@ -60,14 +59,11 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 		int count = pageSize;
 		List<Employee> employees = dao.selectByTid(tid, start, count);
 		for (Employee employee : employees) {
-			Set<Integer> set = new HashSet<Integer>();
-			set.add(employee.getUid());
-			set.add(employee.getParentId());
-			List<Integer> uids = new ArrayList<Integer>(set);
-			List<User> users = userMapper.getUsers(uids);
-			EmployeeTips tips = new EmployeeTips(employee, users.get(0));
-			if (null != users.get(1))
-			tips.setParentName(null);
+			User user = userMapper.getByKey(employee.getUid());
+			EmployeeTips tips = new EmployeeTips(employee, user);
+			Employee employeeParent = dao.selectByTidAndUid(employee.getTid(), employee.getParentId());
+			if(null != employeeParent)
+			tips.setParentName(employeeParent.getName());
 			tipsList.add(tips);
 		}
 			return Result.result(new Pager<EmployeeTips>(total, tipsList));
