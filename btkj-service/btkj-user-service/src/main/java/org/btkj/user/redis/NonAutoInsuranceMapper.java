@@ -8,9 +8,9 @@ import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.NonAutoInsurance;
 import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.NonAutoInsuranceDao;
-import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
-public class NonAutoInsuranceMapper extends ProtostuffDBMapper<Integer, NonAutoInsurance, NonAutoInsuranceDao> {
+public class NonAutoInsuranceMapper extends RedisProtostuffDBMapper<Integer, NonAutoInsurance, NonAutoInsuranceDao> {
 	
 	private static final String LIST					= "set:non_auto_insurance:list:{0}:{1}";			// 租户非车险列表
 	private static final String LIST_CONTROLLER			= "non_auth_insurance:{0}:{1}";

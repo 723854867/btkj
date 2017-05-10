@@ -11,7 +11,7 @@ import org.btkj.pojo.info.EmoloyeeInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.EmployeeDao;
-import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -19,7 +19,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class EmployeeMapper extends ProtostuffDBMapper<Integer, Employee, EmployeeDao> {
+public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, EmployeeDao> {
 	
 	private String LIST							= "set:employee:list:{0}";	// 用户 employee 列表：主要是用来记录有多少个代理公司
 	private String LIST_CONTROLLER				= "employee：controller:{0}";

@@ -25,6 +25,9 @@
         <dependent-module archiveName="btkj-master-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-master-api/btkj-master-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="btkj-nonauto-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-nonauto-api/btkj-nonauto-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="rapid-util-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rapid-util/rapid-util">
             <dependency-type>uses</dependency-type>
         </dependent-module>

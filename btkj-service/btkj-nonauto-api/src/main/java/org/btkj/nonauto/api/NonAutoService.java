@@ -14,5 +14,5 @@ public interface NonAutoService {
 	 * 
 	 * @param category
 	 */
-	void addNonAutoCategory(NonAutoCategory category);
+	void edit(NonAutoCategory category);
 }

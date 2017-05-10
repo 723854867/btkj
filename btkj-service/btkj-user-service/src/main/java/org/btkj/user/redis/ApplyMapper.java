@@ -8,7 +8,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.UserLuaCmd;
-import org.rapid.data.storage.mapper.ProtostuffMemoryMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffMemoryMapper;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ApplyMapper extends ProtostuffMemoryMapper<String, ApplyInfo> {
+public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> {
 	
 	private static final String DATA_KEY				= "hash:memory:apply";				// 每个 租户的所有申请信息
 	private static final String USER_APPLY_LIST			= "set:user:{0}:apply:list";		// 用户的申请列表

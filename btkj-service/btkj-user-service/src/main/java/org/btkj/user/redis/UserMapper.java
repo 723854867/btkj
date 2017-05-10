@@ -9,7 +9,7 @@ import org.btkj.user.Config;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.persistence.dao.UserDao;
-import org.rapid.data.storage.mapper.ProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -21,7 +21,7 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  * 对应关系 hash:{0}:token:user - 用户 id 和用户 token 对应关系 hash:{0}:user:token - 用户
  * token 和用户 id 对应关系
  */
-public class UserMapper extends ProtostuffDBMapper<Integer, User, UserDao> {
+public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> {
 
 	private String USER_LOCK 					= "string:user:{0}:lock"; 			
 
