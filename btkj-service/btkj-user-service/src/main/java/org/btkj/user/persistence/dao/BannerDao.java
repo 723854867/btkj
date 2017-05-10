@@ -9,7 +9,7 @@ import org.btkj.user.persistence.provider.BannerSQLProvider;
 import org.rapid.data.storage.db.Dao;
 
 public interface BannerDao extends Dao<Integer, Banner> {
-
+	
 	/**
 	 * 通过 appId 和  tid 获取 banner
 	 * 

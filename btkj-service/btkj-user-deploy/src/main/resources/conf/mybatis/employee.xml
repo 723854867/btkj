@@ -1,0 +1,28 @@
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.btkj.user.persistence.dao.EmployeeDao">
+
+	<resultMap type="org.btkj.pojo.entity.Employee" id="employee">
+		<id column="id" property="id"/>
+		<result column="uid" property="uid"/>
+		<result column="tid" property="tid"/>
+		<result column="name" property="name"/>
+		<result column="identity" property="identity"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="mod" property="mod"/>
+		<result column="left" property="left"/>
+		<result column="right" property="right"/>
+		<result column="level" property="level"/>
+		<result column="created" property="created"/>
+		<result column="updated" property="updated"/>
+		<result column="pay_type" property="payType"/>
+		<result column="state" property="state"/>
+	</resultMap>
+
+	<!-- 
+	<select id="selectByKey" resultMap="employee">
+		SELECT * FROM employee WHERE id=#{id}
+	</select> -->
+
+</mapper>
