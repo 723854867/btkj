@@ -66,7 +66,9 @@ public class EmployeeSQLProvider {
 	}
 	
 	public String selectByTid() {
-		return "select * from employee where `tid`=#{tid} and #{byId} and #{byName} and #{byMobile} and #{byPayType} and #{byState} order by created desc limit #{start}, #{count}";
+		String string= "select * from employee where `tid`=#{tid} and #{byId} and #{byName} and #{byMobile} and #{byPayType} and #{byState} order by created desc limit #{start}, #{count}";
+		System.out.println(string);
+		return string;
 	}
 
 	

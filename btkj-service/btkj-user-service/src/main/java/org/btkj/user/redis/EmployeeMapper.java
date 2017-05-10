@@ -56,14 +56,14 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 			pageSize = 10;
 		int start = (page - 1) * pageSize;
 		int count = pageSize;
-		String byId = null;
+		String byId = "6";
 		if(null == byId)
 			byId = "1=1"; 
-		else byId = "'id'=byId";
-		String byName = "孙杰";
+		else byId = "'id'="+byId;
+		String byName = null;
 		if(null == byName)
 			byName = "1=1"; 
-		else byName = "'name'=byName";
+		else byName = "name="+byName;
 		String byMobile = null;
 		if(null == byMobile)
 			byMobile = "1=1"; 
