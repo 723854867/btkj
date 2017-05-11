@@ -7,7 +7,7 @@
 						
 	<dubbo:application name="btkj-common" owner="btkj"/>
 	
-	<dubbo:registry address="${dubbo.registry.address}"/>
+	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}" />
 	
 	<!-- btkj-user -->
 	<dubbo:reference id="appService" interface="org.btkj.user.api.AppService" />

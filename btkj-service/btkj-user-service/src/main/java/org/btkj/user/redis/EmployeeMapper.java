@@ -3,12 +3,15 @@ package org.btkj.user.redis;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.EmoloyeeInfo;
+import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
@@ -45,47 +48,14 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	 * @param tid
 	 */
 	@SuppressWarnings("unchecked")
-	public Result<Pager<EmoloyeeInfo>> employeeList(int tid, int page, int pageSize) {
-		List<EmoloyeeInfo> tipsList = new ArrayList<EmoloyeeInfo>();
-		int total = dao.countByTid(tid);
-		if (total == 0)
+	public Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher) {
+		int total = dao.searchCount(searcher);
+		if (0 == total)
 			return Result.result(Pager.EMPLTY);
-		if(page < 1 )
-			page = 1;
-		if(pageSize < 0)
-			pageSize = 10;
-		int start = (page - 1) * pageSize;
-		int count = pageSize;
-		String byId = "6";
-		if(null == byId)
-			byId = "1=1"; 
-		else byId = "'id'="+byId;
-		String byName = null;
-		if(null == byName)
-			byName = "1=1"; 
-		else byName = "name="+byName;
-		String byMobile = null;
-		if(null == byMobile)
-			byMobile = "1=1"; 
-		else byMobile = "'mobile'=byMobile";
-		String byPayType = null;
-		if(null == byPayType)
-			byPayType = "1=1"; 
-		else byPayType = "'payType'=byPayType";
-		String byState = null;
-		if(null == byState)
-			byState = "1=1"; 
-		else byState = "'state'=byState";
-		List<Employee> employees = dao.selectByTid(tid, start, count, byId, byName, byMobile, byPayType, byState);
-		for (Employee employee : employees) {
-			User user = userMapper.getByKey(employee.getUid());
-			EmoloyeeInfo tips = new EmoloyeeInfo(employee, user);
-			Employee employeeParent = dao.selectByTidAndUid(employee.getTid(), employee.getParentId());
-			if(null != employeeParent)
-			tips.setParentName(employeeParent.getName());
-			tipsList.add(tips);
-		}
-			return Result.result(new Pager<EmoloyeeInfo>(total, tipsList));
+		searcher.calculate(total);
+		List<EmployeeListInfo> employees = dao.search(searcher);
+		Pager<EmployeeListInfo> pager = new Pager<EmployeeListInfo>(searcher.getTotal(), employees);
+		return Result.result(pager);
 	}
 	
 	public boolean isEmployee(int tid, int uid) {

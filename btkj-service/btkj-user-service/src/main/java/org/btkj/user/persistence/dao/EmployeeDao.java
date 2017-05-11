@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.info.EmployeeListInfo;
+import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.persistence.provider.EmployeeSQLProvider;
 import org.rapid.data.storage.db.Dao;
 
@@ -32,12 +34,6 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUid")
 	List<Employee> selectByUid(@Param("uid") int uid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "countByTid")
-	int countByTid(int tid);
-	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTid")
-	List<Employee> selectByTid(@Param("tid") int tid, @Param("start") int start, @Param("count") int count, @Param("byId") String byId, @Param("byName") String byName, @Param("byMobile") String byMobile, @Param("byPayType") String byPayType, @Param("byState") String byState);
-	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
 	
@@ -48,4 +44,8 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	 */
 	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateForJoin")
 	void updateForJoin(@Param("tid") int tid, @Param("value") int value);
+	
+	int searchCount(EmployeeSearcher searcher);
+	
+	List<EmployeeListInfo> search(EmployeeSearcher searcher);
 }

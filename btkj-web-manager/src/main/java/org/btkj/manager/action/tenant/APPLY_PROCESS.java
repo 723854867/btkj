@@ -6,7 +6,6 @@ import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.Client;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -18,7 +17,7 @@ public class APPLY_PROCESS extends TenantAction {
 	private TenantService tenantService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, App app, Tenant tenant, User user) {
+	protected Result<?> execute(Request request, App app, Tenant tenant, User user) {
 		return tenantService.applyProcess(tenant.getTid(), request.getParam(Params.UID), request.getOptionalParam(Params.AGREE));
 	}
 }

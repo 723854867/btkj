@@ -25,7 +25,6 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 
 	private String USER_LOCK 					= "string:user:{0}:lock"; 			
 
-	private String DATA_TEMP_KEY				= "hash:memory:user";				// 存放一些用户的内存数据
 	private String MOBILE_USER 					= "hash:app:{0}:mobile:user"; 
 	private String TOKEN_USER 					= "hash:token:{0}:user"; 
 	private String USER_TOKEN 					= "hash:user:{0}:token"; 

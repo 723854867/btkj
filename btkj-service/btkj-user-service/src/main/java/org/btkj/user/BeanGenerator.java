@@ -5,6 +5,7 @@ import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.rapid.util.lang.DateUtils;
 
 public class BeanGenerator {
@@ -30,6 +31,7 @@ public class BeanGenerator {
 		employee.setRight(employee.getLeft() + 1);
 		employee.setName(name);
 		employee.setIdentity(identity);
+		employee.setMobile(user.getMobile());
 		
 		int time = DateUtils.currentTime();
 		employee.setCreated(time);
@@ -63,12 +65,15 @@ public class BeanGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(int tid, int uid, int chief, String name, String identity) { 
+	public static final ApplyInfo newApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity) { 
 		ApplyInfo ai = new ApplyInfo();
-		ai.setUid(uid);
-		ai.setTid(tid);
-		ai.setChief(chief);
+		ai.setTid(tenant.getTid());
+		ai.setUid(user.getUid());
 		ai.setName(name);
+		ai.setMobile(user.getMobile());
+		ai.setChief(chief.getUser().getUid());
+		ai.setChiefName(chief.getEmployee().getName());
+		ai.setMobile(chief.getUser().getMobile());
 		ai.setIdentity(identity);
 		ai.setTime(DateUtils.currentTime());
 		return ai;
