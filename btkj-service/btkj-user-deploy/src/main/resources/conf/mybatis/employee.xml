@@ -1,0 +1,61 @@
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.btkj.user.persistence.dao.EmployeeDao">
+
+	<resultMap type="org.btkj.pojo.entity.Employee" id="employee">
+		<id column="id" property="id"/>
+		<result column="uid" property="uid"/>
+		<result column="tid" property="tid"/>
+		<result column="name" property="name"/>
+		<result column="identity" property="identity"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="mod" property="mod"/>
+		<result column="left" property="left"/>
+		<result column="right" property="right"/>
+		<result column="level" property="level"/>
+		<result column="created" property="created"/>
+		<result column="updated" property="updated"/>
+		<result column="pay_type" property="payType"/>
+		<result column="state" property="state"/>
+	</resultMap>
+	<!--  
+	<select id="selectByKey" resultMap="employee">
+		SELECT * FROM employee where id=#{id}
+	</select>
+	 -->
+	<!-- -->
+	<select id="selectByTid" resultMap="employee">
+		SELECT * FROM employee 
+		<where>
+			<if test="null!=tid">
+				tid=#{0}
+			</if>
+			<if test="null!=id">
+				AND id=#{3}
+			</if>
+			<if test="null!=name">
+				AND name=#{4}
+			</if>
+			<if test="null!=payType">
+				AND pay_type=#{5}
+			</if>
+			<if test="null!=state">
+				AND state=#{6}
+			</if>
+			<if test="null!=uid">
+				AND uid=#{7}
+			</if>
+		</where>
+		<!-- 
+		<if test="1==type">
+			order by created desc
+		</if>
+		<if test="2==type">
+			order by created asc
+		</if>
+		 -->
+		    limit #{1}, #{2}
+	</select> 
+
+</mapper>

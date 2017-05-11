@@ -35,9 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-//	public Result employeeDisable(int id) {
-////		return employeeMapper.UpdateState(id);
-//	}
+	public Result employeeDisable(int id) {
+		return null;
+	}
 	
 	@Override
 	public EmployeeForm getById(int employeeId) {

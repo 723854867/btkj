@@ -65,27 +65,15 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 			pageSize = 10;
 		int start = (page - 1) * pageSize;
 		int count = pageSize;
-		String byId = null;
-		if(null == byId)
-			byId = "1=1"; 
-		else byId = "'id'="+byId;
-		String byName = null;
-		if(null == byName)
-			byName = "1=1"; 
-		else byName = "name="+byName;
-		String byMobile = null;
-		if(null == byMobile)
-			byMobile = "1=1"; 
-		else byMobile = "'mobile'=byMobile";
-		String byPayType = null;
-		if(null == byPayType)
-			byPayType = "1=1"; 
-		else byPayType = "'payType'=byPayType";
-		String byState = null;
-		if(null == byState)
-			byState = "1=1"; 
-		else byState = "'state'=byState";
-		List<Employee> employees = dao.selectByTid(tid, start, count, byId, byName, byMobile, byPayType, byState);
+		int id = 0;
+		String name = null;
+		String payType = null;
+		String state = null;
+		String mobile = null;
+		int appId = 0;
+		int uid = userMapper.getUserByMobile(appId, mobile).getUid();
+		int type = 1;
+		List<Employee> employees = dao.selectByTid(tid, start, count, id, name,  payType, state);
 		for (Employee employee : employees) {
 			User user = userMapper.getByKey(employee.getUid());
 			EmoloyeeInfo tips = new EmoloyeeInfo(employee, user);
