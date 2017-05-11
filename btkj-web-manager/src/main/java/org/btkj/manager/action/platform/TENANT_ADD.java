@@ -10,7 +10,6 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.TenantService;
@@ -39,7 +38,7 @@ public class TENANT_ADD extends PlatformAction {
 	private CourierService courierService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User operator) {
+	protected Result<?> execute(Request request, App app, User operator) {
 		// 获取验证代理公司信息
 		String tname = request.getParam(Params.TNAME);
 		Region region = configService.getRegionById(request.getParam(Params.REGION));

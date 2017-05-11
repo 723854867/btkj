@@ -14,16 +14,17 @@ public class Employee implements UniqueModel<Integer> {
 	private int uid;
 	private int tid;
 	private String name;
+	private String mobile;
 	private String identity;
 	private int parentId;
-	private int mod;
 	private int left;
 	private int right;
 	private int level;
-	private int created;
-	private int updated;
 	private int payType;
 	private int state;
+	private int tagMod;
+	private int created;
+	private int updated;
 
 	public int getId() {
 		return id;
@@ -57,6 +58,14 @@ public class Employee implements UniqueModel<Integer> {
 		this.name = name;
 	}
 	
+	public String getMobile() {
+		return mobile;
+	}
+	
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	
 	public String getIdentity() {
 		return identity;
 	}
@@ -71,14 +80,6 @@ public class Employee implements UniqueModel<Integer> {
 	
 	public void setParentId(int parentId) {
 		this.parentId = parentId;
-	}
-	
-	public int getMod() {
-		return mod;
-	}
-	
-	public void setMod(int mod) {
-		this.mod = mod;
 	}
 	
 	public int getLeft() {
@@ -103,6 +104,14 @@ public class Employee implements UniqueModel<Integer> {
 	
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public int getTagMod() {
+		return tagMod;
+	}
+	
+	public void setTagMod(int tagMod) {
+		this.tagMod = tagMod;
 	}
 
 	public int getCreated() {

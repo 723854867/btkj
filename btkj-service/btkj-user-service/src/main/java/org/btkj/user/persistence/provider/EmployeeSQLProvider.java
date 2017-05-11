@@ -12,12 +12,15 @@ public class EmployeeSQLProvider {
 				VALUES("uid", "#{uid}");
 				VALUES("tid", "#{tid}");
 				VALUES("name", "#{name}");
+				VALUES("mobile", "#{mobile}");
 				VALUES("identity", "#{identity}");
 				VALUES("parent_id", "#{parentId}");
-				VALUES("`mod`", "#{mod}");
 				VALUES("`left`", "#{left}");
 				VALUES("`right`", "#{right}");
 				VALUES("`level`", "#{level}");
+				VALUES("`pay_type`", "#{payType}");
+				VALUES("`tag_mod`", "#{tagMod}");
+				VALUES("`state`", "#{state}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -61,20 +64,6 @@ public class EmployeeSQLProvider {
 				SELECT("*");
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("uid=#{uid}");
-			}
-		}.toString();
-	}
-	
-	public String selectByTid() {
-		return "select * from employee where `tid`=#{tid} and #{byId} and #{byName} and #{byMobile} and #{byPayType} and #{byState} order by created desc limit #{start}, #{count}";
-	}
-
-	public String countByTid() {
-		return new SQL() {
-			{
-				SELECT("count(*)");
-				FROM(BtkjTables.EMPLOYEE.name());
-				WHERE("tid=#{tid}");
 			}
 		}.toString();
 	}

@@ -1,0 +1,3 @@
+#Dubbo Registry Cache
+#Thu May 11 12:07:28 CST 2017
+org.btkj.config.api.ConfigService=empty\://192.168.18.13\:20080/org.btkj.config.api.ConfigService?anyhost\=true&application\=config-service&category\=configurators&check\=false&default.retries\=0&default.timeout\=300000&dubbo\=2.8.4&generic\=false&interface\=org.btkj.config.api.ConfigService&loadbalance\=roundrobin&methods\=getRegionById&optimizer\=org.btkj.pojo.SerializationOptimizerImpl&owner\=btkj&pid\=11376&serialization\=kryo&side\=provider&timestamp\=1494475647967

@@ -8,6 +8,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Version;
+import org.btkj.pojo.submit.EmployeeSearcher;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -155,10 +156,6 @@ public interface Params {
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
 
-	
-	/**
-	 * 泛指名字
-	 */
 	final Str2ObjConstConverter<NonAutoCategory> NON_AUTO_CATEGORY			= new Str2ObjConstConverter<NonAutoCategory>(1200, "nonAutoCategory") {
 		@Override
 		public NonAutoCategory convert(String k) throws ConstConvertFailureException {
@@ -166,4 +163,10 @@ public interface Params {
 		}
 	};
 
+	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearch") {
+		@Override
+		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);
+		}
+	};
 }

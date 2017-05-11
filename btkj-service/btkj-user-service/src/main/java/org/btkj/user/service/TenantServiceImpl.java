@@ -59,12 +59,12 @@ public class TenantServiceImpl implements TenantService {
 	
 	@Override
 	public Result<?> apply(User user, int employeeId, String name, String identity) {
-		EmployeeForm employeeForm = employeeService.getById(employeeId);
-		if (null == employeeForm)
+		EmployeeForm chief = employeeService.getById(employeeId);
+		if (null == chief)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		if (employeeForm.getApp().getId() != user.getAppId())
+		if (chief.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
-		return _doApply(employeeForm.getTenant(), user, employeeForm.getEmployee(), name, identity);
+		return _doApply(chief.getTenant(), user, chief, name, identity);
 	}
 	
 	@Override
@@ -77,16 +77,16 @@ public class TenantServiceImpl implements TenantService {
 				user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
 			}
 		}
-		return _doApply(chief.getTenant(), user, chief.getEmployee(), name, identity);
+		return _doApply(chief.getTenant(), user, chief, name, identity);
 	}
 	
-	private Result<?> _doApply(Tenant tenant, User user, Employee chief, String name, String identity) {
+	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(BeanGenerator.newApply(tenant.getTid(), user.getUid(), chief.getId(), name, identity));
+		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief, name, identity));
 		return Result.success();
 	}
 	

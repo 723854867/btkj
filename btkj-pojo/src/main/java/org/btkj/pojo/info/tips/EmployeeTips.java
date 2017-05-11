@@ -23,7 +23,6 @@ public class EmployeeTips implements Serializable {
 	private String mobile;				//电话（账号）
 	private String identity;
 	private int created;				//注册时间
-	private int mod;					//状态模值 
 	
 	public EmployeeTips() {}
 	
@@ -46,7 +45,6 @@ public class EmployeeTips implements Serializable {
 		this.mobile = user.getMobile();
 		this.identity = employee.getIdentity();
 		this.created = employee.getCreated();
-		this.mod = employee.getMod();
 	}
 	
 	public int getId() {
@@ -146,14 +144,4 @@ public class EmployeeTips implements Serializable {
 	public void setCreated(int created) {
 		this.created = created;
 	}
-
-	public int getMod() {
-		return mod;
-	}
-
-	public void setMod(int mod) {
-		this.mod = mod;
-	}
-	
-	
 }

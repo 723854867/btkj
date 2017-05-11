@@ -7,7 +7,7 @@
 						
 	<dubbo:application name="btkj-master" owner="btkj"/>
 	
-	<dubbo:registry address="${dubbo.registry.address}"/>
+	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}" />
 	
 	<dubbo:reference id="cloudService" interface="org.btkj.master.api.CloudService" />
 	
