@@ -36,17 +36,6 @@ public class EmployeeTips implements Serializable {
 		this.regionName = region.getName();
 	}
 	
-	public EmployeeTips(Employee employee, User user) {
-		this.id = employee.getId();
-		this.tid = employee.getTid();
-		this.uid  = employee.getUid();
-		this.parentId = employee.getParentId();
-		this.name = employee.getName();
-		this.mobile = user.getMobile();
-		this.identity = employee.getIdentity();
-		this.created = employee.getCreated();
-	}
-	
 	public int getId() {
 		return id;
 	}

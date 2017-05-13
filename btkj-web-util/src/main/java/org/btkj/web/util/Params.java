@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.rapid.util.common.Validator;
@@ -167,6 +168,13 @@ public interface Params {
 		@Override
 		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<EmployeeInfo> EMPLOYEE_INFO			= new Str2ObjConstConverter<EmployeeInfo>(1202, "employeeInfo") {
+		@Override
+		public EmployeeInfo convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeInfo.class);
 		}
 	};
 }

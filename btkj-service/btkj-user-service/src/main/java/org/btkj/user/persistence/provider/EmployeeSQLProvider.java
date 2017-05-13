@@ -21,6 +21,9 @@ public class EmployeeSQLProvider {
 				VALUES("`pay_type`", "#{payType}");
 				VALUES("`tag_mod`", "#{tagMod}");
 				VALUES("`state`", "#{state}");
+				VALUES("`integral`", "#{integral}");
+				VALUES("`scale_commission`", "#{scaleCommission}");
+				VALUES("`manage_commission`", "#{manageCommission}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -65,6 +68,40 @@ public class EmployeeSQLProvider {
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("uid=#{uid}");
 			}
+		}.toString();
+	}
+	
+	public String updateStateOfT() {
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.EMPLOYEE.name());
+				SET("`state`=0");
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
+	
+	public String updateStateOfF() {
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.EMPLOYEE.name());
+				SET("`state`=1");
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
+	
+	public String updateInfo() {
+		return new SQL() {
+		   {
+				UPDATE(BtkjTables.EMPLOYEE.name());
+				SET("`pay_type`=#{paytype}");
+				SET("`tag_mod`=#{tagMod}");
+				SET("`scale_commission`=#{scaleCommission}");
+				SET("`manage_commission`=#{manageCommission}");
+				SET("`updated`=#{updated}");
+				WHERE("id=#{id}");
+		   }
 		}.toString();
 	}
 	

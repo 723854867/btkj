@@ -16,6 +16,7 @@ public interface BtkjTables {
 	final Table EMPLOYEE							= new Table("employee");
 	final Table COMMUNITY							= new Table("community");
 	final Table NON_AUTO_INSURANCE					= new Table("non_auto_insurance");
+	final Table SPECIAL_COMMISSION					= new Table("special_commission");
 	
 	// ******************************* user tables *******************************
 	final Table ADMINISTRATOR						= new Table("administrator");

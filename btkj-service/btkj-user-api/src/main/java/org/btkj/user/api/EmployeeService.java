@@ -1,5 +1,6 @@
 package org.btkj.user.api;
 
+import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
@@ -22,5 +23,17 @@ public interface EmployeeService {
 	 * 
 	 * @return
 	 */
-	Result employeeDisable(int id);
+	Result<Void> employeeDisable(int employeeId);
+	
+	/**
+	 * 根据id获取雇员详细信息
+	 * @return
+	 */
+	EmployeeInfo employeeInfoRead(int employeeId);
+	
+	/**
+	 * 修改保存雇员基本信息
+	 * @return
+	 */
+	Result<Void> employeeInfoSave(EmployeeInfo employeeInfo);
 }
