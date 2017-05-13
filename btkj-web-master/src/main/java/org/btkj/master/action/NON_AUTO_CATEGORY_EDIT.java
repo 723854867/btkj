@@ -25,7 +25,7 @@ public class NON_AUTO_CATEGORY_EDIT extends AdministratorAction {
 	@Override
 	protected Result<?> execute(Request request, Administrator operator) {
 		NonAutoCategory category = _checkCategory(request.getParam(Params.NON_AUTO_CATEGORY));
-		nonAutoService.edit(category);
+		nonAutoService.editCategory(category);
 		return Result.success();
 	}
 	

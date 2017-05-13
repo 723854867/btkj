@@ -15,7 +15,7 @@ public interface BtkjTables {
 	final Table TENANT								= new Table("tenant");
 	final Table EMPLOYEE							= new Table("employee");
 	final Table COMMUNITY							= new Table("community");
-	final Table NON_AUTO_INSURANCE					= new Table("non_auto_insurance");
+	final Table NON_AUTO_BIND						= new Table("non_auto_bind");
 	
 	// ******************************* user tables *******************************
 	final Table ADMINISTRATOR						= new Table("administrator");

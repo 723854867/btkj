@@ -63,7 +63,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 用户资料不全
 	 */
-	USER_DATA_INCOMPLETE(510, "user data is incomplete");
+	USER_DATA_INCOMPLETE(510, "user data is incomplete"),
+	
+	/**
+	 * 非车险类型不存在
+	 */
+	NON_AUTO_CATEGORY_NOT_EXIST(511, "non auto category not exist!");
 	
 	private int code;
 	private String desc;

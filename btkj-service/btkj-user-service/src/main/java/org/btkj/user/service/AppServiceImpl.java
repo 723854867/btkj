@@ -4,30 +4,22 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.NonAutoInsurance;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.AppMainPageInfo;
-import org.btkj.pojo.info.PCMainPageInfo;
-import org.btkj.pojo.info.mainpage.IMainPageInfo;
+import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
-import org.btkj.user.persistence.Tx;
 import org.btkj.user.redis.AppMapper;
-import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.EmployeeMapper;
-import org.btkj.user.redis.NonAutoInsuranceMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
-import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
 
@@ -35,13 +27,9 @@ import org.springframework.stereotype.Service;
 public class AppServiceImpl implements AppService {
 	
 	@Resource
-	private Tx tx;
-	@Resource
 	private AppMapper appMapper;
 	@Resource
 	private UserMapper userMapper;
-	@Resource
-	private ApplyMapper applyMapper;
 	@Resource
 	private BannerMapper bannerMapper;
 	@Resource
@@ -50,8 +38,6 @@ public class AppServiceImpl implements AppService {
 	private EmployeeMapper employeeMapper;
 	@Resource
 	private EmployeeService employeeService;
-	@Resource
-	private NonAutoInsuranceMapper nonAutoInsuranceMapper;
 	
 	@Override
 	public App getAppById(int appId) {
@@ -59,18 +45,8 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public Result<IMainPageInfo> mainPage(Client client, User user, int employeeId) {
-		switch (client) {
-		case PC:
-			return Result.result(new PCMainPageInfo(user));
-		default:
-			EmployeeForm employeeForm = 0 == employeeId ? null : employeeService.getById(employeeId);
-			if (0 != employeeId && null == employeeForm)
-				return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-			if (null != employeeForm && employeeForm.getUser().getUid() != user.getUid())
-				return Result.result(Code.FORBID);
-			return _appMainPageInfo(user, null == employeeForm ? null : employeeForm.getEmployee(), null == employeeForm ? null : employeeForm.getTenant());
-		}
+	public Result<MainPageInfo> mainPage(Client client, User user, EmployeeForm em) {
+		return _mainPageInfo(user, em);
 	}
 	
 	/**
@@ -80,7 +56,8 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<IMainPageInfo> _appMainPageInfo(User user, Employee employee, Tenant tenant) {
+	private Result<MainPageInfo> _mainPageInfo(User user, EmployeeForm em) {
+		Tenant tenant = null == em ? null : em.getTenant();
 		int appId = user.getAppId();
 		if (null == tenant) {
 			int mainTid = userMapper.mainTenant(user.getUid());
@@ -93,8 +70,7 @@ public class AppServiceImpl implements AppService {
 				tenant = tenantMapper.getByKey(mainTid);
 		}
 		List<Banner> banners = bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
-		List<NonAutoInsurance> insurances = nonAutoInsuranceMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
-		return Result.result(new AppMainPageInfo(user, tenant, banners, insurances));
+		return Result.result(new MainPageInfo(user, tenant, banners));
 	}
 	
 	@Override
