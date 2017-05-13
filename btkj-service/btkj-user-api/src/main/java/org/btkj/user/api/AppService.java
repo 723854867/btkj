@@ -3,7 +3,8 @@ package org.btkj.user.api;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.mainpage.IMainPageInfo;
+import org.btkj.pojo.info.MainPageInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
@@ -21,10 +22,10 @@ public interface AppService {
 	 * 
 	 * @param client
 	 * @param user
-	 * @param employeeId
+	 * @param em
 	 * @return
 	 */
-	Result<IMainPageInfo> mainPage(Client client, User user, int employeeId);
+	Result<MainPageInfo> mainPage(Client client, User user, EmployeeForm em);
 
 	/**
 	 * 添加 app

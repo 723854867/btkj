@@ -57,9 +57,9 @@
 		<property name="dao" ref="bannerDao" />
 	</bean>
 	
-	<bean id="nonAutoInsuranceMapper" class="org.btkj.user.redis.NonAutoInsuranceMapper">
+	<bean id="nonAutoBindMapper" class="org.btkj.user.redis.NonAutoBindMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="nonAutoInsuranceDao" />
+		<property name="dao" ref="nonAutoBindDao" />
 	</bean>
 	
 	<bean id="specialCommissionMapper" class="org.btkj.user.redis.SpecialCommissionMapper">

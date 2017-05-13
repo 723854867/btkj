@@ -19,4 +19,6 @@
 	
 	<dubbo:reference id="aliyunService" interface="org.btkj.courier.api.AliyunService" />
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" /> 
+	
+	<dubbo:reference id="nonAutoService" interface="org.btkj.nonauto.api.NonAutoService" /> 
 </beans>

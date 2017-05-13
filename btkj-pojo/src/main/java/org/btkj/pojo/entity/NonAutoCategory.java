@@ -18,7 +18,7 @@ public class NonAutoCategory implements UniqueModel<Long> {
 	private String name;
 	private List<Filter> filters;
 	private List<String> sorts;				// 排序字段
-	private List<String> tages;				// 标签
+	private List<String> tags;				// 标签
 	private int created;
 	private int updated;
 	
@@ -54,12 +54,12 @@ public class NonAutoCategory implements UniqueModel<Long> {
 		this.sorts = sorts;
 	}
 	
-	public List<String> getTages() {
-		return tages;
+	public List<String> getTags() {
+		return tags;
 	}
 	
-	public void setTages(List<String> tages) {
-		this.tages = tages;
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 	
 	public int getCreated() {
