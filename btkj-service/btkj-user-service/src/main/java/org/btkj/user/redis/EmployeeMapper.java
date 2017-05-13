@@ -42,6 +42,13 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	}
 	
 	/**
+	 * 禁用员工
+	 */
+	public void UpdateState(int id){
+		
+	}
+	
+	/**
 	 * 分页获取员工信息
 	 * 
 	 * @param pager
