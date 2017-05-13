@@ -20,6 +20,7 @@ import org.btkj.user.persistence.dao.EmployeeDao;
 import org.btkj.user.persistence.dao.SpecialCommissionDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
 
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
@@ -33,7 +34,9 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	
 	@Resource
 	private UserMapper userMapper;
+	@Resource
 	private SpecialCommissionMapper specialCommissionMapper;
+	@Resource
 	private SpecialCommissionDao specialCommissionDao;
 	
 	public EmployeeMapper() {
@@ -50,13 +53,16 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	/**
 	 * 商家后台管理保存修改雇员部分属性
 	 */
-	public void EmployeeInfoSave(EmployeeInfo employeeInfo) {
+	public void employeeInfoSave(EmployeeInfo employeeInfo) {
 		Employee employee = BeanGenerator.newEmployeeSave(employeeInfo);
 		dao.updateInfo(employee);
+		employee = dao.selectByKey(employee.getId());
+		flush(employee);
 		SpecialCommission specialCommission = BeanGenerator.newSpecialCommission(employeeInfo);
-		if(specialCommissionMapper.isSpecialCommission(specialCommission.getEid()))
+		if(null == specialCommissionMapper.getByeid(employee.getId())){
+			specialCommission.setCreated(DateUtils.currentTime());
 			specialCommissionDao.insert(specialCommission);
-		else 
+	    }else 
 			specialCommissionDao.updateInfo(specialCommission);
 	}
 	
@@ -64,15 +70,16 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	 * 禁用雇员
 	 */
 	public void UpdateState(int id) {
-		
 		Employee employee = dao.selectByKey(id);
-		
 		int state = employee.getState();
 		if (state == 0)
 			dao.updateStateOfF(id);
 		else
 			dao.updateStateOfT(id);
+		employee = dao.selectByKey(id);
+		flush(employee);
 	}
+	
 		
 	/**
 	 * 分页获取员工信息
@@ -94,10 +101,6 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	public boolean isEmployee(int tid, int uid) {
 		return null != dao.selectByTidAndUid(tid, uid);
 	} 
-	
-	public boolean isEmployee(int id) {
-		return null != dao.selectByKey(id);
-	}
 	
 	/**
 	 * 获取用户的所拥有的代理公司列表

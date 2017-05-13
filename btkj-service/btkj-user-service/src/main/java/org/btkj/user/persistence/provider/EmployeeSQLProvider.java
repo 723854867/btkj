@@ -95,7 +95,7 @@ public class EmployeeSQLProvider {
 		return new SQL() {
 		   {
 				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("`pay_type`=#{paytype}");
+				SET("`pay_type`=#{payType}");
 				SET("`tag_mod`=#{tagMod}");
 				SET("`scale_commission`=#{scaleCommission}");
 				SET("`manage_commission`=#{manageCommission}");

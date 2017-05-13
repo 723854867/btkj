@@ -24,7 +24,4 @@ public class SpecialCommissionMapper extends RedisProtostuffDBMapper<Integer, Sp
 		return dao.selectByeid(eid);
 	};
 	
-	public boolean isSpecialCommission(int eid) {
-		return null == dao.selectByeid(eid);
-	}
 }

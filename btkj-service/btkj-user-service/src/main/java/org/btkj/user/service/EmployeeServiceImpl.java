@@ -44,6 +44,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Result<Void> employeeDisable(int id) {
+		Employee employee = employeeMapper.getByKey(id);
+		if(null == employee)
+			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		try {
 			employeeMapper.UpdateState(id);
 		} catch (DuplicateKeyException e) {
@@ -54,7 +57,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Result<Void> employeeInfoSave(EmployeeInfo employeeInfo) {
-			employeeMapper.EmployeeInfoSave(employeeInfo);
+		Employee employee = employeeMapper.getByKey(employeeInfo.getId());
+		if(null == employee)
+			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST); 
+			employeeMapper.employeeInfoSave(employeeInfo);
 		 return Result.success();
 	}
 	
@@ -75,6 +81,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (null == employee)
 			return null;
 		SpecialCommission specialCommission = specialCommissionMapper.getByeid(id);
+		if(null == specialCommission)
+			return new EmployeeInfo(employee);
+		else
 		return new EmployeeInfo(employee,specialCommission);
 	}
 }

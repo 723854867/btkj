@@ -104,7 +104,7 @@ public class BeanGenerator {
 	 */
 	public static final Employee newEmployeeSave(EmployeeInfo employeeInfo) {
 		Employee employee = new Employee();
-		employee.setId(employee.getId());
+		employee.setId(employeeInfo.getId());
 		employee.setPayType(employeeInfo.getPayType());
 		employee.setTagMod(employeeInfo.getTagMod());
 		employee.setScaleCommission(employeeInfo.getScaleCommission());

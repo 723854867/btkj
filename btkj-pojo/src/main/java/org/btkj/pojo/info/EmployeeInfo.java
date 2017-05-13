@@ -40,6 +40,23 @@ public class EmployeeInfo implements Serializable {
 	
 	public EmployeeInfo(){};
 	
+	public EmployeeInfo(Employee employee ) {
+		this.uid  = employee.getUid();
+		this.tid = employee.getTid();
+		this.name = employee.getName();
+		this.identity = employee.getIdentity();
+		this.mobile = employee.getMobile();
+		this.created = employee.getCreated();
+		this.pid = employee.getParentId();
+		this.id = employee.getId();
+		this.integral = employee.getIntegral();
+		this.state=employee.getState();
+		this.payType = employee.getPayType();
+		this.scaleCommission = employee.getScaleCommission();
+		this.manageCommission = employee.getManageCommission();
+		this.tagMod = employee.getTagMod();
+	}
+	
 	public EmployeeInfo(Employee employee , SpecialCommission specialCommission) {
 		this.uid  = employee.getUid();
 		this.tid = employee.getTid();
