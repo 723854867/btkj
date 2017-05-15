@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.EmployeeSearcher;
@@ -152,6 +153,15 @@ public interface Params {
 	final Str2BoolConstConverter TENANT_ADD_AUTONOMY		= new Str2BoolConstConverter(1025, "tenantAddAutonomy", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
+		};
+	};
+	
+	final Str2ObjConstConverter<EmployeeState> EMPLOYEE_STATE	= new Str2ObjConstConverter<EmployeeState>(1026, "employeeState") {
+		public EmployeeState convert(String value) throws ConstConvertFailureException {
+			EmployeeState state = EmployeeState.match(Integer.valueOf(value));
+			if (null == state)
+				throw ConstConvertFailureException.errorConstException(this);
+			return state;
 		};
 	};
 	

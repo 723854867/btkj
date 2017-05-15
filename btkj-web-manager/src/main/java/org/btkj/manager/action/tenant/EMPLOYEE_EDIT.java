@@ -12,7 +12,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class EMPLOYEE_INFO_SAVE extends TenantAction {
+public class EMPLOYEE_EDIT extends TenantAction {
 	
 	@Resource
 	private EmployeeService employeeService;

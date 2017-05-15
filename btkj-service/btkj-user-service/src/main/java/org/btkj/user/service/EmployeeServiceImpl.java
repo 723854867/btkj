@@ -8,6 +8,7 @@ import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.SpecialCommission;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.EmployeeForm;
@@ -20,7 +21,6 @@ import org.btkj.user.redis.SpecialCommissionMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.message.Result;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("employeeService")
@@ -43,16 +43,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public Result<Void> employeeDisable(int id) {
+	public Result<Void> employeeDisable(int id, EmployeeState state) {
 		Employee employee = employeeMapper.getByKey(id);
 		if(null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		try {
-			employeeMapper.UpdateState(id);
-		} catch (DuplicateKeyException e) {
-			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+		if (employee.getState() != state.mark()) {
+			employee.setState(state.mark());
+			employeeMapper.update(employee);
 		}
-		 return Result.success();
+		return Result.success();
 	}
 	
 	@Override

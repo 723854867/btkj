@@ -40,6 +40,20 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.EMPLOYEE.name());
+				SET("pay_type", "#{payType}");
+				SET("state", "#{state}");
+				SET("tag_mod", "#{tagMod}");
+				SET("integral", "#{integral}");
+				SET("scaleCommission", "#{scaleCommission}");
+				SET("manageCommission", "#{manageCommission}");
+			}
+		}.toString();
+	}
+	
 	public String selectByTidAndUid() {
 		return new SQL() {
 			{
@@ -67,26 +81,6 @@ public class EmployeeSQLProvider {
 				SELECT("*");
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("uid=#{uid}");
-			}
-		}.toString();
-	}
-	
-	public String updateStateOfT() {
-		return new SQL() {
-			{
-				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("`state`=0");
-				WHERE("id=#{id}");
-			}
-		}.toString();
-	}
-	
-	public String updateStateOfF() {
-		return new SQL() {
-			{
-				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("`state`=1");
-				WHERE("id=#{id}");
 			}
 		}.toString();
 	}

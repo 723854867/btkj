@@ -25,6 +25,10 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	Employee selectByKey(Integer key);
 	
 	@Override
+	@UpdateProvider(type = EmployeeSQLProvider.class, method = "update")
+	void update(Employee entity);
+	
+	@Override
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectAll")
 	List<Employee> selectAll();
 	
@@ -36,12 +40,6 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
-	
-	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateStateOfT")
-	void updateStateOfT(int id);
-	
-	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateStateOfF")
-	void updateStateOfF(int id);
 	
 	/**
 	 * 商家管理后台只能对雇员部分属性进行修改

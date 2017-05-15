@@ -67,21 +67,6 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	}
 	
 	/**
-	 * 禁用雇员
-	 */
-	public void UpdateState(int id) {
-		Employee employee = dao.selectByKey(id);
-		int state = employee.getState();
-		if (state == 0)
-			dao.updateStateOfF(id);
-		else
-			dao.updateStateOfT(id);
-		employee = dao.selectByKey(id);
-		flush(employee);
-	}
-	
-		
-	/**
 	 * 分页获取员工信息
 	 * 
 	 * @param pager

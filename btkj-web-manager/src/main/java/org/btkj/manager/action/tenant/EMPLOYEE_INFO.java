@@ -13,7 +13,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class EMPLOYEE_INFO_READ extends TenantAction {
+public class EMPLOYEE_INFO extends TenantAction {
 	
 	@Resource
 	private EmployeeService employeeService;
@@ -21,11 +21,11 @@ public class EMPLOYEE_INFO_READ extends TenantAction {
 	@Override
 	protected Result<?> execute(Request request, App app, Tenant tenant, User user) {
 		int id = request.getParam(Params.ID);
-		String pname = request.getParam(Params.NAME);
+		String name = request.getParam(Params.NAME);
 		EmployeeInfo info = employeeService.employeeInfoRead(id);
 		if (null == info)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		info.setPname(pname);
+		info.setPname(name);
 		return Result.result(info);
 	}
 }

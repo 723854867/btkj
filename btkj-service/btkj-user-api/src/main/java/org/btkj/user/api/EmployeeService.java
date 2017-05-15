@@ -1,5 +1,6 @@
 package org.btkj.user.api;
 
+import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.EmployeeForm;
@@ -21,9 +22,10 @@ public interface EmployeeService {
 	/**
 	 * 禁用雇员
 	 * 
+	 * @param state
 	 * @return
 	 */
-	Result<Void> employeeDisable(int employeeId);
+	Result<Void> employeeDisable(int employeeId, EmployeeState state);
 	
 	/**
 	 * 根据id获取雇员详细信息
