@@ -12,8 +12,8 @@ public class NonAutoProduct implements UniqueModel<Long> {
 	private long _id; 						// 唯一ID
 	private long cid;						// 所属非车险类型ID
 	private String name; 					// 名字
-	private String price; 					// 价格
-	private String rebate; 					// 返利点数
+	private double price; 					// 价格
+	private double bonus; 					// 返利点数
 	private int insurerId; 					// 保险公司id
 	private String insurerName; 			// 保险公司名字
 	private long sales; 					// 销量
@@ -50,20 +50,20 @@ public class NonAutoProduct implements UniqueModel<Long> {
 		this.name = name;
 	}
 
-	public String getPrice() {
+	public double getPrice() {
 		return price;
 	}
-
-	public void setPrice(String price) {
+	
+	public void setPrice(double price) {
 		this.price = price;
 	}
-
-	public String getRebate() {
-		return rebate;
+	
+	public double getBonus() {
+		return bonus;
 	}
-
-	public void setRebate(String rebate) {
-		this.rebate = rebate;
+	
+	public void setBonus(double bonus) {
+		this.bonus = bonus;
 	}
 
 	public int getInsurerId() {

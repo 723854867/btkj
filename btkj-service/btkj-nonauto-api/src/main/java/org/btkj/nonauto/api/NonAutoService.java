@@ -15,7 +15,7 @@ import org.btkj.pojo.submit.NonAutoProductSearcher;
 public interface NonAutoService {
 
 	/**
-	 * 新增非车险类型
+	 * 新增或修改非车险类型
 	 * 
 	 * @param category
 	 */
@@ -43,6 +43,13 @@ public interface NonAutoService {
 	 * @return
 	 */
 	NonAutoCategory getCategoryById(long id);
+	
+	/**
+	 * 新增或者修改非车险产品
+	 * 
+	 * @param product
+	 */
+	void editProduct(NonAutoProduct product);
 	
 	/**
 	 * 获取非车险产品列表

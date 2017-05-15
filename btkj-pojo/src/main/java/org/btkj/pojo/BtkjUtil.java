@@ -1,9 +1,19 @@
 package org.btkj.pojo;
 
 import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.enums.SortField;
 import org.btkj.pojo.model.Credential;
+import org.rapid.util.common.serializer.json.GsonEnumTypeAdapter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class BtkjUtil {
+	
+	public static final Gson GSON = new GsonBuilder()
+			.serializeNulls()
+			.registerTypeAdapter(SortField.class, new GsonEnumTypeAdapter<SortField>(SortField.CREATED))
+			.create();
 	
 	/**
 	 * 判断 tar 是否是 src 的子行政区划
