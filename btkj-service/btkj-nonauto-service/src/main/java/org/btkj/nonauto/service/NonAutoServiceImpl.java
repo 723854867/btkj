@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.nonauto.mongo.NonAutoCategoryMapper;
+import org.btkj.nonauto.mongo.NonAutoProductMapper;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.model.Pager;
@@ -17,6 +18,8 @@ public class NonAutoServiceImpl implements NonAutoService {
 	
 	@Resource
 	private NonAutoCategoryMapper nonAutoCategoryMapper;
+	@Resource
+	private NonAutoProductMapper nonAutoProductMapper;
 	
 	@Override
 	public void editCategory(NonAutoCategory category) {
@@ -42,7 +45,15 @@ public class NonAutoServiceImpl implements NonAutoService {
 	}
 	
 	@Override
+	public void editProduct(NonAutoProduct product) {
+		if (0 == product.get_id())
+			nonAutoProductMapper.insert(product);
+		else
+			nonAutoProductMapper.update(product);
+	}
+	
+	@Override
 	public Pager<NonAutoProduct> productList(NonAutoProductSearcher searcher) {
-		return null;
+		return nonAutoProductMapper.productList(searcher);
 	}
 }

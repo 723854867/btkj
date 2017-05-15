@@ -2,9 +2,7 @@ package org.btkj.pojo.info.tips;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.EmployeeForm;
 
 public class EmployeeTips implements Serializable {

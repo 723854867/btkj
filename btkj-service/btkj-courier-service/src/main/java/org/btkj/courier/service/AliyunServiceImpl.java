@@ -122,8 +122,8 @@ public class AliyunServiceImpl implements AliyunService {
 		// 设置缓存失效时间
 		long expire = DateUtils.getTimeGap(stsInfo.getExpiration(), DateUtils.UTCDate(), DateUtils.ISO8601_UTC, DateUtils.TIMEZONE_UTC);
 		// 提前 1 分钟失效
-		expire -= 60 * 5;
-		stsInfo.setExpire((DateUtils.currentTime() + expire) * 1000);
+		expire -= 60000;
+		stsInfo.setExpire(System.currentTimeMillis() + expire);
 		return stsInfo;
 	}
 }

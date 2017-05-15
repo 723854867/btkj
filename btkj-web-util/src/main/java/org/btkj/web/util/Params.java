@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.NonAutoCategory;
+import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
@@ -189,7 +190,14 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<EmployeeInfo> EMPLOYEE_INFO			= new Str2ObjConstConverter<EmployeeInfo>(1202, "employeeInfo") {
+	final Str2ObjConstConverter<NonAutoProduct> NON_AUTO_PRODUCT = new Str2ObjConstConverter<NonAutoProduct>(1203, "nonAutoProduct") {
+		@Override
+		public NonAutoProduct convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoProduct.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<EmployeeInfo> EMPLOYEE_INFO			= new Str2ObjConstConverter<EmployeeInfo>(1204, "employeeInfo") {
 		@Override
 		public EmployeeInfo convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeInfo.class);
