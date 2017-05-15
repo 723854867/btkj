@@ -12,6 +12,16 @@ public class App implements UniqueModel<Integer> {
 	private int mod;
 	private int maxTenantsCount;
 	private boolean tenantAddAutonomy;
+	private int mobile;
+	private String legalPerson;    //联系人
+	private int permitNum;         //营业执照号
+	private int expireDate;        //到时时间
+	private int state;             //状态
+	private int payOpen;		   //支付开通	
+	private int takeScore;         //积分提现
+	private int insuranceOpen;     //险种开通
+	private int consultOpen;       //咨询开通
+	private int mallOpen;          //共享商城开通
 	private int created;
 	private int updated;
 	
@@ -98,6 +108,86 @@ public class App implements UniqueModel<Integer> {
 		this.updated = updated;
 	}
 	
+	public int getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(int mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getLegalPerson() {
+		return legalPerson;
+	}
+
+	public void setLegalPerson(String legalPerson) {
+		this.legalPerson = legalPerson;
+	}
+
+	public int getPermitNum() {
+		return permitNum;
+	}
+
+	public void setPermitNum(int permitNum) {
+		this.permitNum = permitNum;
+	}
+
+	public int getExpireDate() {
+		return expireDate;
+	}
+
+	public void setExpireDate(int expireDate) {
+		this.expireDate = expireDate;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public int getPayOpen() {
+		return payOpen;
+	}
+
+	public void setPayOpen(int payOpen) {
+		this.payOpen = payOpen;
+	}
+
+	public int getTakeScore() {
+		return takeScore;
+	}
+
+	public void setTakeScore(int takeScore) {
+		this.takeScore = takeScore;
+	}
+
+	public int getInsuranceOpen() {
+		return insuranceOpen;
+	}
+
+	public void setInsuranceOpen(int insuranceOpen) {
+		this.insuranceOpen = insuranceOpen;
+	}
+
+	public int getConsultOpen() {
+		return consultOpen;
+	}
+
+	public void setConsultOpen(int consultOpen) {
+		this.consultOpen = consultOpen;
+	}
+
+	public int getMallOpen() {
+		return mallOpen;
+	}
+
+	public void setMallOpen(int mallOpen) {
+		this.mallOpen = mallOpen;
+	}
+
 	@Override
 	public Integer key() {
 		return id;

@@ -2,7 +2,7 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.SpecialCommission;
+import org.btkj.pojo.entity.SpecialBonus;
 
 /**
  * 雇员详细信息
@@ -22,21 +22,21 @@ public class EmployeeInfo implements Serializable {
 	private int pid;					//邀请人id
 	private String pname;				//邀请人
 	private int id;						//邀请码(员工工号)
-	private int integral;               //积分余额
+	private int score;               //积分余额
 	private int state;					//状态
 	private int payType;				//支付方式
-	private int scaleCommission;       //规模佣金
-	private int manageCommission;      //管理佣金
+	private int scaleBonus;       //规模佣金
+	private int manageBonus;      //管理佣金
 	private int tagMod;						//角色模值
 	private int noBusinessCar;		//非营业客车 1勾选
 	private int noBusinessTruck;		//非营业货车 1勾选
 	private int businessCar;			//营业客车     1勾选
 	private int businessTruck;			//营业货车     1勾选
-	private int takeEffectTime;		//生效时间
-	private float commercialInsuranceRatio; //商业险比例
-	private int commercialInsuranceType;	  //商业险比例：0减，1加
-	private float compulsoryInsuranceRatio; //交强险比例
-	private int compulsoryInsuranceType;    //交强险比例：0减，1加
+	private int startTime;		//生效时间
+	private float vciRatio; //商业险比例
+	private int vciType;	  //商业险比例：0减，1加
+	private float tciRatio; //交强险比例
+	private int tciType;    //交强险比例：0减，1加
 	
 	public EmployeeInfo(){};
 	
@@ -49,15 +49,15 @@ public class EmployeeInfo implements Serializable {
 		this.created = employee.getCreated();
 		this.pid = employee.getParentId();
 		this.id = employee.getId();
-		this.integral = employee.getIntegral();
+		this.score = employee.getScore();
 		this.state=employee.getState();
 		this.payType = employee.getPayType();
-		this.scaleCommission = employee.getScaleCommission();
-		this.manageCommission = employee.getManageCommission();
+		this.scaleBonus = employee.getScaleBonus();
+		this.manageBonus = employee.getManageBonus();
 		this.tagMod = employee.getTagMod();
 	}
 	
-	public EmployeeInfo(Employee employee , SpecialCommission specialCommission) {
+	public EmployeeInfo(Employee employee , SpecialBonus specialBonus) {
 		this.uid  = employee.getUid();
 		this.tid = employee.getTid();
 		this.name = employee.getName();
@@ -66,21 +66,21 @@ public class EmployeeInfo implements Serializable {
 		this.created = employee.getCreated();
 		this.pid = employee.getParentId();
 		this.id = employee.getId();
-		this.integral = employee.getIntegral();
+		this.score = employee.getScore();
 		this.state=employee.getState();
 		this.payType = employee.getPayType();
-		this.scaleCommission = employee.getScaleCommission();
-		this.manageCommission = employee.getManageCommission();
+		this.scaleBonus = employee.getScaleBonus();
+		this.manageBonus = employee.getManageBonus();
 		this.tagMod = employee.getTagMod();
-		this.noBusinessCar = specialCommission.getNoBusinessCar();
-		this.noBusinessTruck = specialCommission.getNoBusinessTruck();
-		this.businessCar = specialCommission.getBusinessCar();
-		this.businessTruck = specialCommission.getBusinessTruck();
-		this.takeEffectTime = specialCommission.getTakeEffectTime();
-		this.commercialInsuranceRatio = specialCommission.getCommercialInsuranceRatio();
-		this.commercialInsuranceType = specialCommission.getCommercialInsuranceType();
-		this.compulsoryInsuranceRatio = specialCommission.getCompulsoryInsuranceRatio();
-		this.compulsoryInsuranceType = specialCommission.getCompulsoryInsuranceType();
+		this.noBusinessCar = specialBonus.getNoBusinessCar();
+		this.noBusinessTruck = specialBonus.getNoBusinessTruck();
+		this.businessCar = specialBonus.getBusinessCar();
+		this.businessTruck = specialBonus.getBusinessTruck();
+		this.startTime = specialBonus.getStartTime();
+		this.vciRatio = specialBonus.getVciRatio();
+		this.vciType = specialBonus.getVciType();
+		this.tciRatio = specialBonus.getTciRatio();
+		this.tciType = specialBonus.getTciType();
 	}
 
 	public int getUid() {
@@ -155,14 +155,6 @@ public class EmployeeInfo implements Serializable {
 		this.id = id;
 	}
 
-	public int getIntegral() {
-		return integral;
-	}
-
-	public void setIntegral(int integral) {
-		this.integral = integral;
-	}
-
 	public int getState() {
 		return state;
 	}
@@ -177,22 +169,6 @@ public class EmployeeInfo implements Serializable {
 
 	public void setPayType(int payType) {
 		this.payType = payType;
-	}
-
-	public int getScaleCommission() {
-		return scaleCommission;
-	}
-
-	public void setScaleCommission(int scaleCommission) {
-		this.scaleCommission = scaleCommission;
-	}
-
-	public int getManageCommission() {
-		return manageCommission;
-	}
-
-	public void setManageCommission(int manageCommission) {
-		this.manageCommission = manageCommission;
 	}
 
 	public int getNoBusinessCar() {
@@ -227,44 +203,68 @@ public class EmployeeInfo implements Serializable {
 		this.businessTruck = businessTruck;
 	}
 
-	public int getTakeEffectTime() {
-		return takeEffectTime;
+	public int getScore() {
+		return score;
 	}
 
-	public void setTakeEffectTime(int takeEffectTime) {
-		this.takeEffectTime = takeEffectTime;
+	public void setScore(int score) {
+		this.score = score;
 	}
 
-	public float getCommercialInsuranceRatio() {
-		return commercialInsuranceRatio;
+	public int getScaleBonus() {
+		return scaleBonus;
 	}
 
-	public void setCommercialInsuranceRatio(float commercialInsuranceRatio) {
-		this.commercialInsuranceRatio = commercialInsuranceRatio;
+	public void setScaleBonus(int scaleBonus) {
+		this.scaleBonus = scaleBonus;
 	}
 
-	public int getCommercialInsuranceType() {
-		return commercialInsuranceType;
+	public int getManageBonus() {
+		return manageBonus;
 	}
 
-	public void setCommercialInsuranceType(int commercialInsuranceType) {
-		this.commercialInsuranceType = commercialInsuranceType;
+	public void setManageBonus(int manageBonus) {
+		this.manageBonus = manageBonus;
 	}
 
-	public float getCompulsoryInsuranceRatio() {
-		return compulsoryInsuranceRatio;
+	public int getStartTime() {
+		return startTime;
 	}
 
-	public void setCompulsoryInsuranceRatio(float compulsoryInsuranceRatio) {
-		this.compulsoryInsuranceRatio = compulsoryInsuranceRatio;
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
 	}
 
-	public int getCompulsoryInsuranceType() {
-		return compulsoryInsuranceType;
+	public float getVciRatio() {
+		return vciRatio;
 	}
 
-	public void setCompulsoryInsuranceType(int compulsoryInsuranceType) {
-		this.compulsoryInsuranceType = compulsoryInsuranceType;
+	public void setVciRatio(float vciRatio) {
+		this.vciRatio = vciRatio;
+	}
+
+	public int getVciType() {
+		return vciType;
+	}
+
+	public void setVciType(int vciType) {
+		this.vciType = vciType;
+	}
+
+	public float getTciRatio() {
+		return tciRatio;
+	}
+
+	public void setTciRatio(float tciRatio) {
+		this.tciRatio = tciRatio;
+	}
+
+	public int getTciType() {
+		return tciType;
+	}
+
+	public void setTciType(int tciType) {
+		this.tciType = tciType;
 	}
 
 	public int getTagMod() {

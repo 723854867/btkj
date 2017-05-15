@@ -23,9 +23,9 @@ public class Employee implements UniqueModel<Integer> {
 	private int payType;
 	private int state;
 	private int tagMod;
-	private int integral;
-	private int scaleCommission;
-	private int manageCommission;
+	private int score;
+	private int scaleBonus;
+	private int manageBonus;
 	private int created;
 	private int updated;
 
@@ -149,28 +149,28 @@ public class Employee implements UniqueModel<Integer> {
 		this.state = state;
 	}
 	
-	public int getIntegral() {
-		return integral;
+	public int getScore() {
+		return score;
 	}
 
-	public void setIntegral(int integral) {
-		this.integral = integral;
+	public void setScore(int score) {
+		this.score = score;
 	}
 
-	public int getScaleCommission() {
-		return scaleCommission;
+	public int getScaleBonus() {
+		return scaleBonus;
 	}
 
-	public void setScaleCommission(int scaleCommission) {
-		this.scaleCommission = scaleCommission;
+	public void setScaleBonus(int scaleBonus) {
+		this.scaleBonus = scaleBonus;
 	}
 
-	public int getManageCommission() {
-		return manageCommission;
+	public int getManageBonus() {
+		return manageBonus;
 	}
 
-	public void setManageCommission(int manageCommission) {
-		this.manageCommission = manageCommission;
+	public void setManageBonus(int manageBonus) {
+		this.manageBonus = manageBonus;
 	}
 
 	@Override

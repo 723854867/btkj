@@ -6,7 +6,10 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.UserListInfo;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.api.UserService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
@@ -32,6 +35,11 @@ public class UserServiceImpl implements UserService {
 	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
+	
+	@Override
+	public Result<Pager<UserListInfo>> userList(UserSearcher searcher) {
+		return userMapper.userList(searcher);
+	}
 	
 	@Override
 	public User getUser(int uid) {

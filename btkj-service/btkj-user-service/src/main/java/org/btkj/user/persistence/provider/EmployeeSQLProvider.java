@@ -21,9 +21,9 @@ public class EmployeeSQLProvider {
 				VALUES("`pay_type`", "#{payType}");
 				VALUES("`tag_mod`", "#{tagMod}");
 				VALUES("`state`", "#{state}");
-				VALUES("`integral`", "#{integral}");
-				VALUES("`scale_commission`", "#{scaleCommission}");
-				VALUES("`manage_commission`", "#{manageCommission}");
+				VALUES("`score`", "#{score}");
+				VALUES("`scale_bonus`", "#{scaleBonus}");
+				VALUES("`manage_bonus`", "#{manageBonus}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -44,12 +44,14 @@ public class EmployeeSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("pay_type", "#{payType}");
-				SET("state", "#{state}");
-				SET("tag_mod", "#{tagMod}");
-				SET("integral", "#{integral}");
-				SET("scaleCommission", "#{scaleCommission}");
-				SET("manageCommission", "#{manageCommission}");
+				SET("`pay_type`", "#{payType}");
+				SET("`state`", "#{state}");
+				SET("`tag_mod`", "#{tagMod}");
+				SET("`score`", "#{score}");
+				SET("`scale_bonus`", "#{scaleBonus}");
+				SET("`manage_bonus`", "#{manageBonus}");
+				SET("`updated`=#{updated}");
+				WHERE("id=#{id}");
 			}
 		}.toString();
 	}
@@ -82,20 +84,6 @@ public class EmployeeSQLProvider {
 				FROM(BtkjTables.EMPLOYEE.name());
 				WHERE("uid=#{uid}");
 			}
-		}.toString();
-	}
-	
-	public String updateInfo() {
-		return new SQL() {
-		   {
-				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("`pay_type`=#{payType}");
-				SET("`tag_mod`=#{tagMod}");
-				SET("`scale_commission`=#{scaleCommission}");
-				SET("`manage_commission`=#{manageCommission}");
-				SET("`updated`=#{updated}");
-				WHERE("id=#{id}");
-		   }
 		}.toString();
 	}
 	

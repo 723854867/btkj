@@ -2,7 +2,7 @@ package org.btkj.user;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.SpecialCommission;
+import org.btkj.pojo.entity.SpecialBonus;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
@@ -81,20 +81,20 @@ public class BeanGenerator {
 		return ai;
 	}
 	
-	public static final SpecialCommission newSpecialCommission(EmployeeInfo employeeInfo) {
-		SpecialCommission specialCommission = new SpecialCommission();
-		specialCommission.setEid(employeeInfo.getId());
-		specialCommission.setNoBusinessCar(employeeInfo.getBusinessCar());
-		specialCommission.setNoBusinessTruck(employeeInfo.getNoBusinessTruck());
-		specialCommission.setBusinessCar(employeeInfo.getBusinessCar());
-		specialCommission.setBusinessTruck(employeeInfo.getBusinessTruck());
-		specialCommission.setTakeEffectTime(employeeInfo.getTakeEffectTime());
-		specialCommission.setCommercialInsuranceRatio(employeeInfo.getCommercialInsuranceRatio());
-		specialCommission.setCommercialInsuranceType(employeeInfo.getCommercialInsuranceType());
-		specialCommission.setCompulsoryInsuranceRatio(employeeInfo.getCompulsoryInsuranceRatio());
-		specialCommission.setCompulsoryInsuranceType(employeeInfo.getCompulsoryInsuranceType());
-		specialCommission.setUpdated(DateUtils.currentTime());
-		return specialCommission;
+	public static final SpecialBonus newSpecialBonus(EmployeeInfo employeeInfo) {
+		SpecialBonus specialBonus = new SpecialBonus();
+		specialBonus.setEid(employeeInfo.getId());
+		specialBonus.setNoBusinessCar(employeeInfo.getBusinessCar());
+		specialBonus.setNoBusinessTruck(employeeInfo.getNoBusinessTruck());
+		specialBonus.setBusinessCar(employeeInfo.getBusinessCar());
+		specialBonus.setBusinessTruck(employeeInfo.getBusinessTruck());
+		specialBonus.setStartTime(employeeInfo.getStartTime());
+		specialBonus.setVciRatio(employeeInfo.getVciRatio());
+		specialBonus.setVciType(employeeInfo.getVciType());
+		specialBonus.setTciRatio(employeeInfo.getTciRatio());
+		specialBonus.setTciType(employeeInfo.getTciType());
+		specialBonus.setUpdated(DateUtils.currentTime());
+		return specialBonus;
 	}
 	
 	/**
@@ -107,8 +107,8 @@ public class BeanGenerator {
 		employee.setId(employeeInfo.getId());
 		employee.setPayType(employeeInfo.getPayType());
 		employee.setTagMod(employeeInfo.getTagMod());
-		employee.setScaleCommission(employeeInfo.getScaleCommission());
-		employee.setManageCommission(employeeInfo.getManageCommission());
+		employee.setScaleBonus(employeeInfo.getScaleBonus());
+		employee.setManageBonus(employeeInfo.getManageBonus());
 		employee.setUpdated(DateUtils.currentTime());
 		return employee;
 	}

@@ -41,12 +41,6 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
 	
-	/**
-	 * 商家管理后台只能对雇员部分属性进行修改
-	 * @param entity
-	 */
-	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateInfo")
-	void updateInfo(Employee entity);
 	
 	/**
 	 * 新雇员加入代理公司，需要修改该代理公司一部分雇员的 left 和 right 值

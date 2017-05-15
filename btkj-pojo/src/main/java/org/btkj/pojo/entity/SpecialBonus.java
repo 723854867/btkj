@@ -6,7 +6,7 @@ import org.rapid.util.common.model.UniqueModel;
  * 自留佣金设置表
  * @author sj
  */
-public class SpecialCommission implements UniqueModel<Integer> {
+public class SpecialBonus implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = -315073031541553807L;
 
@@ -16,11 +16,11 @@ public class SpecialCommission implements UniqueModel<Integer> {
 	private int noBusinessTruck;		//非营业货车 1勾选
 	private int businessCar;			//营业客车     1勾选
 	private int businessTruck;			//营业货车     1勾选
-	private int takeEffectTime;		//生效时间
-	private float commercialInsuranceRatio; //商业险比例
-	private int commercialInsuranceType;	  //商业险比例：0减，1加
-	private float compulsoryInsuranceRatio; //交强险比例
-	private int compulsoryInsuranceType;    //交强险比例：0减，1加
+	private int startTime;		//生效时间
+	private float vciRatio; //商业险比例
+	private int vciType;	  //商业险比例：0减，1加
+	private float tciRatio; //交强险比例
+	private int tciType;    //交强险比例：0减，1加
 	private int created;
 	private int updated;
 
@@ -95,63 +95,61 @@ public class SpecialCommission implements UniqueModel<Integer> {
 	}
 
 
-
-	public int getTakeEffectTime() {
-		return takeEffectTime;
+	public int getStartTime() {
+		return startTime;
 	}
 
 
 
-	public void setTakeEffectTime(int takeEffectTime) {
-		this.takeEffectTime = takeEffectTime;
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+
+	
+	public float getVciRatio() {
+		return vciRatio;
 	}
 
 
 
-	public float getCommercialInsuranceRatio() {
-		return commercialInsuranceRatio;
+	public void setVciRatio(float vciRatio) {
+		this.vciRatio = vciRatio;
 	}
 
 
 
-	public void setCommercialInsuranceRatio(float commercialInsuranceRatio) {
-		this.commercialInsuranceRatio = commercialInsuranceRatio;
+	public int getVciType() {
+		return vciType;
 	}
 
 
 
-	public int getCommercialInsuranceType() {
-		return commercialInsuranceType;
+	public void setVciType(int vciType) {
+		this.vciType = vciType;
 	}
 
 
 
-	public void setCommercialInsuranceType(int commercialInsuranceType) {
-		this.commercialInsuranceType = commercialInsuranceType;
+	public float getTciRatio() {
+		return tciRatio;
 	}
 
 
 
-	public float getCompulsoryInsuranceRatio() {
-		return compulsoryInsuranceRatio;
+	public void setTciRatio(float tciRatio) {
+		this.tciRatio = tciRatio;
 	}
 
 
 
-	public void setCompulsoryInsuranceRatio(float compulsoryInsuranceRatio) {
-		this.compulsoryInsuranceRatio = compulsoryInsuranceRatio;
+	public int getTciType() {
+		return tciType;
 	}
 
 
 
-	public int getCompulsoryInsuranceType() {
-		return compulsoryInsuranceType;
-	}
-
-
-
-	public void setCompulsoryInsuranceType(int compulsoryInsuranceType) {
-		this.compulsoryInsuranceType = compulsoryInsuranceType;
+	public void setTciType(int tciType) {
+		this.tciType = tciType;
 	}
 
 

@@ -1,11 +1,15 @@
 package org.btkj.user.persistence.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.UserListInfo;
+import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.persistence.provider.UserSQLProvider;
 import org.rapid.data.storage.db.Dao;
 
@@ -26,4 +30,8 @@ public interface UserDao extends Dao<Integer, User> {
 
 	@SelectProvider(type = UserSQLProvider.class, method = "selectByMobile")
 	User selectByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
+	
+	int searchCount(UserSearcher searcher);
+	
+	List<UserListInfo> search(UserSearcher searcher);
 }

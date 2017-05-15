@@ -22,7 +22,7 @@ public class EMPLOYEE_INFO extends TenantAction {
 	protected Result<?> execute(Request request, App app, Tenant tenant, User user) {
 		int id = request.getParam(Params.ID);
 		String name = request.getParam(Params.NAME);
-		EmployeeInfo info = employeeService.employeeInfoRead(id);
+		EmployeeInfo info = employeeService.employeeInfo(id);
 		if (null == info)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		info.setPname(name);

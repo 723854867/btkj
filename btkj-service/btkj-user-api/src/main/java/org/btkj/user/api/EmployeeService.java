@@ -25,17 +25,17 @@ public interface EmployeeService {
 	 * @param state
 	 * @return
 	 */
-	Result<Void> employeeDisable(int employeeId, EmployeeState state);
+	Result<Void> employeeState(int employeeId, EmployeeState state);
 	
 	/**
 	 * 根据id获取雇员详细信息
 	 * @return
 	 */
-	EmployeeInfo employeeInfoRead(int employeeId);
+	EmployeeInfo employeeInfo(int employeeId);
 	
 	/**
 	 * 修改保存雇员基本信息
 	 * @return
 	 */
-	Result<Void> employeeInfoSave(EmployeeInfo employeeInfo);
+	Result<Void> employeeEdit(EmployeeInfo employeeInfo);
 }

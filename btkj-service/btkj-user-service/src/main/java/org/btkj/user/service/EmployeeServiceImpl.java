@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.SpecialCommission;
+import org.btkj.pojo.entity.SpecialBonus;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.EmployeeState;
@@ -17,10 +17,11 @@ import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
-import org.btkj.user.redis.SpecialCommissionMapper;
+import org.btkj.user.redis.SpecialBonusMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
 @Service("employeeService")
@@ -35,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Resource
 	private EmployeeMapper employeeMapper;
 	@Resource
-	private SpecialCommissionMapper specialCommissionMapper;
+	private SpecialBonusMapper specialBonusMapper;
 	
 	@Override
 	public Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher) {
@@ -43,23 +44,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public Result<Void> employeeDisable(int id, EmployeeState state) {
+	public Result<Void> employeeState(int id, EmployeeState state) {
 		Employee employee = employeeMapper.getByKey(id);
 		if(null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		if (employee.getState() != state.mark()) {
 			employee.setState(state.mark());
+			employee.setUpdated(DateUtils.currentTime());
 			employeeMapper.update(employee);
 		}
 		return Result.success();
 	}
 	
 	@Override
-	public Result<Void> employeeInfoSave(EmployeeInfo employeeInfo) {
+	public Result<Void> employeeEdit(EmployeeInfo employeeInfo) {
 		Employee employee = employeeMapper.getByKey(employeeInfo.getId());
 		if(null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST); 
-			employeeMapper.employeeInfoSave(employeeInfo);
+			employeeMapper.employeeEdit(employeeInfo);
 		 return Result.success();
 	}
 	
@@ -75,14 +77,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public EmployeeInfo employeeInfoRead(int id) {
+	public EmployeeInfo employeeInfo(int id) {
 		Employee employee = employeeMapper.getByKey(id);
 		if (null == employee)
 			return null;
-		SpecialCommission specialCommission = specialCommissionMapper.getByeid(id);
-		if(null == specialCommission)
+		SpecialBonus specialBonus = specialBonusMapper.getByeid(id);
+		if(null == specialBonus)
 			return new EmployeeInfo(employee);
 		else
-		return new EmployeeInfo(employee,specialCommission);
+		return new EmployeeInfo(employee,specialBonus);
 	}
 }

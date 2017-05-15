@@ -12,7 +12,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class EMPLOYEE_DISABLE extends TenantAction {
+public class EMPLOYEE_STATE extends TenantAction {
 	
 	@Resource
 	private EmployeeService employeeService;
@@ -21,6 +21,6 @@ public class EMPLOYEE_DISABLE extends TenantAction {
 	protected Result<?> execute(Request request, App app, Tenant tenant, User operator) {
 		int id = request.getParam(Params.ID);
 		EmployeeState state = request.getParam(Params.EMPLOYEE_STATE);
-		return employeeService.employeeDisable(id, state);
+		return employeeService.employeeState(id, state);
 	}
 }

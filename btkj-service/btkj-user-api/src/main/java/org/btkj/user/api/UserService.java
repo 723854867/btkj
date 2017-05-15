@@ -2,7 +2,10 @@ package org.btkj.user.api;
 
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.UserListInfo;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.submit.UserSearcher;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -11,6 +14,10 @@ import org.rapid.util.common.message.Result;
  * @author ahab
  */
 public interface UserService {
+	/**
+	 * 获取全平台用户
+	 */
+	Result<Pager<UserListInfo>> userList(UserSearcher searcher);
 
 	/**
 	 * 通过 uid 获取用户

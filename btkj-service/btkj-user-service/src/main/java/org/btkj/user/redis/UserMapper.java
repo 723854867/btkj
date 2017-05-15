@@ -1,10 +1,15 @@
 package org.btkj.user.redis;
 
 import java.text.MessageFormat;
+import java.util.List;
+
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.UserListInfo;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.Config;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
@@ -35,6 +40,23 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 
 	public UserMapper() {
 		super(BtkjTables.USER, "hash:db:user");
+	}
+	
+	/**
+	 * 分页获取用户信息
+	 * 
+	 * @param pager
+	 * @param tid
+	 */
+	@SuppressWarnings("unchecked")
+	public Result<Pager<UserListInfo>> userList(UserSearcher searcher) {
+		int total = dao.searchCount(searcher);
+		if (0 == total)
+			return Result.result(Pager.EMPLTY);
+		searcher.calculate(total);
+		List<UserListInfo> users = dao.search(searcher);
+		Pager<UserListInfo> pager = new Pager<UserListInfo>(searcher.getTotal(), users);
+		return Result.result(pager);
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {

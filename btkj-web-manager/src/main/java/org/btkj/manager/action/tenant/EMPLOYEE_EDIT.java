@@ -20,7 +20,7 @@ public class EMPLOYEE_EDIT extends TenantAction {
 	@Override
 	protected Result<?> execute(Request request, App app, Tenant tenant, User user) {
 		EmployeeInfo employeeInfo = request.getParam(Params.EMPLOYEE_INFO);
-		return employeeService.employeeInfoSave(employeeInfo);
+		return employeeService.employeeEdit(employeeInfo);
 		
 	}
 }

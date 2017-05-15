@@ -2,12 +2,29 @@ package org.btkj.user.api;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.AppListInfo;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.submit.AppSearcher;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
+	
+	/**
+	 * 禁用App
+	 * 
+	 * @param state
+	 * @return
+	 */
+	Result<Void> appState(int appId, AppState state);
+	
+	/**
+	 * 获取全平台App用户
+	 */
+	Result<Pager<AppListInfo>> appList(AppSearcher searcher);
 	
 	/**
 	 * 通过 appId 获取 App

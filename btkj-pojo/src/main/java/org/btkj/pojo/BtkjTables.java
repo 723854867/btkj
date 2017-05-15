@@ -15,7 +15,7 @@ public interface BtkjTables {
 	final Table TENANT								= new Table("tenant");
 	final Table EMPLOYEE							= new Table("employee");
 	final Table COMMUNITY							= new Table("community");
-	final Table SPECIAL_COMMISSION					= new Table("special_commission");
+	final Table SPECIAL_BONUS					= new Table("special_bonus");
 	final Table NON_AUTO_BIND						= new Table("non_auto_bind");
 
 	

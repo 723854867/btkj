@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.SpecialCommission;
+import org.btkj.pojo.entity.SpecialBonus;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
@@ -17,7 +17,7 @@ import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.EmployeeDao;
-import org.btkj.user.persistence.dao.SpecialCommissionDao;
+import org.btkj.user.persistence.dao.SpecialBonusDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtils;
@@ -35,9 +35,9 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	@Resource
 	private UserMapper userMapper;
 	@Resource
-	private SpecialCommissionMapper specialCommissionMapper;
+	private SpecialBonusMapper specialBonusMapper;
 	@Resource
-	private SpecialCommissionDao specialCommissionDao;
+	private SpecialBonusDao specialBonusDao;
 	
 	public EmployeeMapper() {
 		super(BtkjTables.EMPLOYEE, "hash:db:employee");
@@ -53,17 +53,15 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	/**
 	 * 商家后台管理保存修改雇员部分属性
 	 */
-	public void employeeInfoSave(EmployeeInfo employeeInfo) {
+	public void employeeEdit(EmployeeInfo employeeInfo) {
 		Employee employee = BeanGenerator.newEmployeeSave(employeeInfo);
-		dao.updateInfo(employee);
-		employee = dao.selectByKey(employee.getId());
-		flush(employee);
-		SpecialCommission specialCommission = BeanGenerator.newSpecialCommission(employeeInfo);
-		if(null == specialCommissionMapper.getByeid(employee.getId())){
-			specialCommission.setCreated(DateUtils.currentTime());
-			specialCommissionDao.insert(specialCommission);
+		dao.update(employee);
+		SpecialBonus specialbonus = BeanGenerator.newSpecialBonus(employeeInfo);
+		if(null == specialBonusMapper.getByeid(employee.getId())){
+			specialbonus.setCreated(DateUtils.currentTime());
+			specialBonusMapper.insert(specialbonus);
 	    }else 
-			specialCommissionDao.updateInfo(specialCommission);
+			specialBonusMapper.update(specialbonus);
 	}
 	
 	/**

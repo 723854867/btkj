@@ -6,12 +6,15 @@ import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.NonAutoCategory;
+import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
+import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.submit.UserSearcher;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -165,6 +168,15 @@ public interface Params {
 		};
 	};
 	
+	final Str2ObjConstConverter<AppState> APP_STATE	= new Str2ObjConstConverter<AppState>(1027, "appState") {
+		public AppState convert(String value) throws ConstConvertFailureException {
+			AppState state = AppState.match(Integer.valueOf(value));
+			if (null == state)
+				throw ConstConvertFailureException.errorConstException(this);
+			return state;
+		};
+	};
+	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
 
@@ -193,6 +205,20 @@ public interface Params {
 		@Override
 		public EmployeeInfo convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeInfo.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<UserSearcher> USER_SEARCHER			= new Str2ObjConstConverter<UserSearcher>(1203, "userSearch") {
+		@Override
+		public UserSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, UserSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<AppSearcher> APP_SEARCHER			= new Str2ObjConstConverter<AppSearcher>(1204, "appSearch") {
+		@Override
+		public AppSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, AppSearcher.class);
 		}
 	};
 }
