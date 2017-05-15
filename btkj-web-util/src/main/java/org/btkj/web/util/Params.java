@@ -9,6 +9,7 @@ import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.EmployeeSearcher;
+import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -167,6 +168,13 @@ public interface Params {
 		@Override
 		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<NonAutoProductSearcher> NON_AUTO_PRODUCT_SEARCHER = new Str2ObjConstConverter<NonAutoProductSearcher>(1202, "nonAutoProductSearch") {
+		@Override
+		public NonAutoProductSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoProductSearcher.class);
 		}
 	};
 }

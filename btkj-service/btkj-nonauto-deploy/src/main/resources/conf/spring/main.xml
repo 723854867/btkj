@@ -13,4 +13,9 @@
 		<property name="mongo" ref="mongo" />
 		<property name="keyMapper" ref="keyMapper" />
 	</bean>
+	
+	<bean id="nonAutoProductMapper" class="org.btkj.nonauto.mongo.NonAutoProductMapper">
+		<property name="mongo" ref="mongo" />
+		<property name="keyMapper" ref="keyMapper" />
+	</bean>
 </beans>

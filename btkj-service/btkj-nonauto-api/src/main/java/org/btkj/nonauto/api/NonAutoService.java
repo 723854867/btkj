@@ -3,6 +3,9 @@ package org.btkj.nonauto.api;
 import java.util.List;
 
 import org.btkj.pojo.entity.NonAutoCategory;
+import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.submit.NonAutoProductSearcher;
 
 /**
  * 非车险服务类
@@ -40,4 +43,12 @@ public interface NonAutoService {
 	 * @return
 	 */
 	NonAutoCategory getCategoryById(long id);
+	
+	/**
+	 * 获取非车险产品列表
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Pager<NonAutoProduct> productList(NonAutoProductSearcher searcher);
 }
