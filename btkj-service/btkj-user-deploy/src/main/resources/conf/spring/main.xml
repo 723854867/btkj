@@ -61,4 +61,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="nonAutoBindDao" />
 	</bean>
+	
+	<bean id="specialCommissionMapper" class="org.btkj.user.redis.SpecialCommissionMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="specialCommissionDao" />
+	</bean>
 </beans>

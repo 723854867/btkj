@@ -2,9 +2,11 @@ package org.btkj.user;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.SpecialCommission;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
+import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.rapid.util.lang.DateUtils;
 
@@ -77,5 +79,37 @@ public class BeanGenerator {
 		ai.setIdentity(identity);
 		ai.setTime(DateUtils.currentTime());
 		return ai;
+	}
+	
+	public static final SpecialCommission newSpecialCommission(EmployeeInfo employeeInfo) {
+		SpecialCommission specialCommission = new SpecialCommission();
+		specialCommission.setEid(employeeInfo.getId());
+		specialCommission.setNoBusinessCar(employeeInfo.getBusinessCar());
+		specialCommission.setNoBusinessTruck(employeeInfo.getNoBusinessTruck());
+		specialCommission.setBusinessCar(employeeInfo.getBusinessCar());
+		specialCommission.setBusinessTruck(employeeInfo.getBusinessTruck());
+		specialCommission.setTakeEffectTime(employeeInfo.getTakeEffectTime());
+		specialCommission.setCommercialInsuranceRatio(employeeInfo.getCommercialInsuranceRatio());
+		specialCommission.setCommercialInsuranceType(employeeInfo.getCommercialInsuranceType());
+		specialCommission.setCompulsoryInsuranceRatio(employeeInfo.getCompulsoryInsuranceRatio());
+		specialCommission.setCompulsoryInsuranceType(employeeInfo.getCompulsoryInsuranceType());
+		specialCommission.setUpdated(DateUtils.currentTime());
+		return specialCommission;
+	}
+	
+	/**
+	 * 用于存储后台商家管理中部分雇员修改信息
+	 * @param employee
+	 * @return
+	 */
+	public static final Employee newEmployeeSave(EmployeeInfo employeeInfo) {
+		Employee employee = new Employee();
+		employee.setId(employeeInfo.getId());
+		employee.setPayType(employeeInfo.getPayType());
+		employee.setTagMod(employeeInfo.getTagMod());
+		employee.setScaleCommission(employeeInfo.getScaleCommission());
+		employee.setManageCommission(employeeInfo.getManageCommission());
+		employee.setUpdated(DateUtils.currentTime());
+		return employee;
 	}
 }
