@@ -38,8 +38,8 @@
 	</bean>
 	
 	<bean id="appMapper" class="org.btkj.user.redis.AppMapper">
-		<property name="dao" ref="appDao" />
 		<property name="redis" ref="redis" />
+		<property name="dao" ref="appDao" />
 	</bean>
 	
 	<bean id="tenantMapper" class="org.btkj.user.redis.TenantMapper">
