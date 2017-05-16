@@ -53,6 +53,6 @@
 				</choose>
 			</otherwise>
 		</choose>
-		LIMIT #{start}, #{pageSize})
+		LIMIT #{start}, #{pageSize}
 	</select> 
 </mapper>
