@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.entity.NonAutoProduct;
@@ -216,17 +217,24 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<UserSearcher> USER_SEARCHER			= new Str2ObjConstConverter<UserSearcher>(1203, "userSearch") {
+	final Str2ObjConstConverter<UserSearcher> USER_SEARCHER			= new Str2ObjConstConverter<UserSearcher>(1205, "userSearch") {
 		@Override
 		public UserSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, UserSearcher.class);
 		}
 	};
 	
-	final Str2ObjConstConverter<AppSearcher> APP_SEARCHER			= new Str2ObjConstConverter<AppSearcher>(1204, "appSearch") {
+	final Str2ObjConstConverter<AppSearcher> APP_SEARCHER			= new Str2ObjConstConverter<AppSearcher>(1206, "appSearch") {
 		@Override
 		public AppSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, AppSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<App> APP_INFO			= new Str2ObjConstConverter<App>(1207, "appInfo") {
+		@Override
+		public App convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, App.class);
 		}
 	};
 }

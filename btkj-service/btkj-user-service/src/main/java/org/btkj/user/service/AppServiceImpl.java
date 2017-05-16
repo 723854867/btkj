@@ -46,6 +46,15 @@ public class AppServiceImpl implements AppService {
 	private EmployeeService employeeService;
 	
 	@Override
+	public Result<Void> appEdit(App app) {
+		App a = appMapper.getByKey(app.getId());
+		if(null == a)
+			return Result.result(BtkjCode.APP_NOT_EXIST); 
+			appMapper.update(app);
+		 return Result.success();
+	}
+	
+	@Override
 	public Result<Void> appState(int id, AppState state) {
 		App app = appMapper.getByKey(id);
 		if(null == app)

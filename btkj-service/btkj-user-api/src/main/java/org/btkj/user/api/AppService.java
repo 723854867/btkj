@@ -14,6 +14,12 @@ import org.rapid.util.common.message.Result;
 public interface AppService {
 	
 	/**
+	 * 修改保存App基本信息
+	 * @return
+	 */
+	Result<Void> appEdit(App app);
+	
+	/**
 	 * 禁用App
 	 * 
 	 * @param state
