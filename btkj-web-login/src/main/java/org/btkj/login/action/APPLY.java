@@ -58,7 +58,9 @@ public class APPLY implements Action {
 					result.attach().getUser(), 
 					request.getParam(Params.EMPLOYEE_ID), 
 					request.getParam(Params.NAME), 
-					request.getParam(Params.IDENTITY));
+					request.getParam(Params.IDENTITY),
+					request.getParam(Params.IDENTITY_FACE),
+					request.getParam(Params.IDENTITY_BACK));
 		} finally {
 			userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());
 		}
@@ -74,6 +76,9 @@ public class APPLY implements Action {
 		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, chief.getApp().getId());
 		if (courierService.captchaVerify(verifier).getCode() == -1)
 			return Result.result(Code.CAPTCHA_ERROR);
-		return tenantService.apply(verifier.getIdentity(), chief, name, identity);
+		return tenantService.apply(
+				verifier.getIdentity(), chief, name, identity, 
+				request.getParam(Params.IDENTITY_FACE),
+				request.getParam(Params.IDENTITY_BACK));
 	}
 }

@@ -165,6 +165,8 @@ public interface Params {
 			return state;
 		};
 	};
+	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1027, "identityFace");
+	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1028, "identityBack");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

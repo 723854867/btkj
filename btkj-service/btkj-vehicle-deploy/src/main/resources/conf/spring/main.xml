@@ -10,7 +10,7 @@
 	<context:component-scan base-package="org.btkj.vehicle" />
 	
 	<bean id="httpProxy" class="org.rapid.util.net.http.HttpProxy" init-method="init">
-		<property name="asyncHttp">
+		<property name="syncHttp">
 			<bean class="org.rapid.util.net.http.SyncHttpAdapter">
 				<property name="retryCount" value="${http.sync.retryCount}"/>
 				<property name="keepAliveTime" value="${http.sync.keepAliveTime}"/>

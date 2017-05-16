@@ -14,6 +14,8 @@ public class EmployeeSQLProvider {
 				VALUES("name", "#{name}");
 				VALUES("mobile", "#{mobile}");
 				VALUES("identity", "#{identity}");
+				VALUES("identity_face", "#{identityFace}");
+				VALUES("identity_back", "#{identityBack}");
 				VALUES("parent_id", "#{parentId}");
 				VALUES("`left`", "#{left}");
 				VALUES("`right`", "#{right}");

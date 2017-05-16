@@ -5,5 +5,5 @@ import org.btkj.pojo.entity.Region;
 
 public interface MasterService {
 
-	void tenantAdd(App app, Region region, String tname, String name, String mobile, String identity);
+	void tenantAdd(App app, Region region, String tname, String name, String mobile, String identity, String identityFace, String identityBack);
 }

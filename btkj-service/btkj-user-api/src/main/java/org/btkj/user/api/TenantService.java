@@ -31,9 +31,11 @@ public interface TenantService {
 	 * @param employeeId
 	 * @param name
 	 * @param identity
+	 * @param identityFace
+	 * @param identityBack
 	 * @return
 	 */
-	Result<?> apply(User user, int employeeId, String name, String identity);
+	Result<?> apply(User user, int employeeId, String name, String identity, String identityFace, String identityBack);
 	
 	/**
 	 * 申请加入代理公司
@@ -42,9 +44,11 @@ public interface TenantService {
 	 * @param employeeId
 	 * @param name
 	 * @param identity
+	 * @param identityFace
+	 * @param identityBack
 	 * @return
 	 */
-	Result<?> apply(String mobile, EmployeeForm chief, String name, String identity);
+	Result<?> apply(String mobile, EmployeeForm chief, String name, String identity, String identityFace, String identityBack);
 
 	/**
 	 * 代理公司获取审核列表
@@ -72,7 +76,7 @@ public interface TenantService {
 	 * @param identity root 账号身份证
 	 * @return
 	 */
-	Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity);
+	Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack);
 	
 	/**
 	 * 代理公司列表

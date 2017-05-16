@@ -3,17 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.btkj</groupId>
 		<artifactId>btkj-service</artifactId>
 		<version>1.0</version>
 	</parent>
-	
+
 	<artifactId>btkj-vehicle-deploy</artifactId>
 	<name>btkj-vehicle-deploy</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -95,6 +95,11 @@
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>minlog</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
 		</dependency>
 	</dependencies>
 
