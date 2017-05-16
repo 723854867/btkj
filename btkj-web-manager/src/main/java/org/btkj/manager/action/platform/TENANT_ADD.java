@@ -49,12 +49,14 @@ public class TENANT_ADD extends PlatformAction {
 			return Result.result(Code.REGION_OUT_OF_BOUNDARY);
 		String name = request.getParam(Params.NAME);
 		String identity = request.getParam(Params.IDENTITY);
+		String identityFace = request.getParam(Params.IDENTITY_FACE);
+		String identityBack = request.getParam(Params.IDENTITY_BACK);
 		String mobile = request.getParam(Params.MOBILE);
 		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, mobile, app.getId());	
 		if (courierService.captchaVerify(verifier).getCode() == -1)
 			return Result.result(Code.CAPTCHA_ERROR);
 		if (app.isTenantAddAutonomy())
-			return tenantService.tenantAdd(app, region, tname, mobile, name, identity);
+			return tenantService.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
 		else {
 			int tenantNum = appService.tenantNum(app);
 			if (0 < app.getMaxTenantsCount() && tenantNum >= app.getMaxTenantsCount()) 
@@ -62,7 +64,7 @@ public class TENANT_ADD extends PlatformAction {
 			User user = userService.getUser(mobile, app.getId());
 			if (null != user && userService.tenantNumMax(user)) 
 				return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
-			masterService.tenantAdd(app, region, tname, name, mobile, identity);
+			masterService.tenantAdd(app, region, tname, name, mobile, identity, identityFace, identityBack);
 		}
 		return Result.success();
 	}

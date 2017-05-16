@@ -21,4 +21,7 @@ public interface BtkjTables {
 	
 	// ******************************* user tables *******************************
 	final Table ADMINISTRATOR						= new Table("administrator");
+	
+	// ******************************* vehicle tables *******************************
+	final Table VEHICLE_CONFIG						= new Table("vehicle_config");
 }

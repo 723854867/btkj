@@ -16,6 +16,8 @@ public class Employee implements UniqueModel<Integer> {
 	private String name;
 	private String mobile;
 	private String identity;
+	private String identityFace;
+	private String identityBack;
 	private int parentId;
 	private int left;
 	private int right;
@@ -75,6 +77,22 @@ public class Employee implements UniqueModel<Integer> {
 	
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+	
+	public String getIdentityFace() {
+		return identityFace;
+	}
+	
+	public void setIdentityFace(String identityFace) {
+		this.identityFace = identityFace;
+	}
+	
+	public String getIdentityBack() {
+		return identityBack;
+	}
+	
+	public void setIdentityBack(String identityBack) {
+		this.identityBack = identityBack;
 	}
 	
 	public int getParentId() {

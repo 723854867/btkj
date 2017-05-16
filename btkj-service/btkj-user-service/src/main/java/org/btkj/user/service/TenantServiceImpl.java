@@ -62,17 +62,17 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	@Override
-	public Result<?> apply(User user, int employeeId, String name, String identity) {
+	public Result<?> apply(User user, int employeeId, String name, String identity, String identityFace, String identityBack) {
 		EmployeeForm chief = employeeService.getById(employeeId);
 		if (null == chief)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		if (chief.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
-		return _doApply(chief.getTenant(), user, chief, name, identity);
+		return _doApply(chief.getTenant(), user, chief, name, identity, identityFace, identityBack);
 	}
 	
 	@Override
-	public Result<?> apply(String mobile, EmployeeForm chief, String name, String identity) {
+	public Result<?> apply(String mobile, EmployeeForm chief, String name, String identity, String identityFace, String identityBack) {
 		User user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
 		if (null == user) {
 			try {
@@ -81,16 +81,16 @@ public class TenantServiceImpl implements TenantService {
 				user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
 			}
 		}
-		return _doApply(chief.getTenant(), user, chief, name, identity);
+		return _doApply(chief.getTenant(), user, chief, name, identity, identityFace, identityBack);
 	}
 	
-	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity) {
+	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity, String identityFace, String identityBack) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief, name, identity));
+		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief, name, identity, identityFace, identityBack));
 		return Result.success();
 	}
 	
@@ -109,29 +109,30 @@ public class TenantServiceImpl implements TenantService {
 		
 		Employee chief = employeeMapper.getByKey(info.getChief());
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief, info.getName(), info.getIdentity());
+		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief, info.getName(), 
+				info.getIdentity(), info.getIdentityFace(), info.getIdentityBack());
 		employeeMapper.insert(employee);
 		return Result.success();
 	}
 	
 	@Override
-	public Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity) {
+	public Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack) {
 		Result<User> result = userMapper.lockUserByMobile(app.getId(), mobile);
 		if (result.isSuccess()) {									// 指定一个老用户作为新的租户的顶级用户
 			try {
 				if (userService.tenantNumMax(result.attach()))
 					return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
-				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, result.attach(), name, identity);
+				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, result.attach(), name, identity, identityFace, identityBack);
 				callback.invoke();
 			} finally {
 				userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
 			}
 		} else if (result.getCode() == Code.USER_NOT_EXIST.id()) {	// 指定一个新用户作为租户的顶级用户
 			try {
-				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, mobile, name, identity);
+				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
 				callback.invoke();
 			} catch (DuplicateKeyException e) {			// 说明在这里的时候 mobile 用户刚好也注册了，name再次添加一次
-				return tenantAdd(app, region, tname, mobile, name, identity);
+				return tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
 			}
 		} else 
 			return result;

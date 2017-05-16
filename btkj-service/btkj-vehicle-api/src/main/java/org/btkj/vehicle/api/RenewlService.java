@@ -1,6 +1,7 @@
 package org.btkj.vehicle.api;
 
 import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.model.Renew;
 
 /**
  * 续保服务类：专门用来获取车辆的续保信息
@@ -13,6 +14,7 @@ public interface RenewlService {
 	 * 获取续保信息，必须要是员工才可以
 	 * 
 	 * @param employee
+	 * @param license
 	 */
-	void renewlInfo(EmployeeForm employeeForm, String license);
+	Renew renewlInfo(EmployeeForm employeeForm, String license);
 }

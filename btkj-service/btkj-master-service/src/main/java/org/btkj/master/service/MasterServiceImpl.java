@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MasterServiceImpl implements MasterService {
 
 	@Override
-	public void tenantAdd(App app, Region region, String tname, String name, String mobile, String identity) {
+	public void tenantAdd(App app, Region region, String tname, String name, String mobile, String identity, String identityFace, String identityBack) {
 		
 	}
 }

@@ -23,7 +23,7 @@ public class BeanGenerator {
 		return user;
 	} 
 	
-	public static final Employee newEmployee(User user, Tenant tenant, Employee parent, String name, String identity) {
+	public static final Employee newEmployee(User user, Tenant tenant, Employee parent, String name, String identity, String identityFace, String identityBack) {
 		Employee employee = new Employee();
 		employee.setUid(user.getUid());
 		employee.setTid(tenant.getTid());
@@ -34,6 +34,8 @@ public class BeanGenerator {
 		employee.setName(name);
 		employee.setIdentity(identity);
 		employee.setMobile(user.getMobile());
+		employee.setIdentityFace(identityFace);
+		employee.setIdentityBack(identityBack);
 		
 		int time = DateUtils.currentTime();
 		employee.setCreated(time);
@@ -67,7 +69,7 @@ public class BeanGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity) { 
+	public static final ApplyInfo newApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity, String identityFace, String identityBack) { 
 		ApplyInfo ai = new ApplyInfo();
 		ai.setTid(tenant.getTid());
 		ai.setUid(user.getUid());
@@ -78,6 +80,8 @@ public class BeanGenerator {
 		ai.setMobile(chief.getUser().getMobile());
 		ai.setIdentity(identity);
 		ai.setTime(DateUtils.currentTime());
+		ai.setIdentityFace(identityFace);
+		ai.setIdentityBack(identityBack);
 		return ai;
 	}
 	

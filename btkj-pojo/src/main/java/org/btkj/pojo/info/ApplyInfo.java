@@ -21,6 +21,8 @@ public class ApplyInfo implements UniqueModel<String> {
 	private String chiefMobile; 		// 邀请者手机号
 	private int time; 					// 申请时间
 	private String identity;			// 申请者身份证号
+	private String identityFace;		// 身份证正面
+	private String identityBack;		// 身份证反面
 
 	public int getTid() {
 		return tid;
@@ -92,6 +94,22 @@ public class ApplyInfo implements UniqueModel<String> {
 
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+	
+	public String getIdentityFace() {
+		return identityFace;
+	}
+	
+	public void setIdentityFace(String identityFace) {
+		this.identityFace = identityFace;
+	}
+	
+	public String getIdentityBack() {
+		return identityBack;
+	}
+	
+	public void setIdentityBack(String identityBack) {
+		this.identityBack = identityBack;
 	}
 
 	@Override
