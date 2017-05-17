@@ -27,6 +27,12 @@ public class AppSQLProvider {
 				SET("`name`=#{name}");
 				SET("created=#{created}");
 				SET("updated=#{updated}");
+				SET("state=#{state}");
+				SET("take_score=#{takeScore}");
+				SET("insurance_open=#{insuranceOpen}");
+				SET("consult_open=#{consultOpen}");
+				SET("mall_open=#{mallOpen}");
+				SET("state=#{state}");
 				WHERE("id=#{id}");
 			}
 		}.toString();

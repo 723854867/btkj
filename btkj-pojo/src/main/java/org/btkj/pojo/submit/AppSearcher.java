@@ -10,7 +10,7 @@ public class AppSearcher extends Page {
 	private Integer permitNum;
 	private Integer expireDate;
 	private Integer state;
-	private Integer order;
+	private String order;
 	private Integer asc;
 	public Integer getId() {
 		return id;
@@ -48,10 +48,11 @@ public class AppSearcher extends Page {
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	public Integer getOrder() {
+	
+	public String getOrder() {
 		return order;
 	}
-	public void setOrder(Integer order) {
+	public void setOrder(String order) {
 		this.order = order;
 	}
 	public Integer getAsc() {

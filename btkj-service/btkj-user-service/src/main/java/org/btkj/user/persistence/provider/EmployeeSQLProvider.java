@@ -46,13 +46,13 @@ public class EmployeeSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(BtkjTables.EMPLOYEE.name());
-				SET("`pay_type`", "#{payType}");
-				SET("`state`", "#{state}");
-				SET("`tag_mod`", "#{tagMod}");
-				SET("`score`", "#{score}");
-				SET("`scale_bonus`", "#{scaleBonus}");
-				SET("`manage_bonus`", "#{manageBonus}");
-				SET("`updated`=#{updated}");
+				SET("`pay_type`=#{payType}");
+				SET("`state`=#{state}");
+				SET("`tag_mod`=#{tagMod}");
+				SET("`score`=#{score}");
+				SET("`scale_bonus`=#{scaleBonus}");
+				SET("`manage_bonus`=#{manageBonus}");
+				SET("updated=#{updated}");
 				WHERE("id=#{id}");
 			}
 		}.toString();

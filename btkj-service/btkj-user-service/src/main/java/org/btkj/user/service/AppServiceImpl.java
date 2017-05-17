@@ -50,6 +50,7 @@ public class AppServiceImpl implements AppService {
 		App a = appMapper.getByKey(app.getId());
 		if(null == a)
 			return Result.result(BtkjCode.APP_NOT_EXIST); 
+			app.setUpdated(DateUtils.currentTime());
 			appMapper.update(app);
 		 return Result.success();
 	}

@@ -10,7 +10,7 @@ public class EmployeeSearcher extends Page {
 	private String mobile;
 	private Integer tagMod;
 	private Integer payType;
-	private Integer order;
+	private String order;
 	private Integer asc;
 
 	public Integer getTid() {
@@ -60,12 +60,12 @@ public class EmployeeSearcher extends Page {
 	public void setPayType(Integer payType) {
 		this.payType = payType;
 	}
-
-	public Integer getOrder() {
+	
+	public String getOrder() {
 		return order;
 	}
 
-	public void setOrder(Integer order) {
+	public void setOrder(String order) {
 		this.order = order;
 	}
 

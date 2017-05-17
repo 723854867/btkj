@@ -4,16 +4,23 @@
 <mapper namespace="org.btkj.user.persistence.dao.UserDao">
 
 	<select id="searchCount" parameterType="org.btkj.pojo.submit.UserSearcher" resultType="int">
-		SELECT COUNT(*) FROM (<include refid="search" />) b
+		SELECT COUNT(*) FROM (<include refid="searchSql" />) b
 	</select>
 
 	<select id="search" parameterType="org.btkj.pojo.submit.UserSearcher" resultType="org.btkj.pojo.info.UserListInfo" >
+		SELECT 
+			*
+		FROM 
+			(<include refid="searchSql" /> LIMIT #{start}, #{pageSize}) b
+	</select> 
+
+	<sql id="searchSql">
 		SELECT 
 			`uid`, 
 			`mobile`, 
 			`app_login_time`, 
 			`created`, 
-			`app_id`
+			`app_id` 
 		FROM
 			user 
 		<where>
@@ -53,6 +60,5 @@
 				</choose>
 			</otherwise>
 		</choose>
-		LIMIT #{start}, #{pageSize}
-	</select> 
+	</sql>
 </mapper>

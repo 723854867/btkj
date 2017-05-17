@@ -6,7 +6,8 @@ public class UserSearcher extends Page {
 
 	private Integer uid;
 	private String mobile;
-	private Integer order;
+	private Integer appId;
+	private String order;
 	private Integer asc;
 	public Integer getUid() {
 		return uid;
@@ -20,10 +21,10 @@ public class UserSearcher extends Page {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public Integer getOrder() {
+	public String getOrder() {
 		return order;
 	}
-	public void setOrder(Integer order) {
+	public void setOrder(String order) {
 		this.order = order;
 	}
 	public Integer getAsc() {
@@ -32,5 +33,11 @@ public class UserSearcher extends Page {
 	public void setAsc(Integer asc) {
 		this.asc = asc;
 	}
-
+	public Integer getAppId() {
+		return appId;
+	}
+	public void setAppId(Integer appId) {
+		this.appId = appId;
+	}
+	
 }

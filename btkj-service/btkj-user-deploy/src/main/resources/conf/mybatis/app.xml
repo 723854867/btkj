@@ -4,10 +4,17 @@
 <mapper namespace="org.btkj.user.persistence.dao.AppDao">
 
 	<select id="searchCount" parameterType="org.btkj.pojo.submit.AppSearcher" resultType="int">
-		SELECT COUNT(*) FROM (<include refid="search" />) b
+		SELECT COUNT(*) FROM (<include refid="searchSql" />) b
 	</select>
 
 	<select id="search" parameterType="org.btkj.pojo.submit.AppSearcher" resultType="org.btkj.pojo.info.AppListInfo" >
+		SELECT 
+			*
+		FROM 	
+			(<include refid="searchSql" /> LIMIT #{start}, #{pageSize}) b
+	</select> 
+
+	<sql id="searchSql">
 		SELECT 
 			`id`, 
 			`name`, 
@@ -15,7 +22,7 @@
 			`permit_num`, 
 			`created`, 
 			`expire_date`, 
-			`state`
+			`state` 
 		FROM
 			app 
 		<where>
@@ -58,19 +65,22 @@
 							</otherwise>
 						</choose>
 					</when>
-					<when test="order == 'expireDate'">
+					<otherwise>
 						<choose>
-							<when test="null != asc">
+							<when test="order == 'expireDate'">
+								<choose>
+									<when test="null != asc">
 								ORDER BY expire_date ASC
-							</when>
-							<otherwise>
+									</when>
+								<otherwise>
 								ORDER BY expire_date DESC
-							</otherwise>
+							    </otherwise>
+								</choose>
+							</when>
 						</choose>
-					</when>
+					</otherwise>
 				</choose>
 			</otherwise>
 		</choose>
-		LIMIT #{start}, #{pageSize}
-	</select> 
+	</sql>
 </mapper>
