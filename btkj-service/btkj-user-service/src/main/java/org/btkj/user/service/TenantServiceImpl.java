@@ -2,9 +2,7 @@ package org.btkj.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
@@ -13,10 +11,13 @@ import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
+import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
@@ -31,6 +32,7 @@ import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.ResultOnlyCallback;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,34 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeService employeeService;
 	@Resource
 	private NonAutoBindMapper nonAutoBindMapper;
+	
+	@Override
+	public Result<Void> tenantEdit(Tenant tenant) {
+		Tenant t = tenantMapper.getByKey(tenant.getTid());
+		if(null == t)
+			return Result.result(BtkjCode.TENANT_NOT_EXIST); 
+			tenant.setUpdated(DateUtils.currentTime());
+			tenantMapper.update(tenant);
+		 return Result.success();
+	}
+	
+	@Override
+	public Result<Void> tenantState(int tid, TenantState state) {
+		Tenant tenant = tenantMapper.getByKey(tid);
+		if(null == tenant)
+			return Result.result(BtkjCode.TENANT_NOT_EXIST);
+		if (tenant.getState() != state.mark()) {
+			tenant.setState(state.mark());
+			tenant.setUpdated(DateUtils.currentTime());
+			tenantMapper.update(tenant);
+		}
+		return Result.success();
+	}
+	
+	@Override
+	public Result<Pager<TenantListPc>> tenantList(TenantSearcher searcher) {
+		return tenantMapper.tenantList(searcher);
+	}
 	
 	@Override
 	public Tenant getTenantById(int tid) {

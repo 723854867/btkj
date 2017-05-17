@@ -25,7 +25,6 @@ public class AppSQLProvider {
 			{
 				UPDATE(BtkjTables.APP.name());
 				SET("`name`=#{name}");
-				SET("created=#{created}");
 				SET("updated=#{updated}");
 				SET("state=#{state}");
 				SET("take_score=#{takeScore}");

@@ -9,13 +9,16 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
+import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
@@ -181,6 +184,15 @@ public interface Params {
 		};
 	};
 	
+	final Str2ObjConstConverter<TenantState> TENANT_STATE = new Str2ObjConstConverter<TenantState>(1030, "tenantState") {
+		public TenantState convert(String value) throws ConstConvertFailureException {
+			TenantState state = TenantState.match(Integer.valueOf(value));
+			if (null == state)
+				throw ConstConvertFailureException.errorConstException(this);
+			return state;
+		};
+	};
+	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
 
@@ -237,6 +249,19 @@ public interface Params {
 		@Override
 		public App convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, App.class);
+		}
+	};
+	final Str2ObjConstConverter<TenantSearcher> TENANT_SEARCHER			= new Str2ObjConstConverter<TenantSearcher>(1208, "tenantSearch") {
+		@Override
+		public TenantSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<Tenant> TENANT_INFO			= new Str2ObjConstConverter<Tenant>(1209, "tenantInfo") {
+		@Override
+		public Tenant convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, Tenant.class);
 		}
 	};
 }
