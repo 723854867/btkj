@@ -68,7 +68,17 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 非车险类型不存在
 	 */
-	NON_AUTO_CATEGORY_NOT_EXIST(511, "non auto category not exist!");
+	NON_AUTO_CATEGORY_NOT_EXIST(511, "non auto category not exist!"),
+	
+	/**
+	 * 当前城市不支持壁虎报价
+	 */
+	BIHU_CITY_UNSUPPORT(512, "bihu do not supprted the city!"),
+	
+	/**
+	 * 续保信息获取超时
+	 */
+	RENEW_INFO_GET_TIMEOUT(513, "renew info get timeout!");
 	
 	private int code;
 	private String desc;

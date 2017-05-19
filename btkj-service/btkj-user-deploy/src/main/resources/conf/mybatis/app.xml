@@ -2,7 +2,8 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.btkj.user.persistence.dao.AppDao">
-
+	
+	<!-- 
 	<select id="searchCount" parameterType="org.btkj.pojo.submit.AppSearcher" resultType="int">
 		SELECT COUNT(*) FROM (<include refid="search" />) b
 	</select>
@@ -72,5 +73,5 @@
 			</otherwise>
 		</choose>
 		LIMIT #{start}, #{pageSize}
-	</select> 
+	</select>  -->
 </mapper>

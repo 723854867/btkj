@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="org.btkj.bihu.vehicle" />
+	
+	<context:property-placeholder location="classpath:conf/bihu.properties"/>
+	
+	<bean class="org.rapid.util.common.SpringContextUtil" />
+	
+	<bean id="httpProxy" class="org.rapid.util.net.http.HttpProxy" init-method="init">
+		<property name="syncHttp">
+			<bean class="org.rapid.util.net.http.SyncHttpAdapter">
+				<property name="retryCount" value="${http.sync.retryCount}"/>
+				<property name="keepAliveTime" value="${http.sync.keepAliveTime}"/>
+				<property name="maxConn" value="${http.sync.maxConn}"/>
+				<property name="sslEnabled" value="${http.sync.sslEnabled}"/>
+				<property name="maxConnPerRoute" value="${http.sync.maxConnPerRoute}"/>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="cityCodeMapper" class="org.btkj.bihu.vehicle.redis.CityCodeMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="cityCodeDao" />
+	</bean>
+	
+	<bean id="tenantConfigMapper" class="org.btkj.bihu.vehicle.redis.TenantConfigMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="tenantConfigDao" />
+	</bean>
+</beans>

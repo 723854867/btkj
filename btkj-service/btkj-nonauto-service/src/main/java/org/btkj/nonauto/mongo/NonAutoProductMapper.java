@@ -54,22 +54,27 @@ public class NonAutoProductMapper extends MongoMapper<Long, NonAutoProduct> {
 			list.add(Filters.all(FIELD_TAGS, tags));
 		if (null != searcher.getCid())
 			list.add(Filters.eq(FIELD_CID, searcher.getCid()));
-		long total = mongo.count(collection, Filters.and(list));
+		long total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
 		if (0 == total)
 			return Pager.EMPLTY;
 		
 		searcher.calculate((int) total);
 		List<NonAutoProduct> products = null;
 		if (null != searcher.getSort())
-			products = mongo.paging(
-				collection, Filters.and(list), 
-				searcher.isDesc() ? Sorts.descending(searcher.getSort().statisticField()) : Sorts.ascending(searcher.getSort().statisticField()),  
-				searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class);
+			products = list.isEmpty() ? 
+					mongo.pagingAndSort(collection, searcher.isDesc() ? 
+							Sorts.descending(searcher.getSort().statisticField()) : 
+								Sorts.ascending(searcher.getSort().statisticField()),  
+								searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class):
+					mongo.pagingAndSort(collection, Filters.and(list), searcher.isDesc() ? 
+							Sorts.descending(searcher.getSort().statisticField()) : 
+								Sorts.ascending(searcher.getSort().statisticField()),  
+								searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class);
 		else
-			products = mongo.paging(
-				collection, Filters.and(list), 
-				searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class);
-		return new Pager<NonAutoProduct>(searcher.getPage(), products);
+			products = list.isEmpty() ? 
+					mongo.paging(collection, searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class):
+					mongo.paging(collection, Filters.and(list), searcher.getStart(), searcher.getPageSize(), NonAutoProduct.class);
+		return new Pager<NonAutoProduct>(searcher.getTotal(), products);
 	}
 	
 	public void setKeyMapper(KeyMapper keyMapper) {

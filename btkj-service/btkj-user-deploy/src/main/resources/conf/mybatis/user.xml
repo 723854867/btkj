@@ -3,6 +3,7 @@
 			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.btkj.user.persistence.dao.UserDao">
 
+	<!-- 
 	<select id="searchCount" parameterType="org.btkj.pojo.submit.UserSearcher" resultType="int">
 		SELECT COUNT(*) FROM (<include refid="search" />) b
 	</select>
@@ -53,6 +54,6 @@
 				</choose>
 			</otherwise>
 		</choose>
-		LIMIT #{start}, #{pageSize}
-	</select> 
+		LIMIT #{start}, #{pageSize} 
+	</select> -->
 </mapper>
