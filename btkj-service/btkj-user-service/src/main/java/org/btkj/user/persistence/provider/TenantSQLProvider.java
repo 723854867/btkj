@@ -23,6 +23,23 @@ public class TenantSQLProvider {
 		}.toString();
 	}
 
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.TENANT.name());
+				SET("`name`=#{name}");
+				SET("updated=#{updated}");
+				SET("state=#{state}");
+				SET("take_score=#{takeScore}");
+				SET("insurance_open=#{insuranceOpen}");
+				SET("consult_open=#{consultOpen}");
+				SET("mall_open=#{mallOpen}");
+				SET("state=#{state}");
+				WHERE("tid=#{tid}");
+			}
+		}.toString();
+	}
+	
 	public String selectAll() {
 		return new SQL() {
 			{

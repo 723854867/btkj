@@ -8,13 +8,35 @@ import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
+import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.submit.TenantSearcher;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
+	
+	/**
+	 * 修改保存Tenant基本信息
+	 * @return
+	 */
+	Result<Void> tenantEdit(Tenant tenant);
+	
+	/**
+	 * 禁用Tenant
+	 * 
+	 * @param state
+	 * @return
+	 */
+	Result<Void> tenantState(int tenantId, TenantState state);
+	
+	/**
+	 * 获取平台Tenant用户列表
+	 */
+	Result<Pager<TenantListPc>> tenantList(TenantSearcher searcher);
 	
 	/**
 	 * 通过 tid 获取 tenant

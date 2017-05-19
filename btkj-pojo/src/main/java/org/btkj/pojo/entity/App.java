@@ -12,7 +12,7 @@ public class App implements UniqueModel<Integer> {
 	private int mod;
 	private int maxTenantsCount;
 	private boolean tenantAddAutonomy;
-	private int mobile;
+	private String mobile;
 	private String legalPerson;    //联系人
 	private int permitNum;         //营业执照号
 	private int expireDate;        //到时时间
@@ -108,11 +108,11 @@ public class App implements UniqueModel<Integer> {
 		this.updated = updated;
 	}
 	
-	public int getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(int mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 

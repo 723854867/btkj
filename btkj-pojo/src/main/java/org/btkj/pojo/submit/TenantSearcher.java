@@ -1,10 +1,10 @@
 package org.btkj.pojo.submit;
 
-public class AppSearcher extends Page {
+public class TenantSearcher extends Page {
 
 	private static final long serialVersionUID = -7144922898174024077L;
 
-	private Integer id;
+	private Integer tid;
 	private String name;
 	private String mobile;
 	private Integer permitNum;
@@ -12,11 +12,12 @@ public class AppSearcher extends Page {
 	private Integer state;
 	private String order;
 	private Integer asc;
-	public Integer getId() {
-		return id;
+	
+	public Integer getTid() {
+		return tid;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setTid(Integer tid) {
+		this.tid = tid;
 	}
 	public String getName() {
 		return name;

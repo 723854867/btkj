@@ -3,20 +3,32 @@
 			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.btkj.user.persistence.dao.UserDao">
 
-	<!-- 
-	<select id="searchCount" parameterType="org.btkj.pojo.submit.UserSearcher" resultType="int">
-		SELECT COUNT(*) FROM (<include refid="search" />) b
+	<select id="searchCount" parameterType="org.btkj.pojo.submit.UserSearcher"
+		resultType="int">
+		SELECT COUNT(*) FROM (
+		<include refid="searchSql" />
+		) b
 	</select>
 
-	<select id="search" parameterType="org.btkj.pojo.submit.UserSearcher" resultType="org.btkj.pojo.info.UserListInfo" >
-		SELECT 
-			`uid`, 
-			`mobile`, 
-			`app_login_time`, 
-			`created`, 
-			`app_id`
+	<select id="search" parameterType="org.btkj.pojo.submit.UserSearcher"
+		resultType="org.btkj.pojo.info.UserListInfo">
+		SELECT
+		*
 		FROM
-			user 
+		(
+		<include refid="searchSql" />
+		LIMIT #{start}, #{pageSize}) b
+	</select>
+
+	<sql id="searchSql">
+		SELECT
+		`uid`,
+		`mobile`,
+		`app_login_time`,
+		`created`,
+		`app_id`
+		FROM
+		user
 		<where>
 			<if test="null != uid">
 				uid=#{uid}
@@ -54,6 +66,6 @@
 				</choose>
 			</otherwise>
 		</choose>
-		LIMIT #{start}, #{pageSize} 
-	</select> -->
+		LIMIT #{start}, #{pageSize}
+	</sql>
 </mapper>
