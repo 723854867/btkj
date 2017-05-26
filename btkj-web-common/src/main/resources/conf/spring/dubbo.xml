@@ -20,4 +20,6 @@
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" /> 
 	
 	<dubbo:reference id="nonAutoService" interface="org.btkj.nonauto.api.NonAutoService" />
+	
+	<dubbo:reference id="vehicleService" interface="org.btkj.vehicle.api.VehicleService" />
 </beans>

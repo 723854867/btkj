@@ -3,7 +3,7 @@ package org.btkj.pojo.config;
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.zookeeper.CreateMode;
-import org.rapid.util.common.Constants;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.ZkUtil;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class GlobalConfigContainer {
 				}
 				byte[] buffer = (byte[]) data;
 				try {
-					GlobalConfig temp = SerializeUtil.JsonUtil.GSON.fromJson(new String(buffer, Constants.UTF_8), GlobalConfig.class);
+					GlobalConfig temp = SerializeUtil.JsonUtil.GSON.fromJson(new String(buffer, Consts.UTF_8), GlobalConfig.class);
 					globalConfig = temp;
 				} catch (Exception e) {
 					logger.error("Config change failure!");

@@ -1,20 +1,18 @@
 package org.btkj.manager.action;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
 public abstract class TenantAction extends org.btkj.web.util.action.TenantAction {
 	
 	@Override
-	protected final Result<?> execute(Request request, Client client, App app, Tenant tenant, User user) {
-		return execute(request, app, tenant, user);
+	protected final Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
+		return execute(request, employeeForm);
 	}
 	
-	protected abstract Result<?> execute(Request request, App app, Tenant tenant, User operator);
+	protected abstract Result<?> execute(Request request, EmployeeForm employeeForm);
 
 	@Override
 	protected Client client(Request request) {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.SpecialBonus;
@@ -15,7 +16,6 @@ import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.BeanGenerator;
-import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.EmployeeDao;
 import org.btkj.user.persistence.dao.SpecialBonusDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
@@ -45,9 +45,7 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	
 	@Override
 	public Employee insert(Employee entity) {
-		dao.selectByTidForUpdate(entity.getTid()); // 间隙锁
-		dao.updateForJoin(entity.getTid(), entity.getLeft());
-		return super.insert(entity);
+		throw new UnsupportedOperationException("EmployeeMapper unsupported insert immediately!");
 	}
 	
 	/**
@@ -92,14 +90,14 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	 */
 	public List<Employee> ownedTenants(User user) {
 		List<Employee> employees = null;
-		List<byte[]> list = redis.protostuffCacheListLoadWithData(Config.CACHE_CONTROLLER, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
+		List<byte[]> list = redis.protostuffCacheListLoadWithData(BtkjConsts.CACHE_CONTROLLER, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
 		if (null != list) {
 			employees = new ArrayList<Employee>();
 			for (byte[] buffer : list) 
 				employees.add(deserial(buffer));
 		} else {
 			employees = dao.selectByUid(user.getUid());
-			redis.protostuffCacheListFlush(Config.CACHE_CONTROLLER, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees);
+			redis.protostuffCacheListFlush(BtkjConsts.CACHE_CONTROLLER, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees);
 		}
 		return employees;
 	}

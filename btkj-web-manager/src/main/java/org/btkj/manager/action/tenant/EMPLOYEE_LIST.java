@@ -3,10 +3,8 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.EmployeeListInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.api.EmployeeService;
@@ -20,9 +18,9 @@ public class EMPLOYEE_LIST extends TenantAction {
 	private EmployeeService employeeService;
 
 	@Override
-	protected Result<Pager<EmployeeListInfo>> execute(Request request, App app, Tenant tenant, User user) {
+	protected Result<Pager<EmployeeListInfo>> execute(Request request, EmployeeForm employeeForm) {
 		EmployeeSearcher searcher = request.getParam(Params.EMPLOYEE_SEARCHER);
-		searcher.setTid(tenant.getTid());
+		searcher.setTid(employeeForm.getTenant().getTid());
 		return employeeService.employeeList(searcher);
 	}
 }

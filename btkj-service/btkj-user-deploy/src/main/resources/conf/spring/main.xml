@@ -29,7 +29,6 @@
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
-	
 	<bean id="userMapper" class="org.btkj.user.redis.UserMapper" >
 		<property name="dao" ref="userDao" />
 		<property name="redis" ref="redis" />

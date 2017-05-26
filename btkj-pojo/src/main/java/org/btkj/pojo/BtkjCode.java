@@ -78,7 +78,52 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 续保信息获取超时
 	 */
-	RENEW_INFO_GET_TIMEOUT(513, "renew info get timeout!");
+	RENEW_INFO_GET_TIMEOUT(513, "renew info get timeout!"),
+	
+	/**
+	 * 续保信息获取失败
+	 */
+	RENEW_INFO_GET_FAILURE(514, "renw info get failure!"),
+	
+	/**
+	 * 壁虎线路未开通
+	 */
+	LANE_BIHU_NOT_OPENED(515, "lane of bihu not opened!"),
+	
+	/**
+	 * 险企未开通
+	 */
+	INSURER_NOT_OPENED(516, "insurer not opened!"),
+	
+	/**
+	 * 险企不存在
+	 */
+	INSURER_NOT_EXIST(517, "insurer not exist"),
+	
+	/**
+	 * 报价失败
+	 */
+	QUOTE_FAILURE(518, "quote failure"),
+	
+	/**
+	 * 没有报价
+	 */
+	NOT_QUOTE(519, "not quote"),
+	
+	/**
+	 * 壁虎请求太频繁
+	 */
+	BIHU_REQUEST_FREQUENTLY(520, "bihu request frequently"),
+	
+	/**
+	 * 车主名字错误
+	 */
+	CAR_OWNER_NAME_ERROR(521, "car owner name error"),
+	
+	/**
+	 * 订单不存在
+	 */
+	ORDER_NOT_EXIST(522, "order not exist!");
 	
 	private int code;
 	private String desc;

@@ -2,7 +2,9 @@ package org.btkj.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
@@ -29,7 +31,6 @@ import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.NonAutoBindMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
-import org.rapid.util.common.ResultOnlyCallback;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtils;
@@ -141,7 +142,7 @@ public class TenantServiceImpl implements TenantService {
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
 		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief, info.getName(), 
 				info.getIdentity(), info.getIdentityFace(), info.getIdentityBack());
-		employeeMapper.insert(employee);
+		tx.insertEmployee(employee);
 		return Result.success();
 	}
 	
@@ -152,15 +153,13 @@ public class TenantServiceImpl implements TenantService {
 			try {
 				if (userService.tenantNumMax(result.attach()))
 					return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
-				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, result.attach(), name, identity, identityFace, identityBack);
-				callback.invoke();
+				tx.tenantAdd(app, region, tname, result.attach(), name, identity, identityFace, identityBack).finish();
 			} finally {
 				userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
 			}
 		} else if (result.getCode() == Code.USER_NOT_EXIST.id()) {	// 指定一个新用户作为租户的顶级用户
 			try {
-				ResultOnlyCallback<Void> callback = tx.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
-				callback.invoke();
+				tx.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack).finish();;
 			} catch (DuplicateKeyException e) {			// 说明在这里的时候 mobile 用户刚好也注册了，name再次添加一次
 				return tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
 			}

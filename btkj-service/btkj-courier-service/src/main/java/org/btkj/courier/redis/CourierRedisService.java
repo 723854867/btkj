@@ -22,7 +22,7 @@ import org.btkj.courier.Config;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.rapid.data.storage.redis.Redis;
-import org.rapid.util.common.Constants;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.Env;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.key.KeyUtil;
@@ -99,7 +99,7 @@ public class CourierRedisService {
 	private void _sendCaptcha(String mobile, String captcha) {
 		String tplValue = null;
 		try {
-			tplValue = URLEncoder.encode("#code#", Constants.UTF_8.name()) + "=" + URLEncoder.encode(captcha, Constants.UTF_8.name());
+			tplValue = URLEncoder.encode("#code#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(captcha, Consts.UTF_8.name());
 		} catch (UnsupportedEncodingException e) {
 			logger.error("captcha url encode failure!", e);
 			return;

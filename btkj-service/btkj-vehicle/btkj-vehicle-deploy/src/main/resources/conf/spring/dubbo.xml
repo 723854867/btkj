@@ -10,9 +10,17 @@
 	
 	<dubbo:application name="${dubbo.application.name}" owner="btkj" />
 	
-	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}" /> 
+	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}"/> 
 	
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
-	<dubbo:service interface="org.btkj.vehicle.api.RenewlService" ref="renewlService" loadbalance="${dubbo.service.loadbalance}"/>
+	<dubbo:service interface="org.btkj.vehicle.api.VehicleService" ref="vehicleService" loadbalance="${dubbo.service.loadbalance}"/>
+
+	<dubbo:consumer check="false" />
+	
+	<dubbo:reference id="biHuVehicle" interface="org.btkj.bihu.vehicle.api.BiHuVehicle" />
+	
+	<dubbo:reference id="leBaoBaVehicle" interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle"/>
+	
+	<dubbo:reference id="baoTuVehicle" interface="org.btkj.baotu.vehicle.api.BaoTuVehicle" />
 </beans>

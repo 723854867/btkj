@@ -1,5 +1,6 @@
 package org.btkj.user.api;
 
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
@@ -38,4 +39,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Result<Void> employeeEdit(EmployeeInfo employeeInfo);
+	
+	/**
+	 * 我的团队
+	 * @param form
+	 * @return
+	 */
+	Pager<Employee> team(EmployeeForm form);
 }

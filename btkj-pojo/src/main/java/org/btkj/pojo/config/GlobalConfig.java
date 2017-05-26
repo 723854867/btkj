@@ -13,10 +13,14 @@ public class GlobalConfig {
 		DEFAULT_CONFIG = new GlobalConfig();
 		DEFAULT_CONFIG.setMaxTenantNum(10);
 		DEFAULT_CONFIG.setBannerNum(3);
+		DEFAULT_CONFIG.setMaxInsurNum(1);
+		DEFAULT_CONFIG.setMaxQuoteNum(3);
 	}
 
 	private int maxTenantNum;
 	private int bannerNum;
+	private int maxInsurNum;		// 一次请求同时投保的险企最大数
+	private int maxQuoteNum;		// 一次请求同时报价的险企最大数
 	
 	public int getMaxTenantNum() {
 		return maxTenantNum;
@@ -32,5 +36,21 @@ public class GlobalConfig {
 	
 	public void setBannerNum(int bannerNum) {
 		this.bannerNum = bannerNum;
+	}
+	
+	public int getMaxInsurNum() {
+		return maxInsurNum;
+	}
+	
+	public void setMaxInsurNum(int maxInsurNum) {
+		this.maxInsurNum = maxInsurNum;
+	}
+	
+	public int getMaxQuoteNum() {
+		return maxQuoteNum;
+	}
+	
+	public void setMaxQuoteNum(int maxQuoteNum) {
+		this.maxQuoteNum = maxQuoteNum;
 	}
 }

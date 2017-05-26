@@ -34,11 +34,6 @@ public class NonAutoProductMapper extends MongoMapper<Long, NonAutoProduct> {
 		return super.insert(model);
 	}
 	
-	@Override
-	public void update(NonAutoProduct model) {
-		mongo.replace(collection, Filters.eq(FIELD_ID, model.get_id()), serial(model));
-	}
-	
 	@SuppressWarnings("unchecked")
 	public Pager<NonAutoProduct> productList(NonAutoProductSearcher searcher) {
 		List<Bson> list = new ArrayList<Bson>();

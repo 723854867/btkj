@@ -3,10 +3,8 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.EmployeeInfo;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -18,7 +16,7 @@ public class EMPLOYEE_EDIT extends TenantAction {
 	private EmployeeService employeeService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Tenant tenant, User user) {
+	protected Result<?> execute(Request request, EmployeeForm employeeForm) {
 		EmployeeInfo employeeInfo = request.getParam(Params.EMPLOYEE_INFO);
 		return employeeService.employeeEdit(employeeInfo);
 		

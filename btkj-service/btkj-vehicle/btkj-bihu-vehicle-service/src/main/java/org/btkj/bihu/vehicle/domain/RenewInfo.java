@@ -2,15 +2,21 @@ package org.btkj.bihu.vehicle.domain;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.model.Renew;
-import org.rapid.util.net.http.handler.SyncJsonRespHandler;
-import org.rapid.util.net.http.handler.SyncRespHandler;
+import org.btkj.bihu.vehicle.BiHuUtil;
+import org.btkj.bihu.vehicle.RespHandler;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
+import org.btkj.pojo.model.insur.vehicle.CompulsiveInsurance;
+import org.btkj.pojo.model.insur.vehicle.InsurUnit;
+import org.btkj.pojo.model.insur.vehicle.Insurance;
+import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
+import org.btkj.pojo.model.insur.vehicle.Vehicle;
 
 public class RenewInfo implements Serializable {
 	
 	private static final long serialVersionUID = 6265475310068561305L;
 	
-	public static final SyncRespHandler<RenewInfo> JSON_HANDLER			= SyncJsonRespHandler.build(RenewInfo.class);
+	public static final RespHandler<RenewInfo> JSON_HANDLER			= RespHandler.build(RenewInfo.class);
 
 	/**
 	 * 1: 获取续保信息成功(车辆信息 + 险种) 如果是续保期外的车或者是投保我司对接外的其他保险公司的车辆，这种情况，只返回该车的投保截止日期
@@ -114,7 +120,7 @@ public class RenewInfo implements Serializable {
 		private String BusinessExpireDate;		// 商业险到期时间
 		private String NextForceStartDate;		// 下年的交强险起保日期
 		private String NextBusinessStartDate;	// 下年的商业险起保日期
-		private int SearCount;					// 座位数量
+		private int SeatCount;					// 座位数量
 		private String InsuredIdCard;			// 被保人证件号
 		private int InsuredIdType;				// 被保人证件类型(参考 IdType)
 		private String InsuredMobile;			// 被保人手机号
@@ -327,12 +333,12 @@ public class RenewInfo implements Serializable {
 			NextBusinessStartDate = nextBusinessStartDate;
 		}
 		
-		public int getSearCount() {
-			return SearCount;
+		public int getSeatCount() {
+			return SeatCount;
 		}
 		
-		public void setSearCount(int searCount) {
-			SearCount = searCount;
+		public void setSeatCount(int seatCount) {
+			SeatCount = seatCount;
 		}
 		
 		public String getInsuredIdCard() {
@@ -517,8 +523,8 @@ public class RenewInfo implements Serializable {
 		private double BuJiMianJingShenSunShi;		// 不计免精神损失保额
 		private double HcSanFangTeYue;				// 机动车无法找到三方特约险保额
 		private double HcJingShenSunShi;			// 精神损失险保额
-		private String HcXiuLiChangType;			// 指定专修厂类型：-1-没有；0-国产；1-进口(依赖于请求参数)
-		private String HcXiuLiChange;				// 指定修理厂险(依赖于请求参数)
+		private int HcXiuLiChangType;			// 指定专修厂类型：-1-没有；0-国产；1-进口(依赖于请求参数)
+		private double HcXiuLiChange;			// 指定修理厂险(依赖于请求参数)
 		
 		public int getSource() {
 			return Source;
@@ -688,26 +694,164 @@ public class RenewInfo implements Serializable {
 			HcJingShenSunShi = hcJingShenSunShi;
 		}
 		
-		public String getHcXiuLiChangType() {
+		public int getHcXiuLiChangType() {
 			return HcXiuLiChangType;
 		}
 		
-		public void setHcXiuLiChangType(String hcXiuLiChangType) {
+		public void setHcXiuLiChangType(int hcXiuLiChangType) {
 			HcXiuLiChangType = hcXiuLiChangType;
 		}
 		
-		public String getHcXiuLiChange() {
+		public double getHcXiuLiChange() {
 			return HcXiuLiChange;
 		}
 		
-		public void setHcXiuLiChange(String hcXiuLiChange) {
+		public void setHcXiuLiChange(double hcXiuLiChange) {
 			HcXiuLiChange = hcXiuLiChange;
 		}
 	}
 	
-	public Renew toRenew() {
-		Renew renew = new Renew();
+	public Renewal toRenewal() {
+		Renewal renewal = new Renewal();
+		if (null != this.SaveQuote) {
+			renewal.setOwner(_owner());
+			renewal.setInsurer(_insurer());
+			renewal.setInsured(_insured());
+			renewal.setVehicle(_vehicle());
+		}
+		if (BusinessStatus != 3 && null != this.SaveQuote)
+			renewal.setSchema(_insranceSchema());
+		return renewal;
+	}
+	
+	private InsurUnit _owner() {
+		InsurUnit owner = new InsurUnit();
+		owner.setName(this.UserInfo.LicenseOwner);
+		owner.setIdType(BiHuUtil.idType(this.UserInfo.IdType));
+		owner.setIdNo(this.UserInfo.CredentislasNum);
+		return owner;
+	}
+	
+	private InsurUnit _insurer() {
+		InsurUnit insurer = new InsurUnit();
+		insurer.setName(this.UserInfo.PostedName);
+		insurer.setIdType(BiHuUtil.idType(this.UserInfo.HolderIdType));
+		insurer.setIdNo(this.UserInfo.HolderIdCard);
+		insurer.setMobile(this.UserInfo.HolderMobile);
+		return insurer;
+	}
+	
+	private InsurUnit _insured() {
+		InsurUnit insured = new InsurUnit();
+		insured.setName(this.UserInfo.InsuredName);
+		insured.setIdType(BiHuUtil.idType(this.UserInfo.InsuredIdType));
+		insured.setIdNo(this.UserInfo.InsuredIdCard);
+		insured.setMobile(this.UserInfo.InsuredMobile);
+		return insured;
+	}
+	
+	private Vehicle _vehicle() {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setLicense(this.UserInfo.LicenseNo);
+		vehicle.setVin(this.UserInfo.CarVin);
+		vehicle.setEngine(this.UserInfo.EngineNo);
+		vehicle.setModel(this.UserInfo.ModleName);
+		vehicle.setEnrollDate(this.UserInfo.RegisterDate);
+		vehicle.setSeatCount(this.UserInfo.SeatCount);
+		return vehicle;
+	}
+	
+	private InsuranceSchema _insranceSchema() {
+		InsuranceSchema schema = new InsuranceSchema();
 		
-		return new Renew();
+		// 交强险：没有保额和价格
+		CompulsiveInsurance cpi = new CompulsiveInsurance();
+		cpi.setStart(this.UserInfo.NextForceStartDate);
+		cpi.setEnd(this.UserInfo.ForceExpireDate);
+		schema.setCompulsive(cpi);
+		
+		// 商业险
+		CommercialInsurance cmi = new CommercialInsurance();
+		cmi.setStart(this.UserInfo.NextBusinessStartDate);
+		cmi.setEnd(this.UserInfo.BusinessExpireDate);
+		if (0 != this.SaveQuote.getCheSun()) {				// 车损
+			Insurance insurance = new Insurance(this.SaveQuote.getCheSun());
+			cmi.setDamage(insurance);
+			if (0 != this.SaveQuote.getBuJiMianCheSun()) {	// 车损不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianCheSun());
+				cmi.setDamageOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getSanZhe()) {				// 第三者
+			Insurance insurance = new Insurance(this.SaveQuote.getSanZhe());
+			cmi.setThird(insurance);
+			if (0 != this.SaveQuote.getBuJiMianSanZhe()) {	// 第三者不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianSanZhe());
+				cmi.setThirdOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getSiJi()) {				// 车上人员责任险(司机)
+			Insurance insurance = new Insurance(this.SaveQuote.getSiJi());
+			cmi.setDriver(insurance);
+			if (0 != this.SaveQuote.getBuJiMianSiJi()) {	// 车上人员责任险(司机)不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianSiJi());
+				cmi.setDriverOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getChengKe()) {				// 车上人员责任险(乘客)
+			Insurance insurance = new Insurance(this.SaveQuote.getChengKe());
+			cmi.setPassenger(insurance);
+			if (0 != this.SaveQuote.getBuJiMianChengKe()) {	// 车上人员责任险(乘客)
+				insurance = new Insurance(this.SaveQuote.getBuJiMianChengKe());
+				cmi.setPassengerOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getDaoQiang()) {			// 盗抢
+			Insurance insurance = new Insurance(this.SaveQuote.getDaoQiang());
+			cmi.setRobbery(insurance);
+			if (0 != this.SaveQuote.getBuJiMianDaoQiang()) {// 盗抢不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianDaoQiang());
+				cmi.setRobberyOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getBoLi()) {				// 玻璃破碎险:1国产，2进口
+			Insurance insurance = new Insurance(this.SaveQuote.getBoLi());
+			cmi.setGlass(insurance);
+		}
+		if (0 != this.SaveQuote.getZiRan()) {				// 自燃
+			Insurance insurance = new Insurance(this.SaveQuote.getZiRan());
+			cmi.setAutoFire(insurance);
+			if (0 != this.SaveQuote.getBuJiMianZiRan()) {	// 自燃不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianZiRan());
+				cmi.setAutoFireOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getHuaHen()) {				// 划痕
+			Insurance insurance = new Insurance(this.SaveQuote.getHuaHen());
+			cmi.setScratch(insurance);
+			if (0 != this.SaveQuote.getBuJiMianHuaHen()) {	// 划痕不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianHuaHen());
+				cmi.setScratchOfDeductible(insurance);
+			}
+		}
+		if (0 != this.SaveQuote.getSheShui()) {				// 涉水
+			Insurance insurance = new Insurance(this.SaveQuote.getSheShui());
+			cmi.setWading(insurance);
+			if (0 != this.SaveQuote.getBuJiMianSheShui()) {	// 涉水不计免赔
+				insurance = new Insurance(this.SaveQuote.getBuJiMianSheShui());
+				cmi.setWadingOfDeductible(insurance);
+			}
+		}
+		if (-1 != this.SaveQuote.getHcXiuLiChangType()) {	// 指定修理厂
+			Insurance insurance = new Insurance(this.SaveQuote.getHcXiuLiChangType(), this.SaveQuote.getHcXiuLiChange());
+			cmi.setGarageDesignated(insurance);
+		}
+		if (0 != this.SaveQuote.getHcSanFangTeYue()) {		// 无法找到第三方特约
+			Insurance insurance = new Insurance(this.SaveQuote.getHcSanFangTeYue());
+			cmi.setUnknownThird(insurance);
+		}
+		schema.setCommercial(cmi);
+		schema.setInsurerId(this.SaveQuote.getSource());
+		return schema;
 	}
 }

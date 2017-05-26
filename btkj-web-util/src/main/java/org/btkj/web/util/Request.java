@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.rapid.data.storage.redis.DistributeSession;
 import org.rapid.data.storage.redis.Redis;
-import org.rapid.util.common.Constants;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.conveter.StrConstConverter;
 import org.rapid.util.exception.ConstConvertFailureException;
@@ -33,8 +33,8 @@ public class Request {
 	public Request(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		response.setHeader(HttpHeaders.CONTENT_TYPE, Constants.MimeType.TEXT_JSON_UTF_8);
-		response.setCharacterEncoding(Constants.UTF_8.name());
+		response.setHeader(HttpHeaders.CONTENT_TYPE, Consts.MimeType.TEXT_JSON_UTF_8);
+		response.setCharacterEncoding(Consts.UTF_8.name());
 	}
 	
 	/**

@@ -19,6 +19,7 @@ public class NonAutoCategory implements UniqueModel<Long> {
 	private List<Filter> filters;
 	private List<String> sorts;				// 排序字段
 	private List<String> tags;				// 标签
+	private String icon;					// 图表地址
 	private int created;
 	private int updated;
 	
@@ -56,6 +57,14 @@ public class NonAutoCategory implements UniqueModel<Long> {
 	
 	public List<String> getTags() {
 		return tags;
+	}
+	
+	public String getIcon() {
+		return icon;
+	}
+	
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 	
 	public void setTags(List<String> tags) {

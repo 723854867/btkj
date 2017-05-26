@@ -3,6 +3,7 @@ package org.btkj.user.persistence;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
@@ -17,7 +18,6 @@ import org.btkj.user.persistence.dao.UserDao;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
-import org.rapid.util.common.ResultOnlyCallback;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +47,7 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public ResultOnlyCallback<Void> tenantAdd(App app, Region region, String tname, User user, String name, String identity, String identityFace, String identityBack) {
+	public TxCallback tenantAdd(App app, Region region, String tname, User user, String name, String identity, String identityFace, String identityBack) {
 		appDao.selectByKeyForUpdate(app.getId());
 		if (0 < app.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(app.getId());
@@ -58,18 +58,17 @@ public class Tx {
 		tenantDao.insert(tenant);
 		Employee employee = BeanGenerator.newEmployee(user, tenant, null, name, identity, identityFace, identityBack);
 		employeeDao.insert(employee);
-		return new ResultOnlyCallback<Void>() {
+		return new TxCallback() {
 			@Override
-			public Void invoke() {
+			public void finish() {
 				tenantMapper.flush(tenant);
 				employeeMapper.flush(employee);
-				return null;
 			}
 		};
 	}
 
 	@Transactional
-	public ResultOnlyCallback<Void> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack) {
+	public TxCallback tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack) {
 		appDao.selectByKeyForUpdate(app.getId());
 		if (0 < app.getMaxTenantsCount()) {				// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(app.getId());
@@ -82,13 +81,25 @@ public class Tx {
 		userDao.insert(user);
 		Employee employee = BeanGenerator.newEmployee(user, tenant, null, name, identity, identityFace, identityBack);
 		employeeDao.insert(employee);
-		return new ResultOnlyCallback<Void>() {
+		return new TxCallback() {
 			@Override
-			public Void invoke() {
+			public void finish() {
 				userMapper.flush(user);
 				tenantMapper.flush(tenant);
 				employeeMapper.flush(employee);
-				return null;
+			}
+		};
+	}
+	
+	@Transactional
+	public TxCallback insertEmployee(Employee employee) {
+		employeeDao.selectByTidForUpdate(employee.getTid()); 
+		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
+		employeeDao.insert(employee);
+		return new TxCallback() {
+			@Override
+			public void finish() {
+				employeeMapper.flush(employee);
 			}
 		};
 	}

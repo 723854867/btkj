@@ -17,6 +17,7 @@ import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
+import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
@@ -202,6 +203,27 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoCategory.class);
 		}
 	};
+	
+	final Str2StrConstConverter LICENSE					= new Str2StrConstConverter(1102, "license") {
+		public String convert(String value) throws ConstConvertFailureException {
+			if (!Validator.isVehicleLisense(value))
+				throw ConstConvertFailureException.errorConstException(this);
+			return value;
+		};
+	};
+	
+	final Str2StrConstConverter VIN						= new Str2StrConstConverter(1103, "vin");
+	final Str2StrConstConverter ENGINE					= new Str2StrConstConverter(1104, "engine");
+	
+	final Str2ObjConstConverter<VehicleOrderSubmit> VEHICLE_ORDER_SUBMIT			= new Str2ObjConstConverter<VehicleOrderSubmit>(1105, "vehicleOrderSubmit") {
+		@Override
+		public VehicleOrderSubmit convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehicleOrderSubmit.class);
+		}
+	};
+	
+	final Str2StrConstConverter BIZ_NO				= new Str2StrConstConverter(1106, "bizNo");
+
 
 	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearch") {
 		@Override

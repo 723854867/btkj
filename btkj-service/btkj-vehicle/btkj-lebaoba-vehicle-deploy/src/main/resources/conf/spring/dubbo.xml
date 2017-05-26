@@ -14,5 +14,5 @@
 	
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
-	<dubbo:service interface="org.btkj.vehicle.api.RenewlService" ref="renewlService" loadbalance="${dubbo.service.loadbalance}"/>
+	<dubbo:service interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle" ref="leBaoBaVehicle" loadbalance="${dubbo.service.loadbalance}"/>
 </beans>

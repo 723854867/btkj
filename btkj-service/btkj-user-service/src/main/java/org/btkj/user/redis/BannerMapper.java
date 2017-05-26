@@ -4,10 +4,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Banner;
-import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.BannerDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
@@ -22,11 +22,11 @@ public class BannerMapper extends RedisProtostuffDBMapper<Integer, Banner, Banne
 	
 	public List<Banner> getByAppIdAndTid(int appId, int tid) {
 		String listKey = _listKey(appId, tid);
-		List<byte[]> list = redis.protostuffCacheListLoadWithData(Config.CACHE_CONTROLLER, listKey, redisKey, _listController(appId, tid));
+		List<byte[]> list = redis.protostuffCacheListLoadWithData(BtkjConsts.CACHE_CONTROLLER, listKey, redisKey, _listController(appId, tid));
 		List<Banner> banners = null;
 		if (null == list) {
 			banners = dao.selectByAppIdAndTid(appId, tid);
-			redis.protostuffCacheListFlush(Config.CACHE_CONTROLLER, redisKey, _listKey(appId, tid), _listController(appId, tid), banners);
+			redis.protostuffCacheListFlush(BtkjConsts.CACHE_CONTROLLER, redisKey, _listKey(appId, tid), _listController(appId, tid), banners);
 		} else {
 			banners = new ArrayList<Banner>(list.size());
 			for (byte[] data : list)

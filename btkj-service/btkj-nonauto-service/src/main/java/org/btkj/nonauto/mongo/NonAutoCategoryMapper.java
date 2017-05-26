@@ -26,20 +26,9 @@ public class NonAutoCategoryMapper extends MongoMapper<Long, NonAutoCategory> {
 		return super.insert(model);
 	}
 	
-	@Override
-	public NonAutoCategory getByKey(Long key) {
-		Document document = mongo.findOne(collection, Filters.eq(FIELD_ID, key));
-		return null == document ? null : deserial(document);
-	}
-	
 	public NonAutoCategory getByName(String name) {
 		Document document = mongo.findOne(collection, Filters.eq(FIELD_NAME, name));
 		return null == document ? null : deserial(document);
-	}
-	
-	@Override
-	public void update(NonAutoCategory model) {
-		mongo.replace(collection, Filters.eq(FIELD_ID, model.get_id()), serial(model));
 	}
 	
 	public List<NonAutoCategory> getAll() {

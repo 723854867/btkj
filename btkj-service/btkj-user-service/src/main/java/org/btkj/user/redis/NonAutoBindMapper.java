@@ -4,9 +4,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.NonAutoBind;
-import org.btkj.user.Config;
 import org.btkj.user.persistence.dao.NonAutoBindDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
@@ -27,11 +27,11 @@ public class NonAutoBindMapper extends RedisProtostuffDBMapper<Integer, NonAutoB
 	 * @return
 	 */
 	public List<NonAutoBind> getByTid(int tid) { 
-		List<byte[]> list = redis.protostuffCacheListLoadWithData(Config.CACHE_CONTROLLER, _listKey(tid), redisKey, _listControllerKey(tid));
+		List<byte[]> list = redis.protostuffCacheListLoadWithData(BtkjConsts.CACHE_CONTROLLER, _listKey(tid), redisKey, _listControllerKey(tid));
 		List<NonAutoBind> binds = null;
 		if (null == list) {
 			binds = dao.selectByTid(tid);
-			redis.protostuffCacheListFlush(Config.CACHE_CONTROLLER, redisKey, _listKey(tid), _listControllerKey(tid), binds);
+			redis.protostuffCacheListFlush(BtkjConsts.CACHE_CONTROLLER, redisKey, _listKey(tid), _listControllerKey(tid), binds);
 		} else {
 			binds = new ArrayList<NonAutoBind>(list.size());
 			for (byte[] data : list)
