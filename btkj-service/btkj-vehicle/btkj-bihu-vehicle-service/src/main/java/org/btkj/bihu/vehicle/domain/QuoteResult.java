@@ -3,11 +3,12 @@ package org.btkj.bihu.vehicle.domain;
 import java.io.Serializable;
 
 import org.btkj.bihu.vehicle.RespHandler;
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
 import org.btkj.pojo.model.insur.vehicle.CompulsiveInsurance;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.model.insur.vehicle.Policy;
+import org.rapid.util.common.message.Result;
 
 public class QuoteResult implements Serializable {
 	
@@ -583,8 +584,9 @@ public class QuoteResult implements Serializable {
 		}
 	}
 	
-	public Policy toQuote() {
-		Policy quote = new Policy();
+	public Result<InsuranceSchema> schema() {
+		if (this.Item.QuoteStatus != 0)
+			return Result.result(BtkjCode.QUOTE_FAILURE, this.Item.QuoteResult);
 		InsuranceSchema schema = new InsuranceSchema();
 		CompulsiveInsurance cpi = new CompulsiveInsurance();
 		cpi.setStart(this.UserInfo.ForceStartDate);
@@ -635,7 +637,6 @@ public class QuoteResult implements Serializable {
 		if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
 			cmi.setUnknownThird(new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		schema.setCommercial(cmi);
-		quote.setSchema(schema);
-		return quote;
+		return Result.result(schema);
 	}
 }

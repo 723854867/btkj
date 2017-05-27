@@ -1,6 +1,7 @@
 package org.btkj.vehicle.api;
 
 import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.rapid.util.common.message.Result;
@@ -48,5 +49,5 @@ public interface VehicleService {
 	 * @param license
 	 * @return
 	 */
-	Result<Void> orderInfo(EmployeeForm employeeForm, String license);
+	Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String license);
 }

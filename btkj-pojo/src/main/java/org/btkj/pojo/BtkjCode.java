@@ -71,19 +71,19 @@ public enum BtkjCode implements ICode {
 	NON_AUTO_CATEGORY_NOT_EXIST(511, "non auto category not exist!"),
 	
 	/**
-	 * 当前城市不支持壁虎报价
-	 */
-	BIHU_CITY_UNSUPPORT(512, "bihu do not supprted the city!"),
-	
-	/**
 	 * 续保信息获取超时
 	 */
-	RENEW_INFO_GET_TIMEOUT(513, "renew info get timeout!"),
+	RENEW_INFO_GET_TIMEOUT(512, "renew info get timeout!"),
 	
 	/**
 	 * 续保信息获取失败
 	 */
-	RENEW_INFO_GET_FAILURE(514, "renw info get failure!"),
+	RENEW_INFO_GET_FAILURE(513, "renw info get failure!"),
+	
+	/**
+	 * 没有配置路由
+	 */
+	LANE_NOT_SET(514, "lane not set"),
 	
 	/**
 	 * 壁虎线路未开通
@@ -91,9 +91,14 @@ public enum BtkjCode implements ICode {
 	LANE_BIHU_NOT_OPENED(515, "lane of bihu not opened!"),
 	
 	/**
-	 * 险企未开通
+	 * 当前城市不支持壁虎报价
 	 */
-	INSURER_NOT_OPENED(516, "insurer not opened!"),
+	BIHU_CITY_UNSUPPORT(516, "bihu do not supprted the city!"),
+	
+	/**
+	 * 壁虎不支持的险企
+	 */
+	BIHU_INSURER_UNSUPPORT(517, "bihu insurer not open!"),
 	
 	/**
 	 * 险企不存在

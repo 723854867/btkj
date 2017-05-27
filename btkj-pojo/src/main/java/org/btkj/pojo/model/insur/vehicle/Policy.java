@@ -23,9 +23,10 @@ public class Policy implements Serializable {
 	
 	public Policy() {}
 	
-	public Policy(int insurerId, int lane) {
+	public Policy(int insurerId, int lane, VehicleOrderType type) {
 		this.insurerId = insurerId;
 		this.lane = lane;
+		this.type = type;
 		this.state = PolicyState.NEW;
 	}
 	

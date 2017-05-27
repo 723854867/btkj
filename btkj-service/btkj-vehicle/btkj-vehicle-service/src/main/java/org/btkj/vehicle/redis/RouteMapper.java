@@ -10,21 +10,21 @@ import org.btkj.vehicle.mybatis.Tables;
 import org.btkj.vehicle.mybatis.dao.RouteDao;
 import org.btkj.vehicle.mybatis.entity.Route;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.util.common.Consts;
 
-public class RouteMapper extends RedisProtostuffDBMapper<Integer, Route, RouteDao> {
+public class RouteMapper extends RedisProtostuffDBMapper<String, Route, RouteDao> {
 	
 	private String LIST							= "set:route:list:{0}";	
-	private String LIST_CONTROLLER				= "route：controller:{0}"; 
-
+	private String LIST_CONTROLLER				= "route：controller:{0}";
+	
 	public RouteMapper() {
 		super(Tables.ROUTE, "hash:db:route");
 	}
 	
-	/**
-	 * 获取商户的线路列表
-	 * 
-	 * @return
-	 */
+	public Route getByTidAndInsurerId(int tid, int insurerId) {
+		return getByKey(tid + Consts.SYMBOL_UNDERLINE + insurerId);
+	}
+	
 	public List<Route> routes(Tenant tenant) {
 		List<Route> routes = null;
 		List<byte[]> list = redis.protostuffCacheListLoadWithData(BtkjConsts.CACHE_CONTROLLER, _listKey(tenant.getTid()), redisKey, _listController(tenant.getTid()));
@@ -50,5 +50,5 @@ public class RouteMapper extends RedisProtostuffDBMapper<Integer, Route, RouteDa
 	
 	private String _listController(int tid) {
 		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(tid));
-	} 
+	}
 }

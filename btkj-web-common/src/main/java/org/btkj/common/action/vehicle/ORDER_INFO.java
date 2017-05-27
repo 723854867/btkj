@@ -2,6 +2,7 @@ package org.btkj.common.action.vehicle;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.vehicle.api.VehicleService;
@@ -21,7 +22,7 @@ public class ORDER_INFO extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
+	protected Result<VehicleOrder> execute(Request request, Client client, EmployeeForm employeeForm) {
 		return vehicleService.orderInfo(employeeForm, request.getParam(Params.LICENSE));
 	}
 	

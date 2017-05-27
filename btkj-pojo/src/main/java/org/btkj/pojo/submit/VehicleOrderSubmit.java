@@ -1,6 +1,7 @@
 package org.btkj.pojo.submit;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.btkj.pojo.entity.Renewal;
 
@@ -13,24 +14,24 @@ public class VehicleOrderSubmit implements Serializable {
 
 	private static final long serialVersionUID = -108775801806960634L;
 
-	private int quoteMod;			// 报价模值(需要报价的保险公司的模值之和)
-	private int insureMod;			// 投保模值(需要核保的保险公司的模值之和：只能是 quoteMod 的子集)
+	private Set<Integer> quote;						// 报价公司ID列表
+	private Set<Integer> insure;					// 投保公司ID列表
 	private Renewal renewal;
 	
-	public int getQuoteMod() {
-		return quoteMod;
+	public Set<Integer> getQuote() {
+		return quote;
 	}
 	
-	public void setQuoteMod(int quoteMod) {
-		this.quoteMod = quoteMod;
+	public void setQuote(Set<Integer> quote) {
+		this.quote = quote;
 	}
 	
-	public int getInsureMod() {
-		return insureMod;
+	public Set<Integer> getInsure() {
+		return insure;
 	}
 	
-	public void setInsureMod(int insureMod) {
-		this.insureMod = insureMod;
+	public void setInsure(Set<Integer> insure) {
+		this.insure = insure;
 	}
 	
 	public Renewal getRenewal() {

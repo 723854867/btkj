@@ -23,11 +23,6 @@
 		</property>
 	</bean>
 	
-	<bean id="vehicleConfigMapper" class="org.btkj.vehicle.redis.VehicleConfigMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="vehicleConfigDao" />
-	</bean>
-	
 	<bean id="renewalMapper" class="org.btkj.vehicle.mongo.RenewalMapper">
 		<property name="mongo" ref="mongo" />
 	</bean>
@@ -35,5 +30,9 @@
 	<bean id="routeMapper" class="org.btkj.vehicle.redis.RouteMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="routeDao" />
+	</bean>
+	
+	<bean id="orderMapper" class="org.btkj.vehicle.mongo.OrderMapper">
+		<property name="mongo" ref="mongo" />
 	</bean>
 </beans>

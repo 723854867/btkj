@@ -10,7 +10,7 @@ import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.Policy;
+import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
@@ -66,11 +66,8 @@ public class BiHuVehicleTest extends BaseTest {
 			Renewal renewal = result.attach();
 			VehicleOrderSubmit submit = new VehicleOrderSubmit();
 			submit.setRenewal(renewal);
-			submit.setQuoteMod(4);
 			submit.getRenewal().getSchema().getCommercial().setStart(String.valueOf(DateUtils.currentTime()));
 			submit.getRenewal().getSchema().getCompulsive().setStart(String.valueOf(DateUtils.currentTime()));
-			Result<Void> r = biHuVehicle.order(form, submit.getQuoteMod(), submit.getInsureMod(), submit.getRenewal());
-			System.out.println(r.getCode());
 		} else 
 			System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(1);
@@ -86,7 +83,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
-		Result<Policy> result = biHuVehicle.quoteResult(form, "浙H0155R", 4);
+		Result<InsuranceSchema> result = biHuVehicle.quoteResult(form, "浙H0155R", 4);
 		System.out.println(result.attach());
 		TimeUnit.HOURS.sleep(1);
 	}
@@ -106,11 +103,8 @@ public class BiHuVehicleTest extends BaseTest {
 			Renewal renewal = result.attach();
 			VehicleOrderSubmit submit = new VehicleOrderSubmit();
 			submit.setRenewal(renewal);
-			submit.setInsureMod(4);
 			submit.getRenewal().getSchema().getCommercial().setStart(String.valueOf(DateUtils.currentTime()));
 			submit.getRenewal().getSchema().getCompulsive().setStart(String.valueOf(DateUtils.currentTime()));
-			Result<Void> r = biHuVehicle.order(form, submit.getQuoteMod(), submit.getInsureMod(), submit.getRenewal());
-			System.out.println(r.getCode());
 		} else 
 			System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(1);

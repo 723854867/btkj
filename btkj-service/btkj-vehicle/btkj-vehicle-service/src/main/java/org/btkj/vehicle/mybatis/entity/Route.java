@@ -2,23 +2,23 @@ package org.btkj.vehicle.mybatis.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class Route implements UniqueModel<Integer> {
+public class Route implements UniqueModel<String> {
 
 	private static final long serialVersionUID = 4987424246445479663L;
 
-	private int id;
+	private String key;
 	private int tid;
 	private int insurerId;
 	private int lane;
 	private int created;
 	private int updated;
 
-	public int getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public int getTid() {
@@ -40,11 +40,11 @@ public class Route implements UniqueModel<Integer> {
 	public int getLane() {
 		return lane;
 	}
-
+	
 	public void setLane(int lane) {
 		this.lane = lane;
 	}
-
+	
 	public int getCreated() {
 		return created;
 	}
@@ -62,7 +62,7 @@ public class Route implements UniqueModel<Integer> {
 	}
 
 	@Override
-	public Integer key() {
-		return this.id;
+	public String key() {
+		return this.key;
 	}
 }

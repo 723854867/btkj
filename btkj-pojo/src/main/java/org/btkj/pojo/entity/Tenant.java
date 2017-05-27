@@ -11,7 +11,6 @@ public class Tenant implements UniqueModel<Integer> {
 	private int appId;
 	private int region;
 	private int mod;
-	private int insurerMod;			// 险企模值
 	private String privilege;
 	private String mobile;
 	private String legalPerson;    //联系人
@@ -67,14 +66,6 @@ public class Tenant implements UniqueModel<Integer> {
 		this.mod = mod;
 	}
 	
-	public int getInsurerMod() {
-		return insurerMod;
-	}
-	
-	public void setInsurerMod(int insurerMod) {
-		this.insurerMod = insurerMod;
-	}
-
 	public String getPrivilege() {
 		return privilege;
 	}

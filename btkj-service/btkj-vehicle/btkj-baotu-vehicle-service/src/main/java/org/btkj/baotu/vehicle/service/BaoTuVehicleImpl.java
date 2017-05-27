@@ -1,5 +1,7 @@
 package org.btkj.baotu.vehicle.service;
 
+import java.util.Set;
+
 import org.btkj.baotu.vehicle.api.BaoTuVehicle;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.model.EmployeeForm;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class BaoTuVehicleImpl implements BaoTuVehicle {
 
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, Renewal renewal) {
+	public Result<Void> order(EmployeeForm employeeForm, Set<Integer> quote, Set<Integer> insure, Renewal renewal) {
 		return Result.result(Code.SYSTEM_ERROR);
 	}
 }
