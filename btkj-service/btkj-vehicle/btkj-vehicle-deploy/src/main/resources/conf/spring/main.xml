@@ -35,4 +35,9 @@
 	<bean id="orderMapper" class="org.btkj.vehicle.mongo.OrderMapper">
 		<property name="mongo" ref="mongo" />
 	</bean>
+	
+	<bean id="cityMapper" class="org.btkj.vehicle.redis.CityMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="cityDao" />
+	</bean>
 </beans>

@@ -11,6 +11,7 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.PolicyState;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
 import org.btkj.pojo.model.insur.vehicle.Policy;
+import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.util.common.serializer.SerializeUtil;
 
@@ -28,6 +29,7 @@ public class OrderMapper extends MongoMapper<String, VehicleOrder> {
 	private String FIELD_STATE				= "policies.{0}.state";
 	private String FIELD_DESC				= "policies.{0}.desc";
 	private String FIELD_SCHEMA				= "policies.{0}.schema";
+	private String FIELD_DETAIL				= "policies.{0}.detail";
 	
 	public OrderMapper() {
 		super("vehicle_order");
@@ -68,6 +70,24 @@ public class OrderMapper extends MongoMapper<String, VehicleOrder> {
 								Document.parse(SerializeUtil.JsonUtil.GSON.toJson(schema))),
 						Updates.set(MessageFormat.format(FIELD_STATE, String.valueOf(policy.getInsurerId())), 
 								PolicyState.QUOTE_SUCCESS.toString()),
+						Updates.set(MessageFormat.format(FIELD_DESC, String.valueOf(policy.getInsurerId())), desc)));
+	}
+	
+	public void insureFailure(VehicleOrder model, Policy policy, String desc) {
+		mongo.findOneAndUpdate(collection, Filters.eq(FIELD_ID, model.key()), 
+				Filters.and(
+						Updates.set(MessageFormat.format(FIELD_STATE, String.valueOf(policy.getInsurerId())), PolicyState.QUOTE_SUCCESS_INSURE_FAILURE.toString()),
+						Updates.set(MessageFormat.format(FIELD_DESC, String.valueOf(policy.getInsurerId())), desc)));
+	}
+	
+	public void insureSuccess(VehicleOrder model, Policy policy, PolicyDetail detail, String desc) {
+		mongo.findOneAndUpdate(collection, Filters.eq(FIELD_ID, model.key()), 
+				Filters.and(
+						Updates.set(
+								MessageFormat.format(FIELD_DETAIL, String.valueOf(policy.getInsurerId())), 
+								Document.parse(SerializeUtil.JsonUtil.GSON.toJson(detail))),
+						Updates.set(MessageFormat.format(FIELD_STATE, String.valueOf(policy.getInsurerId())), 
+								PolicyState.INSURE_SUCCESS.toString()),
 						Updates.set(MessageFormat.format(FIELD_DESC, String.valueOf(policy.getInsurerId())), desc)));
 	}
 }

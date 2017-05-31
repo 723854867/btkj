@@ -1,5 +1,7 @@
 package org.btkj.vehicle.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,6 +23,7 @@ import org.btkj.pojo.enums.VehicleOrderType;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
 import org.btkj.pojo.model.insur.vehicle.Policy;
+import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.model.Lane;
@@ -28,13 +31,19 @@ import org.btkj.vehicle.mongo.OrderMapper;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mybatis.entity.Route;
 import org.btkj.vehicle.redis.RouteMapper;
+import org.btkj.vehicle.rule.Rule;
 import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.consts.code.ICode;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 @Service("vehicleService")
 public class VehicleServiceImpl implements VehicleService {
 	
+	@Resource
+	private Rule rule;
 	@Resource
 	private RouteMapper routeMapper;
 	@Resource
@@ -81,6 +90,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Override
 	public Result<Void> order(EmployeeForm employeeForm, VehicleOrderSubmit submit) {
+		ICode code = rule.orderCheck(employeeForm.getTenant().getRegion(), submit);
+		if (code != Code.OK)
+			return Result.result(code);
 		Tenant tenant = employeeForm.getTenant();
 		List<Route> routes = routeMapper.routes(tenant);
 		Set<Integer> quote = submit.getQuote();
@@ -133,8 +145,8 @@ public class VehicleServiceImpl implements VehicleService {
 		}
 		if (null != bihuQuote)
 			quote.removeAll(bihuQuote);
-		if (null != leBaoBaInsure)
-			quote.removeAll(leBaoBaInsure);
+		if (null != leBaoBaQuote)
+			quote.removeAll(leBaoBaQuote);
 		Renewal renewal = submit.getRenewal();
 		int employeeId = employeeForm.getEmployee().getId();
 		String license = renewal.getVehicle().getLicense();
@@ -168,27 +180,44 @@ public class VehicleServiceImpl implements VehicleService {
 		// 只需要刷新壁虎的订单即可：保途和乐宝吧的订单状态是异步回调的，壁虎的需要主动请求
 		Map<Integer, Policy> policies = order.getPolicies();
 		for (Policy policy : policies.values()) {
-			if (policy.getLane() != Lane.BI_HU.mark()
-					|| policy.getState() != PolicyState.NEW) 
+			if (policy.getLane() != Lane.BI_HU.mark() || policy.getState() != PolicyState.NEW) 
 				continue;
-			VehicleOrderType type = policy.getType();
-			switch (type) {
-			case QUOTE:
-				Result<InsuranceSchema> result = biHuVehicle.quoteResult(employeeForm, license, policy.getInsurerId());
-				if (!result.isSuccess()) {
-					if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) 
-						orderMapper.quoteFailure(order, policy, result.getDesc());
+			Result<InsuranceSchema> result = _quoteResult(employeeForm, license, order, policy);
+			if (result.isSuccess() && policy.getType() == VehicleOrderType.QUOTE_AND_INSURE) {			// 还要获取一次核保信息
+				Result<PolicyDetail> ir = biHuVehicle.insureResult(employeeForm, license, policy.getInsurerId());
+				if (!ir.isSuccess()) {
+					if (ir.getCode() == BtkjCode.INSURE_FAILURE.id()) 
+						orderMapper.insureFailure(order, policy, ir.getDesc());
 				} else
-					orderMapper.quoteSuccess(order, policy, result.getDesc(), result.attach());
-				break;
-			default:
-				break;
+					orderMapper.insureSuccess(order, policy, ir.attach(), ir.getDesc());
 			}
 		}
 		return Result.result(order);
 	}
 	
+	private Result<InsuranceSchema> _quoteResult(EmployeeForm employeeForm, String license, VehicleOrder order, Policy policy) {
+		Result<InsuranceSchema> result = biHuVehicle.quoteResult(employeeForm, license, policy.getInsurerId());
+		if (!result.isSuccess()) {
+			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) 
+				orderMapper.quoteFailure(order, policy, result.getDesc());
+		} else
+			orderMapper.quoteSuccess(order, policy, result.getDesc(), result.attach());
+		return result;
+	}
+	
 	private String _orderId(String license, int employeeId) {
 		return employeeId + Consts.SYMBOL_UNDERLINE + license;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Integer> insurers(Tenant tenant) {
+		List<Route> list = routeMapper.routes(tenant);
+		if (CollectionUtils.isEmpty(list))
+			return Collections.EMPTY_LIST;
+		List<Integer> l = new ArrayList<Integer>();
+		for (Route route : list)
+			l.add(route.getInsurerId());
+		return l;
 	}
 }

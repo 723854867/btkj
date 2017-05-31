@@ -15,7 +15,6 @@ import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
 import org.btkj.pojo.model.insur.vehicle.Vehicle;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
-import org.btkj.vehicle.api.RuleService;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -34,14 +33,12 @@ import org.rapid.util.lang.StringUtils;
 public class ORDER extends TenantAction {
 	
 	@Resource
-	private RuleService ruleService;
-	@Resource
 	private VehicleService vehicleService;
 
 	@Override
 	protected Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
 		VehicleOrderSubmit submit = request.getParam(Params.VEHICLE_ORDER_SUBMIT);
-		if (!_check(employeeForm.getTenant(), submit) || !ruleService.check(employeeForm, submit))
+		if (!_check(employeeForm.getTenant(), submit))
 			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_ORDER_SUBMIT);
 		return vehicleService.order(employeeForm, submit);
 	}
@@ -98,15 +95,14 @@ public class ORDER extends TenantAction {
 		CommercialInsurance cmi = schema.getCommercial();
 		if (null == cpi && null == cmi)
 			return false;
-		if (null != cpi && null == cpi.getStart())  		// 交强险必须指定起保日期 
+		// 交强险必须指定起保日期且日期的长度为10位
+		if (null != cpi && !Validator.isUnixTimestamp(cpi.getStart()))	
 			return false;
 		if (null != cmi) {
-			// 必须要有起保日期
-			if (null == cmi.getStart())
-				return false;
-			// 确保至少保了一种基本险
-			if (null == cmi.getDamage() && null == cmi.getThird() && null == cmi.getDriver()
-					&& null == cmi.getPassenger() && null == cmi.getRobbery())
+			// 必须要有起保日期且日期的长度为10位, 确保至少保了一种基本险
+			if (!Validator.isUnixTimestamp(cmi.getStart()) 
+					|| (null == cmi.getDamage() && null == cmi.getThird() 
+							&& null == cmi.getDriver() && null == cmi.getPassenger() && null == cmi.getRobbery()))
 				return false;
 		}
 		return true;

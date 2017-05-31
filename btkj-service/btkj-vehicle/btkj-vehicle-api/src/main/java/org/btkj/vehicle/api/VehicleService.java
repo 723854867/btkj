@@ -1,6 +1,9 @@
 package org.btkj.vehicle.api;
 
+import java.util.List;
+
 import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
@@ -50,4 +53,11 @@ public interface VehicleService {
 	 * @return
 	 */
 	Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String license);
+	
+	/**
+	 * 获取商户的险企列表
+	 * 
+	 * @return
+	 */
+	List<Integer> insurers(Tenant tenant);
 }

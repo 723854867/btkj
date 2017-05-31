@@ -20,6 +20,7 @@ public class Policy implements Serializable {
 	private PolicyState state;			// 状态
 	private String desc;				// 描述
 	private InsuranceSchema schema;		// 投保方案
+	private PolicyDetail detail;
 	
 	public Policy() {}
 	
@@ -76,5 +77,13 @@ public class Policy implements Serializable {
 	
 	public void setSchema(InsuranceSchema schema) {
 		this.schema = schema;
+	}
+	
+	public PolicyDetail getDetail() {
+		return detail;
+	}
+	
+	public void setDetail(PolicyDetail detail) {
+		this.detail = detail;
 	}
 }

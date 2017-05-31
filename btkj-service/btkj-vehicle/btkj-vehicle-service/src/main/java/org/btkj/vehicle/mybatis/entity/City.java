@@ -1,8 +1,8 @@
-package org.btkj.vehicle.mybatis.dao;
+package org.btkj.vehicle.mybatis.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class CityRule implements UniqueModel<Integer> {
+public class City implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = -6748716010804985723L;
 

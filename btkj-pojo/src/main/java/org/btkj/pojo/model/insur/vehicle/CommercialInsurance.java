@@ -14,6 +14,10 @@ public class CommercialInsurance implements Serializable {
 	private String start;						// 起保日期
 	private String end;							// 截止日期
 	private double tota;						// 商业险总额
+	private double noLossDiscountRate;			// 无赔款优惠系数
+	private double autoChannelRate;				// 自主渠道系数
+	private double autoUnderwritingRate;		// 自主核保系数
+	private double trafficViolationRate;		// 交通违法系数
 	private Insurance damage;					// 车损险
 	private Insurance damageOfDeductible;		// 车损不计免赔
 	private Insurance third;					// 第三方责任险
@@ -56,6 +60,38 @@ public class CommercialInsurance implements Serializable {
 	
 	public void setTota(double tota) {
 		this.tota = tota;
+	}
+	
+	public double getNoLossDiscountRate() {
+		return noLossDiscountRate;
+	}
+
+	public void setNoLossDiscountRate(double noLossDiscountRate) {
+		this.noLossDiscountRate = noLossDiscountRate;
+	}
+
+	public double getAutoChannelRate() {
+		return autoChannelRate;
+	}
+
+	public void setAutoChannelRate(double autoChannelRate) {
+		this.autoChannelRate = autoChannelRate;
+	}
+
+	public double getAutoUnderwritingRate() {
+		return autoUnderwritingRate;
+	}
+
+	public void setAutoUnderwritingRate(double autoUnderwritingRate) {
+		this.autoUnderwritingRate = autoUnderwritingRate;
+	}
+
+	public double getTrafficViolationRate() {
+		return trafficViolationRate;
+	}
+
+	public void setTrafficViolationRate(double trafficViolationRate) {
+		this.trafficViolationRate = trafficViolationRate;
 	}
 
 	public Insurance getDamage() {

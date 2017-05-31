@@ -18,6 +18,16 @@ public enum PolicyState {
 	QUOTE_FAILURE,
 	
 	/**
+	 * 报价成功，投保失败
+	 */
+	QUOTE_SUCCESS_INSURE_FAILURE,
+	
+	/**
+	 * 投保成功
+	 */
+	INSURE_SUCCESS,
+	
+	/**
 	 * 系统错误
 	 */
 	SYSTEM_ERROR;

@@ -10,7 +10,6 @@ import org.btkj.vehicle.mybatis.Tables;
 import org.btkj.vehicle.mybatis.dao.RouteDao;
 import org.btkj.vehicle.mybatis.entity.Route;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
-import org.rapid.util.common.Consts;
 
 public class RouteMapper extends RedisProtostuffDBMapper<String, Route, RouteDao> {
 	
@@ -19,10 +18,6 @@ public class RouteMapper extends RedisProtostuffDBMapper<String, Route, RouteDao
 	
 	public RouteMapper() {
 		super(Tables.ROUTE, "hash:db:route");
-	}
-	
-	public Route getByTidAndInsurerId(int tid, int insurerId) {
-		return getByKey(tid + Consts.SYMBOL_UNDERLINE + insurerId);
 	}
 	
 	public List<Route> routes(Tenant tenant) {

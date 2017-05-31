@@ -23,11 +23,11 @@ import org.btkj.bihu.vehicle.domain.QuoteResult;
 import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
-import org.btkj.bihu.vehicle.mybatis.entity.CityCode;
-import org.btkj.bihu.vehicle.mybatis.entity.Insurer;
+import org.btkj.bihu.vehicle.mybatis.entity.BiHuCity;
+import org.btkj.bihu.vehicle.mybatis.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.mybatis.entity.TenantConfig;
-import org.btkj.bihu.vehicle.redis.CityCodeMapper;
-import org.btkj.bihu.vehicle.redis.InsurerMapper;
+import org.btkj.bihu.vehicle.redis.BiHuCityMapper;
+import org.btkj.bihu.vehicle.redis.BiHuInsurerMapper;
 import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.Renewal;
@@ -38,6 +38,7 @@ import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
+import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.Vehicle;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -59,9 +60,9 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	@Resource
 	private HttpProxy httpProxy;
 	@Resource
-	private InsurerMapper insurerMapper;
+	private BiHuCityMapper biHuCityMapper;
 	@Resource
-	private CityCodeMapper cityCodeMapper;
+	private BiHuInsurerMapper biHuInsurerMapper;
 	@Resource
 	private TenantConfigMapper tenantConfigMapper;
 	
@@ -112,9 +113,9 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
 			params.setAgent(agent).setKey(key);
-		CityCode cityCode = cityCodeMapper.getByKey(employeeForm.getTenant().getRegion());
+		BiHuCity cityCode = biHuCityMapper.getByKey(employeeForm.getTenant().getRegion());
 		if (null == cityCode)
-			return Result.result(BtkjCode.BIHU_CITY_UNSUPPORT);
+			return Result.result(BtkjCode.CITY_UNSUPPORT);
 		params.setCityCode(cityCode.getCid());
 		HttpUriRequest request = _requestUri(renewInfoPath, params, renewInfoTimeout);
 		try {
@@ -136,17 +137,17 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
 		if (null == tc)
 			return Result.result(BtkjCode.LANE_BIHU_NOT_OPENED);
-		CityCode cityCode = cityCodeMapper.getByKey(employeeForm.getTenant().getRegion());
+		BiHuCity cityCode = biHuCityMapper.getByKey(employeeForm.getTenant().getRegion());
 		if (null == cityCode)
-			return Result.result(BtkjCode.BIHU_CITY_UNSUPPORT);
-		List<Insurer> insurers = insurerMapper.getWithinKey(new ArrayList<Integer>(quote));
+			return Result.result(BtkjCode.CITY_UNSUPPORT);
+		List<BiHuInsurer> insurers = biHuInsurerMapper.getWithinKey(new ArrayList<Integer>(quote));
 		if (insurers.size() != quote.size())
-			return Result.result(BtkjCode.BIHU_INSURER_UNSUPPORT);
+			return Result.result(BtkjCode.INSURER_NOT_EXIST);
 		int quoteMod = 0;
 		int insureMod = 0;
-		for (Insurer insurer : insurers) {
+		for (BiHuInsurer insurer : insurers) {
 			quoteMod |= insurer.getCode();
-			if (insure.remove(insurer.getId()))
+			if (null != insure && insure.remove(insurer.getId()))
 				insureMod |= insurer.getCode();
 		}
 		BiHuParams params = new BiHuParams(RequestType.QUOTE);
@@ -188,7 +189,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		params.setInsuredName(insured.getName());
 		params.setInsuredIdType(_biHuIdType(insured.getIdType()));
 		params.setInsuredIdCard(insured.getIdNo());
-		if (!StringUtils.hasText(insured.getMobile()))
+		if (StringUtils.hasText(insured.getMobile()))
 			params.setInsuredMobile(insured.getMobile());
 	}
 	
@@ -198,7 +199,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		params.setHolderName(insurer.getName());
 		params.setHolderIdType(_biHuIdType(insurer.getIdType()));
 		params.setHolderIdCard(insurer.getIdNo());
-		if (!StringUtils.hasText(insurer.getMobile()))
+		if (StringUtils.hasText(insurer.getMobile()))
 			params.setHolderMobile(insurer.getMobile());
 	}
 	
@@ -287,11 +288,31 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			}
 			// 无法找到第三方特约
 			params.setHcSanFangTeYue(null != cmi.getUnknownThird() ? 1 : 0);
+		} else {
+			params.setCheSun(0);
+			params.setBuJiMianCheSun(0);
+			params.setSanZhe(0);
+			params.setBuJiMianSanZhe(0);
+			params.setSiJi(0);
+			params.setBuJiMianSiJi(0);
+			params.setChengKe(0);
+			params.setBuJiMianChengKe(0);
+			params.setDaoQiang(0);
+			params.setBuJiMianDaoQiang(0);
+			params.setBoLi(0);
+			params.setZiRan(0);
+			params.setBuJiMianZiRan(0);
+			params.setHuaHen(0);
+			params.setBuJiMianHuaHen(0);
+			params.setSheShui(0);
+			params.setBuJiMianSheShui(0);
 		}
+		params.setBuJiMianJingShenSunShi(0); // 不计免精神损失不做该项投保
 	}
 	
 	@Override
 	public Result<InsuranceSchema> quoteResult(EmployeeForm employeeForm, String license, int insurId) {
+		BiHuInsurer insurer = biHuInsurerMapper.getByKey(insurId);
 		BiHuParams params = new BiHuParams(RequestType.QUOTE_RESULT);
 		params.setLicenseNo(license);
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));
@@ -300,7 +321,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
 			params.setAgent(agent).setKey(key);
-		params.setQuoteGroup(insurId);
+		params.setQuoteGroup(insurer.getCode());
 		HttpUriRequest request = _requestUri(quoteResultPath, params, quoteResultTimeout);
 		try {
 			QuoteResult result = httpProxy.syncRequest(request, QuoteResult.JSON_HANDLER);
@@ -318,8 +339,8 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<Void> insureResult(EmployeeForm employeeForm, String license, int insurId) {
-		Insurer insurer = insurerMapper.getByKey(insurId);
+	public Result<PolicyDetail> insureResult(EmployeeForm employeeForm, String license, int insurId) {
+		BiHuInsurer insurer = biHuInsurerMapper.getByKey(insurId);
 		if (null == insurer)
 			return Result.result(BtkjCode.INSURER_NOT_EXIST);
 		
@@ -335,11 +356,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		HttpUriRequest request = _requestUri(insureResultPath, params, insureResultTimeout);
 		try {
 			InsureResult result = httpProxy.syncRequest(request, InsureResult.JSON_HANDLER);
-			if (result.getBusinessStatus() != 1 || null == result.getItem())
-				return Result.result(BtkjCode.QUOTE_FAILURE);
-			if (result.getItem().getSubmitStatus() == 4)
-				return Result.result(BtkjCode.NOT_QUOTE);
-			return null;
+			if (result.getBusinessStatus() != 1)
+				return Result.result(Code.REQUEST_FAILURE);
+			if (result.getItem().getSubmitStatus() != 1)
+				return Result.result(BtkjCode.INSURE_FAILURE, result.getItem().getSubmitResult());
+			return Result.result(result.detail());
 		} catch (IOException e) {
 			logger.warn("bihu renew request failure!", e);
 			if (e instanceof SocketTimeoutException)

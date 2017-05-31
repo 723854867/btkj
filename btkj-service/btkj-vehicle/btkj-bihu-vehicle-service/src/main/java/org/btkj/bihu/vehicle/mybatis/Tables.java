@@ -4,7 +4,7 @@ import org.rapid.data.storage.db.Table;
 
 public interface Tables {
 
-	final Table INSURER				= new Table("insurer");
-	final Table CITY_CODE 			= new Table("city_code");
-	final Table TENANT_CONFIG		= new Table("tenant_config");
+	final Table BI_HU_CITY 				= new Table("bi_hu_city");
+	final Table BI_HU_INSURER			= new Table("bi_hu_insurer");
+	final Table TENANT_CONFIG			= new Table("tenant_config");
 }

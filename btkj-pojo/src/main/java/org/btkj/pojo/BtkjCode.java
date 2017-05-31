@@ -91,44 +91,49 @@ public enum BtkjCode implements ICode {
 	LANE_BIHU_NOT_OPENED(515, "lane of bihu not opened!"),
 	
 	/**
-	 * 当前城市不支持壁虎报价
+	 * 不支持的城市
 	 */
-	BIHU_CITY_UNSUPPORT(516, "bihu do not supprted the city!"),
-	
-	/**
-	 * 壁虎不支持的险企
-	 */
-	BIHU_INSURER_UNSUPPORT(517, "bihu insurer not open!"),
+	CITY_UNSUPPORT(516, "city unsupport"),
 	
 	/**
 	 * 险企不存在
 	 */
-	INSURER_NOT_EXIST(517, "insurer not exist"),
+	INSURER_NOT_EXIST(519, "insurer not exist"),
 	
 	/**
 	 * 报价失败
 	 */
-	QUOTE_FAILURE(518, "quote failure"),
+	QUOTE_FAILURE(520, "quote failure"),
+	
+	/**
+	 * 核保失败
+	 */
+	INSURE_FAILURE(521, "insure failure"),
 	
 	/**
 	 * 没有报价
 	 */
-	NOT_QUOTE(519, "not quote"),
+	NOT_QUOTE(522, "not quote"),
 	
 	/**
 	 * 壁虎请求太频繁
 	 */
-	BIHU_REQUEST_FREQUENTLY(520, "bihu request frequently"),
+	BIHU_REQUEST_FREQUENTLY(523, "bihu request frequently"),
 	
 	/**
 	 * 车主名字错误
 	 */
-	CAR_OWNER_NAME_ERROR(521, "car owner name error"),
+	CAR_OWNER_NAME_ERROR(524, "car owner name error"),
 	
 	/**
 	 * 订单不存在
 	 */
-	ORDER_NOT_EXIST(522, "order not exist!");
+	ORDER_NOT_EXIST(525, "order not exist!"),
+	
+	/**
+	 * 不在续保期内：起保时间太长
+	 */
+	NOT_IN_RENEWAL_PERIOD(526, "not in renewal period");
 	
 	private int code;
 	private String desc;

@@ -585,7 +585,7 @@ public class QuoteResult implements Serializable {
 	}
 	
 	public Result<InsuranceSchema> schema() {
-		if (this.Item.QuoteStatus != 0)
+		if (this.Item.QuoteStatus <= 0)
 			return Result.result(BtkjCode.QUOTE_FAILURE, this.Item.QuoteResult);
 		InsuranceSchema schema = new InsuranceSchema();
 		CompulsiveInsurance cpi = new CompulsiveInsurance();
@@ -637,6 +637,10 @@ public class QuoteResult implements Serializable {
 		if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
 			cmi.setUnknownThird(new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		schema.setCommercial(cmi);
+		cmi.setNoLossDiscountRate(this.Item.RateFactor1);
+		cmi.setAutoChannelRate(this.Item.RateFactor2);
+		cmi.setAutoUnderwritingRate(this.Item.RateFactor3);
+		cmi.setTrafficViolationRate(this.Item.RateFactor4);
 		return Result.result(schema);
 	}
 }

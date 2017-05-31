@@ -19,14 +19,14 @@
 		</property>
 	</bean>
 	
-	<bean id="cityCodeMapper" class="org.btkj.bihu.vehicle.redis.CityCodeMapper">
+	<bean id="biHuCityMapper" class="org.btkj.bihu.vehicle.redis.BiHuCityMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="cityCodeDao" />
+		<property name="dao" ref="biHuCityDao" />
 	</bean>
 	
-	<bean id="InsurerMapper" class="org.btkj.bihu.vehicle.redis.InsurerMapper">
+	<bean id="biHuInsurerMapper" class="org.btkj.bihu.vehicle.redis.BiHuInsurerMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="insurerDao" />
+		<property name="dao" ref="biHuInsurerDao" />
 	</bean>
 	
 	<bean id="tenantConfigMapper" class="org.btkj.bihu.vehicle.redis.TenantConfigMapper">

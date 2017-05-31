@@ -2,7 +2,7 @@ package org.btkj.bihu.vehicle.mybatis.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class CityCode implements UniqueModel<Integer> {
+public class BiHuCity implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 2112678389121538395L;
 

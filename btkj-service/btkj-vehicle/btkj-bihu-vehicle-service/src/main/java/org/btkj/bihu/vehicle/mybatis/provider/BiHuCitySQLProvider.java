@@ -3,14 +3,14 @@ package org.btkj.bihu.vehicle.mybatis.provider;
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.bihu.vehicle.mybatis.Tables;
 
-public class InsurerSQLProvider {
+public class BiHuCitySQLProvider {
 
 	public String selectByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.INSURER.name());
-				WHERE("id=#{key}");
+				FROM(Tables.BI_HU_CITY.name());
+				WHERE("code=#{code}");
 			}
 		}.toString();
 	}

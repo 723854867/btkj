@@ -5,6 +5,7 @@ import java.util.Set;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
+import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -54,5 +55,5 @@ public interface BiHuVehicle {
 	 * @param employeeForm
 	 * @return
 	 */
-	Result<Void> insureResult(EmployeeForm employeeForm, String license, int insurId);
+	Result<PolicyDetail> insureResult(EmployeeForm employeeForm, String license, int insurId);
 }

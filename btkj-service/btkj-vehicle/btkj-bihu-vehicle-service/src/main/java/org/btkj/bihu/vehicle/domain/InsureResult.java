@@ -3,6 +3,7 @@ package org.btkj.bihu.vehicle.domain;
 import java.io.Serializable;
 
 import org.btkj.bihu.vehicle.RespHandler;
+import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 
 public class InsureResult implements Serializable {
 
@@ -98,5 +99,14 @@ public class InsureResult implements Serializable {
 		public void setForceRate(double forceRate) {
 			ForceRate = forceRate;
 		}
+	}
+	
+	public PolicyDetail detail() {
+		PolicyDetail detail = new PolicyDetail();
+		detail.setCommercialNo(this.Item.BizNo);
+		detail.setCommercialRate(this.Item.BizRate);
+		detail.setCompulsiveNo(this.Item.ForceNo);
+		detail.setCompulsiveRate(this.Item.ForceRate);
+		return detail;
 	}
 }

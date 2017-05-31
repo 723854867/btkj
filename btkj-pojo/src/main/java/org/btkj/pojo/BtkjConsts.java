@@ -15,6 +15,8 @@ public interface BtkjConsts {
 	 */
 	final String CACHE_CONTROLLER						= "set:cache:controller";
 	
+	@SuppressWarnings("rawtypes")
 	interface RESULT {
+		
 	}
 }
