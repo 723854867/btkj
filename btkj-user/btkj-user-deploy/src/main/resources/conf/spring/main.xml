@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="org.btkj.user" />
+	
+	<bean class="org.rapid.util.common.SpringContextUtil" />
+	
+	<bean id="config" class="org.btkj.user.Config">
+		<property name="userLockExpire" value="${user.lock.expire}" />
+	</bean>
+	
+	<bean id="globalConfigContainer" class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
+		<property name="zkClient">
+			<bean class="org.I0Itec.zkclient.ZkClient">
+				<constructor-arg name="zkServers" value="${zk.servers}" />
+				<constructor-arg name="sessionTimeout" value="${zk.session.timeout}" />
+				<constructor-arg name="connectionTimeout" value="${zk.connection.timeout}" />
+				<constructor-arg name="zkSerializer" >
+					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="configPath" value="${zk.config.path}" />
+	</bean>
+	
+	<bean id="userMapper" class="org.btkj.user.redis.UserMapper" >
+		<property name="dao" ref="userDao" />
+		<property name="redis" ref="redis" />
+		<property name="distributeLock" ref="distributeLock" />
+		<property name="appMapper" ref="appMapper" />
+	</bean>
+	
+	<bean id="appMapper" class="org.btkj.user.redis.AppMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="appDao" />
+	</bean>
+	
+	<bean id="tenantMapper" class="org.btkj.user.redis.TenantMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="tenantDao" />
+	</bean>
+	
+	<bean id="employeeMapper" class="org.btkj.user.redis.EmployeeMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="employeeDao" />
+	</bean>
+	
+	<bean id="bannerMapper" class="org.btkj.user.redis.BannerMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="bannerDao" />
+	</bean>
+	
+	<bean id="nonAutoBindMapper" class="org.btkj.user.redis.NonAutoBindMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="nonAutoBindDao" />
+	</bean>
+	
+	<bean id="specialBonusMapper" class="org.btkj.user.redis.SpecialBonusMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="specialBonusDao" />
+	</bean>
+</beans>

@@ -29,7 +29,16 @@
 	</dependencies>
 
 	<modules>
-		<module>btkj-service</module>
+		<module>btkj-community</module>
+		<module>btkj-config</module>
+		<module>btkj-courier</module>
+		<module>btkj-master</module>
+		<module>btkj-nonauto</module>
+		<module>btkj-user</module>
+		<module>btkj-vehicle</module>
+		<module>btkj-baotu-vehicle</module>
+		<module>btkj-bihu-vehicle</module>
+		<module>btkj-lebaoba-vehicle</module>
 		<module>btkj-test</module>
 		<module>btkj-web-common</module>
 		<module>btkj-web-manager</module>

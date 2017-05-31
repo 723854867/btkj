@@ -1,0 +1,71 @@
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.btkj.user.persistence.dao.UserDao">
+
+	<select id="searchCount" parameterType="org.btkj.pojo.submit.UserSearcher"
+		resultType="int">
+		SELECT COUNT(*) FROM (
+		<include refid="searchSql" />
+		) b
+	</select>
+
+	<select id="search" parameterType="org.btkj.pojo.submit.UserSearcher"
+		resultType="org.btkj.pojo.info.UserListInfo">
+		SELECT
+		*
+		FROM
+		(
+		<include refid="searchSql" />
+		LIMIT #{start}, #{pageSize}) b
+	</select>
+
+	<sql id="searchSql">
+		SELECT
+		`uid`,
+		`mobile`,
+		`app_login_time`,
+		`created`,
+		`app_id`
+		FROM
+		user
+		<where>
+			<if test="null != uid">
+				uid=#{uid}
+			</if>
+			<if test="null != mobile">
+				AND mobile=#{mobile}
+			</if>
+			<if test="null != appId">
+				AND `app_id`=#{appId}
+			</if>
+		</where>
+		<choose>
+			<when test="order == null">
+				<choose>
+					<when test="null != asc">
+						ORDER BY created ASC
+					</when>
+					<otherwise>
+						ORDER BY created DESC
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="order == 'created'">
+						<choose>
+							<when test="null != asc">
+								ORDER BY created ASC
+							</when>
+							<otherwise>
+								ORDER BY created DESC
+							</otherwise>
+						</choose>
+					</when>
+				</choose>
+			</otherwise>
+		</choose>
+		LIMIT #{start}, #{pageSize}
+	</sql>
+</mapper>

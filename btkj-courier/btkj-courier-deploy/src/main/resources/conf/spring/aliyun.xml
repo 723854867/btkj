@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="aliyunConfig" class="org.rapid.aliyun.AliyunConfig">
+		<constructor-arg index="0" value="classpath:conf/aliyun.properties" />
+	</bean>
+	
+	<bean id="stsService" class="org.rapid.aliyun.service.sts.StsService" init-method="init">
+		<property name="config" ref="aliyunConfig" />
+	</bean>
+</beans>

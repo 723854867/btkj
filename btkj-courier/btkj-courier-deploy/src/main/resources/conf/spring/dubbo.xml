@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!--  <dubbo:monitor protocol="registry"/> -->
+	<dubbo:provider timeout="${dubbo.timeout}" retries="${dubbo.retries}" />
+	
+	<dubbo:application name="${dubbo.application.name}" owner="btkj" />
+	
+	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}" />
+	
+	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl" />
+	
+	<dubbo:service interface="org.btkj.courier.api.AliyunService" ref="aliyunService" loadbalance="${dubbo.service.loadbalance}" />
+	
+	<dubbo:service interface="org.btkj.courier.api.CourierService" ref="courierService" loadbalance="${dubbo.service.loadbalance}" />
+</beans>
