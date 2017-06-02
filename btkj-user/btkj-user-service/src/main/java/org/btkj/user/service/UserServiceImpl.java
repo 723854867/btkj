@@ -2,6 +2,7 @@ package org.btkj.user.service;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
@@ -16,6 +17,9 @@ import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.data.storage.redis.DistributeSession;
+import org.rapid.data.storage.redis.Redis;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtils;
@@ -25,6 +29,8 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 	
+	@Resource
+	private Redis redis;
 	@Resource
 	private AppMapper appMapper;
 	@Resource
@@ -53,12 +59,35 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserModel getUserByToken(Client client, String token) {
-		return userMapper.getUserByToken(client, token);
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			if (null == uid)
+				return null;
+			User user = userMapper.getByKey(Integer.valueOf(uid));
+			return new UserModel(appMapper.getByKey(user.getAppId()), user);
+		default:
+			return userMapper.getUserByToken(client, token);
+		}
 	}
 	
 	@Override
 	public Result<UserModel> lockUserByToken(Client client, String token) {
-		return userMapper.lockUserByToken(client, token);
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			if (null == uid)
+				return null;
+			User user = userMapper.getByKey(Integer.valueOf(uid));
+			String lockId = userMapper.lockUser(user.getUid());
+			if (null == lockId)
+				return Consts.RESULT.USER_STATUS_CHANGED;
+			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
+		default:
+			return userMapper.lockUserByToken(client, token);
+		}
 	}
 	
 	@Override
@@ -73,14 +102,14 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<?> update(User user) {
+	public Result<Void> update(User user) {
 		user.setUpdated(DateUtils.currentTime());
 		try {
 			userMapper.update(user);
 		} catch (DuplicateKeyException e) {
 			return Result.result(Code.IDENTITY_ALREADY_EXIST);
 		}
-		return Result.success();
+		return Consts.RESULT.OK;
 	}
 	
 	@Override

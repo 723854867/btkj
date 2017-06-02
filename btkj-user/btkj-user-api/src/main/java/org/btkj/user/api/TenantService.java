@@ -49,28 +49,11 @@ public interface TenantService {
 	/**
 	 * 申请加入代理公司
 	 * 
-	 * @param token
-	 * @param employeeId
-	 * @param name
-	 * @param identity
-	 * @param identityFace
-	 * @param identityBack
+	 * @param user
+	 * @param chief
 	 * @return
 	 */
-	Result<?> apply(User user, int employeeId, String name, String identity, String identityFace, String identityBack);
-	
-	/**
-	 * 申请加入代理公司
-	 * 
-	 * @param mobile
-	 * @param employeeId
-	 * @param name
-	 * @param identity
-	 * @param identityFace
-	 * @param identityBack
-	 * @return
-	 */
-	Result<?> apply(String mobile, EmployeeForm chief, String name, String identity, String identityFace, String identityBack);
+	Result<?> apply(User user, EmployeeForm chief);
 
 	/**
 	 * 代理公司获取审核列表
@@ -93,12 +76,10 @@ public interface TenantService {
 	 * @param app 如果是为多租户app添加代理公司则需要该参数
 	 * @param region 代理公司地区
 	 * @param tname 代理公司租户名字
-	 * @param name root 账号名字
-	 * @param mobile root 账号手机名字
-	 * @param identity root 账号身份证
+	 * @param user 顶级用户
 	 * @return
 	 */
-	Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack);
+	Result<?> tenantAdd(App app, Region region, String tname, User user);
 	
 	/**
 	 * 代理公司列表

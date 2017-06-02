@@ -133,7 +133,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 不在续保期内：起保时间太长
 	 */
-	NOT_IN_RENEWAL_PERIOD(526, "not in renewal period");
+	NOT_IN_RENEWAL_PERIOD(526, "not in renewal period"),
+	
+	/**
+	 * 文章不存在
+	 */
+	ARTICLE_NOT_EXIST(600, "article not exits");
 	
 	private int code;
 	private String desc;

@@ -24,12 +24,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> {
 	
-	private static final String DATA_KEY				= "hash:memory:apply";				// 每个 租户的所有申请信息
 	private static final String USER_APPLY_LIST			= "set:user:{0}:apply:list";		// 用户的申请列表
 	private static final String TENANT_APPLY_LIST		= "set:tenant:{0}:apply:list";		// 代理公司的申请列表
 	
 	public ApplyMapper() {
-		super(DATA_KEY);
+		super("hash:memory:apply");
 	}
 
 	public ApplyInfo getByTidAndUid(int tid, int uid) {
@@ -40,7 +39,7 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	public ApplyInfo insert(ApplyInfo model) {
 		redis.invokeLua(UserLuaCmd.APPLY_FLUSH,
 				SerializeUtil.RedisUtil.encode(
-						DATA_KEY,
+						redisKey,
 						tenantApplyListKey(model.getTid()),
 						userApplyListKey(model.getUid()),
 						model.key(),
@@ -59,7 +58,7 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	public Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize) {
 		List<byte[]> list = redis.hpaging(
 				SerializeUtil.RedisUtil.encode(tenantApplyListKey(tid)), 
-				SerializeUtil.RedisUtil.encode(DATA_KEY), 
+				SerializeUtil.RedisUtil.encode(redisKey), 
 				SerializeUtil.RedisUtil.encode(page), 
 				SerializeUtil.RedisUtil.encode(pageSize),
 				SerializeUtil.RedisUtil.encode(RedisConsts.OPTION_ZREVRANGE));
@@ -81,7 +80,7 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	public List<Integer> applyListTids(User user) {
 		List<byte[]> list = redis.hmgetByZsetKeys(
 				SerializeUtil.RedisUtil.encode(userApplyListKey(user.getUid())), 
-				SerializeUtil.RedisUtil.encode(DATA_KEY), 0, -1);
+				SerializeUtil.RedisUtil.encode(redisKey), 0, -1);
 		List<Integer> set = new ArrayList<Integer>();
 		for (byte[] buffer : list) 
 			set.add(deserial(buffer).getTid());
@@ -98,7 +97,7 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	public ApplyInfo getAndDel(int tid, int uid) {
 		byte[] data = redis.invokeLua(UserLuaCmd.APPLY_GET_AND_DEL, 
 				SerializeUtil.RedisUtil.encode(
-						DATA_KEY,
+						redisKey,
 						tenantApplyListKey(tid),
 						userApplyListKey(uid),
 						tid + "-" + uid));

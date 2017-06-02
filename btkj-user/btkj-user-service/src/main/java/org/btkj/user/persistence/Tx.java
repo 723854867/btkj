@@ -47,7 +47,7 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(App app, Region region, String tname, User user, String name, String identity, String identityFace, String identityBack) {
+	public TxCallback tenantAdd(App app, Region region, String tname, User user) {
 		appDao.selectByKeyForUpdate(app.getId());
 		if (0 < app.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(app.getId());
@@ -56,7 +56,7 @@ public class Tx {
 		}
 		Tenant tenant = BeanGenerator.newTenant(region.getId(), app.getId(), tname);
 		tenantDao.insert(tenant);
-		Employee employee = BeanGenerator.newEmployee(user, tenant, null, name, identity, identityFace, identityBack);
+		Employee employee = BeanGenerator.newEmployee(user, tenant, null);
 		employeeDao.insert(employee);
 		return new TxCallback() {
 			@Override
@@ -67,30 +67,6 @@ public class Tx {
 		};
 	}
 
-	@Transactional
-	public TxCallback tenantAdd(App app, Region region, String tname, String mobile, String name, String identity, String identityFace, String identityBack) {
-		appDao.selectByKeyForUpdate(app.getId());
-		if (0 < app.getMaxTenantsCount()) {				// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
-			int tenantNum = tenantDao.countByAppIdForUpdate(app.getId());
-			if (tenantNum >= app.getMaxTenantsCount())
-				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
-		}
-		Tenant tenant = BeanGenerator.newTenant(region.getId(), app.getId(), tname);
-		tenantDao.insert(tenant);
-		User user = BeanGenerator.newUser(app.getId(), mobile);
-		userDao.insert(user);
-		Employee employee = BeanGenerator.newEmployee(user, tenant, null, name, identity, identityFace, identityBack);
-		employeeDao.insert(employee);
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				userMapper.flush(user);
-				tenantMapper.flush(tenant);
-				employeeMapper.flush(employee);
-			}
-		};
-	}
-	
 	@Transactional
 	public TxCallback insertEmployee(Employee employee) {
 		employeeDao.selectByTidForUpdate(employee.getTid()); 

@@ -43,9 +43,6 @@ public class EmployeeInfo implements Serializable {
 	public EmployeeInfo(Employee employee ) {
 		this.uid  = employee.getUid();
 		this.tid = employee.getTid();
-		this.name = employee.getName();
-		this.identity = employee.getIdentity();
-		this.mobile = employee.getMobile();
 		this.created = employee.getCreated();
 		this.pid = employee.getParentId();
 		this.id = employee.getId();
@@ -60,9 +57,6 @@ public class EmployeeInfo implements Serializable {
 	public EmployeeInfo(Employee employee , SpecialBonus specialBonus) {
 		this.uid  = employee.getUid();
 		this.tid = employee.getTid();
-		this.name = employee.getName();
-		this.identity = employee.getIdentity();
-		this.mobile = employee.getMobile();
 		this.created = employee.getCreated();
 		this.pid = employee.getParentId();
 		this.id = employee.getId();

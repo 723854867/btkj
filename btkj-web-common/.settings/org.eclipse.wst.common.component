@@ -31,6 +31,9 @@
         <dependent-module archiveName="btkj-vehicle-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-vehicle-api/btkj-vehicle-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="btkj-community-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-community-api/btkj-community-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="rapid-util-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rapid-util/rapid-util">
             <dependency-type>uses</dependency-type>
         </dependent-module>

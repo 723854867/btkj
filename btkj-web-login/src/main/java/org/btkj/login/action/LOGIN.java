@@ -29,13 +29,13 @@ public class LOGIN extends AppAction {
 	@Override
 	protected Result<?> execute(Request request, Client client, App app) {
 		switch (client) {
-		case PC:
+		case MANAGER:
 			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
 		default:
 			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, app.getId());			// app 登录需要验证码
 			if (courierService.captchaVerify(verifier).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
-			return loginService.login(app, verifier.getIdentity());
+			return loginService.login(app, client, verifier.getIdentity());
 		}
 	}
 }

@@ -2,6 +2,7 @@ package org.btkj.user.service;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -14,8 +15,11 @@ import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.data.storage.redis.DistributeSession;
+import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 import org.rapid.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,8 @@ import org.springframework.stereotype.Service;
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
 	
+	@Resource
+	private Redis redis;
 	@Resource
 	private AppMapper appMapper;
 	@Resource
@@ -35,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<?> login(App app, String mobile) {
+	public Result<?> login(App app, Client client, String mobile) {
 		Result<User> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		User user = ru.attach();
 		String lockId = ru.getDesc();
@@ -58,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
 		if (!ru.isSuccess())
 			return ru;
 		try {
-			return _doLogin(Client.APP, user, mobile);
+			return _doLogin(client, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
@@ -75,25 +81,33 @@ public class LoginServiceImpl implements LoginService {
 				return Result.result(Code.PWD_NOT_RESET);
 			if (!pwd.equals(user.getPwd()))
 				return Result.result(Code.PWD_ERROR);
-			return _doLogin(Client.PC, user, mobile);
+			return _doLogin(Client.MANAGER, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}
 	}
 
 	private Result<LoginInfo> _doLogin(Client client, User user, String mobile) {
-		String token = userMapper.tokenReplace(client, user.getUid(), mobile);
-		int time = DateUtils.currentTime();
-		switch (client) {
-		case PC:
-			user.setPcLoginTime(time);
-			break;
-		default:
-			user.setAppLoginTime(time);
-			break;
+		String token = client == Client.RECRUIT 
+				? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() 
+						: userMapper.tokenReplace(client, user.getUid(), mobile);
+		if (client == Client.RECRUIT) {						// 直接使用分布式 session
+			DistributeSession session = new DistributeSession(token, redis);
+			session.setInactiveInterval(DateUtils.MILLIS_FIVE_MINUTES);
+			session.put(BtkjConsts.FIELD.UID, user.getUid());
+		} else {
+			int time = DateUtils.currentTime();
+			switch (client) {
+			case MANAGER:
+				user.setPcLoginTime(time);
+				break;
+			default:
+				user.setAppLoginTime(time);
+				break;
+			}
+			user.setUpdated(time);
+			userMapper.update(user);
 		}
-		user.setUpdated(time);
-		userMapper.update(user);
 		return Result.result(new LoginInfo(token, user));
 	}
 	

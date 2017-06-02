@@ -10,7 +10,12 @@ public enum Client {
 	/**
 	 * pc 端
 	 */
-	PC(2);
+	MANAGER(2),
+	
+	/**
+	 * 
+	 */
+	RECRUIT(4);
 	
 	private int type;
 	

@@ -40,6 +40,6 @@ public class PWD_RESET extends AppAction {
 	
 	@Override
 	protected Client client(Request request) {
-		return Client.PC;
+		return Client.MANAGER;
 	}
 }

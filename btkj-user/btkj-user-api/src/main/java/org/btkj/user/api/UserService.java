@@ -75,7 +75,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	Result<?> update(User user);
+	Result<Void> update(User user);
 	
 	/**
 	 * 密码重置

@@ -2,8 +2,9 @@ package org.btkj.master.api;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.User;
 
 public interface MasterService {
 
-	void tenantAdd(App app, Region region, String tname, String name, String mobile, String identity, String identityFace, String identityBack);
+	void tenantAdd(App app, Region region, String tname, User user);
 }

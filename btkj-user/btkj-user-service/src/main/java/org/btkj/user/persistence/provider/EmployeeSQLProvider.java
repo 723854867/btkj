@@ -1,5 +1,8 @@
 package org.btkj.user.persistence.provider;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;
 
@@ -95,5 +98,15 @@ public class EmployeeSQLProvider {
 	
 	public String updateForJoin() {
 		return "update employee set `left`=case when `left`>#{value} then `left`+2 else `left` end, `right`=case when `right`>=#{value} then `right`+2 else `right` end where tid=#{tid}";
+	}
+	
+	public String selectWithinKey(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("list");
+		StringBuilder builder = new StringBuilder("select * from employee where id in(");
+		for (int key : keys)
+			builder.append(key).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
 	}
 }

@@ -1,5 +1,7 @@
 package org.btkj.user.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
@@ -92,5 +94,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Pager<Employee> team(EmployeeForm form) {
 		
 		return null;
+	}
+	
+	@Override
+	public List<Employee> employees(List<Integer> ids) {
+		return employeeMapper.getWithinKey(ids);
 	}
 }

@@ -13,7 +13,7 @@ public interface LoginService {
 	 * @param mobile 手机号
 	 * @return
 	 */
-	Result<?> login(App app, String mobile);
+	Result<?> login(App app, Client client, String mobile);
 	
 	/**
 	 * pc 登录:必须要指定代理商

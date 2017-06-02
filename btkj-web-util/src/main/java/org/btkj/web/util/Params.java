@@ -7,20 +7,21 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
+import org.btkj.pojo.submit.ArticleSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
+import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -284,6 +285,13 @@ public interface Params {
 		@Override
 		public Tenant convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, Tenant.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<ArticleSearcher> ARTICLE_SEARCHER			= new Str2ObjConstConverter<ArticleSearcher>(1210, "articleSearcher") {
+		@Override
+		public ArticleSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, ArticleSearcher.class);
 		}
 	};
 }

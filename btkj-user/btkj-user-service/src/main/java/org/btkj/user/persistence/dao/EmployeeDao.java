@@ -32,6 +32,10 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectAll")
 	List<Employee> selectAll();
 	
+	@Override
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectWithinKey")
+	List<Employee> selectWithinKey(List<Integer> keys);
+	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidAndUid")
 	Employee selectByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
 	

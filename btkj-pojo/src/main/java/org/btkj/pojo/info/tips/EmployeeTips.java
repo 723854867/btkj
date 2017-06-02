@@ -2,6 +2,7 @@ package org.btkj.pojo.info.tips;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.model.EmployeeForm;
 
@@ -24,11 +25,16 @@ public class EmployeeTips implements Serializable {
 	
 	public EmployeeTips() {}
 	
+	public EmployeeTips(Employee employee) {
+		this.id = employee.getId();
+		this.uid = employee.getUid();
+		this.tid = employee.getTid();
+	}
+	
 	public EmployeeTips(EmployeeForm form, Region region) {
 		this.id = form.getEmployee().getId();
 		this.tid = form.getEmployee().getTid();
 		this.uid  = form.getEmployee().getUid();
-		this.name = form.getEmployee().getName();
 		this.tname = form.getTenant().getName();
 		this.regionId = region.getId();
 		this.regionName = region.getName();

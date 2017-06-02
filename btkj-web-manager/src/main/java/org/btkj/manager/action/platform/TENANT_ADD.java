@@ -7,6 +7,7 @@ import org.btkj.courier.api.CourierService;
 import org.btkj.manager.action.PlatformAction;
 import org.btkj.master.api.MasterService;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
@@ -17,7 +18,7 @@ import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
-import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.region.RegionUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
@@ -46,25 +47,27 @@ public class TENANT_ADD extends PlatformAction {
 			throw ConstConvertFailureException.errorConstException(Params.REGION);
 		// 代理公司的行政区域必须是平台行政区域的子行政区域
 		if (!RegionUtil.isSubRegion(configService.getRegionById(app.getRegion()).getId(), region.getId()))
-			return Result.result(Code.REGION_OUT_OF_BOUNDARY);
-		String name = request.getParam(Params.NAME);
-		String identity = request.getParam(Params.IDENTITY);
-		String identityFace = request.getParam(Params.IDENTITY_FACE);
-		String identityBack = request.getParam(Params.IDENTITY_BACK);
+			return Consts.RESULT.REGION_OUT_OF_BOUNDARY;
+		
 		String mobile = request.getParam(Params.MOBILE);
+		User user = userService.getUser(mobile, app.getId());
+		if (null == user) 
+			return Consts.RESULT.USER_NOT_EXIST;
+		if (null == user.getName())				// 资料不齐的用户不能作为商户顶级雇员
+			return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
+		
 		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, mobile, app.getId());	
 		if (courierService.captchaVerify(verifier).getCode() == -1)
-			return Result.result(Code.CAPTCHA_ERROR);
+			return Consts.RESULT.CAPTCHA_ERROR;
 		if (app.isTenantAddAutonomy())
-			return tenantService.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
+			return tenantService.tenantAdd(app, region, tname, user);
 		else {
 			int tenantNum = appService.tenantNum(app);
 			if (0 < app.getMaxTenantsCount() && tenantNum >= app.getMaxTenantsCount()) 
 				return Result.result(BtkjCode.APP_TENANT_NUM_MAXIMUM);
-			User user = userService.getUser(mobile, app.getId());
-			if (null != user && userService.tenantNumMax(user)) 
+			if (userService.tenantNumMax(user)) 
 				return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
-			masterService.tenantAdd(app, region, tname, name, mobile, identity, identityFace, identityBack);
+			masterService.tenantAdd(app, region, tname, user);
 		}
 		return Result.success();
 	}

@@ -15,13 +15,14 @@ public interface BtkjTables {
 	final Table TENANT								= new Table("tenant");
 	final Table EMPLOYEE							= new Table("employee");
 	final Table COMMUNITY							= new Table("community");
-	final Table SPECIAL_BONUS					= new Table("special_bonus");
+	final Table SPECIAL_BONUS						= new Table("special_bonus");
 	final Table NON_AUTO_BIND						= new Table("non_auto_bind");
 
 	
 	// ******************************* user tables *******************************
 	final Table ADMINISTRATOR						= new Table("administrator");
 	
-	// ******************************* vehicle tables *******************************
-	final Table VEHICLE_CONFIG						= new Table("vehicle_config");
+	// ******************************* community tables *******************************
+	final Table ARTICLE								= new Table("article");
+	final Table COMMENT								= new Table("comment");
 }

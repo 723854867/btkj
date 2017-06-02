@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.NonAutoBind;
@@ -31,10 +32,10 @@ import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.NonAutoBindMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtils;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -93,39 +94,19 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<?> apply(User user, int employeeId, String name, String identity, String identityFace,
-			String identityBack) {
-		EmployeeForm chief = employeeService.getById(employeeId);
-		if (null == chief)
-			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+	public Result<?> apply(User user, EmployeeForm chief) {
 		if (chief.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
-		return _doApply(chief.getTenant(), user, chief, name, identity, identityFace, identityBack);
+		return _doApply(chief.getTenant(), user, chief);
 	}
 
-	@Override
-	public Result<?> apply(String mobile, EmployeeForm chief, String name, String identity, String identityFace,
-			String identityBack) {
-		User user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
-		if (null == user) {
-			try {
-				user = userMapper.insert(BeanGenerator.newUser(chief.getApp().getId(), mobile));
-			} catch (DuplicateKeyException e) { // 如果unique冲突则说明 app-mobile
-												// 组合已经存在了，则直接再次获取
-				user = userMapper.getUserByMobile(chief.getApp().getId(), mobile);
-			}
-		}
-		return _doApply(chief.getTenant(), user, chief, name, identity, identityFace, identityBack);
-	}
-
-	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief, String name, String identity,
-			String identityFace, String identityBack) {
+	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief, name, identity, identityFace, identityBack));
+		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief));
 		return Result.success();
 	}
 
@@ -144,34 +125,23 @@ public class TenantServiceImpl implements TenantService {
 
 		Employee chief = employeeMapper.getByKey(info.getChief());
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief, info.getName(),
-				info.getIdentity(), info.getIdentityFace(), info.getIdentityBack());
-		tx.insertEmployee(employee);
+		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
+		tx.insertEmployee(employee).finish();
 		return Result.success();
 	}
 
 	@Override
-	public Result<?> tenantAdd(App app, Region region, String tname, String mobile, String name, String identity,
-			String identityFace, String identityBack) {
-		Result<User> result = userMapper.lockUserByMobile(app.getId(), mobile);
-		if (result.isSuccess()) { // 指定一个老用户作为新的租户的顶级用户
-			try {
-				if (userService.tenantNumMax(result.attach()))
-					return Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
-				tx.tenantAdd(app, region, tname, result.attach(), name, identity, identityFace, identityBack).finish();
-			} finally {
-				userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
-			}
-		} else if (result.getCode() == Code.USER_NOT_EXIST.id()) { // 指定一个新用户作为租户的顶级用户
-			try {
-				tx.tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack).finish();
-				;
-			} catch (DuplicateKeyException e) { // 说明在这里的时候 mobile
-												// 用户刚好也注册了，name再次添加一次
-				return tenantAdd(app, region, tname, mobile, name, identity, identityFace, identityBack);
-			}
-		} else
-			return result;
+	public Result<?> tenantAdd(App app, Region region, String tname, User user) {
+		String lockId = userMapper.lockUser(user.getUid());
+		if (null == lockId)
+			return Consts.RESULT.USER_STATUS_CHANGED;
+		try {
+			if (userService.tenantNumMax(user))
+				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
+			tx.tenantAdd(app, region, tname, user).finish();
+		} finally {
+			userMapper.releaseUserLock(user.getUid(), lockId);
+		}
 		return Result.success();
 	}
 
