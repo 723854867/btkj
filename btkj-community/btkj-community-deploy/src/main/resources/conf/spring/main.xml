@@ -21,4 +21,14 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="articleDao" />
 	</bean>
+	
+	<bean id="quizMapper" class="org.btkj.community.redis.QuizMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="quizDao" />
+	</bean>
+	
+	<bean id="replyMapper" class="org.btkj.community.redis.ReplyMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="replyDao" />
+	</bean>
 </beans>

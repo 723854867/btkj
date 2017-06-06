@@ -25,12 +25,6 @@ public class EmployeeTips implements Serializable {
 	
 	public EmployeeTips() {}
 	
-	public EmployeeTips(Employee employee) {
-		this.id = employee.getId();
-		this.uid = employee.getUid();
-		this.tid = employee.getTid();
-	}
-	
 	public EmployeeTips(EmployeeForm form, Region region) {
 		this.id = form.getEmployee().getId();
 		this.tid = form.getEmployee().getTid();

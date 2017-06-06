@@ -1,5 +1,8 @@
 package org.btkj.user.persistence.provider;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;
 
@@ -53,5 +56,15 @@ public class UserSQLProvider {
 				WHERE("uid=#{key}");
 			}
 		}.toString();
+	}
+	
+	public String selectWithinKey(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("list");
+		StringBuilder builder = new StringBuilder("select * from user where uid in(");
+		for (int key : keys)
+			builder.append(key).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
 	}
 }

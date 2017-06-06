@@ -23,7 +23,7 @@ import org.rapid.util.lang.DateUtils;
 
 public class ArticleMapper extends RedisProtostuffDBMapper<Integer, Article, ArticleDao> {
 	
-	private String LOAD_LOCK						= "lock:article";						// 咨询加载控制键
+	private String LOAD_LOCK						= "lock:article";							// 咨询加载控制键
 	private String TIME_BASED_SET					= "set:article:time:{0}";					// 基于时间的排序列表
 	private String BROWSE_NUM_BASED_SET				= "set:article:browse:num:{0}";				// 基于浏览数的排序列表
 	private String COMMENT_NUM_BASED_SET			= "set:article:comment:num:{0}";			// 基于评论数的排序列表

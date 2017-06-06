@@ -31,6 +31,10 @@ public interface UserDao extends Dao<Integer, User> {
 	@SelectProvider(type = UserSQLProvider.class, method = "selectByMobile")
 	User selectByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
 	
+	@Override
+	@SelectProvider(type = UserSQLProvider.class, method = "selectWithinKey")
+	List<User> selectWithinKey(@Param("list") List<Integer> keys);
+	
 	int searchCount(UserSearcher searcher);
 	
 	List<UserListInfo> search(UserSearcher searcher);

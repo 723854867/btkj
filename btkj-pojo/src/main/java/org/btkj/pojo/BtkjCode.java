@@ -138,7 +138,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 文章不存在
 	 */
-	ARTICLE_NOT_EXIST(600, "article not exits");
+	ARTICLE_NOT_EXIST(600, "article not exits"),
+	
+	/**
+	 * 提问不存在
+	 */
+	QUIZ_NOT_EXIST(601, "quiz not exits");
 	
 	private int code;
 	private String desc;

@@ -7,11 +7,11 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.common.pojo.info.CommentInfo;
+import org.btkj.common.pojo.info.ReplyInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Comment;
+import org.btkj.pojo.entity.Reply;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
@@ -23,41 +23,43 @@ import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtils;
 
 /**
- * 评论列表
+ * 提问回复分页
  * 
  * @author ahab
  */
-public class COMMENT_LIST extends UserAction {
+public class REPLY_LIST extends UserAction {
 	
 	@Resource
 	private UserService userService;
 	@Resource
 	private CommunityService communityService;
-
+	
 	@Override
 	protected Result<?> execute(Request request, App app, Client client, User operator) {
-		int page = request.getParam(Params.PAGE);
-		int pageSize = request.getParam(Params.PAGE_SIZE);
-		Result<Pager<Comment>> result = communityService.comments(app.getId(), request.getParam(Params.ID), page, pageSize);
+		Result<Pager<Reply>> result = communityService.replies(
+				app.getId(), 
+				request.getParam(Params.ID), 
+				request.getParam(Params.PAGE), 
+				request.getParam(Params.PAGE_SIZE));
 		if (!result.isSuccess())
 			return result;
-		List<Comment> list = result.attach().getList();
+		
+		List<Reply> list = result.attach().getList();
 		if (CollectionUtils.isEmpty(list))
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		Set<Integer> ids = new HashSet<Integer>();
-		for (Comment comment : list)
-			ids.add(comment.getUid());
-		
+		for (Reply reply : list)
+			ids.add(reply.getUid());
 		List<User> users = userService.users(new ArrayList<Integer>(ids));
-		List<CommentInfo> l = new ArrayList<CommentInfo>(list.size());
-		for (Comment comment : list) {
+		List<ReplyInfo> l = new ArrayList<ReplyInfo>(list.size());
+		for (Reply reply : list) {
 			for (User user : users) {
-				if (user.getUid() != comment.getUid())
+				if (user.getUid() != reply.getUid())
 					continue;
-				l.add(new CommentInfo(user, comment));
+				l.add(new ReplyInfo(user, reply));
 				break;
 			}
 		}
-		return Result.result(new Pager<CommentInfo>(result.attach().getTotal(), l));
+		return Result.result(new Pager<ReplyInfo>(result.attach().getTotal(), l));
 	}
 }

@@ -19,6 +19,7 @@ import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.ArticleSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.pojo.submit.VehicleOrderSubmit;
@@ -54,6 +55,8 @@ public interface Params {
 	 * 雇员 ID
 	 */
 	final Str2IntConstConverter EMPLOYEE_ID				= new Str2IntConstConverter(1000, "employeeId");
+	
+	final Str2StrConstConverter CONTENT					= new Str2StrConstConverter(1001, "content");
 	
 	/**
 	 * 登陆或者注册时需要传递的参数，用来区分不同的 app、tenant
@@ -292,6 +295,13 @@ public interface Params {
 		@Override
 		public ArticleSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, ArticleSearcher.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<QuizSearcher> QUIZ_SEARCHER				= new Str2ObjConstConverter<QuizSearcher>(1211, "quizSearcher") {
+		@Override
+		public QuizSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuizSearcher.class);
 		}
 	};
 }

@@ -11,9 +11,6 @@ public class UserTips implements Serializable {
 	private int uid;
 	private String name;
 	private String avatar;
-	private String identity;
-	private String identityFace;
-	private String identityBack;
 	
 	public UserTips() {}
 	
@@ -21,9 +18,6 @@ public class UserTips implements Serializable {
 		this.uid = user.getUid();
 		this.name = user.getName();
 		this.avatar = user.getAvatar();
-		this.identity = user.getIdentity();
-		this.identityFace = user.getIdentityFace();
-		this.identityBack = user.getIdentityBack();
 	}
 
 	public int getUid() {
@@ -48,29 +42,5 @@ public class UserTips implements Serializable {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-	}
-
-	public String getIdentity() {
-		return identity;
-	}
-
-	public void setIdentity(String identity) {
-		this.identity = identity;
-	}
-
-	public String getIdentityFace() {
-		return identityFace;
-	}
-
-	public void setIdentityFace(String identityFace) {
-		this.identityFace = identityFace;
-	}
-
-	public String getIdentityBack() {
-		return identityBack;
-	}
-
-	public void setIdentityBack(String identityBack) {
-		this.identityBack = identityBack;
 	}
 }

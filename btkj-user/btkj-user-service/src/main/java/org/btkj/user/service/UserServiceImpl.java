@@ -1,5 +1,7 @@
 package org.btkj.user.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
@@ -50,6 +52,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(int uid) {
 		return userMapper.getByKey(uid);
+	}
+	
+	@Override
+	public List<User> users(List<Integer> list) {
+		return userMapper.getWithinKey(list);
 	}
 	
 	@Override

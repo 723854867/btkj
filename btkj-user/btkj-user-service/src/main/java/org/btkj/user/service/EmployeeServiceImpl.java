@@ -95,9 +95,4 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		return null;
 	}
-	
-	@Override
-	public List<Employee> employees(List<Integer> ids) {
-		return employeeMapper.getWithinKey(ids);
-	}
 }

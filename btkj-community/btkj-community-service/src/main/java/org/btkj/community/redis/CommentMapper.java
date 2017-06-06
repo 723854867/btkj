@@ -61,6 +61,12 @@ public class CommentMapper extends RedisProtostuffDBMapper<Integer, Comment, Com
 		redis.zadd(_listKey(entities.get(0).getArticleId()), map);
 	}
 	
+	@Override
+	public void flush(Comment entity) {
+		super.flush(entity);
+		redis.zadd(_listKey(entity.getArticleId()), entity.getCreated(), String.valueOf(entity.getId()));
+	}
+	
 	public void setTx(Tx tx) {
 		this.tx = tx;
 	}

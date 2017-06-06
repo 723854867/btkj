@@ -1,5 +1,7 @@
 package org.btkj.user.api;
 
+import java.util.List;
+
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.UserListInfo;
@@ -26,6 +28,14 @@ public interface UserService {
 	 * @return
 	 */
 	User getUser(int uid);
+	
+	/**
+	 * 一次获取多个用户
+	 * 
+	 * @param list
+	 * @return
+	 */
+	List<User> users(List<Integer> list);
 	
 	/**
 	 * 通过账号和 appId 获取用户

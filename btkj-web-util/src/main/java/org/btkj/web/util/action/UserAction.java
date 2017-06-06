@@ -43,7 +43,7 @@ public abstract class UserAction implements Action {
 		}
 	}
 	
-	protected abstract Result<?> execute(Request request, App app, Client client, User operator);
+	protected abstract Result<?> execute(Request request, App app, Client client, User user);
 	
 	/**
 	 * 如果返回 true 则已经获取到了 user 的锁

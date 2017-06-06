@@ -13,4 +13,15 @@ public class ArticleSQLProvider {
 			}
 		}.toString();
 	};
+	
+	public String update() { 
+		return new SQL() {
+			{
+				UPDATE(BtkjTables.ARTICLE.name());
+				SET("browse_num=#{browseNum}");
+				SET("comment_num=#{commentNum}");
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
 }

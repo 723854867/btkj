@@ -23,6 +23,8 @@ public interface BtkjTables {
 	final Table ADMINISTRATOR						= new Table("administrator");
 	
 	// ******************************* community tables *******************************
+	final Table QUIZ								= new Table("quiz");
+	final Table REPLY								= new Table("reply");
 	final Table ARTICLE								= new Table("article");
 	final Table COMMENT								= new Table("comment");
 }
