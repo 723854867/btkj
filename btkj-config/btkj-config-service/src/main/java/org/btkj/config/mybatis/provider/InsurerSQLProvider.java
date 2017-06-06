@@ -1,4 +1,4 @@
-package org.btkj.config.persistence.provider;
+package org.btkj.config.mybatis.provider;
 
 import java.util.List;
 import java.util.Map;

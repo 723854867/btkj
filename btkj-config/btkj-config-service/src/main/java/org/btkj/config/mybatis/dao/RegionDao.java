@@ -1,10 +1,10 @@
-package org.btkj.config.persistence.dao;
+package org.btkj.config.mybatis.dao;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.btkj.config.persistence.provider.RegionSQLProvider;
+import org.btkj.config.mybatis.provider.RegionSQLProvider;
 import org.btkj.pojo.entity.Region;
 import org.rapid.data.storage.db.Dao;
 

@@ -13,4 +13,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="regionDao" />
 	</bean>
+	
+	<bean id="insurerMapper" class="org.btkj.config.redis.InsurerMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="insurerDao" />
+	</bean>
 </beans>

@@ -1,6 +1,6 @@
 package org.btkj.config.redis;
 
-import org.btkj.config.persistence.dao.InsurerDao;
+import org.btkj.config.mybatis.dao.InsurerDao;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Insurer;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;

@@ -1,4 +1,4 @@
-package org.btkj.config.persistence.provider;
+package org.btkj.config.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;

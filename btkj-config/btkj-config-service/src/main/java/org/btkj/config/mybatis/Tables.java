@@ -1,4 +1,4 @@
-package org.btkj.config.persistence;
+package org.btkj.config.mybatis;
 
 import org.rapid.data.storage.db.Table;
 
