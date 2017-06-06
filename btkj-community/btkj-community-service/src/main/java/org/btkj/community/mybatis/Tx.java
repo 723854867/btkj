@@ -3,10 +3,15 @@ package org.btkj.community.mybatis;
 import javax.annotation.Resource;
 
 import org.btkj.community.mybatis.dao.ArticleDao;
+import org.btkj.community.mybatis.dao.CommentDao;
 import org.btkj.community.mybatis.dao.QuizDao;
+import org.btkj.community.mybatis.dao.ReplyDao;
+import org.btkj.community.redis.ArticleMapper;
 import org.btkj.community.redis.CommentMapper;
+import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.entity.Article;
 import org.btkj.pojo.entity.Comment;
 import org.btkj.pojo.entity.Quiz;
@@ -20,12 +25,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class Tx {
 	
 	@Resource
-	private QuizDao QuizDao;
+	private QuizDao quizDao;
+	@Resource
+	private ReplyDao replyDao;
 	@Resource
 	private ArticleDao articleDao;
+	@Resource
+	private CommentDao commentDao;
 	
 	@Resource
-	private ReplyMapper ReplyMapper;
+	private QuizMapper quizMapper;
+	@Resource
+	private ReplyMapper replyMapper;
+	@Resource
+	private ArticleMapper articleMapper;
 	@Resource
 	private CommentMapper commentMapper;
 	
@@ -36,24 +49,38 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void comment(User user, int articleId, String content) {
-		Article article = articleDao.selectByKey(articleId);
+	public TxCallback comment(User user, int articleId, String content) {
+		Article article = articleMapper.getByKey(articleId);
 		if (null == article || article.getAppId() != user.getAppId())
 			throw new BusinessException(BtkjCode.ARTICLE_NOT_EXIST);
 		article.setCommentNum(article.getCommentNum() + 1);
 		articleDao.update(article);
 		Comment comment = EntityGenerator.comment(user, articleId, content);
-		commentMapper.insert(comment);
+		commentDao.insert(comment);
+		return new TxCallback() {
+			@Override
+			public void finish() {
+				articleMapper.flush(article);
+				commentMapper.flush(comment);
+			}
+		};
 	}
 	
 	@Transactional
-	public void reply(User user, int quizId, String content) {
-		Quiz quiz = QuizDao.selectByKey(quizId);
+	public TxCallback reply(User user, int quizId, String content) {
+		Quiz quiz = quizMapper.getByKey(quizId);
 		if (null == quiz || quiz.getAppId() != user.getAppId())
 			throw new BusinessException(BtkjCode.QUIZ_NOT_EXIST);
 		quiz.setReplyNum(quiz.getReplyNum() + 1);
-		QuizDao.update(quiz);
+		quizDao.update(quiz);
 		Reply reply = EntityGenerator.reply(user, quizId, content);
-		ReplyMapper.insert(reply);
+		replyDao.insert(reply);
+		return new TxCallback() {
+			@Override
+			public void finish() {
+				quizMapper.flush(quiz);
+				replyMapper.flush(reply);
+			}
+		};
 	}
 }

@@ -9,15 +9,15 @@ public class CommentSQLProvider {
 		return new SQL() {
 			{
 				INSERT_INTO(BtkjTables.COMMENT.name());
-				VALUES("article_id", "articleId");
-				VALUES("uid", "uid");
-				VALUES("content", "content");
-				VALUES("created", "created");
+				VALUES("article_id", "#{articleId}");
+				VALUES("uid", "#{uid}");
+				VALUES("content", "#{content}");
+				VALUES("created", "#{created}");
 			}
 		}.toString();
 	}
 
 	public String selectByArticleIdForUpdate() {
-		return "SELECT * FROM article WHERE article_id = #{articleId} FOR UPDATE";
+		return "SELECT * FROM comment WHERE article_id = #{articleId} FOR UPDATE";
 	}
 }

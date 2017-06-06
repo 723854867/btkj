@@ -54,6 +54,6 @@ public class Reply implements UniqueModel<Integer> {
 
 	@Override
 	public Integer key() {
-		return null;
+		return this.id;
 	}
 }

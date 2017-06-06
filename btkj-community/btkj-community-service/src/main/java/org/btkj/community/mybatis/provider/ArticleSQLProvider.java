@@ -4,6 +4,16 @@ import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.BtkjTables;
 
 public class ArticleSQLProvider {
+	
+	public String selectByKey() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(BtkjTables.ARTICLE.name());
+				WHERE("id=#{key}");
+			}
+		}.toString();
+	}
 
 	public String selectAll() {
 		return new SQL() {

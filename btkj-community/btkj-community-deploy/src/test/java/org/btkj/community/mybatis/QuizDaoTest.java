@@ -15,6 +15,6 @@ public class QuizDaoTest extends BaseTest {
 	@Test
 	public void testSearch() {
 		QuizSearcher searcher = new QuizSearcher();
-		quizDao.search(searcher);
+		quizDao.paging(searcher);
 	}
 }

@@ -24,8 +24,8 @@ public interface QuizDao extends Dao<Integer, Quiz> {
 	 * @param searcher
 	 * @return
 	 */
-	@SelectProvider(type = QuizSQLProvider.class, method = "count")
-	int count(QuizSearcher searcher);
+	@SelectProvider(type = QuizSQLProvider.class, method = "total")
+	int total(QuizSearcher searcher);
 	
 	/**
 	 * 获取符合条件的记录列表
@@ -33,6 +33,6 @@ public interface QuizDao extends Dao<Integer, Quiz> {
 	 * @param searcher
 	 * @return
 	 */
-	@SelectProvider(type = QuizSQLProvider.class, method = "search")
-	List<Quiz> search(QuizSearcher searcher);
+	@SelectProvider(type = QuizSQLProvider.class, method = "paging")
+	List<Quiz> paging(QuizSearcher searcher);
 }

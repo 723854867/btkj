@@ -9,10 +9,10 @@ public class ReplySQLProvider {
 		return new SQL() {
 			{
 				INSERT_INTO(BtkjTables.REPLY.name());
-				VALUES("quiz_id", "quizId");
-				VALUES("uid", "uid");
-				VALUES("content", "content");
-				VALUES("created", "created");
+				VALUES("quiz_id", "#{quizId}");
+				VALUES("uid", "#{uid}");
+				VALUES("content", "#{content}");
+				VALUES("created", "#{created}");
 			}
 		}.toString();
 	}
@@ -20,7 +20,7 @@ public class ReplySQLProvider {
 	public String total() {
 		return new SQL() {
 			{
-				SELECT("*");
+				SELECT("COUNT(*)");
 				FROM(BtkjTables.REPLY.name());
 				WHERE("quiz_id=#{quizId}");
 			}
@@ -28,12 +28,6 @@ public class ReplySQLProvider {
 	}
 	
 	public String paging() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(BtkjTables.REPLY.name());
-				WHERE("quiz_id=#{quizId} LIMIT #{start}, #{pageSize}");
-			}
-		}.toString();
+		return "SELECT * FROM reply WHERE quiz_id=#{quizId} LIMIT #{start}, #{pageSize}";
 	}
 }

@@ -18,11 +18,11 @@ public class QuizMapper extends RedisProtostuffDBMapper<Integer, Quiz, QuizDao> 
 	}
 	
 	public Result<Pager<Quiz>> quizs(QuizSearcher searcher) {
-		int total = dao.count(searcher);
+		int total = dao.total(searcher);
 		if (0 == total)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		searcher.calculate(total);
-		List<Quiz> list = dao.search(searcher);
+		List<Quiz> list = dao.paging(searcher);
 		return Result.result(new Pager<Quiz>(total, list));
 	}
 }

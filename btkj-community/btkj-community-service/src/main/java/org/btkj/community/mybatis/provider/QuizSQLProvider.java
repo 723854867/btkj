@@ -29,22 +29,22 @@ public class QuizSQLProvider {
 		}.toString();
 	}
 
-	public String count(QuizSearcher searcher) {
+	public String total(QuizSearcher searcher) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM quiz ");
+		builder.append("SELECT COUNT(*) FROM quiz ");
 		if (null != searcher.getAppId())
 			builder.append("WHERE app_id=").append(searcher.getAppId());
 		return builder.toString();
 	}
 	
-	public String search(QuizSearcher searcher) {
+	public String paging(QuizSearcher searcher) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT * FROM quiz ");
 		if (null != searcher.getAppId())
 			builder.append("WHERE app_id=").append(searcher.getAppId());
 		SortCol col = searcher.getSortCol();
 		if (null == col) 
-			builder.append("ORDER BY created ");
+			builder.append(" ORDER BY created ");
 		else {
 			switch (col) {
 			case BROWSE_NUM:
@@ -61,6 +61,6 @@ public class QuizSQLProvider {
 		SortType sortType = searcher.getSortType();
 		builder.append(null == sortType ? "DESC " : SortType.ASC == sortType ? "ASC " : "DESC ");
 		builder.append("LIMIT ").append(searcher.getStart()).append(", ").append(searcher.getPageSize());
-		return null;
+		return builder.toString();
 	}
 }

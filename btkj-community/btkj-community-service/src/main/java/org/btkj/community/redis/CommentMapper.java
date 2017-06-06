@@ -16,6 +16,7 @@ import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
+import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.DateUtils;
 
 public class CommentMapper extends RedisProtostuffDBMapper<Integer, Comment, CommentDao> {
@@ -48,17 +49,18 @@ public class CommentMapper extends RedisProtostuffDBMapper<Integer, Comment, Com
 	}
 	
 	public void storeComments(int articleId) {
-		List<Comment> articles = dao.selectByArticleIdForUpdate(articleId);
-		flush(articles);
+		List<Comment> comments = dao.selectByArticleIdForUpdate(articleId);
+		if (!CollectionUtils.isEmpty(comments))
+			flush(comments);
 	}
 	
 	@Override
-	public void flush(List<Comment> entities) {
-		redis.hmsetProtostuff(redisKey, entities);
+	public void flush(List<Comment> comments) {
+		redis.hmsetProtostuff(redisKey, comments);
 		Map<String, Double> map = new HashMap<String, Double>();
-		for (Comment comment : entities)
+		for (Comment comment : comments)
 			map.put(String.valueOf(comment.getId()), Double.valueOf(comment.getCreated()));
-		redis.zadd(_listKey(entities.get(0).getArticleId()), map);
+		redis.zadd(_listKey(comments.get(0).getArticleId()), map);
 	}
 	
 	@Override

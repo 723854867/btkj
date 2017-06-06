@@ -8,7 +8,11 @@ import org.btkj.pojo.entity.Article;
 import org.rapid.data.storage.db.Dao;
 
 public interface ArticleDao extends Dao<Integer, Article> {
-
+	
+	@Override
+	@SelectProvider(type = ArticleSQLProvider.class, method = "selectByKey")
+	Article selectByKey(Integer key);
+	
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "selectAll")
 	List<Article> selectAll();

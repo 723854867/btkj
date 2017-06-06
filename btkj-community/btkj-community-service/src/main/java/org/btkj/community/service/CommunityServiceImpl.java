@@ -52,7 +52,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public Result<Void> comment(User user, int articleId, String content) {
 		try {
-			tx.comment(user, articleId, content);
+			tx.comment(user, articleId, content).finish();;
 		} catch (BusinessException e) {
 			return Result.result(e.getCode());
 		}
@@ -80,7 +80,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public Result<Void> reply(User user, int quizId, String content) {
 		try {
-			tx.comment(user, quizId, content);
+			tx.reply(user, quizId, content).finish();;
 		} catch (BusinessException e) {
 			return Result.result(e.getCode());
 		}
