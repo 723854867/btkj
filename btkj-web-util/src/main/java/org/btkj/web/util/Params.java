@@ -120,6 +120,8 @@ public interface Params {
 	
 	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1015, "region");
 	final Str2IntConstConverter TENANT_REGION			= new Str2IntConstConverter(1016, "tenantRegion");
+	
+	final Str2StrConstConverter TITLE					= new Str2StrConstConverter(1017, "title");
 
 	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1018, "agree", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
@@ -151,8 +153,16 @@ public interface Params {
 			return val;
 		};
 	};
+	final Str2IntConstConverter MAX_ARTICLES_COUNT		= new Str2IntConstConverter(1024, "maxArticlesCount") {
+		public Integer convert(String value) throws ConstConvertFailureException {
+			int val = Integer.valueOf(value);
+			if (val < 0)
+				throw ConstConvertFailureException.errorConstException(this);
+			return val;
+		};
+	};
 	
-	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1024, "modules") {
+	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1025, "modules") {
 		@Override
 		public Set<Integer> convert(String k) throws ConstConvertFailureException {
 			try {
@@ -163,13 +173,13 @@ public interface Params {
 		}
 	};
 	
-	final Str2BoolConstConverter TENANT_ADD_AUTONOMY		= new Str2BoolConstConverter(1025, "tenantAddAutonomy", false) {
+	final Str2BoolConstConverter TENANT_ADD_AUTONOMY		= new Str2BoolConstConverter(1026, "tenantAddAutonomy", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
 		};
 	};
 	
-	final Str2ObjConstConverter<EmployeeState> EMPLOYEE_STATE	= new Str2ObjConstConverter<EmployeeState>(1026, "employeeState") {
+	final Str2ObjConstConverter<EmployeeState> EMPLOYEE_STATE	= new Str2ObjConstConverter<EmployeeState>(1027, "employeeState") {
 		public EmployeeState convert(String value) throws ConstConvertFailureException {
 			EmployeeState state = EmployeeState.match(Integer.valueOf(value));
 			if (null == state)
@@ -177,10 +187,10 @@ public interface Params {
 			return state;
 		};
 	};
-	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1027, "identityFace");
-	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1028, "identityBack");
+	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1028, "identityFace");
+	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1029, "identityBack");
 	
-	final Str2ObjConstConverter<AppState> APP_STATE	= new Str2ObjConstConverter<AppState>(1029, "appState") {
+	final Str2ObjConstConverter<AppState> APP_STATE	= new Str2ObjConstConverter<AppState>(1030, "appState") {
 		public AppState convert(String value) throws ConstConvertFailureException {
 			AppState state = AppState.match(Integer.valueOf(value));
 			if (null == state)
@@ -189,7 +199,7 @@ public interface Params {
 		};
 	};
 	
-	final Str2ObjConstConverter<TenantState> TENANT_STATE = new Str2ObjConstConverter<TenantState>(1030, "tenantState") {
+	final Str2ObjConstConverter<TenantState> TENANT_STATE = new Str2ObjConstConverter<TenantState>(1031, "tenantState") {
 		public TenantState convert(String value) throws ConstConvertFailureException {
 			TenantState state = TenantState.match(Integer.valueOf(value));
 			if (null == state)
@@ -197,6 +207,9 @@ public interface Params {
 			return state;
 		};
 	};
+	
+	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1032, "icon");
+	final Str2StrConstConverter LINK					= new Str2StrConstConverter(1033, "link");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

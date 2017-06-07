@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.community.LuaCmd;
 import org.btkj.community.mybatis.dao.ArticleDao;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
@@ -83,6 +84,15 @@ public class ArticleMapper extends RedisProtostuffDBMapper<Integer, Article, Art
 		for (byte[] data : list)
 			articles.add(deserial(data));
 		return Result.result(new Pager<Article>(total, articles));
+	}
+	
+	@Override
+	public void flush(Article entity) {
+		redis.invokeLua(LuaCmd.FLUSH_ARTICLE, SerializeUtil.RedisUtil.encode(
+				redisKey, _setKey(entity.getAppId(), SortCol.BROWSE_NUM),
+				_setKey(entity.getAppId(), SortCol.COMMENT_NUM),
+				_setKey(entity.getAppId(), SortCol.TIME), entity.getId(),
+				serial(entity), entity.getCreated()));
 	}
 	
 	private String _setKey(int appId, SortCol col) {

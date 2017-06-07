@@ -38,11 +38,12 @@ public class BeanGenerator {
 		return employee;
 	}
 	
-	public static final App newApp(int region, String name, int maxTenantsCount, boolean tenantAddAutonomy) {
+	public static final App newApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy) {
 		App app = new App();
 		app.setRegion(region);
 		app.setName(name);
 		app.setMaxTenantsCount(maxTenantsCount);
+		app.setMaxArticlesCount(maxArticlesCount);
 		app.setTenantAddAutonomy(tenantAddAutonomy);
 
 		int time = DateUtils.currentTime();

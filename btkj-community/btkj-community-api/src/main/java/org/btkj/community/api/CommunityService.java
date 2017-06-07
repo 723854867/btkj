@@ -1,5 +1,6 @@
 package org.btkj.community.api;
 
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Article;
 import org.btkj.pojo.entity.Comment;
 import org.btkj.pojo.entity.Quiz;
@@ -11,6 +12,17 @@ import org.btkj.pojo.submit.QuizSearcher;
 import org.rapid.util.common.message.Result;
 
 public interface CommunityService {
+	
+	/**
+	 * 新增咨询
+	 * 
+	 * @param app
+	 * @param title
+	 * @param icon
+	 * @param link
+	 * @return
+	 */
+	Result<Void> articleAdd(App app, String title, String icon, String link);
 
 	/**
 	 * 咨询分页

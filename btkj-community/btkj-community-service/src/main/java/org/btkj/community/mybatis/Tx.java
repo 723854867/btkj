@@ -1,5 +1,7 @@
 package org.btkj.community.mybatis;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.community.mybatis.dao.ArticleDao;
@@ -12,6 +14,7 @@ import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Article;
 import org.btkj.pojo.entity.Comment;
 import org.btkj.pojo.entity.Quiz;
@@ -41,7 +44,6 @@ public class Tx {
 	private ArticleMapper articleMapper;
 	@Resource
 	private CommentMapper commentMapper;
-	
 
 	@Transactional
 	public void storeComments(int articleId) {
@@ -82,5 +84,16 @@ public class Tx {
 				replyMapper.flush(reply);
 			}
 		};
+	}
+	
+	@Transactional
+	public void articlesAdd(App app, String title, String icon, String link) { 
+		if (app.getMaxArticlesCount() > 0) {
+			List<Article> list = articleDao.selectByAppIdForUpdate(app.getId());
+			if (list.size() >= app.getMaxArticlesCount())
+				throw new BusinessException(BtkjCode.ARTICLE_NUM_MAXIMUM);
+		}
+		Article article = EntityGenerator.article(app, title, icon, link);
+		articleMapper.insert(article);
 	}
 }

@@ -35,7 +35,8 @@ public class APP_ADD extends AdministratorAction {
 		
 		String name = request.getParam(Params.NAME);
 		int maxTenantsCount = request.getParam(Params.MAX_TENANTS_COUNT);
+		int maxArticlesCount = request.getParam(Params.MAX_ARTICLES_COUNT);
 		boolean tenantAddAutonomy = request.getOptionalParam(Params.TENANT_ADD_AUTONOMY);
-		return Result.result(appService.addApp(region.getId(), name, maxTenantsCount, tenantAddAutonomy));
+		return Result.result(appService.addApp(region.getId(), name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy));
 	}
 }

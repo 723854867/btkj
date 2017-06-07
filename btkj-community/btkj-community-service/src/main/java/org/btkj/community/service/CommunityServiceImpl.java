@@ -9,6 +9,7 @@ import org.btkj.community.redis.CommentMapper;
 import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Article;
 import org.btkj.pojo.entity.Comment;
 import org.btkj.pojo.entity.Quiz;
@@ -35,6 +36,16 @@ public class CommunityServiceImpl implements CommunityService {
 	private ArticleMapper articleMapper;
 	@Resource
 	private CommentMapper commentMapper;
+	
+	@Override
+	public Result<Void> articleAdd(App app, String title, String icon, String link) {
+		try {
+			tx.articlesAdd(app, title, icon, link);
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
+		}
+		return Consts.RESULT.OK;
+	}
 
 	@Override
 	public Result<Pager<Article>> articles(int appId, ArticleSearcher searcher) {

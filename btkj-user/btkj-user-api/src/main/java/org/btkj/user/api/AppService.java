@@ -2,7 +2,6 @@ package org.btkj.user.api;
 
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppListInfo;
 import org.btkj.pojo.info.MainPageInfo;
@@ -18,14 +17,6 @@ public interface AppService {
 	 * @return
 	 */
 	Result<Void> appEdit(App app);
-	
-	/**
-	 * 禁用App
-	 * 
-	 * @param state
-	 * @return
-	 */
-	Result<Void> appState(int appId, AppState state);
 	
 	/**
 	 * 获取全平台App用户
@@ -56,10 +47,11 @@ public interface AppService {
 	 * @param region app 的业务地区
 	 * @param name app 的名字
 	 * @param maxTenantsCount app 能添加的租户的上限
+	 * @param maxArticlesCount app 能添加的最大咨询数
 	 * @param tenantAddAutonomy 是否允许自主添加代理商，如果为 false，则需要保途审核
 	 * @return
 	 */
-	App addApp(int region, String name, int maxTenantsCount, boolean tenantAddAutonomy);
+	App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy);
 	
 	/**
 	 * 获取该 app 的代理公司数

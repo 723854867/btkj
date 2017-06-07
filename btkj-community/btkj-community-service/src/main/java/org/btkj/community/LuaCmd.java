@@ -7,10 +7,10 @@ public enum LuaCmd implements ILuaCmd {
 	/**
 	 * 咨询分页
 	 */
-	STORE_ARTICLES {
+	FLUSH_ARTICLE {
 		@Override
 		public int keyNum() {
-			return 0;
+			return 4;
 		}
 	};
 

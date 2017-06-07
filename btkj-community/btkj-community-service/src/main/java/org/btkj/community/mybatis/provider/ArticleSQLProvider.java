@@ -14,6 +14,10 @@ public class ArticleSQLProvider {
 			}
 		}.toString();
 	}
+	
+	public String selectByAppIdForUpdate() {
+		return "SELECT * FROM article WHERE app_id=#{appId} FOR UPDATE";
+	}
 
 	public String selectAll() {
 		return new SQL() {

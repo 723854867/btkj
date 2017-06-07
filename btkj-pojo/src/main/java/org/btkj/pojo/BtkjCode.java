@@ -141,6 +141,11 @@ public enum BtkjCode implements ICode {
 	ARTICLE_NOT_EXIST(600, "article not exits"),
 	
 	/**
+	 * 咨询数达到最大值
+	 */
+	ARTICLE_NUM_MAXIMUM(601, "article num maximum"),
+	
+	/**
 	 * 提问不存在
 	 */
 	QUIZ_NOT_EXIST(601, "quiz not exits");

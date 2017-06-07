@@ -10,7 +10,6 @@ import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.AppListInfo;
 import org.btkj.pojo.info.MainPageInfo;
@@ -56,19 +55,6 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public Result<Void> appState(int id, AppState state) {
-		App app = appMapper.getByKey(id);
-		if(null == app)
-			return Result.result(BtkjCode.APP_NOT_EXIST);
-		if (app.getState() != state.mark()) {
-			app.setState(state.mark());
-			app.setUpdated(DateUtils.currentTime());
-			appMapper.update(app);
-		}
-		return Result.success();
-	}
-	
-	@Override
 	public Result<Pager<AppListInfo>> appList(AppSearcher searcher) {
 		return appMapper.appList(searcher);
 	}
@@ -108,8 +94,8 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public App addApp(int region, String name, int maxTenantsCount, boolean tenantAddAutonomy) {
-		App app = BeanGenerator.newApp(region, name, maxTenantsCount, tenantAddAutonomy);
+	public App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy) {
+		App app = BeanGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy);
 		appMapper.insert(app);
 		return app;
 	}

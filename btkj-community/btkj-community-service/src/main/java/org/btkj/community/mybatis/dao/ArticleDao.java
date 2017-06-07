@@ -13,6 +13,9 @@ public interface ArticleDao extends Dao<Integer, Article> {
 	@SelectProvider(type = ArticleSQLProvider.class, method = "selectByKey")
 	Article selectByKey(Integer key);
 	
+	@SelectProvider(type = ArticleSQLProvider.class, method = "selectByAppIdForUpdate")
+	List<Article> selectByAppIdForUpdate(int appId);
+	
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "selectAll")
 	List<Article> selectAll();
