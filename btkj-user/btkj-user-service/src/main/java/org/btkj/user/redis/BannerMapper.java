@@ -8,7 +8,7 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Banner;
-import org.btkj.user.persistence.dao.BannerDao;
+import org.btkj.user.mybatis.dao.BannerDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
 public class BannerMapper extends RedisProtostuffDBMapper<Integer, Banner, BannerDao> {

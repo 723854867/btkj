@@ -9,18 +9,13 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.SpecialBonus;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.EmployeeSearcher;
-import org.btkj.user.BeanGenerator;
-import org.btkj.user.persistence.dao.EmployeeDao;
-import org.btkj.user.persistence.dao.SpecialBonusDao;
+import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
 
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
@@ -34,10 +29,6 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	
 	@Resource
 	private UserMapper userMapper;
-	@Resource
-	private SpecialBonusMapper specialBonusMapper;
-	@Resource
-	private SpecialBonusDao specialBonusDao;
 	
 	public EmployeeMapper() {
 		super(BtkjTables.EMPLOYEE, "hash:db:employee");
@@ -46,20 +37,6 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	@Override
 	public Employee insert(Employee entity) {
 		throw new UnsupportedOperationException("EmployeeMapper unsupported insert immediately!");
-	}
-	
-	/**
-	 * 商家后台管理保存修改雇员部分属性
-	 */
-	public void employeeEdit(EmployeeInfo employeeInfo) {
-		Employee employee = BeanGenerator.newEmployeeSave(employeeInfo);
-		dao.update(employee);
-		SpecialBonus specialbonus = BeanGenerator.newSpecialBonus(employeeInfo);
-		if(null == specialBonusMapper.getByeid(employee.getId())){
-			specialbonus.setCreated(DateUtils.currentTime());
-			specialBonusMapper.insert(specialbonus);
-	    }else 
-			specialBonusMapper.update(specialbonus);
 	}
 	
 	/**
@@ -100,6 +77,16 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 			redis.protostuffCacheListFlush(BtkjConsts.CACHE_CONTROLLER, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees);
 		}
 		return employees;
+	}
+	
+	/**
+	 * 获取指定雇员的团队
+	 * 
+	 * @param employee
+	 * @return
+	 */
+	public List<Employee> team(Employee employee, int depth) {
+		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + depth - 1);
 	}
 	
 	@Override

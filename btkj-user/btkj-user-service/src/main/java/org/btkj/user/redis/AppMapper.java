@@ -7,7 +7,7 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.info.AppListInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.AppSearcher;
-import org.btkj.user.persistence.dao.AppDao;
+import org.btkj.user.mybatis.dao.AppDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
 

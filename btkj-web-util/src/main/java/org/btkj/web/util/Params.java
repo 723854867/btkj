@@ -3,6 +3,7 @@ package org.btkj.web.util;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.entity.App;
@@ -13,7 +14,6 @@ import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.enums.TenantState;
-import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.ArticleSearcher;
@@ -30,6 +30,7 @@ import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
+import org.rapid.util.lang.DateUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -210,6 +211,18 @@ public interface Params {
 	
 	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1032, "icon");
 	final Str2StrConstConverter LINK					= new Str2StrConstConverter(1033, "link");
+	final Str2IntConstConverter MOD						= new Str2IntConstConverter(1034, "mod");
+	final Str2IntConstConverter BEGIN_TIME				= new Str2IntConstConverter(1035, "beginTime") {
+		public Integer convert(String value) throws ConstConvertFailureException {
+			return (int) (DateUtils.getTime(value, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
+		};
+	};
+	
+	final Str2IntConstConverter END_TIME				= new Str2IntConstConverter(1036, "endTime") {
+		public Integer convert(String value) throws ConstConvertFailureException {
+			return (int) (DateUtils.getTime(value, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
+		};
+	};
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
@@ -260,13 +273,6 @@ public interface Params {
 		@Override
 		public NonAutoProduct convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoProduct.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<EmployeeInfo> EMPLOYEE_INFO			= new Str2ObjConstConverter<EmployeeInfo>(1204, "employeeInfo") {
-		@Override
-		public EmployeeInfo convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeInfo.class);
 		}
 	};
 	

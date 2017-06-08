@@ -28,6 +28,6 @@ public class ReplySQLProvider {
 	}
 	
 	public String paging() {
-		return "SELECT * FROM reply WHERE quiz_id=#{quizId} LIMIT #{start}, #{pageSize}";
+		return "SELECT * FROM reply WHERE quiz_id=#{quizId} ORDER BY created DESC LIMIT #{start}, #{pageSize}";
 	}
 }

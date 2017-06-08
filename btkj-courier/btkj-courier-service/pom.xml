@@ -6,7 +6,7 @@
 
 	<parent>
 		<groupId>org.btkj</groupId>
-		<artifactId>btkj-service</artifactId>
+		<artifactId>btkj-courier</artifactId>
 		<version>1.0</version>
 	</parent>
 
@@ -46,6 +46,11 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpasyncclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 </project>

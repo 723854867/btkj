@@ -6,7 +6,7 @@
 
 	<parent>
 		<groupId>org.btkj</groupId>
-		<artifactId>btkj-service</artifactId>
+		<artifactId>btkj-courier</artifactId>
 		<version>1.0</version>
 	</parent>
 
@@ -19,12 +19,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.btkj</groupId>
 			<artifactId>btkj-courier-service</artifactId>
@@ -88,8 +88,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
 		</dependency>
 	</dependencies>
 

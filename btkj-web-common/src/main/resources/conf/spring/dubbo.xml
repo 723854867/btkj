@@ -18,10 +18,15 @@
 	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" /> 
 	
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" /> 
+	<dubbo:reference id="jianJieService" interface="org.btkj.courier.api.JianJieService"> 
+		<dubbo:method name="addUser" async="true" />
+	</dubbo:reference>
 	
 	<dubbo:reference id="nonAutoService" interface="org.btkj.nonauto.api.NonAutoService" />
 	
 	<dubbo:reference id="vehicleService" interface="org.btkj.vehicle.api.VehicleService" />
 	
 	<dubbo:reference id="communityService" interface="org.btkj.community.api.CommunityService" />
+	
+	<dubbo:reference id="statisticsService" interface="org.btkj.statistics.api.StatisticsService" />
 </beans>

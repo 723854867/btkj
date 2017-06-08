@@ -3,6 +3,7 @@ package org.btkj.community.mybatis;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Article;
 import org.btkj.pojo.entity.Comment;
+import org.btkj.pojo.entity.Quiz;
 import org.btkj.pojo.entity.Reply;
 import org.btkj.pojo.entity.User;
 import org.rapid.util.lang.DateUtils;
@@ -26,6 +27,15 @@ public class EntityGenerator {
 		comment.setUid(user.getUid());
 		comment.setCreated(DateUtils.currentTime());
 		return comment;
+	}
+	
+	public static final Quiz quiz(User user, String content) {
+		Quiz quiz = new Quiz();
+		quiz.setAppId(user.getAppId());
+		quiz.setUid(user.getUid());
+		quiz.setContent(content);
+		quiz.setCreated(DateUtils.currentTime());
+		return quiz;
 	}
 	
 	public static final Reply reply(User user, int quizId, String content) {

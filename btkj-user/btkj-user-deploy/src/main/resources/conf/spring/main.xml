@@ -15,7 +15,7 @@
 		<property name="userLockExpire" value="${user.lock.expire}" />
 	</bean>
 	
-	<bean id="globalConfigContainer" class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
+	<bean class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
 		<property name="zkClient">
 			<bean class="org.I0Itec.zkclient.ZkClient">
 				<constructor-arg name="zkServers" value="${zk.servers}" />
@@ -27,6 +27,10 @@
 			</bean>
 		</property>
 		<property name="configPath" value="${zk.config.path}" />
+	</bean>
+	
+	<bean class="org.btkj.pojo.AliyunUtil">
+		<property name="ossPrefix" value="${aliyun.oss.prefix}" />
 	</bean>
 	
 	<bean id="userMapper" class="org.btkj.user.redis.UserMapper" >
@@ -59,10 +63,5 @@
 	<bean id="nonAutoBindMapper" class="org.btkj.user.redis.NonAutoBindMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="nonAutoBindDao" />
-	</bean>
-	
-	<bean id="specialBonusMapper" class="org.btkj.user.redis.SpecialBonusMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="specialBonusDao" />
 	</bean>
 </beans>

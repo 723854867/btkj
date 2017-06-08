@@ -19,4 +19,6 @@
 	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" /> 
 	
 	<dubbo:reference id="masterService" interface="org.btkj.master.api.MasterService" />
+	
+	<dubbo:reference id="communityService" interface="org.btkj.community.api.CommunityService" />
 </beans>

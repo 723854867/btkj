@@ -3,6 +3,7 @@ package org.btkj.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.tips.UserDetailTips;
 import org.btkj.pojo.info.tips.UserTips;
 
 public class LoginInfo implements Serializable {
@@ -10,13 +11,13 @@ public class LoginInfo implements Serializable {
 	private static final long serialVersionUID = -8394028501904858733L;
 
 	private String token;
-	private UserTips user;
+	private UserDetailTips user;
 	
 	public LoginInfo() {}
 	
 	public LoginInfo(String token, User user) {
 		this.token = token;
-		this.user = new UserTips(user);
+		this.user = new UserDetailTips(user);
 	}
 	
 	public String getToken() {
@@ -31,7 +32,7 @@ public class LoginInfo implements Serializable {
 		return user;
 	}
 	
-	public void setUser(UserTips user) {
+	public void setUser(UserDetailTips user) {
 		this.user = user;
 	}
 }

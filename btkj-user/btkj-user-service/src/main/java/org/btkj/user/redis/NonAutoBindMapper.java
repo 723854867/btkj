@@ -7,7 +7,7 @@ import java.util.List;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.NonAutoBind;
-import org.btkj.user.persistence.dao.NonAutoBindDao;
+import org.btkj.user.mybatis.dao.NonAutoBindDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 
 public class NonAutoBindMapper extends RedisProtostuffDBMapper<Integer, NonAutoBind, NonAutoBindDao> {

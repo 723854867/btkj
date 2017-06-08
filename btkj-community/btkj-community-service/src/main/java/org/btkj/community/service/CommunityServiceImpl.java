@@ -3,6 +3,7 @@ package org.btkj.community.service;
 import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityService;
+import org.btkj.community.mybatis.EntityGenerator;
 import org.btkj.community.mybatis.Tx;
 import org.btkj.community.redis.ArticleMapper;
 import org.btkj.community.redis.CommentMapper;
@@ -68,6 +69,13 @@ public class CommunityServiceImpl implements CommunityService {
 			return Result.result(e.getCode());
 		}
 		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public int quiz(User user, String content) {
+		Quiz quiz = EntityGenerator.quiz(user, content);
+		quizMapper.insert(quiz);
+		return quiz.getId();
 	}
 	
 	@Override

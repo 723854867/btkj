@@ -14,18 +14,17 @@ import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
 import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.TenantSearcher;
-import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
-import org.btkj.user.persistence.Tx;
+import org.btkj.user.mybatis.EntityGenerator;
+import org.btkj.user.mybatis.Tx;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -35,7 +34,6 @@ import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -61,29 +59,6 @@ public class TenantServiceImpl implements TenantService {
 	private NonAutoBindMapper nonAutoBindMapper;
 
 	@Override
-	public Result<Void> tenantEdit(Tenant tenant) {
-		Tenant t = tenantMapper.getByKey(tenant.getTid());
-		if (null == t)
-			return Result.result(BtkjCode.TENANT_NOT_EXIST);
-		tenant.setUpdated(DateUtils.currentTime());
-		tenantMapper.update(tenant);
-		return Result.success();
-	}
-
-	@Override
-	public Result<Void> tenantState(int tid, TenantState state) {
-		Tenant tenant = tenantMapper.getByKey(tid);
-		if (null == tenant)
-			return Result.result(BtkjCode.TENANT_NOT_EXIST);
-		if (tenant.getState() != state.mark()) {
-			tenant.setState(state.mark());
-			tenant.setUpdated(DateUtils.currentTime());
-			tenantMapper.update(tenant);
-		}
-		return Result.success();
-	}
-
-	@Override
 	public Result<Pager<TenantListPc>> tenantList(TenantSearcher searcher) {
 		return tenantMapper.tenantList(searcher);
 	}
@@ -106,7 +81,7 @@ public class TenantServiceImpl implements TenantService {
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(BeanGenerator.newApply(tenant, user, chief));
+		applyMapper.insert(EntityGenerator.newApply(tenant, user, chief));
 		return Result.success();
 	}
 
@@ -125,7 +100,7 @@ public class TenantServiceImpl implements TenantService {
 
 		Employee chief = employeeMapper.getByKey(info.getChief());
 		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Employee employee = BeanGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
+		Employee employee = EntityGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
 		tx.insertEmployee(employee).finish();
 		return Result.success();
 	}

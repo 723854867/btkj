@@ -5,6 +5,21 @@ import org.btkj.pojo.BtkjTables;
 
 public class ArticleSQLProvider {
 	
+	public String insert() { 
+		return new SQL() {
+			{
+				INSERT_INTO(BtkjTables.ARTICLE.name());
+				VALUES("app_id", "#{appId}");
+				VALUES("title", "#{title}");
+				VALUES("browse_num", "#{browseNum}");
+				VALUES("comment_num", "#{commentNum}");
+				VALUES("icon", "#{icon}");
+				VALUES("link", "#{link}");
+				VALUES("created", "#{created}");
+			}
+		}.toString();
+	}
+	
 	public String selectByKey() {
 		return new SQL() {
 			{

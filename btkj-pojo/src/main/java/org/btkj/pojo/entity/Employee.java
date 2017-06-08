@@ -17,12 +17,6 @@ public class Employee implements UniqueModel<Integer> {
 	private int left;
 	private int right;
 	private int level;
-	private int payType;
-	private int state;
-	private int tagMod;
-	private int score;
-	private int scaleBonus;
-	private int manageBonus;
 	private int created;
 	private int updated;
 
@@ -81,14 +75,6 @@ public class Employee implements UniqueModel<Integer> {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	
-	public int getTagMod() {
-		return tagMod;
-	}
-	
-	public void setTagMod(int tagMod) {
-		this.tagMod = tagMod;
-	}
 
 	public int getCreated() {
 		return created;
@@ -106,46 +92,6 @@ public class Employee implements UniqueModel<Integer> {
 		this.updated = updated;
 	}
 	
-	public int getPayType() {
-		return payType;
-	}
-
-	public void setPayType(int payType) {
-		this.payType = payType;
-	}
-
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
-	
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getScaleBonus() {
-		return scaleBonus;
-	}
-
-	public void setScaleBonus(int scaleBonus) {
-		this.scaleBonus = scaleBonus;
-	}
-
-	public int getManageBonus() {
-		return manageBonus;
-	}
-
-	public void setManageBonus(int manageBonus) {
-		this.manageBonus = manageBonus;
-	}
-
 	@Override
 	public Integer key() {
 		return id;

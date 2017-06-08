@@ -13,7 +13,7 @@ import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.Config;
 import org.btkj.user.UserLuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
-import org.btkj.user.persistence.dao.UserDao;
+import org.btkj.user.mybatis.dao.UserDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;

@@ -47,5 +47,6 @@
 		<module>btkj-web-login</module>
 		<module>btkj-web-master</module>
     	<module>btkj-web-callback</module>
+    	<module>btkj-statistics</module>
   </modules>
 </project>

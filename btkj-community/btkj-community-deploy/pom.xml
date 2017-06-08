@@ -6,7 +6,7 @@
 	
 	<parent>
 		<groupId>org.btkj</groupId>
-		<artifactId>btkj-service</artifactId>
+		<artifactId>btkj-community</artifactId>
 		<version>1.0</version>
 	</parent>
 	
@@ -95,6 +95,11 @@
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>minlog</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
 		</dependency>
 	</dependencies>
 

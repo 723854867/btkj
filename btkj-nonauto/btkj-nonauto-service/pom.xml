@@ -6,7 +6,7 @@
 
 	<parent>
 		<groupId>org.btkj</groupId>
-		<artifactId>btkj-service</artifactId>
+		<artifactId>btkj-nonauto</artifactId>
 		<version>1.0</version>
 	</parent>
 

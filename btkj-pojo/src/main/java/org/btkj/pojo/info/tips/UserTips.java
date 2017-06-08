@@ -2,6 +2,7 @@ package org.btkj.pojo.info.tips;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.AliyunUtil;
 import org.btkj.pojo.entity.User;
 
 public class UserTips implements Serializable {
@@ -17,7 +18,8 @@ public class UserTips implements Serializable {
 	public UserTips(User user) {
 		this.uid = user.getUid();
 		this.name = user.getName();
-		this.avatar = user.getAvatar();
+		if (null != user.getAvatar())
+			this.avatar = AliyunUtil.userResource(user, user.getAvatar());
 	}
 
 	public int getUid() {

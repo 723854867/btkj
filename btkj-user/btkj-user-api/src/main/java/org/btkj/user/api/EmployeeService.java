@@ -1,8 +1,8 @@
 package org.btkj.user.api;
 
+import java.util.List;
+
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.enums.EmployeeState;
-import org.btkj.pojo.info.EmployeeInfo;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
@@ -19,31 +19,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher);
-	
-	/**
-	 * 禁用雇员
-	 * 
-	 * @param state
-	 * @return
-	 */
-	Result<Void> employeeState(int employeeId, EmployeeState state);
-	
-	/**
-	 * 根据id获取雇员详细信息
-	 * @return
-	 */
-	EmployeeInfo employeeInfo(int employeeId);
-	
-	/**
-	 * 修改保存雇员基本信息
-	 * @return
-	 */
-	Result<Void> employeeEdit(EmployeeInfo employeeInfo);
-	
+	 
 	/**
 	 * 我的团队
 	 * @param form
 	 * @return
 	 */
-	Pager<Employee> team(EmployeeForm form);
+	List<Employee> team(EmployeeForm form);
 }

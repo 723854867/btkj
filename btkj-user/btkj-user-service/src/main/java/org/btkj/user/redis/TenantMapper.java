@@ -7,7 +7,7 @@ import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.TenantSearcher;
-import org.btkj.user.persistence.dao.TenantDao;
+import org.btkj.user.mybatis.dao.TenantDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.util.common.message.Result;
 

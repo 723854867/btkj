@@ -1,19 +1,14 @@
 package org.btkj.pojo.info.tips;
 
-import java.io.Serializable;
-
-import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.model.EmployeeForm;
 
-public class EmployeeTips implements Serializable {
+public class EmployeeTips extends UserTips {
 
 	private static final long serialVersionUID = -3946965045838944053L;
 
 	private int id;						//邀请码
-	private int uid;
 	private int tid;
-	private String name;
 	private int regionId;
 	private String regionName;
 	private int parentId;				//邀请人id
@@ -26,9 +21,9 @@ public class EmployeeTips implements Serializable {
 	public EmployeeTips() {}
 	
 	public EmployeeTips(EmployeeForm form, Region region) {
+		super(form.getUser());
 		this.id = form.getEmployee().getId();
 		this.tid = form.getEmployee().getTid();
-		this.uid  = form.getEmployee().getUid();
 		this.tname = form.getTenant().getName();
 		this.regionId = region.getId();
 		this.regionName = region.getName();
@@ -42,28 +37,12 @@ public class EmployeeTips implements Serializable {
 		this.id = id;
 	}
 	
-	public int getUid() {
-		return uid;
-	}
-	
-	public void setUid(int uid) {
-		this.uid = uid;
-	}
-	
 	public int getTid() {
 		return tid;
 	}
 	
 	public void setTid(int tid) {
 		this.tid = tid;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public int getRegionId() {

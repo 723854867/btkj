@@ -17,4 +17,6 @@
 	<dubbo:service interface="org.btkj.courier.api.AliyunService" ref="aliyunService" loadbalance="${dubbo.service.loadbalance}" />
 	
 	<dubbo:service interface="org.btkj.courier.api.CourierService" ref="courierService" loadbalance="${dubbo.service.loadbalance}" />
+	
+	<dubbo:service interface="org.btkj.courier.api.JianJieService" ref="jianJieService" loadbalance="${dubbo.service.loadbalance}" />
 </beans>

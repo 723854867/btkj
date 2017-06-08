@@ -16,9 +16,9 @@ import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.AppSearcher;
-import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
+import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -95,7 +95,7 @@ public class AppServiceImpl implements AppService {
 	
 	@Override
 	public App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy) {
-		App app = BeanGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy);
+		App app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy);
 		appMapper.insert(app);
 		return app;
 	}

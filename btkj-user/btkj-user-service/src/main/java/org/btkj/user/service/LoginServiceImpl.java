@@ -7,9 +7,9 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.LoginInfo;
-import org.btkj.user.BeanGenerator;
 import org.btkj.user.api.LoginService;
 import org.btkj.user.model.TokenRemoveModel;
+import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -48,7 +48,7 @@ public class LoginServiceImpl implements LoginService {
 		// 用户不存在则创建用户
 		if (ru.getCode() == Code.USER_NOT_EXIST.id()) {
 			try {
-				user = userMapper.insert(BeanGenerator.newUser(app.getId(), mobile));
+				user = userMapper.insert(EntityGenerator.newUser(app.getId(), mobile));
 				lockId = userMapper.lockUser(user.getUid());
 				if (null == lockId)
 					return Result.result(Code.USER_STATUS_CHANGED);

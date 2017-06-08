@@ -54,6 +54,15 @@ public interface CommunityService {
 	Result<Void> comment(User user, int articleId, String content); 
 	
 	/**
+	 * 提问
+	 * 
+	 * @param user
+	 * @param content
+	 * @return
+	 */
+	int quiz(User user, String content);
+	
+	/**
 	 * 问答分页
 	 * 
 	 * @param appId

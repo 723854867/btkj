@@ -8,6 +8,20 @@ import org.btkj.pojo.submit.QuizSearcher.SortCol;
 
 public class QuizSQLProvider {
 	
+	public String insert() {
+		return new SQL() {
+			{
+				INSERT_INTO(BtkjTables.QUIZ.name());
+				VALUES("app_id", "#{appId}");
+				VALUES("reply_num", "#{replyNum}");
+				VALUES("uid", "#{uid}");
+				VALUES("browse_num", "#{browseNum}");
+				VALUES("content", "#{content}");
+				VALUES("created", "#{created}");
+			}
+		}.toString();
+	}
+	
 	public String selectByKey() {
 		return new SQL() {
 			{
@@ -48,13 +62,13 @@ public class QuizSQLProvider {
 		else {
 			switch (col) {
 			case BROWSE_NUM:
-				builder.append("ORDER BY browse_num ");
+				builder.append(" ORDER BY browse_num ");
 				break;
 			case REPLY_NUM:
-				builder.append("ORDER BY reply_num ");
+				builder.append(" ORDER BY reply_num ");
 				break;
 			default:
-				builder.append("ORDER BY created ");
+				builder.append(" ORDER BY created ");
 				break;
 			}
 		}
