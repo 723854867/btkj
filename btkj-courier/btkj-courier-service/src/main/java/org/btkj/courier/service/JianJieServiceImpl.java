@@ -23,7 +23,7 @@ import org.btkj.courier.pojo.JianJieUser;
 import org.btkj.pojo.entity.User;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.net.http.HttpProxy;
 import org.rapid.util.net.http.handler.AsyncRespHandler;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class JianJieServiceImpl implements JianJieService {
 			URI uri = uriBuilder.build();
 			HttpPost request = new HttpPost(uri);
 			request.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE);
-			user.setMobile(String.valueOf(StringUtils.getNationalNumber(user.getMobile())));
+			user.setMobile(String.valueOf(PhoneUtil.getNationalNumber(user.getMobile())));
 			request.setEntity(new StringEntity(SerializeUtil.JsonUtil.GSON.toJson(new JianJieUser(user))));
 			httpProxy.asyncRequest(request, new AsyncRespHandler() {
 				@Override
