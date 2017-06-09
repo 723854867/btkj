@@ -99,7 +99,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>baotu-community-service</finalName>
+		<finalName>community-service</finalName>
 
 		<filters>
 			<filter>${basedir}/build/${env}.properties</filter>
