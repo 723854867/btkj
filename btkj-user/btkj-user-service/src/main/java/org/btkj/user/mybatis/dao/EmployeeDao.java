@@ -41,6 +41,15 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
 	List<Employee> selectByTidForUpdate(int tid);
 	
+	/**
+	 * 团队：自己和 level - 自己的 level 范围内的成员
+	 * 
+	 * @param id
+	 * @param left
+	 * @param right
+	 * @param level
+	 * @return
+	 */
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "team")
 	List<Employee> team(@Param("id") int id, @Param("left") int left, @Param("right") int right, @Param("level") int level);
 	

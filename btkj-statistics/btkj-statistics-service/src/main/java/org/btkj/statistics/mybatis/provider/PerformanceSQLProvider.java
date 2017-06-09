@@ -21,7 +21,7 @@ public class PerformanceSQLProvider {
 	public String total(Map<String, Object> params) {
 		List<Integer> list = (List<Integer>) params.get("list");
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT SUM(amount) amount FROM performance where employee_id IN (");
+		builder.append("SELECT IFNULL(SUM(amount), 0) FROM performance where employee_id IN (");
 		for (int employeeId : list)
 			builder.append(employeeId).append(",");
 		builder.deleteCharAt(builder.length() - 1);

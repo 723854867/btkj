@@ -39,6 +39,8 @@ public class JianJieServiceImpl implements JianJieService {
 
 	@Value("${url.user.add}")
 	private String urlUserAdd;
+	@Value("${url.vehicle.policies}")
+	private String urlVehiclePolicies;
 	@Resource
 	private HttpProxy httpProxy;
 	
@@ -89,6 +91,10 @@ public class JianJieServiceImpl implements JianJieService {
 			logger.error("简捷业务员添加失败！", e);
 			return;
 		}
+	}
+	
+	public void vehiclePolicies() {
+		
 	}
 	
 	private URIBuilder _uri(String url) throws URISyntaxException {

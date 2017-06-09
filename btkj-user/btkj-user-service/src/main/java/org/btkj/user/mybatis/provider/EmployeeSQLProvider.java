@@ -90,7 +90,7 @@ public class EmployeeSQLProvider {
 	}
 	
 	public String team() {
-		return "SELECT * FROM employee WHERE parent_id=#{id} AND left>#{left} AND right<#{right} AND level<=#{level}";
+		return "SELECT * FROM employee WHERE (parent_id=#{id} AND `left`>#{left} AND `right`<#{right} AND `level`<=#{level}) OR id=#{id}";
 	}
 	
 	public String selectByTidForUpdate() {

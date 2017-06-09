@@ -9,7 +9,7 @@ public class TeamEmployee implements Serializable {
 	private int uid;
 	private int employeeId;
 	private double amount;
-
+	
 	public int getUid() {
 		return uid;
 	}
