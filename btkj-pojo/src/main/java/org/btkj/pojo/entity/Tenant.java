@@ -11,6 +11,7 @@ public class Tenant implements UniqueModel<Integer> {
 	private int appId;
 	private int region;
 	private int teamDepth;
+	private String jianJieId;
 	private int created;
 	private int updated;
 	
@@ -52,6 +53,14 @@ public class Tenant implements UniqueModel<Integer> {
 	
 	public void setTeamDepth(int teamDepth) {
 		this.teamDepth = teamDepth;
+	}
+	
+	public String getJianJieId() {
+		return jianJieId;
+	}
+	
+	public void setJianJieId(String jianJieId) {
+		this.jianJieId = jianJieId;
 	}
 	
 	public int getCreated() {

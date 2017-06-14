@@ -1,16 +1,20 @@
 package org.btkj.bihu.vehicle.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
-import org.btkj.pojo.model.insur.vehicle.CompulsiveInsurance;
+import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.VehicleType;
+import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.model.insur.vehicle.Vehicle;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.rapid.util.lang.StringUtils;
 
 public class RenewInfo implements Serializable {
 	
@@ -713,14 +717,74 @@ public class RenewInfo implements Serializable {
 	
 	public Renewal toRenewal() {
 		Renewal renewal = new Renewal();
-		if (null != this.SaveQuote) {
-			renewal.setOwner(_owner());
-			renewal.setInsurer(_insurer());
-			renewal.setInsured(_insured());
-			renewal.setVehicle(_vehicle());
+		VehiclePolicyTips tips = new VehiclePolicyTips();
+		PolicySchema schema = new PolicySchema();
+		tips.setSchema(schema);
+		if (null != this.UserInfo) {
+			tips.setOwner(_owner());
+			tips.setInsurer(_insurer());
+			tips.setInsured(_insured());
+			tips.setLicense(this.UserInfo.LicenseNo);
+			tips.setVin(this.UserInfo.CarVin);
+			tips.setEngine(this.UserInfo.EngineNo);
+			tips.setModel(this.UserInfo.ModleName);
+			tips.setEnrollDate(this.UserInfo.RegisterDate);
+			tips.setSeatCount(this.UserInfo.SeatCount);
+			tips.setPrice(this.UserInfo.PurchasePrice);
+			tips.setExhaust(this.UserInfo.ExhaustScale);
+			schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
+			schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
+			tips.setVehicleType(VehicleType.NO_BIZ_PASSENGER);
+			tips.setVehicleUsedType(VehicleUsedType.match(this.UserInfo.CarUsedType));
+			renewal.setCommercialNo(this.UserInfo.BizNo);
+			renewal.setCompulsiveNo(this.UserInfo.ForceNo);
+			schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
+			schema.setCommercialEnd(this.UserInfo.BusinessExpireDate);
 		}
-		if (BusinessStatus != 3 && null != this.SaveQuote)
-			renewal.setSchema(_insranceSchema());
+		if (BusinessStatus != 3 && null != this.SaveQuote) {
+			Map<InsuranceType, Insurance> insurances = new HashMap<InsuranceType, Insurance>();
+			if (0 != this.SaveQuote.CheSun)
+				insurances.put(InsuranceType.DAMAGE, new Insurance(this.SaveQuote.CheSun));
+			if (0 != this.SaveQuote.BuJiMianCheSun)
+				insurances.put(InsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianCheSun));
+			if (0 != this.SaveQuote.SanZhe)
+				insurances.put(InsuranceType.THIRD, new Insurance(this.SaveQuote.SanZhe));
+			if (0 != this.SaveQuote.BuJiMianSanZhe)
+				insurances.put(InsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSanZhe));
+			if (0 != this.SaveQuote.SiJi)
+				insurances.put(InsuranceType.DRIVER, new Insurance(this.SaveQuote.SiJi));
+			if (0 != this.SaveQuote.BuJiMianSiJi)
+				insurances.put(InsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSiJi));
+			if (0 != this.SaveQuote.ChengKe)
+				insurances.put(InsuranceType.PASSENGER, new Insurance(this.SaveQuote.ChengKe));
+			if (0 != this.SaveQuote.BuJiMianChengKe)
+				insurances.put(InsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianChengKe));
+			if (0 != this.SaveQuote.DaoQiang)
+				insurances.put(InsuranceType.ROBBERY, new Insurance(this.SaveQuote.DaoQiang));
+			if (0 != this.SaveQuote.BuJiMianDaoQiang)
+				insurances.put(InsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianDaoQiang));
+			if (0 != this.SaveQuote.BoLi)
+				insurances.put(InsuranceType.GLASS, new Insurance(this.SaveQuote.BoLi));
+			if (0 != this.SaveQuote.ZiRan)
+				insurances.put(InsuranceType.AUTO_FIRE, new Insurance(this.SaveQuote.ZiRan));
+			if (0 != this.SaveQuote.BuJiMianZiRan)
+				insurances.put(InsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianZiRan));
+			if (0 != this.SaveQuote.HuaHen)
+				insurances.put(InsuranceType.SCRATCH, new Insurance(this.SaveQuote.HuaHen));
+			if (0 != this.SaveQuote.BuJiMianHuaHen)
+				insurances.put(InsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianHuaHen));
+			if (0 != this.SaveQuote.SheShui)
+				insurances.put(InsuranceType.WADDING, new Insurance(this.SaveQuote.SheShui));
+			if (0 != this.SaveQuote.BuJiMianSheShui)
+				insurances.put(InsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
+			if (-1 != this.SaveQuote.HcXiuLiChangType)
+				insurances.put(InsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChange));
+			if (0 != this.SaveQuote.HcSanFangTeYue)
+				insurances.put(InsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
+			schema.setInsurances(insurances.isEmpty() ? null : insurances);
+			renewal.setInsurerId(this.SaveQuote.Source);
+		}
+		renewal.setTips(tips);
 		return renewal;
 	}
 	
@@ -737,7 +801,7 @@ public class RenewInfo implements Serializable {
 		insurer.setName(this.UserInfo.PostedName);
 		insurer.setIdType(BiHuUtil.idType(this.UserInfo.HolderIdType));
 		insurer.setIdNo(this.UserInfo.HolderIdCard);
-		insurer.setMobile(this.UserInfo.HolderMobile);
+		insurer.setMobile(StringUtils.hasText(this.UserInfo.HolderMobile) ? this.UserInfo.HolderMobile : null);
 		return insurer;
 	}
 	
@@ -746,112 +810,7 @@ public class RenewInfo implements Serializable {
 		insured.setName(this.UserInfo.InsuredName);
 		insured.setIdType(BiHuUtil.idType(this.UserInfo.InsuredIdType));
 		insured.setIdNo(this.UserInfo.InsuredIdCard);
-		insured.setMobile(this.UserInfo.InsuredMobile);
+		insured.setMobile(StringUtils.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
 		return insured;
-	}
-	
-	private Vehicle _vehicle() {
-		Vehicle vehicle = new Vehicle();
-		vehicle.setLicense(this.UserInfo.LicenseNo);
-		vehicle.setVin(this.UserInfo.CarVin);
-		vehicle.setEngine(this.UserInfo.EngineNo);
-		vehicle.setModel(this.UserInfo.ModleName);
-		vehicle.setEnrollDate(this.UserInfo.RegisterDate);
-		vehicle.setSeatCount(this.UserInfo.SeatCount);
-		return vehicle;
-	}
-	
-	private InsuranceSchema _insranceSchema() {
-		InsuranceSchema schema = new InsuranceSchema();
-		
-		// 交强险：没有保额和价格
-		CompulsiveInsurance cpi = new CompulsiveInsurance();
-		cpi.setStart(this.UserInfo.NextForceStartDate);
-		cpi.setEnd(this.UserInfo.ForceExpireDate);
-		schema.setCompulsive(cpi);
-		
-		// 商业险
-		CommercialInsurance cmi = new CommercialInsurance();
-		cmi.setStart(this.UserInfo.NextBusinessStartDate);
-		cmi.setEnd(this.UserInfo.BusinessExpireDate);
-		if (0 != this.SaveQuote.getCheSun()) {				// 车损
-			Insurance insurance = new Insurance(this.SaveQuote.getCheSun());
-			cmi.setDamage(insurance);
-			if (0 != this.SaveQuote.getBuJiMianCheSun()) {	// 车损不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianCheSun());
-				cmi.setDamageOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getSanZhe()) {				// 第三者
-			Insurance insurance = new Insurance(this.SaveQuote.getSanZhe());
-			cmi.setThird(insurance);
-			if (0 != this.SaveQuote.getBuJiMianSanZhe()) {	// 第三者不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianSanZhe());
-				cmi.setThirdOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getSiJi()) {				// 车上人员责任险(司机)
-			Insurance insurance = new Insurance(this.SaveQuote.getSiJi());
-			cmi.setDriver(insurance);
-			if (0 != this.SaveQuote.getBuJiMianSiJi()) {	// 车上人员责任险(司机)不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianSiJi());
-				cmi.setDriverOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getChengKe()) {				// 车上人员责任险(乘客)
-			Insurance insurance = new Insurance(this.SaveQuote.getChengKe());
-			cmi.setPassenger(insurance);
-			if (0 != this.SaveQuote.getBuJiMianChengKe()) {	// 车上人员责任险(乘客)
-				insurance = new Insurance(this.SaveQuote.getBuJiMianChengKe());
-				cmi.setPassengerOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getDaoQiang()) {			// 盗抢
-			Insurance insurance = new Insurance(this.SaveQuote.getDaoQiang());
-			cmi.setRobbery(insurance);
-			if (0 != this.SaveQuote.getBuJiMianDaoQiang()) {// 盗抢不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianDaoQiang());
-				cmi.setRobberyOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getBoLi()) {				// 玻璃破碎险:1国产，2进口
-			Insurance insurance = new Insurance(this.SaveQuote.getBoLi());
-			cmi.setGlass(insurance);
-		}
-		if (0 != this.SaveQuote.getZiRan()) {				// 自燃
-			Insurance insurance = new Insurance(this.SaveQuote.getZiRan());
-			cmi.setAutoFire(insurance);
-			if (0 != this.SaveQuote.getBuJiMianZiRan()) {	// 自燃不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianZiRan());
-				cmi.setAutoFireOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getHuaHen()) {				// 划痕
-			Insurance insurance = new Insurance(this.SaveQuote.getHuaHen());
-			cmi.setScratch(insurance);
-			if (0 != this.SaveQuote.getBuJiMianHuaHen()) {	// 划痕不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianHuaHen());
-				cmi.setScratchOfDeductible(insurance);
-			}
-		}
-		if (0 != this.SaveQuote.getSheShui()) {				// 涉水
-			Insurance insurance = new Insurance(this.SaveQuote.getSheShui());
-			cmi.setWading(insurance);
-			if (0 != this.SaveQuote.getBuJiMianSheShui()) {	// 涉水不计免赔
-				insurance = new Insurance(this.SaveQuote.getBuJiMianSheShui());
-				cmi.setWadingOfDeductible(insurance);
-			}
-		}
-		if (-1 != this.SaveQuote.getHcXiuLiChangType()) {	// 指定修理厂
-			Insurance insurance = new Insurance(this.SaveQuote.getHcXiuLiChangType(), this.SaveQuote.getHcXiuLiChange());
-			cmi.setGarageDesignated(insurance);
-		}
-		if (0 != this.SaveQuote.getHcSanFangTeYue()) {		// 无法找到第三方特约
-			Insurance insurance = new Insurance(this.SaveQuote.getHcSanFangTeYue());
-			cmi.setUnknownThird(insurance);
-		}
-		schema.setCommercial(cmi);
-		schema.setInsurerId(this.SaveQuote.getSource());
-		return schema;
 	}
 }

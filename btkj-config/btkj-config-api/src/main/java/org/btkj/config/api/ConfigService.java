@@ -16,6 +16,14 @@ public interface ConfigService {
 	Region getRegionById(int region);
 	
 	/**
+	 * 根据保险公司ID获取保险公司
+	 * 
+	 * @param insurerId
+	 * @return
+	 */
+	Insurer getInsurerById(int insurerId);
+	
+	/**
 	 * 获取险企列表
 	 * 
 	 * @param list

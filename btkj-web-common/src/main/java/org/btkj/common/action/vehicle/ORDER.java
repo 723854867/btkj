@@ -1,24 +1,29 @@
 package org.btkj.common.action.vehicle;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
-import org.btkj.pojo.model.insur.vehicle.CompulsiveInsurance;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.model.insur.vehicle.Vehicle;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
+import org.btkj.pojo.model.insur.vehicle.Insurance;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.TenantAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
@@ -33,24 +38,37 @@ import org.rapid.util.lang.StringUtils;
 public class ORDER extends TenantAction {
 	
 	@Resource
+	private ConfigService configService;
+	@Resource
 	private VehicleService vehicleService;
 
 	@Override
 	protected Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
-		VehicleOrderSubmit submit = request.getParam(Params.VEHICLE_ORDER_SUBMIT);
-		if (!_check(employeeForm.getTenant(), submit))
-			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_ORDER_SUBMIT);
-		return vehicleService.order(employeeForm, submit);
+		Set<Integer> quote = request.getParam(Params.QUOTE_GROUP);
+		Set<Integer> insure = request.getOptionalParam(Params.INSURE_GROUP);
+		if (!_checkInsurer(quote, insure))
+			return Consts.RESULT.FORBID;
+		List<Insurer> quoteInsurer = configService.insurers(new ArrayList<Integer>(quote));
+		if (quoteInsurer.size() != quote.size())
+			return Consts.RESULT.FORBID;
+		
+		List<Insurer> insureInsurer = null;
+		if (!CollectionUtils.isEmpty(insure)) {
+			insureInsurer = new ArrayList<Insurer>(insure.size());
+			for (int insurerId : insure) {
+				for (Insurer insurer : quoteInsurer) {
+					if (insurer.getId() == insurerId)
+						insureInsurer.add(insurer);
+				}
+			}
+		}
+		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
+		if (!_check(employeeForm.getTenant(), tips))
+			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
+		return vehicleService.order(quoteInsurer, insureInsurer, employeeForm, tips);
 	}
 	
-	/**
-	 * 只检查参数的基本合法性比如是否为null，是否为空等等，不会检验参数是否符合保险规则
-	 * 
-	 * @param submit
-	 */
-	private boolean _check(Tenant tenant, VehicleOrderSubmit submit) {
-		Set<Integer> quote = submit.getQuote();
-		Set<Integer> insure = submit.getInsure();
+	private boolean _checkInsurer(Set<Integer> quote, Set<Integer> insure) {
 		if (!CollectionUtils.isSubSet(quote, insure))
 			return false;
 		int quoteNum = null == quote ? 0 : quote.size();
@@ -59,16 +77,22 @@ public class ORDER extends TenantAction {
 				|| GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum() < quoteNum
 				|| GlobalConfigContainer.getGlobalConfig().getMaxInsurNum() < insureNum)
 			return false;
-		
-		Renewal renewal = submit.getRenewal();
-		if (null == renewal || null == renewal.getOwner() || null == renewal.getInsurer() 
-				|| null == renewal.getInsured() || null == renewal.getVehicle() || null == renewal.getSchema())
+		return true;
+	}
+	
+	/**
+	 * 只检查参数的基本合法性比如是否为null，是否为空等等，不会检验参数是否符合保险规则
+	 * 
+	 * @param submit
+	 */
+	private boolean _check(Tenant tenant, VehiclePolicyTips tips) {
+		if (null == tips.getOwner() || null == tips.getInsurer() || null == tips.getInsured() || null == tips.getSchema())
 			return false;
-		return _checkInsurUnit(renewal.getOwner())
-				&& _checkInsurUnit(renewal.getInsurer())
-				&& _checkInsurUnit(renewal.getInsured())
-				&& _checkVehicle(renewal.getVehicle())
-				&& _checkSchema(renewal.getSchema());
+		return _checkInsurUnit(tips.getOwner())
+				&& _checkInsurUnit(tips.getInsurer())
+				&& _checkInsurUnit(tips.getInsured())
+				&& _checkVehicle(tips)
+				&& _checkSchema(tips.getSchema());
 	}
 	
 	private boolean _checkInsurUnit(InsurUnit unit) {
@@ -81,29 +105,39 @@ public class ORDER extends TenantAction {
 		return true;
 	}
 	
-	private boolean _checkVehicle(Vehicle vehicle) {
+	private boolean _checkVehicle(VehiclePolicyTips tips) {
 		if (!StringUtils.hasText(
-				vehicle.getEngine(), vehicle.getLicense(), 
-				vehicle.getModel(), vehicle.getVin(), 
-				vehicle.getEnrollDate()))
+				tips.getEngine(), tips.getLicense(), 
+				tips.getModel(), tips.getVin(), 
+				tips.getEnrollDate()))
 			return false;
-		return Validator.isVehicleLisense(vehicle.getLicense());
+		return Validator.isVehicleLisense(tips.getLicense());
 	}
 	
-	private boolean _checkSchema(InsuranceSchema schema) {
-		CompulsiveInsurance cpi = schema.getCompulsive();
-		CommercialInsurance cmi = schema.getCommercial();
+	private boolean _checkSchema(PolicySchema schema) {
+		String cpi = schema.getCompulsiveStart();
+		String cmi = schema.getCommercialStart();
 		if (null == cpi && null == cmi)
 			return false;
 		// 交强险必须指定起保日期且日期的长度为10位
-		if (null != cpi && !Validator.isUnixTimestamp(cpi.getStart()))	
+		if (null != cpi && !Validator.isUnixTimestamp(cpi))	
 			return false;
 		if (null != cmi) {
 			// 必须要有起保日期且日期的长度为10位, 确保至少保了一种基本险
-			if (!Validator.isUnixTimestamp(cmi.getStart()) 
-					|| (null == cmi.getDamage() && null == cmi.getThird() 
-							&& null == cmi.getDriver() && null == cmi.getPassenger() && null == cmi.getRobbery()))
+			if (!Validator.isUnixTimestamp(cmi))
 				return false;
+			Map<InsuranceType, Insurance> map = schema.getInsurances();
+			if (null == map)
+				return false;
+			map.remove(null);
+			int mod = 0;
+			for (InsuranceType type : map.keySet()) 
+				mod |= type.mark();
+			for (Entry<InsuranceType, Insurance> entry : map.entrySet()) {
+				int need = entry.getKey().need();
+				if ((mod & need) != need)
+					return false;
+			}
 		}
 		return true;
 	}

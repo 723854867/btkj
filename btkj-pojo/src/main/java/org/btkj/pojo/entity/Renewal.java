@@ -1,8 +1,6 @@
 package org.btkj.pojo.entity;
 
-import org.btkj.pojo.model.insur.vehicle.InsurUnit;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.model.insur.vehicle.Vehicle;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.rapid.util.common.model.UniqueModel;
 
 /**
@@ -14,50 +12,60 @@ public class Renewal implements UniqueModel<Void> {
 
 	private static final long serialVersionUID = 6082011346840718571L;
 
-	private InsurUnit owner;			// 车主信息
-	private InsurUnit insurer;			// 投保人信息
-	private InsurUnit insured;			// 被保人信息
-	private Vehicle vehicle;			// 车辆信息
-	private InsuranceSchema schema;		// 投保方案
-
-	public InsurUnit getOwner() {
-		return owner;
+	private int insurerId;						// 保险公司ID
+	private String insurerName;					// 保险公司名字
+	private String insurerIcon;					// 保险公司图标
+	
+	private String commercialNo;				// 商业险保单号
+	private String compulsiveNo;				// 交强险保单号
+	private VehiclePolicyTips tips;
+	
+	public int getInsurerId() {
+		return insurerId;
 	}
-
-	public void setOwner(InsurUnit owner) {
-		this.owner = owner;
+	
+	public void setInsurerId(int insurerId) {
+		this.insurerId = insurerId;
 	}
-
-	public InsurUnit getInsurer() {
-		return insurer;
+	
+	public String getInsurerName() {
+		return insurerName;
 	}
-
-	public void setInsurer(InsurUnit insurer) {
-		this.insurer = insurer;
+	
+	public void setInsurerName(String insurerName) {
+		this.insurerName = insurerName;
 	}
-
-	public InsurUnit getInsured() {
-		return insured;
+	
+	public String getInsurerIcon() {
+		return insurerIcon;
 	}
-
-	public void setInsured(InsurUnit insured) {
-		this.insured = insured;
+	
+	public void setInsurerIcon(String insurerIcon) {
+		this.insurerIcon = insurerIcon;
 	}
-
-	public Vehicle getVehicle() {
-		return vehicle;
+	
+	public String getCommercialNo() {
+		return commercialNo;
 	}
-
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
+	
+	public void setCommercialNo(String commercialNo) {
+		this.commercialNo = commercialNo;
 	}
-
-	public InsuranceSchema getSchema() {
-		return schema;
+	
+	public String getCompulsiveNo() {
+		return compulsiveNo;
 	}
-
-	public void setSchema(InsuranceSchema schema) {
-		this.schema = schema;
+	
+	public void setCompulsiveNo(String compulsiveNo) {
+		this.compulsiveNo = compulsiveNo;
+	}
+	
+	public VehiclePolicyTips getTips() {
+		return tips;
+	}
+	
+	public void setTips(VehiclePolicyTips tips) {
+		this.tips = tips;
 	}
 
 	@Override

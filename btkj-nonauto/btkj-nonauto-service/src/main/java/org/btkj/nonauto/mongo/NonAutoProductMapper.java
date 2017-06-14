@@ -30,7 +30,7 @@ public class NonAutoProductMapper extends MongoMapper<Long, NonAutoProduct> {
 	@Override
 	public NonAutoProduct insert(NonAutoProduct model) {
 		if (0 == model.get_id())
-			model.set_id(keyMapper.getAndInc(collection));
+			model.set_id(keyMapper.getAndInc(collection, 1));
 		return super.insert(model);
 	}
 	

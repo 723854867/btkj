@@ -23,7 +23,7 @@ public class ORDER_INFO extends TenantAction {
 
 	@Override
 	protected Result<VehicleOrder> execute(Request request, Client client, EmployeeForm employeeForm) {
-		return vehicleService.orderInfo(employeeForm, request.getParam(Params.LICENSE));
+		return vehicleService.orderInfo(employeeForm, request.getParam(Params.ORDER_ID));
 	}
 	
 	@Override

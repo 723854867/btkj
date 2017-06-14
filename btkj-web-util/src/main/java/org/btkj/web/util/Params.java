@@ -14,6 +14,7 @@ import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.EmployeeState;
 import org.btkj.pojo.enums.TenantState;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.ArticleSearcher;
@@ -22,7 +23,6 @@ import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -224,6 +224,8 @@ public interface Params {
 		};
 	};
 	
+	final Str2StrConstConverter ORDER_ID						= new Str2StrConstConverter(1037, "orderId");
+	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
 
@@ -245,15 +247,26 @@ public interface Params {
 	final Str2StrConstConverter VIN						= new Str2StrConstConverter(1103, "vin");
 	final Str2StrConstConverter ENGINE					= new Str2StrConstConverter(1104, "engine");
 	
-	final Str2ObjConstConverter<VehicleOrderSubmit> VEHICLE_ORDER_SUBMIT			= new Str2ObjConstConverter<VehicleOrderSubmit>(1105, "vehicleOrderSubmit") {
+	final Str2ObjConstConverter<VehiclePolicyTips> VEHICLE_POLICY_TIPS	= new Str2ObjConstConverter<VehiclePolicyTips>(1105, "vehiclePolicyTips") {
 		@Override
-		public VehicleOrderSubmit convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehicleOrderSubmit.class);
+		public VehiclePolicyTips convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehiclePolicyTips.class);
 		}
 	};
 	
-	final Str2StrConstConverter BIZ_NO				= new Str2StrConstConverter(1106, "bizNo");
-
+	final Str2StrConstConverter BIZ_NO						= new Str2StrConstConverter(1106, "bizNo");
+	final Str2ObjConstConverter<Set<Integer>> QUOTE_GROUP	= new Str2ObjConstConverter<Set<Integer>>(1107, "quoteGroup") {
+		@Override
+		public Set<Integer> convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<Set<Integer>>(){}.getType());
+		}
+	};
+	final Str2ObjConstConverter<Set<Integer>> INSURE_GROUP	= new Str2ObjConstConverter<Set<Integer>>(1108, "insureGroup") {
+		@Override
+		public Set<Integer> convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<Set<Integer>>(){}.getType());
+		}
+	};
 
 	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearch") {
 		@Override

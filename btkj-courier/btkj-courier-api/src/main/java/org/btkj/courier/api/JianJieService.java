@@ -1,5 +1,6 @@
 package org.btkj.courier.api;
 
+import org.btkj.courier.model.JianJiePoliciesInfo;
 import org.btkj.pojo.entity.User;
 
 /**
@@ -15,4 +16,13 @@ public interface JianJieService {
 	 * @param user
 	 */
 	void addUser(User user);
+	
+	/**
+	 * 获取指定代理公司的所有保单
+	 * 
+	 * @param jianJieId
+	 * @param begin
+	 * @param end
+	 */
+	JianJiePoliciesInfo vehiclePolicies(String jianJieId, String begin, String end); 
 }

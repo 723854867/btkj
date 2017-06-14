@@ -37,14 +37,8 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	
 	@Override
 	public ApplyInfo insert(ApplyInfo model) {
-		redis.invokeLua(UserLuaCmd.APPLY_FLUSH,
-				SerializeUtil.RedisUtil.encode(
-						redisKey,
-						tenantApplyListKey(model.getTid()),
-						userApplyListKey(model.getUid()),
-						model.key(),
-						DateUtils.currentTime(),
-						serial(model)));
+		redis.invokeLua(UserLuaCmd.APPLY_FLUSH, redisKey, tenantApplyListKey(model.getTid()),
+						userApplyListKey(model.getUid()), model.key(), DateUtils.currentTime(), serial(model));
 		return model;
 	}
 	
@@ -95,12 +89,8 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	 * @return
 	 */
 	public ApplyInfo getAndDel(int tid, int uid) {
-		byte[] data = redis.invokeLua(UserLuaCmd.APPLY_GET_AND_DEL, 
-				SerializeUtil.RedisUtil.encode(
-						redisKey,
-						tenantApplyListKey(tid),
-						userApplyListKey(uid),
-						tid + "-" + uid));
+		byte[] data = redis.invokeLua(UserLuaCmd.APPLY_GET_AND_DEL, redisKey,
+						tenantApplyListKey(tid), userApplyListKey(uid), tid + "-" + uid);
 		return null == data ? null : deserial(data);
 	}
 	

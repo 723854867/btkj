@@ -5,7 +5,6 @@ import java.text.MessageFormat;
 import org.btkj.master.MasterLuaCmd;
 import org.btkj.pojo.model.TenantAddApply;
 import org.rapid.data.storage.mapper.RedisProtostuffMemoryMapper;
-import org.rapid.util.common.serializer.SerializeUtil;
 
 public class TenantAddApplyMapper extends RedisProtostuffMemoryMapper<String, TenantAddApply> {
 	
@@ -19,12 +18,8 @@ public class TenantAddApplyMapper extends RedisProtostuffMemoryMapper<String, Te
 
 	@Override
 	public TenantAddApply insert(TenantAddApply model) {
-		return redis.invokeLua(MasterLuaCmd.TENANT_ADD_APPLY_FLUSH, 
-				SerializeUtil.RedisUtil.encode(
-						redisKey, PLATFORM_SET, 
-						_appCommittedSetKey(model.getAppId()),
-						_appProcessedSetKey(model.getAppId()),
-						model.key(), serial(model), System.currentTimeMillis()));
+		return redis.invokeLua(MasterLuaCmd.TENANT_ADD_APPLY_FLUSH, redisKey, PLATFORM_SET, _appCommittedSetKey(model.getAppId()),
+						_appProcessedSetKey(model.getAppId()), model.key(), serial(model), System.currentTimeMillis());
 	}
 	
 	private String _appCommittedSetKey(int appId) { 

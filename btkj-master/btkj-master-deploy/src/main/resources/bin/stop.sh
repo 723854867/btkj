@@ -4,12 +4,7 @@ BIN_DIR=`pwd`
 cd ..
 DEPLOY_DIR=`pwd`
 CONF_DIR=$DEPLOY_DIR/conf
-
 SERVER_NAME=${dubbo.application.name}
-
-if [ -z "$SERVER_NAME" ]; then
-    SERVER_NAME=`hostname`
-fi
 
 PIDS=`ps -ef | grep java | grep "$CONF_DIR" |awk '{print $2}'`
 if [ -z "$PIDS" ]; then

@@ -3,8 +3,7 @@ package org.btkj.vehicle.rule;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.mybatis.entity.City;
 import org.btkj.vehicle.redis.CityMapper;
 import org.rapid.util.common.consts.code.Code;
@@ -21,19 +20,18 @@ public class Rule {
 	/**
 	 * 检查投保规则
 	 * 
-	 * @param submit
+	 * @param order
 	 * @return
 	 */
-	public ICode orderCheck(int cityCode, VehicleOrderSubmit submit) {
-		InsuranceSchema schema = submit.getRenewal().getSchema();
+	public ICode orderCheck(int cityCode, PolicySchema schema) {
 		// 检查起保时间
-		if (null != schema.getCommercial()) {
-			ICode code = _checkRenewalPeriod(cityCode, schema.getCommercial().getStart());
+		if (null != schema.getCommercialStart()) {
+			ICode code = _checkRenewalPeriod(cityCode, schema.getCommercialStart());
 			if (code != Code.OK)
 				return code;
 		}
-		if (null != schema.getCompulsive()) {
-			ICode code = _checkRenewalPeriod(cityCode, schema.getCompulsive().getStart());
+		if (null != schema.getCompulsiveStart()) {
+			ICode code = _checkRenewalPeriod(cityCode, schema.getCompulsiveStart());
 			if (code != Code.OK)
 				return code;
 		}
@@ -51,7 +49,7 @@ public class Rule {
 			return BtkjCode.CITY_UNSUPPORT;
 		int timestamp = Integer.valueOf(time);
 		int maxTime = DateUtils.currentTime() + city.getRenewalPeriod() * 24 * 3600;
-		if (timestamp > maxTime)
+		if (timestamp > maxTime || timestamp < DateUtils.currentTime())
 			return BtkjCode.NOT_IN_RENEWAL_PERIOD;
 		return Code.OK;
 	}

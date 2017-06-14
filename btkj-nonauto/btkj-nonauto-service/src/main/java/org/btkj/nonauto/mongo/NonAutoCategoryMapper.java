@@ -22,7 +22,7 @@ public class NonAutoCategoryMapper extends MongoMapper<Long, NonAutoCategory> {
 	@Override
 	public NonAutoCategory insert(NonAutoCategory model) {
 		if (0 == model.get_id())
-			model.set_id(keyMapper.getAndInc(collection));
+			model.set_id(keyMapper.getAndInc(collection, 1));
 		return super.insert(model);
 	}
 	

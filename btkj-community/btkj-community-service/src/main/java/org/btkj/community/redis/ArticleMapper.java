@@ -88,11 +88,9 @@ public class ArticleMapper extends RedisProtostuffDBMapper<Integer, Article, Art
 	
 	@Override
 	public void flush(Article entity) {
-		redis.invokeLua(LuaCmd.FLUSH_ARTICLE, SerializeUtil.RedisUtil.encode(
-				redisKey, _setKey(entity.getAppId(), SortCol.BROWSE_NUM),
-				_setKey(entity.getAppId(), SortCol.COMMENT_NUM),
-				_setKey(entity.getAppId(), SortCol.TIME), entity.getId(),
-				serial(entity), entity.getCreated()));
+		redis.invokeLua(LuaCmd.FLUSH_ARTICLE, redisKey, _setKey(entity.getAppId(), SortCol.BROWSE_NUM),
+				_setKey(entity.getAppId(), SortCol.COMMENT_NUM), _setKey(entity.getAppId(), SortCol.TIME), entity.getId(),
+				serial(entity), entity.getCreated());
 	}
 	
 	private String _setKey(int appId, SortCol col) {

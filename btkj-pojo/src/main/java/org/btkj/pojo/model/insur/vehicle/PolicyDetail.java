@@ -2,13 +2,18 @@ package org.btkj.pojo.model.insur.vehicle;
 
 import java.io.Serializable;
 
+/**
+ * 保单详情
+ * 
+ * @author ahab
+ */
 public class PolicyDetail implements Serializable {
 
 	private static final long serialVersionUID = 6319047453189138048L;
 
 	private String commercialNo;
-	private String compulsiveNo;
 	private double commercialRate;
+	private String compulsiveNo;
 	private double compulsiveRate;
 
 	public String getCommercialNo() {
@@ -19,6 +24,14 @@ public class PolicyDetail implements Serializable {
 		this.commercialNo = commercialNo;
 	}
 
+	public double getCommercialRate() {
+		return commercialRate;
+	}
+	
+	public void setCommercialRate(double commercialRate) {
+		this.commercialRate = commercialRate;
+	}
+
 	public String getCompulsiveNo() {
 		return compulsiveNo;
 	}
@@ -27,18 +40,10 @@ public class PolicyDetail implements Serializable {
 		this.compulsiveNo = compulsiveNo;
 	}
 
-	public double getCommercialRate() {
-		return commercialRate;
-	}
-
-	public void setCommercialRate(double commercialRate) {
-		this.commercialRate = commercialRate;
-	}
-
 	public double getCompulsiveRate() {
 		return compulsiveRate;
 	}
-
+	
 	public void setCompulsiveRate(double compulsiveRate) {
 		this.compulsiveRate = compulsiveRate;
 	}

@@ -14,6 +14,9 @@ public interface BiHuInsurerDao extends Dao<Integer, BiHuInsurer> {
 	@SelectProvider(type = BiHuInsurerSQLProvider.class, method = "selectByKey")
 	BiHuInsurer selectByKey(Integer key);
 	
+	@SelectProvider(type = BiHuInsurerSQLProvider.class, method = "selectByCode")
+	BiHuInsurer selectByCode(int code);
+	
 	@SelectProvider(type = BiHuInsurerSQLProvider.class, method = "selectWithinKey")
 	List<BiHuInsurer> selectWithinKey(@Param("list") List<Integer> keys);
 }

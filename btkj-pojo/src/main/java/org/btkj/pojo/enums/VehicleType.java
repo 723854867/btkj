@@ -3,7 +3,7 @@ package org.btkj.pojo.enums;
 public enum VehicleType {
 
 	/**
-	 * 客车
+	 * 非营业客车
 	 */
-	PASSENGER;
+	NO_BIZ_PASSENGER;
 }

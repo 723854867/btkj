@@ -13,7 +13,7 @@ public class CommercialInsurance implements Serializable {
 
 	private String start;						// 起保日期
 	private String end;							// 截止日期
-	private double tota;						// 商业险总额
+	private double total;						// 商业险总额
 	private double noLossDiscountRate;			// 无赔款优惠系数
 	private double autoChannelRate;				// 自主渠道系数
 	private double autoUnderwritingRate;		// 自主核保系数
@@ -54,12 +54,12 @@ public class CommercialInsurance implements Serializable {
 		this.end = end;
 	}
 	
-	public double getTota() {
-		return tota;
+	public double getTotal() {
+		return total;
 	}
 	
-	public void setTota(double tota) {
-		this.tota = tota;
+	public void setTotal(double total) {
+		this.total = total;
 	}
 	
 	public double getNoLossDiscountRate() {

@@ -2,11 +2,12 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -40,19 +41,19 @@ public interface VehicleService {
 	 * 下单：包括报价、投保、报价并投保
 	 * 
 	 * @param employeeForm
-	 * @param submit
+	 * @param tips
 	 * @return
 	 */
-	Result<Void> order(EmployeeForm employeeForm, VehicleOrderSubmit submit);
+	Result<Void> order(List<Insurer> quote, List<Insurer> insure, EmployeeForm employeeForm, VehiclePolicyTips tips);
 	
 	/**
 	 * 查看订单详情
 	 * 
 	 * @param employeeForm
-	 * @param license
+	 * @param id
 	 * @return
 	 */
-	Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String license);
+	Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String id);
 	
 	/**
 	 * 获取商户的险企列表

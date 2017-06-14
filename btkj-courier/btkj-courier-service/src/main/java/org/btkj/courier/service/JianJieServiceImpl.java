@@ -13,11 +13,13 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.btkj.courier.api.JianJieService;
+import org.btkj.courier.model.JianJiePoliciesInfo;
 import org.btkj.courier.pojo.JianJieResp;
 import org.btkj.courier.pojo.JianJieUser;
 import org.btkj.pojo.entity.User;
@@ -26,6 +28,8 @@ import org.rapid.util.lang.DateUtils;
 import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.net.http.HttpProxy;
 import org.rapid.util.net.http.handler.AsyncRespHandler;
+import org.rapid.util.net.http.handler.SyncJsonRespHandler;
+import org.rapid.util.net.http.handler.SyncStrRespHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +51,10 @@ public class JianJieServiceImpl implements JianJieService {
 	@Override
 	public void addUser(User user) {
 		try {
-			URIBuilder uriBuilder = _uri(urlUserAdd);
+			URIBuilder uriBuilder = new URIBuilder(urlUserAdd);
+			long timestamp = DateUtils.currentTime();
+			uriBuilder.addParameter("Timestamp", String.valueOf(timestamp));
+			uriBuilder.addParameter("Sign", _userAddSign(timestamp));
 			URI uri = uriBuilder.build();
 			HttpPost request = new HttpPost(uri);
 			request.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE);
@@ -93,18 +100,38 @@ public class JianJieServiceImpl implements JianJieService {
 		}
 	}
 	
-	public void vehiclePolicies() {
-		
+	@Override
+	public JianJiePoliciesInfo vehiclePolicies(String jianJieId, String begin, String end) {
+		try {
+			URIBuilder uriBuilder = new URIBuilder(urlVehiclePolicies);
+			long timestamp = DateUtils.currentTime();
+			uriBuilder.addParameter("Timestamp", String.valueOf(timestamp));
+			uriBuilder.addParameter("Sign", _vehiclePoliciesSign(timestamp, begin, end));
+			uriBuilder.addParameter("CompanyId", "-1");
+			uriBuilder.addParameter("DeptId", jianJieId);
+			uriBuilder.addParameter("TimeStr", begin + end);
+			URI uri = uriBuilder.build();
+			HttpGet request = new HttpGet(uri);
+			request.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE);
+			JianJiePoliciesInfo info = httpProxy.syncRequest(request, SyncJsonRespHandler.build(JianJiePoliciesInfo.class));
+			return info;
+		} catch (URISyntaxException | IOException e) {
+			logger.warn("简捷保单获取失败，简捷ID-{}", jianJieId, e);
+			return null;
+		}
 	}
 	
-	private URIBuilder _uri(String url) throws URISyntaxException {
-		URIBuilder uri = new URIBuilder(url);
-		long timestamp = DateUtils.currentTime();
+	private String _userAddSign(long timestamp) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(timestamp).append("000000").append(timestamp).append("CarCorder");
-		String sign = DigestUtils.md5Hex(builder.toString()).toUpperCase();
-		uri.addParameter("Timestamp", String.valueOf(timestamp));
-		uri.addParameter("Sign", sign);
-		return uri;
+		return DigestUtils.md5Hex(builder.toString());
+	}
+	
+	private String _vehiclePoliciesSign(long timestamp, String begin, String end) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("-1").append(begin).append(end)
+			.delete(16, builder.length())
+			.append(timestamp).append("CarCorder");
+		return DigestUtils.md5Hex(builder.toString());
 	}
 }

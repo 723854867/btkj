@@ -18,6 +18,16 @@ public class BiHuInsurerSQLProvider {
 		}.toString();
 	}
 	
+	public String selectByCode() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Tables.BI_HU_INSURER.name());
+				WHERE("code=#{code}");
+			}
+		}.toString();
+	}
+	
 	public String selectWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from bi_hu_insurer where id in(");

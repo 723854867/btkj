@@ -8,8 +8,8 @@ import com.mongodb.client.model.Filters;
 
 public class RenewalMapper extends MongoMapper<Void, Renewal> {
 	
-	private final String FIELD_VIN					= "vehicle.vin";
-	private final String FIELD_LICENSE				= "vehicle.license";
+	private final String FIELD_VIN					= "tips.vin";
+	private final String FIELD_LICENSE				= "tips.license";
 	
 	public RenewalMapper() {
 		super("renewal");

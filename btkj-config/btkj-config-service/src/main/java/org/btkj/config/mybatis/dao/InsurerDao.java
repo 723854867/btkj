@@ -10,6 +10,10 @@ import org.rapid.data.storage.db.Dao;
 public interface InsurerDao extends Dao<Integer, Insurer> {
 	
 	@Override
+	@SelectProvider(type = InsurerSQLProvider.class, method = "selectByKey")
+	Insurer selectByKey(Integer key);
+	
+	@Override
 	@SelectProvider(type = InsurerSQLProvider.class, method = "selectWithinKey")
 	List<Insurer> selectWithinKey(List<Integer> keys);
 }

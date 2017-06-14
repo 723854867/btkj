@@ -16,6 +16,7 @@ public class TenantSQLProvider {
 				VALUES("app_id", "#{appId}");
 				VALUES("region", "#{region}");
 				VALUES("`team_depth`", "#{teamDepth}");
+				VALUES("`jian_jie_id`", "#{jianJieId}");
 				VALUES("`created`", "#{created}");
 				VALUES("`updated`", "#{updated}");
 			}
@@ -27,6 +28,7 @@ public class TenantSQLProvider {
 			{
 				UPDATE(BtkjTables.TENANT.name());
 				SET("`name`=#{name}");
+				SET("`team_depth`=#{teamDepth}");
 				SET("updated=#{updated}");
 				WHERE("tid=#{tid}");
 			}

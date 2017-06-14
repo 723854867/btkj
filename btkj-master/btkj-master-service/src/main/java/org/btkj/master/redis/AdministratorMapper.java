@@ -5,7 +5,6 @@ import org.btkj.master.persistence.dao.AdministratorDao;
 import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Administrator;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
-import org.rapid.util.common.serializer.SerializeUtil;
 
 public class AdministratorMapper extends RedisProtostuffDBMapper<Integer, Administrator, AdministratorDao> {
 	
@@ -27,8 +26,7 @@ public class AdministratorMapper extends RedisProtostuffDBMapper<Integer, Admini
 	}
 	
 	public Administrator getByToken(String token) { 
-		byte[] data = redis.invokeLua(MasterLuaCmd.ADMINISTRATOR_LOAD_BY_TOKEN, 
-				SerializeUtil.RedisUtil.encode(TOKEN_ADMINISTRATOR, redisKey, token));
+		byte[] data = redis.invokeLua(MasterLuaCmd.ADMINISTRATOR_LOAD_BY_TOKEN, TOKEN_ADMINISTRATOR, redisKey, token);
 		return null == data ? null : deserial(data);
 	}
 }

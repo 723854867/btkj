@@ -15,20 +15,19 @@ import org.btkj.baotu.vehicle.api.BaoTuVehicle;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.PolicyState;
-import org.btkj.pojo.enums.VehicleOrderType;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
-import org.btkj.pojo.model.insur.vehicle.Policy;
 import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
-import org.btkj.pojo.submit.VehicleOrderSubmit;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.model.Lane;
-import org.btkj.vehicle.mongo.OrderMapper;
 import org.btkj.vehicle.mongo.RenewalMapper;
+import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.mybatis.entity.Route;
 import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.rule.Rule;
@@ -47,8 +46,6 @@ public class VehicleServiceImpl implements VehicleService {
 	@Resource
 	private RouteMapper routeMapper;
 	@Resource
-	private OrderMapper orderMapper;
-	@Resource
 	private BiHuVehicle biHuVehicle;			// 壁虎车险
 	@Resource
 	private BaoTuVehicle baoTuVehicle;			// 保途车险
@@ -56,19 +53,21 @@ public class VehicleServiceImpl implements VehicleService {
 	private RenewalMapper renewalMapper;		// 续保缓存
 	@Resource
 	private LeBaoBaVehicle leBaoBaVehicle;		// 乐宝吧车险
+	@Resource
+	private VehicleOrderMapper vehicleOrderMapper;
 	
 	@Override
 	public Result<Renewal> renewal(EmployeeForm employeeForm, String license, String name) {
 		Renewal renewal = renewalMapper.getByLicense(license);
 		if (null != renewal) {
-			if (!renewal.getOwner().getName().equals(name))
+			if (!renewal.getTips().getOwner().getName().equals(name))
 				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
 			return Result.result(renewal);
 		}
 		Result<Renewal> result = biHuVehicle.renewal(employeeForm, license, name);
 		if (result.isSuccess()) {
 			renewalMapper.insert(result.attach());
-			if (!result.attach().getOwner().getName().equals(name))
+			if (!result.attach().getTips().getOwner().getName().equals(name))
 				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
 		}
 		return result;
@@ -78,134 +77,151 @@ public class VehicleServiceImpl implements VehicleService {
 	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, String name) {
 		Renewal renewal = renewalMapper.getByVin(vin);
 		if (null != renewal) {
-			if (!renewal.getOwner().getName().equals(name))
+			if (!renewal.getTips().getOwner().getName().equals(name))
 				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
 			return Result.result(renewal);
 		}
 		Result<Renewal> result = biHuVehicle.renewal(employeeForm, vin, engine, name);
-		if (result.isSuccess())
+		if (result.isSuccess()) {
 			renewalMapper.insert(result.attach());
+			if (!result.attach().getTips().getOwner().getName().equals(name))
+				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
+		}
 		return result;
 	}
 
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, VehicleOrderSubmit submit) {
-		ICode code = rule.orderCheck(employeeForm.getTenant().getRegion(), submit);
+	public Result<Void> order(List<Insurer> quote, List<Insurer> insure, EmployeeForm ef, VehiclePolicyTips tips) {
+		ICode code = rule.orderCheck(ef.getTenant().getRegion(), tips.getSchema());
 		if (code != Code.OK)
 			return Result.result(code);
-		Tenant tenant = employeeForm.getTenant();
+		Tenant tenant = ef.getTenant();
 		List<Route> routes = routeMapper.routes(tenant);
-		Set<Integer> quote = submit.getQuote();
-		Set<Integer> insure = submit.getInsure();
-		Map<Integer, Policy> policies = new HashMap<Integer, Policy>();
+		String batchId = _batchId(tips.getLicense(), ef.getEmployee().getId());
+		Set<Integer> baotuQuote = null;
+		Set<Integer> baotuInsure = null;
 		Set<Integer> bihuQuote = null;
 		Set<Integer> bihuInsure = null;
 		Set<Integer> leBaoBaQuote = null;
 		Set<Integer> leBaoBaInsure = null;
-		for (int insurerId : quote) {
+		Map<Integer, VehicleOrder> orders = new HashMap<Integer, VehicleOrder>();
+		for (Insurer insurer : quote) {
 			Iterator<Route> itr = routes.iterator();
 			boolean find = false;
 			while (itr.hasNext()) {
 				Route route = itr.next();
-				if (route.getInsurerId() != insurerId)
+				if (route.getInsurerId() != insurer.getId())
 					continue;
-				find = true;
 				itr.remove();
+				find = true;
 				Lane lane = Lane.match(route.getLane());
-				Policy policy = new Policy(insurerId, lane.mark(), insure.remove(insurerId) ? VehicleOrderType.QUOTE_AND_INSURE : VehicleOrderType.QUOTE);
-				policies.put(insurerId, policy);
+				boolean flag = false;
+				if (!CollectionUtils.isEmpty(insure)) {
+					Iterator<Insurer> itr1 = insure.iterator();
+					while (itr1.hasNext()) {
+						Insurer temp = itr1.next();
+						if (temp.getId() == insurer.getId()) {
+							itr1.remove();
+							flag = true;
+							break;
+						}
+					}
+				}
+				VehicleOrder order = new VehicleOrder(_orderId(tips.getLicense(), ef.getEmployee().getId(), insurer.getId()), batchId, insurer, lane.mark(), flag, tips);
+				orders.put(insurer.getId(), order);
 				switch (lane) {
 				case BI_HU:
 					if (null == bihuQuote)
 						bihuQuote = new HashSet<Integer>();
-					bihuQuote.add(insurerId);
-					if (policy.getType() == VehicleOrderType.QUOTE_AND_INSURE) {
+					bihuQuote.add(insurer.getId());
+					if (order.isInsure()) {
 						if (null == bihuInsure)
 							bihuInsure = new HashSet<Integer>();
-						bihuInsure.add(insurerId);
+						bihuInsure.add(insurer.getId());
 					}
 					break;
 				case LE_BAO_BA:
 					if (null == leBaoBaQuote)
 						leBaoBaQuote = new HashSet<Integer>();
-					leBaoBaQuote.add(insurerId);
-					if (policy.getType() == VehicleOrderType.QUOTE_AND_INSURE) {
+					leBaoBaQuote.add(insurer.getId());
+					if (order.isInsure()) {
 						if (null == leBaoBaInsure)
 							leBaoBaInsure = new HashSet<Integer>();
-						leBaoBaInsure.add(insurerId);
+						leBaoBaInsure.add(insurer.getId());
 					}
 					break;
 				default:
+					if (null == baotuQuote)
+						baotuQuote = new HashSet<Integer>();
+					baotuQuote.add(insurer.getId());
+					if (order.isInsure()) {
+						if (null == baotuInsure)
+							baotuInsure = new HashSet<Integer>();
+						baotuInsure.add(insurer.getId());
+					}
 					break;
 				}
-				break;
 			}
 			if (!find)
 				return Result.result(BtkjCode.LANE_NOT_SET);
 		}
-		if (null != bihuQuote)
-			quote.removeAll(bihuQuote);
-		if (null != leBaoBaQuote)
-			quote.removeAll(leBaoBaQuote);
-		Renewal renewal = submit.getRenewal();
-		int employeeId = employeeForm.getEmployee().getId();
-		String license = renewal.getVehicle().getLicense();
-		VehicleOrder order = new VehicleOrder(_orderId(license, employeeId), tenant.getTid(), employeeId, policies, renewal.getOwner(), renewal.getVehicle());
-		orderMapper.insert(order);
+		vehicleOrderMapper.deleteBatchOrder(batchId);
+		for (VehicleOrder order : orders.values())
+			vehicleOrderMapper.insert(order);
 		if (null != bihuQuote) {
-			Result<Void> result = biHuVehicle.order(employeeForm, bihuQuote, bihuInsure, renewal);
+			Result<Void> result = biHuVehicle.order(ef, bihuQuote, bihuInsure, tips);
 			if (!result.isSuccess()) 				
-				orderMapper.requestFailure(order, bihuQuote, result.getDesc());
+				vehicleOrderMapper.requestFailure(orders, bihuQuote, result.getDesc());
 		}
 		if (null != leBaoBaQuote) {
-			Result<Void> result = leBaoBaVehicle.order(employeeForm, leBaoBaQuote, leBaoBaInsure, renewal);
+			Result<Void> result = leBaoBaVehicle.order(ef, leBaoBaQuote, leBaoBaInsure, tips);
 			if (!result.isSuccess()) 				
-				orderMapper.requestFailure(order, leBaoBaQuote, result.getDesc());
+				vehicleOrderMapper.requestFailure(orders, leBaoBaQuote, result.getDesc());
 		} 
 		if (!quote.isEmpty()) {
-			Result<Void> result = baoTuVehicle.order(employeeForm, quote, insure, renewal);
+			Result<Void> result = baoTuVehicle.order(ef, baotuQuote, baotuInsure, tips);
 			if (!result.isSuccess()) 				
-				orderMapper.requestFailure(order, quote, result.getDesc());
+				vehicleOrderMapper.requestFailure(orders, baotuQuote, result.getDesc());
 		}
 		return Result.success();
 	}
 	
 	@Override
-	public Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String license) {
-		String id = _orderId(license, employeeForm.getEmployee().getId());
-		VehicleOrder order = orderMapper.getByKey(id);
+	public Result<VehicleOrder> orderInfo(EmployeeForm ef, String id) {
+		VehicleOrder order = vehicleOrderMapper.getByKey(id);
 		if (null == order)
 			return Result.result(BtkjCode.ORDER_NOT_EXIST);
 		
 		// 只需要刷新壁虎的订单即可：保途和乐宝吧的订单状态是异步回调的，壁虎的需要主动请求
-		Map<Integer, Policy> policies = order.getPolicies();
-		for (Policy policy : policies.values()) {
-			if (policy.getLane() != Lane.BI_HU.mark() || policy.getState() != PolicyState.NEW) 
-				continue;
-			Result<InsuranceSchema> result = _quoteResult(employeeForm, license, order, policy);
-			if (result.isSuccess() && policy.getType() == VehicleOrderType.QUOTE_AND_INSURE) {			// 还要获取一次核保信息
-				Result<PolicyDetail> ir = biHuVehicle.insureResult(employeeForm, license, policy.getInsurerId());
-				if (!ir.isSuccess()) {
-					if (ir.getCode() == BtkjCode.INSURE_FAILURE.id()) 
-						orderMapper.insureFailure(order, policy, ir.getDesc());
+		if (order.getLane() == Lane.BI_HU.mark() && order.getState() == PolicyState.NEW) {
+			Result<PolicySchema> result = _quoteResult(ef, order);
+			if (result.isSuccess() && order.isInsure()) {			// 还要获取一次核保信息
+				Result<PolicyDetail> detail = biHuVehicle.insureResult(ef, order.getTips().getLicense(), order.getInsurerId());
+				if (!detail.isSuccess()) {
+					if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) 
+						vehicleOrderMapper.insureFailure(order, detail.getDesc());
 				} else
-					orderMapper.insureSuccess(order, policy, ir.attach(), ir.getDesc());
+					vehicleOrderMapper.insureSuccess(order, detail.attach(), detail.getDesc());
 			}
 		}
 		return Result.result(order);
 	}
 	
-	private Result<InsuranceSchema> _quoteResult(EmployeeForm employeeForm, String license, VehicleOrder order, Policy policy) {
-		Result<InsuranceSchema> result = biHuVehicle.quoteResult(employeeForm, license, policy.getInsurerId());
+	private Result<PolicySchema> _quoteResult(EmployeeForm employeeForm, VehicleOrder order) {
+		Result<PolicySchema> result = biHuVehicle.quoteResult(employeeForm, order.getTips().getLicense(), order.getInsurerId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) 
-				orderMapper.quoteFailure(order, policy, result.getDesc());
+				vehicleOrderMapper.quoteFailure(order, result.getDesc());
 		} else
-			orderMapper.quoteSuccess(order, policy, result.getDesc(), result.attach());
+			vehicleOrderMapper.quoteSuccess(order, result.getDesc(), result.attach());
 		return result;
 	}
 	
-	private String _orderId(String license, int employeeId) {
+	private String _orderId(String license, int employeeId, int insurerId) {
+		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
+	}
+	
+	private String _batchId(String license, int employeeId) {
 		return employeeId + Consts.SYMBOL_UNDERLINE + license;
 	}
 	

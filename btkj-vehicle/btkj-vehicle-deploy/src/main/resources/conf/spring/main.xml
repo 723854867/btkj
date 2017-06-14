@@ -32,7 +32,7 @@
 		<property name="dao" ref="routeDao" />
 	</bean>
 	
-	<bean id="orderMapper" class="org.btkj.vehicle.mongo.OrderMapper">
+	<bean id="vehicleOrderMapper" class="org.btkj.vehicle.mongo.VehicleOrderMapper">
 		<property name="mongo" ref="mongo" />
 	</bean>
 	

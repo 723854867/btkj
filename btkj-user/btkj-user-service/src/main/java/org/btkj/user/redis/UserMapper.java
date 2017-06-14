@@ -17,8 +17,8 @@ import org.btkj.user.mybatis.dao.UserDao;
 import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.converter.binary.Byte2StrConverter;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 
 /**
@@ -60,10 +60,7 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {
-		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, 
-				SerializeUtil.RedisUtil.encode(
-						_mobileUserKey(appId),
-						redisKey, mobile));
+		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, _mobileUserKey(appId), redisKey, mobile);
 		User user = null;
 		if (null == data) {
 			user = dao.selectByMobile(appId, mobile);
@@ -76,11 +73,8 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	
 	public Result<User> lockUserByMobile(int appId, String mobile) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, 
-				SerializeUtil.RedisUtil.encode(
-						_mobileUserKey(appId),
-						redisKey, mobile, USER_LOCK,
-						lockId, Config.getUserLockExpire()));
+		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, _mobileUserKey(appId), redisKey, mobile, USER_LOCK,
+						lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, deserial((byte[]) data));
 		if ((long) data == -2) {
@@ -113,14 +107,8 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	 */
 	public Result<UserModel> lockUserByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN_LOCK, 
-				SerializeUtil.RedisUtil.encode(
-						_tokenUserKey(client), 
-						redisKey, 
-						token, 
-						USER_LOCK, 
-						lockId, 
-						Config.getUserLockExpire()));
+		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
+						USER_LOCK, lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) {
 			User user = deserial((byte[]) data);
 			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
@@ -148,11 +136,7 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	 * @return
 	 */
 	public UserModel getUserByToken(Client client, String token) {
-		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN,
-				SerializeUtil.RedisUtil.encode(
-						_tokenUserKey(client), 
-						redisKey, 
-						token));
+		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
 		if (null == data)
 			return null;
 		User user = deserial(data);
@@ -175,17 +159,12 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	
 	@Override
 	public void flush(User entity) {
-		redis.invokeLua(UserLuaCmd.USER_FLUSH,
-					SerializeUtil.RedisUtil.encode(
-						redisKey,
-						_mobileUserKey(entity.getAppId()),
-						entity.getMobile(),
-						entity.getUid(),
-						serial(entity)));
+		redis.invokeLua(UserLuaCmd.USER_FLUSH, redisKey, _mobileUserKey(entity.getAppId()),
+						entity.getMobile(), entity.getUid(), serial(entity));
 	}
 
 	public int mainTenant(int uid) {
-		String val = redis.hget(USER_MAIN_TENANT, String.valueOf(uid));
+		String val = redis.hget(USER_MAIN_TENANT, String.valueOf(uid), Byte2StrConverter.INSTANCE);
 		return null == val ? 0 : Integer.valueOf(val);
 	}
 	

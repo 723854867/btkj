@@ -1,13 +1,14 @@
 package org.btkj.bihu.vehicle.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.model.insur.vehicle.CommercialInsurance;
-import org.btkj.pojo.model.insur.vehicle.CompulsiveInsurance;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
-import org.btkj.pojo.model.insur.vehicle.InsuranceSchema;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.util.common.message.Result;
 
 public class QuoteResult implements Serializable {
@@ -584,63 +585,65 @@ public class QuoteResult implements Serializable {
 		}
 	}
 	
-	public Result<InsuranceSchema> schema() {
+	public Result<PolicySchema> schema() {
 		if (this.Item.QuoteStatus <= 0)
 			return Result.result(BtkjCode.QUOTE_FAILURE, this.Item.QuoteResult);
-		InsuranceSchema schema = new InsuranceSchema();
-		CompulsiveInsurance cpi = new CompulsiveInsurance();
-		cpi.setStart(this.UserInfo.ForceStartDate);
-		cpi.setEnd(this.UserInfo.ForceExpireDate);
-		cpi.setCompulsory(new Insurance(this.Item.ForceTotal));
-		cpi.setVehicleVesselTax(new Insurance(this.Item.TaxTotal));
-		schema.setCompulsive(cpi);
-		CommercialInsurance cmi = new CommercialInsurance();
-		cmi.setStart(this.UserInfo.BusinessStartDate);
-		cmi.setEnd(this.UserInfo.BusinessExpireDate);
-		cmi.setTota(this.Item.BizTotal);
-		if (null != this.Item.CheSun && this.Item.CheSun.BaoE != 0) 
-			cmi.setDamage(new Insurance(this.Item.CheSun.BaoE, this.Item.CheSun.BaoFei));
-		if (null != this.Item.BuJiMianCheSun && this.Item.BuJiMianCheSun.BaoE != 0)
-			cmi.setDamageOfDeductible(new Insurance(this.Item.BuJiMianCheSun.BaoE, this.Item.BuJiMianCheSun.BaoFei));
-		if (null != this.Item.SanZhe && this.Item.SanZhe.BaoE != 0)
-			cmi.setThird(new Insurance(this.Item.SanZhe.BaoE, this.Item.SanZhe.BaoFei));
-		if (null != this.Item.BuJiMianSanZhe && this.Item.BuJiMianSanZhe.BaoE != 0)
-			cmi.setThirdOfDeductible(new Insurance(this.Item.BuJiMianSanZhe.BaoE, this.Item.BuJiMianSanZhe.BaoFei));
-		if (null != this.Item.SiJi && this.Item.SiJi.BaoE != 0)
-			cmi.setDriver(new Insurance(this.Item.SiJi.BaoE, this.Item.SiJi.BaoFei));
-		if (null != this.Item.BuJiMianSiJi && this.Item.BuJiMianSiJi.BaoE != 0)
-			cmi.setDriverOfDeductible(new Insurance(this.Item.BuJiMianSiJi.BaoE, this.Item.BuJiMianSiJi.BaoFei));
-		if (null != this.Item.ChengKe && this.Item.ChengKe.BaoE != 0)
-			cmi.setPassenger(new Insurance(this.Item.ChengKe.BaoE, this.Item.ChengKe.BaoFei));
-		if (null != this.Item.BuJiMianChengKe && this.Item.BuJiMianChengKe.BaoE != 0)
-			cmi.setPassengerOfDeductible(new Insurance(this.Item.BuJiMianChengKe.BaoE, this.Item.BuJiMianChengKe.BaoFei));
-		if (null != this.Item.DaoQiang && this.Item.DaoQiang.BaoE != 0)
-			cmi.setRobbery(new Insurance(this.Item.DaoQiang.BaoE, this.Item.DaoQiang.BaoFei));
-		if (null != this.Item.BuJiMianDaoQiang && this.Item.BuJiMianDaoQiang.BaoE != 0)
-			cmi.setRobberyOfDeductible(new Insurance(this.Item.BuJiMianDaoQiang.BaoE, this.Item.BuJiMianDaoQiang.BaoFei));
-		if (null != this.Item.BoLi && this.Item.BoLi.BaoE != 0)
-			cmi.setGlass(new Insurance(this.Item.BoLi.BaoE, this.Item.BoLi.BaoFei));
-		if (null != this.Item.ZiRan && this.Item.ZiRan.BaoE != 0)
-			cmi.setAutoFire(new Insurance(this.Item.ZiRan.BaoE, this.Item.ZiRan.BaoFei));
-		if (null != this.Item.BuJiMianZiRan && this.Item.BuJiMianZiRan.BaoE != 0)
-			cmi.setAutoFireOfDeductible(new Insurance(this.Item.BuJiMianZiRan.BaoE, this.Item.BuJiMianZiRan.BaoFei));
-		if (null != this.Item.HuaHen && this.Item.HuaHen.BaoE != 0)
-			cmi.setScratch(new Insurance(this.Item.HuaHen.BaoE, this.Item.HuaHen.BaoFei));
-		if (null != this.Item.BuJiMianHuaHen && this.Item.BuJiMianHuaHen.BaoE != 0)
-			cmi.setScratchOfDeductible(new Insurance(this.Item.BuJiMianHuaHen.BaoE, this.Item.BuJiMianHuaHen.BaoFei));
-		if (null != this.Item.SheShui && this.Item.SheShui.BaoE != 0)
-			cmi.setWading(new Insurance(this.Item.SheShui.BaoE, this.Item.SheShui.BaoFei));
-		if (null != this.Item.BuJiMianSheShui && this.Item.BuJiMianSheShui.BaoE != 0)
-			cmi.setWadingOfDeductible(new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
-		if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0)
-			cmi.setGarageDesignated(new Insurance(this.Item.HcXiuLiChang.BaoE, this.Item.HcXiuLiChang.BaoFei));
-		if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
-			cmi.setUnknownThird(new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
-		schema.setCommercial(cmi);
-		cmi.setNoLossDiscountRate(this.Item.RateFactor1);
-		cmi.setAutoChannelRate(this.Item.RateFactor2);
-		cmi.setAutoUnderwritingRate(this.Item.RateFactor3);
-		cmi.setTrafficViolationRate(this.Item.RateFactor4);
-		return Result.result(schema);
+		org.btkj.pojo.model.insur.vehicle.PolicySchema result = new org.btkj.pojo.model.insur.vehicle.PolicySchema();
+		Map<InsuranceType, Insurance> insurances = new HashMap<InsuranceType, Insurance>();
+		if (null != this.UserInfo) {
+			result.setCompulsiveStart(this.UserInfo.ForceStartDate);
+			result.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
+			result.setCommercialStart(this.UserInfo.BusinessStartDate);
+			result.setCommercialEnd(this.UserInfo.BusinessExpireDate);
+		}
+		if (null != this.Item) {
+			result.setCompulsiveTotal(this.Item.ForceTotal);
+			result.setVehicleVesselTotal(this.Item.TaxTotal);
+			result.setCommericalTotal(this.Item.BizTotal);
+			if (null != this.Item.CheSun && this.Item.CheSun.BaoE != 0) 
+				insurances.put(InsuranceType.DAMAGE, new Insurance(this.Item.CheSun.BaoE, this.Item.CheSun.BaoFei));
+			if (null != this.Item.BuJiMianCheSun && this.Item.BuJiMianCheSun.BaoE != 0)
+				insurances.put(InsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.Item.BuJiMianCheSun.BaoE, this.Item.BuJiMianCheSun.BaoFei));
+			if (null != this.Item.SanZhe && this.Item.SanZhe.BaoE != 0)
+				insurances.put(InsuranceType.THIRD, new Insurance(this.Item.SanZhe.BaoE, this.Item.SanZhe.BaoFei));
+			if (null != this.Item.BuJiMianSanZhe && this.Item.BuJiMianSanZhe.BaoE != 0)
+				insurances.put(InsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSanZhe.BaoE, this.Item.BuJiMianSanZhe.BaoFei));
+			if (null != this.Item.SiJi && this.Item.SiJi.BaoE != 0)
+				insurances.put(InsuranceType.DRIVER, new Insurance(this.Item.SiJi.BaoE, this.Item.SiJi.BaoFei));
+			if (null != this.Item.BuJiMianSiJi && this.Item.BuJiMianSiJi.BaoE != 0)
+				insurances.put(InsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSiJi.BaoE, this.Item.BuJiMianSiJi.BaoFei));
+			if (null != this.Item.ChengKe && this.Item.ChengKe.BaoE != 0)
+				insurances.put(InsuranceType.PASSENGER, new Insurance(this.Item.ChengKe.BaoE, this.Item.ChengKe.BaoFei));
+			if (null != this.Item.BuJiMianChengKe && this.Item.BuJiMianChengKe.BaoE != 0)
+				insurances.put(InsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.Item.BuJiMianChengKe.BaoE, this.Item.BuJiMianChengKe.BaoFei));
+			if (null != this.Item.DaoQiang && this.Item.DaoQiang.BaoE != 0)
+				insurances.put(InsuranceType.ROBBERY, new Insurance(this.Item.DaoQiang.BaoE, this.Item.DaoQiang.BaoFei));
+			if (null != this.Item.BuJiMianDaoQiang && this.Item.BuJiMianDaoQiang.BaoE != 0)
+				insurances.put(InsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.Item.BuJiMianDaoQiang.BaoE, this.Item.BuJiMianDaoQiang.BaoFei));
+			if (null != this.Item.BoLi && this.Item.BoLi.BaoE != 0)
+				insurances.put(InsuranceType.GLASS, new Insurance(this.Item.BoLi.BaoE, this.Item.BoLi.BaoFei));
+			if (null != this.Item.ZiRan && this.Item.ZiRan.BaoE != 0)
+				insurances.put(InsuranceType.AUTO_FIRE, new Insurance(this.Item.ZiRan.BaoE, this.Item.ZiRan.BaoFei));
+			if (null != this.Item.BuJiMianZiRan && this.Item.BuJiMianZiRan.BaoE != 0)
+				insurances.put(InsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.Item.BuJiMianZiRan.BaoE, this.Item.BuJiMianZiRan.BaoFei));
+			if (null != this.Item.HuaHen && this.Item.HuaHen.BaoE != 0)
+				insurances.put(InsuranceType.SCRATCH, new Insurance(this.Item.HuaHen.BaoE, this.Item.HuaHen.BaoFei));
+			if (null != this.Item.BuJiMianHuaHen && this.Item.BuJiMianHuaHen.BaoE != 0)
+				insurances.put(InsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.Item.BuJiMianHuaHen.BaoE, this.Item.BuJiMianHuaHen.BaoFei));
+			if (null != this.Item.SheShui && this.Item.SheShui.BaoE != 0)
+				insurances.put(InsuranceType.WADDING, new Insurance(this.Item.SheShui.BaoE, this.Item.SheShui.BaoFei));
+			if (null != this.Item.BuJiMianSheShui && this.Item.BuJiMianSheShui.BaoE != 0)
+				insurances.put(InsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
+			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0)
+				insurances.put(InsuranceType.GARAGE_DESIGNATED, new Insurance(this.Item.HcXiuLiChang.BaoE, this.Item.HcXiuLiChang.BaoFei));
+			if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
+				insurances.put(InsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
+		}
+		result.setNoLossDiscountRate(this.Item.RateFactor1);
+		result.setAutoChannelRate(this.Item.RateFactor2);
+		result.setAutoUnderwritingRate(this.Item.RateFactor3);
+		result.setTrafficViolationRate(this.Item.RateFactor4);
+		result.setInsurances(insurances.isEmpty() ? null : insurances);
+		return Result.result(result);
 	}
 }

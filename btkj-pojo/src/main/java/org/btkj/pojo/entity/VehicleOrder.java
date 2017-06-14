@@ -1,91 +1,123 @@
 package org.btkj.pojo.entity;
 
-import java.util.Map;
-
-import org.btkj.pojo.model.insur.vehicle.InsurUnit;
-import org.btkj.pojo.model.insur.vehicle.Policy;
-import org.btkj.pojo.model.insur.vehicle.Vehicle;
+import org.btkj.pojo.enums.PolicyState;
+import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.lang.DateUtils;
 
 public class VehicleOrder implements UniqueModel<String> {
 
-	private static final long serialVersionUID = -3393446365795082514L;
+	private static final long serialVersionUID = 2581269614077147352L;
 
+	// 订单基本信息
 	private String _id;
-	private int tid;
-	private int employeeId;
-	private InsurUnit owner;							// 车主信息
-	private Vehicle vehicle;							// 车辆信息
-	private Map<Integer, Policy> policies;
-	private int created;
+	private String batchId;				// 批次号，一次报价可以对多家公司进行报价、多个报价共用一个批次号
+	private int lane; 					// 线路：壁虎、乐宝吧、保途
+	private boolean insure; 			// 是否投保
+	private PolicyState state; 			// 保单状态
+	private String desc; 				// 描述
+	private int created; 				// 创建时间
+
+	// 险企信息
+	private int insurerId; 				// 保险公司ID
+	private String insurerName; 		// 保险公司名字
+	private String insurerIcon; 		// 保险公司Icon
+	
+	private VehiclePolicyTips tips;
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(String _id, int tid, int employeeId, Map<Integer, Policy> policies, InsurUnit owner, Vehicle vehicle) {
-		this._id = _id;
-		this.tid = tid;
-		this.owner = owner;
-		this.vehicle = vehicle;
-		this.policies = policies;
-		this.employeeId = employeeId;
+	public VehicleOrder(String id, String batchId, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
+		this._id = id;
+		this.batchId = batchId;
+		this.insurerId = insurer.getId();
+		this.insurerName = insurer.getName();
+		this.insurerIcon = insurer.getIcon();
+		this.lane = lane;
+		this.insure = insure;
+		this.state = PolicyState.NEW;
+		this.tips = tips;
 		this.created = DateUtils.currentTime();
 	}
 	
 	public String get_id() {
 		return _id;
 	}
-	
+
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	
-	public int getTid() {
-		return tid;
+
+	public int getLane() {
+		return lane;
 	}
-	
-	public void setTid(int tid) {
-		this.tid = tid;
+
+	public void setLane(int lane) {
+		this.lane = lane;
 	}
-	
-	public int getEmployeeId() {
-		return employeeId;
+
+	public boolean isInsure() {
+		return insure;
 	}
-	
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
+
+	public void setInsure(boolean insure) {
+		this.insure = insure;
 	}
-	
-	public InsurUnit getOwner() {
-		return owner;
+
+	public PolicyState getState() {
+		return state;
 	}
-	
-	public void setOwner(InsurUnit owner) {
-		this.owner = owner;
+
+	public void setState(PolicyState state) {
+		this.state = state;
 	}
-	
-	public Vehicle getVehicle() {
-		return vehicle;
+
+	public String getDesc() {
+		return desc;
 	}
-	
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
-	
-	public Map<Integer, Policy> getPolicies() {
-		return policies;
-	}
-	
-	public void setPolicies(Map<Integer, Policy> policies) {
-		this.policies = policies;
-	}
-	
+
 	public int getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(int created) {
 		this.created = created;
+	}
+
+	public int getInsurerId() {
+		return insurerId;
+	}
+
+	public void setInsurerId(int insurerId) {
+		this.insurerId = insurerId;
+	}
+
+	public String getInsurerName() {
+		return insurerName;
+	}
+
+	public void setInsurerName(String insurerName) {
+		this.insurerName = insurerName;
+	}
+
+	public String getInsurerIcon() {
+		return insurerIcon;
+	}
+
+	public void setInsurerIcon(String insurerIcon) {
+		this.insurerIcon = insurerIcon;
+	}
+	
+	public VehiclePolicyTips getTips() {
+		return tips;
+	}
+	
+	public void setTips(VehiclePolicyTips tips) {
+		this.tips = tips;
 	}
 
 	@Override
