@@ -1,15 +1,16 @@
-package org.btkj.master.persistence.provider;
+package org.btkj.master.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class AdministratorSQLProvider {
+	
+	private static final String TABLE				= "administrator";
 
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.ADMINISTRATOR.name());
+				FROM(TABLE);
 				WHERE("id=#{id}");
 			}
 		}.toString();

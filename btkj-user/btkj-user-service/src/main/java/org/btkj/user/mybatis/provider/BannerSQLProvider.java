@@ -1,15 +1,16 @@
 package org.btkj.user.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class BannerSQLProvider {
+	
+	private static final String TABLE			= "banner";
 
-	public String selectByAppIdAndTid() {
+	public String getByAppIdAndTid() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.BANNER.name());
+				FROM(TABLE);
 				WHERE("tid=#{tid}");
 				AND();
 				WHERE("app_id=#{appId}");

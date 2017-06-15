@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.btkj.community.mybatis.dao.QuizDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Quiz;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.QuizSearcher;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class QuizMapper extends RedisProtostuffDBMapper<Integer, Quiz, QuizDao> {
+public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 
 	public QuizMapper() {
-		super(BtkjTables.QUIZ, "hash:db:quiz");
+		super(new ByteProtostuffSerializer<Quiz>(), "hash:db:quiz");
 	}
 	
 	public Result<Pager<Quiz>> quizs(QuizSearcher searcher) {

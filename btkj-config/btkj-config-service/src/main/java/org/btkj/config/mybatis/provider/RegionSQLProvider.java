@@ -1,14 +1,15 @@
 package org.btkj.config.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class RegionSQLProvider {
+	
+	private static final String TABLE			= "region";
 	
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.REGION.name());
+				INSERT_INTO(TABLE);
 				VALUES("id", "#id");
 				VALUES("name", "#name");
 				VALUES("level", "#level");
@@ -18,20 +19,20 @@ public class RegionSQLProvider {
 		}.toString();
 	} 
 
-	public String selectAll() {
+	public String getAll() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.REGION.name());
+				FROM(TABLE);
 			}
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.REGION.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();

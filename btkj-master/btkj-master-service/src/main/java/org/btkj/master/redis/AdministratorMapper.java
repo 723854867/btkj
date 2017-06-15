@@ -1,18 +1,18 @@
 package org.btkj.master.redis;
 
-import org.btkj.master.MasterLuaCmd;
-import org.btkj.master.persistence.dao.AdministratorDao;
-import org.btkj.pojo.BtkjTables;
+import org.btkj.master.LuaCmd;
+import org.btkj.master.mybatis.dao.AdministratorDao;
 import org.btkj.pojo.entity.Administrator;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class AdministratorMapper extends RedisProtostuffDBMapper<Integer, Administrator, AdministratorDao> {
+public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, AdministratorDao> {
 	
 	private String ADMINISTRATOR_TOKEN		= "hash:administrator:token";
 	private String TOKEN_ADMINISTRATOR		= "hash:token:administrator"; 
 
 	public AdministratorMapper() {
-		super(BtkjTables.ADMINISTRATOR, "hash:db:administrator");
+		super(new ByteProtostuffSerializer<Administrator>(), "hash:db:administrator");
 	}
 	
 	public String tokenReplace(Administrator administrator) {
@@ -26,7 +26,7 @@ public class AdministratorMapper extends RedisProtostuffDBMapper<Integer, Admini
 	}
 	
 	public Administrator getByToken(String token) { 
-		byte[] data = redis.invokeLua(MasterLuaCmd.ADMINISTRATOR_LOAD_BY_TOKEN, TOKEN_ADMINISTRATOR, redisKey, token);
-		return null == data ? null : deserial(data);
+		byte[] data = redis.invokeLua(LuaCmd.ADMINISTRATOR_LOAD_BY_TOKEN, TOKEN_ADMINISTRATOR, redisKey, token);
+		return null == data ? null : serializer.antiConvet(data);
 	}
 }

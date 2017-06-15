@@ -28,10 +28,10 @@ public class NonAutoProductMapper extends MongoMapper<Long, NonAutoProduct> {
 	}
 	
 	@Override
-	public NonAutoProduct insert(NonAutoProduct model) {
+	public void insert(NonAutoProduct model) {
 		if (0 == model.get_id())
 			model.set_id(keyMapper.getAndInc(collection, 1));
-		return super.insert(model);
+		super.insert(model);
 	}
 	
 	@SuppressWarnings("unchecked")

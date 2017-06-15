@@ -48,7 +48,8 @@ public class LoginServiceImpl implements LoginService {
 		// 用户不存在则创建用户
 		if (ru.getCode() == Code.USER_NOT_EXIST.id()) {
 			try {
-				user = userMapper.insert(EntityGenerator.newUser(app.getId(), mobile));
+				user = EntityGenerator.newUser(app.getId(), mobile);
+				userMapper.insert(user);
 				lockId = userMapper.lockUser(user.getUid());
 				if (null == lockId)
 					return Result.result(Code.USER_STATUS_CHANGED);

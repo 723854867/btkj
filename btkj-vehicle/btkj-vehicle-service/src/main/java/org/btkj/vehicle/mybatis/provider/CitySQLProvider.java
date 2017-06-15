@@ -5,7 +5,7 @@ import org.btkj.vehicle.mybatis.Tables;
 
 public class CitySQLProvider {
 
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");

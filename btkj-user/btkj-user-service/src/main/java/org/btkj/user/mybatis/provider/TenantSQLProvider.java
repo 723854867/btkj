@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class TenantSQLProvider {
+	
+	private static final String TABLE			= "tenant";
 	
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.TENANT.name());
+				INSERT_INTO(TABLE);
 				VALUES("`name`", "#{name}");
 				VALUES("app_id", "#{appId}");
 				VALUES("region", "#{region}");
@@ -26,7 +27,7 @@ public class TenantSQLProvider {
 	public String update() {
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.TENANT.name());
+				UPDATE(TABLE);
 				SET("`name`=#{name}");
 				SET("`team_depth`=#{teamDepth}");
 				SET("updated=#{updated}");
@@ -35,26 +36,26 @@ public class TenantSQLProvider {
 		}.toString();
 	}
 	
-	public String selectAll() {
+	public String getAll() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.TENANT.name());
+				FROM(TABLE);
 			}
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.TENANT.name());
+				FROM(TABLE);
 				WHERE("tid=#{key}");
 			}
 		}.toString();
 	}
 	
-	public String selectWithinKey(Map<String, List<Integer>> params) {
+	public String getWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from tenant where tid in(");
 		for (int key : keys)
@@ -68,7 +69,7 @@ public class TenantSQLProvider {
 		return new SQL() {
 			{
 				SELECT("COUNT(*)");
-				FROM(BtkjTables.TENANT.name());
+				FROM(TABLE);
 				WHERE("app_id=#{appId}");
 			}
 		}.toString();

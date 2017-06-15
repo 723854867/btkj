@@ -5,7 +5,7 @@ import org.btkj.vehicle.mybatis.Tables;
 
 public class RouteSQLProvider {
 
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
@@ -15,7 +15,7 @@ public class RouteSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByTid() {
+	public String getByTid() {
 		return new SQL() {
 			{
 				SELECT("*");

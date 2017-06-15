@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.statistics.model.TeamEmployee;
 import org.btkj.statistics.mybatis.entity.Performance;
 import org.btkj.statistics.mybatis.provider.PerformanceSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface PerformanceDao extends Dao<Long, Performance> {
+public interface PerformanceDao extends DBMapper<Long, Performance> {
 	
 	/**
 	 * 团队列表

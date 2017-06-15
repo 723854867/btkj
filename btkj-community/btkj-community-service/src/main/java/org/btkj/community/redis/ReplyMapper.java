@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.btkj.community.mybatis.dao.ReplyDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Reply;
 import org.btkj.pojo.model.Pager;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class ReplyMapper extends RedisProtostuffDBMapper<Integer, Reply, ReplyDao> {
+public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 
 	public ReplyMapper() {
-		super(BtkjTables.REPLY, "hash:db:reply");
+		super(new ByteProtostuffSerializer<Reply>(), "hash:db:reply");
 	}
 	
 	public Result<Pager<Reply>> replies(int quizId, int page, int pageSize) {

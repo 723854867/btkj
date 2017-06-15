@@ -89,7 +89,7 @@ public class Tx {
 	@Transactional
 	public void articlesAdd(App app, String title, String icon, String link) { 
 		if (app.getMaxArticlesCount() > 0) {
-			List<Article> list = articleDao.selectByAppIdForUpdate(app.getId());
+			List<Article> list = articleDao.getByAppIdForUpdate(app.getId());
 			if (list.size() >= app.getMaxArticlesCount())
 				throw new BusinessException(BtkjCode.ARTICLE_NUM_MAXIMUM);
 		}

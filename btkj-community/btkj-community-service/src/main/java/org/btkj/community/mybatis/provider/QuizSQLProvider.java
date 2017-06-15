@@ -1,17 +1,18 @@
 package org.btkj.community.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.enums.SortType;
 import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.QuizSearcher.SortCol;
 
 public class QuizSQLProvider {
 	
+	private static final String TABLE				= "quiz";
+	
 	public String insert() {
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.QUIZ.name());
+				INSERT_INTO(TABLE);
 				VALUES("app_id", "#{appId}");
 				VALUES("reply_num", "#{replyNum}");
 				VALUES("uid", "#{uid}");
@@ -22,11 +23,11 @@ public class QuizSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.QUIZ.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();
@@ -35,7 +36,7 @@ public class QuizSQLProvider {
 	public String update() { 
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.QUIZ.name());
+				UPDATE(TABLE);
 				SET("browse_num=#{browseNum}");
 				SET("reply_num=#{replyNum}");
 				WHERE("id=#{id}");

@@ -12,12 +12,7 @@ public interface BtkjConsts {
 	 */
 	final int EMPLOYEE_ROOT_LEVEL				= 1;
 	
-	/**
-	 * redis 缓存控制器的 key
-	 * 
-	 */
-	final String CACHE_CONTROLLER						= "set:cache:controller";
-	final String HASH_CACHE_CONTROLLER					= "hash:memory:cache_controller";
+	final String CACHE_CONTROLLER_KEY			= "hash:memory:cache_controller";
 	
 	interface RESULT {
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);

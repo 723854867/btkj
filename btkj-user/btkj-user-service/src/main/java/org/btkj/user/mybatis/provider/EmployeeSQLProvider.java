@@ -1,14 +1,15 @@
 package org.btkj.user.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class EmployeeSQLProvider {
+	
+	private static final String TABLE			= "employee";
 
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.EMPLOYEE.name());
+				INSERT_INTO(TABLE);
 				VALUES("uid", "#{uid}");
 				VALUES("tid", "#{tid}");
 				VALUES("name", "#{name}");
@@ -32,11 +33,11 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();
@@ -45,7 +46,7 @@ public class EmployeeSQLProvider {
 	public String update() {
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.EMPLOYEE.name());
+				UPDATE(TABLE);
 				SET("`pay_type`=#{payType}");
 				SET("`state`=#{state}");
 				SET("`tag_mod`=#{tagMod}");
@@ -58,11 +59,11 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByTidAndUid() {
+	public String getByTidAndUid() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
+				FROM(TABLE);
 				WHERE("tid=#{tid}");
 				AND();
 				WHERE("uid=#{uid}");
@@ -70,20 +71,20 @@ public class EmployeeSQLProvider {
 		}.toString();
 	}
 	
-	public String selectAll() {
+	public String getAll() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
+				FROM(TABLE);
 			}
 		}.toString();
 	}
 	
-	public String selectByUid() {
+	public String getByUid() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.EMPLOYEE.name());
+				FROM(TABLE);
 				WHERE("uid=#{uid}");
 			}
 		}.toString();
@@ -93,7 +94,7 @@ public class EmployeeSQLProvider {
 		return "SELECT * FROM employee WHERE (parent_id=#{id} AND `left`>#{left} AND `right`<#{right} AND `level`<=#{level}) OR id=#{id}";
 	}
 	
-	public String selectByTidForUpdate() {
+	public String getByTidForUpdate() {
 		return "select * from employee where `tid`=#{tid} for update";
 	}
 	

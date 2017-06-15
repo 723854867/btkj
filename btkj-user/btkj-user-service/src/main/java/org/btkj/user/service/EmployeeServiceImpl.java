@@ -33,8 +33,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher) {
-		return employeeMapper.employeeList(searcher);
+	public Result<Pager<EmployeeListInfo>> employees(EmployeeSearcher searcher) {
+		return employeeMapper.employees(searcher);
 	}
 	
 	@Override

@@ -7,12 +7,10 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.info.AppListInfo;
-import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.user.mybatis.provider.AppSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface AppDao extends Dao<Integer, App> {
+public interface AppDao extends DBMapper<Integer, App> {
 	
 	@Override
 	@InsertProvider(type = AppSQLProvider.class, method = "insert")
@@ -23,18 +21,13 @@ public interface AppDao extends Dao<Integer, App> {
 	@UpdateProvider(type = AppSQLProvider.class, method = "update")
 	void update(App entity);
 
-	@Override
-	@SelectProvider(type = AppSQLProvider.class, method = "selectAll")
-	List<App> selectAll();
+	@SelectProvider(type = AppSQLProvider.class, method = "getAll")
+	List<App> getAll();
 	
 	@Override
-	@SelectProvider(type = AppSQLProvider.class, method = "selectByKey")
-	App selectByKey(Integer key);
+	@SelectProvider(type = AppSQLProvider.class, method = "getByKey")
+	App getByKey(Integer key);
 	
-	@SelectProvider(type = AppSQLProvider.class, method = "selectByKeyForUpdate")
-	App selectByKeyForUpdate(Integer id);
-	
-	int searchCount(AppSearcher searcher);
-	
-	List<AppListInfo> search(AppSearcher searcher);
+	@SelectProvider(type = AppSQLProvider.class, method = "getByKeyForUpdate")
+	App getByKeyForUpdate(Integer id);
 }

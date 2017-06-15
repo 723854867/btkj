@@ -16,10 +16,8 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
-import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -57,11 +55,6 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeService employeeService;
 	@Resource
 	private NonAutoBindMapper nonAutoBindMapper;
-
-	@Override
-	public Result<Pager<TenantListPc>> tenantList(TenantSearcher searcher) {
-		return tenantMapper.tenantList(searcher);
-	}
 
 	@Override
 	public Tenant getTenantById(int tid) {

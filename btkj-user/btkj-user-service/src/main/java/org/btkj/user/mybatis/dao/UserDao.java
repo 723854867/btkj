@@ -8,12 +8,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.UserListInfo;
-import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.mybatis.provider.UserSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface UserDao extends Dao<Integer, User> {
+public interface UserDao extends DBMapper<Integer, User> {
 	
 	@Override
 	@InsertProvider(type = UserSQLProvider.class, method = "insert")
@@ -25,17 +23,13 @@ public interface UserDao extends Dao<Integer, User> {
 	void update(User entity);
 	
 	@Override
-	@SelectProvider(type = UserSQLProvider.class, method = "selectByKey")
-	User selectByKey(Integer key);
+	@SelectProvider(type = UserSQLProvider.class, method = "getByKey")
+	User getByKey(Integer key);
 
-	@SelectProvider(type = UserSQLProvider.class, method = "selectByMobile")
-	User selectByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
+	@SelectProvider(type = UserSQLProvider.class, method = "getByMobile")
+	User getByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
 	
 	@Override
-	@SelectProvider(type = UserSQLProvider.class, method = "selectWithinKey")
-	List<User> selectWithinKey(@Param("list") List<Integer> keys);
-	
-	int searchCount(UserSearcher searcher);
-	
-	List<UserListInfo> search(UserSearcher searcher);
+	@SelectProvider(type = UserSQLProvider.class, method = "getWithinKey")
+	List<User> getWithinKey(@Param("list") List<Integer> keys);
 }

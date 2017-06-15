@@ -2,16 +2,17 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.user.UserLuaCmd;
-import org.rapid.data.storage.mapper.RedisProtostuffMemoryMapper;
+import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.serializer.SerializeUtil;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
+import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.DateUtils;
 import org.springframework.stereotype.Component;
 
@@ -22,13 +23,13 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> {
+public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	
-	private static final String USER_APPLY_LIST			= "set:user:{0}:apply:list";		// 用户的申请列表
-	private static final String TENANT_APPLY_LIST		= "set:tenant:{0}:apply:list";		// 代理公司的申请列表
+	private final String USER_LIST				= "zset:user:{0}:apply:list";		// 用户的申请列表
+	private final String TENANT_LIST			= "zset:tenant:{0}:apply:list";		// 代理公司的申请列表
 	
 	public ApplyMapper() {
-		super("hash:memory:apply");
+		super(new ByteProtostuffSerializer<ApplyInfo>(), "hash:memory:apply");
 	}
 
 	public ApplyInfo getByTidAndUid(int tid, int uid) {
@@ -36,10 +37,8 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	}
 	
 	@Override
-	public ApplyInfo insert(ApplyInfo model) {
-		redis.invokeLua(UserLuaCmd.APPLY_FLUSH, redisKey, tenantApplyListKey(model.getTid()),
-						userApplyListKey(model.getUid()), model.key(), DateUtils.currentTime(), serial(model));
-		return model;
+	public void insert(ApplyInfo model) {
+		redis.hzset(redisKey, model.key(), serializer.convert(model), DateUtils.currentTime(), _tenantListKey(model.getTid()), _userListKey(model.getTid()));
 	}
 	
 	/**
@@ -48,20 +47,14 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	 * @param pager
 	 * @param tid
 	 */
-	@SuppressWarnings("unchecked")
 	public Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize) {
-		List<byte[]> list = redis.hpaging(
-				SerializeUtil.RedisUtil.encode(tenantApplyListKey(tid)), 
-				SerializeUtil.RedisUtil.encode(redisKey), 
-				SerializeUtil.RedisUtil.encode(page), 
-				SerializeUtil.RedisUtil.encode(pageSize),
-				SerializeUtil.RedisUtil.encode(RedisConsts.OPTION_ZREVRANGE));
+		List<byte[]> list = redis.hpaging(_tenantListKey(tid), redisKey, page, pageSize,RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return Result.result(Pager.EMPLTY);
 		int total = Integer.valueOf(new String(list.remove(0)));
 		List<ApplyInfo> applies = new ArrayList<ApplyInfo>();
 		for (byte[] data : list)
-			applies.add(deserial(data));
+			applies.add(serializer.antiConvet(data));
 		return Result.result(new Pager<ApplyInfo>(total, applies));
 	}
 	
@@ -72,13 +65,13 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	 * @return
 	 */
 	public List<Integer> applyListTids(User user) {
-		List<byte[]> list = redis.hmgetByZsetKeys(
-				SerializeUtil.RedisUtil.encode(userApplyListKey(user.getUid())), 
-				SerializeUtil.RedisUtil.encode(redisKey), 0, -1);
-		List<Integer> set = new ArrayList<Integer>();
+		List<byte[]> list = redis.hzget(_userListKey(user.getUid()), redisKey, 0, -1);
+		if (CollectionUtils.isEmpty(list))
+			return Collections.EMPTY_LIST;
+		List<Integer> l = new ArrayList<Integer>(list.size());
 		for (byte[] buffer : list) 
-			set.add(deserial(buffer).getTid());
-		return set;
+			l.add(serializer.antiConvet(buffer).getTid());
+		return l;
 	}
 	
 	/**
@@ -89,16 +82,15 @@ public class ApplyMapper extends RedisProtostuffMemoryMapper<String, ApplyInfo> 
 	 * @return
 	 */
 	public ApplyInfo getAndDel(int tid, int uid) {
-		byte[] data = redis.invokeLua(UserLuaCmd.APPLY_GET_AND_DEL, redisKey,
-						tenantApplyListKey(tid), userApplyListKey(uid), tid + "-" + uid);
-		return null == data ? null : deserial(data);
+		byte[] data = redis.hzgetDel(redisKey, tid + "-" + uid, _tenantListKey(tid), _userListKey(uid));
+		return null == data ? null : serializer.antiConvet(data);
 	}
 	
-	public static final String userApplyListKey(int uid) { 
-		return MessageFormat.format(USER_APPLY_LIST, String.valueOf(uid));
+	private String _userListKey(int uid) { 
+		return MessageFormat.format(USER_LIST, String.valueOf(uid));
 	}
 	
-	public static final String tenantApplyListKey(int tid) { 
-		return MessageFormat.format(TENANT_APPLY_LIST, String.valueOf(tid));
+	private String _tenantListKey(int tid) { 
+		return MessageFormat.format(TENANT_LIST, String.valueOf(tid));
 	}
 }

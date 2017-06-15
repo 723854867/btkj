@@ -10,18 +10,11 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
-import org.btkj.pojo.info.TenantListPc;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.TenantSearcher;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
-	
-	/**
-	 * 获取平台Tenant用户列表
-	 */
-	Result<Pager<TenantListPc>> tenantList(TenantSearcher searcher);
 	
 	/**
 	 * 通过 tid 获取 tenant

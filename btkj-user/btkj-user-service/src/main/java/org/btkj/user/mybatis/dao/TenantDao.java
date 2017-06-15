@@ -8,12 +8,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.info.TenantListPc;
-import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.user.mybatis.provider.TenantSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface TenantDao extends Dao<Integer, Tenant> {
+public interface TenantDao extends DBMapper<Integer, Tenant> {
 	
 	@Override
 	@InsertProvider(type = TenantSQLProvider.class, method = "insert")
@@ -24,25 +22,20 @@ public interface TenantDao extends Dao<Integer, Tenant> {
 	@UpdateProvider(type = TenantSQLProvider.class, method = "update")
 	void update(Tenant entity);
 	
-	@Override
-	@SelectProvider(type = TenantSQLProvider.class, method = "selectAll")
-	List<Tenant> selectAll();
+	@SelectProvider(type = TenantSQLProvider.class, method = "getAll")
+	List<Tenant> getAll();
 	
 	@Override
-	@SelectProvider(type = TenantSQLProvider.class, method = "selectByKey")
-	Tenant selectByKey(Integer key);
+	@SelectProvider(type = TenantSQLProvider.class, method = "getByKey")
+	Tenant getByKey(Integer key);
 	
 	@Override
-	@SelectProvider(type = TenantSQLProvider.class, method = "selectWithinKey")
-	List<Tenant> selectWithinKey(@Param("list") List<Integer> keys);
+	@SelectProvider(type = TenantSQLProvider.class, method = "getWithinKey")
+	List<Tenant> getWithinKey(@Param("list") List<Integer> keys);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppId")
 	int countByAppId(int appId);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppIdForUpdate")
 	int countByAppIdForUpdate(int appId);
-	
-	int searchCount(TenantSearcher searcher);
-	
-	List<TenantListPc> search(TenantSearcher searcher);
 }

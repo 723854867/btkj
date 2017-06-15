@@ -8,7 +8,7 @@ import org.btkj.bihu.vehicle.mybatis.Tables;
 
 public class BiHuInsurerSQLProvider {
 
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
@@ -18,7 +18,7 @@ public class BiHuInsurerSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByCode() {
+	public String getByCode() {
 		return new SQL() {
 			{
 				SELECT("*");
@@ -28,7 +28,7 @@ public class BiHuInsurerSQLProvider {
 		}.toString();
 	}
 	
-	public String selectWithinKey(Map<String, List<Integer>> params) {
+	public String getWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from bi_hu_insurer where id in(");
 		for (int key : keys)

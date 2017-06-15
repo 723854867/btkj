@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ArticleSQLProvider;
 import org.btkj.pojo.entity.Article;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface ArticleDao extends Dao<Integer, Article> {
+public interface ArticleDao extends DBMapper<Integer, Article> {
 	
 	@Override
 	@InsertProvider(type = ArticleSQLProvider.class, method = "insert")
@@ -17,15 +17,14 @@ public interface ArticleDao extends Dao<Integer, Article> {
 	void insert(Article entity);
 	
 	@Override
-	@SelectProvider(type = ArticleSQLProvider.class, method = "selectByKey")
-	Article selectByKey(Integer key);
+	@SelectProvider(type = ArticleSQLProvider.class, method = "getByKey")
+	Article getByKey(Integer key);
 	
-	@SelectProvider(type = ArticleSQLProvider.class, method = "selectByAppIdForUpdate")
-	List<Article> selectByAppIdForUpdate(int appId);
+	@SelectProvider(type = ArticleSQLProvider.class, method = "getByAppIdForUpdate")
+	List<Article> getByAppIdForUpdate(int appId);
 	
-	@Override
-	@SelectProvider(type = ArticleSQLProvider.class, method = "selectAll")
-	List<Article> selectAll();
+	@SelectProvider(type = ArticleSQLProvider.class, method = "getAll")
+	List<Article> getAll();
 	
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "update")

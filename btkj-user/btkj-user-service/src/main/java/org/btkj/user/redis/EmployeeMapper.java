@@ -7,22 +7,22 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.mybatis.dao.EmployeeDao;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
  * 
  * @author ahab
  */
-public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, EmployeeDao> {
+public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDao> {
 	
 	private String LIST							= "set:employee:list:{0}";	// 用户 employee 列表：主要是用来记录有多少个代理公司
 	private String LIST_CONTROLLER				= "employee：controller:{0}";
@@ -31,11 +31,11 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
-		super(BtkjTables.EMPLOYEE, "hash:db:employee");
+		super(new ByteProtostuffSerializer<Employee>(), "hash:db:employee");
 	}
 	
 	@Override
-	public Employee insert(Employee entity) {
+	public void insert(Employee entity) {
 		throw new UnsupportedOperationException("EmployeeMapper unsupported insert immediately!");
 	}
 	
@@ -45,19 +45,16 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	 * @param pager
 	 * @param tid
 	 */
-	@SuppressWarnings("unchecked")
-	public Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher) {
+	public Result<Pager<EmployeeListInfo>> employees(EmployeeSearcher searcher) {
 		int total = dao.searchCount(searcher);
 		if (0 == total)
 			return Result.result(Pager.EMPLTY);
 		searcher.calculate(total);
-		List<EmployeeListInfo> employees = dao.search(searcher);
-		Pager<EmployeeListInfo> pager = new Pager<EmployeeListInfo>(searcher.getTotal(), employees);
-		return Result.result(pager);
+		return Result.result(new Pager<EmployeeListInfo>(searcher.getTotal(), dao.search(searcher)));
 	}
 	
 	public boolean isEmployee(int tid, int uid) {
-		return null != dao.selectByTidAndUid(tid, uid);
+		return null != dao.getByTidAndUid(tid, uid);
 	} 
 	
 	/**
@@ -67,14 +64,14 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	 */
 	public List<Employee> ownedTenants(User user) {
 		List<Employee> employees = null;
-		List<byte[]> list = redis.protostuffCacheListLoadWithData(BtkjConsts.CACHE_CONTROLLER, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
+		List<byte[]> list = redis.hsgetIfMarked(BtkjConsts.CACHE_CONTROLLER_KEY, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
 		if (null != list) {
 			employees = new ArrayList<Employee>();
 			for (byte[] buffer : list) 
-				employees.add(deserial(buffer));
+				employees.add(serializer.antiConvet(buffer));
 		} else {
-			employees = dao.selectByUid(user.getUid());
-			redis.protostuffCacheListFlush(BtkjConsts.CACHE_CONTROLLER, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees);
+			employees = dao.getByUid(user.getUid());
+			redis.hssetMark(BtkjConsts.CACHE_CONTROLLER_KEY, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees, serializer);
 		}
 		return employees;
 	}
@@ -91,7 +88,7 @@ public class EmployeeMapper extends RedisProtostuffDBMapper<Integer, Employee, E
 	
 	@Override
 	public void flush(Employee entity) {
-		redis.protostuffCacheFlush(redisKey, entity, _listKey(entity.getUid()));
+		redis.hsset(redisKey, entity, _listKey(entity.getUid()));
 	}
 	
 	public String _listKey(int uid) { 

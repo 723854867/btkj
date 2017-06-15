@@ -18,7 +18,7 @@ public interface EmployeeService {
 	 * 
 	 * @return
 	 */
-	Result<Pager<EmployeeListInfo>> employeeList(EmployeeSearcher searcher);
+	Result<Pager<EmployeeListInfo>> employees(EmployeeSearcher searcher);
 	 
 	/**
 	 * 我的团队

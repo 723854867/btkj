@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class UserSQLProvider {
+	
+	private static final String TABLE			= "user";
 	
 	public String insert() {
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.USER.name());
+				INSERT_INTO(TABLE);
 				VALUES("app_id", "#{appId}");
 				VALUES("mobile", "#{mobile}");
 				VALUES("pwd", "#{pwd}");
@@ -26,7 +27,7 @@ public class UserSQLProvider {
 	public String update() { 
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.USER.name());
+				UPDATE(TABLE);
 				SET("pwd=#{pwd}");
 				SET("name=#{name}");
 				SET("avatar=#{avatar}");
@@ -41,11 +42,11 @@ public class UserSQLProvider {
 		}.toString();
 	}
 
-	public String selectByMobile() {
+	public String getByMobile() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.USER.name());
+				FROM(TABLE);
 				WHERE("app_id=#{appId}");
 				AND();
 				WHERE("mobile=#{mobile}");
@@ -53,17 +54,17 @@ public class UserSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.USER.name());
+				FROM(TABLE);
 				WHERE("uid=#{key}");
 			}
 		}.toString();
 	}
 	
-	public String selectWithinKey(Map<String, List<Integer>> params) {
+	public String getWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from user where uid in(");
 		for (int key : keys)

@@ -1,7 +1,6 @@
 package org.btkj.test.persistence.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class UserSQLProvider {
 
@@ -20,7 +19,7 @@ public class UserSQLProvider {
 	public String insert() {
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.USER.name());
+				INSERT_INTO("user");
 				VALUES("app_id", "#{appId}");
 				VALUES("mobile", "#{mobile}");
 				VALUES("identity", "#{identity}");

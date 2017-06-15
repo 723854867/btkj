@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.QuizSQLProvider;
 import org.btkj.pojo.entity.Quiz;
 import org.btkj.pojo.submit.QuizSearcher;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface QuizDao extends Dao<Integer, Quiz> {
+public interface QuizDao extends DBMapper<Integer, Quiz> {
 	
 	@Override
 	@InsertProvider(type = QuizSQLProvider.class, method = "insert")
@@ -18,8 +18,8 @@ public interface QuizDao extends Dao<Integer, Quiz> {
 	void insert(Quiz entity);
 	
 	@Override
-	@SelectProvider(type = QuizSQLProvider.class, method = "selectByKey")
-	Quiz selectByKey(Integer key);
+	@SelectProvider(type = QuizSQLProvider.class, method = "getByKey")
+	Quiz getByKey(Integer key);
 	
 	@Override
 	@SelectProvider(type = QuizSQLProvider.class, method = "update")

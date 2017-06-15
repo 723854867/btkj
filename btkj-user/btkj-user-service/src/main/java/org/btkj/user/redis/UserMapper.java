@@ -1,24 +1,19 @@
 package org.btkj.user.redis;
 
 import java.text.MessageFormat;
-import java.util.List;
 
-import org.btkj.pojo.BtkjTables;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.UserListInfo;
-import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
-import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.user.Config;
-import org.btkj.user.UserLuaCmd;
+import org.btkj.user.LuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.dao.UserDao;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
-import org.rapid.util.common.converter.binary.Byte2StrConverter;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 
 /**
@@ -26,59 +21,42 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  * 对应关系 hash:{0}:token:user - 用户 id 和用户 token 对应关系 hash:{0}:user:token - 用户
  * token 和用户 id 对应关系
  */
-public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> {
+public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 
-	private String USER_LOCK 					= "string:user:{0}:lock"; 			
+	private final String USER_LOCK 						= "string:user:{0}:lock"; 			
 
-	private String MOBILE_USER 					= "hash:app:{0}:mobile:user"; 
-	private String TOKEN_USER 					= "hash:token:{0}:user"; 
-	private String USER_TOKEN 					= "hash:user:{0}:token"; 
-	private String USER_MAIN_TENANT				= "hash:user:main:tenant";			// 用户的默认显示的代理商
+	private final String MOBILE_USER 					= "hash:app:{0}:mobile:user"; 
+	private final String TOKEN_USER 					= "hash:token:{0}:user"; 
+	private final String USER_TOKEN 					= "hash:user:{0}:token"; 
+	private final String USER_MAIN_TENANT				= "hash:user:main:tenant";			// 用户的默认显示的代理商
 
 	private AppMapper appMapper;
 	private DistributeLock distributeLock;
 
 	public UserMapper() {
-		super(BtkjTables.USER, "hash:db:user");
-	}
-	
-	/**
-	 * 分页获取用户信息
-	 * 
-	 * @param pager
-	 * @param tid
-	 */
-	@SuppressWarnings("unchecked")
-	public Result<Pager<UserListInfo>> userList(UserSearcher searcher) {
-		int total = dao.searchCount(searcher);
-		if (0 == total)
-			return Result.result(Pager.EMPLTY);
-		searcher.calculate(total);
-		List<UserListInfo> users = dao.search(searcher);
-		Pager<UserListInfo> pager = new Pager<UserListInfo>(searcher.getTotal(), users);
-		return Result.result(pager);
+		super(new ByteProtostuffSerializer<User>(), "hash:db:user");
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {
-		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE, _mobileUserKey(appId), redisKey, mobile);
+		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE, _mobileUserKey(appId), redisKey, mobile);
 		User user = null;
 		if (null == data) {
-			user = dao.selectByMobile(appId, mobile);
+			user = dao.getByMobile(appId, mobile);
 			if (null != user)
 				flush(user);
 		} else
-			user = deserial(data);
+			user = serializer.antiConvet(data);
 		return user;
 	}
 	
 	public Result<User> lockUserByMobile(int appId, String mobile) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_MOBILE_LOCK, _mobileUserKey(appId), redisKey, mobile, USER_LOCK,
+		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE_LOCK, _mobileUserKey(appId), redisKey, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) 
-			return Result.result(Code.OK, lockId, deserial((byte[]) data));
+			return Result.result(Code.OK, lockId, serializer.antiConvet((byte[]) data));
 		if ((long) data == -2) {
-			User user = dao.selectByMobile(appId, mobile);
+			User user = dao.getByMobile(appId, mobile);
 			if (null == user)
 				return Result.result(Code.USER_NOT_EXIST);
 			flush(user);
@@ -107,10 +85,10 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	 */
 	public Result<UserModel> lockUserByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		Object data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
+		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
 						USER_LOCK, lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) {
-			User user = deserial((byte[]) data);
+			User user = serializer.antiConvet((byte[]) data);
 			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
 		}
 		if ((long) data == 1)
@@ -136,10 +114,10 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	 * @return
 	 */
 	public UserModel getUserByToken(Client client, String token) {
-		byte[] data = redis.invokeLua(UserLuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
+		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
 		if (null == data)
 			return null;
-		User user = deserial(data);
+		User user = serializer.antiConvet(data);
 		return new UserModel(appMapper.getByKey(user.getAppId()), user);
 	}
 
@@ -159,13 +137,13 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 	
 	@Override
 	public void flush(User entity) {
-		redis.invokeLua(UserLuaCmd.USER_FLUSH, redisKey, _mobileUserKey(entity.getAppId()),
-						entity.getMobile(), entity.getUid(), serial(entity));
+		redis.invokeLua(LuaCmd.USER_FLUSH, redisKey, _mobileUserKey(entity.getAppId()),
+						entity.getMobile(), entity.getUid(), serializer.convert(entity));
 	}
 
 	public int mainTenant(int uid) {
-		String val = redis.hget(USER_MAIN_TENANT, String.valueOf(uid), Byte2StrConverter.INSTANCE);
-		return null == val ? 0 : Integer.valueOf(val);
+		byte[] val = redis.hget(USER_MAIN_TENANT, String.valueOf(uid));
+		return null == val ? 0 : Integer.valueOf(String.valueOf(val));
 	}
 	
 	public void setAppMapper(AppMapper appMapper) {
@@ -176,19 +154,19 @@ public class UserMapper extends RedisProtostuffDBMapper<Integer, User, UserDao> 
 		this.distributeLock = distributeLock;
 	}
 
-	public String _userLockKey(int uid) {
+	private String _userLockKey(int uid) {
 		return MessageFormat.format(USER_LOCK, String.valueOf(uid));
 	}
 
-	public String _userTokenKey(Client client) {
+	private String _userTokenKey(Client client) {
 		return MessageFormat.format(USER_TOKEN, String.valueOf(client.name().toLowerCase()));
 	}
 
-	public String _tokenUserKey(Client client) {
+	private String _tokenUserKey(Client client) {
 		return MessageFormat.format(TOKEN_USER, String.valueOf(client.name().toLowerCase()));
 	}
 
-	public String _mobileUserKey(int appId) {
+	private String _mobileUserKey(int appId) {
 		return MessageFormat.format(MOBILE_USER, String.valueOf(appId));
 	}
 }

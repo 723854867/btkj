@@ -1,13 +1,13 @@
 package org.btkj.vehicle.redis;
 
-import org.btkj.vehicle.mybatis.Tables;
 import org.btkj.vehicle.mybatis.dao.CityDao;
 import org.btkj.vehicle.mybatis.entity.City;
-import org.rapid.data.storage.mapper.RedisProtostuffDBMapper;
+import org.rapid.data.storage.mapper.RedisDBAdapter;
+import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class CityMapper extends RedisProtostuffDBMapper<Integer, City, CityDao> {
+public class CityMapper extends RedisDBAdapter<Integer, City, CityDao> {
 
 	public CityMapper() {
-		super(Tables.CITY, "hash:db:city");
+		super(new ByteProtostuffSerializer<City>(), "hash:db:city");
 	}
 }

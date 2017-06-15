@@ -1,14 +1,15 @@
 package org.btkj.community.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class ArticleSQLProvider {
+	
+	private static final String TABLE			= "article";
 	
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.ARTICLE.name());
+				INSERT_INTO(TABLE);
 				VALUES("app_id", "#{appId}");
 				VALUES("title", "#{title}");
 				VALUES("browse_num", "#{browseNum}");
@@ -20,25 +21,25 @@ public class ArticleSQLProvider {
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.ARTICLE.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();
 	}
 	
-	public String selectByAppIdForUpdate() {
+	public String getByAppIdForUpdate() {
 		return "SELECT * FROM article WHERE app_id=#{appId} FOR UPDATE";
 	}
 
-	public String selectAll() {
+	public String getAll() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.ARTICLE.name());
+				FROM(TABLE);
 			}
 		}.toString();
 	};
@@ -46,7 +47,7 @@ public class ArticleSQLProvider {
 	public String update() { 
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.ARTICLE.name());
+				UPDATE(TABLE);
 				SET("browse_num=#{browseNum}");
 				SET("comment_num=#{commentNum}");
 				WHERE("id=#{id}");

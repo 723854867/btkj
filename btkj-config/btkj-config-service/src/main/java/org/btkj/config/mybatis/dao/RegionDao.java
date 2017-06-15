@@ -6,19 +6,18 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.RegionSQLProvider;
 import org.btkj.pojo.entity.Region;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface RegionDao extends Dao<Integer, Region> {
+public interface RegionDao extends DBMapper<Integer, Region> {
 	
 	@Override
 	@InsertProvider(type = RegionSQLProvider.class, method = "insert")
 	void insert(Region entity);
 
-	@Override
-	@SelectProvider(type = RegionSQLProvider.class, method = "selectAll")
-	List<Region> selectAll();
+	@SelectProvider(type = RegionSQLProvider.class, method = "getAll")
+	List<Region> getAll();
 	
 	@Override
-	@SelectProvider(type = RegionSQLProvider.class, method = "selectByKey")
-	Region selectByKey(Integer key);
+	@SelectProvider(type = RegionSQLProvider.class, method = "getByKey")
+	Region getByKey(Integer key);
 }

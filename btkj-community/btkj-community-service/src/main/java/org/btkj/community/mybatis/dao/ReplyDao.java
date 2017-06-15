@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ReplySQLProvider;
 import org.btkj.pojo.entity.Reply;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface ReplyDao extends Dao<Integer, Reply> {
+public interface ReplyDao extends DBMapper<Integer, Reply> {
 	
 	@Override
 	@InsertProvider(type = ReplySQLProvider.class, method = "insert")

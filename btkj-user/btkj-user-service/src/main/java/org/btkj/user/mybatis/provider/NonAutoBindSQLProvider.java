@@ -1,15 +1,16 @@
 package org.btkj.user.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class NonAutoBindSQLProvider {
+	
+	private static final String TABLE			= "non_auto_bind";
 
-	public String selectByTid() {
+	public String getByTid() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.NON_AUTO_BIND.name());
+				FROM(TABLE);
 				WHERE("tid=#{tid}");
 			}
 		}.toString();

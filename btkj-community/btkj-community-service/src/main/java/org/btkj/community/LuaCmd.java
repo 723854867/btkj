@@ -5,7 +5,7 @@ import org.rapid.data.storage.redis.ILuaCmd;
 public enum LuaCmd implements ILuaCmd {
 	
 	/**
-	 * 咨询分页
+	 * 咨询缓存刷新
 	 */
 	FLUSH_ARTICLE {
 		@Override

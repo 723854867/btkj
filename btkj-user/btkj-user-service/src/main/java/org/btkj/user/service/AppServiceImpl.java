@@ -4,18 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.AppListInfo;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.mybatis.EntityGenerator;
@@ -25,7 +21,6 @@ import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
 @Service("appService")
@@ -43,21 +38,6 @@ public class AppServiceImpl implements AppService {
 	private EmployeeMapper employeeMapper;
 	@Resource
 	private EmployeeService employeeService;
-	
-	@Override
-	public Result<Void> appEdit(App app) {
-		App a = appMapper.getByKey(app.getId());
-		if(null == a)
-			return Result.result(BtkjCode.APP_NOT_EXIST); 
-			app.setUpdated(DateUtils.currentTime());
-			appMapper.update(app);
-		 return Result.success();
-	}
-	
-	@Override
-	public Result<Pager<AppListInfo>> appList(AppSearcher searcher) {
-		return appMapper.appList(searcher);
-	}
 	
 	@Override
 	public App getAppById(int appId) {

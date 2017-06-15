@@ -21,6 +21,6 @@ public class EMPLOYEE_LIST extends TenantAction {
 	protected Result<Pager<EmployeeListInfo>> execute(Request request, EmployeeForm employeeForm) {
 		EmployeeSearcher searcher = request.getParam(Params.EMPLOYEE_SEARCHER);
 		searcher.setTid(employeeForm.getTenant().getTid());
-		return employeeService.employeeList(searcher);
+		return employeeService.employees(searcher);
 	}
 }

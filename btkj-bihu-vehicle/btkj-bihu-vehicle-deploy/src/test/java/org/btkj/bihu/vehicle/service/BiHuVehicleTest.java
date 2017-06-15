@@ -12,7 +12,6 @@ import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
@@ -122,7 +121,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
-		Result<PolicyDetail> result = biHuVehicle.insureResult(form, "浙H0155R", 4);
+//		Result<PolicyDetail> result = biHuVehicle.insureResult(form, "浙H0155R", 4);
 		TimeUnit.HOURS.sleep(1);
 	}
 }

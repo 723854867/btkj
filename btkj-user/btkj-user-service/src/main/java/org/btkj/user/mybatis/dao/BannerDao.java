@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.user.mybatis.provider.BannerSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface BannerDao extends Dao<Integer, Banner> {
+public interface BannerDao extends DBMapper<Integer, Banner> {
 	
 	/**
 	 * 通过 appId 和  tid 获取 banner
@@ -17,6 +17,6 @@ public interface BannerDao extends Dao<Integer, Banner> {
 	 * @param tid
 	 * @return
 	 */
-	@SelectProvider(type = BannerSQLProvider.class, method = "selectByAppIdAndTid")
-	List<Banner> selectByAppIdAndTid(@Param("appId") int appId, @Param("tid") int tid);
+	@SelectProvider(type = BannerSQLProvider.class, method = "getByAppIdAndTid")
+	List<Banner> getByAppIdAndTid(@Param("appId") int appId, @Param("tid") int tid);
 }

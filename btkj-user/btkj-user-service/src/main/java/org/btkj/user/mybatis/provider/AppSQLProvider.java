@@ -1,14 +1,15 @@
 package org.btkj.user.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.BtkjTables;
 
 public class AppSQLProvider {
+	
+	private static final String TABLE			= "app";
 	
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(BtkjTables.APP.name());
+				INSERT_INTO(TABLE);
 				VALUES("`name`", "#{name}");
 				VALUES("region", "#{region}");
 				VALUES("`mod`", "#{mod}");
@@ -24,7 +25,7 @@ public class AppSQLProvider {
 	public String update() {
 		return new SQL() {
 			{
-				UPDATE(BtkjTables.APP.name());
+				UPDATE(TABLE);
 				SET("`name`=#{name}");
 				SET("updated=#{updated}");
 				SET("state=#{state}");
@@ -38,26 +39,26 @@ public class AppSQLProvider {
 		}.toString();
 	}
 
-	public String selectAll() {
+	public String getAll() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.APP.name());
+				FROM(TABLE);
 			}
 		}.toString();
 	}
 	
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(BtkjTables.APP.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();
 	}
 	
-	public String selectByKeyForUpdate() {
+	public String getByKeyForUpdate() {
 		return "select * from app where id=#{id} for update";
 	}
 }

@@ -5,7 +5,7 @@ import org.btkj.bihu.vehicle.mybatis.Tables;
 
 public class TenantConfigSQLProvider {
 
-	public String selectByKey() {
+	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");

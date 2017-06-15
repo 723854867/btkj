@@ -6,6 +6,8 @@
 						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	
 	<!--  <dubbo:monitor protocol="registry"/> -->
+	<dubbo:consumer check="false" />
+	
 	<dubbo:provider timeout="${dubbo.timeout}" retries="${dubbo.retries}" />
 	
 	<dubbo:application name="${dubbo.application.name}" owner="btkj" />
@@ -16,8 +18,6 @@
 	
 	<dubbo:service interface="org.btkj.vehicle.api.VehicleService" ref="vehicleService" loadbalance="${dubbo.service.loadbalance}"/>
 
-	<dubbo:consumer check="false" />
-	
 	<dubbo:reference id="biHuVehicle" interface="org.btkj.bihu.vehicle.api.BiHuVehicle" />
 	
 	<dubbo:reference id="leBaoBaVehicle" interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle"/>

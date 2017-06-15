@@ -11,9 +11,9 @@ import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.mybatis.provider.EmployeeSQLProvider;
-import org.rapid.data.storage.db.Dao;
+import org.rapid.data.storage.mapper.DBMapper;
 
-public interface EmployeeDao extends Dao<Integer, Employee> {
+public interface EmployeeDao extends DBMapper<Integer, Employee> {
 	
 	@Override
 	@InsertProvider(type = EmployeeSQLProvider.class, method = "insert")
@@ -21,25 +21,24 @@ public interface EmployeeDao extends Dao<Integer, Employee> {
 	void insert(Employee entity);
 	
 	@Override
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByKey")
-	Employee selectByKey(Integer key);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByKey")
+	Employee getByKey(Integer key);
 	
 	@Override
 	@UpdateProvider(type = EmployeeSQLProvider.class, method = "update")
 	void update(Employee entity);
 	
-	@Override
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectAll")
-	List<Employee> selectAll();
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getAll")
+	List<Employee> getAll();
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidAndUid")
-	Employee selectByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidAndUid")
+	Employee getByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByUid")
-	List<Employee> selectByUid(@Param("uid") int uid);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByUid")
+	List<Employee> getByUid(@Param("uid") int uid);
 	
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "selectByTidForUpdate")
-	List<Employee> selectByTidForUpdate(int tid);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidForUpdate")
+	List<Employee> getByTidForUpdate(int tid);
 	
 	/**
 	 * 团队：自己和 level - 自己的 level 范围内的成员

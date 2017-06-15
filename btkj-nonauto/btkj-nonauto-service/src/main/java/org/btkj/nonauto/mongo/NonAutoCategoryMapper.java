@@ -20,10 +20,10 @@ public class NonAutoCategoryMapper extends MongoMapper<Long, NonAutoCategory> {
 	}
 	
 	@Override
-	public NonAutoCategory insert(NonAutoCategory model) {
+	public void insert(NonAutoCategory model) {
 		if (0 == model.get_id())
 			model.set_id(keyMapper.getAndInc(collection, 1));
-		return super.insert(model);
+		super.insert(model);
 	}
 	
 	public NonAutoCategory getByName(String name) {
