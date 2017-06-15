@@ -17,7 +17,6 @@ public class GlobalConfigContainer {
 	private static String configPath;
 	private static GlobalConfig globalConfig;
 	
-	@SuppressWarnings("unused")
 	private void init() {
 		if (!zkClient.exists(configPath))
 			zkClient.create(configPath, null, CreateMode.PERSISTENT);

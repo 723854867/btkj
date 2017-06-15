@@ -29,7 +29,6 @@ import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.net.http.HttpProxy;
 import org.rapid.util.net.http.handler.AsyncRespHandler;
 import org.rapid.util.net.http.handler.SyncJsonRespHandler;
-import org.rapid.util.net.http.handler.SyncStrRespHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

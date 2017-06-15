@@ -8,6 +8,8 @@ import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.model.Pager;
+import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -61,4 +63,11 @@ public interface VehicleService {
 	 * @return
 	 */
 	List<Integer> insurers(Tenant tenant);
+	
+	/**
+	 * 保单分页
+	 * 
+	 * @return
+	 */
+	Pager<VehicleOrder> orders(EmployeeForm ef, VehicleOrderSearcher searcher);
 }

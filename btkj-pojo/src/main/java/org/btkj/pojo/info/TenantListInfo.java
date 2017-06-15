@@ -9,7 +9,6 @@ import java.util.Map;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 
-@SuppressWarnings("unused")
 public class TenantListInfo implements Serializable {
 
 	private static final long serialVersionUID = -7737232217221256836L;

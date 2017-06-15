@@ -10,10 +10,7 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.enums.AppState;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.enums.EmployeeState;
-import org.btkj.pojo.enums.TenantState;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
@@ -23,6 +20,7 @@ import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
+import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -180,34 +178,8 @@ public interface Params {
 		};
 	};
 	
-	final Str2ObjConstConverter<EmployeeState> EMPLOYEE_STATE	= new Str2ObjConstConverter<EmployeeState>(1027, "employeeState") {
-		public EmployeeState convert(String value) throws ConstConvertFailureException {
-			EmployeeState state = EmployeeState.match(Integer.valueOf(value));
-			if (null == state)
-				throw ConstConvertFailureException.errorConstException(this);
-			return state;
-		};
-	};
 	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1028, "identityFace");
 	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1029, "identityBack");
-	
-	final Str2ObjConstConverter<AppState> APP_STATE	= new Str2ObjConstConverter<AppState>(1030, "appState") {
-		public AppState convert(String value) throws ConstConvertFailureException {
-			AppState state = AppState.match(Integer.valueOf(value));
-			if (null == state)
-				throw ConstConvertFailureException.errorConstException(this);
-			return state;
-		};
-	};
-	
-	final Str2ObjConstConverter<TenantState> TENANT_STATE = new Str2ObjConstConverter<TenantState>(1031, "tenantState") {
-		public TenantState convert(String value) throws ConstConvertFailureException {
-			TenantState state = TenantState.match(Integer.valueOf(value));
-			if (null == state)
-				throw ConstConvertFailureException.errorConstException(this);
-			return state;
-		};
-	};
 	
 	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1032, "icon");
 	final Str2StrConstConverter LINK					= new Str2StrConstConverter(1033, "link");
@@ -225,6 +197,13 @@ public interface Params {
 	};
 	
 	final Str2StrConstConverter ORDER_ID						= new Str2StrConstConverter(1037, "orderId");
+	
+	final Str2ObjConstConverter<VehicleOrderSearcher> VEHICLE_ORDER_SEARCHER = new Str2ObjConstConverter<VehicleOrderSearcher>(1038, "vehicleOrderSearcher") {
+		@Override
+		public VehicleOrderSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehicleOrderSearcher.class);
+		}
+	};
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

@@ -31,4 +31,12 @@ public enum PolicyState {
 	 * 系统错误
 	 */
 	SYSTEM_ERROR;
+	
+	public static final PolicyState match(String state) { 
+		for (PolicyState temp : PolicyState.values()) {
+			if (temp.name().equals(state))
+				return temp;
+		}
+		return null;
+	}
 }

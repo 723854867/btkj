@@ -22,10 +22,12 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.PolicyState;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.model.Lane;
+import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.mybatis.entity.Route;
@@ -210,19 +212,17 @@ public class VehicleServiceImpl implements VehicleService {
 	private Result<PolicySchema> _quoteResult(EmployeeForm employeeForm, VehicleOrder order) {
 		Result<PolicySchema> result = biHuVehicle.quoteResult(employeeForm, order.getTips().getLicense(), order.getInsurerId());
 		if (!result.isSuccess()) {
-			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) 
+			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) {
 				vehicleOrderMapper.quoteFailure(order, result.getDesc());
-		} else
+				order.setState(PolicyState.QUOTE_FAILURE);
+				order.setDesc(result.getDesc());
+			}
+		} else {
 			vehicleOrderMapper.quoteSuccess(order, result.getDesc(), result.attach());
+			order.getTips().setSchema(result.attach());
+			order.setDesc(result.getDesc());
+		}
 		return result;
-	}
-	
-	private String _orderId(String license, int employeeId, int insurerId) {
-		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
-	}
-	
-	private String _batchId(String license, int employeeId) {
-		return employeeId + Consts.SYMBOL_UNDERLINE + license;
 	}
 	
 	@Override
@@ -235,5 +235,18 @@ public class VehicleServiceImpl implements VehicleService {
 		for (Route route : list)
 			l.add(route.getInsurerId());
 		return l;
+	}
+	
+	@Override
+	public Pager<VehicleOrder> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
+		return vehicleOrderMapper.list(ef, searcher);
+	}
+	
+	private String _orderId(String license, int employeeId, int insurerId) {
+		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
+	}
+	
+	private String _batchId(String license, int employeeId) {
+		return employeeId + Consts.SYMBOL_UNDERLINE + license;
 	}
 }

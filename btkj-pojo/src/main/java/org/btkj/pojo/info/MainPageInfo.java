@@ -14,7 +14,6 @@ import org.btkj.pojo.entity.User;
  * 
  * @author ahab
  */
-@SuppressWarnings("unused")
 public class MainPageInfo implements Serializable {
 
 	private static final long serialVersionUID = -5659542831623635191L;
