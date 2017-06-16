@@ -3,6 +3,8 @@ package org.btkj.common.action;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
@@ -25,8 +27,11 @@ import org.rapid.util.lang.CollectionUtils;
  */
 public class INSURER_LIST extends UserAction {
 	
+	@Resource
 	private TenantService tenantService;
+	@Resource
 	private ConfigService configService;
+	@Resource
 	private VehicleService vehicleService;
 	
 	@Override

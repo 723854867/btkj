@@ -119,13 +119,7 @@ public class ORDER extends TenantAction {
 		String cmi = schema.getCommercialStart();
 		if (null == cpi && null == cmi)
 			return false;
-		// 交强险必须指定起保日期且日期的长度为10位
-		if (null != cpi && !Validator.isUnixTimestamp(cpi))	
-			return false;
 		if (null != cmi) {
-			// 必须要有起保日期且日期的长度为10位, 确保至少保了一种基本险
-			if (!Validator.isUnixTimestamp(cmi))
-				return false;
 			Map<InsuranceType, Insurance> map = schema.getInsurances();
 			if (null == map)
 				return false;

@@ -1,5 +1,6 @@
 package org.btkj.pojo.entity;
 
+import org.btkj.pojo.comparable.Comparable;
 import org.rapid.util.common.model.UniqueModel;
 
 public class VehicleCoefficient implements UniqueModel<Long> {
@@ -14,6 +15,16 @@ public class VehicleCoefficient implements UniqueModel<Long> {
 	private String comparableValue;
 	private int created;
 	private int updated;
+	
+	public VehicleCoefficient() {}
+	
+	public VehicleCoefficient(long id, int categoryId, String name, Comparable comparable, String comparableValue) {
+		this.id = id;
+		this.categoryId = categoryId;
+		this.name = name;
+		this.comparable = comparable.name();
+		this.comparableValue = comparableValue;
+	}
 	
 	public long getId() {
 		return id;

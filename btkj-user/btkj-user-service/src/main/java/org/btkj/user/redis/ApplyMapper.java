@@ -38,7 +38,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	
 	@Override
 	public void insert(ApplyInfo model) {
-		redis.hzset(redisKey, model.key(), serializer.convert(model), DateUtils.currentTime(), _tenantListKey(model.getTid()), _userListKey(model.getTid()));
+		redis.hzset(redisKey, model.key(), serializer.convert(model), DateUtils.currentTime(), _tenantListKey(model.getTid()), _userListKey(model.getUid()));
 	}
 	
 	/**

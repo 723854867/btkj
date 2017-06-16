@@ -47,7 +47,7 @@ public class Rule {
 		City city = cityMapper.getByKey(cityCode);
 		if (null == city)
 			return BtkjCode.CITY_UNSUPPORT;
-		int timestamp = Integer.valueOf(time);
+		int timestamp = (int) (DateUtils.getTime(time, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000);
 		int maxTime = DateUtils.currentTime() + city.getRenewalPeriod() * 24 * 3600;
 		if (timestamp > maxTime || timestamp < DateUtils.currentTime())
 			return BtkjCode.NOT_IN_RENEWAL_PERIOD;

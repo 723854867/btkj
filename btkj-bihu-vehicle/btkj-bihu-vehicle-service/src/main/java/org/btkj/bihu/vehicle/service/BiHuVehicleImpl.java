@@ -44,6 +44,7 @@ import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
 import org.rapid.util.lang.StringUtils;
 import org.rapid.util.net.http.HttpProxy;
 import org.slf4j.Logger;
@@ -236,16 +237,16 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		if (null != schema.getCommercialStart()) {
 			if (null != schema.getCompulsiveStart()) {
 				params.setForceTax(String.valueOf(1));
-				params.setForceTimeStamp(schema.getCompulsiveStart());
+				params.setForceTimeStamp(String.valueOf((int) (DateUtils.getTime(schema.getCompulsiveStart(), DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000)));
 			} else
 				params.setForceTax(String.valueOf(0));
-			params.setBizTimeStamp(schema.getCommercialStart());
+			params.setBizTimeStamp(String.valueOf((int) (DateUtils.getTime(schema.getCommercialStart(), DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000)));
 		} else {
 			if (null == schema.getCompulsiveStart())
 				throw new IllegalArgumentException("compulsory and commercial insur must choose one!");
 			else {
 				params.setForceTax(String.valueOf(2));
-				params.setForceTimeStamp(schema.getCompulsiveStart());
+				params.setForceTimeStamp(String.valueOf((int) (DateUtils.getTime(schema.getCompulsiveStart(), DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000)));
 			}
 		}
 		
