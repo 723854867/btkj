@@ -2,16 +2,16 @@ package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class CitySQLProvider {
+public class VehicleCoefficientSQLProvider {
 	
-	private static final String TABLE			= "city";
+	private static final String TABLE			= "vehicle_coefficient";
 
-	public String getByKey() {
+	public String getByTid() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("code=#{key}");
+				WHERE("tid=#{tid}");
 			}
 		}.toString();
 	}

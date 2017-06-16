@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.bihu.vehicle.mybatis.Tables;
 
 public class BiHuInsurerSQLProvider {
+	
+	private static final String TABLE			= "bi_hu_insurer";
 
 	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.BI_HU_INSURER.name());
+				FROM(TABLE);
 				WHERE("id=#{key}");
 			}
 		}.toString();
@@ -22,7 +23,7 @@ public class BiHuInsurerSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.BI_HU_INSURER.name());
+				FROM(TABLE);
 				WHERE("code=#{code}");
 			}
 		}.toString();

@@ -88,7 +88,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	
 	@Override
 	public void flush(Employee entity) {
-		redis.hsset(redisKey, entity, _listKey(entity.getUid()));
+		redis.hsset(redisKey, entity.key(), serializer.convert(entity), _listKey(entity.getUid()));
 	}
 	
 	public String _listKey(int uid) { 

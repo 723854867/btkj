@@ -40,4 +40,10 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="cityDao" />
 	</bean>
+	
+	
+	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="vehicleCoefficientDao" />
+	</bean>
 </beans>

@@ -9,6 +9,7 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
+import org.btkj.vehicle.model.VehicleOrderListInfo;
 import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.rapid.util.common.message.Result;
 
@@ -69,5 +70,5 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrder> orders(EmployeeForm ef, VehicleOrderSearcher searcher);
+	Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher);
 }

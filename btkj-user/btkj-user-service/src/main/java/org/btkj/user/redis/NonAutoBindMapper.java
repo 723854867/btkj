@@ -40,6 +40,11 @@ public class NonAutoBindMapper extends RedisDBAdapter<Integer, NonAutoBind, NonA
 		return binds;
 	}
 	
+	@Override
+	public void flush(NonAutoBind model) {
+		redis.hsset(redisKey, model.key(), serializer.convert(model), _listControllerKey(model.getTid()));
+	}
+	
 	public String _listKey(int tid) { 
 		return MessageFormat.format(LIST, String.valueOf(tid));
 	}

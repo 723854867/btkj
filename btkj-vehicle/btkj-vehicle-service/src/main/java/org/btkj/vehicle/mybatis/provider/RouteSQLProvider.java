@@ -1,15 +1,16 @@
 package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.vehicle.mybatis.Tables;
 
 public class RouteSQLProvider {
+	
+	private static final String TABLE			= "route";
 
 	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.ROUTE.name());
+				FROM(TABLE);
 				WHERE("key=#{key}");
 			}
 		}.toString();
@@ -19,7 +20,7 @@ public class RouteSQLProvider {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.ROUTE.name());
+				FROM(TABLE);
 				WHERE("tid=#{tid}");
 			}
 		}.toString();

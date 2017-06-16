@@ -1,15 +1,16 @@
 package org.btkj.bihu.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.bihu.vehicle.mybatis.Tables;
 
 public class TenantConfigSQLProvider {
+	
+	private static final String TABLE			= "tenant_config";
 
 	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.TENANT_CONFIG.name());
+				FROM(TABLE);
 				WHERE("tid=#{tid}");
 			}
 		}.toString();

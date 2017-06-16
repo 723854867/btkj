@@ -1,6 +1,11 @@
 package org.btkj.pojo.comparable;
 
 public enum Comparable {
+	
+	/**
+	 * 等于
+	 */
+	EQUAL,
 
 	/**
 	 * 小于

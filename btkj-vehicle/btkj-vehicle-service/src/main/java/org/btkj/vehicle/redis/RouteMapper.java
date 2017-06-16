@@ -36,7 +36,7 @@ public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	
 	@Override
 	public void flush(Route entity) {
-		redis.hsset(redisKey, entity, _listKey(entity.getTid()));
+		redis.hsset(redisKey, entity.key(), serializer.convert(entity), _listKey(entity.getTid()));
 	}
 	
 	public String _listKey(int tid) { 

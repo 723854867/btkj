@@ -27,6 +27,7 @@ import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.model.Lane;
+import org.btkj.vehicle.model.VehicleOrderListInfo;
 import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
@@ -238,7 +239,7 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Pager<VehicleOrder> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
+	public Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
 		return vehicleOrderMapper.list(ef, searcher);
 	}
 	

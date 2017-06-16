@@ -29,7 +29,6 @@ public class INSURER_LIST extends UserAction {
 	private ConfigService configService;
 	private VehicleService vehicleService;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Result<List<Insurer>> execute(Request request, App app, Client client, User operator) {
 		int tid = request.getParam(Params.TID);

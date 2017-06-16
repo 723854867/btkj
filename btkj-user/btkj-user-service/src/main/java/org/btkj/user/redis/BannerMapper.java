@@ -47,7 +47,7 @@ public class BannerMapper extends RedisDBAdapter<Integer, Banner, BannerDao> {
 	
 	@Override
 	public void flush(Banner entity) {
-		redis.hsset(redisKey, entity, _listKey(entity.getAppId(), entity.getTid()));
+		redis.hsset(redisKey, entity.key(), serializer.convert(entity), _listKey(entity.getAppId(), entity.getTid()));
 	}
 	
 	public String _listKey(int appId, int tid) { 

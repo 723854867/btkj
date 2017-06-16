@@ -1,15 +1,16 @@
 package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.vehicle.mybatis.Tables;
 
 public class VehicleConfigSQLProvider {
+	
+	private static final String TABLE			= "vehicle_config";
 
 	public String selectByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.VEHICLE_CONFIG.name());
+				FROM(TABLE);
 				WHERE("tid=#{key}");
 			}
 		}.toString();

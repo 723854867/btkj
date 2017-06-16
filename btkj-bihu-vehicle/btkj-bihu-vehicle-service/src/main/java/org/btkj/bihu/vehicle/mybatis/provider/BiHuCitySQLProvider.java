@@ -1,15 +1,16 @@
 package org.btkj.bihu.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.bihu.vehicle.mybatis.Tables;
 
 public class BiHuCitySQLProvider {
+	
+	private static final String TABLE			= "bi_hu_city";
 
 	public String getByKey() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Tables.BI_HU_CITY.name());
+				FROM(TABLE);
 				WHERE("code=#{code}");
 			}
 		}.toString();
