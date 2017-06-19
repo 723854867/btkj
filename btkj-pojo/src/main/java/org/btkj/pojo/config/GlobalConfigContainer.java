@@ -2,7 +2,6 @@ package org.btkj.pojo.config;
 
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
-import org.apache.zookeeper.CreateMode;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.ZkUtil;
 import org.rapid.util.common.serializer.SerializeUtil;
@@ -19,7 +18,7 @@ public class GlobalConfigContainer {
 	
 	private void init() {
 		if (!zkClient.exists(configPath))
-			zkClient.create(configPath, null, CreateMode.PERSISTENT);
+			zkClient.createPersistent(configPath, true);
 		GlobalConfig temp = ZkUtil.readJson(zkClient, configPath, GlobalConfig.class);
 		globalConfig = null == temp ? GlobalConfig.DEFAULT_CONFIG : temp;
 		zkClient.subscribeDataChanges(configPath, new IZkDataListener() {
