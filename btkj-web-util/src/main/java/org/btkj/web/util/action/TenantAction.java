@@ -30,13 +30,13 @@ public abstract class TenantAction extends UserAction {
 	@Override
 	protected Result<?> execute(Request request, App app, Client client, User user) {
 		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		EmployeeForm employeeForm = employeeService.getById(employeeId);
-		if (null == employeeForm)
+		EmployeeForm ef = employeeService.getById(employeeId);
+		if (null == ef)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		if (employeeForm.getUser().getUid() != user.getUid())
+		if (ef.getUser().getUid() != user.getUid())
 			return Result.result(Code.FORBID);
-		return execute(request, client, employeeForm);
+		return execute(request, client, ef);
 	}
 	
-	protected abstract Result<?> execute(Request request, Client client, EmployeeForm employeeForm);
+	protected abstract Result<?> execute(Request request, Client client, EmployeeForm ef);
 }

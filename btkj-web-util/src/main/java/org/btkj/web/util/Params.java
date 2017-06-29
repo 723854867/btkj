@@ -15,13 +15,13 @@ import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.ArticleSearcher;
+import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.TenantSearcher;
 import org.btkj.pojo.submit.UserSearcher;
 import org.btkj.vehicle.model.VehicleOrderSearcher;
-import org.rapid.util.common.Validator;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
@@ -29,6 +29,7 @@ import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtils;
+import org.rapid.util.validator.Validator;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -204,6 +205,14 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehicleOrderSearcher.class);
 		}
 	};
+	final Str2ObjConstConverter<BonusSearcher> BONUS_SEARCHER = new Str2ObjConstConverter<BonusSearcher>(1039, "bonusSearcher") {
+		@Override
+		public BonusSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, BonusSearcher.class);
+		}
+	};	
+	
+	final Str2StrConstConverter VEHICLE_ID						= new Str2StrConstConverter(1040, "vehicleId");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
@@ -215,6 +224,9 @@ public interface Params {
 		}
 	};
 	
+	/**
+	 * 车牌号
+	 */
 	final Str2StrConstConverter LICENSE					= new Str2StrConstConverter(1102, "license") {
 		public String convert(String value) throws ConstConvertFailureException {
 			if (!Validator.isVehicleLisense(value))

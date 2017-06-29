@@ -25,6 +25,17 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
+	public boolean isSubRegion(int region1, int region2) {
+		Region r1 = regionMapper.getByKey(region1);
+		Region r2 = regionMapper.getByKey(region2);
+		if (null == r1 || null == r2 || r2.getLevel() < r1.getLevel())
+			return false;
+		if (region1 == region2 || r2.getParentId() == region1)
+			return true;
+		return isSubRegion(region1, r2.getParentId());
+	}
+	
+	@Override
 	public Insurer getInsurerById(int insurerId) {
 		return insurerMapper.getByKey(insurerId);
 	}

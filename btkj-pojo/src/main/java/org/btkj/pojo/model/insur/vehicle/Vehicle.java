@@ -2,8 +2,7 @@ package org.btkj.pojo.model.insur.vehicle;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 
 /**
  * 车辆信息
@@ -18,7 +17,6 @@ public class Vehicle implements Serializable {
 	private String vin;					// 车架号
 	private String engine;				// 发动机号
 	private String model; 				// 厂牌型号
-	private VehicleType type;			// 车辆类型
 	private VehicleUsedType usedType;	// 使用性质
 	private String enrollDate; 			// 初登日期
 	private int seatCount;				// 座位数
@@ -58,14 +56,6 @@ public class Vehicle implements Serializable {
 
 	public void setModel(String model) {
 		this.model = model;
-	}
-	
-	public VehicleType getType() {
-		return type;
-	}
-	
-	public void setType(VehicleType type) {
-		this.type = type;
 	}
 	
 	public VehicleUsedType getUsedType() {

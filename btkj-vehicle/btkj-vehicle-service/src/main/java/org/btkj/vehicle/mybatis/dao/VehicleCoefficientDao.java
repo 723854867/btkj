@@ -7,7 +7,7 @@ import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.vehicle.mybatis.provider.VehicleCoefficientSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 
-public interface VehicleCoefficientDao extends DBMapper<Long, VehicleCoefficient> {
+public interface VehicleCoefficientDao extends DBMapper<Integer, VehicleCoefficient> {
 
 	@SelectProvider(type = VehicleCoefficientSQLProvider.class, method = "getByTid")
 	List<VehicleCoefficient> getByTid(int tid);

@@ -1,36 +1,25 @@
 package org.btkj.pojo.entity;
 
-import org.btkj.pojo.comparable.Comparable;
 import org.rapid.util.common.model.UniqueModel;
 
-public class VehicleCoefficient implements UniqueModel<Long> {
+public class VehicleCoefficient implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 3705826374497188616L;
 
-	private long id;
+	private int id;
 	private int tid;
-	private int categoryId;
+	private int type;
 	private String name;
-	private String comparable;
+	private int comparison;
 	private String comparableValue;
 	private int created;
 	private int updated;
 	
-	public VehicleCoefficient() {}
-	
-	public VehicleCoefficient(long id, int categoryId, String name, Comparable comparable, String comparableValue) {
-		this.id = id;
-		this.categoryId = categoryId;
-		this.name = name;
-		this.comparable = comparable.name();
-		this.comparableValue = comparableValue;
-	}
-	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -41,13 +30,13 @@ public class VehicleCoefficient implements UniqueModel<Long> {
 	public void setTid(int tid) {
 		this.tid = tid;
 	}
-
-	public int getCategoryId() {
-		return categoryId;
+	
+	public int getType() {
+		return type;
 	}
-
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getName() {
@@ -58,12 +47,12 @@ public class VehicleCoefficient implements UniqueModel<Long> {
 		this.name = name;
 	}
 
-	public String getComparable() {
-		return comparable;
+	public int getComparison() {
+		return comparison;
 	}
-
-	public void setComparable(String comparable) {
-		this.comparable = comparable;
+	
+	public void setComparison(int comparison) {
+		this.comparison = comparison;
 	}
 
 	public String getComparableValue() {
@@ -91,7 +80,7 @@ public class VehicleCoefficient implements UniqueModel<Long> {
 	}
 
 	@Override
-	public Long key() {
+	public Integer key() {
 		return this.id;
 	}
 }

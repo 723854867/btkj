@@ -8,8 +8,7 @@ import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.enums.InsuranceType;
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
@@ -721,21 +720,21 @@ public class RenewInfo implements Serializable {
 		PolicySchema schema = new PolicySchema();
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
+			renewal.set_id(this.UserInfo.LicenseNo);
 			tips.setOwner(_owner());
 			tips.setInsurer(_insurer());
 			tips.setInsured(_insured());
 			tips.setLicense(this.UserInfo.LicenseNo);
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
-			tips.setModel(this.UserInfo.ModleName);
+			tips.setName(this.UserInfo.ModleName);
 			tips.setEnrollDate(this.UserInfo.RegisterDate);
-			tips.setSeatCount(this.UserInfo.SeatCount);
+			tips.setSeat(this.UserInfo.SeatCount);
 			tips.setPrice(this.UserInfo.PurchasePrice);
 			tips.setExhaust(this.UserInfo.ExhaustScale);
 			schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
 			schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-			tips.setVehicleType(VehicleType.NO_BIZ_PASSENGER);
-			tips.setVehicleUsedType(VehicleUsedType.match(this.UserInfo.CarUsedType));
+			tips.setVehicleUsedType(_usedType());
 			renewal.setCommercialNo(this.UserInfo.BizNo);
 			renewal.setCompulsiveNo(this.UserInfo.ForceNo);
 			schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
@@ -812,5 +811,28 @@ public class RenewInfo implements Serializable {
 		insured.setIdNo(this.UserInfo.InsuredIdCard);
 		insured.setMobile(StringUtils.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
 		return insured;
+	}
+	
+	private VehicleUsedType _usedType() {
+		switch (this.UserInfo.CarUsedType) {
+		case 1:
+			return VehicleUsedType.HOME_USE;
+		case 2:
+			return VehicleUsedType.ORGAN;
+		case 3:
+			return VehicleUsedType.ENTERPRISE;
+		case 4:
+			return null;
+		case 5:
+			return VehicleUsedType.LEASE;
+		case 6:
+			return VehicleUsedType.BIZ_TRUCK;
+		case 7:
+			return VehicleUsedType.NO_BIZ_TRUCK;
+		case 8:
+			return VehicleUsedType.CITY_BUS;
+		default:
+			return VehicleUsedType.HOME_USE;
+		}
 	}
 }

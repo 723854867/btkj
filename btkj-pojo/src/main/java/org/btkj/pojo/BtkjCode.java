@@ -148,7 +148,27 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 提问不存在
 	 */
-	QUIZ_NOT_EXIST(601, "quiz not exits");
+	QUIZ_NOT_EXIST(601, "quiz not exits"),
+	
+	/**
+	 * 汽车品牌不存在
+	 */
+	VEHICLE_BRAND_NOT_EXSIT(650, "vehicle brand not exist"),
+	
+	/**
+	 * 汽车车系不存在
+	 */
+	VEHICLE_DEPT_NOT_EXIST(651, "vehicle dept not exist"),
+	
+	/**
+	 * 汽车厂牌型号不存在
+	 */
+	VEHICLE_MODEL_NOT_EXIST(652, "vehicle model not exist"),
+	
+	/**
+	 * 车辆种类不存在
+	 */
+	VEHICLE_TYPE_NOT_EXIST(653, "vehicle type not exist");
 	
 	private int code;
 	private String desc;

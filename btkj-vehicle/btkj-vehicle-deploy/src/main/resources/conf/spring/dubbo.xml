@@ -17,6 +17,8 @@
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
 	<dubbo:service interface="org.btkj.vehicle.api.VehicleService" ref="vehicleService" loadbalance="${dubbo.service.loadbalance}"/>
+	
+	<dubbo:service interface="org.btkj.vehicle.api.BonusService" ref="bonusService" loadbalance="${dubbo.service.loadbalance}"/>
 
 	<dubbo:reference id="biHuVehicle" interface="org.btkj.bihu.vehicle.api.BiHuVehicle" />
 	

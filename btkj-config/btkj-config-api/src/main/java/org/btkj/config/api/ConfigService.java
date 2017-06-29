@@ -16,6 +16,15 @@ public interface ConfigService {
 	Region getRegionById(int region);
 	
 	/**
+	 * 判断 region2 是否是 region 1的子行政区划
+	 * 
+	 * @param region1
+	 * @param region2
+	 * @return
+	 */
+	boolean isSubRegion(int region1, int region2);
+	
+	/**
 	 * 根据保险公司ID获取保险公司
 	 * 
 	 * @param insurerId

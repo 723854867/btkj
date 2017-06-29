@@ -22,9 +22,9 @@ import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.region.RegionUtil;
 
 /**
  * 首页信息
@@ -55,7 +55,7 @@ public class MAIN_PAGE extends UserAction {
 		
 		Result<MainPageInfo> result = appService.mainPage(client, user, em);
 		MainPageInfo pageInfo = result.attach();
-		Region region = configService.getRegionById(0 == pageInfo.getRegionId() ? RegionUtil.CH_REGION_ID : pageInfo.getRegionId());
+		Region region = configService.getRegionById(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
 			
 		List<NonAutoCategory> categories = null;

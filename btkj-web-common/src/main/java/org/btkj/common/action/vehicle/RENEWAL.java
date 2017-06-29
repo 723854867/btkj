@@ -35,6 +35,7 @@ public class RENEWAL extends TenantAction {
 			String vin = request.getParam(Params.VIN);
 			String engine = request.getParam(Params.ENGINE);
 			result = vehicleService.renewal(employeeForm, vin, engine, name);
+			break;
 		default:								// 默认根据车牌获取
 			String license = request.getParam(Params.LICENSE);
 			result = vehicleService.renewal(employeeForm, license, name);

@@ -42,10 +42,16 @@
 			<artifactId>btkj-user-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.btkj</groupId>
 			<artifactId>btkj-config-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-vehicle-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -121,6 +127,11 @@
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
 			<version>3.7.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 </project>

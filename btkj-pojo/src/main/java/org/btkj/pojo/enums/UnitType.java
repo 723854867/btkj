@@ -5,15 +5,25 @@ public enum UnitType {
 	/**
 	 * 个人
 	 */
-	PERSONAL,
+	PERSONAL("个人"),
 	
 	/**
 	 * 企业
 	 */
-	ENTERPRISE,
+	ENTERPRISE("企业"),
 	
 	/**
 	 * 机关
 	 */
-	OFFICE;
+	OFFICE("机关");
+	
+	private String title;
+	
+	private UnitType(String title) {
+		this.title = title;
+	}
+	
+	public String title() {
+		return title;
+	}
 }

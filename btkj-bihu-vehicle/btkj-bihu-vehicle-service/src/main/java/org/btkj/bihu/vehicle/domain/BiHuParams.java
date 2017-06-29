@@ -433,7 +433,7 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
-	public BiHuParams setHcXiuLiChangType(double hcXiuLiChangType) {
+	public BiHuParams setHcXiuLiChangType(int hcXiuLiChangType) {
 		put(HC_XIU_LI_CHANG_TYPE, String.valueOf(hcXiuLiChangType));
 		return this;
 	}

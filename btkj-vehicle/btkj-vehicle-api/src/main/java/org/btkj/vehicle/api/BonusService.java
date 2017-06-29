@@ -1,0 +1,39 @@
+package org.btkj.vehicle.api;
+
+import java.util.List;
+
+import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.vehicle.model.BonusRouteView;
+import org.btkj.vehicle.model.VehicleCoefficientInfo;
+import org.rapid.util.common.message.Result;
+
+/**
+ * 佣金服务类
+ * 
+ * @author ahab
+ */
+public interface BonusService {
+	
+	/**
+	 * 获取佣金路由结构表
+	 * 
+	 * @return
+	 */
+	BonusRouteView bonusRouteInfo();
+
+	/**
+	 * 获取车险可配置系数
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Result<List<VehicleCoefficientInfo>> coefficients(BonusSearcher searcher);
+	
+	/**
+	 * 佣金设置
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Result<Void> bonusSettings(BonusSearcher searcher);
+}

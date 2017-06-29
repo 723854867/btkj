@@ -5,7 +5,11 @@ import java.util.List;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
@@ -45,9 +49,10 @@ public interface VehicleService {
 	 * 
 	 * @param employeeForm
 	 * @param tips
+	 * @param vehicleId
 	 * @return
 	 */
-	Result<Void> order(List<Insurer> quote, List<Insurer> insure, EmployeeForm employeeForm, VehiclePolicyTips tips);
+	Result<Void> order(List<Insurer> quote, List<Insurer> insure, EmployeeForm employeeForm, VehiclePolicyTips tips, String vehicleId);
 	
 	/**
 	 * 查看订单详情
@@ -71,4 +76,33 @@ public interface VehicleService {
 	 * @return
 	 */
 	Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher);
+	
+	/**
+	 * 根据车架号获取车辆信息
+	 * @param vin
+	 * @return
+	 */
+	List<VehicleInfo> vehicleInfos(String vin);
+	
+	/**
+	 * 所有品牌
+	 * 
+	 * @return
+	 */
+	List<VehicleBrand> vehicleBrands();
+	
+	/**
+	 * 获取指定品牌下所有的车系
+	 * 
+	 * @return
+	 */
+	List<VehicleDept> vehicleDepts(int brandId);
+	
+	/**
+	 * 获取指定车系下的所有厂牌型号
+	 * 
+	 * @param deptId
+	 * @return
+	 */
+	List<VehicleModel> vehicleModels(int deptId);
 }

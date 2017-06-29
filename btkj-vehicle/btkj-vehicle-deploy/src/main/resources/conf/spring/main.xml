@@ -27,6 +27,10 @@
 		<property name="mongo" ref="mongo" />
 	</bean>
 	
+	<bean id="bonusConfigMapper" class="org.btkj.vehicle.mongo.BonusConfigMapper">
+		<property name="mongo" ref="mongo" />
+	</bean>
+	
 	<bean id="routeMapper" class="org.btkj.vehicle.redis.RouteMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="routeDao" />
@@ -41,9 +45,23 @@
 		<property name="dao" ref="cityDao" />
 	</bean>
 	
-	
 	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="vehicleCoefficientDao" />
+	</bean>
+	
+	<bean id="vehicleBrandMapper" class="org.btkj.vehicle.redis.VehicleBrandMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="vehicleBrandDao" />
+	</bean>
+	
+	<bean id="vehicleDeptMapper" class="org.btkj.vehicle.redis.VehicleDeptMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="vehicleDeptDao" />
+	</bean>
+	
+	<bean id="vehicleModelMapper" class="org.btkj.vehicle.redis.VehicleModelMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="vehicleModelDao" />
 	</bean>
 </beans>

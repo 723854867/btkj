@@ -8,10 +8,11 @@ import org.rapid.util.common.model.UniqueModel;
  * 
  * @author ahab
  */
-public class Renewal implements UniqueModel<Void> {
+public class Renewal implements UniqueModel<String> {
 
 	private static final long serialVersionUID = 6082011346840718571L;
 
+	private String _id;
 	private int insurerId;						// 保险公司ID
 	private String insurerName;					// 保险公司名字
 	private String insurerIcon;					// 保险公司图标
@@ -19,6 +20,14 @@ public class Renewal implements UniqueModel<Void> {
 	private String commercialNo;				// 商业险保单号
 	private String compulsiveNo;				// 交强险保单号
 	private VehiclePolicyTips tips;
+	
+	public String get_id() {
+		return _id;
+	}
+	
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 	
 	public int getInsurerId() {
 		return insurerId;
@@ -69,7 +78,7 @@ public class Renewal implements UniqueModel<Void> {
 	}
 
 	@Override
-	public Void key() {
-		throw new UnsupportedOperationException("Renewal has no fixed key!");
+	public String key() {
+		return this._id;
 	}
 }

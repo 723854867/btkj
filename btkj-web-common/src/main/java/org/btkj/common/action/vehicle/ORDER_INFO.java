@@ -22,8 +22,8 @@ public class ORDER_INFO extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<VehicleOrder> execute(Request request, Client client, EmployeeForm employeeForm) {
-		return vehicleService.orderInfo(employeeForm, request.getParam(Params.ORDER_ID));
+	protected Result<VehicleOrder> execute(Request request, Client client, EmployeeForm ef) {
+		return vehicleService.orderInfo(ef, request.getParam(Params.ORDER_ID));
 	}
 	
 	@Override

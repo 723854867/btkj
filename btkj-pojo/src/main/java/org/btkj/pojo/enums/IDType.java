@@ -1,6 +1,6 @@
 package org.btkj.pojo.enums;
 
-import org.rapid.util.common.Validator;
+import org.rapid.util.validator.Validator;
 
 /**
  * 证件类型

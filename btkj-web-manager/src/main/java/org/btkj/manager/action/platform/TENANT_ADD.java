@@ -20,7 +20,6 @@ import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.region.RegionUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 
 public class TENANT_ADD extends PlatformAction {
@@ -46,7 +45,7 @@ public class TENANT_ADD extends PlatformAction {
 		if (null == region)
 			throw ConstConvertFailureException.errorConstException(Params.REGION);
 		// 代理公司的行政区域必须是平台行政区域的子行政区域
-		if (!RegionUtil.isSubRegion(configService.getRegionById(app.getRegion()).getId(), region.getId()))
+		if (!configService.isSubRegion(app.getRegion(), region.getId()))
 			return Consts.RESULT.REGION_OUT_OF_BOUNDARY;
 		
 		String mobile = request.getParam(Params.MOBILE);

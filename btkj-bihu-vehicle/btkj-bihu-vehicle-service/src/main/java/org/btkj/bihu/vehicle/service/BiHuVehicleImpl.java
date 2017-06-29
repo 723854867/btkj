@@ -227,10 +227,10 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		params.setEngineNo(tips.getEngine());
 		params.setCarVin(tips.getVin());
 		params.setRegisterDate(tips.getEnrollDate());
-		params.setMoldName(tips.getModel());
+		params.setMoldName(tips.getName());
 		if (null != tips.getIssueDate())
 			params.setTransferDate(tips.getIssueDate());
-		params.setSeatCount(String.valueOf(tips.getSeatCount()));
+		params.setSeatCount(String.valueOf(tips.getSeat()));
 	}
 	
 	private void _buildSchema(BiHuParams params, PolicySchema schema) {
@@ -307,7 +307,10 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 				break;
 			case GARAGE_DESIGNATED:
 				if (null != insurance) {
-					params.setHcXiuLiChangType(insurance.getQuota());
+					int value = (int) insurance.getQuota();
+					if (value != -1 && value != 0 && value != 1)
+						value = -1;
+					params.setHcXiuLiChangType(value);
 					params.setHcXiuLiChang(insurance.getPrice());
 				}
 				break;

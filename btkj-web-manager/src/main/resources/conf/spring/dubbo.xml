@@ -21,4 +21,6 @@
 	<dubbo:reference id="masterService" interface="org.btkj.master.api.MasterService" />
 	
 	<dubbo:reference id="communityService" interface="org.btkj.community.api.CommunityService" />
+	
+	<dubbo:reference id="bonusService" interface="org.btkj.vehicle.api.BonusService" />
 </beans>

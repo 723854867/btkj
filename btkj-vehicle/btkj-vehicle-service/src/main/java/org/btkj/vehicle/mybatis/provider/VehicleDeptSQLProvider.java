@@ -2,16 +2,16 @@ package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class VehicleConfigSQLProvider {
+public class VehicleDeptSQLProvider {
 	
-	private static final String TABLE			= "vehicle_config";
+	private static final String TABLE			= "vehicle_dept";
 
-	public String selectByKey() {
+	public String getByBrandId() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("tid=#{key}");
+				WHERE("brand_id=#{brandId}");
 			}
 		}.toString();
 	}

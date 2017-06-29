@@ -14,6 +14,8 @@ import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.UnitType;
+import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
@@ -24,11 +26,11 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.Validator;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.StringUtils;
+import org.rapid.util.validator.Validator;
 
 /**
  * 车险下单：包括报价、投保、报价并投保三种方式
@@ -46,6 +48,7 @@ public class ORDER extends TenantAction {
 	protected Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
 		Set<Integer> quote = request.getParam(Params.QUOTE_GROUP);
 		Set<Integer> insure = request.getOptionalParam(Params.INSURE_GROUP);
+		String vehicleId = request.getParam(Params.VEHICLE_ID);
 		if (!_checkInsurer(quote, insure))
 			return Consts.RESULT.FORBID;
 		List<Insurer> quoteInsurer = configService.insurers(new ArrayList<Integer>(quote));
@@ -65,7 +68,7 @@ public class ORDER extends TenantAction {
 		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
 		if (!_check(employeeForm.getTenant(), tips))
 			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
-		return vehicleService.order(quoteInsurer, insureInsurer, employeeForm, tips);
+		return vehicleService.order(quoteInsurer, insureInsurer, employeeForm, tips, vehicleId);
 	}
 	
 	private boolean _checkInsurer(Set<Integer> quote, Set<Integer> insure) {
@@ -88,28 +91,33 @@ public class ORDER extends TenantAction {
 	private boolean _check(Tenant tenant, VehiclePolicyTips tips) {
 		if (null == tips.getOwner() || null == tips.getInsurer() || null == tips.getInsured() || null == tips.getSchema())
 			return false;
-		return _checkInsurUnit(tips.getOwner())
-				&& _checkInsurUnit(tips.getInsurer())
-				&& _checkInsurUnit(tips.getInsured())
+		VehicleUsedType usedType = tips.getVehicleUsedType();
+		if (null == usedType)
+			return false;
+		return _checkInsurUnit(tips.getOwner(), usedType)
+				&& _checkInsurUnit(tips.getInsurer(), usedType)
+				&& _checkInsurUnit(tips.getInsured(), usedType)
 				&& _checkVehicle(tips)
 				&& _checkSchema(tips.getSchema());
 	}
 	
-	private boolean _checkInsurUnit(InsurUnit unit) {
+	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType) {
 		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName())
 			return false;
 		if (null != unit.getMobile() && !Validator.isMobile(unit.getMobile()))
 			return false;
 		if (!unit.getIdType().check(unit.getIdNo()))
 			return false;
+		_correctUnitType(usedType, unit);
 		return true;
 	}
 	
 	private boolean _checkVehicle(VehiclePolicyTips tips) {
 		if (!StringUtils.hasText(
 				tips.getEngine(), tips.getLicense(), 
-				tips.getModel(), tips.getVin(), 
-				tips.getEnrollDate()))
+				tips.getVin(), tips.getEnrollDate()))
+			return false;
+		if (null == tips.getVehicleUsedType())
 			return false;
 		return Validator.isVehicleLisense(tips.getLicense());
 	}
@@ -132,6 +140,32 @@ public class ORDER extends TenantAction {
 				if ((mod & need) != need)
 					return false;
 			}
+		}
+		return true;
+	}
+	
+	private boolean _correctUnitType(VehicleUsedType usedType, InsurUnit unit) {
+		switch (usedType) {
+		case HOME_USE:
+			unit.setType(UnitType.PERSONAL);
+			break;
+		case ORGAN:
+			unit.setType(UnitType.OFFICE);
+			break;
+		case ENTERPRISE:
+		case CITY_BUS:
+		case HIGHWAY_TRANSPORT:
+		case PARTICULAR:
+			unit.setType(UnitType.ENTERPRISE);
+			break;
+		case BIZ_TRUCK:
+		case NO_BIZ_TRUCK:
+		case LEASE:
+			if (unit.getType() == UnitType.OFFICE)
+				return false;
+			break;
+		default:
+			break;
 		}
 		return true;
 	}

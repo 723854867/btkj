@@ -2,6 +2,7 @@ package org.btkj.pojo.entity;
 
 import org.btkj.pojo.enums.PolicyState;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
+import org.btkj.pojo.model.insur.vehicle.Bonus;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.lang.DateUtils;
 
@@ -12,6 +13,8 @@ public class VehicleOrder implements UniqueModel<String> {
 	// 订单基本信息
 	private String _id;
 	private String batchId;				// 批次号，一次报价可以对多家公司进行报价、多个报价共用一个批次号
+	private int appId;					// 平台ID
+	private int tid;					// 商户ID
 	private int lane; 					// 线路：壁虎、乐宝吧、保途
 	private boolean insure; 			// 是否投保
 	private PolicyState state; 			// 保单状态
@@ -24,12 +27,15 @@ public class VehicleOrder implements UniqueModel<String> {
 	private String insurerIcon; 		// 保险公司Icon
 	
 	private VehiclePolicyTips tips;
+	private Bonus bonus;				// 奖励
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(String id, String batchId, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
+	public VehicleOrder(String id, String batchId, int appId, int tid, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
 		this._id = id;
 		this.batchId = batchId;
+		this.appId = appId;
+		this.tid = tid;
 		this.insurerId = insurer.getId();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
@@ -46,6 +52,22 @@ public class VehicleOrder implements UniqueModel<String> {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	
+	public int getAppId() {
+		return appId;
+	}
+	
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+	
+	public int getTid() {
+		return tid;
+	}
+	
+	public void setTid(int tid) {
+		this.tid = tid;
 	}
 
 	public int getLane() {
@@ -118,6 +140,18 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public void setTips(VehiclePolicyTips tips) {
 		this.tips = tips;
+	}
+	
+	public Bonus getBonus() {
+		return bonus;
+	}
+	
+	public void setBonus(Bonus bonus) {
+		this.bonus = bonus;
+	}
+	
+	public String commisionRoutePath() {
+		return null;
 	}
 
 	@Override

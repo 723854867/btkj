@@ -8,17 +8,20 @@
         				http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan base-package="org.btkj.lebaoba.vehicle" />
+	<context:property-placeholder location="classpath:conf/lebaoba.properties"/>
 	
 	<bean class="org.rapid.util.common.SpringContextUtil" />
 	
 	<bean id="httpProxy" class="org.rapid.util.net.http.HttpProxy" init-method="init">
 		<property name="syncHttp">
 			<bean class="org.rapid.util.net.http.SyncHttpAdapter">
-				<property name="retryCount" value="${http.sync.retryCount}"/>
-				<property name="keepAliveTime" value="${http.sync.keepAliveTime}"/>
-				<property name="maxConn" value="${http.sync.maxConn}"/>
-				<property name="sslEnabled" value="${http.sync.sslEnabled}"/>
-				<property name="maxConnPerRoute" value="${http.sync.maxConnPerRoute}"/>
+				<property name="connectTimeout" value="${http.connectTimeout}" />
+				<property name="soTimeout" value="${http.soTimeout}" />
+				<property name="keepAliveTime" value="${http.keepAliveTime}" />
+				<property name="maxConn" value="${http.maxConn}"/>
+				<property name="sslEnabled" value="${http.sslEnabled}" />
+				<property name="maxConnPerRoute" value="${http.maxConnPerRoute}" />
+				<property name="retryCount" value="${http.sync.retryCount}" />
 			</bean>
 		</property>
 	</bean>

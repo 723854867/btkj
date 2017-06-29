@@ -3,14 +3,14 @@ package org.btkj.pojo.enums;
 public enum PolicyState {
 
 	/**
-	 * 新建报价
+	 * 系统错误
 	 */
-	NEW(1),
+	SYSTEM_ERROR(1),
 	
 	/**
-	 * 报价成功
+	 * 新建报价
 	 */
-	QUOTE_SUCCESS(2),
+	NEW(2),
 	
 	/**
 	 * 报价失败
@@ -18,29 +18,29 @@ public enum PolicyState {
 	QUOTE_FAILURE(4),
 	
 	/**
+	 * 报价成功
+	 */
+	QUOTE_SUCCESS(8),
+	
+	/**
 	 * 报价成功，投保失败
 	 */
-	QUOTE_SUCCESS_INSURE_FAILURE(8),
+	QUOTE_SUCCESS_INSURE_FAILURE(16),
 	
 	/**
 	 * 投保成功
 	 */
-	INSURE_SUCCESS(16),
+	INSURE_SUCCESS(32),
 	
 	/**
 	 * 已预约
 	 */
-	ENGAGED(32),
+	ENGAGED(64),
 	
 	/**
 	 * 已出单
 	 */
-	ISSUED(64),
-	
-	/**
-	 * 系统错误
-	 */
-	SYSTEM_ERROR(128);
+	ISSUED(128);
 	
 	private int mark;
 	
