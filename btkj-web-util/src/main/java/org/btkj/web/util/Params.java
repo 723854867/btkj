@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.btkj.courier.model.QuotaNoticeSubmit;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.NonAutoProduct;
@@ -256,6 +257,13 @@ public interface Params {
 		@Override
 		public Set<Integer> convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<Set<Integer>>(){}.getType());
+		}
+	};
+	
+	final Str2ObjConstConverter<QuotaNoticeSubmit> QUOTA_NOTICE_SUBMIT	= new Str2ObjConstConverter<QuotaNoticeSubmit>(1109, "quotaNoticeSubmit") {
+		@Override
+		public QuotaNoticeSubmit convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuotaNoticeSubmit.class);
 		}
 	};
 

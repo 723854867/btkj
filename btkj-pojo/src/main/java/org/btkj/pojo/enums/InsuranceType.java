@@ -5,12 +5,12 @@ public enum InsuranceType {
 	/**
 	 * 车损
 	 */
-	DAMAGE(1, true),
+	DAMAGE(1, "车损险", true),
 	
 	/**
 	 * 车损不计免赔
 	 */
-	DAMAGE_DEDUCTIBLE(1 << 1, false) {
+	DAMAGE_DEDUCTIBLE(1 << 1, "车损不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.DAMAGE.mark();
@@ -20,12 +20,12 @@ public enum InsuranceType {
 	/**
 	 * 第三者
 	 */
-	THIRD(1 << 2, true),
+	THIRD(1 << 2, "三者险", true),
 	
 	/**
 	 * 第三者不计免赔
 	 */
-	THIRD_DEDUCTIBLE(1 << 3, false) {
+	THIRD_DEDUCTIBLE(1 << 3, "三者不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.THIRD.mark();
@@ -35,12 +35,12 @@ public enum InsuranceType {
 	/**
 	 * 车上人员司机
 	 */
-	DRIVER(1 << 4, true),
+	DRIVER(1 << 4, "司机险", true),
 	
 	/**
 	 * 司机不计免赔
 	 */
-	DRIVER_DEDUCTIBLE(1 << 5, false) {
+	DRIVER_DEDUCTIBLE(1 << 5, "司机不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.DRIVER.mark();
@@ -50,12 +50,12 @@ public enum InsuranceType {
 	/**
 	 * 车上人员乘客
 	 */
-	PASSENGER(1 << 6, true),
+	PASSENGER(1 << 6, "乘客险", true),
 	
 	/**
 	 * 乘客不计免赔
 	 */
-	PASSENGER_DEDUCTIBLE(1 << 7, false) {
+	PASSENGER_DEDUCTIBLE(1 << 7, "乘客不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.PASSENGER.mark();
@@ -65,12 +65,12 @@ public enum InsuranceType {
 	/**
 	 * 盗抢
 	 */
-	ROBBERY(1 << 8, true),
+	ROBBERY(1 << 8, "盗抢险", true),
 	
 	/**
 	 * 盗抢不计免赔
 	 */
-	ROBBERY_DEDUCTIBLE(1 << 9, false) {
+	ROBBERY_DEDUCTIBLE(1 << 9, "盗抢不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.ROBBERY.mark();
@@ -80,17 +80,17 @@ public enum InsuranceType {
 	/**
 	 * 玻璃破碎
 	 */
-	GLASS(1 << 10, false),
+	GLASS(1 << 10, "玻璃险", false),
 	
 	/**
 	 * 自燃
 	 */
-	AUTO_FIRE(1 << 11, false),
+	AUTO_FIRE(1 << 11, "自燃险", false),
 	
 	/**
 	 * 自然不计免赔
 	 */
-	AUTO_FIRE_DEDUCTIBLE(1 << 12, false) {
+	AUTO_FIRE_DEDUCTIBLE(1 << 12, "自然不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.AUTO_FIRE.mark();
@@ -100,12 +100,12 @@ public enum InsuranceType {
 	/**
 	 * 划痕
 	 */
-	SCRATCH(1 << 13, false),
+	SCRATCH(1 << 13, "划痕险", false),
 	
 	/**
 	 * 划痕不计免赔
 	 */
-	SCRATCH_DEDUCTIBLE(1 << 14, false) {
+	SCRATCH_DEDUCTIBLE(1 << 14, "划痕不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.SCRATCH.mark();
@@ -115,12 +115,12 @@ public enum InsuranceType {
 	/**
 	 * 涉水
 	 */
-	WADDING(1 << 15, false),
+	WADDING(1 << 15, "涉水险", false),
 	
 	/**
 	 * 涉水不计免赔
 	 */
-	WADDING_DEDUCTIBLE(1 << 16, false) {
+	WADDING_DEDUCTIBLE(1 << 16, "涉水不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.WADDING.mark();
@@ -130,23 +130,29 @@ public enum InsuranceType {
 	/**
 	 * 指定修理厂
 	 */
-	GARAGE_DESIGNATED(1 << 17, false),
+	GARAGE_DESIGNATED(1 << 17, "指定修理厂", false),
 	
 	/**
 	 * 无法找到第三方
 	 */
-	UNKNOWN_THIRD(1 << 18, false);
+	UNKNOWN_THIRD(1 << 18, "第三方特约险", false);
 	
 	private int mark;
+	private String title;
 	private boolean basic;
 	
-	private InsuranceType(int mark, boolean basic) {
+	private InsuranceType(int mark, String title, boolean basic) {
 		this.mark = mark;
+		this.title = title;
 		this.basic = basic;
 	}
 	
 	public int mark() {
 		return mark;
+	}
+	
+	public String title() {
+		return title;
 	}
 	
 	public boolean isBasic() { 

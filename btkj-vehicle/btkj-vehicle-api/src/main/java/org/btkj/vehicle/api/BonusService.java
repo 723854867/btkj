@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.model.BonusRouteView;
-import org.btkj.vehicle.model.VehicleCoefficientInfo;
+import org.btkj.vehicle.model.VehicleCoefficientsInfo;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -27,7 +27,7 @@ public interface BonusService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<List<VehicleCoefficientInfo>> coefficients(BonusSearcher searcher);
+	Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher);
 	
 	/**
 	 * 佣金设置

@@ -19,4 +19,13 @@ public class VehicleUtils {
 		long timestamp = DateUtils.getTimeGap(commericialStart, enrollDate, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault());
 		return timestamp <= 0 ? 0 : (int) (timestamp / (365 * 24 * 3600 * 1000));
 	}
+	
+	/**
+	 * 是否是新车，新车没有车牌
+	 * 
+	 * @return
+	 */
+	public static final boolean isNewVehicleLicense(String license) {
+		return false;
+	}
 }

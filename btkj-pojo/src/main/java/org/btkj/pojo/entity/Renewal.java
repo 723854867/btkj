@@ -20,6 +20,7 @@ public class Renewal implements UniqueModel<String> {
 	private String commercialNo;				// 商业险保单号
 	private String compulsiveNo;				// 交强险保单号
 	private VehiclePolicyTips tips;
+	private int created;						// 创建时间
 	
 	public String get_id() {
 		return _id;
@@ -75,6 +76,14 @@ public class Renewal implements UniqueModel<String> {
 	
 	public void setTips(VehiclePolicyTips tips) {
 		this.tips = tips;
+	}
+	
+	public int getCreated() {
+		return created;
+	}
+	
+	public void setCreated(int created) {
+		this.created = created;
 	}
 
 	@Override

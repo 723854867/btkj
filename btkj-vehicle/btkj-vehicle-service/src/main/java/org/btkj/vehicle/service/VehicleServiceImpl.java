@@ -29,6 +29,7 @@ import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.vehicle.VehicleUtils;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.model.Lane;
 import org.btkj.vehicle.model.VehicleOrderListInfo;
@@ -77,36 +78,48 @@ public class VehicleServiceImpl implements VehicleService {
 	private VehicleModelMapper vehicleModelMapper;
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String license, String name) {
-		Renewal renewal = renewalMapper.getByKey(license);
-		if (null != renewal) {
-			if (!renewal.getTips().getOwner().getName().equals(name))
-				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
-			return Result.result(renewal);
-		}
-		Result<Renewal> result = biHuVehicle.renewal(employeeForm, license, name);
-		if (result.isSuccess()) {
-			renewalMapper.insert(result.attach());
-			if (!result.attach().getTips().getOwner().getName().equals(name))
-				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
-		}
-		return result;
+	public Result<Renewal> renewal(EmployeeForm ef, String license, String name) {
+		Result<Renewal> result = _renewalByLicense(ef, license);
+		if (!result.isSuccess())
+			return result;
+		Renewal renewal = result.attach();
+		if (!renewal.getTips().getOwner().getName().equals(name))
+			return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
+		return Result.result(renewal);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, String name) {
-		Renewal renewal = renewalMapper.getByVin(vin);
-		if (null != renewal) {
-			if (!renewal.getTips().getOwner().getName().equals(name))
-				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
-			return Result.result(renewal);
-		}
-		Result<Renewal> result = biHuVehicle.renewal(employeeForm, vin, engine, name);
-		if (result.isSuccess()) {
+	public Result<Renewal> renewal(EmployeeForm ef, String vin, String engine, String name) {
+		Result<Renewal> result = _renewalByVinAndEngine(ef, vin, engine);
+		if (!result.isSuccess())
+			return result;
+		Renewal renewal = result.attach();
+		if (!renewal.getTips().getOwner().getName().equals(name))
+			return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
+		return Result.result(renewal);
+	}
+	
+	private Result<Renewal> _renewalByLicense(EmployeeForm ef, String license) {
+		Renewal renewal = renewalMapper.getByLicense(license);
+		return null == renewal ? _flushRenewal(ef, license) : Result.result(renewal);
+	}
+	
+	private Result<Renewal> _renewalByVinAndEngine(EmployeeForm ef, String vin, String engine) {
+		Renewal renewal = renewalMapper.getByKey(vin);
+		return null == renewal ? _flushRenewal(ef, vin, engine) : Result.result(renewal);
+	}
+	
+	private Result<Renewal> _flushRenewal(EmployeeForm ef, String license) {
+		Result<Renewal> result = biHuVehicle.renewal(ef, license);
+		if (result.isSuccess())
 			renewalMapper.insert(result.attach());
-			if (!result.attach().getTips().getOwner().getName().equals(name))
-				return Result.result(BtkjCode.CAR_OWNER_NAME_ERROR);
-		}
+		return result;
+	}
+	
+	private Result<Renewal> _flushRenewal(EmployeeForm ef, String vin, String engine) {
+		Result<Renewal> result = biHuVehicle.renewal(ef, vin, engine);
+		if (result.isSuccess())
+			renewalMapper.insert(result.attach());
 		return result;
 	}
 
@@ -202,7 +215,7 @@ public class VehicleServiceImpl implements VehicleService {
 		vehicleOrderMapper.deleteBatchOrder(batchId);
 		if (null != bihuQuote) {
 			Result<Void> result = biHuVehicle.order(ef, bihuQuote, bihuInsure, tips);
-			if (!result.isSuccess()) 
+			if (!result.isSuccess())
 				_orderRequestFailure(orders, bihuQuote, result.getDesc());
 		}
 		if (null != leBaoBaQuote) {
@@ -231,20 +244,39 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
+	public Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
+		List<VehicleOrder> orders = vehicleOrderMapper.list(ef, searcher);
+		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(orders.size());
+		for (VehicleOrder order : orders) {
+			_orderInfo(ef, order);
+			result.add(new VehicleOrderListInfo(order));
+		}
+		return new Pager<VehicleOrderListInfo>(0, result);
+	}
+	
+	@Override
 	public Result<VehicleOrder> orderInfo(EmployeeForm ef, String id) {
 		VehicleOrder order = vehicleOrderMapper.getByKey(id);
 		if (null == order)
 			return Result.result(BtkjCode.ORDER_NOT_EXIST);
-		
-		// 只需要刷新壁虎的订单即可：保途和乐宝吧的订单状态是异步回调的，壁虎的需要主动请求
-		if (order.getLane() == Lane.BI_HU.mark() && order.getState() == PolicyState.NEW) {
-			_quoteResult(ef, order);
-			if (order.getState() == PolicyState.QUOTE_SUCCESS) {
-				if (order.isInsure()) 
-					_insureResult(ef, order);
-				bonusManager.calculateBonus(order);
+		return _orderInfo(ef, order);
+	}
+	
+	private Result<VehicleOrder> _orderInfo(EmployeeForm ef, VehicleOrder order) {
+		PolicyState state = order.getState();
+		if (order.getLane() == Lane.BI_HU.mark()) {
+			if (order.getState() == PolicyState.QUOTING) {
+				_quoteResult(ef, order);
+				if (order.getState() == PolicyState.QUOTE_SUCCESS) {
+					bonusManager.calculateBonus(order);					// 报价成功计算手续费
+					if (order.isInsure())								// 如果是核保了则状态变为核保中
+						order.setState(PolicyState.INSURING);
+				}
 			}
-			vehicleOrderMapper.insert(order);
+			if (order.getState() == PolicyState.INSURING)
+				_insureResult(ef, order);
+			if (state != order.getState())								// 状态变了则更新保单
+				vehicleOrderMapper.insert(order);
 		}
 		return Result.result(order);
 	}
@@ -269,6 +301,13 @@ public class VehicleServiceImpl implements VehicleService {
 			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(detail.getDesc());
 				order.setState(PolicyState.QUOTE_SUCCESS_INSURE_FAILURE);
+			} else if (detail.getCode() == BtkjCode.INSURE_REPEAT.id()) {
+				order.setDesc(detail.getDesc());
+				order.setState(PolicyState.QUOTE_SUCCESS_INSURE_FAILURE);
+				if (VehicleUtils.isNewVehicleLicense(order.getTips().getLicense()))
+					_flushRenewal(ef, order.getTips().getVin(), order.getTips().getEngine());
+				else
+					_flushRenewal(ef, order.getTips().getLicense());
 			}
 		} else {
 			order.setDesc(detail.getDesc());
@@ -287,11 +326,6 @@ public class VehicleServiceImpl implements VehicleService {
 		for (Route route : list)
 			l.add(route.getInsurerId());
 		return l;
-	}
-	
-	@Override
-	public Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
-		return vehicleOrderMapper.list(ef, searcher);
 	}
 	
 	@Override

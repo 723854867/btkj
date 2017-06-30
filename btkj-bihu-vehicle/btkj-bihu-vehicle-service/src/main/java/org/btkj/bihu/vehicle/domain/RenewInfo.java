@@ -13,6 +13,7 @@ import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.rapid.util.lang.DateUtils;
 import org.rapid.util.lang.StringUtils;
 
 public class RenewInfo implements Serializable {
@@ -720,7 +721,7 @@ public class RenewInfo implements Serializable {
 		PolicySchema schema = new PolicySchema();
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
-			renewal.set_id(this.UserInfo.LicenseNo);
+			renewal.set_id(this.UserInfo.CarVin);
 			tips.setOwner(_owner());
 			tips.setInsurer(_insurer());
 			tips.setInsured(_insured());
@@ -784,6 +785,8 @@ public class RenewInfo implements Serializable {
 			renewal.setInsurerId(this.SaveQuote.Source);
 		}
 		renewal.setTips(tips);
+		if (null != this.UserInfo.ForceExpireDate)
+			renewal.setCreated((int) (DateUtils.getTime(this.UserInfo.ForceExpireDate, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000));
 		return renewal;
 	}
 	

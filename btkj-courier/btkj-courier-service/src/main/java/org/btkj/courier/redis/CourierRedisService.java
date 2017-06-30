@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -15,12 +17,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.btkj.courier.Config;
+import org.btkj.courier.model.QuotaNoticeSubmit;
+import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
+import org.btkj.pojo.model.insur.vehicle.Insurance;
+import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.Env;
@@ -44,6 +52,7 @@ public class CourierRedisService {
 	
 	private String PARAM_TPL_VALUE		= "tpl_value";
 	private String PARAM_MOBILE			= "mobile";
+	private String QUOTA_MODEL			= "交强险{0}，车船税{1}，商业险{2}(商业险包含：";
 	
 	@Resource
 	private Redis redis;
@@ -53,18 +62,22 @@ public class CourierRedisService {
 	private String yunPianKey;
 	@Value("${yunpian.captcha.tplId}")
 	private int captchaTplId;
+	@Value("${yunpian.quota.tplId}")
+	private int quotaTplId;
 	@Value("${yunpian.captcha.tplSendUrl}")
-	private static String tplSendUrl;
+	private String tplSendUrl;
 	
 	private NameValuePair API_KEY;
-	private NameValuePair TPL_ID;
+	private NameValuePair QUOTA_TPL_ID;
+	private NameValuePair CAPTCHA_TPL_ID;
 	private CaptchaSendHandler handler;
 	
 	@PostConstruct
 	private void init() {
 		handler = new CaptchaSendHandler();
-		API_KEY = new BasicNameValuePair("apiKey", yunPianKey);
-		TPL_ID = new BasicNameValuePair("tpl_id", String.valueOf(captchaTplId));
+		API_KEY = new BasicNameValuePair("apikey", yunPianKey);
+		QUOTA_TPL_ID = new BasicNameValuePair("tpl_id", String.valueOf(quotaTplId));
+		CAPTCHA_TPL_ID = new BasicNameValuePair("tpl_id", String.valueOf(captchaTplId));
 	}
 	
 	public Result<String> captchaObtain(CaptchaReceiver receiver) {
@@ -100,17 +113,56 @@ public class CourierRedisService {
 		String tplValue = null;
 		try {
 			tplValue = URLEncoder.encode("#code#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(captcha, Consts.UTF_8.name());
+			List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+			params.add(API_KEY);
+			params.add(CAPTCHA_TPL_ID);
+			params.add(new BasicNameValuePair(PARAM_TPL_VALUE, tplValue));
+			params.add(new BasicNameValuePair(PARAM_MOBILE, mobile));
+			HttpPost method = new HttpPost(tplSendUrl);
+			method.setEntity(new UrlEncodedFormEntity(params, Consts.UTF_8.name()));
+			httpProxy.asyncRequest(method, handler);
 		} catch (UnsupportedEncodingException e) {
 			logger.error("captcha url encode failure!", e);
 			return;
 		}
-		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
-		params.add(API_KEY);
-		params.add(TPL_ID);
-		params.add(new BasicNameValuePair(PARAM_TPL_VALUE, tplValue));
-		params.add(new BasicNameValuePair(PARAM_MOBILE, mobile));
-		HttpPost method = new HttpPost(tplSendUrl);
-		httpProxy.asyncRequest(method, handler);
+	}
+	
+	public void sendQuotaNotice(VehicleOrder order, QuotaNoticeSubmit submit) {
+		String tplValue = null;
+		try {
+			PolicySchema schema = order.getTips().getSchema();
+			String price = String.valueOf(schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal());
+			tplValue = URLEncoder.encode("#license#",Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getTips().getLicense(), Consts.UTF_8.name()) 
+					+ "&" + URLEncoder.encode("#insurer#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getInsurerName(), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#insurance#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(_buildQuotaInsurances(schema), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(price, Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#name#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentName(), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#mobile#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentMobile(), Consts.UTF_8.name());
+			List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+			params.add(API_KEY);
+			params.add(QUOTA_TPL_ID);
+			params.add(new BasicNameValuePair(PARAM_TPL_VALUE, tplValue));
+			params.add(new BasicNameValuePair(PARAM_MOBILE, submit.getCustomerMobile()));
+			HttpPost method = new HttpPost(tplSendUrl);
+			method.setEntity(new UrlEncodedFormEntity(params, Consts.UTF_8.name()));
+			httpProxy.asyncRequest(method, handler);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("captcha url encode failure!", e);
+			return;
+		}
+	}
+	
+	private String _buildQuotaInsurances(PolicySchema schema) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(MessageFormat.format(QUOTA_MODEL, String.valueOf(schema.getCompulsiveTotal()), 
+				String.valueOf(schema.getVehicleVesselTotal()), String.valueOf(schema.getCommericalTotal())));
+		Map<InsuranceType, Insurance> insurances = schema.getInsurances();
+		if (null != insurances) {
+			for (Entry<InsuranceType, Insurance> entry : insurances.entrySet())
+				builder.append(entry.getKey().title()).append(entry.getValue());
+		}
+		builder.append(")");
+		return builder.toString();
 	}
 	
 	public String _captchaKey(CaptchaReceiver receiver) {

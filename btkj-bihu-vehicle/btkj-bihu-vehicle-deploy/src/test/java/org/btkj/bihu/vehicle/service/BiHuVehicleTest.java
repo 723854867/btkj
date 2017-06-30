@@ -47,7 +47,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(110000);
 		form.setTenant(tenant);
-		Result<Renewal> result = biHuVehicle.renewal(form, "LBVFR7908BSE50921", "05207709", "王彬");
+		Result<Renewal> result = biHuVehicle.renewal(form, "LBVFR7908BSE50921", "05207709");
 		System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(2);
 	}

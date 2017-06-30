@@ -41,7 +41,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.insurerIcon = insurer.getIcon();
 		this.lane = lane;
 		this.insure = insure;
-		this.state = PolicyState.NEW;
+		this.state = PolicyState.QUOTING;
 		this.tips = tips;
 		this.created = DateUtils.currentTime();
 	}

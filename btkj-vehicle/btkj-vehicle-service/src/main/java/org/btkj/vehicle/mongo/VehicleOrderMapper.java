@@ -1,13 +1,12 @@
 package org.btkj.vehicle.mongo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
-import org.btkj.vehicle.model.VehicleOrderListInfo;
 import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
 
@@ -39,7 +38,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		mongo.deleteMany(collection, Filters.eq(FIELD_BATCH_ID, batchId));
 	}
 	
-	public Pager<VehicleOrderListInfo> list(EmployeeForm ef, VehicleOrderSearcher searcher) {
+	public List<VehicleOrder> list(EmployeeForm ef, VehicleOrderSearcher searcher) {
 		List<VehicleOrder> orders = null;
 		if (null != searcher.getBatchId())
 			orders = mongo.find(collection, Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()), VehicleOrder.class);
@@ -49,7 +48,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 				list.add(Filters.eq(FIELD_STATE, searcher.getState().toString()));
 			long total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
 			if (0 == total)
-				return Pager.EMPLTY;
+				return Collections.EMPTY_LIST;
 			searcher.calculate((int) total);
 			orders = list.isEmpty() ?
 					mongo.pagingAndSort(collection, Sorts.descending(FIELD_CREATED), 
@@ -57,9 +56,6 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 					mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
 								searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
 		}
-		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(orders.size());
-		for (VehicleOrder order : orders)
-			result.add(new VehicleOrderListInfo(order));
-		return new Pager<VehicleOrderListInfo>(searcher.getTotal(), result);
+		return orders;
 	}
 }

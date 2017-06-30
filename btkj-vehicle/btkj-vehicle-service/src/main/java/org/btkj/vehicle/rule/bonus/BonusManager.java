@@ -11,7 +11,7 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.PolicyState;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.model.BonusRouteView;
-import org.btkj.vehicle.model.VehicleCoefficientInfo;
+import org.btkj.vehicle.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.mongo.BonusConfigMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
@@ -86,7 +86,7 @@ public class BonusManager {
 		return result;
 	}
 	
-	public Result<List<VehicleCoefficientInfo>> coefficients(BonusSearcher searcher) {
+	public Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher) {
 		LinkedList<String> path = CollectionUtils.toStrLinkedList(searcher.getPath().split(Consts.SYMBOL_UNDERLINE));
 		String nextId = path.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);

@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.model.BonusRouteView;
-import org.btkj.vehicle.model.VehicleCoefficientInfo;
+import org.btkj.vehicle.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.rule.bonus.BonusManager;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class BonusServiceImpl implements BonusService {
 	}
 
 	@Override
-	public Result<List<VehicleCoefficientInfo>> coefficients(BonusSearcher searcher) {
+	public Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher) {
 		return bonusManager.coefficients(searcher);
 	}
 	

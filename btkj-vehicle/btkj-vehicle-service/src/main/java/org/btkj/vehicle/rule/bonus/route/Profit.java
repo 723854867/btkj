@@ -1,11 +1,14 @@
 package org.btkj.vehicle.rule.bonus.route;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.VehicleBizType;
+import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.vehicle.model.VehicleCoefficientsInfo;
+import org.rapid.util.Node;
 
 public class Profit extends BonusRoute<BonusRoute<?>> {
 	
@@ -14,14 +17,9 @@ public class Profit extends BonusRoute<BonusRoute<?>> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficient> coefficients(List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,
+			List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		searcher.setBizType(VehicleBizType.PROFIT);
-		return null;
-	}
-	
-	@Override
-	protected Map<Integer, Integer> checkCommercialCommisionSpinner(BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
-		searcher.setBizType(VehicleBizType.PROFIT);
-		return null;
+		return super.coefficients(path, parent, coefficients, searcher);
 	}
 }

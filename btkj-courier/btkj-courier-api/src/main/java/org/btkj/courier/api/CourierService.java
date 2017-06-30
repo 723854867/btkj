@@ -1,5 +1,7 @@
 package org.btkj.courier.api;
 
+import org.btkj.courier.model.QuotaNoticeSubmit;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.rapid.util.common.message.Result;
@@ -26,4 +28,13 @@ public interface CourierService {
 	 * @return
 	 */
 	Result<String> captchaVerify(CaptchaVerifier verifier);
+	
+	/**
+	 * 报价通知：发送给客户的
+	 * 
+	 * @param order
+	 * @param submit
+	 * @return
+	 */
+	void quotaNotice(VehicleOrder order, QuotaNoticeSubmit submit);
 }

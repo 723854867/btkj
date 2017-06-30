@@ -8,9 +8,9 @@ public enum PolicyState {
 	SYSTEM_ERROR(1),
 	
 	/**
-	 * 新建报价
+	 * 报价中
 	 */
-	NEW(2),
+	QUOTING(2),
 	
 	/**
 	 * 报价失败
@@ -23,24 +23,29 @@ public enum PolicyState {
 	QUOTE_SUCCESS(8),
 	
 	/**
+	 * 核保中
+	 */
+	INSURING(16),
+	
+	/**
 	 * 报价成功，投保失败
 	 */
-	QUOTE_SUCCESS_INSURE_FAILURE(16),
+	QUOTE_SUCCESS_INSURE_FAILURE(32),
 	
 	/**
 	 * 投保成功
 	 */
-	INSURE_SUCCESS(32),
+	INSURE_SUCCESS(64),
 	
 	/**
 	 * 已预约
 	 */
-	ENGAGED(64),
+	ENGAGED(128),
 	
 	/**
 	 * 已出单
 	 */
-	ISSUED(128);
+	ISSUED(256);
 	
 	private int mark;
 	

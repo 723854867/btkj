@@ -43,12 +43,13 @@ public class Rule {
 	 * 
 	 * @return
 	 */
-	private ICode _checkRenewalPeriod(int cityCode, String time) {
+	private ICode _checkRenewalPeriod(int cityCode, String startTime) {
 		City city = cityMapper.getByKey(cityCode);
 		if (null == city)
 			return BtkjCode.CITY_UNSUPPORT;
-		int timestamp = (int) (DateUtils.getTime(time, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000);
-		int maxTime = DateUtils.currentTime() + city.getRenewalPeriod() * 24 * 3600;
+		int renewalInterval = city.getRenewalPeriod() * 24 * 3600;
+		int timestamp = (int) (DateUtils.getTime(startTime, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000);
+		int maxTime = DateUtils.currentTime() + renewalInterval;
 		if (timestamp > maxTime || timestamp < DateUtils.currentTime())
 			return BtkjCode.NOT_IN_RENEWAL_PERIOD;
 		return Code.OK;

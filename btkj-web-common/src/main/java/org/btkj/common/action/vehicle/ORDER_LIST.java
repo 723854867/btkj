@@ -23,4 +23,9 @@ public class ORDER_LIST extends TenantAction {
 		VehicleOrderSearcher searcher = request.getParam(Params.VEHICLE_ORDER_SEARCHER);
 		return Result.result(vehicleService.orders(ef, searcher));
 	}
+	
+	@Override
+	protected boolean userLock() {
+		return true;
+	}
 }

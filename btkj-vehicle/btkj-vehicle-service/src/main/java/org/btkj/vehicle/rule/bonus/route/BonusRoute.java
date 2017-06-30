@@ -15,7 +15,7 @@ import org.btkj.pojo.model.insur.vehicle.Bonus;
 import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.VehicleUtils;
-import org.btkj.vehicle.model.VehicleCoefficientInfo;
+import org.btkj.vehicle.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.GENDER;
@@ -150,11 +150,11 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 							continue;
 						String[] params = coefficient.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 						switch (coefficientType) {
+						case ZXB:
 						case CLAIMS:
 						case NO_CLAIMS:
 						case GENDER:
 							int src = IdentityValidator.isMale(tips.getOwner().getIdNo()) ? GENDER.MALE.mark() : GENDER.FEMALE.mark();
-						case ZXB:
 						case SEAT_COUNT:
 							src = tips.getSeat();
 							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)));
@@ -202,21 +202,28 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	 * 
 	 * @return
 	 */
-	public final List<VehicleCoefficientInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		String nextId = path.poll();
 		BonusRouteBody body = null == parent ? null : parent.getChild(id);
 		if (null == nextId) {
-			List<VehicleCoefficientInfo> temp = null;
 			List<VehicleCoefficient> list = coefficients(coefficients, searcher);
 			Map<Integer, Integer> spinner = null == body ? null : body.getCommercialCommisionSpinner();
 			if (null == list) 
 				return null;
-			temp = new ArrayList<VehicleCoefficientInfo>();
+			Map<CoefficientType, VehicleCoefficientsInfo> map = new HashMap<CoefficientType, VehicleCoefficientsInfo>();
 			for (VehicleCoefficient coefficient : list) {
-				Integer rate = spinner.get(coefficient.getId());
-				temp.add(new VehicleCoefficientInfo(coefficient, rate));
+				Integer rate = null == spinner ? null : spinner.get(coefficient.getId());
+				CoefficientType type = CoefficientType.match(coefficient.getType());
+				if (null == type)
+					continue;
+				VehicleCoefficientsInfo temp = map.get(type);
+				if (null == temp) {
+					temp = new VehicleCoefficientsInfo(type);
+					map.put(type, temp);
+				}
+				temp.addCoefficient(coefficient, rate);
 			}
-			return temp;
+			return new ArrayList<VehicleCoefficientsInfo>(map.values());
 		} else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)

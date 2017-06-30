@@ -94,21 +94,21 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private int insureResultTimeout;
 
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String license, String name) {
+	public Result<Renewal> renewal(EmployeeForm employeeForm, String license) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
-		return _doRenewal(employeeForm, params, name);
+		return _doRenewal(employeeForm, params);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, String name) {
+	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
-		return _doRenewal(employeeForm, params, name);
+		return _doRenewal(employeeForm, params);
 	}
 	
-	private Result<Renewal> _doRenewal(EmployeeForm employeeForm, BiHuParams params, String name) {
+	private Result<Renewal> _doRenewal(EmployeeForm employeeForm, BiHuParams params) {
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));	// 用 uid 作为 custkey
 		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
 		if (null != tc) 
@@ -366,15 +366,19 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
 			params.setAgent(agent).setKey(key);
-		params.setSubmitGroup(insurId);
+		params.setSubmitGroup(insurer.getCode());
 		HttpUriRequest request = _requestUri(insureResultPath, params, insureResultTimeout);
 		try {
 			InsureResult result = httpProxy.syncRequest(request, InsureResult.JSON_HANDLER);
 			if (result.getBusinessStatus() != 1)
 				return Result.result(Code.REQUEST_FAILURE);
-			if (result.getItem().getSubmitStatus() != 1)
-				return Result.result(BtkjCode.INSURE_FAILURE, result.getItem().getSubmitResult());
-			return Result.result(result.detail());
+			if (result.getItem().getSubmitStatus() == 1)
+				return Result.result(result.detail());
+			if (result.getItem().getSubmitStatus() == 2)
+				return Result.result(BtkjCode.INSURE_REPEAT, result.getItem().getSubmitResult());
+			if (result.getItem().getSubmitStatus() == 3)
+				return Result.result(BtkjCode.RENEW_INFO_GET_TIMEOUT);
+			return Result.result(BtkjCode.INSURE_FAILURE, result.getItem().getSubmitResult());
 		} catch (IOException e) {
 			logger.warn("bihu renew request failure!", e);
 			if (e instanceof SocketTimeoutException)

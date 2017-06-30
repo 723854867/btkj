@@ -111,29 +111,34 @@ public enum BtkjCode implements ICode {
 	INSURE_FAILURE(521, "insure failure"),
 	
 	/**
+	 * 重复投保
+	 */
+	INSURE_REPEAT(522, "insure repeat"),
+	
+	/**
 	 * 没有报价
 	 */
-	NOT_QUOTE(522, "not quote"),
+	NOT_QUOTE(523, "not quote"),
 	
 	/**
 	 * 壁虎请求太频繁
 	 */
-	BIHU_REQUEST_FREQUENTLY(523, "bihu request frequently"),
+	BIHU_REQUEST_FREQUENTLY(524, "bihu request frequently"),
 	
 	/**
 	 * 车主名字错误
 	 */
-	CAR_OWNER_NAME_ERROR(524, "car owner name error"),
+	CAR_OWNER_NAME_ERROR(525, "car owner name error"),
 	
 	/**
 	 * 订单不存在
 	 */
-	ORDER_NOT_EXIST(525, "order not exist!"),
+	ORDER_NOT_EXIST(526, "order not exist!"),
 	
 	/**
 	 * 不在续保期内：起保时间太长
 	 */
-	NOT_IN_RENEWAL_PERIOD(526, "not in renewal period"),
+	NOT_IN_RENEWAL_PERIOD(527, "not in renewal period"),
 	
 	/**
 	 * 文章不存在
