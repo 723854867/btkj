@@ -2,6 +2,7 @@ package org.btkj.common.action.vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -104,7 +105,7 @@ public class ORDER extends TenantAction {
 	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType) {
 		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName())
 			return false;
-		if (null != unit.getMobile() && !Validator.isMobile(unit.getMobile()))
+		if (null != unit.getMobile() && !Validator.isMobile(unit.getMobile(), Locale.CHINA.getCountry()))
 			return false;
 		if (!unit.getIdType().check(unit.getIdNo()))
 			return false;
