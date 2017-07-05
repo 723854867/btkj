@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.info.EmployeeListInfo;
-import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.mybatis.provider.EmployeeSQLProvider;
+import org.btkj.user.pojo.info.EmployeePagingInfo;
+import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface EmployeeDao extends DBMapper<Integer, Employee> {
@@ -60,7 +60,9 @@ public interface EmployeeDao extends DBMapper<Integer, Employee> {
 	@UpdateProvider(type = EmployeeSQLProvider.class, method = "updateForJoin")
 	void updateForJoin(@Param("tid") int tid, @Param("value") int value);
 	
-	int searchCount(EmployeeSearcher searcher);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "count")
+	int count(EmployeeSearcher searcher);
 	
-	List<EmployeeListInfo> search(EmployeeSearcher searcher);
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "paging")
+	List<EmployeePagingInfo> paging(EmployeeSearcher searcher);
 }

@@ -52,7 +52,7 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public LinkedList<Region> regionRoute(int region) {
 		LinkedList<Region> list = new LinkedList<Region>();
-		_regionRoute(new LinkedList<Region>(), region);
+		_regionRoute(list, region);
 		return list;
 	}
 	

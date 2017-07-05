@@ -355,9 +355,10 @@ public class VehicleServiceImpl implements VehicleService {
 		VehicleOrder order = vehicleOrderMapper.getByKey(orderId);
 		if (null == order)
 			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
-		if (order.getState() != VehicleOrderState.INSURE_SUCCESS)
+		if (order.getState() != VehicleOrderState.INSURE_SUCCESS && order.getState() != VehicleOrderState.ISSUE_APPOINTED)
 			return BtkjConsts.RESULT.ORDER_STATE_ERROR;
 		order.setDeliveryInfo(deliveryInfo);
+		order.setState(VehicleOrderState.ISSUE_APPOINTED);
 		vehicleOrderMapper.insert(order);
 		return Consts.RESULT.OK;
 	}

@@ -9,12 +9,11 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.mybatis.dao.EmployeeDao;
+import org.btkj.user.pojo.info.EmployeePagingInfo;
+import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
-import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
 /**
@@ -45,12 +44,12 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	 * @param pager
 	 * @param tid
 	 */
-	public Result<Pager<EmployeeListInfo>> employees(EmployeeSearcher searcher) {
-		int total = dao.searchCount(searcher);
+	public Pager<EmployeePagingInfo> paging(EmployeeSearcher searcher) {
+		int total = dao.count(searcher);
 		if (0 == total)
-			return Result.result(Pager.EMPLTY);
+			return Pager.EMPLTY;
 		searcher.calculate(total);
-		return Result.result(new Pager<EmployeeListInfo>(searcher.getTotal(), dao.search(searcher)));
+		return new Pager<EmployeePagingInfo>(searcher.getTotal(), dao.paging(searcher));
 	}
 	
 	public boolean isEmployee(int tid, int uid) {

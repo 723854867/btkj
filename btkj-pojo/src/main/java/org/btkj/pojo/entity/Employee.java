@@ -17,6 +17,7 @@ public class Employee implements UniqueModel<Integer> {
 	private int left;
 	private int right;
 	private int level;
+	private int payType;
 	private int created;
 	private int updated;
 
@@ -74,6 +75,14 @@ public class Employee implements UniqueModel<Integer> {
 	
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public int getPayType() {
+		return payType;
+	}
+	
+	public void setPayType(int payType) {
+		this.payType = payType;
 	}
 
 	public int getCreated() {

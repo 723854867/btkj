@@ -8,16 +8,12 @@ import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.EmployeeListInfo;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
-import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
 
 @Service("employeeService")
@@ -31,11 +27,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private TenantMapper tenantMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
-	
-	@Override
-	public Result<Pager<EmployeeListInfo>> employees(EmployeeSearcher searcher) {
-		return employeeMapper.employees(searcher);
-	}
 	
 	@Override
 	public EmployeeForm getById(int employeeId) {

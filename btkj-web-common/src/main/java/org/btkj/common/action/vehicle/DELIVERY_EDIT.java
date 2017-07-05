@@ -41,7 +41,7 @@ public class DELIVERY_EDIT  extends TenantAction {
 		DeliveryType deliveryType = request.getParam(Params.DELIVERY_TYPE);
 		DeliveryInfo deliveryInfo = null;
 		switch (deliveryType) {
-		case DOT_DISPATCH:
+		case ACTIVE_PICK:
 			deliveryInfo = new DeliveryInfo();
 			deliveryInfo.setType(deliveryType);
 			return vehicleService.deliveryEdit(orderId, deliveryInfo);

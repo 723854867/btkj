@@ -90,7 +90,7 @@ public enum InsuranceType {
 	/**
 	 * 自然不计免赔
 	 */
-	AUTO_FIRE_DEDUCTIBLE(1 << 12, "自然不计免赔", false) {
+	AUTO_FIRE_DEDUCTIBLE(1 << 12, "自燃不计免赔", false) {
 		@Override
 		public int need() {
 			return InsuranceType.AUTO_FIRE.mark();

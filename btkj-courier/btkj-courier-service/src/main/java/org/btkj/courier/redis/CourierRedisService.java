@@ -3,11 +3,10 @@ package org.btkj.courier.redis;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -53,6 +52,8 @@ public class CourierRedisService {
 	private String PARAM_TPL_VALUE		= "tpl_value";
 	private String PARAM_MOBILE			= "mobile";
 	private String QUOTA_MODEL			= "交强险{0}，车船税{1}，商业险{2}(商业险包含：";
+	private DecimalFormat df2 			= new DecimalFormat("###.##");
+	private String template				= "【车险报价通知】尊敬的{0}车主，您的车险即将到期。{1}报价：{2}；总计{3}，优惠后价格{4}，共优惠{5}。联系人：{6}，联系电话:{7}";
 	
 	@Resource
 	private Redis redis;
@@ -131,11 +132,15 @@ public class CourierRedisService {
 		String tplValue = null;
 		try {
 			PolicySchema schema = order.getTips().getSchema();
-			String price = String.valueOf(schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal());
+			double discount = (schema.getCompulsiveTotal() * submit.getCompulsoryRate() / (submit.isTaxInclude() ? 100.0 : 106.0)) 
+					+ (schema.getCommericalTotal() * submit.getCommercialRate() / (submit.isTaxInclude() ? 100.0 : 106.0));
+			double price = schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
 			tplValue = URLEncoder.encode("#license#",Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getTips().getLicense(), Consts.UTF_8.name()) 
 					+ "&" + URLEncoder.encode("#insurer#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getInsurerName(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#insurance#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(_buildQuotaInsurances(schema), Consts.UTF_8.name())
-					+ "&" + URLEncoder.encode("#price#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(price, Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(price), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price1#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(price - discount), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price2#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(discount), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#name#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentName(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#mobile#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentMobile(), Consts.UTF_8.name());
 			List<NameValuePair> params = new ArrayList<NameValuePair>(3);
@@ -156,11 +161,41 @@ public class CourierRedisService {
 		StringBuilder builder = new StringBuilder();
 		builder.append(MessageFormat.format(QUOTA_MODEL, String.valueOf(schema.getCompulsiveTotal()), 
 				String.valueOf(schema.getVehicleVesselTotal()), String.valueOf(schema.getCommericalTotal())));
-		Map<InsuranceType, Insurance> insurances = schema.getInsurances();
-		if (null != insurances) {
-			for (Entry<InsuranceType, Insurance> entry : insurances.entrySet())
-				builder.append(entry.getKey().title()).append(entry.getValue());
+		for (InsuranceType type : InsuranceType.values()) {
+			Insurance insurance = null == schema.getInsurances() ? null : schema.getInsurances().get(type);
+			if (null == insurance)
+				continue;
+			switch (type) {
+			case DAMAGE:
+			case THIRD:
+			case DRIVER:
+			case PASSENGER:
+			case SCRATCH:
+				builder.append(type.title()).append(df2.format(insurance.getQuota() / 10000.0)).append("万、");
+				break;
+			case GLASS:
+				builder.append(type.title()).append("(").append(insurance.getQuota() == 1 ? "国产" : "进口").append(")、");
+				break;
+			case GARAGE_DESIGNATED:
+			case UNKNOWN_THIRD:
+			case WADDING:
+			case AUTO_FIRE:
+			case ROBBERY:
+			case DAMAGE_DEDUCTIBLE:
+			case THIRD_DEDUCTIBLE:
+			case DRIVER_DEDUCTIBLE:
+			case PASSENGER_DEDUCTIBLE:
+			case ROBBERY_DEDUCTIBLE:
+			case AUTO_FIRE_DEDUCTIBLE:
+			case SCRATCH_DEDUCTIBLE:
+			case WADDING_DEDUCTIBLE:
+				builder.append(type.title()).append("、");
+				break;
+			default:
+				break;
+			}
 		}
+		builder.deleteCharAt(builder.length() - 1);
 		builder.append(")");
 		return builder.toString();
 	}

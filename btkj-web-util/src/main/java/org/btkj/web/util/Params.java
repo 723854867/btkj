@@ -19,9 +19,9 @@ import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
 import org.btkj.pojo.submit.ArticleSearcher;
 import org.btkj.pojo.submit.BonusSearcher;
-import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
+import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
@@ -103,12 +103,12 @@ public interface Params {
 	
 	final Str2StrConstConverter ADDRESS 					= new Str2StrConstConverter(1013, "address");
 	
-	final Str2StrConstConverter CAPTCHA					= new Str2StrConstConverter(1013, "captcha");
+	final Str2StrConstConverter CAPTCHA					= new Str2StrConstConverter(1014, "captcha");
 	
 	/**
 	 * 身份证
 	 */
-	final Str2StrConstConverter IDENTITY				= new Str2StrConstConverter(1014, "identity") {
+	final Str2StrConstConverter IDENTITY				= new Str2StrConstConverter(1015, "identity") {
 		public String convert(String value) throws ConstConvertFailureException {
 			if (!Validator.isIdentity(value))
 				throw new ConstConvertFailureException(this);
@@ -116,18 +116,18 @@ public interface Params {
 		};
 	};
 	
-	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1015, "region");
-	final Str2IntConstConverter TENANT_REGION			= new Str2IntConstConverter(1016, "tenantRegion");
+	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1016, "region");
+	final Str2IntConstConverter TENANT_REGION			= new Str2IntConstConverter(1017, "tenantRegion");
 	
-	final Str2StrConstConverter TITLE					= new Str2StrConstConverter(1017, "title");
+	final Str2StrConstConverter TITLE					= new Str2StrConstConverter(1018, "title");
 
-	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1018, "agree", false) {
+	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1019, "agree", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
 		};
 	};
 	
-	final Str2ObjConstConverter<Client> CLIENT			= new Str2ObjConstConverter<Client>(1019, "client", Client.APP) {
+	final Str2ObjConstConverter<Client> CLIENT			= new Str2ObjConstConverter<Client>(1020, "client", Client.APP) {
 		@Override
 		public Client convert(String k) throws ConstConvertFailureException {
 			Client client = Client.match(Integer.valueOf(k));
@@ -136,14 +136,14 @@ public interface Params {
 			return client;
 		}
 	};
-	final Str2StrConstConverter PWD						= new Str2StrConstConverter(1020, "pwd") {
+	final Str2StrConstConverter PWD						= new Str2StrConstConverter(1021, "pwd") {
 		public String convert(String value) throws ConstConvertFailureException {
 			return DigestUtils.md5Hex(value);
 		};
 	};
-	final Str2IntConstConverter UID						= new Str2IntConstConverter(1021, "uid");
-	final Str2IntConstConverter ID						= new Str2IntConstConverter(1022, "id");
-	final Str2IntConstConverter MAX_TENANTS_COUNT		= new Str2IntConstConverter(1023, "maxTenantsCount") {
+	final Str2IntConstConverter UID						= new Str2IntConstConverter(1022, "uid");
+	final Str2IntConstConverter ID						= new Str2IntConstConverter(1023, "id");
+	final Str2IntConstConverter MAX_TENANTS_COUNT		= new Str2IntConstConverter(1024, "maxTenantsCount") {
 		public Integer convert(String value) throws ConstConvertFailureException {
 			int val = Integer.valueOf(value);
 			if (val < 0)
@@ -151,7 +151,7 @@ public interface Params {
 			return val;
 		};
 	};
-	final Str2IntConstConverter MAX_ARTICLES_COUNT		= new Str2IntConstConverter(1024, "maxArticlesCount") {
+	final Str2IntConstConverter MAX_ARTICLES_COUNT		= new Str2IntConstConverter(1025, "maxArticlesCount") {
 		public Integer convert(String value) throws ConstConvertFailureException {
 			int val = Integer.valueOf(value);
 			if (val < 0)
@@ -160,7 +160,7 @@ public interface Params {
 		};
 	};
 	
-	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1025, "modules") {
+	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1026, "modules") {
 		@Override
 		public Set<Integer> convert(String k) throws ConstConvertFailureException {
 			try {
@@ -171,7 +171,7 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<DeliveryType> DELIVERY_TYPE	= new Str2ObjConstConverter<DeliveryType>(1026, "deliveryType") {
+	final Str2ObjConstConverter<DeliveryType> DELIVERY_TYPE	= new Str2ObjConstConverter<DeliveryType>(1027, "deliveryType") {
 		@Override
 		public DeliveryType convert(String k) throws ConstConvertFailureException {
 			try {

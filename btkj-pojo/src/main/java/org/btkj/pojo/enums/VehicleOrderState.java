@@ -38,9 +38,14 @@ public enum VehicleOrderState {
 	INSURE_SUCCESS(64),
 	
 	/**
+	 * 已预约
+	 */
+	ISSUE_APPOINTED(128),
+	
+	/**
 	 * 已出单
 	 */
-	ISSUED(128);
+	ISSUED(256);
 	
 	private int mark;
 	
