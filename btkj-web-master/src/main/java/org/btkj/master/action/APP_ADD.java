@@ -14,8 +14,6 @@ import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
- * 添加 app - 必须指定第一个租户和 root 用户
- * 
  * @author ahab
  */
 public class APP_ADD extends AdministratorAction {
@@ -34,9 +32,8 @@ public class APP_ADD extends AdministratorAction {
 			throw ConstConvertFailureException.errorConstException(Params.REGION);
 		
 		String name = request.getParam(Params.NAME);
-		int maxTenantsCount = request.getParam(Params.MAX_TENANTS_COUNT);
-		int maxArticlesCount = request.getParam(Params.MAX_ARTICLES_COUNT);
-		boolean tenantAddAutonomy = request.getOptionalParam(Params.TENANT_ADD_AUTONOMY);
-		return Result.result(appService.addApp(region.getId(), name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy));
+		int maxTenantsCount = request.getOptionalParam(Params.MAX_TENANTS_COUNT);
+		int maxArticlesCount = request.getOptionalParam(Params.MAX_ARTICLES_COUNT);
+		return Result.result(appService.addApp(region.getId(), name, maxTenantsCount, maxArticlesCount));
 	}
 }

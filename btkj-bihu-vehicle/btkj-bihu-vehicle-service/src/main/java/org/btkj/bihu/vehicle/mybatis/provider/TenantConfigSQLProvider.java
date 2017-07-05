@@ -15,4 +15,13 @@ public class TenantConfigSQLProvider {
 			}
 		}.toString();
 	}
+	
+	public String delete() { 
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("tid=#{tid}");
+			}
+		}.toString();
+	}
 }

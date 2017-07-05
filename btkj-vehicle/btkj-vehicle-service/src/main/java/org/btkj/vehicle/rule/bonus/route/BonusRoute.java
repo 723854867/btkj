@@ -15,7 +15,7 @@ import org.btkj.pojo.model.insur.vehicle.Bonus;
 import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.VehicleUtils;
-import org.btkj.vehicle.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.GENDER;

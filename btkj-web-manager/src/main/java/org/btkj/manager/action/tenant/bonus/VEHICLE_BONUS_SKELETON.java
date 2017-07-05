@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.model.BonusRouteView;
+import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 

@@ -11,6 +11,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AppAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -29,13 +30,15 @@ public class LOGIN extends AppAction {
 	@Override
 	protected Result<?> execute(Request request, Client client, App app) {
 		switch (client) {
-		case MANAGER:
+		case TENANT_MANAGER:
 			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
-		default:
+		case APP:
 			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, app.getId());			// app 登录需要验证码
 			if (courierService.captchaVerify(verifier).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
 			return loginService.login(app, client, verifier.getIdentity());
+		default:
+			return Consts.RESULT.FORBID;
 		}
 	}
 }

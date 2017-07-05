@@ -16,6 +16,6 @@ public class APP_TIPS extends AppAction {
 	
 	@Override
 	protected Client client(Request request) {
-		return Client.MANAGER;
+		return Client.TENANT_MANAGER;
 	}
 }

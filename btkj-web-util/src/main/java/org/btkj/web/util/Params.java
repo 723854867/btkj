@@ -2,6 +2,7 @@ package org.btkj.web.util;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -12,6 +13,7 @@ import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
@@ -20,9 +22,9 @@ import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.pojo.submit.EmployeeSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
-import org.btkj.pojo.submit.TenantSearcher;
-import org.btkj.pojo.submit.UserSearcher;
-import org.btkj.vehicle.model.VehicleOrderSearcher;
+import org.btkj.user.pojo.submit.TenantSearcher;
+import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
@@ -33,9 +35,6 @@ import org.rapid.util.lang.DateUtils;
 import org.rapid.util.validator.Validator;
 
 import com.google.gson.reflect.TypeToken;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 /**
  * btkj 的所有请求参数
@@ -77,6 +76,8 @@ public interface Params {
 	 * 租户名
 	 */
 	final Str2StrConstConverter TNAME					= new Str2StrConstConverter(1007, "tname");
+	
+	final Str2IntConstConverter CUSTOMER_ID				= new Str2IntConstConverter(1008, "customerId");
 
 	
 	/**
@@ -84,15 +85,9 @@ public interface Params {
 	 */
 	final Str2StrConstConverter MOBILE					= new Str2StrConstConverter(1009, "mobile") {
 		public String convert(String value) throws ConstConvertFailureException {
-			PhoneNumberUtil util = PhoneNumberUtil.getInstance();
-			try {
-				PhoneNumber number = util.parse(value, null);
-				if (!util.isValidNumber(number))
-					throw new ConstConvertFailureException(this);
-				return "+" + number.getCountryCode() + number.getNationalNumber();
-			} catch (NumberParseException e) {
-				throw new ConstConvertFailureException(this, e);
-			}
+			if (!Validator.isMobile(value, Locale.CHINA.getCountry()))
+				throw new ConstConvertFailureException(this);
+			return value;
 		};
 	};
 	final Str2StrConstConverter AVATAR 					= new Str2StrConstConverter(1010, "avatar");
@@ -105,6 +100,8 @@ public interface Params {
 			return Version.match(k);
 		}
 	};
+	
+	final Str2StrConstConverter ADDRESS 					= new Str2StrConstConverter(1013, "address");
 	
 	final Str2StrConstConverter CAPTCHA					= new Str2StrConstConverter(1013, "captcha");
 	
@@ -174,10 +171,19 @@ public interface Params {
 		}
 	};
 	
-	final Str2BoolConstConverter TENANT_ADD_AUTONOMY		= new Str2BoolConstConverter(1026, "tenantAddAutonomy", false) {
-		public Boolean convert(String value) throws ConstConvertFailureException {
-			return Boolean.valueOf(value);
-		};
+	final Str2ObjConstConverter<DeliveryType> DELIVERY_TYPE	= new Str2ObjConstConverter<DeliveryType>(1026, "deliveryType") {
+		@Override
+		public DeliveryType convert(String k) throws ConstConvertFailureException {
+			try {
+				int value = Integer.valueOf(k);
+				DeliveryType type = DeliveryType.match(value);
+				if (null == type)
+					throw ConstConvertFailureException.errorConstException(this);
+				return type;
+			} catch (NumberFormatException e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+		}
 	};
 	
 	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1028, "identityFace");
@@ -214,6 +220,9 @@ public interface Params {
 	};	
 	
 	final Str2StrConstConverter VEHICLE_ID						= new Str2StrConstConverter(1040, "vehicleId");
+	final Str2StrConstConverter AGENT							= new Str2StrConstConverter(1041, "agent");
+	final Str2StrConstConverter KEY								= new Str2StrConstConverter(1042, "key");
+	final Str2IntConstConverter NUM								= new Str2IntConstConverter(1043, "num");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
@@ -308,7 +317,7 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, App.class);
 		}
 	};
-	final Str2ObjConstConverter<TenantSearcher> TENANT_SEARCHER			= new Str2ObjConstConverter<TenantSearcher>(1208, "tenantSearch") {
+	final Str2ObjConstConverter<TenantSearcher> TENANT_SEARCHER	= new Str2ObjConstConverter<TenantSearcher>(1208, "tenantSearch") {
 		@Override
 		public TenantSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSearcher.class);

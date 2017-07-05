@@ -37,13 +37,12 @@ public class EntityGenerator {
 		return employee;
 	}
 	
-	public static final App newApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy) {
+	public static final App newApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
 		App app = new App();
 		app.setRegion(region);
 		app.setName(name);
 		app.setMaxTenantsCount(maxTenantsCount);
 		app.setMaxArticlesCount(maxArticlesCount);
-		app.setTenantAddAutonomy(tenantAddAutonomy);
 
 		int time = DateUtils.currentTime();
 		app.setCreated(time);
@@ -51,7 +50,7 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final Tenant newTenant(int region, int appId, String name) {
+	public static final Tenant newTenant(int region, int appId, String name, String licenseFace, String licenseBack) {
 		Tenant tenant = new Tenant();
 		tenant.setName(name);
 		tenant.setAppId(appId);

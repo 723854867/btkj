@@ -1,9 +1,9 @@
 package org.btkj.community.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.enums.SortType;
 import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.pojo.submit.QuizSearcher.SortCol;
+import org.rapid.util.common.enums.SORT_TYPE;
 
 public class QuizSQLProvider {
 	
@@ -73,8 +73,8 @@ public class QuizSQLProvider {
 				break;
 			}
 		}
-		SortType sortType = searcher.getSortType();
-		builder.append(null == sortType ? "DESC " : SortType.ASC == sortType ? "ASC " : "DESC ");
+		SORT_TYPE sortType = searcher.getSortType();
+		builder.append(null == sortType ? "DESC " : SORT_TYPE.ASC == sortType ? "ASC " : "DESC ");
 		builder.append("LIMIT ").append(searcher.getStart()).append(", ").append(searcher.getPageSize());
 		return builder.toString();
 	}

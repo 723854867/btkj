@@ -11,12 +11,12 @@ import org.btkj.community.LuaCmd;
 import org.btkj.community.mybatis.dao.ArticleDao;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Article;
-import org.btkj.pojo.enums.SortType;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.ArticleSearcher;
 import org.btkj.pojo.submit.ArticleSearcher.SortCol;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
+import org.rapid.util.common.enums.SORT_TYPE;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
@@ -75,7 +75,7 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 				SerializeUtil.RedisUtil.encode(searcher.getPage()), 
 				SerializeUtil.RedisUtil.encode(searcher.getPageSize()),
 				SerializeUtil.RedisUtil.encode(null == searcher.getSortType() ? RedisConsts.OPTION_ZREVRANGE 
-						: searcher.getSortType() == SortType.ASC ? RedisConsts.OPTION_ZRANGE : RedisConsts.OPTION_ZREVRANGE));
+						: searcher.getSortType() == SORT_TYPE.ASC ? RedisConsts.OPTION_ZRANGE : RedisConsts.OPTION_ZREVRANGE));
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));

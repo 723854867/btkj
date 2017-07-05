@@ -8,14 +8,20 @@ public enum Client {
 	APP(1),
 	
 	/**
-	 * pc 端
+	 * 商户管理端
 	 */
-	MANAGER(2),
+	TENANT_MANAGER(2),
 	
 	/**
+	 * 保途管理端
 	 * 
 	 */
-	RECRUIT(4);
+	BAO_TU_MANAGER(4),
+	
+	/**
+	 * h5推荐好友端
+	 */
+	RECRUIT(8);
 	
 	private int type;
 	

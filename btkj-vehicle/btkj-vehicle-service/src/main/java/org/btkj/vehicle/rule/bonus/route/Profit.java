@@ -7,7 +7,7 @@ import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.VehicleBizType;
 import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
-import org.btkj.vehicle.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
 
 public class Profit extends BonusRoute<BonusRoute<?>> {

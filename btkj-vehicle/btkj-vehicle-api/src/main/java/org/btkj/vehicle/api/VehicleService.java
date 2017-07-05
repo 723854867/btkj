@@ -13,8 +13,9 @@ import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
-import org.btkj.vehicle.model.VehicleOrderListInfo;
-import org.btkj.vehicle.model.VehicleOrderSearcher;
+import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
+import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -105,4 +106,13 @@ public interface VehicleService {
 	 * @return
 	 */
 	List<VehicleModel> vehicleModels(int deptId);
+	
+	/**
+	 * 编辑配送信息
+	 * 
+	 * @param orderId
+	 * @param deliveryInfo
+	 * @return
+	 */
+	Result<Void> deliveryEdit(String orderId, DeliveryInfo deliveryInfo);
 }

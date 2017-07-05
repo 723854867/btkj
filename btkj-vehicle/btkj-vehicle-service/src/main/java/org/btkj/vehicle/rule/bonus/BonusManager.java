@@ -1,5 +1,6 @@
 package org.btkj.vehicle.rule.bonus;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,12 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.BonusConfig;
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.enums.PolicyState;
+import org.btkj.pojo.enums.VehicleOrderState;
+import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.submit.BonusSearcher;
-import org.btkj.vehicle.model.BonusRouteView;
-import org.btkj.vehicle.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.mongo.BonusConfigMapper;
+import org.btkj.vehicle.pojo.model.BonusRouteView;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
@@ -21,6 +23,7 @@ import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.StringUtils;
 
 public class BonusManager {
 	
@@ -95,6 +98,18 @@ public class BonusManager {
 		BonusConfig config = bonusConfigMapper.getByKey(searcher.getId());
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
 		coefficients.addAll(vehicleCoefficientMapper.getByTid(searcher.getTid()));
+		// 车牌省份过滤
+		String provinceAbbreviation = 0 == searcher.getSubordinateProvince() ? null : StringUtils.provinceAbbreviation(searcher.getSubordinateProvince());
+		if (null != provinceAbbreviation) {
+			Iterator<VehicleCoefficient> iterator = coefficients.iterator();
+			while (iterator.hasNext()) {
+				VehicleCoefficient coefficient = iterator.next();
+				if (coefficient.getType() != CoefficientType.LICENSE.mark())
+					continue;
+				if (!provinceAbbreviation.equals(coefficient.getComparableValue().substring(0, 1)))
+					iterator.remove();
+			}
+		}
 		return Result.result(route.coefficients(path, config, coefficients, searcher));
 	}
 	
@@ -104,7 +119,7 @@ public class BonusManager {
 	 * @param order
 	 */
 	public void calculateBonus(VehicleOrder order) {
-		if (order.getState().mark() < PolicyState.QUOTE_SUCCESS.mark() || null != order.getBonus() || null == order.getTips())
+		if (order.getState().mark() < VehicleOrderState.QUOTE_SUCCESS.mark() || null != order.getBonus() || null == order.getTips())
 			return;
 		LinkedList<String> paths = order.getTips().commisionRoutePath();
 		BonusRoute route = null == paths.peek() ? null : bonusRoutes.get(paths.poll());

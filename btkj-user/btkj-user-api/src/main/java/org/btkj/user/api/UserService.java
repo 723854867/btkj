@@ -2,6 +2,7 @@ package org.btkj.user.api;
 
 import java.util.List;
 
+import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserModel;
@@ -97,4 +98,12 @@ public interface UserService {
 	 * @return
 	 */
 	boolean tenantNumMax(User user);
+	
+	/**
+	 * 根据客户 ID 获取客户
+	 * 
+	 * @param customerId
+	 * @return
+	 */
+	Customer getCustomerById(long customerId);
 }

@@ -60,6 +60,11 @@
 		<property name="dao" ref="bannerDao" />
 	</bean>
 	
+	<bean id="customerMapper" class="org.btkj.user.redis.CustomerMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="customerDao" />
+	</bean>
+	
 	<bean id="nonAutoBindMapper" class="org.btkj.user.redis.NonAutoBindMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="nonAutoBindDao" />

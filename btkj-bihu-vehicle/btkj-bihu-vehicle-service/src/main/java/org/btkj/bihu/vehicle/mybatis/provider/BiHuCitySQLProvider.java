@@ -15,4 +15,22 @@ public class BiHuCitySQLProvider {
 			}
 		}.toString();
 	}
+	
+	public String getAll() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+			}
+		}.toString();
+	}
+	
+	public String delete() { 
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("code=#{code}");
+			}
+		}.toString();
+	}
 }

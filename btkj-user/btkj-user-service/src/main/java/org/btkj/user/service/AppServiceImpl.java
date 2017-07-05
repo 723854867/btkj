@@ -74,8 +74,8 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy) {
-		App app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount, tenantAddAutonomy);
+	public App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		App app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
 		appMapper.insert(app);
 		return app;
 	}

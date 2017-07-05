@@ -1,5 +1,6 @@
 package org.btkj.config.api;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.btkj.pojo.entity.Insurer;
@@ -23,6 +24,31 @@ public interface ConfigService {
 	 * @return
 	 */
 	boolean isSubRegion(int region1, int region2);
+	
+	/**
+	 * 根据行政区划代码获取所属省份的行政区划代码：
+	 * 如果行政区划代码是全国返回 null
+	 * 
+	 * @param region
+	 * @return
+	 */
+	Region subordinateProvince(int region);
+	
+	/**
+	 * 根据 region 获取该 region 的全地址路径
+	 * 
+	 * @param region
+	 * @return
+	 */
+	LinkedList<Region> regionRoute(int region);
+	
+	/**
+	 * 一次性获取多条行政区划数据
+	 * 
+	 * @param regionIds
+	 * @return
+	 */
+	List<Region> getRegions(List<Integer> regionIds);
 	
 	/**
 	 * 根据保险公司ID获取保险公司

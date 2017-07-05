@@ -1,8 +1,9 @@
 package org.btkj.pojo.entity;
 
-import org.btkj.pojo.enums.PolicyState;
+import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.Bonus;
+import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.lang.DateUtils;
 
@@ -13,27 +14,30 @@ public class VehicleOrder implements UniqueModel<String> {
 	// 订单基本信息
 	private String _id;
 	private String batchId;				// 批次号，一次报价可以对多家公司进行报价、多个报价共用一个批次号
-	private int appId;					// 平台ID
+	private int employeeId;				// 雇员ID
 	private int tid;					// 商户ID
+	private int appId;					// 平台ID
 	private int lane; 					// 线路：壁虎、乐宝吧、保途
 	private boolean insure; 			// 是否投保
-	private PolicyState state; 			// 保单状态
 	private String desc; 				// 描述
 	private int created; 				// 创建时间
+	private VehicleOrderState state; 	// 保单状态
 
 	// 险企信息
 	private int insurerId; 				// 保险公司ID
 	private String insurerName; 		// 保险公司名字
 	private String insurerIcon; 		// 保险公司Icon
 	
-	private VehiclePolicyTips tips;
 	private Bonus bonus;				// 奖励
+	private VehiclePolicyTips tips;
+	private DeliveryInfo deliveryInfo;	// 配送信息
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(String id, String batchId, int appId, int tid, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
+	public VehicleOrder(String id, String batchId, int employeeId, int appId, int tid, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
 		this._id = id;
 		this.batchId = batchId;
+		this.employeeId = employeeId;
 		this.appId = appId;
 		this.tid = tid;
 		this.insurerId = insurer.getId();
@@ -41,7 +45,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.insurerIcon = insurer.getIcon();
 		this.lane = lane;
 		this.insure = insure;
-		this.state = PolicyState.QUOTING;
+		this.state = VehicleOrderState.QUOTING;
 		this.tips = tips;
 		this.created = DateUtils.currentTime();
 	}
@@ -52,6 +56,14 @@ public class VehicleOrder implements UniqueModel<String> {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	
+	public int getEmployeeId() {
+		return employeeId;
+	}
+	
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
 	}
 	
 	public int getAppId() {
@@ -86,11 +98,11 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.insure = insure;
 	}
 
-	public PolicyState getState() {
+	public VehicleOrderState getState() {
 		return state;
 	}
 
-	public void setState(PolicyState state) {
+	public void setState(VehicleOrderState state) {
 		this.state = state;
 	}
 
@@ -150,10 +162,14 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.bonus = bonus;
 	}
 	
-	public String commisionRoutePath() {
-		return null;
+	public DeliveryInfo getDeliveryInfo() {
+		return deliveryInfo;
 	}
-
+	
+	public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
+		this.deliveryInfo = deliveryInfo;
+	}
+	
 	@Override
 	public String key() {
 		return this._id;

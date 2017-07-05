@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.model.BonusRouteView;
-import org.btkj.vehicle.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.BonusRouteView;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.rule.bonus.BonusManager;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;

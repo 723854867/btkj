@@ -99,14 +99,14 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<?> tenantAdd(App app, Region region, String tname, User user) {
+	public Result<?> tenantAdd(App app, Region region, String tname, User user, String licenseFace, String licenseBack) {
 		String lockId = userMapper.lockUser(user.getUid());
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
 		try {
 			if (userService.tenantNumMax(user))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(app, region, tname, user).finish();
+			tx.tenantAdd(app, region, tname, user, licenseFace, licenseBack).finish();
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}

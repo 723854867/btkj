@@ -15,7 +15,6 @@ public class AppSQLProvider {
 				VALUES("`mod`", "#{mod}");
 				VALUES("max_tenants_count", "#{maxTenantsCount}");
 				VALUES("max_articles_count", "#{maxArticlesCount}");
-				VALUES("tenant_add_autonomy", "#{tenantAddAutonomy}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}

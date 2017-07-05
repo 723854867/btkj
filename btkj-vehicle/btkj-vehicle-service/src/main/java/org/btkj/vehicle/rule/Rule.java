@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
-import org.btkj.vehicle.mybatis.entity.City;
+import org.btkj.vehicle.pojo.entity.City;
 import org.btkj.vehicle.redis.CityMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;

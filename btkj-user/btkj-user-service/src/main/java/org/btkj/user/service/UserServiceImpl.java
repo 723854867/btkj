@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -13,6 +14,7 @@ import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
+import org.btkj.user.redis.CustomerMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService {
 	private ApplyMapper applyMapper;
 	@Resource
 	private TenantMapper tenantMapper;
+	@Resource
+	private CustomerMapper customerMapper;
 	@Resource
 	private EmployeeMapper employeeMapper;
 	
@@ -130,5 +134,10 @@ public class UserServiceImpl implements UserService {
 	public boolean tenantNumMax(User user) {
 		int limit = employeeMapper.ownedTenants(user).size() + applyMapper.applyListTids(user).size();
 		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
+	}
+	
+	@Override
+	public Customer getCustomerById(long customerId) {
+		return customerMapper.getByKey(customerId);
 	}
 }

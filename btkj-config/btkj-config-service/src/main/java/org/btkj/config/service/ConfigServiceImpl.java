@@ -1,5 +1,6 @@
 package org.btkj.config.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,6 +10,7 @@ import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Region;
+import org.rapid.util.common.Consts;
 import org.springframework.stereotype.Service;
 
 @Service("configService")
@@ -33,6 +35,40 @@ public class ConfigServiceImpl implements ConfigService {
 		if (region1 == region2 || r2.getParentId() == region1)
 			return true;
 		return isSubRegion(region1, r2.getParentId());
+	}
+	
+	@Override
+	public Region subordinateProvince(int region) {
+		Region r = regionMapper.getByKey(region);
+		if (null == r)
+			return null;
+		if (r.getLevel() == Consts.RegionLevel.COUNTRY.mark())
+			return null;
+		if (r.getLevel() == Consts.RegionLevel.PROVINCE.mark())
+			return r;
+		return subordinateProvince(r.getParentId());
+	}
+	
+	@Override
+	public LinkedList<Region> regionRoute(int region) {
+		LinkedList<Region> list = new LinkedList<Region>();
+		_regionRoute(new LinkedList<Region>(), region);
+		return list;
+	}
+	
+	@Override
+	public List<Region> getRegions(List<Integer> regionIds) {
+		return regionMapper.getWithinKey(regionIds);
+	}
+	
+	private void _regionRoute(LinkedList<Region> regions, int region) {
+		Region r = regionMapper.getByKey(region);
+		if (null == r)
+			return;
+		regions.addFirst(r);
+		if (0 == r.getParentId())
+			return;
+		_regionRoute(regions, r.getParentId());
 	}
 	
 	@Override

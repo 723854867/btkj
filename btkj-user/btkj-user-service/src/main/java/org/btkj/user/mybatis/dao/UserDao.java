@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.User;
 import org.btkj.user.mybatis.provider.UserSQLProvider;
+import org.btkj.user.pojo.submit.UserSearcher;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface UserDao extends DBMapper<Integer, User> {
@@ -32,4 +33,10 @@ public interface UserDao extends DBMapper<Integer, User> {
 	@Override
 	@SelectProvider(type = UserSQLProvider.class, method = "getWithinKey")
 	List<User> getWithinKey(@Param("list") List<Integer> keys);
+	
+	@SelectProvider(type = UserSQLProvider.class, method = "count")
+	int count(UserSearcher searcher);
+	
+	@SelectProvider(type = UserSQLProvider.class, method = "paging")
+	List<User> paging(UserSearcher searcher);
 }

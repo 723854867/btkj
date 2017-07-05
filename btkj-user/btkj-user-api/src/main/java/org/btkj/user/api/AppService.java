@@ -34,10 +34,9 @@ public interface AppService {
 	 * @param name app 的名字
 	 * @param maxTenantsCount app 能添加的租户的上限
 	 * @param maxArticlesCount app 能添加的最大咨询数
-	 * @param tenantAddAutonomy 是否允许自主添加代理商，如果为 false，则需要保途审核
 	 * @return
 	 */
-	App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount, boolean tenantAddAutonomy);
+	App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount);
 	
 	/**
 	 * 获取该 app 的代理公司数

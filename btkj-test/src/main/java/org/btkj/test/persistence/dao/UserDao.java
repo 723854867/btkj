@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.pojo.entity.User;
 import org.btkj.test.persistence.mapper.UserSQLProvider;
+import org.btkj.user.pojo.submit.TenantSearcher;
 
 public interface UserDao {
 
@@ -22,4 +23,7 @@ public interface UserDao {
 	@InsertProvider(type = UserSQLProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "uid", keyProperty = "uid")
 	void insert(User user);
+	
+	@SelectProvider(type = UserSQLProvider.class, method = "count")
+	int count(TenantSearcher searcher);
 }

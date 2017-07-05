@@ -16,6 +16,6 @@ public abstract class TenantAction extends org.btkj.web.util.action.TenantAction
 
 	@Override
 	protected Client client(Request request) {
-		return Client.MANAGER;
+		return Client.TENANT_MANAGER;
 	}
 }

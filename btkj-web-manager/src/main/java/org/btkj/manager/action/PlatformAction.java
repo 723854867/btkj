@@ -18,6 +18,6 @@ public abstract class PlatformAction extends UserAction {
 
 	@Override
 	protected Client client(Request request) {
-		return Client.MANAGER;
+		return Client.TENANT_MANAGER;
 	}
 }

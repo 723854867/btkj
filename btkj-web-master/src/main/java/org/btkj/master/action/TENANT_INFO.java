@@ -12,6 +12,7 @@ import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 
 public class TENANT_INFO extends AdministratorAction {
+	
 	@Resource
 	private TenantService tenantService;
 

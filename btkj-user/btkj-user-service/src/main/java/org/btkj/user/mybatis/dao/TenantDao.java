@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.user.mybatis.provider.TenantSQLProvider;
+import org.btkj.user.pojo.submit.TenantSearcher;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface TenantDao extends DBMapper<Integer, Tenant> {
@@ -38,4 +39,10 @@ public interface TenantDao extends DBMapper<Integer, Tenant> {
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppIdForUpdate")
 	int countByAppIdForUpdate(int appId);
+	
+	@SelectProvider(type = TenantSQLProvider.class, method = "count")
+	int count(TenantSearcher searcher);
+	
+	@SelectProvider(type = TenantSQLProvider.class, method = "paging")
+	List<Tenant> paging(TenantSearcher searcher);
 }

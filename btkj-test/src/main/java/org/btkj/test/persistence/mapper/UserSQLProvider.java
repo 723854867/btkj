@@ -1,6 +1,7 @@
 package org.btkj.test.persistence.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.btkj.user.pojo.submit.TenantSearcher;
 
 public class UserSQLProvider {
 
@@ -29,5 +30,10 @@ public class UserSQLProvider {
 				VALUES("updated", "#{updated}");
 			}
 		}.toString();
+	}
+	
+	public String count(TenantSearcher searcher) {
+		System.out.println(searcher.getAppId());
+		return null;
 	}
 }

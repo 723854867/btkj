@@ -82,7 +82,7 @@ public class LoginServiceImpl implements LoginService {
 				return Result.result(Code.PWD_NOT_RESET);
 			if (!pwd.equals(user.getPwd()))
 				return Result.result(Code.PWD_ERROR);
-			return _doLogin(Client.MANAGER, user, mobile);
+			return _doLogin(Client.TENANT_MANAGER, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}
@@ -99,7 +99,7 @@ public class LoginServiceImpl implements LoginService {
 		} else {
 			int time = DateUtils.currentTime();
 			switch (client) {
-			case MANAGER:
+			case TENANT_MANAGER:
 				user.setPcLoginTime(time);
 				break;
 			default:

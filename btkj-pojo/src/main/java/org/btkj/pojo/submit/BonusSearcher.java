@@ -7,6 +7,7 @@ import org.rapid.util.common.Consts;
 public class BonusSearcher {
 
 	private int tid;
+	private int subordinateProvince;			// 所属省份行政区划代码
 	private String path;
 	private int insurerId;
 	private boolean delete;
@@ -20,6 +21,14 @@ public class BonusSearcher {
 	
 	public void setTid(int tid) {
 		this.tid = tid;
+	}
+	
+	public int getSubordinateProvince() {
+		return subordinateProvince;
+	}
+	
+	public void setSubordinateProvince(int subordinateProvince) {
+		this.subordinateProvince = subordinateProvince;
 	}
 	
 	public String getPath() {

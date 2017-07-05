@@ -69,6 +69,12 @@
 			<artifactId>HikariCP</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-bihu-vehicle-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

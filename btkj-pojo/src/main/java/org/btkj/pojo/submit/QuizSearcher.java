@@ -1,6 +1,6 @@
 package org.btkj.pojo.submit;
 
-import org.btkj.pojo.enums.SortType;
+import org.rapid.util.common.enums.SORT_TYPE;
 
 public class QuizSearcher extends Page {
 
@@ -8,7 +8,7 @@ public class QuizSearcher extends Page {
 
 	private Integer appId;
 	private SortCol sortCol;
-	private SortType sortType;
+	private SORT_TYPE sortType;
 	
 	public Integer getAppId() {
 		return appId;
@@ -26,11 +26,11 @@ public class QuizSearcher extends Page {
 		this.sortCol = sortCol;
 	}
 	
-	public SortType getSortType() {
+	public SORT_TYPE getSortType() {
 		return sortType;
 	}
 	
-	public void setSortType(SortType sortType) {
+	public void setSortType(SORT_TYPE sortType) {
 		this.sortType = sortType;
 	}
 	

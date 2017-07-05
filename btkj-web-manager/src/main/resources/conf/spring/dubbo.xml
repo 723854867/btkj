@@ -13,6 +13,7 @@
 	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
 	<dubbo:reference id="tenantService" interface="org.btkj.user.api.TenantService" />
 	<dubbo:reference id="employeeService" interface="org.btkj.user.api.EmployeeService" />
+	<dubbo:reference id="userManageService" interface="org.btkj.user.api.UserManageService" />
 	
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" />
 	

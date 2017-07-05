@@ -15,6 +15,7 @@ import org.btkj.baotu.vehicle.api.BaoTuVehicle;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
@@ -22,21 +23,22 @@ import org.btkj.pojo.entity.VehicleBrand;
 import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.enums.PolicyState;
+import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
 import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.btkj.vehicle.VehicleUtils;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.vehicle.model.Lane;
-import org.btkj.vehicle.model.VehicleOrderListInfo;
-import org.btkj.vehicle.model.VehicleOrderSearcher;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
-import org.btkj.vehicle.mybatis.entity.Route;
+import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.entity.Route;
+import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
@@ -161,7 +163,7 @@ public class VehicleServiceImpl implements VehicleService {
 					}
 				}
 				VehicleOrder order = new VehicleOrder(_orderId(tips.getLicense(), ef.getEmployee().getId(), insurer.getId()), 
-						batchId, ef.getApp().getId(), tenant.getTid(), insurer, lane.mark(), flag, tips);
+						batchId, ef.getEmployee().getId(), ef.getApp().getId(), tenant.getTid(), insurer, lane.mark(), flag, tips);
 				orders.put(insurer.getId(), order);
 				switch (lane) {
 				case BI_HU:
@@ -238,7 +240,7 @@ public class VehicleServiceImpl implements VehicleService {
 			VehicleOrder order = orders.get(insurerId);
 			if (null == order)
 				continue;
-			order.setState(PolicyState.SYSTEM_ERROR);
+			order.setState(VehicleOrderState.SYSTEM_ERROR);
 			order.setDesc(desc);
 		}
 	}
@@ -263,17 +265,17 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	private Result<VehicleOrder> _orderInfo(EmployeeForm ef, VehicleOrder order) {
-		PolicyState state = order.getState();
+		VehicleOrderState state = order.getState();
 		if (order.getLane() == Lane.BI_HU.mark()) {
-			if (order.getState() == PolicyState.QUOTING) {
+			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(ef, order);
-				if (order.getState() == PolicyState.QUOTE_SUCCESS) {
+				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
 					bonusManager.calculateBonus(order);					// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
-						order.setState(PolicyState.INSURING);
+						order.setState(VehicleOrderState.INSURING);
 				}
 			}
-			if (order.getState() == PolicyState.INSURING)
+			if (order.getState() == VehicleOrderState.INSURING)
 				_insureResult(ef, order);
 			if (state != order.getState())								// 状态变了则更新保单
 				vehicleOrderMapper.insert(order);
@@ -285,11 +287,11 @@ public class VehicleServiceImpl implements VehicleService {
 		Result<PolicySchema> result = biHuVehicle.quoteResult(employeeForm, order.getTips().getLicense(), order.getInsurerId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) {
-				order.setState(PolicyState.QUOTE_FAILURE);
+				order.setState(VehicleOrderState.QUOTE_FAILURE);
 				order.setDesc(result.getDesc());
 			}
 		} else {
-			order.setState(PolicyState.QUOTE_SUCCESS);
+			order.setState(VehicleOrderState.QUOTE_SUCCESS);
 			order.setDesc(result.getDesc());
 			order.getTips().setSchema(result.attach());
 		}
@@ -300,10 +302,10 @@ public class VehicleServiceImpl implements VehicleService {
 		if (!detail.isSuccess()) {
 			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(detail.getDesc());
-				order.setState(PolicyState.QUOTE_SUCCESS_INSURE_FAILURE);
+				order.setState(VehicleOrderState.QUOTE_SUCCESS_INSURE_FAILURE);
 			} else if (detail.getCode() == BtkjCode.INSURE_REPEAT.id()) {
 				order.setDesc(detail.getDesc());
-				order.setState(PolicyState.QUOTE_SUCCESS_INSURE_FAILURE);
+				order.setState(VehicleOrderState.QUOTE_SUCCESS_INSURE_FAILURE);
 				if (VehicleUtils.isNewVehicleLicense(order.getTips().getLicense()))
 					_flushRenewal(ef, order.getTips().getVin(), order.getTips().getEngine());
 				else
@@ -311,7 +313,7 @@ public class VehicleServiceImpl implements VehicleService {
 			}
 		} else {
 			order.setDesc(detail.getDesc());
-			order.setState(PolicyState.INSURE_SUCCESS);
+			order.setState(VehicleOrderState.INSURE_SUCCESS);
 			order.getTips().setDetail(detail.attach());
 		}
 	}
@@ -346,6 +348,18 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	public List<VehicleModel> vehicleModels(int deptId) {
 		return vehicleModelMapper.getByDeptId(deptId);
+	}
+	
+	@Override
+	public Result<Void> deliveryEdit(String orderId, DeliveryInfo deliveryInfo) {
+		VehicleOrder order = vehicleOrderMapper.getByKey(orderId);
+		if (null == order)
+			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
+		if (order.getState() != VehicleOrderState.INSURE_SUCCESS)
+			return BtkjConsts.RESULT.ORDER_STATE_ERROR;
+		order.setDeliveryInfo(deliveryInfo);
+		vehicleOrderMapper.insert(order);
+		return Consts.RESULT.OK;
 	}
 	
 	private String _orderId(String license, int employeeId, int insurerId) {

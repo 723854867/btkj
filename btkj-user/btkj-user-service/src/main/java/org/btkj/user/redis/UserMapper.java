@@ -1,14 +1,20 @@
 package org.btkj.user.redis;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
 import org.btkj.user.Config;
 import org.btkj.user.LuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.dao.UserDao;
+import org.btkj.user.pojo.info.UserPagingInfo;
+import org.btkj.user.pojo.info.UserPagingMasterInfo;
+import org.btkj.user.pojo.submit.UserSearcher;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
@@ -35,6 +41,18 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 
 	public UserMapper() {
 		super(new ByteProtostuffSerializer<User>(), "hash:db:user");
+	}
+	
+	public Pager<UserPagingInfo> paging(UserSearcher searcher) {
+		int total = dao.count(searcher);
+		if (0 == total)
+			return Pager.EMPLTY;
+		searcher.calculate(total);
+		List<User> users = dao.paging(searcher);
+		List<UserPagingInfo> list = new ArrayList<UserPagingInfo>();
+		for (User user : users) 
+			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
+		return new Pager(searcher.getTotal(), list);
 	}
 	
 	public User getUserByMobile(int appId, String mobile) {

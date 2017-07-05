@@ -7,7 +7,7 @@ import java.util.List;
 import org.bson.conversions.Bson;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.vehicle.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
 
 import com.mongodb.client.model.Filters;

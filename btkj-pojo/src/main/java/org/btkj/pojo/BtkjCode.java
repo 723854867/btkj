@@ -81,24 +81,29 @@ public enum BtkjCode implements ICode {
 	RENEW_INFO_GET_FAILURE(513, "renw info get failure!"),
 	
 	/**
+	 * 线路不存在
+	 */
+	LANE_NOT_EXIST(514, "lane not exist"),
+	
+	/**
 	 * 没有配置路由
 	 */
-	LANE_NOT_SET(514, "lane not set"),
+	LANE_NOT_SET(515, "lane not set"),
 	
 	/**
 	 * 壁虎线路未开通
 	 */
-	LANE_BIHU_NOT_OPENED(515, "lane of bihu not opened!"),
+	LANE_BIHU_NOT_OPENED(516, "lane of bihu not opened!"),
 	
 	/**
 	 * 不支持的城市
 	 */
-	CITY_UNSUPPORT(516, "city unsupport"),
+	CITY_UNSUPPORT(517, "city unsupport"),
 	
 	/**
 	 * 险企不存在
 	 */
-	INSURER_NOT_EXIST(519, "insurer not exist"),
+	INSURER_NOT_EXIST(518, "insurer not exist"),
 	
 	/**
 	 * 报价失败
@@ -136,9 +141,14 @@ public enum BtkjCode implements ICode {
 	ORDER_NOT_EXIST(526, "order not exist!"),
 	
 	/**
+	 * 订单状态错误
+	 */
+	ORDER_STATE_ERROR(527, "order state error"),
+	
+	/**
 	 * 不在续保期内：起保时间太长
 	 */
-	NOT_IN_RENEWAL_PERIOD(527, "not in renewal period"),
+	NOT_IN_RENEWAL_PERIOD(528, "not in renewal period"),
 	
 	/**
 	 * 文章不存在
@@ -173,7 +183,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 车辆种类不存在
 	 */
-	VEHICLE_TYPE_NOT_EXIST(653, "vehicle type not exist");
+	VEHICLE_TYPE_NOT_EXIST(653, "vehicle type not exist"),
+	
+	/**
+	 * 客户不存在
+	 */
+	CUSTOMER_NOT_EXIST(660, "customer not exist");
 	
 	private int code;
 	private String desc;

@@ -7,7 +7,7 @@ import java.util.List;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.vehicle.mybatis.dao.RouteDao;
-import org.btkj.vehicle.mybatis.entity.Route;
+import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 

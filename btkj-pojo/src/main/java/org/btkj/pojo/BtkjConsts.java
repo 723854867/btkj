@@ -22,9 +22,14 @@ public interface BtkjConsts {
 	
 	interface RESULT {
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);
+		Result LANE_NOT_EXIST					= Result.result(BtkjCode.LANE_NOT_EXIST);
+		Result ORDER_NOT_EXIST					= Result.result(BtkjCode.ORDER_NOT_EXIST);
+		Result TENANT_NOT_EXIST					= Result.result(BtkjCode.TENANT_NOT_EXIST);
+		Result ORDER_STATE_ERROR				= Result.result(BtkjCode.ORDER_STATE_ERROR);
 		Result ARTICLE_NOT_EXIST				= Result.result(BtkjCode.ARTICLE_NOT_EXIST);
 		Result INSURER_NOT_EXIST				= Result.result(BtkjCode.INSURER_NOT_EXIST);
 		Result EMPLOYEE_NOT_EXIST				= Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
+		Result CUSTOMER_NOT_EXIST				= Result.result(BtkjCode.CUSTOMER_NOT_EXIST);
 		Result USER_DATA_INCOMPLETE				= Result.result(BtkjCode.USER_DATA_INCOMPLETE);
 		Result USER_TENANT_NUM_MAXIMUM			= Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
 		Result VEHICLE_BRAND_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_BRAND_NOT_EXSIT);

@@ -12,7 +12,6 @@ public class App implements UniqueModel<Integer> {
 	private int mod;
 	private int maxTenantsCount;
 	private int maxArticlesCount;
-	private boolean tenantAddAutonomy;
 	private int created;
 	private int updated;
 	
@@ -83,14 +82,6 @@ public class App implements UniqueModel<Integer> {
 		this.maxArticlesCount = maxArticlesCount;
 	}
 	
-	public boolean isTenantAddAutonomy() {
-		return tenantAddAutonomy;
-	}
-	
-	public void setTenantAddAutonomy(boolean tenantAddAutonomy) {
-		this.tenantAddAutonomy = tenantAddAutonomy;
-	}
-
 	public int getCreated() {
 		return created;
 	}

@@ -29,6 +29,15 @@ public class BiHuInsurerSQLProvider {
 		}.toString();
 	}
 	
+	public String delete() { 
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
+	
 	public String getWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from bi_hu_insurer where id in(");

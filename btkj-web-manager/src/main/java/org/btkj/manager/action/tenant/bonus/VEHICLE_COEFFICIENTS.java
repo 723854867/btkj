@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.vehicle.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
@@ -27,6 +29,8 @@ public class VEHICLE_COEFFICIENTS extends TenantAction {
 	@Resource
 	private BonusService bonusService;
 	@Resource
+	private ConfigService configService;
+	@Resource
 	private VehicleService vehicleService;
 
 	@Override
@@ -39,7 +43,9 @@ public class VEHICLE_COEFFICIENTS extends TenantAction {
 	}
 	
 	private Result<List<VehicleCoefficientsInfo>> _checkSearcher(BonusSearcher searcher, EmployeeForm ef) {
-		searcher.setTid(ef.getEmployee().getTid());
+		searcher.setTid(ef.getTenant().getTid());
+		Region region = configService.subordinateProvince(ef.getTenant().getTid());
+		searcher.setSubordinateProvince(null == region ? 0 : region.getId());
 		if (null == searcher.getPath())
 			throw ConstConvertFailureException.errorConstException(Params.BONUS_SEARCHER);
 		List<Integer> list = vehicleService.insurers(ef.getTenant());
