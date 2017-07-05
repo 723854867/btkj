@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
@@ -44,8 +45,41 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 			orders = mongo.find(collection, Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()), VehicleOrder.class);
 		else {
 			List<Bson> list = new ArrayList<Bson>();
-			if (null != searcher.getState())
-				list.add(Filters.eq(FIELD_STATE, searcher.getState().toString()));
+			if (null != searcher.getState()) {
+				switch (searcher.getState()) {
+				case INSURE:
+					list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.toString()), 
+							Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()), 
+							Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()), 
+							Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString())));
+					break;
+				case QUOTE_SUCCESS:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()));
+					break;
+				case INSURE_FAILURE:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString()));
+					break;
+				case INSURING:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()));
+					break;
+				case ISSUE:
+					list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()), 
+							Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()), 
+							Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString())));
+					break;
+				case INSURE_SUCCESS:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()));
+					break;
+				case ISSUE_SUCCESS:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()));
+					break;
+				case ISSUED:
+					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString()));
+					break;
+				default:
+					break;
+				}
+			}
 			long total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
 			if (0 == total)
 				return Collections.EMPTY_LIST;

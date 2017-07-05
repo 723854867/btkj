@@ -302,10 +302,10 @@ public class VehicleServiceImpl implements VehicleService {
 		if (!detail.isSuccess()) {
 			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(detail.getDesc());
-				order.setState(VehicleOrderState.QUOTE_SUCCESS_INSURE_FAILURE);
+				order.setState(VehicleOrderState.INSURE_FAILURE);
 			} else if (detail.getCode() == BtkjCode.INSURE_REPEAT.id()) {
 				order.setDesc(detail.getDesc());
-				order.setState(VehicleOrderState.QUOTE_SUCCESS_INSURE_FAILURE);
+				order.setState(VehicleOrderState.INSURE_FAILURE);
 				if (VehicleUtils.isNewVehicleLicense(order.getTips().getLicense()))
 					_flushRenewal(ef, order.getTips().getVin(), order.getTips().getEngine());
 				else

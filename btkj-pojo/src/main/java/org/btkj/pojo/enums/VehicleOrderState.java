@@ -30,7 +30,7 @@ public enum VehicleOrderState {
 	/**
 	 * 报价成功，投保失败
 	 */
-	QUOTE_SUCCESS_INSURE_FAILURE(32),
+	INSURE_FAILURE(32),
 	
 	/**
 	 * 投保成功

@@ -30,10 +30,8 @@ public class VehicleOrderListInfo implements Serializable {
 		this.insurerIcon = order.getInsurerIcon();
 		this.owner = order.getTips().getOwner().getName();
 		this.license = order.getTips().getLicense();
-		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.QUOTE_SUCCESS_INSURE_FAILURE || 
-				state == VehicleOrderState.INSURE_SUCCESS) {
-			this.price = order.getTips().getSchema().getCommericalTotal() 
-					+ order.getTips().getSchema().getCompulsiveTotal()
+		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE || state == VehicleOrderState.INSURE_SUCCESS) {
+			this.price = order.getTips().getSchema().getCommericalTotal() + order.getTips().getSchema().getCompulsiveTotal()
 					+ order.getTips().getSchema().getVehicleVesselTotal();
 		}
 	}
