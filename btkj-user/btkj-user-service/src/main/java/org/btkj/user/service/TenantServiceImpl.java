@@ -17,7 +17,6 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -76,11 +75,6 @@ public class TenantServiceImpl implements TenantService {
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
 		applyMapper.insert(EntityGenerator.newApply(tenant, user, chief));
 		return Result.success();
-	}
-
-	@Override
-	public Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize) {
-		return applyMapper.applyList(tid, page, pageSize);
 	}
 
 	@Override

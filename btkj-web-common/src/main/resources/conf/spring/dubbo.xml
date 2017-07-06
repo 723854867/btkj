@@ -31,4 +31,6 @@
 	<dubbo:reference id="communityService" interface="org.btkj.community.api.CommunityService" />
 	
 	<dubbo:reference id="statisticsService" interface="org.btkj.statistics.api.StatisticsService" />
+	
+	<dubbo:reference id="paymentService" interface="org.btkj.payment.api.PaymentService" />
 </beans>

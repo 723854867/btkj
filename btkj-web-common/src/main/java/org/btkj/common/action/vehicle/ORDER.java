@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -95,21 +95,24 @@ public class ORDER extends TenantAction {
 		VehicleUsedType usedType = tips.getVehicleUsedType();
 		if (null == usedType)
 			return false;
-		return _checkInsurUnit(tips.getOwner(), usedType)
-				&& _checkInsurUnit(tips.getInsurer(), usedType)
-				&& _checkInsurUnit(tips.getInsured(), usedType)
+		return _checkInsurUnit(tips.getOwner(), usedType, true)
+				&& _checkInsurUnit(tips.getInsurer(), usedType, false)
+				&& _checkInsurUnit(tips.getInsured(), usedType, false)
 				&& _checkVehicle(tips)
 				&& _checkSchema(tips.getSchema());
 	}
 	
-	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType) {
-		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName())
+	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType, boolean owner) {
+		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName() || null == unit.getType())
 			return false;
 		if (null != unit.getMobile() && !Validator.isMobile(unit.getMobile(), Locale.CHINA.getCountry()))
 			return false;
+		if (owner)
+			_correctUnitType(usedType, unit);
+		if ((unit.getIdType().unitMod() & unit.getType().mark()) != unit.getType().mark())
+			return false;
 		if (!unit.getIdType().check(unit.getIdNo()))
 			return false;
-		_correctUnitType(usedType, unit);
 		return true;
 	}
 	

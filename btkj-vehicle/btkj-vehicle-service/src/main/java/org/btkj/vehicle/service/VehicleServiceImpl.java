@@ -363,6 +363,11 @@ public class VehicleServiceImpl implements VehicleService {
 		return Consts.RESULT.OK;
 	}
 	
+	@Override
+	public long orderNum(int employeeId, int begin, int end, int stateMod) {
+		return vehicleOrderMapper.orderNum(employeeId, begin, end, stateMod);
+	}
+	
 	private String _orderId(String license, int employeeId, int insurerId) {
 		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
 	}

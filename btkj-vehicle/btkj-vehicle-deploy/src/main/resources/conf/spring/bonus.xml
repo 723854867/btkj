@@ -12,7 +12,7 @@
 			<map>
 				<entry key="profit" value-ref="profit" />
 				<entry key="noProfit" value-ref="noProfit" />
-				<entry key="ignoreprofit" value-ref="ignoreprofit" />
+				<entry key="ignoreProfit" value-ref="ignoreProfit" />
 			</map>
 		</property>
 	</bean>
@@ -40,7 +40,7 @@
 	</bean>
 
 	<!-- 不区分营利 和非营利 -->
-	<bean id="ignoreprofit" class="org.btkj.vehicle.rule.bonus.route.IgnoreProfit">
+	<bean id="ignoreProfit" class="org.btkj.vehicle.rule.bonus.route.IgnoreProfit">
 		<property name="children">
 			<map>
 				<entry key="motor" value-ref="motor" />

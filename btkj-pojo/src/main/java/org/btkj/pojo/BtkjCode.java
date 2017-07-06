@@ -188,7 +188,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 客户不存在
 	 */
-	CUSTOMER_NOT_EXIST(660, "customer not exist");
+	CUSTOMER_NOT_EXIST(660, "customer not exist"),
+	
+	/**
+	 * 轮播图不存在
+	 */
+	BANNER_NOT_EXIST(670, "banner not exist");
 	
 	private int code;
 	private String desc;

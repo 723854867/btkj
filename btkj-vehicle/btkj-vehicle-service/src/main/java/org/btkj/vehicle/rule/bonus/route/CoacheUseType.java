@@ -6,6 +6,7 @@ import java.util.Map;
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.rule.bonus.BonusUtils;
 
 /**
@@ -25,12 +26,12 @@ public class CoacheUseType extends BonusRoute<CoacheCategory> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficient> coefficients(List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) {
 		switch (usedType) {
 		case HOME_USE:								// 家庭自用
 		case ENTERPRISE:							// 企业
 		case ORGAN:									// 机关
-			return BonusUtils.noProfitCoacheCommercialCoefficients(searcher, coefficients);
+			return BonusUtils.noProfitCoacheCommercialCoefficients(coefficients, spinner, searcher);
 		default:
 			return null;
 		}

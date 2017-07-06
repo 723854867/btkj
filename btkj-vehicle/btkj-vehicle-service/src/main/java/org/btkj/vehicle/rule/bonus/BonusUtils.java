@@ -1,5 +1,6 @@
 package org.btkj.vehicle.rule.bonus;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.enums.vehicle.VehicleBizType;
 import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 
 public class BonusUtils {
 
@@ -46,16 +48,26 @@ public class BonusUtils {
 	 * @param coefficients
 	 * @return
 	 */
-	public static List<VehicleCoefficient> noProfitCoacheCommercialCoefficients(BonusSearcher searcher, List<VehicleCoefficient> coefficients) { 
+	public static List<VehicleCoefficientsInfo> noProfitCoacheCommercialCoefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) { 
 		if (searcher.getBizType() == VehicleBizType.NO_PROFIT) {			// 非营利客车
-			Iterator<VehicleCoefficient> iterator = coefficients.iterator();
-			while (iterator.hasNext()) {
-				VehicleCoefficient coefficient = iterator.next();
-				CoefficientType coefficientType = CoefficientType.match(coefficient.getType());
-				if (null == coefficientType)
+			List<VehicleCoefficientsInfo> list = new ArrayList<VehicleCoefficientsInfo>();
+			for (CoefficientType type : CoefficientType.values()) {
+				VehicleCoefficientsInfo info = new VehicleCoefficientsInfo(type);
+				list.add(info);
+				
+				Iterator<VehicleCoefficient> iterator = coefficients.iterator();
+				while (iterator.hasNext()) {
+					VehicleCoefficient coefficient = iterator.next();
+					CoefficientType coefficientType = CoefficientType.match(coefficient.getType());
+					if (null == coefficientType)
+						iterator.remove();
+					if (coefficientType != type)
+						continue;
 					iterator.remove();
+					info.addCoefficient(coefficient, null == spinner ? null : spinner.get(coefficient.getId()));
+				}
 			}
-			return coefficients;
+			return list;
 		} else 
 			return null;
 	}

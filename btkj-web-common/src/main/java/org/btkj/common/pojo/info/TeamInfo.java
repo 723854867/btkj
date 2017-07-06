@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.pojo.entity.User;
-import org.btkj.statistics.model.Team;
-import org.btkj.statistics.model.TeamEmployee;
+import org.btkj.statistics.pojo.model.Exploits;
+import org.btkj.statistics.pojo.model.Exploit;
 
 public class TeamInfo implements Serializable{
 
@@ -18,17 +18,17 @@ public class TeamInfo implements Serializable{
 	private double total;					// 总业绩
 	private List<Employee> employees;		// 员工业绩排序列表
 	
-	public TeamInfo(Map<Integer, Integer> map, Team team, List<User> users) {
-		this.total = team.getPerformance();
+	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, List<User> users) {
+		this.total = exploits.getTotal();
 		this.employees = new ArrayList<Employee>(map.size());
-		List<TeamEmployee> list = team.getEmployees();
+		List<Exploit> list = exploits.getEmployeeExploits();
 		Iterator<Entry<Integer, Integer>> itr = map.entrySet().iterator();
 		a : while (itr.hasNext()) {
 			Entry<Integer, Integer> entry = itr.next();
 			itr.remove();
-			Iterator<TeamEmployee> titr = list.iterator();
+			Iterator<Exploit> titr = list.iterator();
 			while (itr.hasNext()) {
-				TeamEmployee employee = titr.next();
+				Exploit employee = titr.next();
 				if (employee.getEmployeeId() != entry.getKey())
 					continue;
 				titr.remove();
@@ -71,9 +71,9 @@ public class TeamInfo implements Serializable{
 				this.user = new UserTips(user);
 		}
 		
-		public Employee(TeamEmployee employee, User user) {
+		public Employee(Exploit employee, User user) {
 			this.id = employee.getEmployeeId();
-			this.performance = employee.getAmount();
+			this.performance = employee.getQuota();
 			if (null != user)
 				this.user = new UserTips(user);
 		}

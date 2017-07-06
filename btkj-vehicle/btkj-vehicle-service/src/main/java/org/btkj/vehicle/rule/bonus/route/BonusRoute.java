@@ -1,6 +1,5 @@
 package org.btkj.vehicle.rule.bonus.route;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -205,26 +204,9 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		String nextId = path.poll();
 		BonusRouteBody body = null == parent ? null : parent.getChild(id);
-		if (null == nextId) {
-			List<VehicleCoefficient> list = coefficients(coefficients, searcher);
-			Map<Integer, Integer> spinner = null == body ? null : body.getCommercialCommisionSpinner();
-			if (null == list) 
-				return null;
-			Map<CoefficientType, VehicleCoefficientsInfo> map = new HashMap<CoefficientType, VehicleCoefficientsInfo>();
-			for (VehicleCoefficient coefficient : list) {
-				Integer rate = null == spinner ? null : spinner.get(coefficient.getId());
-				CoefficientType type = CoefficientType.match(coefficient.getType());
-				if (null == type)
-					continue;
-				VehicleCoefficientsInfo temp = map.get(type);
-				if (null == temp) {
-					temp = new VehicleCoefficientsInfo(type);
-					map.put(type, temp);
-				}
-				temp.addCoefficient(coefficient, rate);
-			}
-			return new ArrayList<VehicleCoefficientsInfo>(map.values());
-		} else {
+		if (null == nextId)
+			return coefficients(coefficients, null == body ? null : body.getCommercialCommisionSpinner(), searcher);
+		else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)
 				return null;
@@ -232,7 +214,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 		}
 	}
 	
-	protected List<VehicleCoefficient> coefficients(List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) {
 		return null;
 	}
 	

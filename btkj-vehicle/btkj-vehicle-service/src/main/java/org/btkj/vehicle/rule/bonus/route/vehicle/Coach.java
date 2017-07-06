@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.btkj.vehicle.rule.bonus.BonusUtils;
 import org.btkj.vehicle.rule.bonus.route.BonusRoute;
 import org.btkj.vehicle.rule.bonus.route.CoacheUseType;
@@ -16,8 +17,8 @@ public class Coach extends BonusRoute<CoacheUseType> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficient> coefficients(List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
-		return BonusUtils.noProfitCoacheCommercialCoefficients(searcher, coefficients);
+	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) {
+		return BonusUtils.noProfitCoacheCommercialCoefficients(coefficients, spinner, searcher);
 	}
 	
 	@Override

@@ -8,9 +8,9 @@ import java.util.List;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;
-import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.DateUtils;
@@ -47,15 +47,15 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	 * @param pager
 	 * @param tid
 	 */
-	public Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize) {
+	public Pager<ApplyPagingInfo> paging(int tid, int page, int pageSize) {
 		List<byte[]> list = redis.hpaging(_tenantListKey(tid), redisKey, page, pageSize,RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
-			return Result.result(Pager.EMPLTY);
+			return Pager.EMPLTY;
 		int total = Integer.valueOf(new String(list.remove(0)));
-		List<ApplyInfo> applies = new ArrayList<ApplyInfo>();
-		for (byte[] data : list)
-			applies.add(serializer.antiConvet(data));
-		return Result.result(new Pager<ApplyInfo>(total, applies));
+		List<ApplyPagingInfo> applies = new ArrayList<ApplyPagingInfo>();
+		for (byte[] data : list) 
+			applies.add(new ApplyPagingInfo(serializer.antiConvet(data)));
+		return new Pager<ApplyPagingInfo>(total, applies);
 	}
 	
 	/**

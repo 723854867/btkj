@@ -1,4 +1,4 @@
-package org.btkj.common.action.tenant;
+package org.btkj.common.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.statistics.api.StatisticsService;
-import org.btkj.statistics.model.Team;
+import org.btkj.statistics.pojo.model.Exploits;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
@@ -41,14 +41,14 @@ public class TEAM_LIST extends TenantAction {
 	protected Result<TeamInfo> execute(Request request, Client client, EmployeeForm employeeForm) {
 		List<Employee> list = employeeService.team(employeeForm);
 		if (CollectionUtils.isEmpty(list))
-			return Consts.RESULT.OK;
+			return Consts.RESULT.EMPTY_LIST;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 		for (Employee employee : list)
 			map.put(employee.getId(), employee.getUid());
 		
-		Team team = statisticsService.teamPerformance(new ArrayList<Integer>(map.keySet()), request.getParam(Params.BEGIN_TIME), 
+		Exploits exploits = statisticsService.multiExploits(new ArrayList<Integer>(map.keySet()), request.getParam(Params.BEGIN_TIME), 
 				request.getParam(Params.END_TIME), request.getParam(Params.MOD));
 		List<User> users = userService.users(new ArrayList<Integer>(map.values()));
-		return Result.result(new TeamInfo(map, team, users));
+		return Result.result(new TeamInfo(map, exploits, users));
 	}
 }

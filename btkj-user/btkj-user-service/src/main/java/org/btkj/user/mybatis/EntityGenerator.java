@@ -2,6 +2,7 @@ package org.btkj.user.mybatis;
 
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.App;
+import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
@@ -68,7 +69,22 @@ public class EntityGenerator {
 		ai.setTid(tenant.getTid());
 		ai.setUid(user.getUid());
 		ai.setChief(chief.getEmployee().getId());
+		ai.setChiefUid(chief.getUser().getUid());
 		ai.setTime(DateUtils.currentTime());
 		return ai;
+	}
+	
+	public static final Banner newBanner(int appId, int tid, int idx, String icon, String link) {
+		Banner banner = new Banner();
+		banner.setAppId(appId);
+		banner.setTid(tid);
+		banner.setId(idx);
+		banner.setImage(icon);
+		banner.setLink(link);
+		
+		int time = DateUtils.currentTime();
+		banner.setCreated(time);
+		banner.setUpdated(time);
+		return banner;
 	}
 }

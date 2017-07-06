@@ -1,8 +1,8 @@
-package org.btkj.statistics.mybatis.entity;
+package org.btkj.statistics.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class Performance implements UniqueModel<Long> {
+public class LogScore implements UniqueModel<Long> {
 
 	private static final long serialVersionUID = 5025465074564999575L;
 
@@ -11,9 +11,9 @@ public class Performance implements UniqueModel<Long> {
 	private int uid;
 	private int tid;
 	private int appId;
-	private int category;
 	private int type;
-	private double amount;
+	private int bizId;
+	private double quota;
 	private int year;
 	private int month;
 	private int day;
@@ -61,28 +61,28 @@ public class Performance implements UniqueModel<Long> {
 		this.appId = appId;
 	}
 
-	public int getCategory() {
-		return category;
-	}
-
-	public void setCategory(int category) {
-		this.category = category;
-	}
-
 	public int getType() {
 		return type;
 	}
-
+	
 	public void setType(int type) {
 		this.type = type;
 	}
 	
-	public double getAmount() {
-		return amount;
+	public int getBizId() {
+		return bizId;
 	}
 	
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setBizId(int bizId) {
+		this.bizId = bizId;
+	}
+	
+	public double getQuota() {
+		return quota;
+	}
+	
+	public void setQuota(double quota) {
+		this.quota = quota;
 	}
 
 	public int getYear() {

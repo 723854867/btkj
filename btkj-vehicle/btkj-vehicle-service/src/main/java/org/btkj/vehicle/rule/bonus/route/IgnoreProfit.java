@@ -23,8 +23,7 @@ public class IgnoreProfit extends BonusRoute<BonusRoute<?>> {
 	}
 	
 	@Override
-	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,
-			List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent, List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		searcher.setBizType(VehicleBizType.IGNROE_PROFIT);
 		return super.coefficients(path, parent, coefficients, searcher);
 	}

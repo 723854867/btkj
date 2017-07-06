@@ -115,4 +115,15 @@ public interface VehicleService {
 	 * @return
 	 */
 	Result<Void> deliveryEdit(String orderId, DeliveryInfo deliveryInfo);
+	
+	/**
+	 * 获取指定状态的保单数量
+	 * 
+	 * @param employeeId
+	 * @param begin
+	 * @param end
+	 * @param stateMod
+	 * @return
+	 */
+	long orderNum(int employeeId, int begin, int end, int stateMod);
 }

@@ -10,6 +10,7 @@ import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
+import org.rapid.util.lang.CollectionUtils;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
@@ -25,6 +26,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	private String FIELD_BATCH_ID					= "batchId";
 	private String FIELD_STATE						= "state";
 	private String FIELD_CREATED					= "created";
+	private String FIELD_EMPLOYEE_ID				= "employeeId";
 	
 	public VehicleOrderMapper() {
 		super("vehicleOrder");
@@ -37,6 +39,21 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	
 	public void deleteBatchOrder(String batchId) {
 		mongo.deleteMany(collection, Filters.eq(FIELD_BATCH_ID, batchId));
+	}
+	
+	public long orderNum(int employeeId, int begin, int end, int stateMod) {
+		Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), 
+				Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end));
+		List<Bson> states = new ArrayList<Bson>();
+		for (VehicleOrderState state : VehicleOrderState.values()) {
+			if ((state.mark() & stateMod) != state.mark())
+				continue;
+			states.add(Filters.eq(FIELD_STATE, state.name()));
+		}
+		Bson filter = CollectionUtils.isEmpty(states) 
+				? Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end)) 
+				: Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end), Filters.or(states));
+		return mongo.count(collection, filter);
 	}
 	
 	public List<VehicleOrder> list(EmployeeForm ef, VehicleOrderSearcher searcher) {

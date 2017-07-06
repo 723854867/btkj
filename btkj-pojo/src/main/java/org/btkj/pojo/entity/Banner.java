@@ -13,7 +13,7 @@ public class Banner implements UniqueModel<Integer> {
 	private String image;
 	private String link;
 	private int created;
-	private int update;
+	private int updated;
 
 	public int getId() {
 		return id;
@@ -71,12 +71,12 @@ public class Banner implements UniqueModel<Integer> {
 		this.created = created;
 	}
 
-	public int getUpdate() {
-		return update;
+	public int getUpdated() {
+		return updated;
 	}
-
-	public void setUpdate(int update) {
-		this.update = update;
+	
+	public void setUpdated(int updated) {
+		this.updated = updated;
 	}
 
 	@Override

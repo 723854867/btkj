@@ -29,6 +29,7 @@ import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
+import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtils;
@@ -188,6 +189,7 @@ public interface Params {
 	
 	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1028, "identityFace");
 	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1029, "identityBack");
+	final Str2IntConstConverter IDX									= new Str2IntConstConverter(1030, "idx");
 	
 	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1032, "icon");
 	final Str2StrConstConverter LINK					= new Str2StrConstConverter(1033, "link");
@@ -344,4 +346,20 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuizSearcher.class);
 		}
 	};
+	
+	final Str2ObjConstConverter<CRUD_TYPE> CRUD_TYPE = new Str2ObjConstConverter<CRUD_TYPE>(1039, "crudType") {
+		@Override
+		public CRUD_TYPE convert(String k) throws ConstConvertFailureException {
+			int value;
+			try {
+				value = Integer.valueOf(k);
+			} catch (NumberFormatException e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+			CRUD_TYPE type = org.rapid.util.common.enums.CRUD_TYPE.match(value);
+			if (null == type)
+				throw ConstConvertFailureException.errorConstException(this);
+			return type;
+		}
+	};	
 }

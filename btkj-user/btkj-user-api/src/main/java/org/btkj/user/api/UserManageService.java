@@ -1,6 +1,7 @@
 package org.btkj.user.api;
 
 import org.btkj.pojo.model.Pager;
+import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
@@ -34,4 +35,46 @@ public interface UserManageService {
 	 * @return
 	 */
 	Result<Pager<EmployeePagingInfo>> employeePaging(EmployeeSearcher searcher);
+	
+	/**
+	 * 申请分页列表
+	 * 
+	 * @param tid
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	Result<Pager<ApplyPagingInfo>> applyPaging(int tid, int page, int pageSize);
+	
+	/**
+	 * 编辑轮播图
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param idx
+	 * @param icon
+	 * @param link
+	 * @return
+	 */
+	Result<Void> bannerAdd(int appId, int tid, int idx, String icon, String link);
+	
+	/**
+	 * 新增轮播图
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param idx
+	 * @param icon
+	 * @param link
+	 * @return
+	 */
+	Result<Void> bannerEdit(int id, String icon, String link);
+	
+	/**
+	 * 删除轮播图
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Result<Void> bannerDelete(int id);
 }

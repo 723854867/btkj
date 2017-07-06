@@ -5,25 +5,31 @@ public enum UnitType {
 	/**
 	 * 个人
 	 */
-	PERSONAL("个人"),
+	PERSONAL(1, "个人"),
 	
 	/**
 	 * 企业
 	 */
-	ENTERPRISE("企业"),
+	ENTERPRISE(2, "企业"),
 	
 	/**
 	 * 机关
 	 */
-	OFFICE("机关");
+	OFFICE(4, "机关");
 	
+	private int mark;
 	private String title;
 	
-	private UnitType(String title) {
+	private UnitType(int mark, String title) {
+		this.mark = mark;
 		this.title = title;
 	}
 	
 	public String title() {
 		return title;
+	}
+	
+	public int mark() {
+		return mark;
 	}
 }

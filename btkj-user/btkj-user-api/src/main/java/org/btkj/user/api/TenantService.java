@@ -8,10 +8,8 @@ import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.TenantListInfo;
 import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
@@ -32,13 +30,6 @@ public interface TenantService {
 	 * @return
 	 */
 	Result<?> apply(User user, EmployeeForm chief);
-
-	/**
-	 * 代理公司获取审核列表
-	 * 
-	 * @return
-	 */
-	Result<Pager<ApplyInfo>> applyList(int tid, int page, int pageSize);
 	
 	/**
 	 * 处理请求
