@@ -9,7 +9,6 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.NonAutoBind;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
@@ -25,7 +24,6 @@ import org.btkj.user.mybatis.Tx;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
-import org.btkj.user.redis.NonAutoBindMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
@@ -52,8 +50,6 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeMapper employeeMapper;
 	@Resource
 	private EmployeeService employeeService;
-	@Resource
-	private NonAutoBindMapper nonAutoBindMapper;
 
 	@Override
 	public Tenant getTenantById(int tid) {
@@ -116,10 +112,5 @@ public class TenantServiceImpl implements TenantService {
 		List<Tenant> own = tenantMapper.getWithinKey(tids);
 		List<Tenant> audit = tenantMapper.getWithinKey(applyMapper.applyListTids(user));
 		return new TenantListInfo(own, employees, audit);
-	}
-
-	@Override
-	public List<NonAutoBind> getNonAutoBinds(int tid) {
-		return nonAutoBindMapper.getByTid(tid);
 	}
 }

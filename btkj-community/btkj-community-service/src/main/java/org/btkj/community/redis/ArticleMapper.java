@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.community.LuaCmd;
 import org.btkj.community.mybatis.dao.ArticleDao;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Article;
@@ -87,9 +86,11 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 	
 	@Override
 	public void flush(Article entity) {
-		redis.invokeLua(LuaCmd.FLUSH_ARTICLE, redisKey, _setKey(entity.getAppId(), SortCol.BROWSE_NUM),
-				_setKey(entity.getAppId(), SortCol.COMMENT_NUM), _setKey(entity.getAppId(), SortCol.TIME), entity.getId(),
-				serializer.convert(entity), entity.getCreated());
+		Map<String, Double> scores = new HashMap<String, Double>();
+		scores.put(_setKey(entity.getAppId(), SortCol.TIME), Double.valueOf(entity.getCreated()));
+		scores.put(_setKey(entity.getAppId(), SortCol.BROWSE_NUM), Double.valueOf(entity.getBrowseNum()));
+		scores.put(_setKey(entity.getAppId(), SortCol.COMMENT_NUM), Double.valueOf(entity.getCommentNum()));
+		redis.hmzset(redisKey, entity, scores, serializer);
 	}
 	
 	private String _setKey(int appId, SortCol col) {

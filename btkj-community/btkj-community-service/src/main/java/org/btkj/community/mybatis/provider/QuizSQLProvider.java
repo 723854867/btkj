@@ -1,9 +1,6 @@
 package org.btkj.community.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.pojo.submit.QuizSearcher;
-import org.btkj.pojo.submit.QuizSearcher.SortCol;
-import org.rapid.util.common.enums.SORT_TYPE;
 
 public class QuizSQLProvider {
 	
@@ -43,39 +40,23 @@ public class QuizSQLProvider {
 			}
 		}.toString();
 	}
-
-	public String total(QuizSearcher searcher) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(*) FROM quiz ");
-		if (null != searcher.getAppId())
-			builder.append("WHERE app_id=").append(searcher.getAppId());
-		return builder.toString();
-	}
 	
-	public String paging(QuizSearcher searcher) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM quiz ");
-		if (null != searcher.getAppId())
-			builder.append("WHERE app_id=").append(searcher.getAppId());
-		SortCol col = searcher.getSortCol();
-		if (null == col) 
-			builder.append(" ORDER BY created ");
-		else {
-			switch (col) {
-			case BROWSE_NUM:
-				builder.append(" ORDER BY browse_num ");
-				break;
-			case REPLY_NUM:
-				builder.append(" ORDER BY reply_num ");
-				break;
-			default:
-				builder.append(" ORDER BY created ");
-				break;
+	public String getByAppId() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+				WHERE("app_id=#{appId}");
 			}
-		}
-		SORT_TYPE sortType = searcher.getSortType();
-		builder.append(null == sortType ? "DESC " : SORT_TYPE.ASC == sortType ? "ASC " : "DESC ");
-		builder.append("LIMIT ").append(searcher.getStart()).append(", ").append(searcher.getPageSize());
-		return builder.toString();
+		}.toString();
+	}
+
+	public String delete() {
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("id=#{key}");
+			}
+		}.toString();
 	}
 }

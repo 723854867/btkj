@@ -32,7 +32,7 @@ public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> 
 	}
 	
 	public Result<Pager<Comment>> comments(int articleId, int page, int pageSize) {
-		if (redis.hsetnx(BtkjConsts.class, _loadLockKey(articleId), String.valueOf(DateUtils.currentTime()))) 	// 首次加载
+		if (redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadLockKey(articleId), String.valueOf(DateUtils.currentTime()))) 	// 首次加载
 			tx.storeComments(articleId);
 		List<byte[]> list = redis.hpaging(
 				SerializeUtil.RedisUtil.encode(_listKey(articleId)), 

@@ -15,4 +15,6 @@
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
 	<dubbo:service interface="org.btkj.community.api.CommunityService" ref="communityService" loadbalance="${dubbo.service.loadbalance}"/>
+	
+	<dubbo:service interface="org.btkj.community.api.CommunityManageService" ref="communityManageService" loadbalance="${dubbo.service.loadbalance}"/>
 </beans>

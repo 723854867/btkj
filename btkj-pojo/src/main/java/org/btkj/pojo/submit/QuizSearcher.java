@@ -1,5 +1,6 @@
 package org.btkj.pojo.submit;
 
+import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.enums.SORT_TYPE;
 
 public class QuizSearcher extends Page {
@@ -32,6 +33,10 @@ public class QuizSearcher extends Page {
 	
 	public void setSortType(SORT_TYPE sortType) {
 		this.sortType = sortType;
+	}
+	
+	public String redisZSortType() {
+		return null == sortType ? RedisConsts.OPTION_ZREVRANGE : sortType == SORT_TYPE.ASC ? RedisConsts.OPTION_ZRANGE : RedisConsts.OPTION_ZREVRANGE;
 	}
 	
 	public enum SortCol {

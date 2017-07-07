@@ -64,9 +64,4 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="customerDao" />
 	</bean>
-	
-	<bean id="nonAutoBindMapper" class="org.btkj.user.redis.NonAutoBindMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="nonAutoBindDao" />
-	</bean>
 </beans>

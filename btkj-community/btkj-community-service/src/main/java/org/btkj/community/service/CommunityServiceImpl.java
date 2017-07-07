@@ -80,7 +80,7 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	@Override
 	public Result<Pager<Quiz>> quizs(QuizSearcher searcher) {
-		return quizMapper.quizs(searcher);
+		return quizMapper.paging(searcher);
 	}
 	
 	@Override
@@ -93,7 +93,7 @@ public class CommunityServiceImpl implements CommunityService {
 		Quiz quiz = quizMapper.getByKey(quizId);
 		if (null == quiz || quiz.getAppId() != appId)
 			return BtkjConsts.RESULT.QUIZ_NOT_EXIST;
-		return replyMapper.replies(quizId, page, pageSize);
+		return replyMapper.paging(quizId, page, pageSize);
 	}
 	
 	@Override

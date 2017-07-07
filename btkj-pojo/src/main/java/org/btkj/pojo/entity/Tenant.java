@@ -14,6 +14,7 @@ public class Tenant implements UniqueModel<Integer> {
 	private String jianJieId;
 	private String licenseFace;
 	private String licenseBack;
+	private String nonAutoBind;
 	private int created;
 	private int updated;
 	
@@ -79,6 +80,14 @@ public class Tenant implements UniqueModel<Integer> {
 	
 	public void setLicenseBack(String licenseBack) {
 		this.licenseBack = licenseBack;
+	}
+	
+	public String getNonAutoBind() {
+		return nonAutoBind;
+	}
+	
+	public void setNonAutoBind(String nonAutoBind) {
+		this.nonAutoBind = nonAutoBind;
 	}
 	
 	public int getCreated() {

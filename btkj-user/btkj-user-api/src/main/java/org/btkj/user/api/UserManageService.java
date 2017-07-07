@@ -1,5 +1,7 @@
 package org.btkj.user.api;
 
+import java.util.Set;
+
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -77,4 +79,13 @@ public interface UserManageService {
 	 * @return
 	 */
 	Result<Void> bannerDelete(int id);
+	
+	/**
+	 * 商家设置
+	 * 
+	 * @param tid
+	 * @param nonAutoBind
+	 * @return
+	 */
+	Result<Void> tenantSetting(int tid, Set<Long> nonAutoBind);
 }

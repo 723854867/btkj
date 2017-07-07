@@ -9,6 +9,7 @@ import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
+import org.rapid.util.common.message.Result;
 
 public class Profit extends BonusRoute<BonusRoute<?>> {
 	
@@ -20,5 +21,11 @@ public class Profit extends BonusRoute<BonusRoute<?>> {
 	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent, List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		searcher.setBizType(VehicleBizType.PROFIT);
 		return super.coefficients(path, parent, coefficients, searcher);
+	}
+	
+	@Override
+	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
+		searcher.setBizType(VehicleBizType.PROFIT);
+		return super.settings(paths, parent, searcher, coefficients);
 	}
 }

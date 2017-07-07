@@ -18,17 +18,22 @@ public class ReplySQLProvider {
 		}.toString();
 	}
 
-	public String total() {
+	public String getByQuizId() {
 		return new SQL() {
 			{
-				SELECT("COUNT(*)");
+				SELECT("*");
 				FROM(TABLE);
 				WHERE("quiz_id=#{quizId}");
 			}
 		}.toString();
 	}
 	
-	public String paging() {
-		return "SELECT * FROM reply WHERE quiz_id=#{quizId} ORDER BY created DESC LIMIT #{start}, #{pageSize}";
+	public String deleteByQuizId() {
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("quiz_id=#{quizId}");
+			}
+		}.toString();
 	}
 }

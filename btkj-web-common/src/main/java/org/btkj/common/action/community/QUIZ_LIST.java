@@ -1,7 +1,13 @@
 package org.btkj.common.action.community;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
+import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Quiz;
@@ -9,10 +15,12 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.submit.QuizSearcher;
+import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
  * 问答分页
@@ -22,12 +30,34 @@ import org.rapid.util.common.message.Result;
 public class QUIZ_LIST extends UserAction {
 	
 	@Resource
+	private UserService userService;
+	@Resource
 	private CommunityService communityService;
 
 	@Override
-	protected Result<Pager<Quiz>> execute(Request request, App app, Client client, User user) {
+	protected Result<?> execute(Request request, App app, Client client, User user) {
 		QuizSearcher searcher = request.getParam(Params.QUIZ_SEARCHER);
+		if (null == searcher.getSortCol())
+			throw ConstConvertFailureException.errorConstException(Params.QUIZ_SEARCHER);
 		searcher.setAppId(app.getId());
-		return communityService.quizs(searcher);
+		switch (client) {
+		case TENANT_MANAGER:
+			Result<Pager<Quiz>> result = communityService.quizs(searcher);
+			Set<Integer> set = new HashSet<Integer>();
+			for (Quiz quiz : result.attach().getList())
+				set.add(quiz.getUid());
+			List<User> users = userService.users(new ArrayList<Integer>(set));
+			List<QuizInfo> list = new ArrayList<QuizInfo>(result.attach().getList().size());
+			for (Quiz quiz : result.attach().getList()) {
+				for (User u : users) {
+					if (u.getUid() != quiz.getUid())
+						continue;
+					list.add(new QuizInfo(u, quiz));
+				}
+			}
+			return Result.result(new Pager<QuizInfo>(result.attach().getTotal(), list));
+		default:
+			return communityService.quizs(searcher);
+		}
 	}
 }

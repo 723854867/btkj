@@ -18,7 +18,7 @@ import org.rapid.util.exception.ConstConvertFailureException;
  * 
  * @author ahab
  */
-public class BANNER_EDIT extends PlatformAction {
+public class BANNER_MANAGE extends PlatformAction {
 	
 	@Resource
 	private UserManageService userManageService;

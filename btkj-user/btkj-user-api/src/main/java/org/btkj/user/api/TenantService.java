@@ -1,9 +1,6 @@
 package org.btkj.user.api;
 
-import java.util.List;
-
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.NonAutoBind;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
@@ -61,11 +58,4 @@ public interface TenantService {
 	 * @return
 	 */
 	TenantListInfo tenantListInfo(Client client, App app, User user);
-	
-	/**
-	 * 获取代理公司非车险列表
-	 * 
-	 * @return
-	 */
-	List<NonAutoBind> getNonAutoBinds(int tid);
 }

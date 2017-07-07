@@ -9,6 +9,7 @@ import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
+import org.rapid.util.common.message.Result;
 
 public class NoProfit extends BonusRoute<BonusRoute<?>> {
 	
@@ -22,6 +23,12 @@ public class NoProfit extends BonusRoute<BonusRoute<?>> {
 	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent, List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
 		searcher.setBizType(VehicleBizType.NO_PROFIT);
 		return super.coefficients(path, parent, coefficients, searcher);
+	}
+	
+	@Override
+	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
+		searcher.setBizType(VehicleBizType.NO_PROFIT);
+		return super.settings(paths, parent, searcher, coefficients);
 	}
 	
 	public void setBrand(Brand brand) {

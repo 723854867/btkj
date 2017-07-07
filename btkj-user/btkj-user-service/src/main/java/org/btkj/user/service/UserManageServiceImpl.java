@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.api.UserManageService;
@@ -28,6 +29,7 @@ import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -153,6 +155,26 @@ public class UserManageServiceImpl implements UserManageService {
 	@Override
 	public Result<Void> bannerDelete(int id) {
 		bannerMapper.delete(id);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> tenantSetting(int tid, Set<Long> nonAutoBind) {
+		Tenant tenant = tenantMapper.getByKey(tid);
+		if (null == tenant)
+			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
+		
+		// 设置非车险
+		if (CollectionUtils.isEmpty(nonAutoBind)) 
+			tenant.setNonAutoBind(null);
+		else {
+			StringBuilder builder = new StringBuilder();
+			for (long cid : nonAutoBind)
+				builder.append(cid).append(Consts.SYMBOL_UNDERLINE);
+			builder.deleteCharAt(builder.length() - 1);
+			tenant.setNonAutoBind(builder.toString());
+		}
+		tenantMapper.update(tenant);
 		return Consts.RESULT.OK;
 	}
 }

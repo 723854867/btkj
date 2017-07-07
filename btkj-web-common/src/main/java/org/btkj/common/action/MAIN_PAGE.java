@@ -1,16 +1,11 @@
 package org.btkj.common.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.NonAutoBind;
-import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -25,6 +20,7 @@ import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.CollectionUtils;
 
 /**
  * 首页信息
@@ -57,20 +53,8 @@ public class MAIN_PAGE extends UserAction {
 		MainPageInfo pageInfo = result.attach();
 		Region region = configService.getRegionById(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
-			
-		List<NonAutoCategory> categories = null;
-		if (null == em)
-			categories = nonAutoService.getAllCategories();
-		else {
-			List<NonAutoBind> binds = tenantService.getNonAutoBinds(em.getTenant().getTid());
-			if (null != binds && !binds.isEmpty()) {
-				List<Long> cids = new ArrayList<Long>(binds.size());
-				for (int i = 0, len = binds.size(); i < len; i++)
-					cids.add(Long.valueOf((binds.get(i).getCid())));
-				categories = nonAutoService.getCategoriesByIds(cids);
-			}
-		}
-		pageInfo.setNonAutoCategories(categories);
+		String nonAutoBind = null == em ? null : em.getTenant().getNonAutoBind();
+		pageInfo.setNonAutoCategories(null == em ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtils.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
 		return result;
 	}
 }

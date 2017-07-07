@@ -190,6 +190,7 @@ public interface Params {
 	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1028, "identityFace");
 	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1029, "identityBack");
 	final Str2IntConstConverter IDX									= new Str2IntConstConverter(1030, "idx");
+	final Str2StrConstConverter NON_AUTO_BIND						= new Str2StrConstConverter(1031, "nonAutoBind");
 	
 	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1032, "icon");
 	final Str2StrConstConverter LINK					= new Str2StrConstConverter(1033, "link");
@@ -347,7 +348,7 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<CRUD_TYPE> CRUD_TYPE = new Str2ObjConstConverter<CRUD_TYPE>(1039, "crudType") {
+	final Str2ObjConstConverter<CRUD_TYPE> CRUD_TYPE = new Str2ObjConstConverter<CRUD_TYPE>(1212, "crudType") {
 		@Override
 		public CRUD_TYPE convert(String k) throws ConstConvertFailureException {
 			int value;
