@@ -247,7 +247,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Override
 	public Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
-		Pager<VehicleOrder> pager = vehicleOrderMapper.list(ef, searcher);
+		Pager<VehicleOrder> pager = vehicleOrderMapper.paging(ef, searcher);
 		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(pager.getList().size());
 		for (VehicleOrder order : pager.getList()) {
 			_orderInfo(ef, order);

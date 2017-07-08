@@ -56,58 +56,58 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		return mongo.count(collection, filter);
 	}
 	
-	public Pager<VehicleOrder> list(EmployeeForm ef, VehicleOrderSearcher searcher) {
+	public Pager<VehicleOrder> paging(EmployeeForm ef, VehicleOrderSearcher searcher) {
 		List<VehicleOrder> orders = null;
 		long total = 0;
+		List<Bson> list = new ArrayList<Bson>();
 		if (null != searcher.getBatchId())
-			orders = mongo.find(collection, Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()), VehicleOrder.class);
-		else {
-			List<Bson> list = new ArrayList<Bson>();
-			if (null != searcher.getState()) {
-				switch (searcher.getState()) {
-				case INSURE:
-					list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.toString()), 
-							Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()), 
-							Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()), 
-							Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString())));
-					break;
-				case QUOTE_SUCCESS:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()));
-					break;
-				case INSURE_FAILURE:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString()));
-					break;
-				case INSURING:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()));
-					break;
-				case ISSUE:
-					list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()), 
-							Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()), 
-							Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString())));
-					break;
-				case INSURE_SUCCESS:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()));
-					break;
-				case ISSUE_SUCCESS:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()));
-					break;
-				case ISSUED:
-					list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString()));
-					break;
-				default:
-					break;
-				}
+			list.add(Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()));
+		if (null != searcher.getEmployeeId())
+			list.add(Filters.eq(FIELD_EMPLOYEE_ID, searcher.getEmployeeId()));
+		if (null != searcher.getState()) {
+			switch (searcher.getState()) {
+			case INSURE:
+				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.toString()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString())));
+				break;
+			case QUOTE_SUCCESS:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()));
+				break;
+			case INSURE_FAILURE:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString()));
+				break;
+			case INSURING:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()));
+				break;
+			case ISSUE:
+				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString())));
+				break;
+			case INSURE_SUCCESS:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()));
+				break;
+			case ISSUE_SUCCESS:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()));
+				break;
+			case ISSUED:
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString()));
+				break;
+			default:
+				break;
 			}
-			total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
-			if (0 == total)
-				return Pager.EMPLTY;
-			searcher.calculate((int) total);
-			orders = list.isEmpty() ?
-					mongo.pagingAndSort(collection, Sorts.descending(FIELD_CREATED), 
-								searcher.getStart(), searcher.getPageSize(), VehicleOrder.class):
-					mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
-								searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
 		}
+		total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
+		if (0 == total)
+			return Pager.EMPLTY;
+		searcher.calculate((int) total);
+		orders = list.isEmpty() ?
+				mongo.pagingAndSort(collection, Sorts.descending(FIELD_CREATED), 
+							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class):
+				mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
+							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
 		return new Pager<VehicleOrder>(searcher.getTotal(), orders);
 	}
 }

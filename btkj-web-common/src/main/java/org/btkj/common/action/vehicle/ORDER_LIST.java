@@ -21,6 +21,7 @@ public class ORDER_LIST extends TenantAction {
 	@Override
 	protected Result<Pager<VehicleOrderListInfo>> execute(Request request, Client client, EmployeeForm ef) {
 		VehicleOrderSearcher searcher = request.getParam(Params.VEHICLE_ORDER_SEARCHER);
+		searcher.setEmployeeId(ef.getEmployee().getId());
 		return Result.result(vehicleService.orders(ef, searcher));
 	}
 	
