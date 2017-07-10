@@ -59,6 +59,11 @@ public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 	}
 	
 	@Override
+	public void remove(Reply model) {
+		redis.hmzdel(redisKey, model.key(), _setKey(model.getQuizId()));
+	}
+	
+	@Override
 	public void flush(Collection<Reply> models) {
 		Map<Integer, List<Reply>> map = new HashMap<Integer, List<Reply>>();
 		for (Reply reply : models) {

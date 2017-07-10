@@ -13,6 +13,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
  * 咨询列表
@@ -27,6 +28,9 @@ public class ARTICLE_LIST extends UserAction {
 	@Override
 	protected Result<Pager<Article>> execute(Request request, App app, Client client, User operator) {
 		ArticleSearcher searcher = request.getParam(Params.ARTICLE_SEARCHER);
-		return communityService.articles(app.getId(), searcher);
+		if (null == searcher.getSortCol())
+			throw ConstConvertFailureException.errorConstException(Params.ARTICLE_SEARCHER);
+		searcher.setAppId(app.getId());
+		return communityService.articles(searcher);
 	}
 }

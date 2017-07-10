@@ -23,8 +23,8 @@ public interface ArticleDao extends DBMapper<Integer, Article> {
 	@SelectProvider(type = ArticleSQLProvider.class, method = "getByAppIdForUpdate")
 	List<Article> getByAppIdForUpdate(int appId);
 	
-	@SelectProvider(type = ArticleSQLProvider.class, method = "getAll")
-	List<Article> getAll();
+	@SelectProvider(type = ArticleSQLProvider.class, method = "getByAppId")
+	List<Article> getByAppId(int appId);
 	
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "update")

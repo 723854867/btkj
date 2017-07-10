@@ -31,7 +31,7 @@ public interface CommunityService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<Pager<Article>> articles(int appId, ArticleSearcher searcher);
+	Result<Pager<Article>> articles(ArticleSearcher searcher);
 	
 	/**
 	 * 评论分页

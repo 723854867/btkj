@@ -35,11 +35,12 @@ public class ArticleSQLProvider {
 		return "SELECT * FROM article WHERE app_id=#{appId} FOR UPDATE";
 	}
 
-	public String getAll() {
+	public String getByAppId() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(TABLE);
+				WHERE("app_id=#{appId}");
 			}
 		}.toString();
 	};

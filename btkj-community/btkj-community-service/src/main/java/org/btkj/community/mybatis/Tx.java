@@ -46,11 +46,6 @@ public class Tx {
 	private CommentMapper commentMapper;
 
 	@Transactional
-	public void storeComments(int articleId) {
-		commentMapper.storeComments(articleId);
-	}
-	
-	@Transactional
 	public TxCallback comment(User user, int articleId, String content) {
 		Article article = articleMapper.getByKey(articleId);
 		if (null == article || article.getAppId() != user.getAppId())

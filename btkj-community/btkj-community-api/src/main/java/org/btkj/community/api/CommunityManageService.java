@@ -17,4 +17,31 @@ public interface CommunityManageService {
 	 * @return
 	 */
 	Result<Void> quizDelete(int quizId, int appId);
+	
+	/**
+	 * 删除回复
+	 * 
+	 * @param replyId
+	 * @param appId
+	 * @return
+	 */
+	Result<Void> replyDelete(int replyId, int appId);
+	
+	/**
+	 * 删除咨询
+	 * 
+	 * @param articleId
+	 * @param appId
+	 * @return
+	 */
+	Result<Void> articleDelete(int articleId, int appId);
+	
+	/**
+	 * 删除评论
+	 * 
+	 * @param commentId
+	 * @param appId
+	 * @return
+	 */
+	Result<Void> commentDelete(int commentId, int appId);
 }

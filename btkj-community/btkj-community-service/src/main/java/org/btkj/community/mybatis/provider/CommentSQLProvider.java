@@ -18,7 +18,23 @@ public class CommentSQLProvider {
 		}.toString();
 	}
 
-	public String getByArticleIdForUpdate() {
-		return "SELECT * FROM comment WHERE article_id = #{articleId} FOR UPDATE";
+	public String getByArticleId() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+				WHERE("article_id=#{articleId}");
+			}
+		}.toString();
+	}
+	
+	public String deleteByArticleId() { 
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+				WHERE("aricle_id=#{articleId}");
+			}
+		}.toString();
 	}
 }

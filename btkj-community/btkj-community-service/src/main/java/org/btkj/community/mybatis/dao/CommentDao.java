@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -19,6 +20,9 @@ public interface CommentDao extends DBMapper<Integer, Comment> {
 	void insert(Comment entity);
 
 	@Resource
-	@SelectProvider(type = CommentSQLProvider.class, method = "getByArticleIdForUpdate")
-	List<Comment> getByArticleIdForUpdate(int articleId);
+	@SelectProvider(type = CommentSQLProvider.class, method = "getByArticleId")
+	List<Comment> getByArticleId(int articleId);
+	
+	@DeleteProvider(type = CommentSQLProvider.class, method = "deleteByArticleId")
+	void deleteByArticleId(int articleId);
 }

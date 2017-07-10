@@ -10,18 +10,13 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-/**
- * 删除提问
- * 
- * @author ahab
- */
-public class QUIZ_DELETE extends PlatformAction {
+public class REPLY_DELETE extends PlatformAction {
 	
 	@Resource
 	private CommunityManageService communityManageService;
 
 	@Override
 	protected Result<Void> execute(Request request, App app, User operator) {
-		return communityManageService.quizDelete(request.getParam(Params.ID), app.getId());
+		return communityManageService.replyDelete(request.getParam(Params.ID), app.getId());
 	}
 }

@@ -166,6 +166,16 @@ public enum BtkjCode implements ICode {
 	QUIZ_NOT_EXIST(601, "quiz not exits"),
 	
 	/**
+	 * 回复不存在
+	 */
+	REPLY_NOT_EXIST(602, "reply not exist"),
+	
+	/**
+	 * 评论不存在
+	 */
+	COMMENT_NOT_EXIST(603, "comment not exist"),
+	
+	/**
 	 * 汽车品牌不存在
 	 */
 	VEHICLE_BRAND_NOT_EXSIT(650, "vehicle brand not exist"),

@@ -1,10 +1,10 @@
 package org.btkj.master.api;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.entity.Administrator;
+import org.btkj.pojo.model.Pager;
+import org.rapid.util.common.message.Result;
 
 public interface MasterService {
 
-	void tenantAdd(App app, Region region, String tname, User user);
+	Result<Pager<Administrator>> administrators(int page, int pageSize);
 }

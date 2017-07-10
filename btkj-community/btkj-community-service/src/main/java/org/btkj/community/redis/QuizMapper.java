@@ -32,8 +32,7 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 	
 	public Result<Pager<Quiz>> paging(QuizSearcher searcher) {
 		_checkLoad(searcher.getAppId());
-		List<byte[]> list = redis.hpaging(_setKey(searcher.getAppId(), searcher.getSortCol()), 
-				redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
+		List<byte[]> list = redis.hpaging(_setKey(searcher.getAppId(), searcher.getSortCol()), redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));

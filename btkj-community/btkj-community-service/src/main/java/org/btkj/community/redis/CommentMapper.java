@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.btkj.community.mybatis.Tx;
 import org.btkj.community.mybatis.dao.CommentDao;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Comment;
@@ -15,31 +15,21 @@ import org.btkj.pojo.model.Pager;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.DateUtils;
 
 public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> {
 	
 	private String LOAD_LOCK					= "lock:comment:{0}";
-	private String LIST							= "zset:comment:{0}";			// 评论列表
+	private String TIME_BASED_ZSET				= "zset:comment:{0}";			// 评论列表
 	
-	private Tx tx;
-
 	public CommentMapper() {
 		super(new ByteProtostuffSerializer<Comment>(), "hash:db:comment");
 	}
 	
 	public Result<Pager<Comment>> comments(int articleId, int page, int pageSize) {
-		if (redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadLockKey(articleId), String.valueOf(DateUtils.currentTime()))) 	// 首次加载
-			tx.storeComments(articleId);
-		List<byte[]> list = redis.hpaging(
-				SerializeUtil.RedisUtil.encode(_listKey(articleId)), 
-				SerializeUtil.RedisUtil.encode(redisKey), 
-				SerializeUtil.RedisUtil.encode(page), 
-				SerializeUtil.RedisUtil.encode(pageSize),
-				SerializeUtil.RedisUtil.encode(RedisConsts.OPTION_ZREVRANGE));
+		_checkLoad(articleId);
+		List<byte[]> list = redis.hpaging(_zsetKey(articleId), redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));
@@ -49,37 +39,63 @@ public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> 
 		return Result.result(new Pager<Comment>(total, comments));
 	}
 	
-	public void storeComments(int articleId) {
-		List<Comment> comments = dao.getByArticleIdForUpdate(articleId);
-		if (!CollectionUtils.isEmpty(comments))
-			flush(comments);
+	public void deleteByArticleId(int articleId) {
+		redis.hmzdrop(redisKey, _zsetKey(articleId));
+		dao.deleteByArticleId(articleId);
 	}
 	
-	@Override
-	public void flush(Collection<Comment> comments) {
-		super.flush(comments);
-		Map<String, Double> map = new HashMap<String, Double>();
-		for (Comment comment : comments)
-			map.put(String.valueOf(comment.getId()), Double.valueOf(comment.getCreated()));
-		int articleId = comments.iterator().next().getArticleId();
-		redis.zadd(_listKey(articleId), map);
+	private void _checkLoad(int articleId) {
+		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(articleId), _loadKey(articleId)))
+			return;
+		List<Comment> list = dao.getByArticleId(articleId);
+		if (CollectionUtils.isEmpty(list))
+			return;
+		flush(list);
 	}
 	
 	@Override
 	public void flush(Comment entity) {
-		super.flush(entity);
-		redis.zadd(_listKey(entity.getArticleId()), entity.getCreated(), String.valueOf(entity.getId()));
+		redis.hmzset(redisKey, entity, _zsetKey(entity.getArticleId()), entity.getCreated(), serializer);
 	}
 	
-	public void setTx(Tx tx) {
-		this.tx = tx;
+	@Override
+	public void remove(Comment model) {
+		redis.hmzdel(redisKey, model.key(), _zsetKey(model.getArticleId()));
 	}
 	
-	private String _listKey(int articleId) {
-		return MessageFormat.format(LIST, String.valueOf(articleId));
+	@Override
+	public void flush(Collection<Comment> models) {
+		Map<Integer, List<Comment>> map = new HashMap<Integer, List<Comment>>();
+		for (Comment comment : models) {
+			int articleId = comment.getArticleId();
+			List<Comment> list = map.get(articleId);
+			if (null == list) {
+				list = new ArrayList<Comment>();
+				map.put(articleId, list);
+			}
+			list.add(comment);
+		}
+		
+		for (Entry<Integer, List<Comment>> entry : map.entrySet()){
+			int article = entry.getKey();
+			Comment[] comments = entry.getValue().toArray(new Comment[]{});
+			Map<String, double[]> zsetParams = new HashMap<String, double[]>();
+			
+			//时间排序
+			double[] scores = new double[comments.length];
+			int idx = 0;
+			for (int i = 0, len = comments.length; i < len; i++)
+				scores[idx++] = comments[i].getCreated();
+			zsetParams.put(_zsetKey(article), scores);
+			redis.hmzset(redisKey, comments, zsetParams, serializer);
+		}
 	}
 	
-	private String _loadLockKey(int articleId) {
+	private String _zsetKey(int articleId) {
+		return MessageFormat.format(TIME_BASED_ZSET, String.valueOf(articleId));
+	}
+	
+	private String _loadKey(int articleId) {
 		return MessageFormat.format(LOAD_LOCK, String.valueOf(articleId));
 	}
 }

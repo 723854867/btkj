@@ -12,7 +12,6 @@
 	<bean class="org.rapid.util.common.SpringContextUtil" />
 	
 	<bean id="commentMapper" class="org.btkj.community.redis.CommentMapper">
-		<property name="tx" ref="tx" />
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="commentDao" />
 	</bean>

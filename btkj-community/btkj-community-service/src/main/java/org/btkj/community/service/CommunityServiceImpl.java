@@ -49,8 +49,8 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public Result<Pager<Article>> articles(int appId, ArticleSearcher searcher) {
-		return articleMapper.articles(appId, searcher);
+	public Result<Pager<Article>> articles(ArticleSearcher searcher) {
+		return articleMapper.paging(searcher);
 	}
 	
 	@Override
