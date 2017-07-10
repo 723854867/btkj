@@ -115,7 +115,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 		if (null != body && body.isValid()) 
 			preEffectBody = body;
 		String nextId = paths.poll();
-		if (null == nextId) {					// 计算本次的佣金
+		if (null == nextId || null == body) {					// 计算本次的佣金:如果下一个节点没设置或者已经到末尾节点了则开始计算
 			if (null == preEffectBody)
 				return;
 			Bonus bonus = new Bonus();
@@ -150,10 +150,16 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 						String[] params = coefficient.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 						switch (coefficientType) {
 						case ZXB:
+							break;
 						case CLAIMS:
+							break;
 						case NO_CLAIMS:
+							break;
 						case GENDER:
 							int src = IdentityValidator.isMale(tips.getOwner().getIdNo()) ? GENDER.MALE.mark() : GENDER.FEMALE.mark();
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)));
+								totalCommercialRate += tempEntry.getValue();
+							break;
 						case SEAT_COUNT:
 							src = tips.getSeat();
 							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)));
@@ -188,11 +194,14 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 			int compulsoryRate = preEffectBody.getCompulsoryRate() - preEffectBody.getCompulsoryRetainRate();
 			commercialRate = Math.max(0, commercialRate);
 			compulsoryRate = Math.max(0, compulsoryRate);
-			bonus.setCommercialBonus(tips.getSchema().getCommericalTotal() * commercialRate);
-			bonus.setCompulsoryBonus((tips.getSchema().getCompulsiveTotal() + tips.getSchema().getVehicleVesselTotal()) * compulsoryRate);
+			bonus.setCommercialBonus(tips.getSchema().getCommericalTotal() * commercialRate / 1000.0);
+			bonus.setCompulsoryBonus((tips.getSchema().getCompulsiveTotal() + tips.getSchema().getVehicleVesselTotal()) * compulsoryRate / 1000.0);
 			order.setBonus(bonus);
 		} else {
-			calculateBonus(paths, order, body, preEffectBody, coefficients);
+			BonusRoute nextRoute = null == children ? null : children.get(nextId);
+			if (null == nextRoute)
+				return;
+			nextRoute.calculateBonus(paths, order, body, preEffectBody, coefficients);
 		}
 	}
 	
