@@ -1,20 +1,10 @@
-package org.btkj.user.mybatis.provider;
+package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class BonusManageSettingsSQLProvider {
+public class BonusManageConfigSQLProvider {
 
-	private final String TABLE			= "bonus_manage_settings";
-	
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("key=#{key}");
-			}
-		}.toString();
-	}
+	private final String TABLE			= "bonus_manage_config";
 	
 	public String insert() {
 		return new SQL() {

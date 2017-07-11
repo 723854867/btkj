@@ -1,4 +1,4 @@
-package org.btkj.user.redis;
+package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -10,28 +10,28 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.user.mybatis.dao.BonusManageSettingsDao;
-import org.btkj.user.pojo.entity.BonusManageSettings;
+import org.btkj.vehicle.mybatis.dao.BonusManageConfigDao;
+import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.StringUtils;
 
-public class BonusManageSettingsMapper extends RedisDBAdapter<String, BonusManageSettings, BonusManageSettingsDao>{
+public class BonusManageConfigMapper extends RedisDBAdapter<String, BonusManageConfig, BonusManageConfigDao>{
 	
-	private final String CONTROLLER							= "bonus_manage_settings：controller:{0}";
-	private final String TENANT_BASED_SET					= "set:bonus_manage_settings:{0}";
+	private final String CONTROLLER							= "bonus_manage_config：controller:{0}";
+	private final String TENANT_BASED_SET					= "set:bonus_manage_config:{0}";
 
-	public BonusManageSettingsMapper() {
-		super(new ByteProtostuffSerializer<BonusManageSettings>(), "hash:db:bonus_manage_settings");
+	public BonusManageConfigMapper() {
+		super(new ByteProtostuffSerializer<BonusManageConfig>(), "hash:db:bonus_manage_config");
 	}
 	
-	public List<BonusManageSettings> getByTenant(int tid) {
+	public List<BonusManageConfig> getByTenant(int tid) {
 		_checkLoad(tid);
 		List<byte[]> list = redis.hmsget(redisKey, _tenantBaseSetKey(tid));
 		if (null == list)
 			return Collections.EMPTY_LIST;
-		List<BonusManageSettings> l = new ArrayList<BonusManageSettings>();
+		List<BonusManageConfig> l = new ArrayList<BonusManageConfig>();
 		for (byte[] buffer : list)
 			l.add(serializer.antiConvet(buffer));
 		return l;
@@ -40,36 +40,36 @@ public class BonusManageSettingsMapper extends RedisDBAdapter<String, BonusManag
 	private void _checkLoad(int tid) {
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtils.EMPTY))
 			return;
-		List<BonusManageSettings> list = dao.getByTid(tid);
+		List<BonusManageConfig> list = dao.getByTid(tid);
 		if (CollectionUtils.isEmpty(list))
 			return;
 		flush(list);
 	}
 	
 	@Override
-	public void flush(BonusManageSettings model) {
+	public void flush(BonusManageConfig model) {
 		redis.hmsset(redisKey, model, serializer, _tenantBaseSetKey(model.getTid()));
 	}
 	
 	@Override
-	public void remove(BonusManageSettings model) {
+	public void remove(BonusManageConfig model) {
 		redis.hmsdel(redisKey, model.key(), _tenantBaseSetKey(model.getTid()));
 	}
 	
 	@Override
-	public void flush(Collection<BonusManageSettings> models) {
-		Map<Integer, List<BonusManageSettings>> map = new HashMap<Integer, List<BonusManageSettings>>();
-		for (BonusManageSettings temp : models) {
+	public void flush(Collection<BonusManageConfig> models) {
+		Map<Integer, List<BonusManageConfig>> map = new HashMap<Integer, List<BonusManageConfig>>();
+		for (BonusManageConfig temp : models) {
 			int tid = temp.getTid();
-			List<BonusManageSettings> list = map.get(tid);
+			List<BonusManageConfig> list = map.get(tid);
 			if (null == list) {
-				list = new ArrayList<BonusManageSettings>();
+				list = new ArrayList<BonusManageConfig>();
 				map.put(tid, list);
 			}
 			list.add(temp);
 		}
 		
-		for (Entry<Integer, List<BonusManageSettings>> entry : map.entrySet())
+		for (Entry<Integer, List<BonusManageConfig>> entry : map.entrySet())
 			redis.hmsset(redisKey, entry.getValue(), serializer, _tenantBaseSetKey(entry.getKey()));
 	}
 	

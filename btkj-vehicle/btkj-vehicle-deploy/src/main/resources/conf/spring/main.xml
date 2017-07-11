@@ -64,4 +64,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="vehicleModelDao" />
 	</bean>
+	
+	<bean id="bonusManageConfigMapper" class="org.btkj.vehicle.redis.BonusManageConfigMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="bonusManageConfigDao" />
+	</bean>
 </beans>

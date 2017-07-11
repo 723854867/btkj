@@ -64,9 +64,4 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="customerDao" />
 	</bean>
-	
-	<bean id="bonusManageSettingsMapper" class="org.btkj.user.redis.BonusManageSettingsMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="bonusManageSettingsDao" />
-	</bean>
 </beans>

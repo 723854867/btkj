@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.City;
 import org.btkj.vehicle.pojo.entity.Route;
 
@@ -55,4 +56,12 @@ public interface VehicleConfigService {
 	 * @param key
 	 */
 	void deleteRoute(String key);
+	
+	/**
+	 * 获取指定商户的管理佣金设置
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	List<BonusManageConfig> bonusManageConfigs(int tid);
 }

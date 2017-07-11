@@ -1,4 +1,4 @@
-package org.btkj.user.pojo.entity;
+package org.btkj.vehicle.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
@@ -7,13 +7,14 @@ import org.rapid.util.common.model.UniqueModel;
  * 
  * @author ahab
  */
-public class BonusManageSettings implements UniqueModel<String> {
+public class BonusManageConfig implements UniqueModel<String> {
 
 	private static final long serialVersionUID = 125714925701847431L;
 
 	private String key;
 	private int tid;
 	private int type;
+	private int depth;
 	private int rate;
 	private int created;
 
@@ -39,6 +40,14 @@ public class BonusManageSettings implements UniqueModel<String> {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	public int getDepth() {
+		return depth;
+	}
+	
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 
 	public int getRate() {
