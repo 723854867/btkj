@@ -45,9 +45,10 @@ public interface TenantService {
 	 * @param user 顶级用户
 	 * @param licenseFace 营业执照正面
 	 * @param licenseBack 营业执照反面
+	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<?> tenantAdd(App app, Region region, String tname, User user, String licenseFace, String licenseBack);
+	Result<?> tenantAdd(App app, Region region, String tname, User user, String licenseFace, String licenseBack, String servicePhone);
 	
 	/**
 	 * 代理公司列表

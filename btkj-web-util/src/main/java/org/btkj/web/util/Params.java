@@ -21,6 +21,7 @@ import org.btkj.pojo.submit.ArticleSearcher;
 import org.btkj.pojo.submit.BonusSearcher;
 import org.btkj.pojo.submit.NonAutoProductSearcher;
 import org.btkj.pojo.submit.QuizSearcher;
+import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.UserSearcher;
@@ -226,6 +227,7 @@ public interface Params {
 	final Str2StrConstConverter AGENT							= new Str2StrConstConverter(1041, "agent");
 	final Str2StrConstConverter KEY								= new Str2StrConstConverter(1042, "key");
 	final Str2IntConstConverter NUM								= new Str2IntConstConverter(1043, "num");
+	final Str2StrConstConverter SERVICE_PHONE					= new Str2StrConstConverter(1044, "servicePhone");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
@@ -276,6 +278,13 @@ public interface Params {
 		@Override
 		public QuotaNoticeSubmit convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuotaNoticeSubmit.class);
+		}
+	};
+	
+	final Str2ObjConstConverter<CustomerSearcher> CUSTOMER_SEARCHER	= new Str2ObjConstConverter<CustomerSearcher>(1110, "customerSearcher") {
+		@Override
+		public CustomerSearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, CustomerSearcher.class);
 		}
 	};
 

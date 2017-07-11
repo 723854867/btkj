@@ -1,11 +1,15 @@
 package org.btkj.user.api;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
+import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -106,4 +110,27 @@ public interface UserService {
 	 * @return
 	 */
 	Customer getCustomerById(long customerId);
+	
+	/**
+	 * 新增客户
+	 * 
+	 * @param uid
+	 * @param name
+	 * @param identity
+	 * @param mobile
+	 * @param license
+	 * @param regions
+	 * @param address
+	 * @param memo
+	 * @return
+	 */
+	Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo);
+
+	/**
+	 * 客户分页
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Result<Pager<Customer>> customers(CustomerSearcher searcher);
 }

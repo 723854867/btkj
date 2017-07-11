@@ -46,6 +46,7 @@ public class TENANT_ADD extends PlatformAction {
 		String licenseFace = request.getParam(Params.IDENTITY_FACE);
 		String licenseBack = request.getParam(Params.IDENTITY_BACK);
 		String mobile = request.getParam(Params.MOBILE);
+		String servicePhone = request.getParam(Params.SERVICE_PHONE);
 		User user = userService.getUser(mobile, app.getId());
 		if (null == user) 
 			return Consts.RESULT.USER_NOT_EXIST;
@@ -55,6 +56,6 @@ public class TENANT_ADD extends PlatformAction {
 		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, mobile, app.getId());	
 		if (courierService.captchaVerify(verifier).getCode() == -1)
 			return Consts.RESULT.CAPTCHA_ERROR;
-		return tenantService.tenantAdd(app, region, tname, user, licenseFace, licenseBack);
+		return tenantService.tenantAdd(app, region, tname, user, licenseFace, licenseBack, servicePhone);
 	}
 }

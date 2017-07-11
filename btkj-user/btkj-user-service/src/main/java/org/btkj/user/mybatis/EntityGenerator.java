@@ -1,13 +1,18 @@
 package org.btkj.user.mybatis;
 
+import java.util.LinkedList;
+
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.EmployeeForm;
+import org.rapid.util.common.enums.REGION_TYPE;
 import org.rapid.util.lang.DateUtils;
 
 public class EntityGenerator {
@@ -51,12 +56,13 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final Tenant newTenant(int region, int appId, String name, String licenseFace, String licenseBack) {
+	public static final Tenant newTenant(int region, int appId, String name, String licenseFace, String licenseBack, String servicePhone) {
 		Tenant tenant = new Tenant();
 		tenant.setName(name);
 		tenant.setAppId(appId);
 		tenant.setRegion(region);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
+		tenant.setServicePhone(servicePhone);
 		
 		int time = DateUtils.currentTime();
 		tenant.setCreated(time);
@@ -86,5 +92,34 @@ public class EntityGenerator {
 		banner.setCreated(time);
 		banner.setUpdated(time);
 		return banner;
+	}
+	
+	public static final Customer newCustomer(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
+		Customer customer = new Customer();
+		customer.setUid(uid);
+		customer.setName(name);
+		customer.setAddress(address);
+		customer.setIdentity(identity);
+		customer.setMemo(memo);
+		customer.setMobile(mobile);
+		customer.setLicense(license);
+		while (null != regions.peek()) {
+			Region region = regions.poll();
+			REGION_TYPE type = REGION_TYPE.match(region.getLevel());
+			switch (type) {
+			case PROVINCE:
+				customer.setProvince(region.getName());
+				break;
+			case CITY:
+				customer.setCity(region.getName());
+				break;
+			case COUNTY:
+				customer.setCounty(region.getName());
+				break;
+			default:
+				break;
+			}
+		}
+		return customer;
 	}
 }

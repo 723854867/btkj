@@ -201,6 +201,11 @@ public enum BtkjCode implements ICode {
 	CUSTOMER_NOT_EXIST(660, "customer not exist"),
 	
 	/**
+	 * 客户身份证冲突
+	 */
+	CUSTOMER_IDENTITY_DUPLICATE(661, "customer identity duplicate"),
+	
+	/**
 	 * 轮播图不存在
 	 */
 	BANNER_NOT_EXIST(670, "banner not exist");

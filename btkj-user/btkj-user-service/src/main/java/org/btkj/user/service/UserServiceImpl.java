@@ -1,5 +1,6 @@
 package org.btkj.user.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,10 +9,14 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserModel;
 import org.btkj.user.api.UserService;
+import org.btkj.user.mybatis.EntityGenerator;
+import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.CustomerMapper;
@@ -139,5 +144,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Customer getCustomerById(long customerId) {
 		return customerMapper.getByKey(customerId);
+	}
+	
+	@Override
+	public Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
+		Customer customer = EntityGenerator.newCustomer(uid, name, identity, mobile, license, regions, address, memo);
+		try {
+			customerMapper.insert(customer);
+		} catch (DuplicateKeyException e) {
+			return BtkjConsts.RESULT.CUSTOMER_IDENTITY_DUPLICATE;
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Pager<Customer>> customers(CustomerSearcher searcher) {
+		return Result.result(customerMapper.paging(searcher));
 	}
 }

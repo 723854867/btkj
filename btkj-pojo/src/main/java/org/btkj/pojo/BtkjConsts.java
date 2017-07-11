@@ -39,6 +39,7 @@ public interface BtkjConsts {
 		Result VEHICLE_DEPT_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_DEPT_NOT_EXIST);
 		Result VEHICLE_MODEL_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_MODEL_NOT_EXIST);
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
+		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

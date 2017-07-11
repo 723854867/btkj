@@ -285,7 +285,13 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 				params.setBuJiMianDaoQiang(null != insurance ? 1 : 0);
 				break;
 			case GLASS:
-				params.setBoLi(null != insurance ? insurance.getQuota() : 0);
+				if (null != insurance) {
+					int value = (int) insurance.getQuota();
+					if (value != 1 && value != 2)
+						value = 0;
+					params.setBoLi(value);
+				} else
+					params.setBoLi(0);
 				break;
 			case AUTO_FIRE:
 				params.setZiRan(null != insurance ? 1 : 0);

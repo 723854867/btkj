@@ -24,6 +24,7 @@ public class TenantSQLProvider {
 				VALUES("`license_face`", "#{licenseFace}");
 				VALUES("`license_back`", "#{licenseBack}");
 				VALUES("`non_auto_bind`", "#{nonAutoBind}");
+				VALUES("`service_phone`", "#{servicePhone}");
 				VALUES("`created`", "#{created}");
 				VALUES("`updated`", "#{updated}");
 			}
@@ -37,6 +38,7 @@ public class TenantSQLProvider {
 				SET("`name`=#{name}");
 				SET("`team_depth`=#{teamDepth}");
 				SET("`non_auto_bind`=#{nonAutoBind}");
+				SET("`service_phone`=#{servicePhone}");
 				SET("updated=#{updated}");
 				WHERE("tid=#{tid}");
 			}
