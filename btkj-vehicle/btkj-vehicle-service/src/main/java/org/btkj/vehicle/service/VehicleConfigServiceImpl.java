@@ -59,6 +59,6 @@ public class VehicleConfigServiceImpl implements VehicleConfigService {
 	
 	@Override
 	public List<BonusManageConfig> bonusManageConfigs(int tid) {
-		return bonusManageConfigMapper.getByTenant(tid);
+		return bonusManageConfigMapper.getByTid(tid);
 	}
 }

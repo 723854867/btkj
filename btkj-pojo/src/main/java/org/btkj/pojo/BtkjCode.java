@@ -151,6 +151,16 @@ public enum BtkjCode implements ICode {
 	NOT_IN_RENEWAL_PERIOD(528, "not in renewal period"),
 	
 	/**
+	 * 车险系数不存在
+	 */
+	COEFFICIENT_NOT_EXIST(550, "coefficient not exist"),
+	
+	/**
+	 * 车险系数最大值
+	 */
+	COEFFICIENT_NUM_MAXMIUM(551, "coefficient num maxmium"),
+	
+	/**
 	 * 文章不存在
 	 */
 	ARTICLE_NOT_EXIST(600, "article not exits"),

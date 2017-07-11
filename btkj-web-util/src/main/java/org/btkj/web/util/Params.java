@@ -14,6 +14,7 @@ import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
+import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.pojo.submit.AppSearcher;
@@ -34,6 +35,7 @@ import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtils;
+import org.rapid.util.math.compare.ComparisonSymbol;
 import org.rapid.util.validator.Validator;
 
 import com.google.gson.reflect.TypeToken;
@@ -329,7 +331,7 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, App.class);
 		}
 	};
-	final Str2ObjConstConverter<TenantSearcher> TENANT_SEARCHER	= new Str2ObjConstConverter<TenantSearcher>(1208, "tenantSearch") {
+	final Str2ObjConstConverter<TenantSearcher> TENANT_SEARCHER	= new Str2ObjConstConverter<TenantSearcher>(1208, "tenantSearcher") {
 		@Override
 		public TenantSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSearcher.class);
@@ -372,4 +374,43 @@ public interface Params {
 			return type;
 		}
 	};	
+	
+	final Str2ObjConstConverter<CoefficientType> COEFFICIENT_TYPE = new Str2ObjConstConverter<CoefficientType>(1213, "coefficientType") {
+		@Override
+		public CoefficientType convert(String k) throws ConstConvertFailureException {
+			int value;
+			try {
+				value = Integer.valueOf(k);
+			} catch (NumberFormatException e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+			CoefficientType type = CoefficientType.match(value);
+			if (null == type)
+				throw ConstConvertFailureException.errorConstException(this);
+			return type;
+		}
+	};
+	
+	final Str2ObjConstConverter<ComparisonSymbol> COMPARISON = new Str2ObjConstConverter<ComparisonSymbol>(1214, "comparison") {
+		@Override
+		public ComparisonSymbol convert(String k) throws ConstConvertFailureException {
+			int value;
+			try {
+				value = Integer.valueOf(k);
+			} catch (NumberFormatException e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+			ComparisonSymbol type = ComparisonSymbol.match(value);
+			if (null == type)
+				throw ConstConvertFailureException.errorConstException(this);
+			return type;
+		}
+	};
+	
+	final Str2ObjConstConverter<String[]> ARRAY	= new Str2ObjConstConverter<String[]>(1215, "array") {
+		@Override
+		public String[] convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<String[]>(){}.getType());
+		}
+	};
 }

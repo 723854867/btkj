@@ -8,7 +8,15 @@ import org.btkj.vehicle.mybatis.provider.VehicleCoefficientSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface VehicleCoefficientDao extends DBMapper<Integer, VehicleCoefficient> {
-
+	
+	@Override
+	@SelectProvider(type = VehicleCoefficientSQLProvider.class, method = "getByKey")
+	VehicleCoefficient getByKey(Integer key);
+	
 	@SelectProvider(type = VehicleCoefficientSQLProvider.class, method = "getByTid")
 	List<VehicleCoefficient> getByTid(int tid);
+	
+	@Override
+	@SelectProvider(type = VehicleCoefficientSQLProvider.class, method = "delete")
+	void delete(Integer key);
 }

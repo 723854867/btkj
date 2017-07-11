@@ -22,6 +22,8 @@
 	
 	<dubbo:service interface="org.btkj.vehicle.api.VehicleConfigService" ref="vehicleConfigService" loadbalance="${dubbo.service.loadbalance}"/>
 
+	<dubbo:service interface="org.btkj.vehicle.api.VehicleManageService" ref="vehicleManageService" loadbalance="${dubbo.service.loadbalance}"/>
+
 	<dubbo:reference id="biHuVehicle" interface="org.btkj.bihu.vehicle.api.BiHuVehicle" />
 	
 	<dubbo:reference id="leBaoBaVehicle" interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle"/>

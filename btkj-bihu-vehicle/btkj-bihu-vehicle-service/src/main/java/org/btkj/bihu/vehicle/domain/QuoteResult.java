@@ -7,6 +7,7 @@ import java.util.Map;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.model.insur.vehicle.GarageDesignatedInsurance;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.util.common.message.Result;
@@ -635,7 +636,7 @@ public class QuoteResult implements Serializable {
 			if (null != this.Item.BuJiMianSheShui && this.Item.BuJiMianSheShui.BaoE != 0)
 				insurances.put(InsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
 			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0)
-				insurances.put(InsuranceType.GARAGE_DESIGNATED, new Insurance(this.Item.HcXiuLiChang.BaoE, this.Item.HcXiuLiChang.BaoFei));
+				insurances.put(InsuranceType.GARAGE_DESIGNATED, new GarageDesignatedInsurance(this.Item.HcXiuLiChangType, this.Item.HcXiuLiChang.BaoE, this.Item.HcXiuLiChang.BaoFei));
 			if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
 				insurances.put(InsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		}

@@ -19,14 +19,14 @@ import org.rapid.util.lang.StringUtils;
 
 public class BonusManageConfigMapper extends RedisDBAdapter<String, BonusManageConfig, BonusManageConfigDao>{
 	
-	private final String CONTROLLER							= "bonus_manage_config：controller:{0}";
+	private final String CONTROLLER							= "bonus_manage_config:controller:{0}";
 	private final String TENANT_BASED_SET					= "set:bonus_manage_config:{0}";
 
 	public BonusManageConfigMapper() {
 		super(new ByteProtostuffSerializer<BonusManageConfig>(), "hash:db:bonus_manage_config");
 	}
 	
-	public List<BonusManageConfig> getByTenant(int tid) {
+	public List<BonusManageConfig> getByTid(int tid) {
 		_checkLoad(tid);
 		List<byte[]> list = redis.hmsget(redisKey, _tenantBaseSetKey(tid));
 		if (null == list)

@@ -22,17 +22,8 @@ public class VehicleCoefficientsInfo implements Serializable {
 	public VehicleCoefficientsInfo(CoefficientType type) {
 		this.typeId = type.mark();
 		this.typeName = type.title();
-		switch (type) {
-		case AGE:
-		case VEHICLE_AGE:
-		case PURCHASE_PRICE:
-			this.custom = true;
-			this.maxCustomNum = 4;
-			break;
-		default:
-			this.custom = false;
-			break;
-		}
+		this.custom = type.isCustom();
+		this.maxCustomNum = type.maxCustomNum();
 	}
 
 	public int getTypeId() {

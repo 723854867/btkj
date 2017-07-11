@@ -2,47 +2,96 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
+import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.StringUtils;
 
 public class VehicleCoefficientMapper extends RedisDBAdapter<Integer, VehicleCoefficient, VehicleCoefficientDao> {
 	
-	private String LIST							= "set:vehicle_coefficient:list:{0}";			
-	private String LIST_CONTROLLER				= "vehicle_coefficient：controller:{0}";
+	private final String CONTROLLER							= "vehicle_coeeficient:controller:{0}";
+	private final String TENANT_BASED_SET					= "set:vehicle_coeeficient:{0}";
 	
 	public VehicleCoefficientMapper() {
 		super(new ByteProtostuffSerializer<VehicleCoefficient>(), "hash:db:vehicle_coefficient");
 	}
 	
 	public List<VehicleCoefficient> getByTid(int tid) {
-		List<byte[]> l = redis.hsgetIfMarked(BtkjConsts.CACHE_CONTROLLER_KEY, _listKey(tid), redisKey, _listControllerKey(tid));
-		List<VehicleCoefficient> list = null;
-		if (null == l) {
-			list = dao.getByTid(tid);
-			redis.hssetMark(BtkjConsts.CACHE_CONTROLLER_KEY, redisKey, _listKey(tid), _listControllerKey(tid), list, serializer);
-		} else {
-			list = new ArrayList<VehicleCoefficient>(l.size());
-			for (byte[] data : l)
-				list.add(serializer.antiConvet(data));
+		_checkLoad(tid);
+		List<byte[]> list = redis.hmsget(redisKey, _tenantBaseSetKey(tid));
+		if (null == list)
+			return Collections.EMPTY_LIST;
+		List<VehicleCoefficient> l = new ArrayList<VehicleCoefficient>();
+		for (byte[] buffer : list)
+			l.add(serializer.antiConvet(buffer));
+		return l;
+	}
+	
+	public List<VehicleCoefficient> getByTidAndType(int tid, CoefficientType type) {
+		List<VehicleCoefficient> l = getByTid(tid);
+		Iterator<VehicleCoefficient> itr = l.iterator();
+		while (itr.hasNext()) {
+			VehicleCoefficient coefficient = itr.next();
+			if (coefficient.getType() == type.mark())
+				continue;
+			itr.remove();
 		}
-		return list;
+		return l;
+	}
+	
+	private void _checkLoad(int tid) {
+		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtils.EMPTY))
+			return;
+		List<VehicleCoefficient> list = dao.getByTid(tid);
+		if (CollectionUtils.isEmpty(list))
+			return;
+		flush(list);
 	}
 	
 	@Override
 	public void flush(VehicleCoefficient model) {
-		redis.hsset(redisKey, model.key(), serializer.convert(model), _listKey(model.getTid()));
+		redis.hmsset(redisKey, model, serializer, _tenantBaseSetKey(model.getTid()));
 	}
 	
-	private String _listKey(int tid) { 
-		return MessageFormat.format(LIST, String.valueOf(tid));
+	@Override
+	public void remove(VehicleCoefficient model) {
+		redis.hmsdel(redisKey, model.key(), _tenantBaseSetKey(model.getTid()));
 	}
 	
-	private String _listControllerKey(int tid) { 
-		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(tid));
+	@Override
+	public void flush(Collection<VehicleCoefficient> models) {
+		Map<Integer, List<VehicleCoefficient>> map = new HashMap<Integer, List<VehicleCoefficient>>();
+		for (VehicleCoefficient temp : models) {
+			int tid = temp.getTid();
+			List<VehicleCoefficient> list = map.get(tid);
+			if (null == list) {
+				list = new ArrayList<VehicleCoefficient>();
+				map.put(tid, list);
+			}
+			list.add(temp);
+		}
+		
+		for (Entry<Integer, List<VehicleCoefficient>> entry : map.entrySet())
+			redis.hmsset(redisKey, entry.getValue(), serializer, _tenantBaseSetKey(entry.getKey()));
+	}
+	
+	private String _controkkerKey(int tid) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(tid));
+	}
+	
+	private String _tenantBaseSetKey(int tid) {
+		return MessageFormat.format(TENANT_BASED_SET, String.valueOf(tid));
 	}
 }
