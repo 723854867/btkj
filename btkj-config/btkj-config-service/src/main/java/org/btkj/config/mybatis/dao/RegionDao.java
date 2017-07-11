@@ -20,4 +20,8 @@ public interface RegionDao extends DBMapper<Integer, Region> {
 	@Override
 	@SelectProvider(type = RegionSQLProvider.class, method = "getByKey")
 	Region getByKey(Integer key);
+	
+	@Override
+	@SelectProvider(type = RegionSQLProvider.class, method = "getWithinKey")
+	List<Region> getWithinKey(List<Integer> keys);
 }

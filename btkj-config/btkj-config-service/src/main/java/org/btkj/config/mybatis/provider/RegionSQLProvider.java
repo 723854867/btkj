@@ -1,5 +1,8 @@
 package org.btkj.config.mybatis.provider;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.jdbc.SQL;
 
 public class RegionSQLProvider {
@@ -36,5 +39,15 @@ public class RegionSQLProvider {
 				WHERE("id=#{key}");
 			}
 		}.toString();
+	}
+	
+	public String getWithinKey(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("list");
+		StringBuilder builder = new StringBuilder("SELECT * FROM region WHERE id IN(");
+		for (int key : keys)
+			builder.append(key).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
 	}
 }
