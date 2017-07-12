@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.vehicle.pojo.BonusScaleConfigType;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
@@ -58,4 +59,32 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	List<BonusScaleConfig> bonusScaleConfigs(int tid);
+	
+	/**
+	 * 新增管理奖励配置项
+	 * 
+	 * @param tid
+	 * @param type
+	 * @param depth
+	 * @param rate
+	 * @return
+	 */
+	Result<Void> bonusManageConfigAdd(int tid, BonusScaleConfigType type, int depth, int rate);
+	
+	/**
+	 * 更新管理奖励配置项
+	 * 
+	 * @param id
+	 * @param rate
+	 * @return
+	 */
+	Result<Void> bonusManageConfigUpdate(int id, int rate);
+	
+	/**
+	 * 删除管理奖励配置项
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Result<Void> bonusManageConfigDelete(int id);
 }

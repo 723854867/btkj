@@ -11,4 +11,12 @@ public enum BonusScaleConfigType {
 	private BonusScaleConfigType(int mark) {
 		this.mark = mark;
 	}
+	
+	public static final BonusScaleConfigType match(int type) {
+		for (BonusScaleConfigType temp : BonusScaleConfigType.values()) {
+			if (temp.mark == type)
+				return temp;
+		}
+		return null;
+	}
 }

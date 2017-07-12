@@ -5,11 +5,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mybatis.Tx;
+import org.btkj.vehicle.pojo.BonusScaleConfigType;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
@@ -67,5 +69,21 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public List<BonusScaleConfig> bonusScaleConfigs(int tid) {
 		return bonusScaleConfigMapper.getByTid(tid);
+	}
+	
+	@Override
+	public Result<Void> bonusManageConfigAdd(int tid, BonusScaleConfigType type, int depth, int rate) {
+		int maxDepth = GlobalConfigContainer.getGlobalConfig().getTeamDepth();
+		return null;
+	}
+	
+	@Override
+	public Result<Void> bonusManageConfigUpdate(int id, int rate) {
+		return null;
+	}
+	
+	@Override
+	public Result<Void> bonusManageConfigDelete(int id) {
+		return null;
 	}
 }
