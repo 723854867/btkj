@@ -17,6 +17,7 @@ public class BonusManageConfig implements UniqueModel<String> {
 	private int depth;
 	private int rate;
 	private int created;
+	private int updated;
 
 	public String getKey() {
 		return key;
@@ -65,7 +66,15 @@ public class BonusManageConfig implements UniqueModel<String> {
 	public void setCreated(int created) {
 		this.created = created;
 	}
+	
+	public int getUpdated() {
+		return updated;
+	}
 
+	public void setUpdated(int updated) {
+		this.updated = updated;
+	}
+	
 	@Override
 	public String key() {
 		return this.key;

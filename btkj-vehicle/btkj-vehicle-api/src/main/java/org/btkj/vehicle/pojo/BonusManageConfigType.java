@@ -27,4 +27,16 @@ public enum BonusManageConfigType {
 	private BonusManageConfigType(int mark) {
 		this.mark = mark;
 	}
+
+	public int mark() {
+		return mark;
+	}
+	
+	public static final BonusManageConfigType match(int type) {
+		for (BonusManageConfigType temp : BonusManageConfigType.values()) {
+			if (temp.mark == type)
+				return temp;
+		}
+		return null;
+	}
 }

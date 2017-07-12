@@ -166,6 +166,16 @@ public enum BtkjCode implements ICode {
 	COEFFICIENT_NUM_MAXMIUM(551, "coefficient num maxmium"),
 	
 	/**
+	 * 管理奖励配置项不存在
+	 */
+	BONUS_MANAGE_CONFIG_NOT_EXIST(552, "bonus manage config not exist"),
+	
+	/**
+	 * 规模奖励配置项不存在
+	 */
+	BONUS_SCALE_CONFIG_NOT_EXIST(553, "bonus scale config not exist"),
+	
+	/**
 	 * 文章不存在
 	 */
 	ARTICLE_NOT_EXIST(600, "article not exits"),

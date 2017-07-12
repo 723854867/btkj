@@ -231,7 +231,8 @@ public interface Params {
 	final Str2IntConstConverter NUM								= new Str2IntConstConverter(1043, "num");
 	final Str2StrConstConverter SERVICE_PHONE					= new Str2StrConstConverter(1044, "servicePhone");
 	final Str2IntConstConverter DEPTH							= new Str2IntConstConverter(1045, "depth");
-
+	final Str2IntConstConverter MIN								= new Str2IntConstConverter(1046, "min");
+	final Str2IntConstConverter MAX								= new Str2IntConstConverter(1047, "max");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

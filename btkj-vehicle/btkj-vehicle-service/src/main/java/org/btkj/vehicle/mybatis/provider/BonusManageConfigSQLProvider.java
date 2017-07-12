@@ -15,6 +15,17 @@ public class BonusManageConfigSQLProvider {
 				VALUES("type", "#{type}");
 				VALUES("rate", "#{rate}");
 				VALUES("created", "#{created}");
+				VALUES("updated", "#{updated}");
+			}
+		}.toString();
+	}
+	
+	public String getByKey() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+				WHERE("key=#{key}");
 			}
 		}.toString();
 	}
@@ -25,6 +36,26 @@ public class BonusManageConfigSQLProvider {
 				SELECT("*");
 				FROM(TABLE);
 				WHERE("tid=#{tid}");
+			}
+		}.toString();
+	}
+	
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(TABLE);
+				SET("rate", "#{rate}");
+				SET("updated", "#{updated}");
+				WHERE("key=#{key}");
+			}
+		}.toString();
+	}
+	
+	public String delete() {
+		return new SQL() {
+			{
+				DELETE_FROM(TABLE);
+				WHERE("key=#{key}");
 			}
 		}.toString();
 	}

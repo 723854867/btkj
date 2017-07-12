@@ -7,7 +7,6 @@ import java.util.Map;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.model.insur.vehicle.GarageDesignatedInsurance;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.util.common.message.Result;
@@ -635,9 +634,10 @@ public class QuoteResult implements Serializable {
 				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.Item.SheShui.BaoE, this.Item.SheShui.BaoFei));
 			if (null != this.Item.BuJiMianSheShui && this.Item.BuJiMianSheShui.BaoE != 0)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
-			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0)
-				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new GarageDesignatedInsurance(this.Item.HcXiuLiChangType, this.Item.HcXiuLiChang.BaoE, this.Item.HcXiuLiChang.BaoFei));
-			if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
+			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0) {
+				double quota = this.Item.HcXiuLiChangType == 1 ? 1 + this.Item.HcXiuLiChang.BaoE : this.Item.HcXiuLiChang.BaoE;
+				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(quota, this.Item.HcXiuLiChang.BaoFei));
+			} if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		}
 		result.setNoLossDiscountRate(this.Item.RateFactor1);

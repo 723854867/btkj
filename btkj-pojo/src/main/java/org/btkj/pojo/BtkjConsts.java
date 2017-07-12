@@ -42,6 +42,8 @@ public interface BtkjConsts {
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
+		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
+		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

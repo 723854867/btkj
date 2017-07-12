@@ -2,7 +2,9 @@ package org.btkj.vehicle.mybatis;
 
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.vehicle.pojo.BonusScaleConfigType;
 import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.City;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.Consts;
@@ -48,5 +50,19 @@ public class EntityGenerator {
 		coefficient.setCreated(time);
 		coefficient.setUpdated(time);
 		return coefficient;
+	}
+	
+	public static final BonusManageConfig newBonusManageConfig(int tid, BonusScaleConfigType type, int depth, int rate) {
+		BonusManageConfig config = new BonusManageConfig();
+		config.setTid(tid);
+		config.setRate(rate);
+		config.setType(type.mark());
+		config.setDepth(depth);
+		config.setKey(tid + Consts.SYMBOL_UNDERLINE + type.mark() + Consts.SYMBOL_UNDERLINE + depth);
+		
+		int time = DateUtils.currentTime();
+		config.setCreated(time);
+		config.setUpdated(time);
+		return config;
 	}
 }
