@@ -78,7 +78,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 续保信息获取失败
 	 */
-	RENEW_INFO_GET_FAILURE(513, "renw info get failure!"),
+	RENEW_INFO_GET_FAILURE(513, "renew info get failure!"),
+	
+	/**
+	 * 获取车辆信息成功(车架号，发动机号，品牌型号，初登日期可以取到)，获取险种失败
+	 */
+	RENEW_INFO_VEHICLE_ONLY(514, "renew info vehicle only"),
 	
 	/**
 	 * 线路不存在

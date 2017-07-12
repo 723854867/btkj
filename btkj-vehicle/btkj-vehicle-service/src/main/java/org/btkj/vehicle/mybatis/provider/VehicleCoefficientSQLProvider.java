@@ -26,6 +26,34 @@ public class VehicleCoefficientSQLProvider {
 		}.toString();
 	}
 	
+	public String insert() {
+		return new SQL() {
+			{
+				INSERT_INTO(TABLE);
+				VALUES("tid", "#{tid}");
+				VALUES("type", "#{type}");
+				VALUES("name", "#{name}");
+				VALUES("comparison", "#{comparison}");
+				VALUES("comparable_value", "#{comparableValue}");
+				VALUES("created", "#{created}");
+				VALUES("updated", "#{updated}");
+			}
+		}.toString();
+	}
+	
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(TABLE);
+				SET("name", "#{name}");
+				SET("comparison", "#{comparison}");
+				SET("comparable_value", "#{comparableValue}");
+				SET("updated", "#{updated}");
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
+	
 	public String delete() {
 		return new SQL() {
 			{
@@ -33,5 +61,9 @@ public class VehicleCoefficientSQLProvider {
 				WHERE("id=#{key}");
 			}
 		}.toString();
+	}
+	
+	public String getByTidAndTypeForUpdate() {
+		return "SELECT * FROM vehicle_coefficient WHERE tid=#{tid} AND type=#{type} FOR UPDATE";
 	}
 }

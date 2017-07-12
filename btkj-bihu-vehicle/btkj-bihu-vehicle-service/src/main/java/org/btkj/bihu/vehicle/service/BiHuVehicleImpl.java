@@ -33,7 +33,7 @@ import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.enums.IDType;
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
@@ -129,7 +129,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			Renewal renewal = info.toRenewal();
 			BiHuInsurer insurer = biHuInsurerMapper.getByCode(renewal.getInsurerId());
 			renewal.setInsurerId(null != insurer ? insurer.getId() : 0);
-			return Result.result(renewal);
+			return status == 3 ? Result.result(BtkjCode.RENEW_INFO_VEHICLE_ONLY, renewal) : Result.result(renewal);
 		} catch (IOException e) {
 			logger.warn("bihu renew request failure!", e);
 			return Result.result(BtkjCode.RENEW_INFO_GET_TIMEOUT);
@@ -250,8 +250,8 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			}
 		}
 		
-		Map<InsuranceType, Insurance> commercial = schema.getInsurances();
-		for (InsuranceType type : InsuranceType.values()) {
+		Map<CommercialInsuranceType, Insurance> commercial = schema.getInsurances();
+		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
 			Insurance insurance = null == commercial ? null : commercial.get(type);
 			switch (type) {
 			case DAMAGE:

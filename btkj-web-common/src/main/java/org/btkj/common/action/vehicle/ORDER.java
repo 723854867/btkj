@@ -14,7 +14,7 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.UnitType;
 import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
@@ -132,14 +132,14 @@ public class ORDER extends TenantAction {
 		if (null == cpi && null == cmi)
 			return false;
 		if (null != cmi) {
-			Map<InsuranceType, Insurance> map = schema.getInsurances();
+			Map<CommercialInsuranceType, Insurance> map = schema.getInsurances();
 			if (null == map)
 				return false;
 			map.remove(null);
 			int mod = 0;
-			for (InsuranceType type : map.keySet()) 
+			for (CommercialInsuranceType type : map.keySet()) 
 				mod |= type.mark();
-			for (Entry<InsuranceType, Insurance> entry : map.entrySet()) {
+			for (Entry<CommercialInsuranceType, Insurance> entry : map.entrySet()) {
 				int need = entry.getKey().need();
 				if ((mod & need) != need)
 					return false;

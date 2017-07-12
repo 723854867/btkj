@@ -7,7 +7,7 @@ import java.util.Map;
 import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.vehicle.VehicleUsedType;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
@@ -722,65 +722,67 @@ public class RenewInfo implements Serializable {
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
 			renewal.set_id(this.UserInfo.CarVin);
-			tips.setOwner(_owner());
-			tips.setInsurer(_insurer());
-			tips.setInsured(_insured());
-			tips.setLicense(this.UserInfo.LicenseNo);
+			tips.setEnrollDate(this.UserInfo.RegisterDate);
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
 			tips.setName(this.UserInfo.ModleName);
-			tips.setEnrollDate(this.UserInfo.RegisterDate);
-			tips.setSeat(this.UserInfo.SeatCount);
-			tips.setPrice(this.UserInfo.PurchasePrice);
-			tips.setExhaust(this.UserInfo.ExhaustScale);
-			schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
-			schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-			tips.setVehicleUsedType(_usedType());
-			renewal.setCommercialNo(this.UserInfo.BizNo);
-			renewal.setCompulsiveNo(this.UserInfo.ForceNo);
-			schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
-			schema.setCommercialEnd(this.UserInfo.BusinessExpireDate);
+			if (this.BusinessStatus != 3) {
+				tips.setOwner(_owner());
+				tips.setInsurer(_insurer());
+				tips.setInsured(_insured());
+				tips.setLicense(this.UserInfo.LicenseNo);
+				tips.setSeat(this.UserInfo.SeatCount);
+				tips.setPrice(this.UserInfo.PurchasePrice);
+				tips.setExhaust(this.UserInfo.ExhaustScale);
+				schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
+				schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
+				tips.setVehicleUsedType(_usedType());
+				renewal.setCommercialNo(this.UserInfo.BizNo);
+				renewal.setCompulsiveNo(this.UserInfo.ForceNo);
+				schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
+				schema.setCommercialEnd(this.UserInfo.BusinessExpireDate);
+			}
 		}
 		if (BusinessStatus != 3 && null != this.SaveQuote) {
-			Map<InsuranceType, Insurance> insurances = new HashMap<InsuranceType, Insurance>();
+			Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
 			if (0 != this.SaveQuote.CheSun)
-				insurances.put(InsuranceType.DAMAGE, new Insurance(this.SaveQuote.CheSun));
+				insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(this.SaveQuote.CheSun));
 			if (0 != this.SaveQuote.BuJiMianCheSun)
-				insurances.put(InsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianCheSun));
+				insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianCheSun));
 			if (0 != this.SaveQuote.SanZhe)
-				insurances.put(InsuranceType.THIRD, new Insurance(this.SaveQuote.SanZhe));
+				insurances.put(CommercialInsuranceType.THIRD, new Insurance(this.SaveQuote.SanZhe));
 			if (0 != this.SaveQuote.BuJiMianSanZhe)
-				insurances.put(InsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSanZhe));
+				insurances.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSanZhe));
 			if (0 != this.SaveQuote.SiJi)
-				insurances.put(InsuranceType.DRIVER, new Insurance(this.SaveQuote.SiJi));
+				insurances.put(CommercialInsuranceType.DRIVER, new Insurance(this.SaveQuote.SiJi));
 			if (0 != this.SaveQuote.BuJiMianSiJi)
-				insurances.put(InsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSiJi));
+				insurances.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSiJi));
 			if (0 != this.SaveQuote.ChengKe)
-				insurances.put(InsuranceType.PASSENGER, new Insurance(this.SaveQuote.ChengKe));
+				insurances.put(CommercialInsuranceType.PASSENGER, new Insurance(this.SaveQuote.ChengKe));
 			if (0 != this.SaveQuote.BuJiMianChengKe)
-				insurances.put(InsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianChengKe));
+				insurances.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianChengKe));
 			if (0 != this.SaveQuote.DaoQiang)
-				insurances.put(InsuranceType.ROBBERY, new Insurance(this.SaveQuote.DaoQiang));
+				insurances.put(CommercialInsuranceType.ROBBERY, new Insurance(this.SaveQuote.DaoQiang));
 			if (0 != this.SaveQuote.BuJiMianDaoQiang)
-				insurances.put(InsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianDaoQiang));
+				insurances.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianDaoQiang));
 			if (0 != this.SaveQuote.BoLi)
-				insurances.put(InsuranceType.GLASS, new Insurance(this.SaveQuote.BoLi));
+				insurances.put(CommercialInsuranceType.GLASS, new Insurance(this.SaveQuote.BoLi));
 			if (0 != this.SaveQuote.ZiRan)
-				insurances.put(InsuranceType.AUTO_FIRE, new Insurance(this.SaveQuote.ZiRan));
+				insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(this.SaveQuote.ZiRan));
 			if (0 != this.SaveQuote.BuJiMianZiRan)
-				insurances.put(InsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianZiRan));
+				insurances.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianZiRan));
 			if (0 != this.SaveQuote.HuaHen)
-				insurances.put(InsuranceType.SCRATCH, new Insurance(this.SaveQuote.HuaHen));
+				insurances.put(CommercialInsuranceType.SCRATCH, new Insurance(this.SaveQuote.HuaHen));
 			if (0 != this.SaveQuote.BuJiMianHuaHen)
-				insurances.put(InsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianHuaHen));
+				insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianHuaHen));
 			if (0 != this.SaveQuote.SheShui)
-				insurances.put(InsuranceType.WADDING, new Insurance(this.SaveQuote.SheShui));
+				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.SaveQuote.SheShui));
 			if (0 != this.SaveQuote.BuJiMianSheShui)
-				insurances.put(InsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
+				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
 			if (-1 != this.SaveQuote.HcXiuLiChangType)
-				insurances.put(InsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChange));
+				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChange));
 			if (0 != this.SaveQuote.HcSanFangTeYue)
-				insurances.put(InsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
+				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
 			schema.setInsurances(insurances.isEmpty() ? null : insurances);
 			renewal.setInsurerId(this.SaveQuote.Source);
 		}

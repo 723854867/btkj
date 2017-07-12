@@ -69,4 +69,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="bonusManageConfigDao" />
 	</bean>
+	
+	<bean id="bonusScaleConfigMapper" class="org.btkj.vehicle.redis.BonusScaleConfigMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="bonusScaleConfigDao" />
+	</bean>
 </beans>

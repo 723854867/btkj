@@ -1,10 +1,13 @@
 package org.btkj.vehicle.mybatis;
 
+import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.City;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtils;
+import org.rapid.util.math.compare.ComparisonSymbol;
 
 public class EntityGenerator {
 
@@ -31,5 +34,19 @@ public class EntityGenerator {
 		route.setCreated(time);
 		route.setUpdated(time);
 		return route;
+	}
+	
+	public static final VehicleCoefficient newVehicleCoefficient(int tid, CoefficientType type, ComparisonSymbol symbol, String value, String name) {
+		VehicleCoefficient coefficient = new VehicleCoefficient();
+		coefficient.setTid(tid);
+		coefficient.setName(name);
+		coefficient.setType(type.mark());
+		coefficient.setComparableValue(value);
+		coefficient.setComparison(symbol.mark());
+		
+		int time = DateUtils.currentTime();
+		coefficient.setCreated(time);
+		coefficient.setUpdated(time);
+		return coefficient;
 	}
 }

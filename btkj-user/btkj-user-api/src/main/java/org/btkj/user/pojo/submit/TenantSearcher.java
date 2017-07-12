@@ -65,16 +65,16 @@ public class TenantSearcher extends Page {
 		this.asc = asc;
 	}
 	
-	public Map<String, String> params() {
+	public Map<String, Object> params() {
 		if (null == tid && null == name && null == appId)
 			return null;
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, Object> params = new HashMap<String, Object>();
 		if (null != tid)
-			params.put("tid", String.valueOf(tid));
+			params.put("tid", tid);
 		if (null != name)
 			params.put("name", name);
 		if (null != appId)
-			params.put("app_id", String.valueOf(appId));
+			params.put("app_id", appId);
 		return params;
 	}
 }

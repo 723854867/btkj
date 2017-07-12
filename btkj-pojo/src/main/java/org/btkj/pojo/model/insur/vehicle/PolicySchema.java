@@ -3,7 +3,7 @@ package org.btkj.pojo.model.insur.vehicle;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.CommercialInsuranceType;
 
 public class PolicySchema implements Serializable {
 
@@ -23,7 +23,7 @@ public class PolicySchema implements Serializable {
 	private double autoUnderwritingRate;		// 自主核保系数
 	private double trafficViolationRate;		// 交通违法系数 
 	
-	private Map<InsuranceType, Insurance> insurances;
+	private Map<CommercialInsuranceType, Insurance> insurances;
 	
 	public double getCompulsiveTotal() {
 		return compulsiveTotal;
@@ -113,11 +113,11 @@ public class PolicySchema implements Serializable {
 		this.trafficViolationRate = trafficViolationRate;
 	}
 
-	public Map<InsuranceType, Insurance> getInsurances() {
+	public Map<CommercialInsuranceType, Insurance> getInsurances() {
 		return insurances;
 	}
 
-	public void setInsurances(Map<InsuranceType, Insurance> insurances) {
+	public void setInsurances(Map<CommercialInsuranceType, Insurance> insurances) {
 		this.insurances = insurances;
 	}
 }

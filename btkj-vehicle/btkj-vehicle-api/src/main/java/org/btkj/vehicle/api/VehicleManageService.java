@@ -1,10 +1,22 @@
 package org.btkj.vehicle.api;
 
+import java.util.List;
+
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
 public interface VehicleManageService {
+	
+	/**
+	 * 获取车险系数
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	List<VehicleCoefficient> coefficients(int tid);
 	
 	/**
 	 * 删除车险系数
@@ -38,4 +50,12 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Result<Void> coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name);
+	
+	/**
+	 * 规模奖励配置
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	List<BonusScaleConfig> bonusScaleConfigs(int tid);
 }

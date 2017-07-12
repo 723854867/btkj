@@ -23,7 +23,7 @@ import org.apache.http.util.EntityUtils;
 import org.btkj.courier.Config;
 import org.btkj.courier.model.QuotaNoticeSubmit;
 import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.model.CaptchaReceiver;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
@@ -161,7 +161,7 @@ public class CourierRedisService {
 		StringBuilder builder = new StringBuilder();
 		builder.append(MessageFormat.format(QUOTA_MODEL, String.valueOf(schema.getCompulsiveTotal()), 
 				String.valueOf(schema.getVehicleVesselTotal()), String.valueOf(schema.getCommericalTotal())));
-		for (InsuranceType type : InsuranceType.values()) {
+		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
 			Insurance insurance = null == schema.getInsurances() ? null : schema.getInsurances().get(type);
 			if (null == insurance)
 				continue;
