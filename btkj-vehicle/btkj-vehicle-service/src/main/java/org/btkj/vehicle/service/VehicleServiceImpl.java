@@ -131,7 +131,7 @@ public class VehicleServiceImpl implements VehicleService {
 		if (code != Code.OK)
 			return Result.result(code);
 		Tenant tenant = ef.getTenant();
-		List<Route> routes = routeMapper.routes(tenant);
+		List<Route> routes = routeMapper.getByTid(tenant.getTid());
 		String batchId = _batchId(tips.getLicense(), ef.getEmployee().getId());
 		Set<Integer> baotuQuote = null;
 		Set<Integer> baotuInsure = null;
@@ -321,7 +321,7 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Integer> insurers(Tenant tenant) {
-		List<Route> list = routeMapper.routes(tenant);
+		List<Route> list = routeMapper.getByTid(tenant.getTid());
 		if (CollectionUtils.isEmpty(list))
 			return Collections.EMPTY_LIST;
 		List<Integer> l = new ArrayList<Integer>();

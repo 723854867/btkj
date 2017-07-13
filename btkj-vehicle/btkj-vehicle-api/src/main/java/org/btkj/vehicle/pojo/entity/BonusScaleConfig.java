@@ -8,9 +8,9 @@ public class BonusScaleConfig implements UniqueModel<Integer> {
 
 	private int id;
 	private int tid;
-	private int min;
-	private int max;
 	private int rate;
+	private int comparison;
+	private String comparableValue;
 	private int created;
 	private int updated;
 
@@ -30,20 +30,20 @@ public class BonusScaleConfig implements UniqueModel<Integer> {
 		this.tid = tid;
 	}
 
-	public int getMin() {
-		return min;
+	public int getComparison() {
+		return comparison;
 	}
-
-	public void setMin(int min) {
-		this.min = min;
+	
+	public void setComparison(int comparison) {
+		this.comparison = comparison;
 	}
-
-	public int getMax() {
-		return max;
+	
+	public String getComparableValue() {
+		return comparableValue;
 	}
-
-	public void setMax(int max) {
-		this.max = max;
+	
+	public void setComparableValue(String comparableValue) {
+		this.comparableValue = comparableValue;
 	}
 
 	public int getRate() {

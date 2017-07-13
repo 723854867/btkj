@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
-import org.btkj.vehicle.pojo.entity.City;
-import org.btkj.vehicle.redis.CityMapper;
+import org.btkj.vehicle.pojo.entity.Area;
+import org.btkj.vehicle.redis.AreaMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
 import org.rapid.util.lang.DateUtils;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class Rule {
 
 	@Resource
-	private CityMapper cityMapper;
+	private AreaMapper cityMapper;
 	
 	/**
 	 * 检查投保规则
@@ -44,7 +44,7 @@ public class Rule {
 	 * @return
 	 */
 	private ICode _checkRenewalPeriod(int cityCode, String startTime) {
-		City city = cityMapper.getByKey(cityCode);
+		Area city = cityMapper.getByKey(cityCode);
 		if (null == city)
 			return BtkjCode.CITY_UNSUPPORT;
 		int renewalInterval = city.getRenewalPeriod() * 24 * 3600;

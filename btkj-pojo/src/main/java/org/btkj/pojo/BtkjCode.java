@@ -156,6 +156,16 @@ public enum BtkjCode implements ICode {
 	NOT_IN_RENEWAL_PERIOD(528, "not in renewal period"),
 	
 	/**
+	 * 路由不存在
+	 */
+	ROUTE_NOT_EXIST(529, "route not eixst"),
+	
+	/**
+	 * 城市不存在
+	 */
+	CITY_NOT_EXIST(530, "city not exist"),
+	
+	/**
 	 * 车险系数不存在
 	 */
 	COEFFICIENT_NOT_EXIST(550, "coefficient not exist"),
@@ -174,6 +184,11 @@ public enum BtkjCode implements ICode {
 	 * 规模奖励配置项不存在
 	 */
 	BONUS_SCALE_CONFIG_NOT_EXIST(553, "bonus scale config not exist"),
+	
+	/**
+	 * 规模奖励配置项最大值
+	 */
+	BONUS_SCALE_CONFIG_MAXMIUM(554, "bonus scale config maxmium"),
 	
 	/**
 	 * 文章不存在
@@ -233,7 +248,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 轮播图不存在
 	 */
-	BANNER_NOT_EXIST(670, "banner not exist");
+	BANNER_NOT_EXIST(670, "banner not exist"),
+	
+	/**
+	 * 未设置简捷id
+	 */
+	JIAN_JIE_ID_NEEDED(680, "jian jie id needed");
 	
 	private int code;
 	private String desc;

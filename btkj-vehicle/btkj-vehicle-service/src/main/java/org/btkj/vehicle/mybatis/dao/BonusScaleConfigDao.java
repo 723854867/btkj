@@ -3,6 +3,7 @@ package org.btkj.vehicle.mybatis.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.vehicle.mybatis.provider.BonusScaleConfigSQLProvider;
@@ -13,6 +14,7 @@ public interface BonusScaleConfigDao extends DBMapper<Integer, BonusScaleConfig>
 	
 	@Override
 	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "insert")
+	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(BonusScaleConfig model);
 	
 	@Override
@@ -21,6 +23,9 @@ public interface BonusScaleConfigDao extends DBMapper<Integer, BonusScaleConfig>
 	
 	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "getByTid")
 	List<BonusScaleConfig> getByTid(int tid);
+	
+	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "getByTidForUpdate")
+	List<BonusScaleConfig> getByTidForUpdate(int tid);
 	
 	@Override
 	@UpdateProvider(type = BonusScaleConfigSQLProvider.class, method = "update")

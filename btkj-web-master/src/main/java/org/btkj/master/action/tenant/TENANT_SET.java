@@ -1,19 +1,16 @@
 package org.btkj.master.action.tenant;
 
 import org.btkj.pojo.entity.Administrator;
+import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 
-/**
- * 商户车险路由设置
- * 
- * @author ahab
- */
-public class VEHICLE_ROUTE_SETTINGS extends AdministratorAction {
+public class TENANT_SET extends AdministratorAction {
 
 	@Override
-	protected Result<?> execute(Request request, Administrator operator) {
+	protected Result<Void> execute(Request request, Administrator operator) {
+		String jianJieId = request.getParam(Params.JIAN_JIE_ID);
 		return null;
 	}
 }

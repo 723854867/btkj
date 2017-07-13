@@ -2,7 +2,7 @@ package org.btkj.bihu.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.bihu.vehicle.pojo.entity.BiHuCity;
+import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.bihu.vehicle.pojo.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
 import org.btkj.pojo.entity.Region;
@@ -16,7 +16,7 @@ public interface BiHuConfigService {
 	 * 
 	 * @return
 	 */
-	List<BiHuCity> cities();
+	List<BiHuArea> cities();
 	
 	/**
 	 * 新增壁虎支持的城市

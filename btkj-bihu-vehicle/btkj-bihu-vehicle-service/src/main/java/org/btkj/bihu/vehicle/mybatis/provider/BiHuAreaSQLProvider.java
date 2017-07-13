@@ -2,9 +2,9 @@ package org.btkj.bihu.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class BiHuCitySQLProvider {
+public class BiHuAreaSQLProvider {
 	
-	private static final String TABLE			= "bi_hu_city";
+	private static final String TABLE			= "bi_hu_area";
 
 	public String getByKey() {
 		return new SQL() {

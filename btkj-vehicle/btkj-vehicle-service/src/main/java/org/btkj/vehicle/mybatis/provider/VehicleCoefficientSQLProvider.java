@@ -45,10 +45,10 @@ public class VehicleCoefficientSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(TABLE);
-				SET("name", "#{name}");
-				SET("comparison", "#{comparison}");
-				SET("comparable_value", "#{comparableValue}");
-				SET("updated", "#{updated}");
+				SET("`name`=#{name}");
+				SET("comparison=#{comparison}");
+				SET("comparable_value=#{comparableValue}");
+				SET("updated=#{updated}");
 				WHERE("id=#{id}");
 			}
 		}.toString();

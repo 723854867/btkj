@@ -44,8 +44,8 @@ public class BonusManageConfigSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(TABLE);
-				SET("rate", "#{rate}");
-				SET("updated", "#{updated}");
+				SET("`rate`=#{rate}");
+				SET("updated=#{updated}");
 				WHERE("key=#{key}");
 			}
 		}.toString();

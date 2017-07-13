@@ -11,7 +11,6 @@ import org.btkj.courier.model.QuotaNoticeSubmit;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.NonAutoProduct;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
@@ -25,7 +24,9 @@ import org.btkj.pojo.submit.QuizSearcher;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
+import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -234,16 +235,18 @@ public interface Params {
 	final Str2IntConstConverter MIN								= new Str2IntConstConverter(1046, "min");
 	final Str2IntConstConverter MAX								= new Str2IntConstConverter(1047, "max");
 	
-	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
-	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
-
-	final Str2ObjConstConverter<NonAutoCategory> NON_AUTO_CATEGORY			= new Str2ObjConstConverter<NonAutoCategory>(1200, "nonAutoCategory") {
+	final Str2ObjConstConverter<TenantSettingsSubmit> TENANT_SETTINGS_SUBMIT = new Str2ObjConstConverter<TenantSettingsSubmit>(1048, "tenantSettingsSubmit") {
 		@Override
-		public NonAutoCategory convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoCategory.class);
+		public TenantSettingsSubmit convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSettingsSubmit.class);
 		}
 	};
 	
+	final Str2StrConstConverter JIAN_JIE_ID						= new Str2StrConstConverter(1049, "jianJieId");
+	
+	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
+	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
+
 	/**
 	 * 车牌号
 	 */
@@ -292,6 +295,13 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, CustomerSearcher.class);
 		}
 	};
+	
+	final Str2ObjConstConverter<NonAutoCategory> NON_AUTO_CATEGORY			= new Str2ObjConstConverter<NonAutoCategory>(1200, "nonAutoCategory") {
+		@Override
+		public NonAutoCategory convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoCategory.class);
+		}
+	};
 
 	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearch") {
 		@Override
@@ -338,13 +348,6 @@ public interface Params {
 		@Override
 		public TenantSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSearcher.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<Tenant> TENANT_INFO			= new Str2ObjConstConverter<Tenant>(1209, "tenantInfo") {
-		@Override
-		public Tenant convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, Tenant.class);
 		}
 	};
 	
@@ -416,4 +419,20 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<String[]>(){}.getType());
 		}
 	};
+	
+	final Str2ObjConstConverter<Lane> LANE = new Str2ObjConstConverter<Lane>(1216, "lane") {
+		@Override
+		public Lane convert(String k) throws ConstConvertFailureException {
+			int value;
+			try {
+				value = Integer.valueOf(k);
+			} catch (NumberFormatException e) {
+				throw ConstConvertFailureException.errorConstException(this);
+			}
+			Lane type = Lane.match(value);
+			if (null == type)
+				throw ConstConvertFailureException.errorConstException(this);
+			return type;
+		}
+	};	
 }

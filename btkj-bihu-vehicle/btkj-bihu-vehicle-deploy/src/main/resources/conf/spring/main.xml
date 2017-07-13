@@ -19,9 +19,9 @@
 		</property>
 	</bean>
 	
-	<bean id="biHuCityMapper" class="org.btkj.bihu.vehicle.redis.BiHuCityMapper">
+	<bean id="biHuAreaMapper" class="org.btkj.bihu.vehicle.redis.BiHuAreaMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="biHuCityDao" />
+		<property name="dao" ref="biHuAreaDao" />
 	</bean>
 	
 	<bean id="biHuInsurerMapper" class="org.btkj.bihu.vehicle.redis.BiHuInsurerMapper">

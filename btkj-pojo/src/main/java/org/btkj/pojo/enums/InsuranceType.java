@@ -8,17 +8,23 @@ package org.btkj.pojo.enums;
  */
 public enum InsuranceType {
 
-	COMMERCIAL(1),
+	COMMERCIAL(1, "商业"),
 
-	COMPULSORY(2);
+	COMPULSORY(2, "交强");
 	
 	private int mark;
+	private String title;
 	
-	private InsuranceType(int mark) {
+	private InsuranceType(int mark, String title) {
 		this.mark = mark;
+		this.title = title;
 	}
 	
 	public int mark() {
 		return mark;
+	}
+	
+	public String title() {
+		return title;
 	}
 }

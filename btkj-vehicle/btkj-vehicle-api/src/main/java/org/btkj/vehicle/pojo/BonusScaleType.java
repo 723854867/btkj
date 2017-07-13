@@ -18,6 +18,13 @@ public enum BonusScaleType {
 		this.mark = mark;
 	}
 	
+	public static final boolean illegalMod(int mod) {
+		int cmod = 0;
+		for (BonusScaleType type : BonusScaleType.values())
+			cmod |= type.mark;
+		return (cmod & mod) == mod;
+	}
+	
 	public int mark() {
 		return mark;
 	}

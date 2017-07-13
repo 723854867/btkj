@@ -2,9 +2,9 @@ package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class CitySQLProvider {
+public class AreaSQLProvider {
 	
-	private static final String TABLE			= "city";
+	private static final String TABLE			= "area";
 
 	public String getByKey() {
 		return new SQL() {

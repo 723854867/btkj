@@ -24,10 +24,10 @@ import org.btkj.bihu.vehicle.domain.QuoteResult;
 import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
-import org.btkj.bihu.vehicle.pojo.entity.BiHuCity;
+import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.bihu.vehicle.pojo.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
-import org.btkj.bihu.vehicle.redis.BiHuCityMapper;
+import org.btkj.bihu.vehicle.redis.BiHuAreaMapper;
 import org.btkj.bihu.vehicle.redis.BiHuInsurerMapper;
 import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
@@ -62,7 +62,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	@Resource
 	private HttpProxy httpProxy;
 	@Resource
-	private BiHuCityMapper biHuCityMapper;
+	private BiHuAreaMapper biHuAreaMapper;
 	@Resource
 	private BiHuInsurerMapper biHuInsurerMapper;
 	@Resource
@@ -115,7 +115,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
 			params.setAgent(agent).setKey(key);
-		BiHuCity cityCode = biHuCityMapper.getByKey(employeeForm.getTenant().getRegion());
+		BiHuArea cityCode = biHuAreaMapper.getByKey(employeeForm.getTenant().getRegion());
 		if (null == cityCode)
 			return Result.result(BtkjCode.CITY_UNSUPPORT);
 		params.setCityCode(cityCode.getCid());
@@ -143,7 +143,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
 		if (null == tc)
 			return Result.result(BtkjCode.LANE_BIHU_NOT_OPENED);
-		BiHuCity cityCode = biHuCityMapper.getByKey(employeeForm.getTenant().getRegion());
+		BiHuArea cityCode = biHuAreaMapper.getByKey(employeeForm.getTenant().getRegion());
 		if (null == cityCode)
 			return Result.result(BtkjCode.CITY_UNSUPPORT);
 		List<BiHuInsurer> insurers = biHuInsurerMapper.getWithinKey(new ArrayList<Integer>(quote));

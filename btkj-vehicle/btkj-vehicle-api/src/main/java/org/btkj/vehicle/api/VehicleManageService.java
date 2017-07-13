@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
-import org.btkj.vehicle.pojo.BonusScaleConfigType;
+import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.Area;
+import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
@@ -70,7 +73,7 @@ public interface VehicleManageService {
 	 * @param rate
 	 * @return
 	 */
-	Result<Void> bonusManageConfigAdd(int tid, BonusScaleConfigType type, int depth, int rate);
+	Result<Void> bonusManageConfigAdd(int tid, BonusManageConfigType type, int depth, int rate);
 	
 	/**
 	 * 更新管理奖励配置项
@@ -93,21 +96,24 @@ public interface VehicleManageService {
 	 * 新增规模奖励配置项
 	 * 
 	 * @param tid
-	 * @param type
-	 * @param depth
 	 * @param rate
+	 * @param symbol
+	 * @param val
 	 * @return
 	 */
-	Result<Void> bonusScaleConfigAdd(int tid, BonusManageConfigType type, int rate, int min, int max);
+	Result<Void> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val);
 	
 	/**
 	 * 更新规模奖励配置项
 	 * 
 	 * @param id
+	 * @param tid
 	 * @param rate
+	 * @param symbol
+	 * @param val
 	 * @return
 	 */
-	Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, int min, int max);
+	Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] val);
 	
 	/**
 	 * 删除规模奖励配置项
@@ -116,4 +122,75 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Result<Void> bonusScaleConfigDelete(int id, int tid);
+	
+	/**
+	 * 获取指定的保单
+	 * 
+	 * @return
+	 */
+	void jianjieSynchronize(JianJiePoliciesInfo info);
+	
+	/**
+	 * 获取车险路由设置
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	List<Route> routes(int tid);
+	
+	/**
+	 * 新增路由
+	 * 
+	 * @param tid
+	 * @param insurerId
+	 * @param lane
+	 * @return
+	 */
+	Result<Void> routeAdd(int tid, int insurerId, Lane lane);
+	
+	/**
+	 * 更新路由
+	 * 
+	 * @param key
+	 * @param lane
+	 * @return
+	 */
+	Result<Void> routeUpdate(String key, Lane lane);
+	
+	/**
+	 * 删除路由
+	 * 
+	 * @param key
+	 */
+	void routeDelete(String key);
+	
+	/**
+	 * 获取所有的城市
+	 * 
+	 * @return
+	 */
+	List<Area> cities();
+	
+	/**
+	 * 新增城市
+	 * 
+	 * @param code
+	 * @param name
+	 * @param renewalPeriod
+	 */
+	Result<Void> cityAdd(int region, String name, int renewalPeriod);
+	
+	/**
+	 * 更新城市
+	 * 
+	 * @param region
+	 */
+	Result<Void> cityUpdate(int region, String name, int renewalPeriod);
+	
+	/**
+	 * 删除城市
+	 * 
+	 * @param region
+	 */
+	void cityDelete(int region);
 }

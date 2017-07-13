@@ -16,6 +16,9 @@ public class Tenant implements UniqueModel<Integer> {
 	private String licenseBack;
 	private String nonAutoBind;
 	private String servicePhone;
+	private int bonusScaleCountMod;				// 规模奖励统计口径模值
+	private int bonusScaleRewardMod;			// 规模奖励奖励口径模值
+	private int jianJieFetchTime;
 	private int created;
 	private int updated;
 	
@@ -97,6 +100,30 @@ public class Tenant implements UniqueModel<Integer> {
 	
 	public void setServicePhone(String servicePhone) {
 		this.servicePhone = servicePhone;
+	}
+	
+	public int getBonusScaleCountMod() {
+		return bonusScaleCountMod;
+	}
+	
+	public void setBonusScaleCountMod(int bonusScaleCountMod) {
+		this.bonusScaleCountMod = bonusScaleCountMod;
+	}
+	
+	public int getBonusScaleRewardMod() {
+		return bonusScaleRewardMod;
+	}
+	
+	public void setBonusScaleRewardMod(int bonusScaleRewardMod) {
+		this.bonusScaleRewardMod = bonusScaleRewardMod;
+	}
+	
+	public int getJianJieFetchTime() {
+		return jianJieFetchTime;
+	}
+	
+	public void setJianJieFetchTime(int jianJieFetchTime) {
+		this.jianJieFetchTime = jianJieFetchTime;
 	}
 	
 	public int getCreated() {

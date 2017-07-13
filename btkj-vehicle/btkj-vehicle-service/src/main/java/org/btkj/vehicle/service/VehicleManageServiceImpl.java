@@ -1,23 +1,31 @@
 package org.btkj.vehicle.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mybatis.EntityGenerator;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
-import org.btkj.vehicle.pojo.BonusScaleConfigType;
+import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.Area;
+import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
+import org.btkj.vehicle.redis.AreaMapper;
+import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
@@ -31,6 +39,10 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Resource
 	private Tx tx;
+	@Resource
+	private AreaMapper areaMapper;
+	@Resource
+	private RouteMapper routeMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -80,10 +92,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Result<Void> bonusManageConfigAdd(int tid, BonusScaleConfigType type, int depth, int rate) {
-		int maxDepth = GlobalConfigContainer.getGlobalConfig().getTeamDepth();
-		if (depth <= 1 || depth > maxDepth)
-			return Consts.RESULT.FORBID;
+	public Result<Void> bonusManageConfigAdd(int tid, BonusManageConfigType type, int depth, int rate) {
 		BonusManageConfig config = EntityGenerator.newBonusManageConfig(tid, type, depth, rate);
 		try {
 			bonusManageConfigMapper.insert(config);
@@ -118,13 +127,23 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Result<Void> bonusScaleConfigAdd(int tid, BonusManageConfigType type, int rate, int min, int max) {
-		return null;
+	public Result<Void> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val) {
+		try {
+			tx.bonusScaleConfigAdd(tid, rate, symbol, val).finish();
+			return Consts.RESULT.OK;
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
+		}
 	}
 	
 	@Override
-	public Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, int min, int max) {
-		return null;
+	public Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] val) {
+		try {
+			tx.bonusScaleConfigUpdate(id, tid, rate, symbol, val).finish();
+			return Consts.RESULT.OK;
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
+		}
 	}
 	
 	@Override
@@ -136,5 +155,93 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			return Consts.RESULT.FORBID;
 		bonusScaleConfigMapper.delete(id);
 		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public void jianjieSynchronize(JianJiePoliciesInfo info) {
+		List<BaseInfo> infos = info.getResult();
+		int left = infos.size();
+		int idx = 0;
+		int pageSize = 50;
+		while (left > 0) {
+			pageSize = Math.min(pageSize, left);
+			List<BaseInfo> list = infos.subList(idx, idx + pageSize);
+			Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
+			Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
+			for (BaseInfo temp : list) {
+				if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title())) {
+					
+				} else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title())) {
+					
+				}
+			}
+		}
+	}
+	
+	@Override
+	public List<Route> routes(int tid) {
+		return routeMapper.getByTid(tid);
+	}
+	
+	@Override
+	public Result<Void> routeAdd(int tid, int insurerId, Lane lane) {
+		Route route = EntityGenerator.newRoute(tid, insurerId, lane);
+		try {
+			routeMapper.insert(route);
+		} catch (DuplicateKeyException e) {
+			return Consts.RESULT.KEY_DUPLICATED;
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> routeUpdate(String key, Lane lane) {
+		Route route = routeMapper.getByKey(key);
+		if (null == route)
+			return BtkjConsts.RESULT.ROUTE_NOT_EXIST;
+		if (route.getLane() != lane.mark()) {
+			route.setLane(lane.mark());
+			route.setUpdated(DateUtils.currentTime());
+			routeMapper.update(route);
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public void routeDelete(String key) {
+		routeMapper.delete(key);		
+	}
+	
+	@Override
+	public List<Area> cities() {
+		return areaMapper.getAll();
+	}
+	
+	@Override
+	public Result<Void> cityAdd(int region, String name, int renewalPeriod) {
+		Area city = EntityGenerator.newCity(region, name, renewalPeriod);
+		try {
+			areaMapper.insert(city);
+			return Consts.RESULT.OK;
+		} catch (DuplicateKeyException e) {
+			return Consts.RESULT.KEY_DUPLICATED;
+		}
+	}
+	
+	@Override
+	public Result<Void> cityUpdate(int region, String name, int renewalPeriod) {
+		Area city = areaMapper.getByKey(region);
+		if (null == city)
+			return BtkjConsts.RESULT.CITY_NOT_EXIST;
+		city.setName(name);
+		city.setRenewalPeriod(renewalPeriod);
+		city.setUpdated(DateUtils.currentTime());
+		areaMapper.update(city);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public void cityDelete(int region) {
+		areaMapper.delete(region);
 	}
 }

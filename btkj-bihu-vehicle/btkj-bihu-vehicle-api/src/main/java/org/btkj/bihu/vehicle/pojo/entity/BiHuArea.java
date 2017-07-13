@@ -2,7 +2,7 @@ package org.btkj.bihu.vehicle.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class BiHuCity implements UniqueModel<Integer> {
+public class BiHuArea implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 2112678389121538395L;
 

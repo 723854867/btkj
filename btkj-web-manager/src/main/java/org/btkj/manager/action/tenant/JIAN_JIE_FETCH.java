@@ -1,0 +1,43 @@
+package org.btkj.manager.action.tenant;
+
+import javax.annotation.Resource;
+
+import org.btkj.courier.api.JianJieService;
+import org.btkj.manager.action.TenantAction;
+import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.web.util.Request;
+import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtils;
+
+/**
+ * 同步简捷的后台保单数据
+ * 
+ * @author ahab
+ */
+public class JIAN_JIE_FETCH extends TenantAction {
+	
+	@Resource
+	private JianJieService jianJieService;
+	@Resource
+	private VehicleManageService vehicleManageService;
+	
+	@Override
+	protected Result<Void> execute(Request request, EmployeeForm ef) {
+		Tenant tenant = ef.getTenant();
+		if (null == tenant.getJianJieId())
+			return BtkjConsts.RESULT.JIAN_JIE_ID_NEEDED;
+		JianJiePoliciesInfo info = jianJieService.vehiclePolicies(ef.getTenant().getJianJieId(),
+				DateUtils.getDate(DateUtils.YYYYMMDD, ef.getTenant().getJianJieFetchTime()),
+				DateUtils.getDate(DateUtils.YYYYMMDD, DateUtils.currentTime()));
+		if (!info.isSuccessStatus())
+			return Result.result(Code.FAILURE, info.getErrorMessage());
+		vehicleManageService.jianjieSynchronize(info);
+		return Consts.RESULT.OK;
+	}
+}

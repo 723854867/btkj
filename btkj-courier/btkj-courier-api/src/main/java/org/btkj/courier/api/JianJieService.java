@@ -1,7 +1,7 @@
 package org.btkj.courier.api;
 
-import org.btkj.courier.model.JianJiePoliciesInfo;
 import org.btkj.pojo.entity.User;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
 
 /**
  * 简捷服务类

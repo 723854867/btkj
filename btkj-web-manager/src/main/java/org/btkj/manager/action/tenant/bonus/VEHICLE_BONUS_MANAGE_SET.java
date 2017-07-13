@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.BonusScaleConfigType;
+import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
@@ -24,7 +24,9 @@ public class VEHICLE_BONUS_MANAGE_SET extends TenantAction {
 		switch (crudType) {
 		case CREATE:
 			int depth = request.getParam(Params.DEPTH);
-			BonusScaleConfigType type = BonusScaleConfigType.match(request.getParam(Params.TYPE));
+			if (depth <= 1 || depth > ef.getTenant().getTeamDepth())
+				return Consts.RESULT.FORBID;
+			BonusManageConfigType type = BonusManageConfigType.match(request.getParam(Params.TYPE));
 			if (null == type)
 				throw ConstConvertFailureException.errorConstException(Params.TYPE);
 			int rate = request.getParam(Params.NUM);

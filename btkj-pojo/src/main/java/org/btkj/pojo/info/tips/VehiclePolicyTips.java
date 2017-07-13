@@ -40,6 +40,7 @@ public class VehiclePolicyTips implements Serializable {
 	private String load;									// 核定载质量
 	private String exhaust;									// 排量
 	private String transmissionName;						// 变速器类型
+	private String vehicleId;
 	private VehicleType vehicleType;						// 车辆种类
 	private VehicleTypeCode vehicleTypeCode;				// 车辆种类类型
 	private VehicleTypeDetailCode vehicleTypeDetailCode;	// 特种车特有：特种车的详细分类
@@ -172,6 +173,14 @@ public class VehiclePolicyTips implements Serializable {
 	public void setTransmissionName(String transmissionName) {
 		this.transmissionName = transmissionName;
 	}
+	
+	public String getVehicleId() {
+		return vehicleId;
+	}
+	
+	public void setVehicleId(String vehicleId) {
+		this.vehicleId = vehicleId;
+	}
 
 	public VehicleType getVehicleType() {
 		return vehicleType;
@@ -246,6 +255,7 @@ public class VehiclePolicyTips implements Serializable {
 		this.load = vehicleInfo.getLoad();
 		this.exhaust = vehicleInfo.getExhaust();
 		this.transmissionName = vehicleInfo.getTransmissionName();
+		this.vehicleId = vehicleInfo.getId();
 		this.vehicleType = vehicleInfo.getVehicleType();
 		this.vehicleTypeCode = vehicleInfo.getVehicleTypeCode();
 		this.vehicleTypeDetailCode = vehicleInfo.getVehicleTypeDetailCode();

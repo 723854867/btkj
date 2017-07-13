@@ -6,10 +6,10 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.api.BiHuConfigService;
 import org.btkj.bihu.vehicle.mybatis.EntityGenerator;
-import org.btkj.bihu.vehicle.pojo.entity.BiHuCity;
+import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.bihu.vehicle.pojo.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
-import org.btkj.bihu.vehicle.redis.BiHuCityMapper;
+import org.btkj.bihu.vehicle.redis.BiHuAreaMapper;
 import org.btkj.bihu.vehicle.redis.BiHuInsurerMapper;
 import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.entity.Region;
@@ -21,26 +21,26 @@ import org.springframework.stereotype.Service;
 public class BiHuConfigServiceImpl implements BiHuConfigService {
 	
 	@Resource
-	private BiHuCityMapper biHuCityMapper;
+	private BiHuAreaMapper biHuAreaMapper;
 	@Resource
 	private BiHuInsurerMapper biHuInsurerMapper;
 	@Resource
 	private TenantConfigMapper tenantConfigMapper;
 
 	@Override
-	public List<BiHuCity> cities() {
-		return biHuCityMapper.getAll();
+	public List<BiHuArea> cities() {
+		return biHuAreaMapper.getAll();
 	}
 	
 	@Override
 	public void addBiHuCity(int cid, Region region, String name) {
-		BiHuCity city = EntityGenerator.newCity(region, cid, name);
-		biHuCityMapper.insert(city);
+		BiHuArea city = EntityGenerator.newCity(region, cid, name);
+		biHuAreaMapper.insert(city);
 	}
 	
 	@Override
 	public void deleteBiHuCity(int code) {
-		biHuCityMapper.delete(code);
+		biHuAreaMapper.delete(code);
 	}
 	
 	@Override

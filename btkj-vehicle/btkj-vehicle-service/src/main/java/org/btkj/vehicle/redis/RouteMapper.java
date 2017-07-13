@@ -2,48 +2,83 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.vehicle.mybatis.dao.RouteDao;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
+import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.StringUtils;
 
 public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	
-	private String LIST							= "set:route:list:{0}";	
-	private String LIST_CONTROLLER				= "route：controller:{0}";
+	private final String CONTROLLER							= "route:controller:{0}";
+	private final String TENANT_BASED_SET					= "set:route:{0}";
 	
 	public RouteMapper() {
 		super(new ByteProtostuffSerializer<Route>(), "hash:db:route");
 	}
 	
-	public List<Route> routes(Tenant tenant) {
-		List<Route> routes = null;
-		List<byte[]> list = redis.hsgetIfMarked(BtkjConsts.CACHE_CONTROLLER_KEY, _listKey(tenant.getTid()), redisKey, _listController(tenant.getTid()));
-		if (null != list) {
-			routes = new ArrayList<Route>();
-			for (byte[] buffer : list) 
-				routes.add(serializer.antiConvet(buffer));
-		} else {
-			routes = dao.getByTid(tenant.getTid());
-			redis.hssetMark(BtkjConsts.CACHE_CONTROLLER_KEY, redisKey, _listKey(tenant.getTid()), _listController(tenant.getTid()), routes, serializer);
-		}
-		return routes;
+	public List<Route> getByTid(int tid) {
+		_checkLoad(tid);
+		List<byte[]> list = redis.hmsget(redisKey, _tenantBaseSetKey(tid));
+		if (null == list)
+			return Collections.EMPTY_LIST;
+		List<Route> l = new ArrayList<Route>();
+		for (byte[] buffer : list)
+			l.add(serializer.antiConvet(buffer));
+		return l;
+	}
+	
+	private void _checkLoad(int tid) {
+		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtils.EMPTY))
+			return;
+		List<Route> list = dao.getByTid(tid);
+		if (CollectionUtils.isEmpty(list))
+			return;
+		flush(list);
 	}
 	
 	@Override
-	public void flush(Route entity) {
-		redis.hsset(redisKey, entity.key(), serializer.convert(entity), _listKey(entity.getTid()));
+	public void flush(Route model) {
+		redis.hmsset(redisKey, model, serializer, _tenantBaseSetKey(model.getTid()));
 	}
 	
-	public String _listKey(int tid) { 
-		return MessageFormat.format(LIST, String.valueOf(tid));
+	@Override
+	public void remove(Route model) {
+		redis.hmsdel(redisKey, model.key(), _tenantBaseSetKey(model.getTid()));
 	}
 	
-	private String _listController(int tid) {
-		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(tid));
+	@Override
+	public void flush(Collection<Route> models) {
+		Map<Integer, List<Route>> map = new HashMap<Integer, List<Route>>();
+		for (Route temp : models) {
+			int tid = temp.getTid();
+			List<Route> list = map.get(tid);
+			if (null == list) {
+				list = new ArrayList<Route>();
+				map.put(tid, list);
+			}
+			list.add(temp);
+		}
+		
+		for (Entry<Integer, List<Route>> entry : map.entrySet())
+			redis.hmsset(redisKey, entry.getValue(), serializer, _tenantBaseSetKey(entry.getKey()));
 	}
+	
+	private String _controkkerKey(int tid) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(tid));
+	}
+	
+	private String _tenantBaseSetKey(int tid) {
+		return MessageFormat.format(TENANT_BASED_SET, String.valueOf(tid));
+	}
+	
 }

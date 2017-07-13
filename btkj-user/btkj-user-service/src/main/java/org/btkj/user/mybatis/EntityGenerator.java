@@ -62,11 +62,14 @@ public class EntityGenerator {
 		tenant.setAppId(appId);
 		tenant.setRegion(region);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
+		tenant.setLicenseFace(licenseFace);
+		tenant.setLicenseBack(licenseBack);
 		tenant.setServicePhone(servicePhone);
 		
 		int time = DateUtils.currentTime();
 		tenant.setCreated(time);
 		tenant.setUpdated(time);
+		tenant.setJianJieFetchTime(time);
 		return tenant;
 	}
 	

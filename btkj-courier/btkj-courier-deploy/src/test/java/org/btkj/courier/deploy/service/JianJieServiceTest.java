@@ -4,8 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.deploy.BaseTest;
-import org.btkj.courier.model.JianJiePoliciesInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.junit.Test;
+import org.rapid.util.common.serializer.SerializeUtil;
 
 public class JianJieServiceTest extends BaseTest{
 	
@@ -15,6 +16,6 @@ public class JianJieServiceTest extends BaseTest{
 	@Test
 	public void testVehiclePolices() {
 		JianJiePoliciesInfo info = jianJieService.vehiclePolicies("2", "20000101", "20170609");
-		System.out.println(info);
+		System.out.println(SerializeUtil.JsonUtil.GSON.toJson(info));
 	}
 }

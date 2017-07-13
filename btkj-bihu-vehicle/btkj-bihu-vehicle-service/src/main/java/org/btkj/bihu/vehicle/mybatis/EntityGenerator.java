@@ -1,6 +1,6 @@
 package org.btkj.bihu.vehicle.mybatis;
 
-import org.btkj.bihu.vehicle.pojo.entity.BiHuCity;
+import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.bihu.vehicle.pojo.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
 import org.btkj.pojo.entity.Region;
@@ -8,8 +8,8 @@ import org.rapid.util.lang.DateUtils;
 
 public class EntityGenerator {
 	
-	public static final BiHuCity newCity(Region region, int cid, String name) {
-		BiHuCity city = new BiHuCity();
+	public static final BiHuArea newCity(Region region, int cid, String name) {
+		BiHuArea city = new BiHuArea();
 		city.setCid(cid);
 		city.setCode(region.getId());
 		city.setName(name);

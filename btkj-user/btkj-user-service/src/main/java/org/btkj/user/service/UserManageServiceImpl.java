@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.Tenant;
@@ -21,6 +22,7 @@ import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
+import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
@@ -29,7 +31,6 @@ import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
 import org.rapid.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -159,22 +160,26 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSetting(int tid, Set<Long> nonAutoBind) {
-		Tenant tenant = tenantMapper.getByKey(tid);
-		if (null == tenant)
-			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
-		
-		// 设置非车险
-		if (CollectionUtils.isEmpty(nonAutoBind)) 
-			tenant.setNonAutoBind(null);
-		else {
-			StringBuilder builder = new StringBuilder();
-			for (long cid : nonAutoBind)
-				builder.append(cid).append(Consts.SYMBOL_UNDERLINE);
-			builder.deleteCharAt(builder.length() - 1);
-			tenant.setNonAutoBind(builder.toString());
+	public void tenantSet(Tenant tenant, TenantSettingsSubmit submit) {
+		if (null != submit.getNonAutoBind()) {
+			if (submit.getNonAutoBind().isEmpty())
+				tenant.setNonAutoBind(null);
+			else {
+				StringBuilder builder = new StringBuilder();
+				for (long cid : submit.getNonAutoBind())
+					builder.append(cid).append(Consts.SYMBOL_UNDERLINE);
+				builder.deleteCharAt(builder.length() - 1);
+				tenant.setNonAutoBind(builder.toString());
+			}
+		}
+		if (null != submit.getBonusScaleCountMod())
+			tenant.setBonusScaleCountMod(submit.getBonusScaleCountMod());
+		if (null != submit.getBonusScaleRewardMod())
+			tenant.setBonusScaleRewardMod(submit.getBonusScaleRewardMod());
+		if (null != submit.getTeamDepth()) {
+			submit.setTeamDepth(Math.max(1, submit.getTeamDepth()));
+			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));
 		}
 		tenantMapper.update(tenant);
-		return Consts.RESULT.OK;
 	}
 }

@@ -46,7 +46,7 @@ public class ORDER extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, EmployeeForm employeeForm) {
+	protected Result<?> execute(Request request, Client client, EmployeeForm ef) {
 		Set<Integer> quote = request.getParam(Params.QUOTE_GROUP);
 		Set<Integer> insure = request.getOptionalParam(Params.INSURE_GROUP);
 		String vehicleId = request.getParam(Params.VEHICLE_ID);
@@ -67,9 +67,9 @@ public class ORDER extends TenantAction {
 			}
 		}
 		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
-		if (!_check(employeeForm.getTenant(), tips))
+		if (!_check(ef.getTenant(), tips))
 			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
-		return vehicleService.order(quoteInsurer, insureInsurer, employeeForm, tips, vehicleId);
+		return vehicleService.order(quoteInsurer, insureInsurer, ef, tips, vehicleId);
 	}
 	
 	private boolean _checkInsurer(Set<Integer> quote, Set<Integer> insure) {

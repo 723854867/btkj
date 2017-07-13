@@ -10,21 +10,7 @@
 	<context:component-scan base-package="org.btkj.vehicle" />
 	
 	<bean class="org.rapid.util.common.SpringContextUtil" />
-	
-	<bean class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
-		<property name="zkClient">
-			<bean class="org.I0Itec.zkclient.ZkClient">
-				<constructor-arg name="zkServers" value="${zk.servers}" />
-				<constructor-arg name="sessionTimeout" value="${zk.session.timeout}" />
-				<constructor-arg name="connectionTimeout" value="${zk.connection.timeout}" />
-				<constructor-arg name="zkSerializer" >
-					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
-				</constructor-arg>
-			</bean>
-		</property>
-		<property name="configPath" value="${zk.config.path}" />
-	</bean>
-	
+
 	<bean id="httpProxy" class="org.rapid.util.net.http.HttpProxy" init-method="init">
 		<property name="syncHttp">
 			<bean class="org.rapid.util.net.http.SyncHttpAdapter">
@@ -54,9 +40,9 @@
 		<property name="mongo" ref="mongo" />
 	</bean>
 	
-	<bean id="cityMapper" class="org.btkj.vehicle.redis.CityMapper">
+	<bean id="areaMapper" class="org.btkj.vehicle.redis.AreaMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="cityDao" />
+		<property name="dao" ref="areaDao" />
 	</bean>
 	
 	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">

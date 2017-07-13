@@ -11,9 +11,9 @@ public class BonusScaleConfigSQLProvider {
 			{
 				INSERT_INTO(TABLE);
 				VALUES("tid", "#{tid}");
-				VALUES("min", "#{min}");
-				VALUES("max", "#{max}");
 				VALUES("rate", "#{rate}");
+				VALUES("comparison", "#{comparision}");
+				VALUES("comparable_value", "#{comparableValue}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
 			}
@@ -40,14 +40,18 @@ public class BonusScaleConfigSQLProvider {
 		}.toString();
 	}
 	
+	public String getByTidForUpdate() {
+		return "SELECT * FROM bonus_scale_config WHERE tid=#{tid} FOR UPDATE";
+	}
+	
 	public String update() {
 		return new SQL() {
 			{
 				UPDATE(TABLE);
-				SET("min", "#{min}");
-				SET("max", "#{max}");
-				SET("rate", "#{rate}");
-				SET("updated", "#{updated}");
+				SET("`rate`=#{rate}");
+				SET("comparision=#{comparision}");
+				SET("comparable_value=#{comparableValue}");
+				SET("updated=#{updated}");
 				WHERE("id=#{key}");
 			}
 		}.toString();

@@ -1,7 +1,6 @@
 package org.btkj.user.api;
 
-import java.util.Set;
-
+import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.model.Pager;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -9,6 +8,7 @@ import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
+import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.rapid.util.common.message.Result;
 
@@ -83,9 +83,9 @@ public interface UserManageService {
 	/**
 	 * 商家设置
 	 * 
-	 * @param tid
-	 * @param nonAutoBind
+	 * @param tenant
+	 * @param submit
 	 * @return
 	 */
-	Result<Void> tenantSetting(int tid, Set<Long> nonAutoBind);
+	void tenantSet(Tenant tenant, TenantSettingsSubmit submit);
 }
