@@ -1,17 +1,12 @@
 package org.btkj.common.action.vehicle;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CommercialInsuranceType;
@@ -29,8 +24,7 @@ import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.StringUtil;
 import org.rapid.util.validator.Validator;
 
 /**
@@ -41,47 +35,21 @@ import org.rapid.util.validator.Validator;
 public class ORDER extends TenantAction {
 	
 	@Resource
-	private ConfigService configService;
-	@Resource
 	private VehicleService vehicleService;
 
 	@Override
 	protected Result<?> execute(Request request, Client client, EmployeeForm ef) {
-		Set<Integer> quote = request.getParam(Params.QUOTE_GROUP);
-		Set<Integer> insure = request.getOptionalParam(Params.INSURE_GROUP);
+		int quoteGroup = request.getParam(Params.QUOTE_GROUP);
+		int insureGroup = request.getOptionalParam(Params.INSURE_GROUP);
 		String vehicleId = request.getParam(Params.VEHICLE_ID);
-		if (!_checkInsurer(quote, insure))
+		if (quoteGroup <= 0 || insureGroup < 0 
+				|| Integer.bitCount(quoteGroup) > GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum()
+				|| Integer.bitCount(insureGroup) > GlobalConfigContainer.getGlobalConfig().getMaxInsureNum())
 			return Consts.RESULT.FORBID;
-		List<Insurer> quoteInsurer = configService.insurers(new ArrayList<Integer>(quote));
-		if (quoteInsurer.size() != quote.size())
-			return Consts.RESULT.FORBID;
-		
-		List<Insurer> insureInsurer = null;
-		if (!CollectionUtils.isEmpty(insure)) {
-			insureInsurer = new ArrayList<Insurer>(insure.size());
-			for (int insurerId : insure) {
-				for (Insurer insurer : quoteInsurer) {
-					if (insurer.getId() == insurerId)
-						insureInsurer.add(insurer);
-				}
-			}
-		}
 		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
 		if (!_check(ef.getTenant(), tips))
 			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
-		return vehicleService.order(quoteInsurer, insureInsurer, ef, tips, vehicleId);
-	}
-	
-	private boolean _checkInsurer(Set<Integer> quote, Set<Integer> insure) {
-		if (!CollectionUtils.isSubSet(quote, insure))
-			return false;
-		int quoteNum = null == quote ? 0 : quote.size();
-		int insureNum = null == insure ? 0 : insure.size();
-		if (0 == quoteNum 
-				|| GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum() < quoteNum
-				|| GlobalConfigContainer.getGlobalConfig().getMaxInsurNum() < insureNum)
-			return false;
-		return true;
+		return vehicleService.order(quoteGroup, insureGroup, ef, tips, vehicleId);
 	}
 	
 	/**
@@ -117,7 +85,7 @@ public class ORDER extends TenantAction {
 	}
 	
 	private boolean _checkVehicle(VehiclePolicyTips tips) {
-		if (!StringUtils.hasText(
+		if (!StringUtil.hasText(
 				tips.getEngine(), tips.getLicense(), 
 				tips.getVin(), tips.getEnrollDate()))
 			return false;

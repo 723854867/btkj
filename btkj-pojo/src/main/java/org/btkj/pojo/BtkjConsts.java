@@ -32,6 +32,7 @@ public interface BtkjConsts {
 		Result ORDER_STATE_ERROR				= Result.result(BtkjCode.ORDER_STATE_ERROR);
 		Result ARTICLE_NOT_EXIST				= Result.result(BtkjCode.ARTICLE_NOT_EXIST);
 		Result INSURER_NOT_EXIST				= Result.result(BtkjCode.INSURER_NOT_EXIST);
+		Result LANE_CONFIG_ERROR				= Result.result(BtkjCode.LANE_CONFIG_ERROR);
 		Result COMMENT_NOT_EXIST				= Result.result(BtkjCode.COMMENT_NOT_EXIST);
 		Result JIAN_JIE_ID_NEEDED				= Result.result(BtkjCode.JIAN_JIE_ID_NEEDED);
 		Result EMPLOYEE_NOT_EXIST				= Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
@@ -47,6 +48,7 @@ public interface BtkjConsts {
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
+		Result BI_HU_TENANT_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BI_HU_TENANT_CONFIG_NOT_EXIST);
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

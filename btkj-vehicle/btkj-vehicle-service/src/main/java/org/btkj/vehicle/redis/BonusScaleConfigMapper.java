@@ -14,8 +14,8 @@ import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class BonusScaleConfigMapper extends RedisDBAdapter<Integer, BonusScaleConfig, BonusScaleConfigDao> {
 	
@@ -38,10 +38,10 @@ public class BonusScaleConfigMapper extends RedisDBAdapter<Integer, BonusScaleCo
 	}
 	
 	private void _checkLoad(int tid) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtils.EMPTY))
+		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtil.EMPTY))
 			return;
 		List<BonusScaleConfig> list = dao.getByTid(tid);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);
 	}

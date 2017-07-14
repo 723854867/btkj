@@ -1,7 +1,5 @@
 package org.btkj.bihu.vehicle.api;
 
-import java.util.Set;
-
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
@@ -40,7 +38,7 @@ public interface BiHuVehicle {
 	/**
 	 * 报价/投保接口:理解为下单
 	 */
-	Result<Void> order(EmployeeForm employeeForm, Set<Integer> quote, Set<Integer> insure, VehiclePolicyTips tips);
+	Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips);
 	
 	/**
 	 * 获取报价信息
@@ -48,7 +46,7 @@ public interface BiHuVehicle {
 	 * @param insurId
 	 * @return
 	 */
-	Result<PolicySchema> quoteResult(EmployeeForm employeeForm, String license, int insurId);
+	Result<PolicySchema> quoteResult(EmployeeForm employeeForm, String license, int insurer);
 	
 	/**
 	 * 获取投保结果(核保信息)
@@ -56,5 +54,5 @@ public interface BiHuVehicle {
 	 * @param employeeForm
 	 * @return
 	 */
-	Result<PolicyDetail> insureResult(EmployeeForm employeeForm, String license, int insurId);
+	Result<PolicyDetail> insureResult(EmployeeForm employeeForm, String license, int insurer);
 }

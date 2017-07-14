@@ -12,7 +12,7 @@ import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, AdministratorDao> {
 	
@@ -56,7 +56,7 @@ public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, 
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, LOAD_LOCK, LOAD_LOCK))
 			return;
 		List<Administrator> list = dao.getAll();
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);
 	} 

@@ -24,7 +24,7 @@ import org.btkj.courier.pojo.JianJieUser;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.rapid.util.common.serializer.SerializeUtil;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.net.http.HttpProxy;
 import org.rapid.util.net.http.handler.AsyncRespHandler;
@@ -51,7 +51,7 @@ public class JianJieServiceImpl implements JianJieService {
 	public void addUser(User user) {
 		try {
 			URIBuilder uriBuilder = new URIBuilder(urlUserAdd);
-			long timestamp = DateUtils.currentTime();
+			long timestamp = DateUtil.currentTime();
 			uriBuilder.addParameter("Timestamp", String.valueOf(timestamp));
 			uriBuilder.addParameter("Sign", _userAddSign(timestamp));
 			URI uri = uriBuilder.build();
@@ -103,7 +103,7 @@ public class JianJieServiceImpl implements JianJieService {
 	public JianJiePoliciesInfo vehiclePolicies(String jianJieId, String begin, String end) {
 		try {
 			URIBuilder uriBuilder = new URIBuilder(urlVehiclePolicies);
-			long timestamp = DateUtils.currentTime();
+			long timestamp = DateUtil.currentTime();
 			uriBuilder.addParameter("Timestamp", String.valueOf(timestamp));
 			uriBuilder.addParameter("Sign", _vehiclePoliciesSign(timestamp, begin, end));
 			uriBuilder.addParameter("CompanyId", "-1");

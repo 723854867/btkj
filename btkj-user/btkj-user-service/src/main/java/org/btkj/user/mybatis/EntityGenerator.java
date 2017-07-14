@@ -13,7 +13,7 @@ import org.btkj.pojo.entity.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.model.EmployeeForm;
 import org.rapid.util.common.enums.REGION_TYPE;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 	
@@ -22,7 +22,7 @@ public class EntityGenerator {
 		user.setAppId(appId);
 		user.setMobile(mobile);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		user.setCreated(time);
 		user.setUpdated(time);
 		return user;
@@ -37,7 +37,7 @@ public class EntityGenerator {
 		employee.setLeft(null == parent ? 1 : parent.getRight());
 		employee.setRight(employee.getLeft() + 1);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		employee.setCreated(time);
 		employee.setUpdated(time);
 		return employee;
@@ -50,7 +50,7 @@ public class EntityGenerator {
 		app.setMaxTenantsCount(maxTenantsCount);
 		app.setMaxArticlesCount(maxArticlesCount);
 
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		app.setCreated(time);
 		app.setUpdated(time);
 		return app;
@@ -66,7 +66,7 @@ public class EntityGenerator {
 		tenant.setLicenseBack(licenseBack);
 		tenant.setServicePhone(servicePhone);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		tenant.setCreated(time);
 		tenant.setUpdated(time);
 		tenant.setJianJieFetchTime(time);
@@ -79,7 +79,7 @@ public class EntityGenerator {
 		ai.setUid(user.getUid());
 		ai.setChief(chief.getEmployee().getId());
 		ai.setChiefUid(chief.getUser().getUid());
-		ai.setTime(DateUtils.currentTime());
+		ai.setTime(DateUtil.currentTime());
 		return ai;
 	}
 	
@@ -91,7 +91,7 @@ public class EntityGenerator {
 		banner.setImage(icon);
 		banner.setLink(link);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		banner.setCreated(time);
 		banner.setUpdated(time);
 		return banner;

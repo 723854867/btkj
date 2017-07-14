@@ -28,7 +28,7 @@ import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<Void> update(User user) {
-		user.setUpdated(DateUtils.currentTime());
+		user.setUpdated(DateUtil.currentTime());
 		try {
 			userMapper.update(user);
 		} catch (DuplicateKeyException e) {

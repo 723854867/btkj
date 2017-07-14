@@ -20,7 +20,7 @@ import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -94,10 +94,10 @@ public class LoginServiceImpl implements LoginService {
 						: userMapper.tokenReplace(client, user.getUid(), mobile);
 		if (client == Client.RECRUIT) {						// 直接使用分布式 session
 			DistributeSession session = new DistributeSession(token, redis);
-			session.setInactiveInterval(DateUtils.MILLIS_FIVE_MINUTES);
+			session.setInactiveInterval(DateUtil.MILLIS_FIVE_MINUTES);
 			session.put(BtkjConsts.FIELD.UID, user.getUid());
 		} else {
-			int time = DateUtils.currentTime();
+			int time = DateUtil.currentTime();
 			switch (client) {
 			case TENANT_MANAGER:
 				user.setPcLoginTime(time);

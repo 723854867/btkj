@@ -19,7 +19,7 @@ import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.GENDER;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.rapid.util.math.compare.IntComparable;
 import org.rapid.util.math.compare.StrComparable;
@@ -157,27 +157,27 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 							break;
 						case GENDER:
 							int src = IdentityValidator.isMale(tips.getOwner().getIdNo()) ? GENDER.MALE.mark() : GENDER.FEMALE.mark();
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)));
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)));
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case SEAT_COUNT:
 							src = tips.getSeat();
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)));
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)));
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case VEHICLE_AGE:
 							src = VehicleUtils.vehicleAge(order);
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)))
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case AGE:
 							src = IdentityValidator.getAge(tips.getOwner().getIdNo());
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)))
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case PURCHASE_PRICE:
 							src = (int) (tips.getPrice());
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtils.toIntegerArray(params)))
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case LICENSE:

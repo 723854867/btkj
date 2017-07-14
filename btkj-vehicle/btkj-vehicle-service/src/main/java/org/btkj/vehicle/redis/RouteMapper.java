@@ -14,8 +14,8 @@ import org.btkj.vehicle.mybatis.dao.RouteDao;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	
@@ -38,10 +38,10 @@ public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	}
 	
 	private void _checkLoad(int tid) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtils.EMPTY))
+		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _controkkerKey(tid), StringUtil.EMPTY))
 			return;
 		List<Route> list = dao.getByTid(tid);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);
 	}

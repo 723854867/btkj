@@ -18,7 +18,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 获取代理公司拥有的险企
@@ -41,7 +41,7 @@ public class INSURER_LIST extends UserAction {
 		if (null == tenant)
 			return Result.result(BtkjCode.TENANT_NOT_EXIST);
 		List<Integer> list = vehicleService.insurers(tenant);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return Result.result(Collections.EMPTY_LIST);
 		return Result.result(configService.insurers(list));
 	}

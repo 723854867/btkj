@@ -20,7 +20,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 提问回复分页
@@ -45,7 +45,7 @@ public class REPLY_LIST extends UserAction {
 			return result;
 		
 		List<Reply> list = result.attach().getList();
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		Set<Integer> ids = new HashSet<Integer>();
 		for (Reply reply : list)

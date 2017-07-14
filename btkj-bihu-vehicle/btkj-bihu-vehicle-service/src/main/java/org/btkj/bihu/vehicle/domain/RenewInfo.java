@@ -13,8 +13,8 @@ import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.insur.vehicle.InsurUnit;
 import org.btkj.pojo.model.insur.vehicle.Insurance;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
-import org.rapid.util.lang.DateUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class RenewInfo implements Serializable {
 	
@@ -788,7 +788,7 @@ public class RenewInfo implements Serializable {
 		}
 		renewal.setTips(tips);
 		if (null != this.UserInfo.ForceExpireDate)
-			renewal.setCreated((int) (DateUtils.getTime(this.UserInfo.ForceExpireDate, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000));
+			renewal.setCreated((int) (DateUtil.getTime(this.UserInfo.ForceExpireDate, DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000));
 		return renewal;
 	}
 	
@@ -805,7 +805,7 @@ public class RenewInfo implements Serializable {
 		insurer.setName(this.UserInfo.PostedName);
 		insurer.setIdType(BiHuUtil.idType(this.UserInfo.HolderIdType));
 		insurer.setIdNo(this.UserInfo.HolderIdCard);
-		insurer.setMobile(StringUtils.hasText(this.UserInfo.HolderMobile) ? this.UserInfo.HolderMobile : null);
+		insurer.setMobile(StringUtil.hasText(this.UserInfo.HolderMobile) ? this.UserInfo.HolderMobile : null);
 		return insurer;
 	}
 	
@@ -814,7 +814,7 @@ public class RenewInfo implements Serializable {
 		insured.setName(this.UserInfo.InsuredName);
 		insured.setIdType(BiHuUtil.idType(this.UserInfo.InsuredIdType));
 		insured.setIdNo(this.UserInfo.InsuredIdCard);
-		insured.setMobile(StringUtils.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
+		insured.setMobile(StringUtil.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
 		return insured;
 	}
 	

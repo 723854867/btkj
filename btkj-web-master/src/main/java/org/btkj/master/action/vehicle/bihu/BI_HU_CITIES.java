@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.bihu.vehicle.api.BiHuConfigService;
+import org.btkj.bihu.vehicle.api.BiHuManageService;
 import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.pojo.entity.Administrator;
 import org.btkj.web.util.Request;
@@ -19,7 +19,7 @@ import org.rapid.util.common.message.Result;
 public class BI_HU_CITIES extends AdministratorAction {
 	
 	@Resource
-	private BiHuConfigService biHuConfigService;
+	private BiHuManageService biHuConfigService;
 
 	@Override
 	protected Result<List<BiHuArea>> execute(Request request, Administrator operator) {

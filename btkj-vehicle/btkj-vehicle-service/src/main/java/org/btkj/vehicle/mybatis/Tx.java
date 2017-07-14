@@ -18,7 +18,7 @@ import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +68,7 @@ public class Tx {
 		builder.deleteCharAt(builder.length() - 1);
 		coefficient.setName(name);
 		coefficient.setComparison(symbol.mark());
-		coefficient.setUpdated(DateUtils.currentTime());
+		coefficient.setUpdated(DateUtil.currentTime());
 		coefficient.setComparableValue(builder.toString());
 		vehicleCoefficientDao.update(coefficient);
 		final VehicleCoefficient update = coefficient;
@@ -155,7 +155,7 @@ public class Tx {
 		builder.deleteCharAt(builder.length() - 1);
 		config.setRate(rate);
 		config.setComparison(symbol.mark());
-		config.setUpdated(DateUtils.currentTime());
+		config.setUpdated(DateUtil.currentTime());
 		config.setComparableValue(builder.toString());
 		bonusScaleConfigDao.update(config);
 		final BonusScaleConfig update = config;

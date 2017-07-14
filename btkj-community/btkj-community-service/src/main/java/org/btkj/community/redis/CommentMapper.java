@@ -16,7 +16,7 @@ import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> {
 	
@@ -48,7 +48,7 @@ public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> 
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(articleId), _loadKey(articleId)))
 			return;
 		List<Comment> list = dao.getByArticleId(articleId);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);
 	}

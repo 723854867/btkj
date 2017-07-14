@@ -19,6 +19,15 @@ public class InsurerSQLProvider {
 		}.toString();
 	}
 	
+	public String getAll() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(TABLE);
+			}
+		}.toString();
+	}
+	
 	public String getWithinKey(Map<String, List<Integer>> params) {
 		List<Integer> keys = params.get("list");
 		StringBuilder builder = new StringBuilder("select * from insurer where id in(");

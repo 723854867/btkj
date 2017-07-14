@@ -21,7 +21,7 @@ import org.btkj.web.util.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 我的团队分页
@@ -40,7 +40,7 @@ public class TEAM_LIST extends TenantAction {
 	@Override
 	protected Result<TeamInfo> execute(Request request, Client client, EmployeeForm employeeForm) {
 		List<Employee> list = employeeService.team(employeeForm);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return Consts.RESULT.EMPTY_LIST;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 		for (Employee employee : list)

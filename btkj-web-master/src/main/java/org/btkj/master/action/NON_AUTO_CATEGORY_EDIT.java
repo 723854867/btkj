@@ -10,7 +10,7 @@ import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 /**
  * 添加非车险类型
@@ -33,7 +33,7 @@ public class NON_AUTO_CATEGORY_EDIT extends AdministratorAction {
 		if (null == category.getName())
 			throw ConstConvertFailureException.errorConstException(Params.NON_AUTO_CATEGORY);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		category.setUpdated(time);
 		if (0 == category.get_id())
 			category.setCreated(time);

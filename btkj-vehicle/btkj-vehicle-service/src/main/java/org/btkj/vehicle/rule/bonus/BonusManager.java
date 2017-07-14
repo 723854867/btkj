@@ -22,8 +22,8 @@ import org.btkj.vehicle.rule.bonus.route.BonusRoute;
 import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class BonusManager {
 	
@@ -63,7 +63,7 @@ public class BonusManager {
 	
 	public Result<Void> bonusSettings(BonusSearcher searcher) {
 		String path = searcher.getPath();
-		LinkedList<String> paths = CollectionUtils.toStrLinkedList(path.split(Consts.SYMBOL_UNDERLINE));
+		LinkedList<String> paths = CollectionUtil.toStrLinkedList(path.split(Consts.SYMBOL_UNDERLINE));
 		String nextId = paths.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);
 		if (null == route)
@@ -90,7 +90,7 @@ public class BonusManager {
 	}
 	
 	public Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher) {
-		LinkedList<String> path = CollectionUtils.toStrLinkedList(searcher.getPath().split(Consts.SYMBOL_UNDERLINE));
+		LinkedList<String> path = CollectionUtil.toStrLinkedList(searcher.getPath().split(Consts.SYMBOL_UNDERLINE));
 		String nextId = path.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);
 		if (null == route)
@@ -99,7 +99,7 @@ public class BonusManager {
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
 		coefficients.addAll(vehicleCoefficientMapper.getByTid(searcher.getTid()));
 		// 车牌省份过滤
-		String provinceAbbreviation = 0 == searcher.getSubordinateProvince() ? null : StringUtils.provinceAbbreviation(searcher.getSubordinateProvince());
+		String provinceAbbreviation = 0 == searcher.getSubordinateProvince() ? null : StringUtil.provinceAbbreviation(searcher.getSubordinateProvince());
 		if (null != provinceAbbreviation) {
 			Iterator<VehicleCoefficient> iterator = coefficients.iterator();
 			while (iterator.hasNext()) {

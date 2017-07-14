@@ -8,7 +8,7 @@ import org.btkj.vehicle.pojo.entity.Area;
 import org.btkj.vehicle.redis.AreaMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Component;
 
 @Component("rule")
@@ -48,9 +48,9 @@ public class Rule {
 		if (null == city)
 			return BtkjCode.CITY_UNSUPPORT;
 		int renewalInterval = city.getRenewalPeriod() * 24 * 3600;
-		int timestamp = (int) (DateUtils.getTime(startTime, DateUtils.YYYY_MM_DD_HH_MM_SS) / 1000);
-		int maxTime = DateUtils.currentTime() + renewalInterval;
-		if (timestamp > maxTime || timestamp < DateUtils.currentTime())
+		int timestamp = (int) (DateUtil.getTime(startTime, DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000);
+		int maxTime = DateUtil.currentTime() + renewalInterval;
+		if (timestamp > maxTime || timestamp < DateUtil.currentTime())
 			return BtkjCode.NOT_IN_RENEWAL_PERIOD;
 		return Code.OK;
 	}

@@ -13,7 +13,7 @@ import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 /**
  * 同步简捷的后台保单数据
@@ -33,8 +33,8 @@ public class JIAN_JIE_FETCH extends TenantAction {
 		if (null == tenant.getJianJieId())
 			return BtkjConsts.RESULT.JIAN_JIE_ID_NEEDED;
 		JianJiePoliciesInfo info = jianJieService.vehiclePolicies(ef.getTenant().getJianJieId(),
-				DateUtils.getDate(DateUtils.YYYYMMDD, ef.getTenant().getJianJieFetchTime()),
-				DateUtils.getDate(DateUtils.YYYYMMDD, DateUtils.currentTime()));
+				DateUtil.getDate(DateUtil.YYYYMMDD, ef.getTenant().getJianJieFetchTime()),
+				DateUtil.getDate(DateUtil.YYYYMMDD, DateUtil.currentTime()));
 		if (!info.isSuccessStatus())
 			return Result.result(Code.FAILURE, info.getErrorMessage());
 		vehicleManageService.jianjieSynchronize(info);

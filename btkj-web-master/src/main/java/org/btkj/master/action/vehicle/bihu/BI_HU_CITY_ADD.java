@@ -2,7 +2,7 @@ package org.btkj.master.action.vehicle.bihu;
 
 import javax.annotation.Resource;
 
-import org.btkj.bihu.vehicle.api.BiHuConfigService;
+import org.btkj.bihu.vehicle.api.BiHuManageService;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.entity.Administrator;
 import org.btkj.pojo.entity.Region;
@@ -23,7 +23,7 @@ public class BI_HU_CITY_ADD extends AdministratorAction {
 	@Resource
 	private ConfigService configService;
 	@Resource
-	private BiHuConfigService biHuConfigService;
+	private BiHuManageService biHuConfigService;
 
 	@Override
 	protected Result<Void> execute(Request request, Administrator operator) {

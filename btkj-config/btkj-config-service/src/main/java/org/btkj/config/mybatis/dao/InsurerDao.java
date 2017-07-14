@@ -14,6 +14,10 @@ public interface InsurerDao extends DBMapper<Integer, Insurer> {
 	Insurer getByKey(Integer key);
 	
 	@Override
+	@SelectProvider(type = InsurerSQLProvider.class, method = "getAll")
+	List<Insurer> getAll();
+	
+	@Override
 	@SelectProvider(type = InsurerSQLProvider.class, method = "getWithinKey")
 	List<Insurer> getWithinKey(List<Integer> keys);
 }

@@ -3,6 +3,7 @@ package org.btkj.baotu.vehicle.service;
 import java.util.Set;
 
 import org.btkj.baotu.vehicle.api.BaoTuVehicle;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
 import org.rapid.util.common.consts.code.Code;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class BaoTuVehicleImpl implements BaoTuVehicle {
 
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, Set<Integer> quote, Set<Integer> insure, VehiclePolicyTips tips) {
+	public Result<Void> order(EmployeeForm employeeForm, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips) {
 		return Result.result(Code.SYSTEM_ERROR);
 	}
 }

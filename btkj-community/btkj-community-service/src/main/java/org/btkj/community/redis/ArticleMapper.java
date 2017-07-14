@@ -17,7 +17,7 @@ import org.btkj.pojo.submit.ArticleSearcher.SortCol;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> {
 	
@@ -46,7 +46,7 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(appId), _loadKey(appId)))
 			return;
 		List<Article> list = dao.getByAppId(appId);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);
 	} 

@@ -93,7 +93,7 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 没有配置路由
 	 */
-	LANE_NOT_SET(515, "lane not set"),
+	LANE_CONFIG_ERROR(515, "lane config error"),
 	
 	/**
 	 * 壁虎线路未开通
@@ -253,7 +253,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 未设置简捷id
 	 */
-	JIAN_JIE_ID_NEEDED(680, "jian jie id needed");
+	JIAN_JIE_ID_NEEDED(680, "jian jie id needed"),
+	
+	/**
+	 * 商户壁虎配置不存在
+	 */
+	BI_HU_TENANT_CONFIG_NOT_EXIST(690, "bi hu tenant config not exist");
 	
 	private int code;
 	private String desc;

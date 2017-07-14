@@ -16,7 +16,7 @@ import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 	
@@ -48,7 +48,7 @@ public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(quizId), _loadKey(quizId)))
 			return;
 		List<Reply> quizs = dao.getByQuizId(quizId);
-		if (CollectionUtils.isEmpty(quizs))
+		if (CollectionUtil.isEmpty(quizs))
 			return;
 		flush(quizs);
 	}

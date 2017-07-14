@@ -18,7 +18,7 @@ import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 商户自己设置自己的一些属性
@@ -43,7 +43,7 @@ public class TENANT_SET extends TenantAction {
 	
 	private void _check(TenantSettingsSubmit submit) {
 		Set<Long> nonAutoBind = submit.getNonAutoBind();
-		if (!CollectionUtils.isEmpty(nonAutoBind)) {
+		if (!CollectionUtil.isEmpty(nonAutoBind)) {
 			List<NonAutoCategory> categories = nonAutoService.getCategoriesByIds(new ArrayList<Long>(nonAutoBind));
 			nonAutoBind.clear();
 			for (NonAutoCategory category : categories)

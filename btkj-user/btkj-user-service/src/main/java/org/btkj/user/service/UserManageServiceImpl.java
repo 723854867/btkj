@@ -31,7 +31,7 @@ import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -148,7 +148,7 @@ public class UserManageServiceImpl implements UserManageService {
 			return BtkjConsts.RESULT.BANNER_NOT_EXIST;
 		banner.setImage(icon);
 		banner.setLink(link);
-		banner.setUpdated(DateUtils.currentTime());
+		banner.setUpdated(DateUtil.currentTime());
 		bannerMapper.update(banner);
 		return Consts.RESULT.OK;
 	}

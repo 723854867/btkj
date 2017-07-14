@@ -20,7 +20,7 @@ import org.rapid.aliyun.policy.Policy;
 import org.rapid.aliyun.policy.Statement;
 import org.rapid.aliyun.service.sts.StsService;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -120,7 +120,7 @@ public class AliyunServiceImpl implements AliyunService {
 		stsInfo.setAccessKeySecret(credentials.getAccessKeySecret());
 		
 		// 设置缓存失效时间
-		long expire = DateUtils.getTimeGap(stsInfo.getExpiration(), DateUtils.UTCDate(), DateUtils.ISO8601_UTC, DateUtils.TIMEZONE_UTC);
+		long expire = DateUtil.getTimeGap(stsInfo.getExpiration(), DateUtil.UTCDate(), DateUtil.ISO8601_UTC, DateUtil.TIMEZONE_UTC);
 		// 提前 1 分钟失效
 		expire -= 60000;
 		stsInfo.setExpire(System.currentTimeMillis() + expire);

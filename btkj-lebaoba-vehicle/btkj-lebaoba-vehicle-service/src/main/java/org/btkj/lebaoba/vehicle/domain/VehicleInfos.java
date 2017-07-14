@@ -10,7 +10,7 @@ import org.btkj.pojo.enums.vehicle.VehicleType;
 import org.btkj.pojo.enums.vehicle.VehicleTypeCode;
 import org.btkj.pojo.enums.vehicle.VehicleTypeDetailCode;
 import org.btkj.pojo.info.VehicleInfo;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 @XmlRootElement(name = "RETURN")
 public class VehicleInfos {
@@ -190,7 +190,7 @@ private List<VehicleCommonInfo> list;
 	}
 	
 	public List<VehicleInfo> infos() {
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return null;
 		List<VehicleInfo> temp = new ArrayList<VehicleInfo>(list.size());
 		for (VehicleCommonInfo commonInfo : list) {

@@ -8,7 +8,7 @@ import java.util.Map;
 import org.btkj.pojo.entity.NonAutoProduct;
 import org.rapid.data.storage.mongo.KeyMapper;
 import org.rapid.data.storage.mongo.Mongo;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class NonAutoCategoryMapperTest {
 
@@ -69,8 +69,8 @@ public class NonAutoCategoryMapperTest {
 		tags.add("意外		0元");
 		tags.add("xx		12万元");
 		product.setLiabilities(tags);
-		product.setCreated(DateUtils.currentTime());
-		product.setUpdated(DateUtils.currentTime());
+		product.setCreated(DateUtil.currentTime());
+		product.setUpdated(DateUtil.currentTime());
 		mapper.insert(product);
 	}
 }

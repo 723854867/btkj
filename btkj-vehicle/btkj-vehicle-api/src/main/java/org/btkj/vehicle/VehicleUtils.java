@@ -3,7 +3,7 @@ package org.btkj.vehicle;
 import java.util.TimeZone;
 
 import org.btkj.pojo.entity.VehicleOrder;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class VehicleUtils {
 
@@ -16,7 +16,7 @@ public class VehicleUtils {
 	public static final int vehicleAge(VehicleOrder order) {
 		String commericialStart = order.getTips().getSchema().getCommercialStart();
 		String enrollDate = order.getTips().getEnrollDate();
-		long timestamp = DateUtils.getTimeGap(commericialStart, enrollDate, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault());
+		long timestamp = DateUtil.getTimeGap(commericialStart, enrollDate, DateUtil.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault());
 		return timestamp <= 0 ? 0 : (int) (timestamp / (365 * 24 * 3600 * 1000));
 	}
 	

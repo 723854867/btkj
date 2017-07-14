@@ -24,11 +24,6 @@
 		<property name="dao" ref="biHuAreaDao" />
 	</bean>
 	
-	<bean id="biHuInsurerMapper" class="org.btkj.bihu.vehicle.redis.BiHuInsurerMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="biHuInsurerDao" />
-	</bean>
-	
 	<bean id="tenantConfigMapper" class="org.btkj.bihu.vehicle.redis.TenantConfigMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="tenantConfigDao" />

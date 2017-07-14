@@ -6,7 +6,7 @@ import org.btkj.pojo.entity.Comment;
 import org.btkj.pojo.entity.Quiz;
 import org.btkj.pojo.entity.Reply;
 import org.btkj.pojo.entity.User;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 
@@ -16,7 +16,7 @@ public class EntityGenerator {
 		article.setIcon(icon);
 		article.setLink(link);
 		article.setTitle(title);
-		article.setCreated(DateUtils.currentTime());
+		article.setCreated(DateUtil.currentTime());
 		return article;
 	}
 	
@@ -25,7 +25,7 @@ public class EntityGenerator {
 		comment.setArticleId(articleId);
 		comment.setContent(content);
 		comment.setUid(user.getUid());
-		comment.setCreated(DateUtils.currentTime());
+		comment.setCreated(DateUtil.currentTime());
 		return comment;
 	}
 	
@@ -34,7 +34,7 @@ public class EntityGenerator {
 		quiz.setAppId(user.getAppId());
 		quiz.setUid(user.getUid());
 		quiz.setContent(content);
-		quiz.setCreated(DateUtils.currentTime());
+		quiz.setCreated(DateUtil.currentTime());
 		return quiz;
 	}
 	
@@ -43,7 +43,7 @@ public class EntityGenerator {
 		reply.setQuizId(quizId);
 		reply.setContent(content);
 		reply.setUid(user.getUid());
-		reply.setCreated(DateUtils.currentTime());
+		reply.setCreated(DateUtil.currentTime());
 		return reply;
 	}
 }

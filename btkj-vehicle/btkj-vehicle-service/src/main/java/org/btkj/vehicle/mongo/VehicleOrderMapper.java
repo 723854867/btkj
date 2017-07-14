@@ -10,7 +10,7 @@ import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
@@ -50,7 +50,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 				continue;
 			states.add(Filters.eq(FIELD_STATE, state.name()));
 		}
-		Bson filter = CollectionUtils.isEmpty(states) 
+		Bson filter = CollectionUtil.isEmpty(states) 
 				? Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end)) 
 				: Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end), Filters.or(states));
 		return mongo.count(collection, filter);

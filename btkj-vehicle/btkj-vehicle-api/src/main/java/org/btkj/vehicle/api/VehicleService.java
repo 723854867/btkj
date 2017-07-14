@@ -2,7 +2,6 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.VehicleBrand;
@@ -53,7 +52,7 @@ public interface VehicleService {
 	 * @param vehicleId
 	 * @return
 	 */
-	Result<Void> order(List<Insurer> quote, List<Insurer> insure, EmployeeForm employeeForm, VehiclePolicyTips tips, String vehicleId);
+	Result<Void> order(int quoteGroup, int insureGroup, EmployeeForm employeeForm, VehiclePolicyTips tips, String vehicleId);
 	
 	/**
 	 * 查看订单详情

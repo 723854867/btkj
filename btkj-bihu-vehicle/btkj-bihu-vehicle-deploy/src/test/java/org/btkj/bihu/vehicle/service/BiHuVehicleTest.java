@@ -15,7 +15,7 @@ import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class BiHuVehicleTest extends BaseTest {
 
@@ -65,12 +65,12 @@ public class BiHuVehicleTest extends BaseTest {
 		Result<Renewal> result = biHuVehicle.renewal(form, "浙AM396M", "王彬");
 		if (result.isSuccess()) {
 			Renewal renewal = result.attach();
-			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtils.currentTime()));
-			renewal.getTips().getSchema().setCompulsiveStart(String.valueOf(DateUtils.currentTime()));
+			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtil.currentTime()));
+			renewal.getTips().getSchema().setCompulsiveStart(String.valueOf(DateUtil.currentTime()));
 			Set<Integer> set = new HashSet<Integer>();
 			set.add(3);
-			Result<Void> result2 = biHuVehicle.order(form, set, set, renewal.getTips());
-			System.out.println(result2.getCode());
+//			Result<Void> result2 = biHuVehicle.order(form, set, set, renewal.getTips());
+//			System.out.println(result2.getCode());
 		} else 
 			System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(1);
@@ -104,8 +104,8 @@ public class BiHuVehicleTest extends BaseTest {
 		Result<Renewal> result = biHuVehicle.renewal(form, "浙H0155R", "");
 		if (result.isSuccess()) {
 			Renewal renewal = result.attach();
-			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtils.currentTime()));
-			renewal.getTips().getSchema().setCompulsiveStart(String.valueOf(DateUtils.currentTime()));
+			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtil.currentTime()));
+			renewal.getTips().getSchema().setCompulsiveStart(String.valueOf(DateUtil.currentTime()));
 		} else 
 			System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(1);

@@ -12,8 +12,8 @@ import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,7 +38,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	
 	@Override
 	public void insert(ApplyInfo model) {
-		redis.hzset(redisKey, model.key(), serializer.convert(model), DateUtils.currentTime(), _tenantListKey(model.getTid()), _userListKey(model.getUid()));
+		redis.hzset(redisKey, model.key(), serializer.convert(model), DateUtil.currentTime(), _tenantListKey(model.getTid()), _userListKey(model.getUid()));
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	 */
 	public List<Integer> applyListTids(User user) {
 		List<byte[]> list = redis.hzget(_userListKey(user.getUid()), redisKey, 0, -1);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return Collections.EMPTY_LIST;
 		List<Integer> l = new ArrayList<Integer>(list.size());
 		for (byte[] buffer : list) 

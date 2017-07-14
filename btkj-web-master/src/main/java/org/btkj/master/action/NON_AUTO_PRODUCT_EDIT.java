@@ -10,7 +10,7 @@ import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class NON_AUTO_PRODUCT_EDIT extends AdministratorAction {
 	
@@ -28,7 +28,7 @@ public class NON_AUTO_PRODUCT_EDIT extends AdministratorAction {
 		if (null == product.getName())
 			throw ConstConvertFailureException.errorConstException(Params.NON_AUTO_PRODUCT);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		product.setUpdated(time);
 		if (0 == product.get_id())
 			product.setCreated(time);

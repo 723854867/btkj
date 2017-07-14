@@ -20,7 +20,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 评论列表
@@ -42,7 +42,7 @@ public class COMMENT_LIST extends UserAction {
 		if (!result.isSuccess())
 			return result;
 		List<Comment> list = result.attach().getList();
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		Set<Integer> ids = new HashSet<Integer>();
 		for (Comment comment : list)

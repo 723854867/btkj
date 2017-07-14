@@ -8,7 +8,7 @@ import org.btkj.pojo.entity.VehicleBrand;
 import org.btkj.vehicle.mybatis.dao.VehicleBrandDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 public class VehicleBrandMapper extends RedisDBAdapter<Integer, VehicleBrand, VehicleBrandDao> {
 	
@@ -21,7 +21,7 @@ public class VehicleBrandMapper extends RedisDBAdapter<Integer, VehicleBrand, Ve
 	public List<VehicleBrand> getAll() {
 		_checkLoad();
 		List<byte[]> list = redis.hvals(redisKey);
-		if (CollectionUtils.isEmpty(list))
+		if (CollectionUtil.isEmpty(list))
 			return null;
 		List<VehicleBrand> brands = new ArrayList<VehicleBrand>(list.size());
 		for (byte[] data : list)

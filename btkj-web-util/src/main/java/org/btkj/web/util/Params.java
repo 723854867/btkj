@@ -35,7 +35,7 @@ import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.rapid.util.validator.Validator;
 
@@ -201,13 +201,13 @@ public interface Params {
 	final Str2IntConstConverter MOD						= new Str2IntConstConverter(1034, "mod");
 	final Str2IntConstConverter BEGIN_TIME				= new Str2IntConstConverter(1035, "beginTime") {
 		public Integer convert(String value) throws ConstConvertFailureException {
-			return (int) (DateUtils.getTime(value, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
+			return (int) (DateUtil.getTime(value, DateUtil.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
 		};
 	};
 	
 	final Str2IntConstConverter END_TIME				= new Str2IntConstConverter(1036, "endTime") {
 		public Integer convert(String value) throws ConstConvertFailureException {
-			return (int) (DateUtils.getTime(value, DateUtils.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
+			return (int) (DateUtil.getTime(value, DateUtil.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault()) / 1000);
 		};
 	};
 	
@@ -269,18 +269,8 @@ public interface Params {
 	};
 	
 	final Str2StrConstConverter BIZ_NO						= new Str2StrConstConverter(1106, "bizNo");
-	final Str2ObjConstConverter<Set<Integer>> QUOTE_GROUP	= new Str2ObjConstConverter<Set<Integer>>(1107, "quoteGroup") {
-		@Override
-		public Set<Integer> convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<Set<Integer>>(){}.getType());
-		}
-	};
-	final Str2ObjConstConverter<Set<Integer>> INSURE_GROUP	= new Str2ObjConstConverter<Set<Integer>>(1108, "insureGroup") {
-		@Override
-		public Set<Integer> convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, new TypeToken<Set<Integer>>(){}.getType());
-		}
-	};
+	final Str2IntConstConverter QUOTE_GROUP					= new Str2IntConstConverter(1107, "quoteGroup");
+	final Str2IntConstConverter INSURE_GROUP				= new Str2IntConstConverter(1108, "insureGroup"); 
 	
 	final Str2ObjConstConverter<QuotaNoticeSubmit> QUOTA_NOTICE_SUBMIT	= new Str2ObjConstConverter<QuotaNoticeSubmit>(1109, "quotaNoticeSubmit") {
 		@Override

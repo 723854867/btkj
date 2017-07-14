@@ -1,10 +1,9 @@
 package org.btkj.bihu.vehicle.mybatis;
 
 import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
-import org.btkj.bihu.vehicle.pojo.entity.BiHuInsurer;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
 import org.btkj.pojo.entity.Region;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 	
@@ -14,21 +13,10 @@ public class EntityGenerator {
 		city.setCode(region.getId());
 		city.setName(name);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		city.setCreated(time);
 		city.setUpdated(time);
 		return city;
-	}
-	
-	public static final BiHuInsurer newInsurer(int code, String name) {
-		BiHuInsurer insurer = new BiHuInsurer();
-		insurer.setCode(code);
-		insurer.setName(name);
-		
-		int time = DateUtils.currentTime();
-		insurer.setCreated(time);
-		insurer.setUpdated(time);
-		return insurer;
 	}
 	
 	public static final TenantConfig newTenantConfig(int tid, String agent, String key) { 
@@ -37,7 +25,7 @@ public class EntityGenerator {
 		config.setAgent(agent);
 		config.setKey(key);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		config.setCreated(time);
 		config.setUpdated(time);
 		return config;

@@ -20,7 +20,7 @@ import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtils;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 首页信息
@@ -54,7 +54,7 @@ public class MAIN_PAGE extends UserAction {
 		Region region = configService.getRegionById(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
 		String nonAutoBind = null == em ? null : em.getTenant().getNonAutoBind();
-		pageInfo.setNonAutoCategories(null == em ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtils.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
+		pageInfo.setNonAutoCategories(null == em ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
 		return result;
 	}
 }

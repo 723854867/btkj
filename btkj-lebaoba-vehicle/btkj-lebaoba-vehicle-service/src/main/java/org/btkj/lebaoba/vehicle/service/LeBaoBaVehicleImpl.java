@@ -17,6 +17,7 @@ import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.lebaoba.vehicle.domain.BasicResult;
 import org.btkj.lebaoba.vehicle.domain.VehicleInfos;
 import org.btkj.lebaoba.vehicle.domain.VehicleSubmit;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
 import org.btkj.pojo.model.EmployeeForm;
@@ -75,7 +76,7 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 	}
 
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, Set<Integer> quote, Set<Integer> insure, VehiclePolicyTips tips) {
+	public Result<Void> order(EmployeeForm employeeForm, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips) {
 		return Result.result(Code.SYSTEM_ERROR);
 	}
 }

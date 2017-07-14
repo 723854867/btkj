@@ -84,5 +84,11 @@
 			<artifactId>btkj-baotu-vehicle-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-config-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -9,6 +9,8 @@ public class Insurer implements UniqueModel<Integer> {
 	private int id;
 	private String name;
 	private String icon;
+	private int biHuId;
+	private String leBaoBaId;
 	private int created;
 	private int updated;
 
@@ -35,6 +37,22 @@ public class Insurer implements UniqueModel<Integer> {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
+	
+	public int getBiHuId() {
+		return biHuId;
+	}
+	
+	public void setBiHuId(int biHuId) {
+		this.biHuId = biHuId;
+	}
+	
+	public String getLeBaoBaId() {
+		return leBaoBaId;
+	}
+	
+	public void setLeBaoBaId(String leBaoBaId) {
+		this.leBaoBaId = leBaoBaId;
+	}
 
 	public int getCreated() {
 		return created;
@@ -51,7 +69,7 @@ public class Insurer implements UniqueModel<Integer> {
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
-
+	
 	@Override
 	public Integer key() {
 		return id;

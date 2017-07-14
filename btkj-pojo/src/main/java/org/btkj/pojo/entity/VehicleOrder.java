@@ -2,10 +2,12 @@ package org.btkj.pojo.entity;
 
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.tips.VehiclePolicyTips;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.Bonus;
 import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.model.UniqueModel;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 
 public class VehicleOrder implements UniqueModel<String> {
 
@@ -34,12 +36,12 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(String id, String batchId, int employeeId, int appId, int tid, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
-		this._id = id;
+	public VehicleOrder(String batchId, EmployeeForm ef, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
+		this._id = _orderId(tips.getLicense(), employeeId, tid);
 		this.batchId = batchId;
-		this.employeeId = employeeId;
-		this.appId = appId;
-		this.tid = tid;
+		this.employeeId = ef.getEmployee().getId();
+		this.appId = ef.getApp().getId();
+		this.tid = ef.getTenant().getTid();
 		this.insurerId = insurer.getId();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
@@ -47,7 +49,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.insure = insure;
 		this.state = VehicleOrderState.QUOTING;
 		this.tips = tips;
-		this.created = DateUtils.currentTime();
+		this.created = DateUtil.currentTime();
 	}
 	
 	public String get_id() {
@@ -173,5 +175,9 @@ public class VehicleOrder implements UniqueModel<String> {
 	@Override
 	public String key() {
 		return this._id;
+	}
+
+	private String _orderId(String license, int employeeId, int insurerId) {
+		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
 	}
 }

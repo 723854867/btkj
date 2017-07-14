@@ -29,7 +29,7 @@ import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -110,7 +110,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		if (tid != config.getTid())
 			return Consts.RESULT.FORBID;
 		config.setRate(rate);
-		config.setUpdated(DateUtils.currentTime());
+		config.setUpdated(DateUtil.currentTime());
 		bonusManageConfigMapper.update(config);
 		return Consts.RESULT.OK;
 	}
@@ -201,7 +201,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			return BtkjConsts.RESULT.ROUTE_NOT_EXIST;
 		if (route.getLane() != lane.mark()) {
 			route.setLane(lane.mark());
-			route.setUpdated(DateUtils.currentTime());
+			route.setUpdated(DateUtil.currentTime());
 			routeMapper.update(route);
 		}
 		return Consts.RESULT.OK;
@@ -235,7 +235,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			return BtkjConsts.RESULT.CITY_NOT_EXIST;
 		city.setName(name);
 		city.setRenewalPeriod(renewalPeriod);
-		city.setUpdated(DateUtils.currentTime());
+		city.setUpdated(DateUtil.currentTime());
 		areaMapper.update(city);
 		return Consts.RESULT.OK;
 	}

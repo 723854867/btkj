@@ -29,4 +29,6 @@
 	<dubbo:reference id="leBaoBaVehicle" interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle"/>
 	
 	<dubbo:reference id="baoTuVehicle" interface="org.btkj.baotu.vehicle.api.BaoTuVehicle" />
+	
+	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
 </beans>

@@ -11,7 +11,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.conveter.StrConstConverter;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.StringUtils;
+import org.rapid.util.lang.StringUtil;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -71,7 +71,7 @@ public class Request {
 	 */
 	public <T> T getParam(StrConstConverter<T> constant) throws ConstConvertFailureException {
 		String val = request.getParameter(constant.key());
-		if (!StringUtils.hasText(val))
+		if (!StringUtil.hasText(val))
 			throw ConstConvertFailureException.nullConstException(constant);
 		try {
 			return constant.convert(val);
@@ -106,7 +106,7 @@ public class Request {
 	
 	public <T> T getHeader(Const<T> constant) throws ConstConvertFailureException {
 		String val = request.getHeader(constant.key());
-		if (!StringUtils.hasText(val))
+		if (!StringUtil.hasText(val))
 			throw ConstConvertFailureException.nullConstException(constant);
 		try {
 			return constant instanceof StrConstConverter ? ((StrConstConverter<T>) constant).convert(val) : constant.value();

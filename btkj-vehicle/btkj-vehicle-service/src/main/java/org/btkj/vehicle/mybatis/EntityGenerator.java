@@ -9,7 +9,7 @@ import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Area;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.Consts;
-import org.rapid.util.lang.DateUtils;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
 public class EntityGenerator {
@@ -20,7 +20,7 @@ public class EntityGenerator {
 		city.setName(name);
 		city.setRenewalPeriod(renewalPeriod);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		city.setCreated(time);
 		city.setUpdated(time);
 		return city;
@@ -33,7 +33,7 @@ public class EntityGenerator {
 		route.setInsurerId(insurerId);
 		route.setLane(lane.mark());
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		route.setCreated(time);
 		route.setUpdated(time);
 		return route;
@@ -47,7 +47,7 @@ public class EntityGenerator {
 		coefficient.setComparableValue(value);
 		coefficient.setComparison(symbol.mark());
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		coefficient.setCreated(time);
 		coefficient.setUpdated(time);
 		return coefficient;
@@ -61,7 +61,7 @@ public class EntityGenerator {
 		config.setDepth(depth);
 		config.setKey(tid + Consts.SYMBOL_UNDERLINE + type.mark() + Consts.SYMBOL_UNDERLINE + depth);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		config.setCreated(time);
 		config.setUpdated(time);
 		return config;
@@ -74,7 +74,7 @@ public class EntityGenerator {
 		config.setComparison(symbol.mark());
 		config.setComparableValue(value);
 		
-		int time = DateUtils.currentTime();
+		int time = DateUtil.currentTime();
 		config.setCreated(time);
 		config.setUpdated(time);
 		return config;
