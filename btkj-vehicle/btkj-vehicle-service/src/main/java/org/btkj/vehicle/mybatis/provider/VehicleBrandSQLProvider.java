@@ -1,17 +1,12 @@
 package org.btkj.vehicle.mybatis.provider;
 
-import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class VehicleBrandSQLProvider {
+public class VehicleBrandSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "vehicle_brand";
-
-	public String getAll() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-			}
-		}.toString();
+	
+	public VehicleBrandSQLProvider() {
+		super(TABLE, "id");
 	}
 }

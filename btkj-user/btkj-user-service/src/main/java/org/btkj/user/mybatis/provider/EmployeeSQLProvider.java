@@ -5,34 +5,29 @@ import java.util.Map.Entry;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
+import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SORT_TYPE;
 
-public class EmployeeSQLProvider {
+public class EmployeeSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "employee";
+	
+	public EmployeeSQLProvider() {
+		super(TABLE, "id");
+	}
 
 	public String insert() { 
 		return new SQL() {
 			{
 				INSERT_INTO(TABLE);
-				VALUES("uid", "#{uid}");
-				VALUES("tid", "#{tid}");
-				VALUES("parent_id", "#{parentId}");
+				VALUES("`uid`", "#{uid}");
+				VALUES("`tid`", "#{tid}");
+				VALUES("`parent_id`", "#{parentId}");
 				VALUES("`left`", "#{left}");
 				VALUES("`right`", "#{right}");
 				VALUES("`level`", "#{level}");
-				VALUES("created", "#{created}");
-				VALUES("updated", "#{updated}");
-			}
-		}.toString();
-	}
-	
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("id=#{key}");
+				VALUES("`created`", "#{created}");
+				VALUES("`updated`", "#{updated}");
 			}
 		}.toString();
 	}
@@ -41,8 +36,8 @@ public class EmployeeSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(TABLE);
-				SET("updated=#{updated}");
-				WHERE("id=#{id}");
+				SET("`updated`=#{updated}");
+				WHERE("`id`=#{id}");
 			}
 		}.toString();
 	}
@@ -52,18 +47,9 @@ public class EmployeeSQLProvider {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("tid=#{tid}");
+				WHERE("`tid`=#{tid}");
 				AND();
-				WHERE("uid=#{uid}");
-			}
-		}.toString();
-	}
-	
-	public String getAll() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
+				WHERE("`uid`=#{uid}");
 			}
 		}.toString();
 	}
@@ -73,7 +59,7 @@ public class EmployeeSQLProvider {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("uid=#{uid}");
+				WHERE("`uid`=#{uid}");
 			}
 		}.toString();
 	}

@@ -1,13 +1,15 @@
 package org.btkj.config.mybatis.provider;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class InsurerSQLProvider {
+public class InsurerSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "insurer";
+	
+	public InsurerSQLProvider() {
+		super(TABLE, "id");
+	}
 	
 	public String getByKey() {
 		return new SQL() {
@@ -26,15 +28,5 @@ public class InsurerSQLProvider {
 				FROM(TABLE);
 			}
 		}.toString();
-	}
-	
-	public String getByKeys(Map<String, List<Integer>> params) {
-		List<Integer> keys = params.get("keys");
-		StringBuilder builder = new StringBuilder("select * from insurer where id in(");
-		for (int key : keys)
-			builder.append(key).append(",");
-		builder.deleteCharAt(builder.length() - 1);
-		builder.append(")");
-		return builder.toString();
 	}
 }

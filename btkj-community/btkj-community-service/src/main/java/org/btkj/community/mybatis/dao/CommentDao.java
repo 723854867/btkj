@@ -1,11 +1,12 @@
 package org.btkj.community.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.CommentSQLProvider;
@@ -20,8 +21,9 @@ public interface CommentDao extends DBMapper<Integer, Comment> {
 	void insert(Comment entity);
 
 	@Resource
+	@MapKey("id")
 	@SelectProvider(type = CommentSQLProvider.class, method = "getByArticleId")
-	List<Comment> getByArticleId(int articleId);
+	Map<Integer, Comment> getByArticleId(int articleId);
 	
 	@DeleteProvider(type = CommentSQLProvider.class, method = "deleteByArticleId")
 	void deleteByArticleId(int articleId);

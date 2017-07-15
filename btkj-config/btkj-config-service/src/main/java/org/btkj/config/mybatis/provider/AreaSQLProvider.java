@@ -1,10 +1,15 @@
 package org.btkj.config.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class AreaSQLProvider {
+public class AreaSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "area";
+	
+	public AreaSQLProvider() {
+		super(TABLE, "code");
+	}
 	
 	public String insert() {
 		return new SQL() {
@@ -20,16 +25,6 @@ public class AreaSQLProvider {
 		}.toString();
 	}
 
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("code=#{key}");
-			}
-		}.toString();
-	}
-	
 	public String update() {
 		return new SQL(){
 			{
@@ -38,15 +33,6 @@ public class AreaSQLProvider {
 				SET("`renewal_period`=#{renewalPeriod}");
 				SET("`bi_hu_id`=#{biHuId}");
 				SET("`updated`=#{updated}");
-				WHERE("`code`=#{code}");
-			}
-		}.toString();
-	}
-	
-	public String delete() { 
-		return new SQL() {
-			{
-				DELETE_FROM(TABLE);
 				WHERE("`code`=#{code}");
 			}
 		}.toString();

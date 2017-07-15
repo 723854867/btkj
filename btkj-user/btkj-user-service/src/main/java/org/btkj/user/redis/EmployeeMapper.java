@@ -2,11 +2,14 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.Employee;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.Pager;
@@ -15,6 +18,7 @@ import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * EMPLOYEE_DATA 中的 employee 数据的 left 和 right 不是最新值
@@ -23,19 +27,14 @@ import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
  */
 public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDao> {
 	
-	private String LIST							= "set:employee:list:{0}";	// 用户 employee 列表：主要是用来记录有多少个代理公司
-	private String LIST_CONTROLLER				= "employee：controller:{0}";
+	private final String USER_SET				= "set:employee：user:{0}";
+	private final String USER_CONTROLLER		= "employee：controller:{0}:";			// 基于用户的缓存控制键
 	
 	@Resource
 	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
 		super(new ByteProtostuffSerializer<Employee>(), "hash:db:employee");
-	}
-	
-	@Override
-	public void insert(Employee entity) {
-		throw new UnsupportedOperationException("EmployeeMapper unsupported insert immediately!");
 	}
 	
 	/**
@@ -62,17 +61,16 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	 * @return
 	 */
 	public List<Employee> ownedTenants(User user) {
-		List<Employee> employees = null;
-		List<byte[]> list = redis.hsgetIfMarked(BtkjConsts.CACHE_CONTROLLER_KEY, _listKey(user.getUid()), redisKey, _listController(user.getUid()));
-		if (null != list) {
-			employees = new ArrayList<Employee>();
-			for (byte[] buffer : list) 
-				employees.add(serializer.antiConvet(buffer));
-		} else {
-			employees = dao.getByUid(user.getUid());
-			redis.hssetMark(BtkjConsts.CACHE_CONTROLLER_KEY, redisKey, _listKey(user.getUid()), _listController(user.getUid()), employees, serializer);
-		}
-		return employees;
+		Map<Integer, Employee> map =_checkLoad(user.getUid());
+		if (null != map)
+			return new ArrayList<Employee>(map.values());
+		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(user.getUid()));
+		if (null == list)
+			return Collections.EMPTY_LIST;
+		List<Employee> l = new ArrayList<Employee>();
+		for (byte[] buffer : list)
+			l.add(serializer.antiConvet(buffer));
+		return l;
 	}
 	
 	/**
@@ -85,16 +83,40 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + depth - 1);
 	}
 	
+	private Map<Integer, Employee> _checkLoad(int uid) {
+		if (!checkLoad(_userSetKey(uid)))
+			return null;
+		Map<Integer, Employee> map = dao.getByUid(uid);
+		if (!CollectionUtil.isEmpty(map))
+			flush(map);
+		return map;
+	}
+	
 	@Override
 	public void flush(Employee entity) {
-		redis.hsset(redisKey, entity.key(), serializer.convert(entity), _listKey(entity.getUid()));
+		redis.hmsset(redisKey, entity, serializer, _userSetKey(entity.getUid()));
 	}
 	
-	public String _listKey(int uid) { 
-		return MessageFormat.format(LIST, String.valueOf(uid));
+	@Override
+	public void flush(Map<Integer, Employee> entities) {
+		Map<Integer, List<Employee>> map = new HashMap<Integer, List<Employee>>();
+		for (Employee temp : entities.values()) {
+			List<Employee> list = map.get(temp.getUid());
+			if (null == list) {
+				list = new ArrayList<Employee>();
+				map.put(temp.getUid(), list);
+			}
+			list.add(temp);
+		}
+		for (Entry<Integer, List<Employee>> entry : map.entrySet())
+			redis.hmsset(redisKey, entry.getValue(), serializer, _userSetKey(entry.getKey()));
 	}
 	
-	private String _listController(int uid) {
-		return MessageFormat.format(LIST_CONTROLLER, String.valueOf(uid));
+	public String _userSetKey(int uid) { 
+		return MessageFormat.format(USER_SET, String.valueOf(uid));
+	}
+	
+	private String _userControllerField(int uid) {
+		return MessageFormat.format(USER_CONTROLLER, String.valueOf(uid));
 	}
 }

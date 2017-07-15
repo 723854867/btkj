@@ -1,8 +1,9 @@
 package org.btkj.user.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -16,15 +17,9 @@ public interface BannerDao extends DBMapper<Integer, Banner> {
 	@SelectProvider(type = BannerSQLProvider.class, method = "getByKey")
 	Banner getByKey(Integer key);
 	
-	/**
-	 * 通过 appId 和  tid 获取 banner
-	 * 
-	 * @param appId
-	 * @param tid
-	 * @return
-	 */
+	@MapKey("id")
 	@SelectProvider(type = BannerSQLProvider.class, method = "getByAppIdAndTid")
-	List<Banner> getByAppIdAndTid(@Param("appId") int appId, @Param("tid") int tid);
+	Map<Integer, Banner> getByAppIdAndTid(@Param("appId") int appId, @Param("tid") int tid);
 	
 	@Override
 	@UpdateProvider(type = BannerSQLProvider.class, method = "update")

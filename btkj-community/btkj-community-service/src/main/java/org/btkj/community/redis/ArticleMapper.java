@@ -2,7 +2,6 @@ package org.btkj.community.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +20,10 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> {
 	
-	private String LOAD_LOCK						= "lock:article:{0}";						// 咨询加载控制键
 	private String TIME_BASED_SET					= "zset:article:time:{0}";					// 基于时间的排序列表
 	private String BROWSE_NUM_BASED_SET				= "zset:article:browse:num:{0}";			// 基于浏览数的排序列表
 	private String COMMENT_NUM_BASED_SET			= "zset:article:comment:num:{0}";			// 基于评论数的排序列表
+	private String APP_CONTROLLER					= "controller:article:{0}";					// 基于 appId 的缓存列表
 	
 	public ArticleMapper() {
 		super(new ByteProtostuffSerializer<Article>(), "hash:db:article");
@@ -32,7 +31,7 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 	
 	public Result<Pager<Article>> paging(ArticleSearcher searcher) {
 		_checkLoad(searcher.getAppId());
-		List<byte[]> list = redis.hpaging(_setKey(searcher.getAppId(), searcher.getSortCol()), redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
+		List<byte[]> list = redis.hpaging(_zsetKey(searcher.getAppId(), searcher.getSortCol()), redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));
@@ -43,32 +42,33 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 	}
 	
 	private void _checkLoad(int appId) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(appId), _loadKey(appId)))
+		if (!checkLoad(_appControllerField(appId)))
 			return;
-		List<Article> list = dao.getByAppId(appId);
-		if (CollectionUtil.isEmpty(list))
+		Map<Integer, Article> map = dao.getByAppId(appId);
+		if (CollectionUtil.isEmpty(map))
 			return;
-		flush(list);
+		flush(map);
 	} 
 	
 	@Override
 	public void flush(Article entity) {
 		Map<String, Double> scores = new HashMap<String, Double>();
-		scores.put(_setKey(entity.getAppId(), SortCol.TIME), Double.valueOf(entity.getCreated()));
-		scores.put(_setKey(entity.getAppId(), SortCol.BROWSE_NUM), Double.valueOf(entity.getBrowseNum()));
-		scores.put(_setKey(entity.getAppId(), SortCol.COMMENT_NUM), Double.valueOf(entity.getCommentNum()));
+		scores.put(_zsetKey(entity.getAppId(), SortCol.TIME), Double.valueOf(entity.getCreated()));
+		scores.put(_zsetKey(entity.getAppId(), SortCol.BROWSE_NUM), Double.valueOf(entity.getBrowseNum()));
+		scores.put(_zsetKey(entity.getAppId(), SortCol.COMMENT_NUM), Double.valueOf(entity.getCommentNum()));
 		redis.hmzset(redisKey, entity, scores, serializer);
 	}
 	
 	@Override
-	public void remove(Article model) {
-		redis.hmzdel(redisKey, model.key(), _setKey(model.getAppId(), SortCol.TIME), _setKey(model.getAppId(), SortCol.BROWSE_NUM), _setKey(model.getAppId(), SortCol.COMMENT_NUM));
+	public void remove(Article entity) {
+		int appId = entity.getAppId();
+		redis.hmzdel(redisKey, entity.key(), _zsetKey(appId, SortCol.TIME), _zsetKey(appId, SortCol.BROWSE_NUM), _zsetKey(appId, SortCol.COMMENT_NUM));
 	}
 	
 	@Override
-	public void flush(Collection<Article> models) {
+	public void flush(Map<Integer, Article> entities) {
 		Map<Integer, List<Article>> map = new HashMap<Integer, List<Article>>();
-		for (Article article : models) {
+		for (Article article : entities.values()) {
 			List<Article> list = map.get(article.getAppId());
 			if (null == list) {
 				list = new ArrayList<Article>();
@@ -87,30 +87,30 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 			int idx = 0;
 			for (int i = 0, len = articles.length; i < len; i++)
 				scores[idx++] = articles[i].getCreated();
-			zsetParams.put(_setKey(appId, SortCol.TIME), scores);
+			zsetParams.put(_zsetKey(appId, SortCol.TIME), scores);
 			
 			// 回复数排序
 			scores = new double[articles.length];
 			idx = 0;
 			for (int i = 0, len = articles.length; i < len; i++)
 				scores[idx++] = articles[i].getBrowseNum();
-			zsetParams.put(_setKey(appId, SortCol.BROWSE_NUM), scores);
+			zsetParams.put(_zsetKey(appId, SortCol.BROWSE_NUM), scores);
 			
 			// 浏览数排序
 			scores = new double[articles.length];
 			idx = 0;
 			for (int i = 0, len = articles.length; i < len; i++)
 				scores[idx++] = articles[i].getCommentNum();
-			zsetParams.put(_setKey(appId, SortCol.COMMENT_NUM), scores);
+			zsetParams.put(_zsetKey(appId, SortCol.COMMENT_NUM), scores);
 			redis.hmzset(redisKey, articles, zsetParams, serializer);
 		}
 	}
 	
-	private String _loadKey(int appId) {
-		return MessageFormat.format(LOAD_LOCK, String.valueOf(appId));
+	private String _appControllerField(int appId) {
+		return MessageFormat.format(APP_CONTROLLER, String.valueOf(appId));
 	}
 	
-	private String _setKey(int appId, SortCol col) {
+	private String _zsetKey(int appId, SortCol col) {
 		String setKey = null;
 		switch (col) {
 		case BROWSE_NUM:

@@ -2,18 +2,22 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.vehicle.mybatis.dao.VehicleModelDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
+import org.rapid.util.lang.CollectionUtil;
 
 public class VehicleModelMapper extends RedisDBAdapter<Integer, VehicleModel, VehicleModelDao> {
 	
-	private static final String SET						= "set:vehicle_model:{0}";			
-	private static final String SET_CONTROLLER			= "controller:vehicle_model:{0}";
+	private final String DEPT_SET							= "set:vehicle_model:dept:{0}";
+	private final String CONTROLLER							= "vehicle_model:controller:{0}";
 
 	public VehicleModelMapper() {
 		super(new ByteProtostuffSerializer<VehicleModel>(), "hash:db:vehicle_model");
@@ -26,24 +30,53 @@ public class VehicleModelMapper extends RedisDBAdapter<Integer, VehicleModel, Ve
 	 * @return
 	 */
 	public List<VehicleModel> getByDeptId(int deptId) {
-		List<byte[]> list = redis.hsgetIfMarked(BtkjConsts.CACHE_CONTROLLER_KEY, _setKey(deptId), redisKey, _setControllerKey(deptId));
-		List<VehicleModel> models = null;
-		if (null == list) {
-			models = dao.getByDeptId(deptId);
-			redis.hssetMark(BtkjConsts.CACHE_CONTROLLER_KEY, redisKey, _setKey(deptId), _setControllerKey(deptId), models, serializer);
-		} else {
-			models = new ArrayList<VehicleModel>(list.size());
-			for (byte[] data : list)
-				models.add(serializer.antiConvet(data));
+		Map<Integer, VehicleModel> map = _checkLoad(deptId);
+		if (null != map)
+			return new ArrayList<VehicleModel>(map.values());
+		List<byte[]> list = redis.hmsget(redisKey, _deptSetKey(deptId));
+		if (null == list)
+			return Collections.EMPTY_LIST;
+		List<VehicleModel> l = new ArrayList<VehicleModel>();
+		for (byte[] buffer : list)
+			l.add(serializer.antiConvet(buffer));
+		return l;
+	}
+	
+	private Map<Integer, VehicleModel> _checkLoad(int deptId) {
+		if (!checkLoad(_controllerKey(deptId)))
+			return null;
+		Map<Integer, VehicleModel> map = dao.getByDeptId(deptId);
+		if (!CollectionUtil.isEmpty(map))
+			flush(map);
+		return map;
+	}
+	
+	@Override
+	public void flush(VehicleModel entity) {
+		redis.hmsset(redisKey, entity, serializer, _deptSetKey(entity.getDeptId()));
+	}
+	
+	@Override
+	public void flush(Map<Integer, VehicleModel> entities) {
+		Map<Integer, List<VehicleModel>> map = new HashMap<Integer, List<VehicleModel>>();
+		for (VehicleModel temp : entities.values()) {
+			int tid = temp.getDeptId();
+			List<VehicleModel> list = map.get(tid);
+			if (null == list) {
+				list = new ArrayList<VehicleModel>();
+				map.put(tid, list);
+			}
+			list.add(temp);
 		}
-		return models;
+		for (Entry<Integer, List<VehicleModel>> entry : map.entrySet())
+			redis.hmsset(redisKey, entry.getValue(), serializer, _deptSetKey(entry.getKey()));
 	}
 	
-	public String _setKey(int deptId) { 
-		return MessageFormat.format(SET, String.valueOf(deptId));
+	public String _deptSetKey(int deptId) { 
+		return MessageFormat.format(DEPT_SET, String.valueOf(deptId));
 	}
 	
-	public String _setControllerKey(int deptId) { 
-		return MessageFormat.format(SET_CONTROLLER, String.valueOf(deptId));
+	public String _controllerKey(int deptId) { 
+		return MessageFormat.format(CONTROLLER, String.valueOf(deptId));
 	}
 }

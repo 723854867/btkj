@@ -1,7 +1,5 @@
 package org.btkj.community.mybatis;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.btkj.community.mybatis.dao.ArticleDao;
@@ -84,8 +82,8 @@ public class Tx {
 	@Transactional
 	public void articlesAdd(App app, String title, String icon, String link) { 
 		if (app.getMaxArticlesCount() > 0) {
-			List<Article> list = articleDao.getByAppIdForUpdate(app.getId());
-			if (list.size() >= app.getMaxArticlesCount())
+			int num = articleDao.countByAppIdForUpdate(app.getId());
+			if (num >= app.getMaxArticlesCount())
 				throw new BusinessException(BtkjCode.ARTICLE_NUM_MAXIMUM);
 		}
 		Article article = EntityGenerator.article(app, title, icon, link);

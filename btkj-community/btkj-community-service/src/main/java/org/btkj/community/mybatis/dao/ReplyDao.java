@@ -1,9 +1,10 @@
 package org.btkj.community.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ReplySQLProvider;
@@ -17,8 +18,9 @@ public interface ReplyDao extends DBMapper<Integer, Reply> {
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(Reply entity);
 	
+	@MapKey("id")
 	@SelectProvider(type = ReplySQLProvider.class, method = "getByQuizId")
-	List<Reply> getByQuizId(int quizId);
+	Map<Integer, Reply> getByQuizId(int quizId);
 
 	@DeleteProvider(type = ReplySQLProvider.class, method = "deleteByQuizId")
 	void deleteByQuizId(int quizId);

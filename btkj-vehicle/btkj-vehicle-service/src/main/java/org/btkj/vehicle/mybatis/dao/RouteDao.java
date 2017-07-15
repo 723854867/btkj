@@ -1,7 +1,8 @@
 package org.btkj.vehicle.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.vehicle.mybatis.provider.RouteSQLProvider;
 import org.btkj.vehicle.pojo.entity.Route;
@@ -13,6 +14,7 @@ public interface RouteDao extends DBMapper<String, Route> {
 	@SelectProvider(type = RouteSQLProvider.class, method = "getByKey")
 	Route getByKey(String key);
 	
+	@MapKey("key")
 	@SelectProvider(type = RouteSQLProvider.class, method = "getByTid")
-	List<Route> getByTid(int tid);
+	Map<String, Route> getByTid(int tid);
 }

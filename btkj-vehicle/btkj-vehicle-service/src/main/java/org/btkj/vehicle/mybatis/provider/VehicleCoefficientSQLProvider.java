@@ -1,19 +1,14 @@
 package org.btkj.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class VehicleCoefficientSQLProvider {
+public class VehicleCoefficientSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "vehicle_coefficient";
 	
-	public String getByKey(int id) {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("id=#{key}");
-			}
-		}.toString();
+	public VehicleCoefficientSQLProvider() {
+		super(TABLE, "id");
 	}
 
 	public String getByTid() {
@@ -21,7 +16,7 @@ public class VehicleCoefficientSQLProvider {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("tid=#{tid}");
+				WHERE("`tid`=#{tid}");
 			}
 		}.toString();
 	}
@@ -30,13 +25,13 @@ public class VehicleCoefficientSQLProvider {
 		return new SQL() {
 			{
 				INSERT_INTO(TABLE);
-				VALUES("tid", "#{tid}");
-				VALUES("type", "#{type}");
-				VALUES("name", "#{name}");
-				VALUES("comparison", "#{comparison}");
-				VALUES("comparable_value", "#{comparableValue}");
-				VALUES("created", "#{created}");
-				VALUES("updated", "#{updated}");
+				VALUES("`tid`", "#{tid}");
+				VALUES("`type`", "#{type}");
+				VALUES("`name`", "#{name}");
+				VALUES("`comparison`", "#{comparison}");
+				VALUES("`comparable_value`", "#{comparableValue}");
+				VALUES("`created`", "#{created}");
+				VALUES("`updated`", "#{updated}");
 			}
 		}.toString();
 	}
@@ -46,19 +41,10 @@ public class VehicleCoefficientSQLProvider {
 			{
 				UPDATE(TABLE);
 				SET("`name`=#{name}");
-				SET("comparison=#{comparison}");
-				SET("comparable_value=#{comparableValue}");
-				SET("updated=#{updated}");
-				WHERE("id=#{id}");
-			}
-		}.toString();
-	}
-	
-	public String delete() {
-		return new SQL() {
-			{
-				DELETE_FROM(TABLE);
-				WHERE("id=#{key}");
+				SET("`comparison`=#{comparison}");
+				SET("`comparable_value`=#{comparableValue}");
+				SET("`updated`=#{updated}");
+				WHERE("`id`=#{id}");
 			}
 		}.toString();
 	}

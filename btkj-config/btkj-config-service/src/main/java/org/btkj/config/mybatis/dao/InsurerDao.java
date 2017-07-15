@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.InsurerSQLProvider;
 import org.btkj.pojo.entity.Insurer;
@@ -24,5 +23,5 @@ public interface InsurerDao extends DBMapper<Integer, Insurer> {
 	@Override
 	@MapKey("id")
 	@SelectProvider(type = InsurerSQLProvider.class, method = "getByKeys")
-	Map<Integer, Insurer> getByKeys(@Param("keys") Collection<Integer> keys);
+	Map<Integer, Insurer> getByKeys(Collection<Integer> keys);
 }

@@ -1,8 +1,9 @@
 package org.btkj.community.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ArticleSQLProvider;
@@ -20,11 +21,12 @@ public interface ArticleDao extends DBMapper<Integer, Article> {
 	@SelectProvider(type = ArticleSQLProvider.class, method = "getByKey")
 	Article getByKey(Integer key);
 	
-	@SelectProvider(type = ArticleSQLProvider.class, method = "getByAppIdForUpdate")
-	List<Article> getByAppIdForUpdate(int appId);
+	@SelectProvider(type = ArticleSQLProvider.class, method = "countByAppIdForUpdate")
+	int countByAppIdForUpdate(int appId);
 	
+	@MapKey("id")
 	@SelectProvider(type = ArticleSQLProvider.class, method = "getByAppId")
-	List<Article> getByAppId(int appId);
+	Map<Integer, Article> getByAppId(int appId);
 	
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "update")

@@ -26,19 +26,12 @@ public interface EmployeeDao extends DBMapper<Integer, Employee> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByKey")
 	Employee getByKey(Integer key);
 	
-	@Override
-	@UpdateProvider(type = EmployeeSQLProvider.class, method = "update")
-	void update(Employee entity);
-	
-	@MapKey("id")
-	@SelectProvider(type = EmployeeSQLProvider.class, method = "getAll")
-	Map<Integer, Employee> getAll();
-	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidAndUid")
 	Employee getByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);
 	
+	@MapKey("id")
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByUid")
-	List<Employee> getByUid(@Param("uid") int uid);
+	Map<Integer, Employee> getByUid(@Param("uid") int uid);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidForUpdate")
 	List<Employee> getByTidForUpdate(int tid);
@@ -68,4 +61,8 @@ public interface EmployeeDao extends DBMapper<Integer, Employee> {
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "paging")
 	List<EmployeePagingInfo> paging(EmployeeSearcher searcher);
+	
+	@Override
+	@UpdateProvider(type = EmployeeSQLProvider.class, method = "update")
+	void update(Employee entity);
 }

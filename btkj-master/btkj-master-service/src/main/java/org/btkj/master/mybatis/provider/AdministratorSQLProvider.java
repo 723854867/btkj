@@ -1,18 +1,10 @@
 package org.btkj.master.mybatis.provider;
 
-import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class AdministratorSQLProvider {
+public class AdministratorSQLProvider extends SQLProvider {
 	
-	private static final String TABLE				= "administrator";
-
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("id=#{id}");
-			}
-		}.toString();
+	public AdministratorSQLProvider() {
+		super("administrator", "id");
 	}
 }

@@ -1,10 +1,15 @@
 package org.btkj.bihu.vehicle.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class TenantConfigSQLProvider {
+public class TenantConfigSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "tenant_config";
+	
+	public TenantConfigSQLProvider() {
+		super(TABLE, "tid");
+	}
 	
 	public String insert() {
 		return new SQL() {
@@ -19,16 +24,6 @@ public class TenantConfigSQLProvider {
 		}.toString();
 	}
 	
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("tid=#{tid}");
-			}
-		}.toString();
-	}
-	
 	public String update() {
 		return new SQL(){
 			{
@@ -37,15 +32,6 @@ public class TenantConfigSQLProvider {
 				SET("`key`=#{key}");
 				SET("`updated`=#{updated}");
 				WHERE("`tid`=#{tid}");
-			}
-		}.toString();
-	}
-	
-	public String delete() { 
-		return new SQL() {
-			{
-				DELETE_FROM(TABLE);
-				WHERE("tid=#{tid}");
 			}
 		}.toString();
 	}

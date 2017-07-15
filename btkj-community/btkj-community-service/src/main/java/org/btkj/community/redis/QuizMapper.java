@@ -2,7 +2,6 @@ package org.btkj.community.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +20,10 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 	
-	private String LOAD_LOCK						= "lock:quiz:{0}";							
-	private String TIME_BASED_SET					= "zset:quiz:time:{0}";						// 基于时间的排序列表
-	private String REPLY_BASED_SET					= "zset:reply:time:{0}";					// 基于回复数的排序列表
-	private String BROWSE_BASED_SET					= "zset:browse:time:{0}";					// 基于浏览数的排序列表
+	private String TIME_BASED_SET					= "zset:quiz:time:{0}";						// 时间的排序列表
+	private String REPLY_BASED_SET					= "zset:quiz:reply:{0}";					// 回复数的排序列表
+	private String BROWSE_BASED_SET					= "zset:quiz:browse:{0}";					// 浏览数的排序列表
+	private String APP_CONTROLLER					= "controller:quiz:{0}";					// 基于平台的缓存控制键
 
 	public QuizMapper() {
 		super(new ByteProtostuffSerializer<Quiz>(), "hash:db:quiz");
@@ -43,33 +42,33 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 	}
 	
 	private void _checkLoad(int appId) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(appId), _loadKey(appId)))
+		if (!checkLoad(_appControllerField(appId)))
 			return;
-		List<Quiz> quizs = dao.getByAppId(appId);
-		if (CollectionUtil.isEmpty(quizs))
+		Map<Integer, Quiz> map = dao.getByAppId(appId);
+		if (CollectionUtil.isEmpty(map))
 			return;
-		flush(quizs);
+		flush(map);
 	}
 	
 	@Override
-	public void flush(Quiz model) {
-		Map<String, Double> zsetParams = new HashMap<String, Double>();
-		zsetParams.put(_setKey(model.getAppId(), SortCol.TIME), Double.valueOf(model.getCreated()));
-		zsetParams.put(_setKey(model.getAppId(), SortCol.REPLY_NUM), Double.valueOf(model.getReplyNum()));
-		zsetParams.put(_setKey(model.getAppId(), SortCol.BROWSE_NUM), Double.valueOf(model.getBrowseNum()));
-		redis.hmzset(redisKey, model, zsetParams, serializer);
+	public void flush(Quiz entity) {
+		Map<String, Double> scores = new HashMap<String, Double>();
+		scores.put(_setKey(entity.getAppId(), SortCol.TIME), Double.valueOf(entity.getCreated()));
+		scores.put(_setKey(entity.getAppId(), SortCol.REPLY_NUM), Double.valueOf(entity.getReplyNum()));
+		scores.put(_setKey(entity.getAppId(), SortCol.BROWSE_NUM), Double.valueOf(entity.getBrowseNum()));
+		redis.hmzset(redisKey, entity, scores, serializer);
 	}
 	
 	@Override
-	public void remove(Quiz model) {
-		int appId = model.getAppId();
-		redis.hmzdel(redisKey, model.key(), _setKey(appId, SortCol.TIME), _setKey(appId, SortCol.REPLY_NUM), _setKey(appId, SortCol.BROWSE_NUM));
+	public void remove(Quiz entity) {
+		int appId = entity.getAppId();
+		redis.hmzdel(redisKey, entity.key(), _setKey(appId, SortCol.TIME), _setKey(appId, SortCol.REPLY_NUM), _setKey(appId, SortCol.BROWSE_NUM));
 	}
 	
 	@Override
-	public void flush(Collection<Quiz> models) {
+	public void flush(Map<Integer, Quiz> entities) {
 		Map<Integer, List<Quiz>> map = new HashMap<Integer, List<Quiz>>();
-		for (Quiz quiz : models) {
+		for (Quiz quiz : entities.values()) {
 			int appId = quiz.getAppId();
 			List<Quiz> list = map.get(appId);
 			if (null == list) {
@@ -108,8 +107,8 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 		}
 	}
 	
-	private String _loadKey(int appId) {
-		return MessageFormat.format(LOAD_LOCK, String.valueOf(appId));
+	private String _appControllerField(int appId) {
+		return MessageFormat.format(APP_CONTROLLER, String.valueOf(appId));
 	}
 	
 	private String _setKey(int appId, SortCol col) {

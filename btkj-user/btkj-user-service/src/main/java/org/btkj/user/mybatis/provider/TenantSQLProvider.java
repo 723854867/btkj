@@ -1,24 +1,28 @@
 package org.btkj.user.mybatis.provider;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.TenantSearcher;
+import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.SqlUtil;
 import org.rapid.util.common.enums.SORT_TYPE;
 
-public class TenantSQLProvider {
+public class TenantSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "tenant";
+	
+	public TenantSQLProvider() {
+		super(TABLE, "tid");
+	}
 	
 	public String insert() { 
 		return new SQL() {
 			{
 				INSERT_INTO(TABLE);
 				VALUES("`name`", "#{name}");
-				VALUES("app_id", "#{appId}");
-				VALUES("region", "#{region}");
+				VALUES("`app_id`", "#{appId}");
+				VALUES("`region`", "#{region}");
 				VALUES("`team_depth`", "#{teamDepth}");
 				VALUES("`license_face`", "#{licenseFace}");
 				VALUES("`license_back`", "#{licenseBack}");
@@ -42,39 +46,10 @@ public class TenantSQLProvider {
 				SET("`bonus_scale_count_mod`=#{bonusScaleCountMod}");
 				SET("`bonus_scale_reward_mod`=#{bonusScaleRewardMod}");
 				SET("`jian_jie_fetch_time`=#{jianJieFetchTime}");
-				SET("updated=#{updated}");
-				WHERE("tid=#{tid}");
+				SET("`updated`=#{updated}");
+				WHERE("`tid`=#{tid}");
 			}
 		}.toString();
-	}
-	
-	public String getAll() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-			}
-		}.toString();
-	}
-	
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("tid=#{key}");
-			}
-		}.toString();
-	}
-	
-	public String getByKeys(Map<String, List<Integer>> params) {
-		List<Integer> keys = params.get("keys");
-		StringBuilder builder = new StringBuilder("select * from tenant where tid in(");
-		for (int key : keys)
-			builder.append(key).append(",");
-		builder.deleteCharAt(builder.length() - 1);
-		builder.append(")");
-		return builder.toString();
 	}
 	
 	public String countByAppId() {
@@ -82,7 +57,7 @@ public class TenantSQLProvider {
 			{
 				SELECT("COUNT(*)");
 				FROM(TABLE);
-				WHERE("app_id=#{appId}");
+				WHERE("`app_id`=#{appId}");
 			}
 		}.toString();
 	}

@@ -26,10 +26,6 @@ public interface TenantDao extends DBMapper<Integer, Tenant> {
 	@UpdateProvider(type = TenantSQLProvider.class, method = "update")
 	void update(Tenant entity);
 	
-	@MapKey("tid")
-	@SelectProvider(type = TenantSQLProvider.class, method = "getAll")
-	Map<Integer, Tenant> getAll();
-	
 	@Override
 	@SelectProvider(type = TenantSQLProvider.class, method = "getByKey")
 	Tenant getByKey(Integer key);

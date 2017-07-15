@@ -20,7 +20,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-class CUSTOMER_LIST extends UserAction {
+public class CUSTOMER_LIST extends UserAction {
 	
 	@Resource
 	private UserService userService;

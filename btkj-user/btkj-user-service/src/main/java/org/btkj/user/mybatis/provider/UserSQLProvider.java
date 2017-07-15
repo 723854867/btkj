@@ -1,28 +1,32 @@
 package org.btkj.user.mybatis.provider;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.UserSearcher;
+import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SORT_TYPE;
 
-public class UserSQLProvider {
+public class UserSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "user";
+	
+	public UserSQLProvider() {
+		super(TABLE, "uid");
+	}
 	
 	public String insert() {
 		return new SQL() {
 			{
 				INSERT_INTO(TABLE);
-				VALUES("app_id", "#{appId}");
-				VALUES("mobile", "#{mobile}");
-				VALUES("pwd", "#{pwd}");
-				VALUES("app_login_time", "#{appLoginTime}");
-				VALUES("pc_login_time", "#{pcLoginTime}");
-				VALUES("created", "#{created}");
-				VALUES("updated", "#{updated}");
+				VALUES("`app_id`", "#{appId}");
+				VALUES("`mobile`", "#{mobile}");
+				VALUES("`pwd`", "#{pwd}");
+				VALUES("`app_login_time`", "#{appLoginTime}");
+				VALUES("`pc_login_time`", "#{pcLoginTime}");
+				VALUES("`created`", "#{created}");
+				VALUES("`updated`", "#{updated}");
 			}
 		}.toString();
 	}
@@ -31,16 +35,16 @@ public class UserSQLProvider {
 		return new SQL() {
 			{
 				UPDATE(TABLE);
-				SET("pwd=#{pwd}");
-				SET("name=#{name}");
-				SET("avatar=#{avatar}");
-				SET("identity=#{identity}");
-				SET("identity_face=#{identityFace}");
-				SET("identity_back=#{identityBack}");
-				SET("app_login_time=#{appLoginTime}");
-				SET("pc_login_time=#{pcLoginTime}");
-				SET("updated=#{updated}");
-				WHERE("uid=#{uid}");
+				SET("`pwd`=#{pwd}");
+				SET("`name`=#{name}");
+				SET("`avatar`=#{avatar}");
+				SET("`identity`=#{identity}");
+				SET("`identity_face`=#{identityFace}");
+				SET("`identity_back`=#{identityBack}");
+				SET("`app_login_time`=#{appLoginTime}");
+				SET("`pc_login_time`=#{pcLoginTime}");
+				SET("`updated`=#{updated}");
+				WHERE("`uid`=#{uid}");
 			}
 		}.toString();
 	}
@@ -50,31 +54,11 @@ public class UserSQLProvider {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("app_id=#{appId}");
+				WHERE("`app_id`=#{appId}");
 				AND();
-				WHERE("mobile=#{mobile}");
+				WHERE("`mobile`=#{mobile}");
 			}
 		}.toString();
-	}
-	
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("uid=#{key}");
-			}
-		}.toString();
-	}
-	
-	public String getByKeys(Map<String, List<Integer>> params) {
-		List<Integer> keys = params.get("keys");
-		StringBuilder builder = new StringBuilder("select * from user where uid in(");
-		for (int key : keys)
-			builder.append(key).append(",");
-		builder.deleteCharAt(builder.length() - 1);
-		builder.append(")");
-		return builder.toString();
 	}
 	
 	public String count(UserSearcher searcher) {

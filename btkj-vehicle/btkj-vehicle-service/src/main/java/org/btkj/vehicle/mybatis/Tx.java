@@ -1,7 +1,7 @@
 package org.btkj.vehicle.mybatis;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -43,8 +43,8 @@ public class Tx {
 
 	@Transactional
 	public TxCallback coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name) {
-		List<VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
-		Iterator<VehicleCoefficient> itr = coefficients.iterator();
+		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
+		Iterator<VehicleCoefficient> itr = coefficients.values().iterator();
 		VehicleCoefficient coefficient = null;
 		while (itr.hasNext()) {
 			VehicleCoefficient temp = itr.next();
@@ -56,7 +56,7 @@ public class Tx {
 		}
 		if (null == coefficient)
 			throw new BusinessException(BtkjCode.COEFFICIENT_NOT_EXIST);
-		for (VehicleCoefficient temp : coefficients) {
+		for (VehicleCoefficient temp : coefficients.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(symbol, value, val))
@@ -82,10 +82,10 @@ public class Tx {
 	
 	@Transactional
 	public TxCallback coefficientAdd(int tid, CoefficientType type, ComparisonSymbol symbol, String[] value, String name) {
-		List<VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
+		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
 		if (type.isCustom() && coefficients.size() >= type.maxCustomNum())
 			throw new BusinessException(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
-		for (VehicleCoefficient temp : coefficients) {
+		for (VehicleCoefficient temp : coefficients.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(symbol, value, val))
@@ -107,10 +107,10 @@ public class Tx {
 	
 	@Transactional
 	public TxCallback bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] cval) {
-		List<BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
+		Map<Integer, BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
 		if (configs.size() >= GlobalConfigContainer.getGlobalConfig().getMaxBonusScaleConfig())
 			throw new BusinessException(BtkjCode.BONUS_SCALE_CONFIG_MAXMIUM);
-		for (BonusScaleConfig temp : configs) {
+		for (BonusScaleConfig temp : configs.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(symbol, cval, val))
@@ -130,8 +130,8 @@ public class Tx {
 	}
 	
 	public TxCallback bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] cval) {
-		List<BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
-		Iterator<BonusScaleConfig> itr = configs.iterator();
+		Map<Integer, BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
+		Iterator<BonusScaleConfig> itr = configs.values().iterator();
 		BonusScaleConfig config = null;
 		while (itr.hasNext()) {
 			BonusScaleConfig temp = itr.next();
@@ -143,7 +143,7 @@ public class Tx {
 		}
 		if (null == config)
 			throw new BusinessException(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
-		for (BonusScaleConfig temp : configs) {
+		for (BonusScaleConfig temp : configs.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(symbol, cval, val))

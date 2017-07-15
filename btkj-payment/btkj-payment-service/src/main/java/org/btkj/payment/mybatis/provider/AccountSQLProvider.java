@@ -1,18 +1,10 @@
 package org.btkj.payment.mybatis.provider;
 
-import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class AccountSQLProvider {
+public class AccountSQLProvider extends SQLProvider {
 	
-	private static final String TABLE			= "account";
-
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("employee_id=#{employeeId}");
-			}
-		}.toString();
+	public AccountSQLProvider() {
+		super("account", "employee_id");
 	}
 }

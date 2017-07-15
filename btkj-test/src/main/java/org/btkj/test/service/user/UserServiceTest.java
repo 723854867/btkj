@@ -38,17 +38,17 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testAppGet() {
-		Map<Integer, User> amp1 = userDao.getAll();
-		for (Entry<Integer, User> entry : amp1.entrySet()) {
-			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
-		}
-		Set<Integer> set1 = new HashSet<Integer>();
-		set1.add(1);
-		set1.add(2);
-		amp1 = userDao.getByKeys(set1);
-		for (Entry<Integer, User> entry : amp1.entrySet()) {
-			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
-		}
+//		Map<Integer, User> amp1 = userDao.getAll();
+//		for (Entry<Integer, User> entry : amp1.entrySet()) {
+//			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
+//		}
+//		Set<Integer> set1 = new HashSet<Integer>();
+//		set1.add(1);
+//		set1.add(2);
+//		amp1 = userDao.getByKeys(set1);
+//		for (Entry<Integer, User> entry : amp1.entrySet()) {
+//			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
+//		}
 		
 		Map<Integer, App> map = appDao.getAll();
 		for (Entry<Integer, App> entry : map.entrySet()) {

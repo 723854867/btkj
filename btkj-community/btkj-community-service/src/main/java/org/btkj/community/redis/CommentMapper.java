@@ -2,7 +2,6 @@ package org.btkj.community.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +19,16 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> {
 	
-	private String LOAD_LOCK					= "lock:comment:{0}";
-	private String TIME_BASED_ZSET				= "zset:comment:{0}";			// 评论列表
-	
+	private String TIME_ZSET					= "zset:comment:time:{0}";		// 时间排序评论列表
+	private String ARTICLE_CONTROLLER			= "controller:comment:{0}";		// 基于咨询的缓存列表
+
 	public CommentMapper() {
 		super(new ByteProtostuffSerializer<Comment>(), "hash:db:comment");
 	}
 	
 	public Result<Pager<Comment>> comments(int articleId, int page, int pageSize) {
 		_checkLoad(articleId);
-		List<byte[]> list = redis.hpaging(_zsetKey(articleId), redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
+		List<byte[]> list = redis.hpaging(_timeZsetKey(articleId), redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));
@@ -40,33 +39,33 @@ public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> 
 	}
 	
 	public void deleteByArticleId(int articleId) {
-		redis.hmzdrop(redisKey, _zsetKey(articleId));
+		redis.hmzdrop(redisKey, _timeZsetKey(articleId));
 		dao.deleteByArticleId(articleId);
 	}
 	
 	private void _checkLoad(int articleId) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(articleId), _loadKey(articleId)))
+		if (!checkLoad(_articleControllerField(articleId)))
 			return;
-		List<Comment> list = dao.getByArticleId(articleId);
-		if (CollectionUtil.isEmpty(list))
+		Map<Integer, Comment> map = dao.getByArticleId(articleId);
+		if (CollectionUtil.isEmpty(map))
 			return;
-		flush(list);
+		flush(map);
 	}
 	
 	@Override
 	public void flush(Comment entity) {
-		redis.hmzset(redisKey, entity, _zsetKey(entity.getArticleId()), entity.getCreated(), serializer);
+		redis.hmzset(redisKey, entity, _timeZsetKey(entity.getArticleId()), entity.getCreated(), serializer);
 	}
 	
 	@Override
-	public void remove(Comment model) {
-		redis.hmzdel(redisKey, model.key(), _zsetKey(model.getArticleId()));
+	public void remove(Comment entity) {
+		redis.hmzdel(redisKey, entity.key(), _timeZsetKey(entity.getArticleId()));
 	}
 	
 	@Override
-	public void flush(Collection<Comment> models) {
+	public void flush(Map<Integer, Comment> models) {
 		Map<Integer, List<Comment>> map = new HashMap<Integer, List<Comment>>();
-		for (Comment comment : models) {
+		for (Comment comment : models.values()) {
 			int articleId = comment.getArticleId();
 			List<Comment> list = map.get(articleId);
 			if (null == list) {
@@ -75,27 +74,24 @@ public class CommentMapper extends RedisDBAdapter<Integer, Comment, CommentDao> 
 			}
 			list.add(comment);
 		}
-		
 		for (Entry<Integer, List<Comment>> entry : map.entrySet()){
 			int article = entry.getKey();
 			Comment[] comments = entry.getValue().toArray(new Comment[]{});
 			Map<String, double[]> zsetParams = new HashMap<String, double[]>();
-			
-			//时间排序
 			double[] scores = new double[comments.length];
 			int idx = 0;
 			for (int i = 0, len = comments.length; i < len; i++)
 				scores[idx++] = comments[i].getCreated();
-			zsetParams.put(_zsetKey(article), scores);
+			zsetParams.put(_timeZsetKey(article), scores);
 			redis.hmzset(redisKey, comments, zsetParams, serializer);
 		}
 	}
 	
-	private String _zsetKey(int articleId) {
-		return MessageFormat.format(TIME_BASED_ZSET, String.valueOf(articleId));
+	private String _timeZsetKey(int articleId) {
+		return MessageFormat.format(TIME_ZSET, String.valueOf(articleId));
 	}
 	
-	private String _loadKey(int articleId) {
-		return MessageFormat.format(LOAD_LOCK, String.valueOf(articleId));
+	private String _articleControllerField(int articleId) {
+		return MessageFormat.format(ARTICLE_CONTROLLER, String.valueOf(articleId));
 	}
 }

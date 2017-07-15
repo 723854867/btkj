@@ -1,9 +1,10 @@
 package org.btkj.community.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.QuizSQLProvider;
@@ -25,8 +26,9 @@ public interface QuizDao extends DBMapper<Integer, Quiz> {
 	@SelectProvider(type = QuizSQLProvider.class, method = "update")
 	void update(Quiz entity);
 	
+	@MapKey("id")
 	@SelectProvider(type = QuizSQLProvider.class, method = "getByAppId")
-	List<Quiz> getByAppId(int appId);
+	Map<Integer, Quiz> getByAppId(int appId);
 
 	@Override
 	@DeleteProvider(type = QuizSQLProvider.class, method = "delete")

@@ -2,7 +2,6 @@ package org.btkj.community.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,8 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 	
-	private String LOAD_LOCK						= "lock:reply:{0}";							
-	private String TIME_BASED_SET					= "zset:reply:time:{0}";						// 基于时间的排序列表
+	private String TIME_ZSET					= "zset:reply:time:{0}";						// 基于时间的排序列表
+	private String QUIZ_CONTROLLER				= "controller:reply:{0}";						// 基于提问的缓存控制键
 
 	public ReplyMapper() {
 		super(new ByteProtostuffSerializer<Reply>(), "hash:db:reply");
@@ -29,7 +28,7 @@ public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 	
 	public Result<Pager<Reply>> paging(int quizId, int page, int pageSize) {
 		_checkLoad(quizId);
-		List<byte[]> list = redis.hpaging(_setKey(quizId), redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
+		List<byte[]> list = redis.hpaging(_timeZsetKey(quizId), redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));
@@ -40,33 +39,33 @@ public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 	}
 	
 	public void deleteByQuizId(int quizId) {
-		redis.hmzdrop(redisKey, _setKey(quizId));
+		redis.hmzdrop(redisKey, _timeZsetKey(quizId));
 		dao.deleteByQuizId(quizId);
 	}
 	
 	private void _checkLoad(int quizId) {
-		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, _loadKey(quizId), _loadKey(quizId)))
+		if (!checkLoad(_quizControllerField(quizId)))
 			return;
-		List<Reply> quizs = dao.getByQuizId(quizId);
-		if (CollectionUtil.isEmpty(quizs))
+		Map<Integer, Reply> map = dao.getByQuizId(quizId);
+		if (CollectionUtil.isEmpty(map))
 			return;
-		flush(quizs);
+		flush(map);
 	}
 	
 	@Override
-	public void flush(Reply model) {
-		redis.hmzset(redisKey, model, _setKey(model.getQuizId()), model.getCreated(), serializer);
+	public void flush(Reply entity) {
+		redis.hmzset(redisKey, entity, _timeZsetKey(entity.getQuizId()), entity.getCreated(), serializer);
 	}
 	
 	@Override
-	public void remove(Reply model) {
-		redis.hmzdel(redisKey, model.key(), _setKey(model.getQuizId()));
+	public void remove(Reply entity) {
+		redis.hmzdel(redisKey, entity.key(), _timeZsetKey(entity.getQuizId()));
 	}
 	
 	@Override
-	public void flush(Collection<Reply> models) {
+	public void flush(Map<Integer, Reply> entities) {
 		Map<Integer, List<Reply>> map = new HashMap<Integer, List<Reply>>();
-		for (Reply reply : models) {
+		for (Reply reply : entities.values()) {
 			int quizId = reply.getQuizId();
 			List<Reply> list = map.get(quizId);
 			if (null == list) {
@@ -75,27 +74,24 @@ public class ReplyMapper extends RedisDBAdapter<Integer, Reply, ReplyDao> {
 			}
 			list.add(reply);
 		}
-		
 		for (Entry<Integer, List<Reply>> entry : map.entrySet()){
 			int quizId = entry.getKey();
 			Reply[] replies = entry.getValue().toArray(new Reply[]{});
 			Map<String, double[]> zsetParams = new HashMap<String, double[]>();
-			
-			//时间排序
 			double[] scores = new double[replies.length];
 			int idx = 0;
 			for (int i = 0, len = replies.length; i < len; i++)
 				scores[idx++] = replies[i].getCreated();
-			zsetParams.put(_setKey(quizId), scores);
+			zsetParams.put(_timeZsetKey(quizId), scores);
 			redis.hmzset(redisKey, replies, zsetParams, serializer);
 		}
 	}
 	
-	private String _setKey(int quizId) {
-		return MessageFormat.format(TIME_BASED_SET, String.valueOf(quizId));
+	private String _timeZsetKey(int quizId) {
+		return MessageFormat.format(TIME_ZSET, String.valueOf(quizId));
 	}
 	
-	private String _loadKey(int quizId) {
-		return MessageFormat.format(LOAD_LOCK, String.valueOf(quizId));
+	private String _quizControllerField(int quizId) {
+		return MessageFormat.format(QUIZ_CONTROLLER, String.valueOf(quizId));
 	}
 }

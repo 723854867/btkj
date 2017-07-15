@@ -37,7 +37,7 @@ public class VehicleOrder implements UniqueModel<String> {
 	public VehicleOrder() {}
 	
 	public VehicleOrder(String batchId, EmployeeForm ef, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
-		this._id = _orderId(tips.getLicense(), employeeId, tid);
+		this._id = _orderId(tips.getLicense(), ef, insurer);
 		this.batchId = batchId;
 		this.employeeId = ef.getEmployee().getId();
 		this.appId = ef.getApp().getId();
@@ -177,7 +177,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		return this._id;
 	}
 
-	private String _orderId(String license, int employeeId, int insurerId) {
-		return employeeId + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurerId;
+	private String _orderId(String license, EmployeeForm ef, Insurer insurer) {
+		return ef.getEmployee().getId() + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurer.getId();
 	}
 }

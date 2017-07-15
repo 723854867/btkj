@@ -23,10 +23,6 @@ public interface UserDao extends DBMapper<Integer, User> {
 	void insert(User entity);
 	
 	@Override
-	@UpdateProvider(type = UserSQLProvider.class, method = "update")
-	void update(User entity);
-	
-	@Override
 	@SelectProvider(type = UserSQLProvider.class, method = "getByKey")
 	User getByKey(Integer key);
 
@@ -36,11 +32,15 @@ public interface UserDao extends DBMapper<Integer, User> {
 	@Override
 	@MapKey("uid")
 	@SelectProvider(type = UserSQLProvider.class, method = "getByKeys")
-	Map<Integer, User> getByKeys(@Param("keys") Collection<Integer> keys);
+	Map<Integer, User> getByKeys(Collection<Integer> keys);
 	
 	@SelectProvider(type = UserSQLProvider.class, method = "count")
 	int count(UserSearcher searcher);
 	
 	@SelectProvider(type = UserSQLProvider.class, method = "paging")
 	List<User> paging(UserSearcher searcher);
+	
+	@Override
+	@UpdateProvider(type = UserSQLProvider.class, method = "update")
+	void update(User entity);
 }

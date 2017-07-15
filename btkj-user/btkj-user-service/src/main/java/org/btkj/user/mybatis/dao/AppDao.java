@@ -18,10 +18,6 @@ public interface AppDao extends DBMapper<Integer, App> {
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(App entity);
 	
-	@Override
-	@UpdateProvider(type = AppSQLProvider.class, method = "update")
-	void update(App entity);
-
 	@MapKey("id")
 	@SelectProvider(type = AppSQLProvider.class, method = "getAll")
 	Map<Integer, App> getAll();
@@ -31,5 +27,9 @@ public interface AppDao extends DBMapper<Integer, App> {
 	App getByKey(Integer key);
 	
 	@SelectProvider(type = AppSQLProvider.class, method = "getByKeyForUpdate")
-	App getByKeyForUpdate(Integer id);
+	App getByKeyForUpdate(Integer key);
+	
+	@Override
+	@UpdateProvider(type = AppSQLProvider.class, method = "update")
+	void update(App entity);
 }

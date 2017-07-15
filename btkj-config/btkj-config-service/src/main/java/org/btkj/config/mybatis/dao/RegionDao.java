@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.RegionSQLProvider;
 import org.btkj.pojo.entity.Region;
@@ -28,5 +27,5 @@ public interface RegionDao extends DBMapper<Integer, Region> {
 	@Override
 	@MapKey("id")
 	@SelectProvider(type = RegionSQLProvider.class, method = "getByKeys")
-	Map<Integer, Region> getByKeys(@Param("keys") Collection<Integer> keys);
+	Map<Integer, Region> getByKeys(Collection<Integer> keys);
 }

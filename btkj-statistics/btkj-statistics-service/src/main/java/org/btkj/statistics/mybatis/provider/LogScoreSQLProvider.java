@@ -1,10 +1,15 @@
 package org.btkj.statistics.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class LogScoreSQLProvider {
+public class LogScoreSQLProvider extends SQLProvider {
 	
 	private static final String TABLE			= "log_score";
+	
+	public LogScoreSQLProvider() {
+		super(TABLE, "id");
+	}
 	
 	public String scoreReward() {
 		return new SQL() {

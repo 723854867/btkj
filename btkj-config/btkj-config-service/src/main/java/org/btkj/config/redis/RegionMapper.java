@@ -4,9 +4,7 @@ import org.btkj.config.mybatis.dao.RegionDao;
 import org.btkj.pojo.entity.Region;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
-import org.springframework.stereotype.Component;
 
-@Component("regionMapper")
 public class RegionMapper extends RedisDBAdapter<Integer, Region, RegionDao> {
 	
 	public RegionMapper() {

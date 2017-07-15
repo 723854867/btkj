@@ -5,39 +5,34 @@ import java.util.Map.Entry;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.CustomerSearcher;
+import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.SORT_TYPE;
 
-public class CustomerSQLProvider {
+public class CustomerSQLProvider extends SQLProvider {
 
 	private static final String TABLE			= "customer";
-
-	public String getByKey() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("id=#{key}");
-			}
-		}.toString();
-	}
 	
+	public CustomerSQLProvider() {
+		super(TABLE, "id");
+	}
+
 	public String insert() {
 		return new SQL() {
 			{
 				INSERT_INTO(TABLE);
-				VALUES("uid", "#{uid}");
-				VALUES("identity", "#{identity}");
-				VALUES("name", "#{name}");
-				VALUES("mobile", "#{mobile}");
-				VALUES("license", "#{license}");
-				VALUES("province", "#{province}");
-				VALUES("city", "#{city}");
-				VALUES("county", "#{county}");
-				VALUES("address", "#{address}");
-				VALUES("memo", "#{memo}");
-				VALUES("created", "#{created}");
-				VALUES("updated", "#{updated}");
+				VALUES("`uid`", "#{uid}");
+				VALUES("`identity`", "#{identity}");
+				VALUES("`name`", "#{name}");
+				VALUES("`mobile`", "#{mobile}");
+				VALUES("`license`", "#{license}");
+				VALUES("`province`", "#{province}");
+				VALUES("`city`", "#{city}");
+				VALUES("`county`", "#{county}");
+				VALUES("`address`", "#{address}");
+				VALUES("`memo`", "#{memo}");
+				VALUES("`created`", "#{created}");
+				VALUES("`updated`", "#{updated}");
 			}
 		}.toString();
 	}
@@ -53,7 +48,7 @@ public class CustomerSQLProvider {
 	}
 	
 	public String paging(CustomerSearcher searcher) {
-		StringBuilder builder = new StringBuilder("SELECT COUNT(*) FROM customer WHERE uid=#{uid} ");
+		StringBuilder builder = new StringBuilder("SELECT * FROM customer WHERE uid=#{uid} ");
 		Map<String, String> params = searcher.params();
 		if (null != params) {
 			for (Entry<String, String> entry : params.entrySet()) 

@@ -1,8 +1,9 @@
 package org.btkj.vehicle.mybatis.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -21,11 +22,13 @@ public interface BonusScaleConfigDao extends DBMapper<Integer, BonusScaleConfig>
 	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "getByKey")
 	BonusScaleConfig getByKey(Integer key);
 	
+	@MapKey("id")
 	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "getByTid")
-	List<BonusScaleConfig> getByTid(int tid);
+	Map<Integer, BonusScaleConfig> getByTid(int tid);
 	
+	@MapKey("id")
 	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "getByTidForUpdate")
-	List<BonusScaleConfig> getByTidForUpdate(int tid);
+	Map<Integer, BonusScaleConfig> getByTidForUpdate(int tid);
 	
 	@Override
 	@UpdateProvider(type = BonusScaleConfigSQLProvider.class, method = "update")
