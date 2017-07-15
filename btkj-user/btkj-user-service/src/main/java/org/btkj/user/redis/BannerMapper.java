@@ -28,8 +28,8 @@ public class BannerMapper extends RedisDBAdapter<Integer, Banner, BannerDao> {
 		Map<Integer, Banner> map = _checkLoad(appId, tid);
 		if (null == map) {
 			List<byte[]> list = redis.hmsget(redisKey, _appTenantSetKey(appId, tid));
+			map = new HashMap<Integer, Banner>();
 			if (null != list) {
-				map = new HashMap<Integer, Banner>();
 				for (byte[] buffer : list) {
 					Banner banner = serializer.antiConvet(buffer);
 					map.put(banner.getId(), banner);
