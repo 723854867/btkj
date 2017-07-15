@@ -16,42 +16,6 @@ public class TenantSQLProvider extends SQLProvider {
 		super(TABLE, "tid");
 	}
 	
-	public String insert() { 
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`name`", "#{name}");
-				VALUES("`app_id`", "#{appId}");
-				VALUES("`region`", "#{region}");
-				VALUES("`team_depth`", "#{teamDepth}");
-				VALUES("`license_face`", "#{licenseFace}");
-				VALUES("`license_back`", "#{licenseBack}");
-				VALUES("`service_phone`", "#{servicePhone}");
-				VALUES("`jian_jie_fetch_time`", "#{jianJieFetchTime}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
-	}
-
-	public String update() {
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`name`=#{name}");
-				SET("`jian_jie_id`=#{jianJieId}");
-				SET("`team_depth`=#{teamDepth}");
-				SET("`non_auto_bind`=#{nonAutoBind}");
-				SET("`service_phone`=#{servicePhone}");
-				SET("`bonus_scale_count_mod`=#{bonusScaleCountMod}");
-				SET("`bonus_scale_reward_mod`=#{bonusScaleRewardMod}");
-				SET("`jian_jie_fetch_time`=#{jianJieFetchTime}");
-				SET("`updated`=#{updated}");
-				WHERE("`tid`=#{tid}");
-			}
-		}.toString();
-	}
-	
 	public String countByAppId() {
 		return new SQL() {
 			{

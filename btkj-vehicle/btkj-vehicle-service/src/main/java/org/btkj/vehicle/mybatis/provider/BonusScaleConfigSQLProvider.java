@@ -11,20 +11,6 @@ public class BonusScaleConfigSQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`tid`", "#{tid}");
-				VALUES("`rate`", "#{rate}");
-				VALUES("`comparison`", "#{comparision}");
-				VALUES("`comparable_value`", "#{comparableValue}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
-	}
-	
 	public String getByTid() {
 		return new SQL() {
 			{
@@ -37,18 +23,5 @@ public class BonusScaleConfigSQLProvider extends SQLProvider {
 	
 	public String getByTidForUpdate() {
 		return "SELECT * FROM bonus_scale_config WHERE tid=#{tid} FOR UPDATE";
-	}
-	
-	public String update() {
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`rate`=#{rate}");
-				SET("`comparision`=#{comparision}");
-				SET("`comparable_value`=#{comparableValue}");
-				SET("`updated`=#{updated}");
-				WHERE("`id`=#{key}");
-			}
-		}.toString();
 	}
 }

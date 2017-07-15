@@ -11,31 +11,6 @@ public class QuizSQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`app_id`", "#{appId}");
-				VALUES("`reply_num`", "#{replyNum}");
-				VALUES("`uid`", "#{uid}");
-				VALUES("`browse_num`", "#{browseNum}");
-				VALUES("`content`", "#{content}");
-				VALUES("`created`", "#{created}");
-			}
-		}.toString();
-	}
-	
-	public String update() { 
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`browse_num`=#{browseNum}");
-				SET("`reply_num`=#{replyNum}");
-				WHERE("`id`=#{id}");
-			}
-		}.toString();
-	}
-	
 	public String getByAppId() {
 		return new SQL() {
 			{

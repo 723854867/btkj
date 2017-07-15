@@ -11,18 +11,6 @@ public class ReplySQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`quiz_id`", "#{quizId}");
-				VALUES("`uid`", "#{uid}");
-				VALUES("`content`", "#{content}");
-				VALUES("`created`", "#{created}");
-			}
-		}.toString();
-	}
-
 	public String getByQuizId() {
 		return new SQL() {
 			{

@@ -73,4 +73,22 @@ public class UserServiceTest extends BaseTest {
 	public void testDelete() {
 		appDao.delete(2);
 	}
+	
+	@Test
+	public void testInsert() {
+		User user = new User();
+		user.setAppId(10);
+		userDao.insert(user);
+	}
+	
+	@Test
+	public void testUpdate() {
+		User user = new User();
+		user.setUid(60);
+		user.setAppId(1);
+		user.setMobile("+8617826877008");
+		user.setCreated(10);
+		user.setUpdated(11);
+		userDao.update(user);
+	}
 }

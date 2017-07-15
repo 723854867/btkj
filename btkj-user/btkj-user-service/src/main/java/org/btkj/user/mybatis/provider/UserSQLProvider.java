@@ -16,39 +16,6 @@ public class UserSQLProvider extends SQLProvider {
 		super(TABLE, "uid");
 	}
 	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`app_id`", "#{appId}");
-				VALUES("`mobile`", "#{mobile}");
-				VALUES("`pwd`", "#{pwd}");
-				VALUES("`app_login_time`", "#{appLoginTime}");
-				VALUES("`pc_login_time`", "#{pcLoginTime}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
-	}
-	
-	public String update() { 
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`pwd`=#{pwd}");
-				SET("`name`=#{name}");
-				SET("`avatar`=#{avatar}");
-				SET("`identity`=#{identity}");
-				SET("`identity_face`=#{identityFace}");
-				SET("`identity_back`=#{identityBack}");
-				SET("`app_login_time`=#{appLoginTime}");
-				SET("`pc_login_time`=#{pcLoginTime}");
-				SET("`updated`=#{updated}");
-				WHERE("`uid`=#{uid}");
-			}
-		}.toString();
-	}
-
 	public String getByMobile() {
 		return new SQL() {
 			{

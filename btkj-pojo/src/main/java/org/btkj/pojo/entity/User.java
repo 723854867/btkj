@@ -23,7 +23,7 @@ public class User implements UniqueModel<Integer> {
 	public int getUid() {
 		return uid;
 	}
-
+	
 	public void setUid(int uid) {
 		this.uid = uid;
 	}

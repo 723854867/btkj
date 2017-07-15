@@ -22,16 +22,4 @@ public class BannerSQLProvider extends SQLProvider {
 			}
 		}.toString();
 	}
-	
-	public String update() {
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`image`=#{image}");
-				SET("`link`=#{link}");
-				SET("`updated`=#{updated}");
-				WHERE("`id`=#{id}");
-			}
-		}.toString();
-	}
 }

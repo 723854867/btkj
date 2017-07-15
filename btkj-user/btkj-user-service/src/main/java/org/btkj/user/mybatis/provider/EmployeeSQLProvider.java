@@ -16,32 +16,6 @@ public class EmployeeSQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 
-	public String insert() { 
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`uid`", "#{uid}");
-				VALUES("`tid`", "#{tid}");
-				VALUES("`parent_id`", "#{parentId}");
-				VALUES("`left`", "#{left}");
-				VALUES("`right`", "#{right}");
-				VALUES("`level`", "#{level}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
-	}
-	
-	public String update() {
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`updated`=#{updated}");
-				WHERE("`id`=#{id}");
-			}
-		}.toString();
-	}
-	
 	public String getByTidAndUid() {
 		return new SQL() {
 			{

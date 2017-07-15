@@ -11,18 +11,6 @@ public class CommentSQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`article_id`", "#{articleId}");
-				VALUES("`uid`", "#{uid}");
-				VALUES("`content`", "#{content}");
-				VALUES("`created`", "#{created}");
-			}
-		}.toString();
-	}
-
 	public String getByArticleId() {
 		return new SQL() {
 			{

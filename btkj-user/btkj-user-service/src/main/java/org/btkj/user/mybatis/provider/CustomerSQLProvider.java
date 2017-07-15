@@ -3,7 +3,6 @@ package org.btkj.user.mybatis.provider;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.Consts;
@@ -17,26 +16,6 @@ public class CustomerSQLProvider extends SQLProvider {
 		super(TABLE, "id");
 	}
 
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`uid`", "#{uid}");
-				VALUES("`identity`", "#{identity}");
-				VALUES("`name`", "#{name}");
-				VALUES("`mobile`", "#{mobile}");
-				VALUES("`license`", "#{license}");
-				VALUES("`province`", "#{province}");
-				VALUES("`city`", "#{city}");
-				VALUES("`county`", "#{county}");
-				VALUES("`address`", "#{address}");
-				VALUES("`memo`", "#{memo}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
-	}
-	
 	public String total(CustomerSearcher searcher) {
 		StringBuilder builder = new StringBuilder("SELECT COUNT(*) FROM customer WHERE uid=#{uid} ");
 		Map<String, String> params = searcher.params();

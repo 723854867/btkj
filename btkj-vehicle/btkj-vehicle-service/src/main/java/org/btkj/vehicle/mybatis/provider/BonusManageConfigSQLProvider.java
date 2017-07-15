@@ -8,21 +8,7 @@ public class BonusManageConfigSQLProvider extends SQLProvider {
 	private static final String TABLE			= "bonus_manage_config";
 	
 	public BonusManageConfigSQLProvider() {
-		super(TABLE, "key");
-	}
-	
-	public String insert() {
-		return new SQL() {
-			{
-				INSERT_INTO(TABLE);
-				VALUES("`key`", "#{key}");
-				VALUES("`tid`", "#{tid}");
-				VALUES("`type`", "#{type}");
-				VALUES("`rate`", "#{rate}");
-				VALUES("`created`", "#{created}");
-				VALUES("`updated`", "#{updated}");
-			}
-		}.toString();
+		super(TABLE, "key", false);
 	}
 	
 	public String getByTid() {
@@ -31,17 +17,6 @@ public class BonusManageConfigSQLProvider extends SQLProvider {
 				SELECT("*");
 				FROM(TABLE);
 				WHERE("`tid`=#{tid}");
-			}
-		}.toString();
-	}
-	
-	public String update() {
-		return new SQL() {
-			{
-				UPDATE(TABLE);
-				SET("`rate`=#{rate}");
-				SET("`updated`=#{updated}");
-				WHERE("`key`=#{key}");
 			}
 		}.toString();
 	}

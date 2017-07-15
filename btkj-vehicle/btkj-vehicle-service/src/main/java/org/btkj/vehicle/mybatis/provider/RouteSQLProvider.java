@@ -8,7 +8,7 @@ public class RouteSQLProvider extends SQLProvider {
 	private static final String TABLE			= "route";
 	
 	public RouteSQLProvider() {
-		super(TABLE, "key");
+		super(TABLE, "key", false);
 	}
 
 	public String getByTid() {
