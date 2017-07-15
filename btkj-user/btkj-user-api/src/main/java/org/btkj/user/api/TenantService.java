@@ -1,7 +1,6 @@
 package org.btkj.user.api;
 
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -48,7 +47,7 @@ public interface TenantService {
 	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<?> tenantAdd(App app, Region region, String tname, User user, String licenseFace, String licenseBack, String servicePhone);
+	Result<?> tenantAdd(App app, int region, String tname, User user, String licenseFace, String licenseBack, String servicePhone);
 	
 	/**
 	 * 代理公司列表

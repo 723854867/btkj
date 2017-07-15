@@ -1,6 +1,5 @@
 package org.btkj.test;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -19,13 +18,13 @@ public class Tx {
 	@Transactional
 	public void selectForUpdate(int appId) throws InterruptedException {
 		System.out.println("start to selectForUpdate");
-		userDao.selectForUpdate(appId);
+//		userDao.selectForUpdate(appId);
 		TimeUnit.SECONDS.sleep(10);
 		System.out.println("selectForUpdate finish");
 	}
 	
 	public void selectByAppId(int appId) throws InterruptedException {
-		List<User> list = userDao.selectByAppId(appId);
+//		List<User> list = userDao.selectByAppId(appId);
 		TimeUnit.SECONDS.sleep(3);
 		System.out.println("selectByAppId finish");
 	}

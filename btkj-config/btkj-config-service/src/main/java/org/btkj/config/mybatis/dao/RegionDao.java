@@ -1,8 +1,11 @@
 package org.btkj.config.mybatis.dao;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.RegionSQLProvider;
 import org.btkj.pojo.entity.Region;
@@ -14,14 +17,16 @@ public interface RegionDao extends DBMapper<Integer, Region> {
 	@InsertProvider(type = RegionSQLProvider.class, method = "insert")
 	void insert(Region entity);
 
+	@MapKey("id")
 	@SelectProvider(type = RegionSQLProvider.class, method = "getAll")
-	List<Region> getAll();
+	Map<Integer, Region> getAll();
 	
 	@Override
 	@SelectProvider(type = RegionSQLProvider.class, method = "getByKey")
 	Region getByKey(Integer key);
 	
 	@Override
-	@SelectProvider(type = RegionSQLProvider.class, method = "getWithinKey")
-	List<Region> getWithinKey(List<Integer> keys);
+	@MapKey("id")
+	@SelectProvider(type = RegionSQLProvider.class, method = "getByKeys")
+	Map<Integer, Region> getByKeys(@Param("keys") Collection<Integer> keys);
 }

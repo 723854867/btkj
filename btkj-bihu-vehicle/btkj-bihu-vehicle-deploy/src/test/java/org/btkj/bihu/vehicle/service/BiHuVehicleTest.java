@@ -32,7 +32,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(110000);
 		form.setTenant(tenant);
-		Result<Renewal> result = biHuVehicle.renewal(form, "浙H0155R", "江晨辰");
+		Result<Renewal> result = biHuVehicle.renewal(form, "浙H0155R", "江晨辰", 2);
 		System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(2);
 	}
@@ -47,7 +47,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(110000);
 		form.setTenant(tenant);
-		Result<Renewal> result = biHuVehicle.renewal(form, "LBVFR7908BSE50921", "05207709");
+		Result<Renewal> result = biHuVehicle.renewal(form, "LBVFR7908BSE50921", "05207709", 9);
 		System.out.println(result.getCode());
 		TimeUnit.HOURS.sleep(2);
 	}
@@ -62,7 +62,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(4);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
-		Result<Renewal> result = biHuVehicle.renewal(form, "浙AM396M", "王彬");
+		Result<Renewal> result = biHuVehicle.renewal(form, "浙AM396M", "王彬", 9);
 		if (result.isSuccess()) {
 			Renewal renewal = result.attach();
 			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtil.currentTime()));
@@ -101,7 +101,7 @@ public class BiHuVehicleTest extends BaseTest {
 		tenant.setTid(1);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
-		Result<Renewal> result = biHuVehicle.renewal(form, "浙H0155R", "");
+		Result<Renewal> result = biHuVehicle.renewal(form, "浙H0155R", "", 9);
 		if (result.isSuccess()) {
 			Renewal renewal = result.attach();
 			renewal.getTips().getSchema().setCommercialStart(String.valueOf(DateUtil.currentTime()));

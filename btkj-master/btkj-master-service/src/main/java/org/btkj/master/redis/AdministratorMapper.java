@@ -55,7 +55,7 @@ public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, 
 	private void _checkLoad() {
 		if (!redis.hsetnx(BtkjConsts.CACHE_CONTROLLER_KEY, LOAD_LOCK, LOAD_LOCK))
 			return;
-		List<Administrator> list = dao.getAll();
+		List<Administrator> list = new ArrayList<Administrator>(dao.getAll().values());
 		if (CollectionUtil.isEmpty(list))
 			return;
 		flush(list);

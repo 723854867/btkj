@@ -1,8 +1,11 @@
 package org.btkj.user.mybatis.dao;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -31,8 +34,9 @@ public interface UserDao extends DBMapper<Integer, User> {
 	User getByMobile(@Param("appId") int appId, @Param("mobile") String mobile);
 	
 	@Override
-	@SelectProvider(type = UserSQLProvider.class, method = "getWithinKey")
-	List<User> getWithinKey(@Param("list") List<Integer> keys);
+	@MapKey("uid")
+	@SelectProvider(type = UserSQLProvider.class, method = "getByKeys")
+	Map<Integer, User> getByKeys(@Param("keys") Collection<Integer> keys);
 	
 	@SelectProvider(type = UserSQLProvider.class, method = "count")
 	int count(UserSearcher searcher);

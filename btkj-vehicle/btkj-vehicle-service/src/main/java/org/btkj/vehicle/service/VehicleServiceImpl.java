@@ -116,14 +116,14 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	private Result<Renewal> _flushRenewal(EmployeeForm ef, String license) {
-		Result<Renewal> result = biHuVehicle.renewal(ef, license);
+		Result<Renewal> result = biHuVehicle.renewal(ef, license, configService.area(ef.getTenant().getRegion()).getBiHuId());
 		if (result.isSuccess())
 			_saveRenewal(result.attach());
 		return result;
 	}
 	
 	private Result<Renewal> _flushRenewal(EmployeeForm ef, String vin, String engine) {
-		Result<Renewal> result = biHuVehicle.renewal(ef, vin, engine);
+		Result<Renewal> result = biHuVehicle.renewal(ef, vin, engine, configService.area(ef.getTenant().getRegion()).getBiHuId());
 		if (result.isSuccess()) 
 			_saveRenewal(result.attach());
 		return result;
@@ -143,7 +143,7 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Override
 	public Result<Void> order(int quoteGroup, int insureGroup, EmployeeForm ef, VehiclePolicyTips tips, String vehicleId) {
-		ICode code = rule.orderCheck(ef.getTenant().getRegion(), tips.getSchema());
+		ICode code = rule.orderCheck(ef, tips.getSchema());
 		if (code != Code.OK)
 			return Result.result(code);
 		Map<Integer, Insurer> quoteMap = new HashMap<Integer, Insurer>();
@@ -202,7 +202,7 @@ public class VehicleServiceImpl implements VehicleService {
 		tips.bind(vehicleInfo);
 		vehicleOrderMapper.deleteBatchOrder(batchId);
 		if (0 != biHuQuoteMod) {
-			Result<Void> result = biHuVehicle.order(ef, biHuQuoteMod, biHuInsureMod, tips);
+			Result<Void> result = biHuVehicle.order(ef, biHuQuoteMod, biHuInsureMod, tips, configService.area(ef.getTenant().getRegion()).getBiHuId());
 			if (!result.isSuccess())
 				_orderRequestFailure(orders.get(Lane.BI_HU), result.getDesc());
 		}
@@ -312,7 +312,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Override
 	public List<VehicleBrand> vehicleBrands() {
-		return vehicleBrandMapper.getAll();
+		return new ArrayList<VehicleBrand>(vehicleBrandMapper.getAll().values());
 	}
 	
 	@Override

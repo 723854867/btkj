@@ -74,7 +74,7 @@ public class UserManageServiceImpl implements UserManageService {
 		Set<Integer> set = new HashSet<Integer>();
 		for (EmployeePagingInfo info : pager.getList()) 
 			set.add(info.getParentId());
-		List<Employee> parents = employeeMapper.getWithinKey(new ArrayList<Integer>(set));
+		List<Employee> parents = new ArrayList<Employee>(employeeMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (EmployeePagingInfo info : pager.getList()) {
 			for (Employee employee : parents) {
 				if (employee.getId() == info.getParentId())
@@ -86,7 +86,7 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getUid());
 			set.add(info.getParentUid());
 		}
-		List<User> users = userMapper.getWithinKey(new ArrayList<Integer>(set));
+		List<User> users = new ArrayList<User>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (EmployeePagingInfo info : pager.getList()) {
 			for (User user : users) {
 				if (info.getUid() == user.getUid()) {
@@ -111,7 +111,7 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getParentUid());
 		}
 		
-		List<User> users = userMapper.getWithinKey(new ArrayList<Integer>(set));
+		List<User> users = new ArrayList<User>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (ApplyPagingInfo info : pager.getList()) {
 			for (User user : users) {
 				if (user.getUid() == info.getUid()) {

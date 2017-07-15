@@ -2,7 +2,6 @@ package org.btkj.nonauto.mongo;
 
 import java.util.List;
 
-import org.bson.Document;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.KeyMapper;
@@ -27,12 +26,7 @@ public class NonAutoCategoryMapper extends MongoMapper<Long, NonAutoCategory> {
 	}
 	
 	public NonAutoCategory getByName(String name) {
-		Document document = mongo.findOne(collection, Filters.eq(FIELD_NAME, name));
-		return null == document ? null : deserial(document);
-	}
-	
-	public List<NonAutoCategory> getAll() {
-		return mongo.find(collection, clazz);
+		return mongo.findOne(collection, Filters.eq(FIELD_NAME, name), clazz);
 	}
 	
 	public List<NonAutoCategory> getByKeys(List<Long> keys) {

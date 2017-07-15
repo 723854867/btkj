@@ -22,7 +22,7 @@ public interface BiHuVehicle {
 	 * @param name 车主姓名
 	 * @return
 	 */
-	Result<Renewal> renewal(EmployeeForm employeeForm, String license);
+	Result<Renewal> renewal(EmployeeForm employeeForm, String license, int cityCode);
 	
 	/**
 	 * 获取续保信息：通过车架号和发动机号
@@ -33,12 +33,12 @@ public interface BiHuVehicle {
 	 * @param name
 	 * @return
 	 */
-	Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine);
+	Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, int cityCode);
 	
 	/**
 	 * 报价/投保接口:理解为下单
 	 */
-	Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips);
+	Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode);
 	
 	/**
 	 * 获取报价信息

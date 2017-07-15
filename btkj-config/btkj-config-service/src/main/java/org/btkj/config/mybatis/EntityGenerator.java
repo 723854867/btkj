@@ -1,5 +1,6 @@
 package org.btkj.config.mybatis;
 
+import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.entity.Insurer;
 import org.rapid.util.lang.DateUtil;
 
@@ -17,5 +18,17 @@ public class EntityGenerator {
 		insurer.setCreated(time);
 		insurer.setUpdated(time);
 		return insurer;
+	}
+	
+	public static final Area newArea(int code, int renewalPeriod, int biHuId) {
+		Area area = new Area();
+		area.setCode(code);
+		area.setRenewalPeriod(renewalPeriod);
+		area.setBiHuId(biHuId);
+		
+		int time = DateUtil.currentTime();
+		area.setCreated(time);
+		area.setUpdated(time);
+		return area;
 	}
 }

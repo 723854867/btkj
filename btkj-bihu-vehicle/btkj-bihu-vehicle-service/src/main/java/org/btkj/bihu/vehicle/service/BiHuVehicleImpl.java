@@ -21,9 +21,7 @@ import org.btkj.bihu.vehicle.domain.QuoteResult;
 import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
-import org.btkj.bihu.vehicle.pojo.entity.BiHuArea;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
-import org.btkj.bihu.vehicle.redis.BiHuAreaMapper;
 import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.Renewal;
@@ -57,8 +55,6 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	@Resource
 	private HttpProxy httpProxy;
 	@Resource
-	private BiHuAreaMapper biHuAreaMapper;
-	@Resource
 	private TenantConfigMapper tenantConfigMapper;
 	
 	@Value("${bihu.key}")
@@ -87,31 +83,28 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private int insureResultTimeout;
 
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String license) {
+	public Result<Renewal> renewal(EmployeeForm employeeForm, String license, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
-		return _doRenewal(employeeForm, params);
+		return _doRenewal(employeeForm, params, cityCode);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine) {
+	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
-		return _doRenewal(employeeForm, params);
+		return _doRenewal(employeeForm, params, cityCode);
 	}
 	
-	private Result<Renewal> _doRenewal(EmployeeForm employeeForm, BiHuParams params) {
+	private Result<Renewal> _doRenewal(EmployeeForm employeeForm, BiHuParams params, int cityCode) {
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));	// 用 uid 作为 custkey
 		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
 		if (null != tc) 
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
 			params.setAgent(agent).setKey(key);
-		BiHuArea cityCode = biHuAreaMapper.getByKey(employeeForm.getTenant().getRegion());
-		if (null == cityCode)
-			return Result.result(BtkjCode.CITY_UNSUPPORT);
-		params.setCityCode(cityCode.getCid());
+		params.setCityCode(cityCode);
 		HttpUriRequest request = _requestUri(renewInfoPath, params, renewInfoTimeout);
 		try {
 			RenewInfo info = httpProxy.syncRequest(request, RenewInfo.JSON_HANDLER);
@@ -130,19 +123,16 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips) {
+	public Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode) {
 		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
 		if (null == tc)
 			return Result.result(BtkjCode.LANE_BIHU_NOT_OPENED);
-		BiHuArea cityCode = biHuAreaMapper.getByKey(employeeForm.getTenant().getRegion());
-		if (null == cityCode)
-			return Result.result(BtkjCode.CITY_UNSUPPORT);
 		BiHuParams params = new BiHuParams(RequestType.QUOTE);
 		params.setAgent(tc.getAgent())
 			.setKey(tc.getKey())
 			.setQuoteGroup(quoteMod)
 			.setSubmitGroup(insureMod)
-			.setCityCode(cityCode.getCid())
+			.setCityCode(cityCode)
 			.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));
 		
 		_buildOwner(params, tips.getOwner());

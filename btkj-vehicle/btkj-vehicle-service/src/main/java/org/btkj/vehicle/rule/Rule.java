@@ -2,10 +2,11 @@ package org.btkj.vehicle.rule;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
+import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.pojo.model.insur.vehicle.PolicySchema;
-import org.btkj.vehicle.pojo.entity.Area;
-import org.btkj.vehicle.redis.AreaMapper;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
 import org.rapid.util.lang.DateUtil;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class Rule {
 
 	@Resource
-	private AreaMapper cityMapper;
+	private ConfigService configService;
 	
 	/**
 	 * 检查投保规则
@@ -23,15 +24,15 @@ public class Rule {
 	 * @param order
 	 * @return
 	 */
-	public ICode orderCheck(int cityCode, PolicySchema schema) {
+	public ICode orderCheck(EmployeeForm ef, PolicySchema schema) {
 		// 检查起保时间
 		if (null != schema.getCommercialStart()) {
-			ICode code = _checkRenewalPeriod(cityCode, schema.getCommercialStart());
+			ICode code = _checkRenewalPeriod(ef, schema.getCommercialStart());
 			if (code != Code.OK)
 				return code;
 		}
 		if (null != schema.getCompulsiveStart()) {
-			ICode code = _checkRenewalPeriod(cityCode, schema.getCompulsiveStart());
+			ICode code = _checkRenewalPeriod(ef, schema.getCompulsiveStart());
 			if (code != Code.OK)
 				return code;
 		}
@@ -43,11 +44,9 @@ public class Rule {
 	 * 
 	 * @return
 	 */
-	private ICode _checkRenewalPeriod(int cityCode, String startTime) {
-		Area city = cityMapper.getByKey(cityCode);
-		if (null == city)
-			return BtkjCode.CITY_UNSUPPORT;
-		int renewalInterval = city.getRenewalPeriod() * 24 * 3600;
+	private ICode _checkRenewalPeriod(EmployeeForm ef, String startTime) {
+		Area area = configService.area(ef.getTenant().getRegion());
+		int renewalInterval = area.getRenewalPeriod() * 24 * 3600;
 		int timestamp = (int) (DateUtil.getTime(startTime, DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000);
 		int maxTime = DateUtil.currentTime() + renewalInterval;
 		if (timestamp > maxTime || timestamp < DateUtil.currentTime())

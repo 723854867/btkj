@@ -8,7 +8,6 @@ import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.Area;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
@@ -163,34 +162,4 @@ public interface VehicleManageService {
 	 * @param key
 	 */
 	void routeDelete(String key);
-	
-	/**
-	 * 获取所有的城市
-	 * 
-	 * @return
-	 */
-	List<Area> cities();
-	
-	/**
-	 * 新增城市
-	 * 
-	 * @param code
-	 * @param name
-	 * @param renewalPeriod
-	 */
-	Result<Void> cityAdd(int region, String name, int renewalPeriod);
-	
-	/**
-	 * 更新城市
-	 * 
-	 * @param region
-	 */
-	Result<Void> cityUpdate(int region, String name, int renewalPeriod);
-	
-	/**
-	 * 删除城市
-	 * 
-	 * @param region
-	 */
-	void cityDelete(int region);
 }

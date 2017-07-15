@@ -6,7 +6,6 @@ import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.Area;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtil;
@@ -14,18 +13,6 @@ import org.rapid.util.math.compare.ComparisonSymbol;
 
 public class EntityGenerator {
 
-	public static final Area newCity(int region, String name, int renewalPeriod) {
-		Area city = new Area();
-		city.setCode(region);
-		city.setName(name);
-		city.setRenewalPeriod(renewalPeriod);
-		
-		int time = DateUtil.currentTime();
-		city.setCreated(time);
-		city.setUpdated(time);
-		return city;
-	}
-	
 	public static final Route newRoute(int tid, int insurerId, Lane lane) { 
 		Route route = new Route();
 		route.setKey(tid + Consts.SYMBOL_UNDERLINE + insurerId);

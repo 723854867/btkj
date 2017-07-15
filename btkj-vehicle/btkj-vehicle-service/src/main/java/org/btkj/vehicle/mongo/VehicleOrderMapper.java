@@ -34,7 +34,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	
 	@Override
 	public void insert(VehicleOrder model) {
-		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), serial(model), new UpdateOptions().upsert(true));
+		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), model, new UpdateOptions().upsert(true));
 	}
 	
 	public void deleteBatchOrder(String batchId) {

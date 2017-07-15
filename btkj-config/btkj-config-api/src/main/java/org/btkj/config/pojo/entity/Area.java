@@ -1,59 +1,59 @@
-package org.btkj.bihu.vehicle.pojo.entity;
+package org.btkj.config.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class BiHuArea implements UniqueModel<Integer> {
+public class Area implements UniqueModel<Integer> {
 
-	private static final long serialVersionUID = 2112678389121538395L;
+	private static final long serialVersionUID = -6748716010804985723L;
 
-	private int cid;
 	private int code;
-	private String name;
+	private int renewalPeriod;				// 续保期限
+	private int biHuId;
 	private int created;
 	private int updated;
-	
-	public int getCid() {
-		return cid;
-	}
-	
-	public void setCid(int cid) {
-		this.cid = cid;
-	}
-	
+
 	public int getCode() {
 		return code;
 	}
-	
+
 	public void setCode(int code) {
 		this.code = code;
 	}
 	
-	public String getName() {
-		return name;
+	public int getRenewalPeriod() {
+		return renewalPeriod;
+	}
+
+	public void setRenewalPeriod(int renewalPeriod) {
+		this.renewalPeriod = renewalPeriod;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public int getBiHuId() {
+		return biHuId;
 	}
 	
+	public void setBiHuId(int biHuId) {
+		this.biHuId = biHuId;
+	}
+
 	public int getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	
+
 	public int getUpdated() {
 		return updated;
 	}
-	
+
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
-	
+
 	@Override
 	public Integer key() {
-		return this.code;
+		return code;
 	}
 }

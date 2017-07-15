@@ -23,7 +23,7 @@ public interface BtkjConsts {
 	interface RESULT {
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);
 		Result LANE_NOT_EXIST					= Result.result(BtkjCode.LANE_NOT_EXIST);
-		Result CITY_NOT_EXIST					= Result.result(BtkjCode.CITY_NOT_EXIST);
+		Result AREA_NOT_EXIST					= Result.result(BtkjCode.AREA_NOT_EXIST);
 		Result ORDER_NOT_EXIST					= Result.result(BtkjCode.ORDER_NOT_EXIST);
 		Result REPLY_NOT_EXIST					= Result.result(BtkjCode.REPLY_NOT_EXIST);
 		Result ROUTE_NOT_EXIST					= Result.result(BtkjCode.ROUTE_NOT_EXIST);

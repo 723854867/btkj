@@ -1,8 +1,10 @@
 package org.btkj.user.mybatis.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -28,8 +30,9 @@ public interface EmployeeDao extends DBMapper<Integer, Employee> {
 	@UpdateProvider(type = EmployeeSQLProvider.class, method = "update")
 	void update(Employee entity);
 	
+	@MapKey("id")
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getAll")
-	List<Employee> getAll();
+	Map<Integer, Employee> getAll();
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidAndUid")
 	Employee getByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);

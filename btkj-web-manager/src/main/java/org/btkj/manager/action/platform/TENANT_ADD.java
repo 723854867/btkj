@@ -7,7 +7,6 @@ import org.btkj.courier.api.CourierService;
 import org.btkj.manager.action.PlatformAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.model.CaptchaVerifier;
 import org.btkj.user.api.AppService;
@@ -18,7 +17,6 @@ import org.btkj.web.util.ParamsUtil;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
 
 public class TENANT_ADD extends PlatformAction {
 	
@@ -35,13 +33,9 @@ public class TENANT_ADD extends PlatformAction {
 
 	@Override
 	protected Result<?> execute(Request request, App app, User operator) {
-		// 获取验证代理公司信息
 		String tname = request.getParam(Params.TNAME);
-		Region region = configService.getRegionById(request.getParam(Params.REGION));
-		if (null == region)
-			throw ConstConvertFailureException.errorConstException(Params.REGION);
-		// 代理公司的行政区域必须是平台行政区域的子行政区域
-		if (!configService.isSubRegion(app.getRegion(), region.getId()))
+		int region = request.getParam(Params.REGION);
+		if (!configService.isSubRegion(app.getRegion(), request.getParam(Params.REGION)))
 			return Consts.RESULT.REGION_OUT_OF_BOUNDARY;
 		String licenseFace = request.getParam(Params.IDENTITY_FACE);
 		String licenseBack = request.getParam(Params.IDENTITY_BACK);

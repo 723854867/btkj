@@ -101,11 +101,6 @@ public enum BtkjCode implements ICode {
 	LANE_BIHU_NOT_OPENED(516, "lane of bihu not opened!"),
 	
 	/**
-	 * 不支持的城市
-	 */
-	CITY_UNSUPPORT(517, "city unsupport"),
-	
-	/**
 	 * 险企不存在
 	 */
 	INSURER_NOT_EXIST(518, "insurer not exist"),
@@ -161,9 +156,9 @@ public enum BtkjCode implements ICode {
 	ROUTE_NOT_EXIST(529, "route not eixst"),
 	
 	/**
-	 * 城市不存在
+	 * 地区
 	 */
-	CITY_NOT_EXIST(530, "city not exist"),
+	AREA_NOT_EXIST(530, "area not exist"),
 	
 	/**
 	 * 车险系数不存在

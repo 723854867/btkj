@@ -1,8 +1,11 @@
 package org.btkj.user.mybatis.dao;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -23,16 +26,18 @@ public interface TenantDao extends DBMapper<Integer, Tenant> {
 	@UpdateProvider(type = TenantSQLProvider.class, method = "update")
 	void update(Tenant entity);
 	
+	@MapKey("tid")
 	@SelectProvider(type = TenantSQLProvider.class, method = "getAll")
-	List<Tenant> getAll();
+	Map<Integer, Tenant> getAll();
 	
 	@Override
 	@SelectProvider(type = TenantSQLProvider.class, method = "getByKey")
 	Tenant getByKey(Integer key);
 	
 	@Override
-	@SelectProvider(type = TenantSQLProvider.class, method = "getWithinKey")
-	List<Tenant> getWithinKey(@Param("list") List<Integer> keys);
+	@MapKey("tid")
+	@SelectProvider(type = TenantSQLProvider.class, method = "getByKeys")
+	Map<Integer, Tenant> getByKeys(@Param("keys") Collection<Integer> keys);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppId")
 	int countByAppId(int appId);

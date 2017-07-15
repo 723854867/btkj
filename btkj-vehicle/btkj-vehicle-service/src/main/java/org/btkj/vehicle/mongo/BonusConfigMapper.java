@@ -14,6 +14,6 @@ public class BonusConfigMapper extends MongoMapper<String, BonusConfig> {
 	
 	@Override
 	public void insert(BonusConfig model) {
-		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), serial(model), new UpdateOptions().upsert(true));
+		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), model, new UpdateOptions().upsert(true));
 	}
 }

@@ -1,6 +1,5 @@
 package org.btkj.vehicle.mongo;
 
-import org.bson.Document;
 import org.btkj.pojo.entity.Renewal;
 import org.rapid.data.storage.mapper.MongoMapper;
 
@@ -19,11 +18,10 @@ public class RenewalMapper extends MongoMapper<String, Renewal> {
 	
 	@Override
 	public void insert(Renewal model) {
-		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), serial(model), new UpdateOptions().upsert(true));
+		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), model, new UpdateOptions().upsert(true));
 	}
 	
 	public Renewal getByLicense(String license) {
-		Document document = mongo.findOne(collection, Filters.eq(FIELD_LICENSE, license), Sorts.descending(FIELD_CREATED));
-		return null == document ? null : deserial(document);
+		return mongo.findOne(collection, Filters.eq(FIELD_LICENSE, license), Sorts.descending(FIELD_CREATED), clazz);
 	}
 }

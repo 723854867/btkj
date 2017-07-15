@@ -1,5 +1,6 @@
 package org.btkj.user.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public List<User> users(List<Integer> list) {
-		return userMapper.getWithinKey(list);
+		return new ArrayList<User>(userMapper.getByKeys(list).values());
 	}
 	
 	@Override

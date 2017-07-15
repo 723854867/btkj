@@ -28,8 +28,8 @@ public class InsurerSQLProvider {
 		}.toString();
 	}
 	
-	public String getWithinKey(Map<String, List<Integer>> params) {
-		List<Integer> keys = params.get("list");
+	public String getByKeys(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("keys");
 		StringBuilder builder = new StringBuilder("select * from insurer where id in(");
 		for (int key : keys)
 			builder.append(key).append(",");

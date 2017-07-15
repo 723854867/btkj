@@ -9,6 +9,11 @@
         				
 	<context:component-scan base-package="org.btkj.config" />
 	
+	<bean id="areaMapper" class="org.btkj.config.redis.AreaMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="areaDao" />
+	</bean>
+	
 	<bean id="regionMapper" class="org.btkj.config.redis.RegionMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="regionDao" />

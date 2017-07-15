@@ -1,11 +1,14 @@
 package org.btkj.config.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.config.pojo.entity.Area;
+import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.entity.Insurer;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service("configService")
 public class ConfigServiceImpl implements ConfigService {
 	
+	@Resource
+	private AreaMapper areaMapper;
 	@Resource
 	private RegionMapper regionMapper;
 	@Resource
@@ -58,7 +63,7 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	public List<Region> getRegions(List<Integer> regionIds) {
-		return regionMapper.getWithinKey(regionIds);
+		return new ArrayList<Region>(regionMapper.getByKeys(regionIds).values());
 	}
 	
 	private void _regionRoute(LinkedList<Region> regions, int region) {
@@ -78,6 +83,11 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	public List<Insurer> insurers(List<Integer> list) {
-		return insurerMapper.getWithinKey(list);
+		return new ArrayList<Insurer>(insurerMapper.getByKeys(list).values());
+	}
+	
+	@Override
+	public Area area(int areaId) {
+		return areaMapper.getByKey(areaId);
 	}
 }

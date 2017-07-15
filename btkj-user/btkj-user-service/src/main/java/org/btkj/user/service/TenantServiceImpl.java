@@ -9,7 +9,6 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.App;
 import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
@@ -89,7 +88,7 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<?> tenantAdd(App app, Region region, String tname, User user, String licenseFace, String licenseBack, String servicePhone) {
+	public Result<?> tenantAdd(App app, int region, String tname, User user, String licenseFace, String licenseBack, String servicePhone) {
 		String lockId = userMapper.lockUser(user.getUid());
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
@@ -109,8 +108,8 @@ public class TenantServiceImpl implements TenantService {
 		List<Integer> tids = new ArrayList<Integer>(employees.size());
 		for (Employee employee : employees)
 			tids.add(employee.getTid());
-		List<Tenant> own = tenantMapper.getWithinKey(tids);
-		List<Tenant> audit = tenantMapper.getWithinKey(applyMapper.applyListTids(user));
+		List<Tenant> own = new ArrayList<Tenant>(tenantMapper.getByKeys(tids).values());
+		List<Tenant> audit = new ArrayList<Tenant>(tenantMapper.getByKeys(applyMapper.applyListTids(user)).values());
 		return new TenantListInfo(own, employees, audit);
 	}
 }

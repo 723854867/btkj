@@ -3,6 +3,7 @@ package org.btkj.config.api;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Region;
 
@@ -65,4 +66,12 @@ public interface ConfigService {
 	 * @return
 	 */
 	List<Insurer> insurers(List<Integer> list);
+	
+	/**
+	 * 获取指定的地区
+	 * 
+	 * @param areaId
+	 * @return
+	 */
+	Area area(int areaId);
 }

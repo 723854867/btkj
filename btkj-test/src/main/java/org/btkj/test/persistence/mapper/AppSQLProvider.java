@@ -2,9 +2,9 @@ package org.btkj.test.persistence.mapper;
 
 import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class UserSQLProvider extends SQLProvider {
+public class AppSQLProvider extends SQLProvider {
 
-	public UserSQLProvider() {
-		super("user", "uid");
+	public AppSQLProvider() {
+		super("app", "id");
 	}
 }

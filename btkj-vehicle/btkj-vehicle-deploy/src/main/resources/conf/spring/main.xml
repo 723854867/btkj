@@ -40,11 +40,6 @@
 		<property name="mongo" ref="mongo" />
 	</bean>
 	
-	<bean id="areaMapper" class="org.btkj.vehicle.redis.AreaMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="areaDao" />
-	</bean>
-	
 	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="vehicleCoefficientDao" />

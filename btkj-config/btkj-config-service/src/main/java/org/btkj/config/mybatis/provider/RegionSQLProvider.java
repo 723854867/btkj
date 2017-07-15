@@ -41,8 +41,8 @@ public class RegionSQLProvider {
 		}.toString();
 	}
 	
-	public String getWithinKey(Map<String, List<Integer>> params) {
-		List<Integer> keys = params.get("list");
+	public String getByKeys(Map<String, List<Integer>> params) {
+		List<Integer> keys = params.get("keys");
 		StringBuilder builder = new StringBuilder("SELECT * FROM region WHERE id IN(");
 		for (int key : keys)
 			builder.append(key).append(",");

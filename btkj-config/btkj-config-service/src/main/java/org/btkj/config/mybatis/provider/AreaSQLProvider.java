@@ -1,4 +1,4 @@
-package org.btkj.vehicle.mybatis.provider;
+package org.btkj.config.mybatis.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
@@ -13,6 +13,7 @@ public class AreaSQLProvider {
 				VALUES("`code`", "#{code}");
 				VALUES("`name`", "#{name}");
 				VALUES("`renewal_period`", "#{renewalPeriod}");
+				VALUES("`bi_hu_id`", "#{biHuId}");
 				VALUES("`created`", "#{created}");
 				VALUES("`updated`", "#{updated}");
 			}
@@ -35,6 +36,7 @@ public class AreaSQLProvider {
 				UPDATE(TABLE);
 				SET("`name`=#{name}");
 				SET("`renewal_period`=#{renewalPeriod}");
+				SET("`bi_hu_id`=#{biHuId}");
 				SET("`updated`=#{updated}");
 				WHERE("`code`=#{code}");
 			}

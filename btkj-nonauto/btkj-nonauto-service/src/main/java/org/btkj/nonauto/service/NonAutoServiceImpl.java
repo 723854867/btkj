@@ -1,5 +1,6 @@
 package org.btkj.nonauto.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -31,7 +32,7 @@ public class NonAutoServiceImpl implements NonAutoService {
 	
 	@Override
 	public List<NonAutoCategory> getAllCategories() {
-		return nonAutoCategoryMapper.getAll();
+		return new ArrayList<NonAutoCategory>(nonAutoCategoryMapper.getAll().values());
 	}
 	
 	@Override

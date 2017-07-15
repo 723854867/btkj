@@ -1,7 +1,10 @@
 package org.btkj.config.mybatis.dao;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.InsurerSQLProvider;
 import org.btkj.pojo.entity.Insurer;
@@ -14,10 +17,12 @@ public interface InsurerDao extends DBMapper<Integer, Insurer> {
 	Insurer getByKey(Integer key);
 	
 	@Override
+	@MapKey("id")
 	@SelectProvider(type = InsurerSQLProvider.class, method = "getAll")
-	List<Insurer> getAll();
+	Map<Integer, Insurer> getAll();
 	
 	@Override
-	@SelectProvider(type = InsurerSQLProvider.class, method = "getWithinKey")
-	List<Insurer> getWithinKey(List<Integer> keys);
+	@MapKey("id")
+	@SelectProvider(type = InsurerSQLProvider.class, method = "getByKeys")
+	Map<Integer, Insurer> getByKeys(@Param("keys") Collection<Integer> keys);
 }

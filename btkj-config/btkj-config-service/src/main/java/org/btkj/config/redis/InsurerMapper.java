@@ -1,6 +1,7 @@
 package org.btkj.config.redis;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.btkj.config.mybatis.dao.InsurerDao;
 import org.btkj.pojo.BtkjConsts;
@@ -23,13 +24,13 @@ public class InsurerMapper extends RedisDBAdapter<Integer, Insurer, InsurerDao> 
 	}
 	
 	@Override
-	public List<Insurer> getWithinKey(List<Integer> keys) {
+	public Map<Integer, Insurer> getByKeys(Collection<Integer> keys) {
 		checkLoad(BtkjConsts.CACHE_CONTROLLER_KEY, CONTROLLER);
-		return super.getWithinKey(keys);
+		return super.getByKeys(keys);
 	}
 	
 	@Override
-	public List<Insurer> getAll() {
+	public Map<Integer, Insurer> getAll() {
 		checkLoad(BtkjConsts.CACHE_CONTROLLER_KEY, CONTROLLER);
 		return super.getAll();
 	}

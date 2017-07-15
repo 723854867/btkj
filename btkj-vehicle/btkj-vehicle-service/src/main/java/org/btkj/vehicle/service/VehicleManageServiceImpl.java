@@ -20,11 +20,9 @@ import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.Area;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
-import org.btkj.vehicle.redis.AreaMapper;
 import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
@@ -39,8 +37,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Resource
 	private Tx tx;
-	@Resource
-	private AreaMapper areaMapper;
 	@Resource
 	private RouteMapper routeMapper;
 	@Resource
@@ -210,38 +206,5 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public void routeDelete(String key) {
 		routeMapper.delete(key);		
-	}
-	
-	@Override
-	public List<Area> cities() {
-		return areaMapper.getAll();
-	}
-	
-	@Override
-	public Result<Void> cityAdd(int region, String name, int renewalPeriod) {
-		Area city = EntityGenerator.newCity(region, name, renewalPeriod);
-		try {
-			areaMapper.insert(city);
-			return Consts.RESULT.OK;
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
-		}
-	}
-	
-	@Override
-	public Result<Void> cityUpdate(int region, String name, int renewalPeriod) {
-		Area city = areaMapper.getByKey(region);
-		if (null == city)
-			return BtkjConsts.RESULT.CITY_NOT_EXIST;
-		city.setName(name);
-		city.setRenewalPeriod(renewalPeriod);
-		city.setUpdated(DateUtil.currentTime());
-		areaMapper.update(city);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public void cityDelete(int region) {
-		areaMapper.delete(region);
 	}
 }

@@ -22,7 +22,7 @@ public class BaseTest {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				userDao.selectForUpdate(100);
+//				userDao.selectForUpdate(100);
 				try {
 					TimeUnit.SECONDS.sleep(10);
 				} catch (InterruptedException e) {
