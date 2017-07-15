@@ -26,7 +26,7 @@ public class ArticleSQLProvider extends SQLProvider {
 		}.toString();
 	}
 	
-	public String getByAppIdForUpdate() {
+	public String countByAppIdForUpdate() {
 		return "SELECT COUNT(*) FROM article WHERE `app_id`=#{appId} FOR UPDATE";
 	}
 
