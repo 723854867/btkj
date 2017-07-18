@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
@@ -60,11 +60,11 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * 
 	 * @return
 	 */
-	public List<EmployeePO> ownedTenants(UserPO user) {
-		Map<Integer, EmployeePO> map =_checkLoad(user.getUid());
+	public List<EmployeePO> ownedTenants(int uid) {
+		Map<Integer, EmployeePO> map =_checkLoad(uid);
 		if (null != map)
 			return new ArrayList<EmployeePO>(map.values());
-		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(user.getUid()));
+		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(uid));
 		if (null == list)
 			return Collections.EMPTY_LIST;
 		List<EmployeePO> l = new ArrayList<EmployeePO>();
@@ -79,7 +79,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * @param employee
 	 * @return
 	 */
-	public List<EmployeePO> team(EmployeePO employee, int depth) {
+	public List<EmployeePO> team(Employee employee, int depth) {
 		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + depth - 1);
 	}
 	

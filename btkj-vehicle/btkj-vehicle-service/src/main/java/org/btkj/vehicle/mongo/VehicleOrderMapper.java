@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.bson.conversions.Bson;
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
@@ -62,7 +61,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		return mongo.count(collection, filter);
 	}
 	
-	public Pager<VehicleOrder> paging(EmployeeForm ef, VehicleOrderSearcher searcher) {
+	public Pager<VehicleOrder> paging(VehicleOrderSearcher searcher) {
 		List<VehicleOrder> orders = null;
 		long total = 0;
 		List<Bson> list = new ArrayList<Bson>();

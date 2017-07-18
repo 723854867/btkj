@@ -2,7 +2,7 @@ package org.btkj.pojo.po;
 
 import org.btkj.pojo.bo.Bonus;
 import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.Consts;
@@ -16,6 +16,8 @@ public class VehicleOrder implements UniqueModel<String> {
 	// 订单基本信息
 	private String _id;
 	private String batchId;				// 批次号，一次报价可以对多家公司进行报价、多个报价共用一个批次号
+	private int quoteMod;				// 报价模值，用来决定本次报价同时和几家公司一起报价
+	private int insureMod;				// 核保模值
 	private int employeeId;				// 雇员ID
 	private int tid;					// 商户ID
 	private int appId;					// 平台ID
@@ -36,12 +38,14 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(String batchId, EmployeeForm ef, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
-		this._id = _orderId(tips.getLicense(), ef, insurer);
+	public VehicleOrder(String batchId, int quoteMod, int insureMod, Employee employee, Insurer insurer, int lane, boolean insure, VehiclePolicyTips tips) {
+		this._id = _orderId(tips.getLicense(), employee, insurer);
 		this.batchId = batchId;
-		this.employeeId = ef.getEmployee().getId();
-		this.appId = ef.getApp().getId();
-		this.tid = ef.getTenant().getTid();
+		this.quoteMod = quoteMod;
+		this.insureMod = insureMod;
+		this.employeeId = employee.getId();
+		this.appId = employee.getAppId();
+		this.tid = employee.getTid();
 		this.insurerId = insurer.getId();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
@@ -58,6 +62,30 @@ public class VehicleOrder implements UniqueModel<String> {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	
+	public String getBatchId() {
+		return batchId;
+	}
+	
+	public void setBatchId(String batchId) {
+		this.batchId = batchId;
+	}
+	
+	public int getQuoteMod() {
+		return quoteMod;
+	}
+
+	public void setQuoteMod(int quoteMod) {
+		this.quoteMod = quoteMod;
+	}
+	
+	public int getInsureMod() {
+		return insureMod;
+	}
+	
+	public void setInsureMod(int insureMod) {
+		this.insureMod = insureMod;
 	}
 	
 	public int getEmployeeId() {
@@ -177,7 +205,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		return this._id;
 	}
 
-	private String _orderId(String license, EmployeeForm ef, Insurer insurer) {
-		return ef.getEmployee().getId() + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurer.getId();
+	private String _orderId(String license, Employee employee, Insurer insurer) {
+		return employee.getId() + Consts.SYMBOL_UNDERLINE + license + Consts.SYMBOL_UNDERLINE + insurer.getId();
 	}
 }

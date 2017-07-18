@@ -2,28 +2,25 @@ package org.btkj.manager.action.platform;
 
 import javax.annotation.Resource;
 
-import org.btkj.manager.action.PlatformAction;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.manager.action.UserAction;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.enums.SORT_COL;
 import org.rapid.util.common.message.Result;
 
-public class USER_LIST extends PlatformAction {
+public class USER_LIST extends UserAction {
 	
 	@Resource
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Pager<UserPagingInfo>> execute(Request request, AppPO app, UserPO operator) {
+	protected Result<?> execute(Request request, User user) {
 		UserSearcher searcher = request.getParam(Params.USER_SEARCHER);
-		searcher.setAppId(app.getId());
+		searcher.setAppId(user.getAppId());
 		searcher.setClient(Client.TENANT_MANAGER);
 		// 排序字段处理：只能做 created 和 updated 字段的排序
 		String sortCol = searcher.getSortCol();

@@ -5,11 +5,9 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.MainPageInfo;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
@@ -41,20 +39,20 @@ public class MAIN_PAGE extends UserAction {
 	private EmployeeService employeeService;
 	
 	@Override
-	protected Result<MainPageInfo> execute(Request request, AppPO app, Client client, UserPO user) {
+	protected Result<MainPageInfo> execute(Request request, User user) {
 		int employeeId = request.getOptionalParam(Params.EMPLOYEE_ID);
-		EmployeeForm em = 0 == employeeId ? null : employeeService.getById(employeeId);
-		if (0 != employeeId && null == em)
+		Employee employee = 0 == employeeId ? null : employeeService.employee(employeeId);
+		if (0 != employeeId && null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		if (null != em && em.getUser().getUid() != user.getUid())
+		if (null != employee && employee.getUid() != user.getUid())
 			return Result.result(Code.FORBID);
 		
-		Result<MainPageInfo> result = appService.mainPage(client, user, em);
+		Result<MainPageInfo> result = appService.mainPage(user, employee);
 		MainPageInfo pageInfo = result.attach();
 		Region region = configService.getRegionById(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
-		String nonAutoBind = null == em ? null : em.getTenant().getNonAutoBind();
-		pageInfo.setNonAutoCategories(null == em ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
+		String nonAutoBind = null == employee ? null : employee.getTenant().getNonAutoBind();
+		pageInfo.setNonAutoCategories(null == employee ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
 		return result;
 	}
 }

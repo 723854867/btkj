@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 
 /**
  * app 首页信息
@@ -24,7 +24,7 @@ public class MainPageInfo implements Serializable {
 	
 	public MainPageInfo() {}
 	
-	public MainPageInfo(UserPO user, TenantPO tenant, List<Banner> banners) {
+	public MainPageInfo(User user, TenantPO tenant, List<Banner> banners) {
 		this.uid = user.getUid();
 		mainTenant = new MainTenantInfo(tenant, banners);
 	}

@@ -11,8 +11,7 @@ import org.btkj.common.pojo.info.CommentInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
@@ -35,10 +34,10 @@ public class COMMENT_LIST extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, AppPO app, Client client, UserPO operator) {
+	protected Result<?> execute(Request request, User user) {
 		int page = request.getParam(Params.PAGE);
 		int pageSize = request.getParam(Params.PAGE_SIZE);
-		Result<Pager<Comment>> result = communityService.comments(app.getId(), request.getParam(Params.ID), page, pageSize);
+		Result<Pager<Comment>> result = communityService.comments(user.getAppId(), request.getParam(Params.ID), page, pageSize);
 		if (!result.isSuccess())
 			return result;
 		List<Comment> list = result.attach().getList();
@@ -51,10 +50,10 @@ public class COMMENT_LIST extends UserAction {
 		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<CommentInfo> l = new ArrayList<CommentInfo>(list.size());
 		for (Comment comment : list) {
-			for (UserPO user : users) {
-				if (user.getUid() != comment.getUid())
+			for (UserPO temp : users) {
+				if (temp.getUid() != comment.getUid())
 					continue;
-				l.add(new CommentInfo(user, comment));
+				l.add(new CommentInfo(temp, comment));
 				break;
 			}
 		}

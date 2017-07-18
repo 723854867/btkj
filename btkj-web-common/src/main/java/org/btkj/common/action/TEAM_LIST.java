@@ -8,8 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.TeamInfo;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.statistics.api.StatisticsService;
@@ -38,13 +37,13 @@ public class TEAM_LIST extends TenantAction {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<TeamInfo> execute(Request request, Client client, EmployeeForm employeeForm) {
-		List<EmployeePO> list = employeeService.team(employeeForm);
+	protected Result<TeamInfo> execute(Request request, Employee employee) {
+		List<EmployeePO> list = employeeService.team(employee);
 		if (CollectionUtil.isEmpty(list))
 			return Consts.RESULT.EMPTY_LIST;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-		for (EmployeePO employee : list)
-			map.put(employee.getId(), employee.getUid());
+		for (EmployeePO temp : list)
+			map.put(temp.getId(), temp.getUid());
 		
 		Exploits exploits = statisticsService.multiExploits(new ArrayList<Integer>(map.keySet()), request.getParam(Params.BEGIN_TIME), 
 				request.getParam(Params.END_TIME), request.getParam(Params.MOD));

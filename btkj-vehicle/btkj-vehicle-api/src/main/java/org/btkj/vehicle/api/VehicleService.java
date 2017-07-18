@@ -3,8 +3,8 @@ package org.btkj.vehicle.api;
 import java.util.List;
 
 import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Renewal;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.VehicleBrand;
@@ -31,7 +31,7 @@ public interface VehicleService {
 	 * @param license 车牌号
 	 * @param name 车主姓名
 	 */
-	Result<Renewal> renewal(EmployeeForm employeeForm, String license, String name);
+	Result<Renewal> renewal(Employee employee, String license, String name);
 	
 	/**
 	 * 获取续保信息：通过车架号和发动机号(次新车)
@@ -42,7 +42,7 @@ public interface VehicleService {
 	 * @param name 车主姓名
 	 * @return
 	 */
-	Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, String name);
+	Result<Renewal> renewal(Employee employee, String vin, String engine, String name);
 	
 	/**
 	 * 下单：包括报价、投保、报价并投保
@@ -52,7 +52,7 @@ public interface VehicleService {
 	 * @param vehicleId
 	 * @return
 	 */
-	Result<Void> order(int quoteGroup, int insureGroup, EmployeeForm employeeForm, VehiclePolicyTips tips, String vehicleId);
+	Result<Void> order(int quoteMod, int insureMod, Employee employee, VehiclePolicyTips tips, String vehicleId);
 	
 	/**
 	 * 查看订单详情
@@ -61,7 +61,7 @@ public interface VehicleService {
 	 * @param id
 	 * @return
 	 */
-	Result<VehicleOrder> orderInfo(EmployeeForm employeeForm, String id);
+	Result<VehicleOrder> orderInfo(Employee employee, String id);
 	
 	/**
 	 * 获取商户的险企列表
@@ -75,7 +75,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher);
+	Pager<VehicleOrderListInfo> orders(Employee employee, VehicleOrderSearcher searcher);
 	
 	/**
 	 * 根据车架号获取车辆信息

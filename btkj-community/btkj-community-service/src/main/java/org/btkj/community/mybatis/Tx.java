@@ -12,13 +12,12 @@ import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.po.UserPO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +43,7 @@ public class Tx {
 	private CommentMapper commentMapper;
 
 	@Transactional
-	public TxCallback comment(UserPO user, int articleId, String content) {
+	public TxCallback comment(User user, int articleId, String content) {
 		Article article = articleMapper.getByKey(articleId);
 		if (null == article || article.getAppId() != user.getAppId())
 			throw new BusinessException(BtkjCode.ARTICLE_NOT_EXIST);
@@ -62,13 +61,13 @@ public class Tx {
 	}
 	
 	@Transactional
-	public TxCallback reply(UserPO user, int quizId, String content) {
+	public TxCallback reply(int appId, int uid, int quizId, String content) {
 		Quiz quiz = quizMapper.getByKey(quizId);
-		if (null == quiz || quiz.getAppId() != user.getAppId())
+		if (null == quiz || quiz.getAppId() != appId)
 			throw new BusinessException(BtkjCode.QUIZ_NOT_EXIST);
 		quiz.setReplyNum(quiz.getReplyNum() + 1);
 		quizDao.update(quiz);
-		Reply reply = EntityGenerator.reply(user, quizId, content);
+		Reply reply = EntityGenerator.reply(uid, quizId, content);
 		replyDao.insert(reply);
 		return new TxCallback() {
 			@Override
@@ -80,13 +79,13 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void articlesAdd(AppPO app, String title, String icon, String link) { 
-		if (app.getMaxArticlesCount() > 0) {
-			int num = articleDao.countByAppIdForUpdate(app.getId());
-			if (num >= app.getMaxArticlesCount())
+	public void articlesAdd(int appId, int maxArticleCount, String title, String icon, String link) { 
+		if (maxArticleCount > 0) {
+			int num = articleDao.countByAppIdForUpdate(appId);
+			if (num >= maxArticleCount)
 				throw new BusinessException(BtkjCode.ARTICLE_NUM_MAXIMUM);
 		}
-		Article article = EntityGenerator.article(app, title, icon, link);
+		Article article = EntityGenerator.article(appId, title, icon, link);
 		articleMapper.insert(article);
 	}
 }

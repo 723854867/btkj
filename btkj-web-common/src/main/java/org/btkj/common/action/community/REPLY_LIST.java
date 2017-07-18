@@ -11,8 +11,7 @@ import org.btkj.common.pojo.info.ReplyInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Reply;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
@@ -35,12 +34,9 @@ public class REPLY_LIST extends UserAction {
 	private CommunityService communityService;
 	
 	@Override
-	protected Result<?> execute(Request request, AppPO app, Client client, UserPO operator) {
-		Result<Pager<Reply>> result = communityService.replies(
-				app.getId(), 
-				request.getParam(Params.ID), 
-				request.getParam(Params.PAGE), 
-				request.getParam(Params.PAGE_SIZE));
+	protected Result<?> execute(Request request, User user) {
+		Result<Pager<Reply>> result = communityService.replies(user.getAppId(), request.getParam(Params.ID), 
+				request.getParam(Params.PAGE), request.getParam(Params.PAGE_SIZE));
 		if (!result.isSuccess())
 			return result;
 		
@@ -53,10 +49,10 @@ public class REPLY_LIST extends UserAction {
 		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<ReplyInfo> l = new ArrayList<ReplyInfo>(list.size());
 		for (Reply reply : list) {
-			for (UserPO user : users) {
-				if (user.getUid() != reply.getUid())
+			for (UserPO temp : users) {
+				if (temp.getUid() != reply.getUid())
 					continue;
-				l.add(new ReplyInfo(user, reply));
+				l.add(new ReplyInfo(temp, reply));
 				break;
 			}
 		}

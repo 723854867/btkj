@@ -3,10 +3,8 @@ package org.btkj.manager.action.tenant.employee;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -19,10 +17,10 @@ public class EMPLOYEE_LIST extends TenantAction {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Pager<EmployeePagingInfo>> execute(Request request, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		EmployeeSearcher searcher = request.getParam(Params.EMPLOYEE_SEARCHER);
-		searcher.setTid(ef.getTenant().getTid());
-		searcher.setAppId(ef.getApp().getId());
+		searcher.setTid(employee.getTid());
+		searcher.setAppId(employee.getAppId());
 		// 排序字段处理：只能做 created 和 updated 字段的排序
 		String sortCol = searcher.getSortCol();
 		if (null != sortCol) {

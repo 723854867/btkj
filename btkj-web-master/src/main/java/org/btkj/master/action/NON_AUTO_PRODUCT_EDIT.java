@@ -2,17 +2,17 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.master.LoggedAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.NonAutoProduct;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtil;
 
-public class NON_AUTO_PRODUCT_EDIT extends AdministratorAction {
+public class NON_AUTO_PRODUCT_EDIT extends LoggedAction {
 	
 	@Resource
 	private NonAutoService nonAutoService;

@@ -2,7 +2,8 @@ package org.btkj.user.mybatis;
 
 import java.util.LinkedList;
 
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
@@ -28,9 +29,9 @@ public class EntityGenerator {
 		return user;
 	} 
 	
-	public static final EmployeePO newEmployee(UserPO user, TenantPO tenant, EmployeePO parent) {
+	public static final EmployeePO newEmployee(int uid, TenantPO tenant, EmployeePO parent) {
 		EmployeePO employee = new EmployeePO();
-		employee.setUid(user.getUid());
+		employee.setUid(uid);
 		employee.setTid(tenant.getTid());
 		employee.setParentId(null == parent ? 0 : parent.getId());
 		employee.setLevel(null == parent ? 1 : parent.getLevel() + 1);
@@ -73,11 +74,11 @@ public class EntityGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(TenantPO tenant, UserPO user, EmployeeForm chief) { 
+	public static final ApplyInfo newApply(TenantPO tenant, User user, Employee chief) { 
 		ApplyInfo ai = new ApplyInfo();
 		ai.setTid(tenant.getTid());
 		ai.setUid(user.getUid());
-		ai.setChief(chief.getEmployee().getId());
+		ai.setChief(chief.getId());
 		ai.setChiefUid(chief.getUser().getUid());
 		ai.setTime(DateUtil.currentTime());
 		return ai;

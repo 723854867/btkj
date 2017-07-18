@@ -8,12 +8,11 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.manager.action.PlatformAction;
+import org.btkj.manager.action.UserAction;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.submit.TenantSearcher;
@@ -22,7 +21,7 @@ import org.btkj.web.util.Request;
 import org.rapid.util.common.enums.SORT_COL;
 import org.rapid.util.common.message.Result;
 
-public class TENANT_LIST extends PlatformAction {
+public class TENANT_LIST extends UserAction {
 	
 	@Resource
 	private ConfigService configService;
@@ -30,9 +29,9 @@ public class TENANT_LIST extends PlatformAction {
 	private UserManageService userManageService;
 	
 	@Override
-	protected Result<Pager<TenantPagingInfo>> execute(Request request, AppPO app, UserPO operator) {
+	protected Result<?> execute(Request request, User user) {
 		TenantSearcher searcher = request.getParam(Params.TENANT_SEARCHER);
-		searcher.setAppId(app.getId());
+		searcher.setAppId(user.getAppId());
 		searcher.setClient(Client.TENANT_MANAGER);
 		// 排序字段处理：只能做 created 和 updated 字段的排序
 		String sortCol = searcher.getSortCol();

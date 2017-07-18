@@ -10,8 +10,7 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.QuizSearcher;
@@ -35,12 +34,12 @@ public class QUIZ_LIST extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, AppPO app, Client client, UserPO user) {
+	protected Result<?> execute(Request request, User user) {
 		QuizSearcher searcher = request.getParam(Params.QUIZ_SEARCHER);
 		if (null == searcher.getSortCol())
 			throw ConstConvertFailureException.errorConstException(Params.QUIZ_SEARCHER);
-		searcher.setAppId(app.getId());
-		switch (client) {
+		searcher.setAppId(user.getAppId());
+		switch (user.getClient()) {
 		case TENANT_MANAGER:
 			Result<Pager<Quiz>> result = communityService.quizs(searcher);
 			Set<Integer> set = new HashSet<Integer>();

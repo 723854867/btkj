@@ -7,10 +7,9 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.redis.AliyunMapper;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
@@ -55,17 +54,7 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 
 	@Override
-	public StsInfo assumeRole(AppPO app) {
-		return null;
-	}
-
-	@Override
-	public StsInfo assumeRole(TenantPO tenant) {
-		return null;
-	}
-
-	@Override
-	public StsInfo assumeRole(UserPO user) {
+	public StsInfo assumeRole(User user) {
 		String field = MessageFormat.format(USER_KEY, String.valueOf(user.getAppId()), String.valueOf(user.getUid()));
 		StsInfo stsInfo = aliyunMapper.getByKey(field);
 		if (null == stsInfo) {
@@ -79,12 +68,17 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 
 	@Override
+	public StsInfo assumeRole(TenantPO tenant) {
+		return null;
+	}
+
+	@Override
 	public StsInfo assumeRole(EmployeePO employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	private StsInfo _doAssumeRole(UserPO user) {
+	private StsInfo _doAssumeRole(User user) {
 		Policy policy = new Policy();
 		policy.addStatement(bucketReadOnly);
 		policy.addStatement(_ossFullAccess(user));
@@ -102,7 +96,7 @@ public class AliyunServiceImpl implements AliyunService {
 		return stsInfo;
 	}
 	
-	private Statement _ossFullAccess(UserPO user) {
+	private Statement _ossFullAccess(User user) {
 		Statement statement = new Statement(Effect.Allow);
 		statement.setAction(Action.OSS_FULL_ACCESS);
 		statement.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/user/" + user.getUid() + "/*");

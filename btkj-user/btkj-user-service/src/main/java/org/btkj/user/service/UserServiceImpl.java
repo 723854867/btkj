@@ -8,8 +8,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.UserModel;
-import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.Customer;
 import org.btkj.pojo.po.EmployeePO;
@@ -62,12 +61,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UserPO getUser(String mobile, int appId) {
-		return userMapper.getUserByMobile(appId, mobile);
+	public User user(String mobile, int appId) {
+		UserPO po = userMapper.getUserByMobile(appId, mobile);
+		return null == po ? null : new User(appMapper.getByKey(po.getAppId()), po);
 	}
 	
 	@Override
-	public UserModel getUserByToken(Client client, String token) {
+	public User getUserByToken(Client client, String token) {
 		switch (client) {
 		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
@@ -75,14 +75,14 @@ public class UserServiceImpl implements UserService {
 			if (null == uid)
 				return null;
 			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
-			return new UserModel(appMapper.getByKey(user.getAppId()), user);
+			return new User(client, appMapper.getByKey(user.getAppId()), user);
 		default:
 			return userMapper.getUserByToken(client, token);
 		}
 	}
 	
 	@Override
-	public Result<UserModel> lockUserByToken(Client client, String token) {
+	public Result<User> lockUserByToken(Client client, String token) {
 		switch (client) {
 		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 			String lockId = userMapper.lockUser(user.getUid());
 			if (null == lockId)
 				return Consts.RESULT.USER_STATUS_CHANGED;
-			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
+			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
 		default:
 			return userMapper.lockUserByToken(client, token);
 		}
@@ -134,12 +134,6 @@ public class UserServiceImpl implements UserService {
 		} finally {
 			userMapper.releaseUserLock(result.attach().getUid(), result.getDesc());
 		}
-	}
-	
-	@Override
-	public boolean tenantNumMax(UserPO user) {
-		int limit = employeeMapper.ownedTenants(user).size() + applyMapper.applyListTids(user).size();
-		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
 	}
 	
 	@Override

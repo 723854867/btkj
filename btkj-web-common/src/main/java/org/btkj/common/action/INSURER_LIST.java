@@ -7,11 +7,9 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
@@ -35,7 +33,7 @@ public class INSURER_LIST extends UserAction {
 	private VehicleService vehicleService;
 	
 	@Override
-	protected Result<List<Insurer>> execute(Request request, AppPO app, Client client, UserPO operator) {
+	protected Result<List<Insurer>> execute(Request request, User user) {
 		int tid = request.getParam(Params.TID);
 		TenantPO tenant = tenantService.getTenantById(tid);
 		if (null == tenant)

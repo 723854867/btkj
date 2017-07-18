@@ -5,13 +5,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 
-public class INSURERS extends AdministratorAction {
+public class INSURERS extends LoggedAction {
 	
 	@Resource
 	private ConfigManageService configManageService;

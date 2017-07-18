@@ -2,10 +2,8 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.UserModel;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -13,7 +11,7 @@ import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
 /**
- * 用户多 client action：只能操作同一个 app 中的资源
+ * 用户操作，需要登录才可以进行的操作
  * 
  * @author ahab
  */
@@ -27,23 +25,23 @@ public abstract class UserAction implements Action {
 		String token = request.getHeader(Params.TOKEN);
 		Client client = client(request);
 		if (userLock()) {
-			Result<UserModel> result = userService.lockUserByToken(client, token);
+			Result<User> result = userService.lockUserByToken(client, token);
 			if (!result.isSuccess())
 				return result;
 			try {
-				return execute(request, result.attach().getApp(), client, result.attach().getUser());
+				return execute(request, result.attach());
 			} finally {
-				userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());
+				userService.releaseUserLock(result.getDesc(), result.attach().getUid());
 			}
 		} else {
-			UserModel userModel = userService.getUserByToken(client, token);
-			if (null == userModel)
+			User user = userService.getUserByToken(client, token);
+			if (null == user)
 				return Result.result(Code.TOKEN_INVALID);
-			return execute(request, userModel.getApp(), client, userModel.getUser());
+			return execute(request, user);
 		}
 	}
 	
-	protected abstract Result<?> execute(Request request, AppPO app, Client client, UserPO user);
+	protected abstract Result<?> execute(Request request, User user);
 	
 	/**
 	 * 如果返回 true 则已经获取到了 user 的锁
@@ -52,15 +50,5 @@ public abstract class UserAction implements Action {
 	 */
 	protected boolean userLock() {
 		return false;
-	}
-	
-	/**
-	 * 获取 client 类型：默认是需要客户端传递过来的
-	 * 
-	 * @param request
-	 * @return
-	 */
-	protected Client client(Request request) {
-		return request.getParam(Params.CLIENT);
 	}
 }

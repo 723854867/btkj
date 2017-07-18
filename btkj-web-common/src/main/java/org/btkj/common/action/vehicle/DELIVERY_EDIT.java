@@ -7,9 +7,8 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.Recipient;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.po.Customer;
 import org.btkj.pojo.po.Region;
@@ -36,7 +35,7 @@ public class DELIVERY_EDIT  extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<Void> execute(Request request, Client client, EmployeeForm ef) {
+	protected Result<Void> execute(Request request, Employee employee) {
 		String orderId = request.getParam(Params.ORDER_ID);
 		DeliveryType deliveryType = request.getParam(Params.DELIVERY_TYPE);
 		DeliveryInfo deliveryInfo = null;

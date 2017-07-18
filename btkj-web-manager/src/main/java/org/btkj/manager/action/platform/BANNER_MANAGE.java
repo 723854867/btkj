@@ -2,9 +2,8 @@ package org.btkj.manager.action.platform;
 
 import javax.annotation.Resource;
 
-import org.btkj.manager.action.PlatformAction;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.manager.action.UserAction;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.api.UserManageService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -18,13 +17,13 @@ import org.rapid.util.exception.ConstConvertFailureException;
  * 
  * @author ahab
  */
-public class BANNER_MANAGE extends PlatformAction {
+public class BANNER_MANAGE extends UserAction {
 	
 	@Resource
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<?> execute(Request request, AppPO app, UserPO operator) {
+	protected Result<?> execute(Request request, User user) {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:
@@ -34,7 +33,7 @@ public class BANNER_MANAGE extends PlatformAction {
 			int idx = request.getParam(Params.IDX);
 			if (idx < 1 || idx > 3)
 				throw ConstConvertFailureException.errorConstException(Params.IDX);
-			return userManageService.bannerAdd(app.getId(), tid, idx, icon, link);
+			return userManageService.bannerAdd(user.getAppId(), tid, idx, icon, link);
 		case DELETE:
 			int id = request.getOptionalParam(Params.ID);
 			return userManageService.bannerDelete(id);

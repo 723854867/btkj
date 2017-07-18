@@ -18,10 +18,10 @@ import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Renewal;
@@ -84,8 +84,8 @@ public class VehicleServiceImpl implements VehicleService {
 	private VehicleModelMapper vehicleModelMapper;
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm ef, String license, String name) {
-		Result<Renewal> result = _renewalByLicense(ef, license);
+	public Result<Renewal> renewal(Employee employee, String license, String name) {
+		Result<Renewal> result = _renewalByLicense(employee, license);
 		if (!result.isSuccess())
 			return result;
 		Renewal renewal = result.attach();
@@ -95,8 +95,8 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm ef, String vin, String engine, String name) {
-		Result<Renewal> result = _renewalByVinAndEngine(ef, vin, engine);
+	public Result<Renewal> renewal(Employee employee, String vin, String engine, String name) {
+		Result<Renewal> result = _renewalByVinAndEngine(employee, vin, engine);
 		if (!result.isSuccess())
 			return result;
 		Renewal renewal = result.attach();
@@ -105,25 +105,25 @@ public class VehicleServiceImpl implements VehicleService {
 		return Result.result(renewal);
 	}
 	
-	private Result<Renewal> _renewalByLicense(EmployeeForm ef, String license) {
+	private Result<Renewal> _renewalByLicense(Employee employee, String license) {
 		Renewal renewal = renewalMapper.getByLicense(license);
-		return null == renewal ? _flushRenewal(ef, license) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee, license) : Result.result(renewal);
 	}
 	
-	private Result<Renewal> _renewalByVinAndEngine(EmployeeForm ef, String vin, String engine) {
+	private Result<Renewal> _renewalByVinAndEngine(Employee employee, String vin, String engine) {
 		Renewal renewal = renewalMapper.getByKey(vin);
-		return null == renewal ? _flushRenewal(ef, vin, engine) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee, vin, engine) : Result.result(renewal);
 	}
 	
-	private Result<Renewal> _flushRenewal(EmployeeForm ef, String license) {
-		Result<Renewal> result = biHuVehicle.renewal(ef, license, configService.area(ef.getTenant().getRegion()).getBiHuId());
+	private Result<Renewal> _flushRenewal(Employee employee, String license) {
+		Result<Renewal> result = biHuVehicle.renewal(employee.getUid(), employee.getTid(), license, configService.area(employee.getRegion()).getBiHuId());
 		if (result.isSuccess())
 			_saveRenewal(result.attach());
 		return result;
 	}
 	
-	private Result<Renewal> _flushRenewal(EmployeeForm ef, String vin, String engine) {
-		Result<Renewal> result = biHuVehicle.renewal(ef, vin, engine, configService.area(ef.getTenant().getRegion()).getBiHuId());
+	private Result<Renewal> _flushRenewal(Employee employee, String vin, String engine) {
+		Result<Renewal> result = biHuVehicle.renewal(employee.getUid(), employee.getTid(), vin, engine, configService.area(employee.getRegion()).getBiHuId());
 		if (result.isSuccess()) 
 			_saveRenewal(result.attach());
 		return result;
@@ -142,16 +142,16 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 
 	@Override
-	public Result<Void> order(int quoteGroup, int insureGroup, EmployeeForm ef, VehiclePolicyTips tips, String vehicleId) {
-		ICode code = rule.orderCheck(ef, tips.getSchema());
+	public Result<Void> order(int quoteMod, int insureMod, Employee employee, VehiclePolicyTips tips, String vehicleId) {
+		ICode code = rule.orderCheck(employee, tips.getSchema());
 		if (code != Code.OK)
 			return Result.result(code);
 		Map<Integer, Insurer> quoteMap = new HashMap<Integer, Insurer>();
-		for (Insurer insurer : configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteGroup)))
+		for (Insurer insurer : configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteMod)))
 			quoteMap.put(insurer.getId(), insurer);
-		Set<Integer> insure = NumberUtil.splitIntoPowerOfTwoSet(insureGroup);
-		List<Route> routes = routeMapper.getByTid(ef.getTenant().getTid());
-		String batchId = _batchId(tips, ef);
+		Set<Integer> insure = NumberUtil.splitIntoPowerOfTwoSet(insureMod);
+		List<Route> routes = routeMapper.getByTid(employee.getTid());
+		String batchId = _batchId(tips, employee);
 		int biHuQuoteMod = 0;
 		int biHuInsureMod = 0;
 		Map<Lane, Map<Integer, VehicleOrder>> orders = new HashMap<Lane, Map<Integer, VehicleOrder>>();
@@ -169,7 +169,7 @@ public class VehicleServiceImpl implements VehicleService {
 					orders.put(lane, temp);
 				}
 				boolean submit = null == insure ? false : insure.remove(entry.getKey());
-				temp.put(entry.getKey(), new VehicleOrder(batchId, ef, entry.getValue(), lane.mark(), submit, tips));
+				temp.put(entry.getKey(), new VehicleOrder(batchId, quoteMod, insureMod, employee, entry.getValue(), lane.mark(), submit, tips));
 				switch (lane) {
 				case BI_HU:
 					if (0 == entry.getValue().getBiHuId())
@@ -202,7 +202,7 @@ public class VehicleServiceImpl implements VehicleService {
 		tips.bind(vehicleInfo);
 		vehicleOrderMapper.deleteBatchOrder(batchId);
 		if (0 != biHuQuoteMod) {
-			Result<Void> result = biHuVehicle.order(ef, biHuQuoteMod, biHuInsureMod, tips, configService.area(ef.getTenant().getRegion()).getBiHuId());
+			Result<Void> result = biHuVehicle.order(employee, biHuQuoteMod, biHuInsureMod, tips, configService.area(employee.getRegion()).getBiHuId());
 			if (!result.isSuccess())
 				_orderRequestFailure(orders.get(Lane.BI_HU), result.getDesc());
 		}
@@ -221,29 +221,29 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Pager<VehicleOrderListInfo> orders(EmployeeForm ef, VehicleOrderSearcher searcher) {
-		Pager<VehicleOrder> pager = vehicleOrderMapper.paging(ef, searcher);
+	public Pager<VehicleOrderListInfo> orders(Employee employee, VehicleOrderSearcher searcher) {
+		Pager<VehicleOrder> pager = vehicleOrderMapper.paging(searcher);
 		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(pager.getList().size());
 		for (VehicleOrder order : pager.getList()) {
-			_orderInfo(ef, order);
+			_orderInfo(employee, order);
 			result.add(new VehicleOrderListInfo(order));
 		}
 		return new Pager<VehicleOrderListInfo>(pager.getTotal(), result);
 	}
 	
 	@Override
-	public Result<VehicleOrder> orderInfo(EmployeeForm ef, String id) {
+	public Result<VehicleOrder> orderInfo(Employee employee, String id) {
 		VehicleOrder order = vehicleOrderMapper.getByKey(id);
 		if (null == order)
 			return Result.result(BtkjCode.ORDER_NOT_EXIST);
-		return _orderInfo(ef, order);
+		return _orderInfo(employee, order);
 	}
 	
-	private Result<VehicleOrder> _orderInfo(EmployeeForm ef, VehicleOrder order) {
+	private Result<VehicleOrder> _orderInfo(Employee employee, VehicleOrder order) {
 		VehicleOrderState state = order.getState();
 		if (order.getLane() == Lane.BI_HU.mark()) {
 			if (order.getState() == VehicleOrderState.QUOTING) {
-				_quoteResult(ef, order);
+				_quoteResult(employee, order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
 					bonusManager.calculateBonus(order);					// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
@@ -251,15 +251,15 @@ public class VehicleServiceImpl implements VehicleService {
 				}
 			}
 			if (order.getState() == VehicleOrderState.INSURING)
-				_insureResult(ef, order);
+				_insureResult(employee, order);
 			if (state != order.getState())								// 状态变了则更新保单
 				vehicleOrderMapper.insert(order);
 		}
 		return Result.result(order);
 	}
 	
-	private void _quoteResult(EmployeeForm employeeForm, VehicleOrder order) {
-		Result<PolicySchema> result = biHuVehicle.quoteResult(employeeForm, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+	private void _quoteResult(Employee employee, VehicleOrder order) {
+		Result<PolicySchema> result = biHuVehicle.quoteResult(employee.getUid(), employee.getTid(), order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) {
 				order.setState(VehicleOrderState.QUOTE_FAILURE);
@@ -272,8 +272,8 @@ public class VehicleServiceImpl implements VehicleService {
 		}
 	}
 	
-	private void _insureResult(EmployeeForm ef, VehicleOrder order) {
-		Result<PolicyDetail> detail = biHuVehicle.insureResult(ef, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+	private void _insureResult(Employee employee, VehicleOrder order) {
+		Result<PolicyDetail> detail = biHuVehicle.insureResult(employee.getUid(), employee.getTid(), order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
 		if (!detail.isSuccess()) {
 			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(detail.getDesc());
@@ -282,9 +282,9 @@ public class VehicleServiceImpl implements VehicleService {
 				order.setDesc(detail.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
 				if (VehicleUtils.isNewVehicleLicense(order.getTips().getLicense()))
-					_flushRenewal(ef, order.getTips().getVin(), order.getTips().getEngine());
+					_flushRenewal(employee, order.getTips().getVin(), order.getTips().getEngine());
 				else
-					_flushRenewal(ef, order.getTips().getLicense());
+					_flushRenewal(employee, order.getTips().getLicense());
 			}
 		} else {
 			order.setDesc(detail.getDesc());
@@ -343,7 +343,7 @@ public class VehicleServiceImpl implements VehicleService {
 		return vehicleOrderMapper.orderNum(employeeId, begin, end, stateMod);
 	}
 	
-	private String _batchId(VehiclePolicyTips tips, EmployeeForm ef) {
-		return ef.getEmployee().getId() + Consts.SYMBOL_UNDERLINE + tips.getLicense();
+	private String _batchId(VehiclePolicyTips tips, Employee employee) {
+		return employee.getId() + Consts.SYMBOL_UNDERLINE + tips.getLicense();
 	}
 }

@@ -3,6 +3,7 @@ package org.btkj.master.action.vehicle.baotu;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.Insurer;
@@ -11,12 +12,11 @@ import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.message.Result;
 
-public class ROUTE_EDIT extends AdministratorAction {
+public class ROUTE_EDIT extends LoggedAction {
 	
 	@Resource
 	private TenantService tenantService;

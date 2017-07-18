@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.master.LoggedAction;
 import org.btkj.master.pojo.RouteInfo;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.Insurer;
@@ -15,10 +16,9 @@ import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 
-public class ROUTES extends AdministratorAction {
+public class ROUTES extends LoggedAction {
 	
 	@Resource
 	private ConfigService configService;

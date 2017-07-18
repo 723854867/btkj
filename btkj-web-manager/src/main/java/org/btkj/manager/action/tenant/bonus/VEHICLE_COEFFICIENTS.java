@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.VehicleCoefficient;
@@ -42,10 +42,10 @@ public class VEHICLE_COEFFICIENTS extends TenantAction {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<List<VehicleCoefficientsInfo>> execute(Request request, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		BonusSearcher searcher = request.getOptionalParam(Params.BONUS_SEARCHER);
 		if (null == searcher) {
-			List<VehicleCoefficient> coefficients = vehicleManageService.coefficients(ef.getTenant().getTid());
+			List<VehicleCoefficient> coefficients = vehicleManageService.coefficients(employee.getTid());
 			Map<CoefficientType, VehicleCoefficientsInfo> map = new HashMap<CoefficientType, VehicleCoefficientsInfo>();
 			for (CoefficientType type : CoefficientType.values()) {
 				if (!type.isCustom())
@@ -62,20 +62,20 @@ public class VEHICLE_COEFFICIENTS extends TenantAction {
 			}
 			return Result.result(new ArrayList<VehicleCoefficientsInfo>(map.values()));
 		} else {
-			Result<List<VehicleCoefficientsInfo>> result = _checkSearcher(searcher, ef);
+			Result<List<VehicleCoefficientsInfo>> result = _checkSearcher(searcher, employee);
 			if (!result.isSuccess())
 				return result;
 			return bonusService.coefficients(searcher);
 		}
 	}
 	
-	private Result<List<VehicleCoefficientsInfo>> _checkSearcher(BonusSearcher searcher, EmployeeForm ef) {
-		searcher.setTid(ef.getTenant().getTid());
-		Region region = configService.subordinateProvince(ef.getTenant().getTid());
+	private Result<List<VehicleCoefficientsInfo>> _checkSearcher(BonusSearcher searcher, Employee employee) {
+		searcher.setTid(employee.getTid());
+		Region region = configService.subordinateProvince(employee.getTid());
 		searcher.setSubordinateProvince(null == region ? 0 : region.getId());
 		if (null == searcher.getPath())
 			throw ConstConvertFailureException.errorConstException(Params.BONUS_SEARCHER);
-		List<Integer> list = vehicleService.insurers(ef.getTenant());
+		List<Integer> list = vehicleService.insurers(employee.getTenant());
 		for (int insurerId : list) {
 			if (insurerId == searcher.getInsurerId())
 				return Consts.RESULT.OK;

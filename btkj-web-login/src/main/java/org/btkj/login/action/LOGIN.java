@@ -4,8 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.bo.CaptchaVerifier;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.App;
 import org.btkj.user.api.LoginService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
@@ -28,15 +27,15 @@ public class LOGIN extends AppAction {
 	private CourierService courierService;
 	
 	@Override
-	protected Result<?> execute(Request request, Client client, AppPO app) {
-		switch (client) {
+	protected Result<?> execute(Request request, App app) {
+		switch (app.getClient()) {
 		case TENANT_MANAGER:
 			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
 		case APP:
 			CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, app.getId());			// app 登录需要验证码
 			if (courierService.captchaVerify(verifier).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
-			return loginService.login(app, client, verifier.getIdentity());
+			return loginService.login(app, verifier.getIdentity());
 		default:
 			return Consts.RESULT.FORBID;
 		}

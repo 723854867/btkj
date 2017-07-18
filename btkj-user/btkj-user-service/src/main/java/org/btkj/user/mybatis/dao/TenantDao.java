@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.po.TenantPO;
@@ -33,7 +32,7 @@ public interface TenantDao extends DBMapper<Integer, TenantPO> {
 	@Override
 	@MapKey("tid")
 	@SelectProvider(type = TenantSQLProvider.class, method = "getByKeys")
-	Map<Integer, TenantPO> getByKeys(@Param("keys") Collection<Integer> keys);
+	Map<Integer, TenantPO> getByKeys(Collection<Integer> keys);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppId")
 	int countByAppId(int appId);

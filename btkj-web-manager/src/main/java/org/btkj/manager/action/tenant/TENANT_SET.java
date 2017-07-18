@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSettingsSubmit;
@@ -34,10 +34,10 @@ public class TENANT_SET extends TenantAction {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Void> execute(Request request, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		TenantSettingsSubmit submit = request.getParam(Params.TENANT_SETTINGS_SUBMIT);
 		_check(submit);
-		userManageService.tenantSet(ef.getTenant(), submit);
+		userManageService.tenantSet(employee.getTenant(), submit);
 		return Consts.RESULT.OK;
 	}
 	

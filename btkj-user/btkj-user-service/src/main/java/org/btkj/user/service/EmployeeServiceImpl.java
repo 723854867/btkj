@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
@@ -29,18 +29,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public EmployeeForm getById(int employeeId) {
+	public Employee employee(int employeeId) {
 		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return null;
 		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
 		AppPO app = appMapper.getByKey(tenant.getAppId());
 		UserPO user = userMapper.getByKey(employee.getUid());
-		return new EmployeeForm(app, user, tenant, employee);
+		return new Employee(app, user, tenant, employee);
 	}
 	
 	@Override
-	public List<EmployeePO> team(EmployeeForm form) {
-		return employeeMapper.team(form.getEmployee(), form.getTenant().getTeamDepth());
+	public List<EmployeePO> team(Employee employee) {
+		return employeeMapper.team(employee, employee.getTeamDepth());
 	}
 }

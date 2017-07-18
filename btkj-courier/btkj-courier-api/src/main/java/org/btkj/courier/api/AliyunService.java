@@ -1,9 +1,8 @@
 package org.btkj.courier.api;
 
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.StsInfo;
 
 /**
@@ -20,7 +19,7 @@ public interface AliyunService {
 	 * @param userModel
 	 * @return
 	 */
-	StsInfo assumeRole(AppPO app);
+	StsInfo assumeRole(User user);
 	
 	/**
 	 * STS assumeRole
@@ -29,15 +28,6 @@ public interface AliyunService {
 	 * @return
 	 */
 	StsInfo assumeRole(TenantPO tenant);
-	
-	/**
-	 * STS assumeRole
-	 * 
-	 * @param app
-	 * @param user
-	 * @return
-	 */
-	StsInfo assumeRole(UserPO user);
 	
 	/**
 	 * STS assumeRole

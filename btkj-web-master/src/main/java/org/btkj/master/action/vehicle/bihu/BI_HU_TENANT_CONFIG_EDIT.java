@@ -3,18 +3,18 @@ package org.btkj.master.action.vehicle.bihu;
 import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.api.BiHuManageService;
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.message.Result;
 
-public class BI_HU_TENANT_CONFIG_EDIT extends AdministratorAction {
+public class BI_HU_TENANT_CONFIG_EDIT extends LoggedAction {
 	
 	@Resource
 	private TenantService tenantService;

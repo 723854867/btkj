@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.App;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.MainPageInfo;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
@@ -40,12 +41,20 @@ public class AppServiceImpl implements AppService {
 	private EmployeeService employeeService;
 	
 	@Override
+	public App app(Client client, int appId) {
+		AppPO entity = appMapper.getByKey(appId);
+		if (null == entity)
+			return null;
+		return new App(entity, client);
+	}
+	
+	@Override
 	public AppPO getAppById(int appId) {
 		return appMapper.getByKey(appId);
 	}
 	
 	@Override
-	public Result<MainPageInfo> mainPage(Client client, UserPO user, EmployeeForm em) {
+	public Result<MainPageInfo> mainPage(User user, Employee em) {
 		return _mainPageInfo(user, em);
 	}
 	
@@ -56,13 +65,13 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<MainPageInfo> _mainPageInfo(UserPO user, EmployeeForm em) {
-		TenantPO tenant = null == em ? null : em.getTenant();
+	private Result<MainPageInfo> _mainPageInfo(User user, Employee employee) {
+		TenantPO tenant = null == employee ? null : employee.getTenant();
 		int appId = user.getAppId();
 		if (null == tenant) {
 			int mainTid = userMapper.mainTenant(user.getUid());
 			if (0 == mainTid) {
-				List<EmployeePO> employees = employeeMapper.ownedTenants(user);
+				List<EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
 				if (null != employees && !employees.isEmpty()) 
 					mainTid = employees.get(0).getTid();
 			}

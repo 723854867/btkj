@@ -4,9 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.bo.CaptchaVerifier;
+import org.btkj.pojo.bo.indentity.App;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
@@ -25,12 +24,10 @@ public class PWD_RESET extends AppAction {
 	@Resource
 	private UserService userService;
 	@Resource
-	private TenantService tenantService;
-	@Resource
 	private CourierService courierService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, AppPO app) {
+	protected Result<?> execute(Request request, App app) {
 		String pwd = request.getParam(Params.PWD);
 		CaptchaVerifier verifier = ParamsUtil.captchaVerifier(request, app.getId());
 		if (courierService.captchaVerify(verifier).getCode() == -1)
@@ -39,7 +36,7 @@ public class PWD_RESET extends AppAction {
 	}
 	
 	@Override
-	protected Client client(Request request) {
+	public Client client(Request request) {
 		return Client.TENANT_MANAGER;
 	}
 }

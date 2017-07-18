@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.UserModel;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.Customer;
 import org.btkj.pojo.po.Region;
@@ -42,7 +42,7 @@ public interface UserService {
 	 * @param appId
 	 * @return
 	 */
-	UserPO getUser(String mobile, int appId);
+	User user(String mobile, int appId);
 	
 	/**
 	 * 通过 token 获取用户
@@ -51,7 +51,7 @@ public interface UserService {
 	 * @param toke
 	 * @return
 	 */
-	UserModel getUserByToken(Client client, String token);
+	User getUserByToken(Client client, String token);
 	
 	/**
 	 * 获取用户的同时获取用户锁
@@ -60,7 +60,7 @@ public interface UserService {
 	 * @param token
 	 * @return
 	 */
-	Result<UserModel> lockUserByToken(Client client, String token);
+	Result<User> lockUserByToken(Client client, String token);
 
 	/**
 	 * 通过雇员 ID 获取用户
@@ -94,14 +94,6 @@ public interface UserService {
 	 * @return
 	 */
 	Result<?> pwdReset(int appId, String mobile, String pwd);
-	
-	/**
-	 * 判断用户代理公司数是否达到最大值
-	 * 
-	 * @param user
-	 * @return
-	 */
-	boolean tenantNumMax(UserPO user);
 	
 	/**
 	 * 根据客户 ID 获取客户

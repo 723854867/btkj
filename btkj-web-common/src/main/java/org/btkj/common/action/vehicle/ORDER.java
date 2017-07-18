@@ -6,12 +6,11 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.UnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
@@ -38,7 +37,7 @@ public class ORDER extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		int quoteGroup = request.getParam(Params.QUOTE_GROUP);
 		int insureGroup = request.getOptionalParam(Params.INSURE_GROUP);
 		String vehicleId = request.getParam(Params.VEHICLE_ID);
@@ -47,9 +46,9 @@ public class ORDER extends TenantAction {
 				|| Integer.bitCount(insureGroup) > GlobalConfigContainer.getGlobalConfig().getMaxInsureNum())
 			return Consts.RESULT.FORBID;
 		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
-		if (!_check(ef.getTenant(), tips))
+		if (!_check(employee.getTenant(), tips))
 			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
-		return vehicleService.order(quoteGroup, insureGroup, ef, tips, vehicleId);
+		return vehicleService.order(quoteGroup, insureGroup, employee, tips, vehicleId);
 	}
 	
 	/**

@@ -5,8 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.courier.api.CourierService;
 import org.btkj.courier.model.QuotaNoticeSubmit;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.vehicle.api.VehicleService;
@@ -25,15 +24,15 @@ public class QUOTA_NOTICE extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		QuotaNoticeSubmit submit = request.getParam(Params.QUOTA_NOTICE_SUBMIT);
 		if (null == submit.getCustomerMobile())
 			throw ConstConvertFailureException.errorConstException(Params.QUOTA_NOTICE_SUBMIT);
-		Result<VehicleOrder> result = vehicleService.orderInfo(ef, request.getParam(Params.ORDER_ID));
+		Result<VehicleOrder> result = vehicleService.orderInfo(employee, request.getParam(Params.ORDER_ID));
 		if (!result.isSuccess())
 			return result;
 		VehicleOrder order = result.attach();
-		if (order.getEmployeeId() != ef.getEmployee().getId())
+		if (order.getEmployeeId() != employee.getId())
 			return Consts.RESULT.FORBID;
 		if (order.getState().mark() < VehicleOrderState.QUOTE_SUCCESS.mark())			// 只有报价成功才可以转发
 			return BtkjConsts.RESULT.ORDER_STATE_ERROR;
@@ -43,9 +42,9 @@ public class QUOTA_NOTICE extends TenantAction {
 		submit.setCompulsoryRate(Math.max(0, submit.getCompulsoryRate()));
 		submit.setCompulsoryRate(Math.min(100, submit.getCompulsoryRate()));
 		if (null == submit.getAgentMobile())
-			submit.setAgentMobile(ef.getUser().getMobile());
+			submit.setAgentMobile(employee.getMobile());
 		if (null == submit.getAgentName())
-			submit.setAgentName(ef.getUser().getName());
+			submit.setAgentName(employee.getName());
 		courierService.quotaNotice(result.attach(), submit);
 		return Consts.RESULT.OK;
 	}

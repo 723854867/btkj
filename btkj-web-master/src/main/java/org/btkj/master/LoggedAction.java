@@ -1,4 +1,4 @@
-package org.btkj.web.util.action;
+package org.btkj.master;
 
 import javax.annotation.Resource;
 
@@ -6,6 +6,7 @@ import org.btkj.master.api.CloudService;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Action;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -14,15 +15,14 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public abstract class AdministratorAction implements Action {
+public abstract class LoggedAction implements Action {
 	
 	@Resource
 	protected CloudService cloudService;
 	
 	@Override
 	public Result<?> execute(Request request) {
-		String token = request.getHeader(Params.TOKEN);
-		Administrator administrator = cloudService.getAdministratorByToken(token);
+		Administrator administrator = cloudService.getAdministratorByToken(request.getHeader(Params.TOKEN));
 		if (null == administrator)
 			return Result.result(Code.TOKEN_INVALID);
 		return execute(request, administrator);

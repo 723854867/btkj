@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.vo.EmployeeTips;
 import org.btkj.user.api.EmployeeService;
@@ -27,11 +27,10 @@ public class EMPLOYEE_TIPS implements Action {
 
 	@Override
 	public Result<EmployeeTips> execute(Request request) {
-		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		EmployeeForm form = employeeService.getById(employeeId);
-		if (null == form)
+		Employee employee = employeeService.employee(request.getParam(Params.EMPLOYEE_ID));
+		if (null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
-		Region region = configService.getRegionById(form.getTenant().getRegion());
-		return Result.result(new EmployeeTips(form, region));
+		Region region = configService.getRegionById(employee.getRegion());
+		return Result.result(new EmployeeTips(employee, region));
 	}
 }

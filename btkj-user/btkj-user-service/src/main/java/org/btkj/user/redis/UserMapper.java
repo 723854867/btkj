@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.UserModel;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.Config;
@@ -101,13 +101,13 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public Result<UserModel> lockUserByToken(Client client, String token) {
+	public Result<User> lockUserByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
 						USER_LOCK, lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) {
 			UserPO user = serializer.antiConvet((byte[]) data);
-			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
+			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
 		}
 		if ((long) data == 1)
 			return Result.result(Code.USER_NOT_EXIST);
@@ -131,12 +131,12 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	 * @param token
 	 * @return
 	 */
-	public UserModel getUserByToken(Client client, String token) {
+	public User getUserByToken(Client client, String token) {
 		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
 		if (null == data)
 			return null;
 		UserPO user = serializer.antiConvet(data);
-		return new UserModel(appMapper.getByKey(user.getAppId()), user);
+		return new User(client, appMapper.getByKey(user.getAppId()), user);
 	}
 
 	public String tokenReplace(Client client, int uid, String mobile) {

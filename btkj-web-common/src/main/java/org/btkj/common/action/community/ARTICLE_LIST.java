@@ -4,10 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Article;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -26,11 +24,11 @@ public class ARTICLE_LIST extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<Pager<Article>> execute(Request request, AppPO app, Client client, UserPO operator) {
+	protected Result<Pager<Article>> execute(Request request, User user) {
 		ArticleSearcher searcher = request.getParam(Params.ARTICLE_SEARCHER);
 		if (null == searcher.getSortCol())
 			throw ConstConvertFailureException.errorConstException(Params.ARTICLE_SEARCHER);
-		searcher.setAppId(app.getId());
+		searcher.setAppId(user.getAppId());
 		return communityService.articles(searcher);
 	}
 }

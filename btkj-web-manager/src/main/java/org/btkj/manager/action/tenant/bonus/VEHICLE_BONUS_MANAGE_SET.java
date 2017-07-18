@@ -3,7 +3,7 @@ package org.btkj.manager.action.tenant.bonus;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.web.util.Params;
@@ -19,25 +19,25 @@ public class VEHICLE_BONUS_MANAGE_SET extends TenantAction {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<Void> execute(Request request, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:
 			int depth = request.getParam(Params.DEPTH);
-			if (depth <= 1 || depth > ef.getTenant().getTeamDepth())
+			if (depth <= 1 || depth > employee.getTeamDepth())
 				return Consts.RESULT.FORBID;
 			BonusManageConfigType type = BonusManageConfigType.match(request.getParam(Params.TYPE));
 			if (null == type)
 				throw ConstConvertFailureException.errorConstException(Params.TYPE);
 			int rate = request.getParam(Params.NUM);
-			return vehicleManageService.bonusManageConfigAdd(ef.getTenant().getTid(), type, depth, rate);
+			return vehicleManageService.bonusManageConfigAdd(employee.getTid(), type, depth, rate);
 		case UPDATE:
 			String id = request.getParam(Params.KEY);
 			rate = request.getParam(Params.NUM);
-			return vehicleManageService.bonusManageConfigUpdate(id, ef.getTenant().getTid(), rate);
+			return vehicleManageService.bonusManageConfigUpdate(id, employee.getTid(), rate);
 		case DELETE:
 			id = request.getParam(Params.KEY);
-			return vehicleManageService.bonusManageConfigDelete(id, ef.getTenant().getTid());
+			return vehicleManageService.bonusManageConfigDelete(id, employee.getTid());
 		default:
 			return Consts.RESULT.FORBID;
 		}

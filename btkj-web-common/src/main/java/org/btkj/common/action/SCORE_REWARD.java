@@ -4,8 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.RewardInfo;
 import org.btkj.payment.api.PaymentService;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -26,13 +25,13 @@ public class SCORE_REWARD extends TenantAction {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<?> execute(Request request, Client client, EmployeeForm ef) {
+	protected Result<?> execute(Request request, Employee employee) {
 		int type = request.getOptionalParam(Params.TYPE);
 		switch (type) {
 		case 0:									// 奖励首页：总计
-			return Result.result(new RewardInfo(paymentService.getAccountByEmployeeId(ef.getEmployee().getId())));
+			return Result.result(new RewardInfo(paymentService.getAccountByEmployeeId(employee.getId())));
 		case 1:									// 按照时间统计积分雇员积分
-			return Result.result(statisticsService.scoreReward(ef.getEmployee().getId(), request.getParam(Params.BEGIN_TIME), request.getParam(Params.END_TIME)));
+			return Result.result(statisticsService.scoreReward(employee.getId(), request.getParam(Params.BEGIN_TIME), request.getParam(Params.END_TIME)));
 		default:
 			throw ConstConvertFailureException.errorConstException(Params.TYPE);
 		}

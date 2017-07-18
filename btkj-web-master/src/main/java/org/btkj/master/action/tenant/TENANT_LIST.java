@@ -2,17 +2,17 @@ package org.btkj.master.action.tenant;
 
 import javax.annotation.Resource;
 
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.enums.SORT_COL;
 import org.rapid.util.common.message.Result;
 
-public class TENANT_LIST extends AdministratorAction {
+public class TENANT_LIST extends LoggedAction {
 	
 	@Resource
 	private UserManageService userManageService;

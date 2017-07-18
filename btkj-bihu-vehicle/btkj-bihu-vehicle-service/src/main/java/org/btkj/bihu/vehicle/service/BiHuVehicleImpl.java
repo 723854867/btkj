@@ -24,11 +24,11 @@ import org.btkj.bihu.vehicle.exception.RequestFrequently;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
 import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.exception.BusinessException;
@@ -83,23 +83,23 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private int insureResultTimeout;
 
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String license, int cityCode) {
+	public Result<Renewal> renewal(int uid, int tid, String license, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
-		return _doRenewal(employeeForm, params, cityCode);
+		return _doRenewal(uid, tid, params, cityCode);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(EmployeeForm employeeForm, String vin, String engine, int cityCode) {
+	public Result<Renewal> renewal(int uid, int tid, String vin, String engine, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
-		return _doRenewal(employeeForm, params, cityCode);
+		return _doRenewal(uid, tid, params, cityCode);
 	}
 	
-	private Result<Renewal> _doRenewal(EmployeeForm employeeForm, BiHuParams params, int cityCode) {
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));	// 用 uid 作为 custkey
-		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
+	private Result<Renewal> _doRenewal(int uid, int tid, BiHuParams params, int cityCode) {
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));	// 用 uid 作为 custkey
+		TenantConfig tc = tenantConfigMapper.getByKey(tid);
 		if (null != tc) 
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
@@ -123,8 +123,8 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<Void> order(EmployeeForm employeeForm, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode) {
-		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
+	public Result<Void> order(Employee employee, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode) {
+		TenantConfig tc = tenantConfigMapper.getByKey(employee.getTid());
 		if (null == tc)
 			return Result.result(BtkjCode.LANE_BIHU_NOT_OPENED);
 		BiHuParams params = new BiHuParams(RequestType.QUOTE);
@@ -133,7 +133,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			.setQuoteGroup(quoteMod)
 			.setSubmitGroup(insureMod)
 			.setCityCode(cityCode)
-			.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));
+			.setCustKey(DigestUtils.md5Hex(String.valueOf(employee.getUid())));
 		
 		_buildOwner(params, tips.getOwner());
 		_buildInsured(params, tips.getInsured());
@@ -302,11 +302,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicySchema> quoteResult(EmployeeForm employeeForm, String license, int insurer) {
+	public Result<PolicySchema> quoteResult(int uid, int tid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.QUOTE_RESULT);
 		params.setLicenseNo(license);
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));
-		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));
+		TenantConfig tc = tenantConfigMapper.getByKey(tid);
 		if (null != tc) 
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else
@@ -329,11 +329,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicyDetail> insureResult(EmployeeForm employeeForm, String license, int insurer) {
+	public Result<PolicyDetail> insureResult(int uid, int tid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.INSURE_RESULT);
 		params.setLicenseNo(license);
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(employeeForm.getUser().getUid())));
-		TenantConfig tc = tenantConfigMapper.getByKey(employeeForm.getTenant().getTid());
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));
+		TenantConfig tc = tenantConfigMapper.getByKey(tid);
 		if (null != tc) 
 			params.setAgent(tc.getAgent()).setKey(tc.getKey());
 		else

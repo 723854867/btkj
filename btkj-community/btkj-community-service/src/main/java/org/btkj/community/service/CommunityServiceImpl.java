@@ -11,13 +11,12 @@ import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.rapid.util.common.Consts;
@@ -39,9 +38,9 @@ public class CommunityServiceImpl implements CommunityService {
 	private CommentMapper commentMapper;
 	
 	@Override
-	public Result<Void> articleAdd(AppPO app, String title, String icon, String link) {
+	public Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link) {
 		try {
-			tx.articlesAdd(app, title, icon, link);
+			tx.articlesAdd(appId, maxArticleCount, title, icon, link);
 		} catch (BusinessException e) {
 			return Result.result(e.getCode());
 		}
@@ -62,7 +61,7 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public Result<Void> comment(UserPO user, int articleId, String content) {
+	public Result<Void> comment(User user, int articleId, String content) {
 		try {
 			tx.comment(user, articleId, content).finish();;
 		} catch (BusinessException e) {
@@ -72,8 +71,8 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public int quiz(UserPO user, String content) {
-		Quiz quiz = EntityGenerator.quiz(user, content);
+	public int quiz(int appId, int uid, String content) {
+		Quiz quiz = EntityGenerator.quiz(appId, uid, content);
 		quizMapper.insert(quiz);
 		return quiz.getId();
 	}
@@ -97,9 +96,9 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public Result<Void> reply(UserPO user, int quizId, String content) {
+	public Result<Void> reply(int appId, int uid, int quizId, String content) {
 		try {
-			tx.reply(user, quizId, content).finish();;
+			tx.reply(appId, uid, quizId, content).finish();;
 		} catch (BusinessException e) {
 			return Result.result(e.getCode());
 		}

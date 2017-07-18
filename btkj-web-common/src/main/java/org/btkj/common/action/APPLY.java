@@ -4,10 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -34,9 +32,9 @@ public class APPLY extends UserAction {
 	private EmployeeService employeeService;
 	
 	@Override
-	protected Result<?> execute(Request request, AppPO app, Client client, UserPO user) {
+	protected Result<?> execute(Request request, User user) {
 		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		EmployeeForm chief = employeeService.getById(employeeId);
+		Employee chief = employeeService.employee(employeeId);
 		if (null == chief)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (null == user.getName())

@@ -3,8 +3,7 @@ package org.btkj.common.action;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
@@ -19,19 +18,19 @@ public class USER_EDIT extends UserAction {
 	private UserService userService;
 	@Resource
 	private JianJieService jianJieService;
-
+	
 	@Override
-	protected Result<Void> execute(Request request, AppPO app, Client client, UserPO user) {
-		boolean nameChanged = _name(request, user);
-		boolean avatarChanged = _avatar(request, user);
-		boolean identityChanged = _identity(request, user);
-		boolean identityFaceChanged = _identityFace(request, user);
-		boolean identityBackChanged = _identityBack(request, user);
+	protected Result<?> execute(Request request, User user) {
+		boolean nameChanged = _name(request, user.getEntity());
+		boolean avatarChanged = _avatar(request, user.getEntity());
+		boolean identityChanged = _identity(request, user.getEntity());
+		boolean identityFaceChanged = _identityFace(request, user.getEntity());
+		boolean identityBackChanged = _identityBack(request, user.getEntity());
 		if (!nameChanged && !avatarChanged && !identityChanged && !identityFaceChanged && !identityBackChanged)
 			return Consts.RESULT.OK;
-		Result<Void> result = userService.update(user);
+		Result<Void> result = userService.update(user.getEntity());
 		if (result.isSuccess() && (nameChanged || identityChanged))
-			jianJieService.addUser(user);
+			jianJieService.addUser(user.getEntity());
 		return result;
 	}
 	

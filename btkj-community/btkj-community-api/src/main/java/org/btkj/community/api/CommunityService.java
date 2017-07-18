@@ -1,12 +1,11 @@
 package org.btkj.community.api;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.rapid.util.common.message.Result;
@@ -22,7 +21,7 @@ public interface CommunityService {
 	 * @param link
 	 * @return
 	 */
-	Result<Void> articleAdd(AppPO app, String title, String icon, String link);
+	Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link);
 
 	/**
 	 * 咨询分页
@@ -51,7 +50,7 @@ public interface CommunityService {
 	 * @param content
 	 * @return
 	 */
-	Result<Void> comment(UserPO user, int articleId, String content); 
+	Result<Void> comment(User user, int articleId, String content); 
 	
 	/**
 	 * 提问
@@ -60,7 +59,7 @@ public interface CommunityService {
 	 * @param content
 	 * @return
 	 */
-	int quiz(UserPO user, String content);
+	int quiz(int appId, int uid, String content);
 	
 	/**
 	 * 问答分页
@@ -98,5 +97,5 @@ public interface CommunityService {
 	 * @param content
 	 * @return
 	 */
-	Result<Void> reply(UserPO user, int quizId, String content);
+	Result<Void> reply(int appId, int uid, int quizId, String content);
 }

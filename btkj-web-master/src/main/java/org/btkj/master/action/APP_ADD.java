@@ -4,19 +4,19 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.courier.api.CourierService;
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.Region;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
  * @author ahab
  */
-public class APP_ADD extends AdministratorAction {
+public class APP_ADD extends LoggedAction {
 	
 	@Resource
 	private AppService appService;

@@ -2,16 +2,16 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.master.LoggedAction;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;
 
-public class APP_INFO extends AdministratorAction {
+public class APP_INFO extends LoggedAction {
 	@Resource
 	private AppService appService;
 

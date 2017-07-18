@@ -2,7 +2,7 @@ package org.btkj.pojo.vo;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.App;
 
 public class AppTips implements Serializable {
 
@@ -13,7 +13,7 @@ public class AppTips implements Serializable {
 	
 	public AppTips() {}
 	
-	public AppTips(AppPO app) {
+	public AppTips(App app) {
 		this.appId = app.getId();
 		this.name = app.getName();
 	}

@@ -1,12 +1,9 @@
 package org.btkj.manager.action.tenant.bonus;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.po.VehicleBrand;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
@@ -17,7 +14,7 @@ public class VEHICLE_BRANDS extends TenantAction {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<List<VehicleBrand>> execute(Request request, EmployeeForm employeeForm) {
+	protected Result<?> execute(Request request, Employee employee) {
 		return Result.result(vehicleService.vehicleBrands());
 	}
 }

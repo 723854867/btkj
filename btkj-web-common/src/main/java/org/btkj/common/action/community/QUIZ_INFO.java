@@ -5,8 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
@@ -28,11 +27,11 @@ public class QUIZ_INFO extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<QuizInfo> execute(Request request, AppPO app, Client client, UserPO operator) {
+	protected Result<QuizInfo> execute(Request request, User user) {
 		Quiz quiz = communityService.quiz(request.getParam(Params.ID));
-		if (null == quiz || quiz.getAppId() != app.getId())
+		if (null == quiz || quiz.getAppId() != user.getAppId())
 			return BtkjConsts.RESULT.QUIZ_NOT_EXIST;
-		UserPO user = userService.getUser(quiz.getUid());
-		return Result.result(new QuizInfo(user, quiz));
+		UserPO publisher = userService.getUser(quiz.getUid());
+		return Result.result(new QuizInfo(publisher, quiz));
 	}
 }

@@ -1,13 +1,22 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.App;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.MainPageInfo;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
+	
+	/**
+	 * 通过 appId 获取 app
+	 * 
+	 * @param appId
+	 * @return
+	 */
+	App app(Client client, int appId);
 	
 	/**
 	 * 通过 appId 获取 App
@@ -25,7 +34,7 @@ public interface AppService {
 	 * @param em
 	 * @return
 	 */
-	Result<MainPageInfo> mainPage(Client client, UserPO user, EmployeeForm em);
+	Result<MainPageInfo> mainPage(User user, Employee employee);
 
 	/**
 	 * 添加 app

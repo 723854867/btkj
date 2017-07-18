@@ -1,10 +1,8 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.TenantListInfo;
 import org.rapid.util.common.message.Result;
 
@@ -25,7 +23,7 @@ public interface TenantService {
 	 * @param chief
 	 * @return
 	 */
-	Result<?> apply(UserPO user, EmployeeForm chief);
+	Result<?> apply(User user, Employee chief);
 	
 	/**
 	 * 处理请求
@@ -47,7 +45,7 @@ public interface TenantService {
 	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<?> tenantAdd(AppPO app, int region, String tname, UserPO user, String licenseFace, String licenseBack, String servicePhone);
+	Result<?> tenantAdd(int appId, int uid, int region, String tname, String licenseFace, String licenseBack, String servicePhone);
 	
 	/**
 	 * 代理公司列表
@@ -57,5 +55,5 @@ public interface TenantService {
 	 * @param user
 	 * @return
 	 */
-	TenantListInfo tenantListInfo(Client client, AppPO app, UserPO user);
+	TenantListInfo tenantListInfo(User user);
 }

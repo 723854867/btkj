@@ -1,6 +1,6 @@
 package org.btkj.pojo.vo;
 
-import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Region;
 
 public class EmployeeTips extends UserTips {
@@ -20,11 +20,11 @@ public class EmployeeTips extends UserTips {
 	
 	public EmployeeTips() {}
 	
-	public EmployeeTips(EmployeeForm form, Region region) {
-		super(form.getUser());
-		this.id = form.getEmployee().getId();
-		this.tid = form.getEmployee().getTid();
-		this.tname = form.getTenant().getName();
+	public EmployeeTips(Employee employee, Region region) {
+		super(employee.getUser());
+		this.id = employee.getId();
+		this.tid = employee.getTid();
+		this.tname = employee.tname();
 		this.regionId = region.getId();
 		this.regionName = region.getName();
 	}

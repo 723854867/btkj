@@ -7,12 +7,11 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.EmployeeForm;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
 import org.btkj.pojo.vo.TenantListInfo;
 import org.btkj.user.api.EmployeeService;
@@ -56,13 +55,13 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<?> apply(UserPO user, EmployeeForm chief) {
+	public Result<?> apply(User user, Employee chief) {
 		if (chief.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
 		return _doApply(chief.getTenant(), user, chief);
 	}
 
-	private Result<?> _doApply(TenantPO tenant, UserPO user, EmployeeForm chief) {
+	private Result<?> _doApply(TenantPO tenant, User user, Employee chief) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
@@ -82,34 +81,39 @@ public class TenantServiceImpl implements TenantService {
 
 		EmployeePO chief = employeeMapper.getByKey(info.getChief());
 		TenantPO tenant = tenantMapper.getByKey(info.getTid());
-		EmployeePO employee = EntityGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
+		EmployeePO employee = EntityGenerator.newEmployee(info.getUid(), tenant, chief);
 		tx.insertEmployee(employee).finish();
 		return Result.success();
 	}
 
 	@Override
-	public Result<?> tenantAdd(AppPO app, int region, String tname, UserPO user, String licenseFace, String licenseBack, String servicePhone) {
-		String lockId = userMapper.lockUser(user.getUid());
+	public Result<?> tenantAdd(int appId, int uid, int region, String tname, String licenseFace, String licenseBack, String servicePhone) {
+		String lockId = userMapper.lockUser(uid);
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
 		try {
-			if (userService.tenantNumMax(user))
+			if (_tenantNumMax(uid))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(app, region, tname, user, licenseFace, licenseBack, servicePhone).finish();
+			tx.tenantAdd(appId, uid, region, tname, licenseFace, licenseBack, servicePhone).finish();
 		} finally {
-			userMapper.releaseUserLock(user.getUid(), lockId);
+			userMapper.releaseUserLock(uid, lockId);
 		}
 		return Result.success();
 	}
 
 	@Override
-	public TenantListInfo tenantListInfo(Client client, AppPO app, UserPO user) {
-		List<EmployeePO> employees = employeeMapper.ownedTenants(user);
+	public TenantListInfo tenantListInfo(User user) {
+		List<EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
 		List<Integer> tids = new ArrayList<Integer>(employees.size());
 		for (EmployeePO employee : employees)
 			tids.add(employee.getTid());
 		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(tids).values());
-		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyListTids(user)).values());
+		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyListTids(user.getUid())).values());
 		return new TenantListInfo(own, employees, audit);
+	}
+	
+	private boolean _tenantNumMax(int uid) {
+		int limit = employeeMapper.ownedTenants(uid).size() + applyMapper.applyListTids(uid).size();
+		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
 	}
 }
