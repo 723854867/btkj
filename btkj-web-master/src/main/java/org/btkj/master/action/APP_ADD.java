@@ -27,7 +27,7 @@ public class APP_ADD extends LoggedAction {
 
 	@Override
 	protected Result<?> execute(Request request, Administrator administrator) {
-		Region region = configService.getRegionById(request.getParam(Params.REGION));
+		Region region = configService.region(request.getParam(Params.REGION));
 		if (null == region)
 			throw ConstConvertFailureException.errorConstException(Params.REGION);
 		

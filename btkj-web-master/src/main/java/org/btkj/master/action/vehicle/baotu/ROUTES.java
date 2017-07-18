@@ -3,6 +3,7 @@ package org.btkj.master.action.vehicle.baotu;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -31,15 +32,14 @@ public class ROUTES extends LoggedAction {
 		Set<Integer> set = new HashSet<Integer>();
 		for (Route route : routes)
 			set.add(route.getInsurerId());
-		List<Insurer> list = configService.insurers(new ArrayList<Integer>(set));
+		Map<Integer, Insurer> insurers = configService.insurers(new ArrayList<Integer>(set));
 		List<RouteInfo> l = new ArrayList<RouteInfo>();
 		for (Route route : routes) {
-			for (Insurer insurer : list) {
-				if (insurer.getId() == route.getInsurerId()) {
-					l.add(new RouteInfo(route, insurer));
-					break;
-				}
-			}
+			Insurer insurer = insurers.get(route.getInsurerId());
+			if (null == insurer)
+				continue;
+			l.add(new RouteInfo(route, insurer));
+			break;
 		}
 		return Result.result(l);
 	}

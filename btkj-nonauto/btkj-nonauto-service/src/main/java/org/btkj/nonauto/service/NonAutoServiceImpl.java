@@ -41,7 +41,7 @@ public class NonAutoServiceImpl implements NonAutoService {
 	}
 	
 	@Override
-	public NonAutoCategory getCategoryById(long id) {
+	public NonAutoCategory category(long id) {
 		return nonAutoCategoryMapper.getByKey(id);
 	}
 	

@@ -28,7 +28,7 @@ import org.rapid.util.lang.CollectionUtil;
 public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, EmployeeDao> {
 	
 	private final String USER_SET				= "set:employee：user:{0}";
-	private final String USER_CONTROLLER		= "employee：controller:{0}:";			// 基于用户的缓存控制键
+	private final String CONTROLLER				= "employee：controller:{0}:";			// 基于用户的缓存控制键
 	
 	@Resource
 	private UserMapper userMapper;
@@ -79,12 +79,12 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * @param employee
 	 * @return
 	 */
-	public List<EmployeePO> team(Employee employee, int depth) {
-		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + depth - 1);
+	public List<EmployeePO> team(Employee employee) {
+		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + employee.getTeamDepth() - 1);
 	}
 	
 	private Map<Integer, EmployeePO> _checkLoad(int uid) {
-		if (!checkLoad(_userSetKey(uid)))
+		if (!checkLoad(_controllerField(uid)))
 			return null;
 		Map<Integer, EmployeePO> map = dao.getByUid(uid);
 		if (!CollectionUtil.isEmpty(map))
@@ -116,7 +116,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 		return MessageFormat.format(USER_SET, String.valueOf(uid));
 	}
 	
-	private String _userControllerField(int uid) {
-		return MessageFormat.format(USER_CONTROLLER, String.valueOf(uid));
+	private String _controllerField(int uid) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(uid));
 	}
 }

@@ -1,5 +1,6 @@
 package org.btkj.user.mybatis.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,11 @@ public interface EmployeeDao extends DBMapper<Integer, EmployeePO> {
 	@Override
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByKey")
 	EmployeePO getByKey(Integer key);
+	
+	@Override
+	@MapKey("id")
+	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByKeys")
+	Map<Integer, EmployeePO> getByKeys(Collection<Integer> keys);
 	
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidAndUid")
 	EmployeePO getByTidAndUid(@Param("tid") int tid, @Param("uid") int uid);

@@ -42,7 +42,7 @@ public interface NonAutoService {
 	 * @param id
 	 * @return
 	 */
-	NonAutoCategory getCategoryById(long id);
+	NonAutoCategory category(long id);
 	
 	/**
 	 * 新增或者修改非车险产品

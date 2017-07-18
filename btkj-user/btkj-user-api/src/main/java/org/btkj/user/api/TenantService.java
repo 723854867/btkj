@@ -3,7 +3,7 @@ package org.btkj.user.api;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.TenantListInfo;
+import org.btkj.user.pojo.info.TenantListInfo;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
@@ -14,7 +14,7 @@ public interface TenantService {
 	 * @param tid
 	 * @return
 	 */
-	TenantPO getTenantById(int tid);
+	TenantPO tenant(int tid);
 	
 	/**
 	 * 申请加入代理公司

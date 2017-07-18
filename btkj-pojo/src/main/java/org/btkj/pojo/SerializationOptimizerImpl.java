@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.btkj.pojo.bo.BtkjUserLoginModel;
-import org.btkj.pojo.bo.CaptchaReceiver;
-import org.btkj.pojo.bo.CaptchaVerifier;
 import org.btkj.pojo.bo.Version;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
@@ -30,8 +28,6 @@ public class SerializationOptimizerImpl implements SerializationOptimizer {
 		list.add(UserPO.class);
 		list.add(EmployeePO.class);
 		
-		list.add(CaptchaReceiver.class);
-		list.add(CaptchaVerifier.class);
 		list.add(BtkjUserLoginModel.class);
 		list.add(Version.class);
 		return list;

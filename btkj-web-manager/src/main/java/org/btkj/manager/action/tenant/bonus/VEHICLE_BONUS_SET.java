@@ -53,7 +53,7 @@ public class VEHICLE_BONUS_SET extends TenantAction {
 		routeData.setCommercialRetainRate(Math.max(routeData.getCommercialRetainRate(), BtkjConsts.MIN_COMMISION_RETAIN_RATE));
 		routeData.setCompulsoryRetainRate(Math.max(routeData.getCompulsoryRetainRate(), BtkjConsts.MIN_COMMISION_RETAIN_RATE));
 		
-		List<Integer> list = vehicleService.insurers(employee.getTenant());
+		List<Integer> list = vehicleService.insurers(employee.getTid());
 		for (int insurerId : list) {
 			if (insurerId == searcher.getInsurerId())
 				return Consts.RESULT.OK;

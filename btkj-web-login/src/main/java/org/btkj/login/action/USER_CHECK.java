@@ -25,8 +25,7 @@ public class USER_CHECK implements Action {
 
 	@Override
 	public Result<Void> execute(Request request) {
-		String mobile = request.getParam(Params.MOBILE);
-		User user = userService.user(mobile, request.getParam(Params.APP_ID));
+		User user = userService.user(request.getParam(Params.MOBILE), request.getParam(Params.APP_ID));
 		if (null == user)
 			return Result.result(Code.USER_NOT_EXIST);
 		if (null == user.getPwd())

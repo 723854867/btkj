@@ -17,7 +17,7 @@ import org.rapid.util.lang.CollectionUtil;
 public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	
 	private final String TENANT_SET							= "set:route:tenant:{0}";
-	private final String TENANT_CONTROLLER					= "route:controller:{0}";
+	private final String CONTROLLER							= "route:controller:{0}";
 	
 	public RouteMapper() {
 		super(new ByteProtostuffSerializer<Route>(), "hash:db:route");
@@ -37,7 +37,7 @@ public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 	}
 	
 	private Map<String, Route> _checkLoad(int tid) {
-		if (!checkLoad(_tenantControllerField(tid)))
+		if (!checkLoad(_controllerField(tid)))
 			return null;
 		Map<String, Route> map = dao.getByTid(tid);
 		if (!CollectionUtil.isEmpty(map))
@@ -75,7 +75,7 @@ public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 		return MessageFormat.format(TENANT_SET, String.valueOf(tid));
 	}
 	
-	private String _tenantControllerField(int tid) {
-		return MessageFormat.format(TENANT_CONTROLLER, String.valueOf(tid));
+	private String _controllerField(int tid) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(tid));
 	}
 }

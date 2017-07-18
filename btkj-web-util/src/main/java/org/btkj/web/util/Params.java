@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.btkj.courier.model.QuotaNoticeSubmit;
+import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.bo.Version;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CoefficientType;

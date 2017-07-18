@@ -6,7 +6,6 @@ import org.btkj.pojo.bo.DeliveryInfo;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
@@ -68,7 +67,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	List<Integer> insurers(TenantPO tenant);
+	List<Integer> insurers(int tid);
 	
 	/**
 	 * 保单分页

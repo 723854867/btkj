@@ -22,9 +22,7 @@ public class NON_AUTO_CATEGORY_INFO implements Action {
 
 	@Override
 	public Result<NonAutoCategory> execute(Request request) {
-		NonAutoCategory category = nonAutoService.getCategoryById(request.getParam(Params.ID));
-		if (null == category)
-			return Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
-		return Result.result(category);
+		NonAutoCategory category = nonAutoService.category(request.getParam(Params.ID));
+		return null == category ? Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST) : Result.result(category);
 	}
 }

@@ -92,22 +92,22 @@ public class EmployeeSearcher extends Page {
 		this.asc = asc;
 	}
 	
-	public Map<String, String> params() {
+	public Map<String, Object> params() {
 		if (null == tid && null == employeeId 
 				&& null == parentId && null == payType
 				&& null == uid)
 			return null;
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, Object> params = new HashMap<String, Object>();
 		if (null != tid)
-			params.put("tid", String.valueOf(tid));
+			params.put("tid", tid);
 		if (null != employeeId)
-			params.put("id", String.valueOf(employeeId));
+			params.put("id", employeeId);
 		if (null != parentId)
-			params.put("parent_id", String.valueOf(parentId));
+			params.put("parent_id", parentId);
 		if (null != payType)
-			params.put("pay_type", String.valueOf(payType));
+			params.put("pay_type", payType);
 		if (null != uid)
-			params.put("uid", String.valueOf(uid));
+			params.put("uid", uid);
 		return params;
 	}
 }

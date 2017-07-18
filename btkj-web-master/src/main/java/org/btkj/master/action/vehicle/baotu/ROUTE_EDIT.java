@@ -30,7 +30,7 @@ public class ROUTE_EDIT extends LoggedAction {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:
-			TenantPO tenant = tenantService.getTenantById(request.getParam(Params.TID));
+			TenantPO tenant = tenantService.tenant(request.getParam(Params.TID));
 			if (null == tenant)
 				return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 			Insurer insurer = configService.getInsurerById(request.getParam(Params.ID));

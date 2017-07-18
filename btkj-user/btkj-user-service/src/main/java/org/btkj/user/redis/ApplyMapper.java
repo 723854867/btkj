@@ -63,7 +63,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	 * @param uid
 	 * @return
 	 */
-	public List<Integer> applyListTids(int uid) {
+	public List<Integer> applyTenants(int uid) {
 		List<byte[]> list = redis.hzget(_userListKey(uid), redisKey, 0, -1);
 		if (CollectionUtil.isEmpty(list))
 			return Collections.EMPTY_LIST;

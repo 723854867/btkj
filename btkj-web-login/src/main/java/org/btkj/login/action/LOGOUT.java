@@ -2,7 +2,6 @@ package org.btkj.login.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.enums.Client;
 import org.btkj.user.api.LoginService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -16,8 +15,6 @@ public class LOGOUT implements Action {
 
 	@Override
 	public Result<?> execute(Request request) {
-		String token = request.getHeader(Params.TOKEN);
-		Client client = request.getParam(Params.CLIENT);
-		return loginService.logout(client, token);
+		return loginService.logout(client(request), request.getHeader(Params.TOKEN));
 	}
 }

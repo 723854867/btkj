@@ -25,7 +25,6 @@ import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
@@ -146,9 +145,7 @@ public class VehicleServiceImpl implements VehicleService {
 		ICode code = rule.orderCheck(employee, tips.getSchema());
 		if (code != Code.OK)
 			return Result.result(code);
-		Map<Integer, Insurer> quoteMap = new HashMap<Integer, Insurer>();
-		for (Insurer insurer : configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteMod)))
-			quoteMap.put(insurer.getId(), insurer);
+		Map<Integer, Insurer> quoteMap = configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteMod));
 		Set<Integer> insure = NumberUtil.splitIntoPowerOfTwoSet(insureMod);
 		List<Route> routes = routeMapper.getByTid(employee.getTid());
 		String batchId = _batchId(tips, employee);
@@ -294,9 +291,8 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public List<Integer> insurers(TenantPO tenant) {
-		List<Route> list = routeMapper.getByTid(tenant.getTid());
+	public List<Integer> insurers(int tid) {
+		List<Route> list = routeMapper.getByTid(tid);
 		if (CollectionUtil.isEmpty(list))
 			return Collections.EMPTY_LIST;
 		List<Integer> l = new ArrayList<Integer>();

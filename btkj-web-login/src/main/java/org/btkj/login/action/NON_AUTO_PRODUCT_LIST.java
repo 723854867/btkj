@@ -3,7 +3,6 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.Action;
@@ -21,7 +20,6 @@ public class NON_AUTO_PRODUCT_LIST implements Action {
 
 	@Override
 	public Result<?> execute(Request request) {
-		NonAutoProductSearcher searcher = request.getParam(Params.NON_AUTO_PRODUCT_SEARCHER);
-		return Result.result(nonAutoService.productList(searcher));
+		return Result.result(nonAutoService.productList(request.getParam(Params.NON_AUTO_PRODUCT_SEARCHER)));
 	}
 }

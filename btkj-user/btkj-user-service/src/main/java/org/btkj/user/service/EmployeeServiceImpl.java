@@ -41,6 +41,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public List<EmployeePO> team(Employee employee) {
-		return employeeMapper.team(employee, employee.getTeamDepth());
+		return employeeMapper.team(employee);
 	}
 }

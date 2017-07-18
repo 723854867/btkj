@@ -21,9 +21,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.btkj.courier.Config;
-import org.btkj.courier.model.QuotaNoticeSubmit;
-import org.btkj.pojo.bo.CaptchaReceiver;
-import org.btkj.pojo.bo.CaptchaVerifier;
+import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
@@ -81,10 +79,9 @@ public class CourierRedisService {
 		CAPTCHA_TPL_ID = new BasicNameValuePair("tpl_id", String.valueOf(captchaTplId));
 	}
 	
-	public Result<String> captchaObtain(CaptchaReceiver receiver) {
-		String captchaKey = _captchaKey(receiver);
-		String captchaCountKey = _captchaCountKey(receiver);
-		
+	public Result<String> captchaObtain(int appId, String mobile) {
+		String captchaKey = _captchaKey(appId, mobile);
+		String captchaCountKey = _captchaCountKey(appId, mobile);
 		String captcha = KeyUtil.randomCaptcha(Config.getCaptchaLen());
 		int flag = (int) redis.captchaObtain(captchaKey, captchaCountKey, captcha, 
 				Config.getCaptchaLifeTime(), Config.getCaptchaMaximum(), Config.getCaptchaCountLifeTime());
@@ -97,15 +94,15 @@ public class CourierRedisService {
 		case TEST:
 			return Result.result(flag, captcha);
 		case ONLINE:
-			_sendCaptcha(receiver.getIdentity(), captcha);
+			_sendCaptcha(mobile, captcha);
 			return Result.result(flag);
 		default:
 			return Result.result(Code.SYSTEM_ERROR);
 		}
 	}
 	
-	public Result<String> captchaVerifier(CaptchaVerifier verifier) {
-		if (!redis.delIfEquals(_captchaKey(verifier), verifier.getCaptcha()))
+	public Result<String> captchaVerifier(int appId, String mobile, String captcha) {
+		if (!redis.delIfEquals(_captchaKey(appId, mobile), captcha))
 			return Result.result(-1);
 		return Result.result(0);
 	}
@@ -200,12 +197,12 @@ public class CourierRedisService {
 		return builder.toString();
 	}
 	
-	public String _captchaKey(CaptchaReceiver receiver) {
-		return MessageFormat.format(CAPTCHA, String.valueOf(receiver.getAppId()), receiver.getIdentity());
+	public String _captchaKey(int appId, String mobile) {
+		return MessageFormat.format(CAPTCHA, String.valueOf(appId), mobile);
 	}
 	
-	public String _captchaCountKey(CaptchaReceiver receiver) {
-		return MessageFormat.format(CAPTCHA_COUNT, String.valueOf(receiver.getAppId()), receiver.getIdentity());
+	public String _captchaCountKey(int appId, String mobile) {
+		return MessageFormat.format(CAPTCHA_COUNT, String.valueOf(appId), mobile);
 	}
 	
 	private class CaptchaSendHandler implements AsyncRespHandler {

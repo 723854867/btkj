@@ -27,7 +27,7 @@ public class BI_HU_TENANT_CONFIG_EDIT extends LoggedAction {
 		switch (crudType) {
 		case CREATE:
 			int tid = request.getParam(Params.TID);
-			TenantPO tenant = tenantService.getTenantById(tid);
+			TenantPO tenant = tenantService.tenant(tid);
 			if (null == tenant)
 				return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 			return biHuManageService.tenantConfigAdd(tid, request.getParam(Params.AGENT), request.getParam(Params.KEY));

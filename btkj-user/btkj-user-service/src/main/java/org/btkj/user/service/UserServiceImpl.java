@@ -129,6 +129,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			UserPO user = result.attach();
 			user.setPwd(pwd);
+			user.setUpdated(DateUtil.currentTime());
 			userMapper.update(user);
 			return Result.success();
 		} finally {

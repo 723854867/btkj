@@ -6,11 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
+import org.btkj.courier.pojo.info.StsInfo;
 import org.btkj.courier.redis.AliyunMapper;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
 import org.rapid.aliyun.policy.Action;
@@ -54,11 +51,11 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 
 	@Override
-	public StsInfo assumeRole(User user) {
-		String field = MessageFormat.format(USER_KEY, String.valueOf(user.getAppId()), String.valueOf(user.getUid()));
+	public StsInfo assumeRole(int appId, int uid) {
+		String field = MessageFormat.format(USER_KEY, String.valueOf(appId), String.valueOf(uid));
 		StsInfo stsInfo = aliyunMapper.getByKey(field);
 		if (null == stsInfo) {
-			stsInfo = _doAssumeRole(user);
+			stsInfo = _doAssumeRole(uid);
 			if (null != stsInfo) {
 				stsInfo.setKey(field);
 				aliyunMapper.insert(stsInfo);
@@ -67,27 +64,14 @@ public class AliyunServiceImpl implements AliyunService {
 		return stsInfo;
 	}
 
-	@Override
-	public StsInfo assumeRole(TenantPO tenant) {
-		return null;
-	}
-
-	@Override
-	public StsInfo assumeRole(EmployeePO employee) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	private StsInfo _doAssumeRole(User user) {
+	private StsInfo _doAssumeRole(int uid) {
 		Policy policy = new Policy();
 		policy.addStatement(bucketReadOnly);
-		policy.addStatement(_ossFullAccess(user));
+		policy.addStatement(_ossFullAccess(uid));
 		AssumeRoleResponse response;
 		try {
-			response = stsService.assumeRole(
-					aliyunConfig.getConfig(AliyunOptions.STS_ROLE_ARN), 
-					"user-" + user.getUid(), policy,
-					aliyunConfig.getConfig(AliyunOptions.STS_TOKEN_EXPIRATION));
+			response = stsService.assumeRole(aliyunConfig.getConfig(AliyunOptions.STS_ROLE_ARN), 
+					"user-" + uid, policy, aliyunConfig.getConfig(AliyunOptions.STS_TOKEN_EXPIRATION));
 		} catch (ConstConvertFailureException | ClientException e) {
 			logger.warn("Aliyun sts assume role failure!", e);
 			return null;
@@ -96,10 +80,10 @@ public class AliyunServiceImpl implements AliyunService {
 		return stsInfo;
 	}
 	
-	private Statement _ossFullAccess(User user) {
+	private Statement _ossFullAccess(int uid) {
 		Statement statement = new Statement(Effect.Allow);
 		statement.setAction(Action.OSS_FULL_ACCESS);
-		statement.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/user/" + user.getUid() + "/*");
+		statement.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/user/" + uid + "/*");
 		return statement;
 	}
 	

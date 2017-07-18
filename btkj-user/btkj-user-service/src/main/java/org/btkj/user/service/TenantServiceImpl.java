@@ -13,19 +13,18 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.vo.ApplyInfo;
-import org.btkj.pojo.vo.TenantListInfo;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.mybatis.Tx;
+import org.btkj.user.pojo.info.TenantListInfo;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
 
@@ -50,24 +49,18 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeService employeeService;
 
 	@Override
-	public TenantPO getTenantById(int tid) {
+	public TenantPO tenant(int tid) {
 		return tenantMapper.getByKey(tid);
 	}
 
 	@Override
 	public Result<?> apply(User user, Employee chief) {
-		if (chief.getApp().getId() != user.getAppId())
-			return Result.result(Code.FORBID);
-		return _doApply(chief.getTenant(), user, chief);
-	}
-
-	private Result<?> _doApply(TenantPO tenant, User user, Employee chief) {
-		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
+		ApplyInfo ai = applyMapper.getByTidAndUid(chief.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
-		if (employeeMapper.isEmployee(tenant.getTid(), user.getUid()))
+		if (employeeMapper.isEmployee(chief.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(EntityGenerator.newApply(tenant, user, chief));
+		applyMapper.insert(EntityGenerator.newApply(chief.getTenant(), user, chief));
 		return Result.success();
 	}
 
@@ -108,12 +101,12 @@ public class TenantServiceImpl implements TenantService {
 		for (EmployeePO employee : employees)
 			tids.add(employee.getTid());
 		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(tids).values());
-		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyListTids(user.getUid())).values());
+		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyTenants(user.getUid())).values());
 		return new TenantListInfo(own, employees, audit);
 	}
 	
 	private boolean _tenantNumMax(int uid) {
-		int limit = employeeMapper.ownedTenants(uid).size() + applyMapper.applyListTids(uid).size();
+		int limit = employeeMapper.ownedTenants(uid).size() + applyMapper.applyTenants(uid).size();
 		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
 	}
 }

@@ -1,10 +1,10 @@
 package org.btkj.user.mybatis.provider;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
+import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SORT_TYPE;
 
@@ -52,35 +52,19 @@ public class EmployeeSQLProvider extends SQLProvider {
 	
 	public String count(EmployeeSearcher searcher) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT(*) FROM user");
-		Map<String, String> params = searcher.params();
-		if (null != params && !params.isEmpty()) {
-			builder.append(" WHERE ");
-			boolean first = true;
-			for (Entry<String, String> entry : params.entrySet()) {
-				if (!first)
-					builder.append(" AND ");
-				first = false;
-				builder.append(entry.getKey()).append("=").append(entry.getValue());
-			}
-		}
+		builder.append("SELECT COUNT(*) FROM employee");
+		Map<String, Object> params = searcher.params();
+		if (null != params && !params.isEmpty()) 
+			SqlUtil.appendWithWhere(builder, params);
 		return builder.toString();
 	}
 	
 	public String paging(EmployeeSearcher searcher) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM user");
-		Map<String, String> params = searcher.params();
-		if (null != params && !params.isEmpty()) {
-			builder.append(" WHERE ");
-			boolean first = true;
-			for (Entry<String, String> entry : params.entrySet()) {
-				if (!first)
-					builder.append(" AND ");
-				first = false;
-				builder.append(entry.getKey()).append("=").append(entry.getValue());
-			}
-		}
+		builder.append("SELECT * FROM employee");
+		Map<String, Object> params = searcher.params();
+		if (null != params && !params.isEmpty())
+			SqlUtil.appendWithWhere(builder, params);
 		if (null != searcher.getSortCol()) {
 			builder.append(" ORDER BY ").append(searcher.getSortCol()).append(" ");
 			builder.append(searcher.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());

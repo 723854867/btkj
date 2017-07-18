@@ -1,8 +1,6 @@
 package org.btkj.courier.api;
 
-import org.btkj.courier.model.QuotaNoticeSubmit;
-import org.btkj.pojo.bo.CaptchaReceiver;
-import org.btkj.pojo.bo.CaptchaVerifier;
+import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.po.VehicleOrder;
 import org.rapid.util.common.message.Result;
 
@@ -16,18 +14,16 @@ public interface CourierService {
 	/**
 	 * 获取验证码
 	 * 
-	 * @param receiver 
 	 * @return
 	 */
-	Result<String> captchaObtain(CaptchaReceiver receiver);
+	Result<String> captchaObtain(int appId, String mobile);
 	
 	/**
 	 * 验证验证码
 	 * 
-	 * @param verifier
 	 * @return
 	 */
-	Result<String> captchaVerify(CaptchaVerifier verifier);
+	Result<String> captchaVerify(int appId, String mobile, String captcha);
 	
 	/**
 	 * 报价通知：发送给客户的

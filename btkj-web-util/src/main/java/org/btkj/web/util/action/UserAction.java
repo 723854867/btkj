@@ -2,8 +2,10 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -29,6 +31,8 @@ public abstract class UserAction implements Action {
 			if (!result.isSuccess())
 				return result;
 			try {
+				if (!userIntegrityVerify(result.attach()))
+					return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
 				return execute(request, result.attach());
 			} finally {
 				userService.releaseUserLock(result.getDesc(), result.attach().getUid());
@@ -37,11 +41,24 @@ public abstract class UserAction implements Action {
 			User user = userService.getUserByToken(client, token);
 			if (null == user)
 				return Result.result(Code.TOKEN_INVALID);
+			if (!userIntegrityVerify(user))
+				return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
 			return execute(request, user);
 		}
 	}
 	
 	protected abstract Result<?> execute(Request request, User user);
+	
+	/**
+	 * 检测是否完善用户资料
+	 * 
+	 * @return
+	 */
+	protected boolean userIntegrityVerify(User user) {
+		UserPO po = user.getEntity();
+		return !(null == po.getName() || null == po.getAvatar() || null == po.getIdentity()
+				|| null == po.getIdentityBack() || null == po.getIdentityFace());
+	}
 	
 	/**
 	 * 如果返回 true 则已经获取到了 user 的锁

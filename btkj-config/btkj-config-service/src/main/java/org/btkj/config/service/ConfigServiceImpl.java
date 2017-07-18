@@ -1,8 +1,10 @@
 package org.btkj.config.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -27,7 +29,7 @@ public class ConfigServiceImpl implements ConfigService {
 	private InsurerMapper insurerMapper;
 	
 	@Override
-	public Region getRegionById(int region) {
+	public Region region(int region) {
 		return regionMapper.getByKey(region);
 	}
 	
@@ -82,8 +84,8 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
-	public List<Insurer> insurers(List<Integer> list) {
-		return new ArrayList<Insurer>(insurerMapper.getByKeys(list).values());
+	public Map<Integer, Insurer> insurers(Collection<Integer> tids) {
+		return insurerMapper.getByKeys(tids);
 	}
 	
 	@Override

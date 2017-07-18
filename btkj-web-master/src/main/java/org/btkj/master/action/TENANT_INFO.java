@@ -19,7 +19,7 @@ public class TENANT_INFO extends LoggedAction {
 	@Override
 	protected Result<?> execute(Request request, Administrator administrator) {
 		int tid = request.getParam(Params.TID);
-		TenantPO tenant = tenantService.getTenantById(tid);
+		TenantPO tenant = tenantService.tenant(tid);
 		if (null == tenant)
 			return Result.result(BtkjCode.TENANT_NOT_EXIST);
 		return Result.result(tenant);

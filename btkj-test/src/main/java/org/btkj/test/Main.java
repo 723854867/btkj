@@ -25,7 +25,6 @@ public class Main {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-
 //					User user = new User();
 //					user.setAppId(102);
 //					user.setName("ss");
