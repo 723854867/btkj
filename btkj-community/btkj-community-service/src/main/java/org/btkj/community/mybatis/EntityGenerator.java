@@ -1,16 +1,16 @@
 package org.btkj.community.mybatis;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Article;
-import org.btkj.pojo.entity.Comment;
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.Reply;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Article;
+import org.btkj.pojo.po.Comment;
+import org.btkj.pojo.po.Quiz;
+import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.po.UserPO;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 
-	public static final Article article(App app, String title, String icon, String link) {
+	public static final Article article(AppPO app, String title, String icon, String link) {
 		Article article = new Article();
 		article.setAppId(app.getId());
 		article.setIcon(icon);
@@ -20,7 +20,7 @@ public class EntityGenerator {
 		return article;
 	}
 	
-	public static final Comment comment(User user, int articleId, String content) {
+	public static final Comment comment(UserPO user, int articleId, String content) {
 		Comment comment = new Comment();
 		comment.setArticleId(articleId);
 		comment.setContent(content);
@@ -29,7 +29,7 @@ public class EntityGenerator {
 		return comment;
 	}
 	
-	public static final Quiz quiz(User user, String content) {
+	public static final Quiz quiz(UserPO user, String content) {
 		Quiz quiz = new Quiz();
 		quiz.setAppId(user.getAppId());
 		quiz.setUid(user.getUid());
@@ -38,7 +38,7 @@ public class EntityGenerator {
 		return quiz;
 	}
 	
-	public static final Reply reply(User user, int quizId, String content) {
+	public static final Reply reply(UserPO user, int quizId, String content) {
 		Reply reply = new Reply();
 		reply.setQuizId(quizId);
 		reply.setContent(content);

@@ -1,11 +1,11 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.TenantListInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.TenantListInfo;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
@@ -16,7 +16,7 @@ public interface TenantService {
 	 * @param tid
 	 * @return
 	 */
-	Tenant getTenantById(int tid);
+	TenantPO getTenantById(int tid);
 	
 	/**
 	 * 申请加入代理公司
@@ -25,7 +25,7 @@ public interface TenantService {
 	 * @param chief
 	 * @return
 	 */
-	Result<?> apply(User user, EmployeeForm chief);
+	Result<?> apply(UserPO user, EmployeeForm chief);
 	
 	/**
 	 * 处理请求
@@ -47,7 +47,7 @@ public interface TenantService {
 	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<?> tenantAdd(App app, int region, String tname, User user, String licenseFace, String licenseBack, String servicePhone);
+	Result<?> tenantAdd(AppPO app, int region, String tname, UserPO user, String licenseFace, String licenseBack, String servicePhone);
 	
 	/**
 	 * 代理公司列表
@@ -57,5 +57,5 @@ public interface TenantService {
 	 * @param user
 	 * @return
 	 */
-	TenantListInfo tenantListInfo(Client client, App app, User user);
+	TenantListInfo tenantListInfo(Client client, AppPO app, UserPO user);
 }

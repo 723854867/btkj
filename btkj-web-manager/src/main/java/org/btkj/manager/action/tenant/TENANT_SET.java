@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.vehicle.pojo.BonusScaleType;

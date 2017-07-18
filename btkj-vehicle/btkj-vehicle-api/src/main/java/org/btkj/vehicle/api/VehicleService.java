@@ -2,17 +2,17 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
-import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.info.VehicleInfo;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
+import org.btkj.pojo.bo.DeliveryInfo;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.VehicleBrand;
+import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.po.VehicleModel;
+import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.vo.VehicleInfo;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.util.common.message.Result;
@@ -68,7 +68,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	List<Integer> insurers(Tenant tenant);
+	List<Integer> insurers(TenantPO tenant);
 	
 	/**
 	 * 保单分页

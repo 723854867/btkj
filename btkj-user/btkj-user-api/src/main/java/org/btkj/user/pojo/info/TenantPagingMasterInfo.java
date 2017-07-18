@@ -1,6 +1,6 @@
 package org.btkj.user.pojo.info;
 
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.po.TenantPO;
 
 /**
  * 后台商户分页数据：(master 保途端)
@@ -16,7 +16,7 @@ public class TenantPagingMasterInfo extends TenantPagingInfo {
 	private String appName; 			// 所属平台名字
 	private String jianJieId; 			// 该商户的简捷ID
 	
-	public TenantPagingMasterInfo(Tenant tenant) {
+	public TenantPagingMasterInfo(TenantPO tenant) {
 		super(tenant);
 		this.appId = tenant.getAppId();
 		this.jianJieId = tenant.getJianJieId();

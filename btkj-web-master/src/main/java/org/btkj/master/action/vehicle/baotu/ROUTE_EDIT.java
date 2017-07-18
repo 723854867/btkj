@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.web.util.Params;
@@ -30,7 +30,7 @@ public class ROUTE_EDIT extends AdministratorAction {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:
-			Tenant tenant = tenantService.getTenantById(request.getParam(Params.TID));
+			TenantPO tenant = tenantService.getTenantById(request.getParam(Params.TID));
 			if (null == tenant)
 				return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 			Insurer insurer = configService.getInsurerById(request.getParam(Params.ID));

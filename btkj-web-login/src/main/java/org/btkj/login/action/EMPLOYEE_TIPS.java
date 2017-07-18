@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.info.tips.EmployeeTips;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.vo.EmployeeTips;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.MainPageInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Banner;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.MainPageInfo;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.mybatis.EntityGenerator;
@@ -40,12 +40,12 @@ public class AppServiceImpl implements AppService {
 	private EmployeeService employeeService;
 	
 	@Override
-	public App getAppById(int appId) {
+	public AppPO getAppById(int appId) {
 		return appMapper.getByKey(appId);
 	}
 	
 	@Override
-	public Result<MainPageInfo> mainPage(Client client, User user, EmployeeForm em) {
+	public Result<MainPageInfo> mainPage(Client client, UserPO user, EmployeeForm em) {
 		return _mainPageInfo(user, em);
 	}
 	
@@ -56,13 +56,13 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<MainPageInfo> _mainPageInfo(User user, EmployeeForm em) {
-		Tenant tenant = null == em ? null : em.getTenant();
+	private Result<MainPageInfo> _mainPageInfo(UserPO user, EmployeeForm em) {
+		TenantPO tenant = null == em ? null : em.getTenant();
 		int appId = user.getAppId();
 		if (null == tenant) {
 			int mainTid = userMapper.mainTenant(user.getUid());
 			if (0 == mainTid) {
-				List<Employee> employees = employeeMapper.ownedTenants(user);
+				List<EmployeePO> employees = employeeMapper.ownedTenants(user);
 				if (null != employees && !employees.isEmpty()) 
 					mainTid = employees.get(0).getTid();
 			}
@@ -74,14 +74,14 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
-		App app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
+	public AppPO addApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		AppPO app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
 		appMapper.insert(app);
 		return app;
 	}
 	
 	@Override
-	public int tenantNum(App app) {
+	public int tenantNum(AppPO app) {
 		return tenantMapper.countByAppId(app.getId());
 	}
 }

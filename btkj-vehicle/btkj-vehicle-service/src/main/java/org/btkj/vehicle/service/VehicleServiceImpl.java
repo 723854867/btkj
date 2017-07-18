@@ -17,21 +17,21 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.bo.DeliveryInfo;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.PolicyDetail;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.info.VehicleInfo;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.insur.vehicle.DeliveryInfo;
-import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.VehicleBrand;
+import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.po.VehicleModel;
+import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.vo.VehicleInfo;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.VehicleUtils;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
@@ -295,7 +295,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Integer> insurers(Tenant tenant) {
+	public List<Integer> insurers(TenantPO tenant) {
 		List<Route> list = routeMapper.getByTid(tenant.getTid());
 		if (CollectionUtil.isEmpty(list))
 			return Collections.EMPTY_LIST;

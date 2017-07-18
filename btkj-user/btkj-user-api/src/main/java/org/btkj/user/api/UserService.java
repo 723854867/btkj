@@ -3,12 +3,12 @@ package org.btkj.user.api;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.UserModel;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.po.Customer;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.message.Result;
 
@@ -25,7 +25,7 @@ public interface UserService {
 	 * @param uid
 	 * @return
 	 */
-	User getUser(int uid);
+	UserPO getUser(int uid);
 	
 	/**
 	 * 一次获取多个用户
@@ -33,7 +33,7 @@ public interface UserService {
 	 * @param list
 	 * @return
 	 */
-	List<User> users(List<Integer> list);
+	List<UserPO> users(List<Integer> list);
 	
 	/**
 	 * 通过账号和 appId 获取用户
@@ -42,7 +42,7 @@ public interface UserService {
 	 * @param appId
 	 * @return
 	 */
-	User getUser(String mobile, int appId);
+	UserPO getUser(String mobile, int appId);
 	
 	/**
 	 * 通过 token 获取用户
@@ -67,7 +67,7 @@ public interface UserService {
 	 * 
 	 * @return
 	 */
-	User getUserByEmployeeId(int employeeId);
+	UserPO getUserByEmployeeId(int employeeId);
 	
 	/**
 	 * 释放用户锁
@@ -83,7 +83,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	Result<Void> update(User user);
+	Result<Void> update(UserPO user);
 	
 	/**
 	 * 密码重置
@@ -101,7 +101,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	boolean tenantNumMax(User user);
+	boolean tenantNumMax(UserPO user);
 	
 	/**
 	 * 根据客户 ID 获取客户

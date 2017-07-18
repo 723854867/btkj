@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.QuizSQLProvider;
-import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.po.Quiz;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface QuizDao extends DBMapper<Integer, Quiz> {

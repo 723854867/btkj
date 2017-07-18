@@ -1,7 +1,7 @@
 package org.btkj.web.util;
 
-import org.btkj.pojo.model.CaptchaReceiver;
-import org.btkj.pojo.model.CaptchaVerifier;
+import org.btkj.pojo.bo.CaptchaReceiver;
+import org.btkj.pojo.bo.CaptchaVerifier;
 
 public class ParamsUtil {
 	

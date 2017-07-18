@@ -2,14 +2,17 @@ package org.btkj.vehicle.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.conversions.Bson;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
+import org.rapid.data.storage.mongo.MongoUtil;
 import org.rapid.util.lang.CollectionUtil;
 
 import com.mongodb.client.model.Filters;
@@ -27,6 +30,9 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	private String FIELD_STATE						= "state";
 	private String FIELD_CREATED					= "created";
 	private String FIELD_EMPLOYEE_ID				= "employeeId";
+	
+	private String FIELD_COMMERCIAL_POLICY_NO		= "tips.detail.commercialNo";
+	private String FIELD_COMPULSORY_POLICY_NO		= "tips.detail.compulsiveNo";
 	
 	public VehicleOrderMapper() {
 		super("vehicleOrder");
@@ -109,5 +115,17 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 				mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
 							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
 		return new Pager<VehicleOrder>(searcher.getTotal(), orders);
+	}
+	
+	/**
+	 * 通过投保单号获取订单
+	 * 
+	 * @param type
+	 * @param policyNo
+	 * @return
+	 */
+	public List<VehicleOrder> getByNos(InsuranceType type, Set<String> nos) {
+		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
+		return mongo.find(collection, bson, clazz);
 	}
 }

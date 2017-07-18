@@ -1,6 +1,6 @@
 package org.btkj.pojo;
 
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
 import org.rapid.util.common.message.Result;
 
 public interface BtkjConsts {
@@ -11,8 +11,6 @@ public interface BtkjConsts {
 	 * 租户顶级用户的 level
 	 */
 	final int EMPLOYEE_ROOT_LEVEL				= 1;
-	
-	final String CACHE_CONTROLLER_KEY			= "hash:memory:cache_controller";
 	
 	final int GLOBAL_TENANT_ID					= 0;
 	final int MAX_COMMISION_RATE				= 600;

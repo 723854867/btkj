@@ -6,17 +6,17 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.InsurUnit;
+import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.UnitType;
-import org.btkj.pojo.enums.vehicle.VehicleUsedType;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.InsurUnit;
-import org.btkj.pojo.model.insur.vehicle.Insurance;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -57,7 +57,7 @@ public class ORDER extends TenantAction {
 	 * 
 	 * @param submit
 	 */
-	private boolean _check(Tenant tenant, VehiclePolicyTips tips) {
+	private boolean _check(TenantPO tenant, VehiclePolicyTips tips) {
 		if (null == tips.getOwner() || null == tips.getInsurer() || null == tips.getInsured() || null == tips.getSchema())
 			return false;
 		VehicleUsedType usedType = tips.getVehicleUsedType();

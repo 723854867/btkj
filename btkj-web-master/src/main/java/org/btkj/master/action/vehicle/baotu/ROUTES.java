@@ -9,8 +9,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.master.pojo.RouteInfo;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.Insurer;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.web.util.Params;

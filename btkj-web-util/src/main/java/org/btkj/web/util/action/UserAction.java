@@ -2,10 +2,10 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.UserModel;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -43,7 +43,7 @@ public abstract class UserAction implements Action {
 		}
 	}
 	
-	protected abstract Result<?> execute(Request request, App app, Client client, User user);
+	protected abstract Result<?> execute(Request request, AppPO app, Client client, UserPO user);
 	
 	/**
 	 * 如果返回 true 则已经获取到了 user 的锁

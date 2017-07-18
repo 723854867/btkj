@@ -2,9 +2,9 @@ package org.btkj.common.action.vehicle;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.Renewal;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

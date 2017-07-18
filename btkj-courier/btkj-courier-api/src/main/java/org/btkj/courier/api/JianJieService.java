@@ -1,7 +1,7 @@
 package org.btkj.courier.api;
 
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.JianJiePoliciesInfo;
 
 /**
  * 简捷服务类
@@ -15,7 +15,7 @@ public interface JianJieService {
 	 * 
 	 * @param user
 	 */
-	void addUser(User user);
+	void addUser(UserPO user);
 	
 	/**
 	 * 获取指定代理公司的所有保单

@@ -10,16 +10,16 @@ import org.btkj.community.redis.CommentMapper;
 import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Article;
-import org.btkj.pojo.entity.Comment;
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.Reply;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.ArticleSearcher;
-import org.btkj.pojo.submit.QuizSearcher;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Article;
+import org.btkj.pojo.po.Comment;
+import org.btkj.pojo.po.Quiz;
+import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.ArticleSearcher;
+import org.btkj.pojo.vo.QuizSearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class CommunityServiceImpl implements CommunityService {
 	private CommentMapper commentMapper;
 	
 	@Override
-	public Result<Void> articleAdd(App app, String title, String icon, String link) {
+	public Result<Void> articleAdd(AppPO app, String title, String icon, String link) {
 		try {
 			tx.articlesAdd(app, title, icon, link);
 		} catch (BusinessException e) {
@@ -62,7 +62,7 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public Result<Void> comment(User user, int articleId, String content) {
+	public Result<Void> comment(UserPO user, int articleId, String content) {
 		try {
 			tx.comment(user, articleId, content).finish();;
 		} catch (BusinessException e) {
@@ -72,7 +72,7 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public int quiz(User user, String content) {
+	public int quiz(UserPO user, String content) {
 		Quiz quiz = EntityGenerator.quiz(user, content);
 		quizMapper.insert(quiz);
 		return quiz.getId();
@@ -97,7 +97,7 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public Result<Void> reply(User user, int quizId, String content) {
+	public Result<Void> reply(UserPO user, int quizId, String content) {
 		try {
 			tx.reply(user, quizId, content).finish();;
 		} catch (BusinessException e) {

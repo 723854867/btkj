@@ -1,10 +1,10 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.MainPageInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.MainPageInfo;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
@@ -15,7 +15,7 @@ public interface AppService {
 	 * @param appId
 	 * @return
 	 */
-	App getAppById(int appId);
+	AppPO getAppById(int appId);
 	
 	/**
 	 * 非游客模式的首页：分为 app 首页、pc 端首页、管理后台首页
@@ -25,7 +25,7 @@ public interface AppService {
 	 * @param em
 	 * @return
 	 */
-	Result<MainPageInfo> mainPage(Client client, User user, EmployeeForm em);
+	Result<MainPageInfo> mainPage(Client client, UserPO user, EmployeeForm em);
 
 	/**
 	 * 添加 app
@@ -36,7 +36,7 @@ public interface AppService {
 	 * @param maxArticlesCount app 能添加的最大咨询数
 	 * @return
 	 */
-	App addApp(int region, String name, int maxTenantsCount, int maxArticlesCount);
+	AppPO addApp(int region, String name, int maxTenantsCount, int maxArticlesCount);
 	
 	/**
 	 * 获取该 app 的代理公司数
@@ -44,5 +44,5 @@ public interface AppService {
 	 * @param app
 	 * @return
 	 */
-	int tenantNum(App app);
+	int tenantNum(AppPO app);
 }

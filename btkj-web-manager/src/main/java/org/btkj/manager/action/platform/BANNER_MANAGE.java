@@ -3,8 +3,8 @@ package org.btkj.manager.action.platform;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.PlatformAction;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -24,7 +24,7 @@ public class BANNER_MANAGE extends PlatformAction {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, User operator) {
+	protected Result<?> execute(Request request, AppPO app, UserPO operator) {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:

@@ -3,7 +3,7 @@ package org.btkj.master.action.vehicle.baotu;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.pojo.entity.Administrator;
+import org.btkj.pojo.po.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;

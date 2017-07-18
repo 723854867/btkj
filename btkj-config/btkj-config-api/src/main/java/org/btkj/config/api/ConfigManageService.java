@@ -3,7 +3,7 @@ package org.btkj.config.api;
 import java.util.List;
 
 import org.btkj.config.pojo.info.AreaInfo;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.message.Result;
 
 public interface ConfigManageService {

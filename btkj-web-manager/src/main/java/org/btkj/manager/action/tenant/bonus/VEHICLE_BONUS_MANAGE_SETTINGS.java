@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.vehicle.api.VehicleConfigService;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.web.util.Request;

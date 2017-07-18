@@ -8,12 +8,12 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.Banner;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
@@ -63,7 +63,7 @@ public class UserManageServiceImpl implements UserManageService {
 	public Result<Pager<EmployeePagingInfo>> employeePaging(EmployeeSearcher searcher) {
 		Pager<EmployeePagingInfo> pager = null;
 		if (null != searcher.getMobile()) {
-			User user = userMapper.getUserByMobile(searcher.getAppId(), searcher.getMobile());
+			UserPO user = userMapper.getUserByMobile(searcher.getAppId(), searcher.getMobile());
 			if (null == user)
 				return Result.result(Pager.EMPLTY);
 			searcher.setUid(user.getUid());
@@ -74,9 +74,9 @@ public class UserManageServiceImpl implements UserManageService {
 		Set<Integer> set = new HashSet<Integer>();
 		for (EmployeePagingInfo info : pager.getList()) 
 			set.add(info.getParentId());
-		List<Employee> parents = new ArrayList<Employee>(employeeMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		List<EmployeePO> parents = new ArrayList<EmployeePO>(employeeMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (EmployeePagingInfo info : pager.getList()) {
-			for (Employee employee : parents) {
+			for (EmployeePO employee : parents) {
 				if (employee.getId() == info.getParentId())
 					info.setParentUid(employee.getUid());
 			}
@@ -86,9 +86,9 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getUid());
 			set.add(info.getParentUid());
 		}
-		List<User> users = new ArrayList<User>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		List<UserPO> users = new ArrayList<UserPO>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (EmployeePagingInfo info : pager.getList()) {
-			for (User user : users) {
+			for (UserPO user : users) {
 				if (info.getUid() == user.getUid()) {
 					info.setName(user.getName());
 					info.setMobile(user.getMobile());
@@ -111,9 +111,9 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getParentUid());
 		}
 		
-		List<User> users = new ArrayList<User>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		List<UserPO> users = new ArrayList<UserPO>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (ApplyPagingInfo info : pager.getList()) {
-			for (User user : users) {
+			for (UserPO user : users) {
 				if (user.getUid() == info.getUid()) {
 					info.setName(user.getName());
 					info.setMobile(user.getMobile());
@@ -160,7 +160,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public void tenantSet(Tenant tenant, TenantSettingsSubmit submit) {
+	public void tenantSet(TenantPO tenant, TenantSettingsSubmit submit) {
 		if (null != submit.getNonAutoBind()) {
 			if (submit.getNonAutoBind().isEmpty())
 				tenant.setNonAutoBind(null);

@@ -3,7 +3,7 @@ package org.btkj.config.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.config.pojo.entity.Area;
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.po.Region;
 
 public class AreaInfo implements Serializable {
 

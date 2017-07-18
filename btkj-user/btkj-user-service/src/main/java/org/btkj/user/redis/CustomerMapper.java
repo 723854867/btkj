@@ -2,8 +2,8 @@ package org.btkj.user.redis;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.Customer;
 import org.btkj.user.mybatis.dao.CustomerDao;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mapper.RedisDBAdapter;

@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.NonAutoCategory;
+import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.Action;

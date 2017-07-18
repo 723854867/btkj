@@ -2,7 +2,7 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.common.message.Result;

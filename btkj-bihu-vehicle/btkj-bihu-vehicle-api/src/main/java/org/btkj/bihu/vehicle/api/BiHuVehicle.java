@@ -1,10 +1,10 @@
 package org.btkj.bihu.vehicle.api;
 
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.PolicyDetail;
+import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.message.Result;
 
 /**

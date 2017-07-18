@@ -21,8 +21,8 @@ import org.apache.http.util.EntityUtils;
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.pojo.JianJieResp;
 import org.btkj.courier.pojo.JianJieUser;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.PhoneUtil;
@@ -48,7 +48,7 @@ public class JianJieServiceImpl implements JianJieService {
 	private HttpProxy httpProxy;
 	
 	@Override
-	public void addUser(User user) {
+	public void addUser(UserPO user) {
 		try {
 			URIBuilder uriBuilder = new URIBuilder(urlUserAdd);
 			long timestamp = DateUtil.currentTime();

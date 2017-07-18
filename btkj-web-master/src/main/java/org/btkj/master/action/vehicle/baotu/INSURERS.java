@@ -5,8 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.Insurer;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;
 import org.rapid.util.common.message.Result;

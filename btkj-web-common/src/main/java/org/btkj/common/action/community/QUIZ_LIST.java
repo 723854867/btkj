@@ -9,12 +9,12 @@ import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.QuizSearcher;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Quiz;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.QuizSearcher;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -35,7 +35,7 @@ public class QUIZ_LIST extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User user) {
+	protected Result<?> execute(Request request, AppPO app, Client client, UserPO user) {
 		QuizSearcher searcher = request.getParam(Params.QUIZ_SEARCHER);
 		if (null == searcher.getSortCol())
 			throw ConstConvertFailureException.errorConstException(Params.QUIZ_SEARCHER);
@@ -46,10 +46,10 @@ public class QUIZ_LIST extends UserAction {
 			Set<Integer> set = new HashSet<Integer>();
 			for (Quiz quiz : result.attach().getList())
 				set.add(quiz.getUid());
-			List<User> users = userService.users(new ArrayList<Integer>(set));
+			List<UserPO> users = userService.users(new ArrayList<Integer>(set));
 			List<QuizInfo> list = new ArrayList<QuizInfo>(result.attach().getList().size());
 			for (Quiz quiz : result.attach().getList()) {
-				for (User u : users) {
+				for (UserPO u : users) {
 					if (u.getUid() != quiz.getUid())
 						continue;
 					list.add(new QuizInfo(u, quiz));

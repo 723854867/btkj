@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.api.BiHuManageService;
 import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
-import org.btkj.pojo.entity.Administrator;
+import org.btkj.pojo.po.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;

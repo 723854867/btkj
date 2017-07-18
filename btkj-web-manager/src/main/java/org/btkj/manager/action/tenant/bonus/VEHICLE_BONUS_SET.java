@@ -6,9 +6,9 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
-import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.pojo.bo.BonusRouteBody;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;

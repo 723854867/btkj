@@ -3,8 +3,8 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.api.MasterService;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;

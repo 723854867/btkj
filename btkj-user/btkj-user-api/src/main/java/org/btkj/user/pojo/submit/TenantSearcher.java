@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.submit.Page;
+import org.btkj.pojo.vo.Page;
 
 public class TenantSearcher extends Page {
 

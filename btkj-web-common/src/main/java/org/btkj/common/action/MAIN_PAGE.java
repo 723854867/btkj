@@ -5,12 +5,12 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.MainPageInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.MainPageInfo;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
@@ -41,7 +41,7 @@ public class MAIN_PAGE extends UserAction {
 	private EmployeeService employeeService;
 	
 	@Override
-	protected Result<MainPageInfo> execute(Request request, App app, Client client, User user) {
+	protected Result<MainPageInfo> execute(Request request, AppPO app, Client client, UserPO user) {
 		int employeeId = request.getOptionalParam(Params.EMPLOYEE_ID);
 		EmployeeForm em = 0 == employeeId ? null : employeeService.getById(employeeId);
 		if (0 != employeeId && null == em)

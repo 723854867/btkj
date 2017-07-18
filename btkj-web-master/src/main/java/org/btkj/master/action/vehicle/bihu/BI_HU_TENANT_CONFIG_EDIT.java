@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.api.BiHuManageService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -27,7 +27,7 @@ public class BI_HU_TENANT_CONFIG_EDIT extends AdministratorAction {
 		switch (crudType) {
 		case CREATE:
 			int tid = request.getParam(Params.TID);
-			Tenant tenant = tenantService.getTenantById(tid);
+			TenantPO tenant = tenantService.getTenantById(tid);
 			if (null == tenant)
 				return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 			return biHuManageService.tenantConfigAdd(tid, request.getParam(Params.AGENT), request.getParam(Params.KEY));

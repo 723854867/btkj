@@ -2,7 +2,7 @@ package org.btkj.login.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
@@ -26,7 +26,7 @@ public class USER_CHECK implements Action {
 	@Override
 	public Result<Void> execute(Request request) {
 		String mobile = request.getParam(Params.MOBILE);
-		User user = userService.getUser(mobile, request.getParam(Params.APP_ID));
+		UserPO user = userService.getUser(mobile, request.getParam(Params.APP_ID));
 		if (null == user)
 			return Result.result(Code.USER_NOT_EXIST);
 		if (null == user.getPwd())

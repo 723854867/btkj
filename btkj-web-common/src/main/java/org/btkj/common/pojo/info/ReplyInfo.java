@@ -2,9 +2,9 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Reply;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.tips.UserTips;
+import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.UserTips;
 
 public class ReplyInfo implements Serializable {
 
@@ -15,7 +15,7 @@ public class ReplyInfo implements Serializable {
 	private UserTips user;
 	private String content;
 	
-	public ReplyInfo(User user, Reply reply) {
+	public ReplyInfo(UserPO user, Reply reply) {
 		this.id = reply.getId();
 		this.time = reply.getCreated();
 		this.content = reply.getContent();

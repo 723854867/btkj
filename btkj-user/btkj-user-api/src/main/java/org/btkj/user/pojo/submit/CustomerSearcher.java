@@ -3,7 +3,7 @@ package org.btkj.user.pojo.submit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.btkj.pojo.submit.Page;
+import org.btkj.pojo.vo.Page;
 
 public class CustomerSearcher extends Page {
 

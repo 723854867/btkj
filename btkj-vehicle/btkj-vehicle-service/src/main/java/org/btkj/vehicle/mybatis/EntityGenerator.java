@@ -1,7 +1,7 @@
 package org.btkj.vehicle.mybatis;
 
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;

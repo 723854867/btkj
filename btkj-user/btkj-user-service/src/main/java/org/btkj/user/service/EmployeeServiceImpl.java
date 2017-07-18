@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -30,17 +30,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public EmployeeForm getById(int employeeId) {
-		Employee employee = employeeMapper.getByKey(employeeId);
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return null;
-		Tenant tenant = tenantMapper.getByKey(employee.getTid());
-		App app = appMapper.getByKey(tenant.getAppId());
-		User user = userMapper.getByKey(employee.getUid());
+		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		AppPO app = appMapper.getByKey(tenant.getAppId());
+		UserPO user = userMapper.getByKey(employee.getUid());
 		return new EmployeeForm(app, user, tenant, employee);
 	}
 	
 	@Override
-	public List<Employee> team(EmployeeForm form) {
+	public List<EmployeePO> team(EmployeeForm form) {
 		return employeeMapper.team(form.getEmployee(), form.getTenant().getTeamDepth());
 	}
 }

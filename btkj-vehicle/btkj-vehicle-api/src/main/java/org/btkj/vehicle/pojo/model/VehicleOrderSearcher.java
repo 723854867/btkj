@@ -1,6 +1,6 @@
 package org.btkj.vehicle.pojo.model;
 
-import org.btkj.pojo.submit.Page;
+import org.btkj.pojo.vo.Page;
 import org.btkj.vehicle.pojo.OrderFilterState;
 
 public class VehicleOrderSearcher extends Page {

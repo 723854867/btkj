@@ -1,10 +1,10 @@
 package org.btkj.courier.api;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.StsInfo;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.StsInfo;
 
 /**
  * aliyun 的一些服务
@@ -20,7 +20,7 @@ public interface AliyunService {
 	 * @param userModel
 	 * @return
 	 */
-	StsInfo assumeRole(App app);
+	StsInfo assumeRole(AppPO app);
 	
 	/**
 	 * STS assumeRole
@@ -28,7 +28,7 @@ public interface AliyunService {
 	 * @param tenant
 	 * @return
 	 */
-	StsInfo assumeRole(Tenant tenant);
+	StsInfo assumeRole(TenantPO tenant);
 	
 	/**
 	 * STS assumeRole
@@ -37,7 +37,7 @@ public interface AliyunService {
 	 * @param user
 	 * @return
 	 */
-	StsInfo assumeRole(User user);
+	StsInfo assumeRole(UserPO user);
 	
 	/**
 	 * STS assumeRole
@@ -45,5 +45,5 @@ public interface AliyunService {
 	 * @param employee
 	 * @return
 	 */
-	StsInfo assumeRole(Employee employee);
+	StsInfo assumeRole(EmployeePO employee);
 }

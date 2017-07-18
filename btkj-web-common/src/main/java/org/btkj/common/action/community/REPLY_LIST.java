@@ -10,11 +10,11 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.ReplyInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Reply;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -35,7 +35,7 @@ public class REPLY_LIST extends UserAction {
 	private CommunityService communityService;
 	
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User operator) {
+	protected Result<?> execute(Request request, AppPO app, Client client, UserPO operator) {
 		Result<Pager<Reply>> result = communityService.replies(
 				app.getId(), 
 				request.getParam(Params.ID), 
@@ -50,10 +50,10 @@ public class REPLY_LIST extends UserAction {
 		Set<Integer> ids = new HashSet<Integer>();
 		for (Reply reply : list)
 			ids.add(reply.getUid());
-		List<User> users = userService.users(new ArrayList<Integer>(ids));
+		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<ReplyInfo> l = new ArrayList<ReplyInfo>(list.size());
 		for (Reply reply : list) {
-			for (User user : users) {
+			for (UserPO user : users) {
 				if (user.getUid() != reply.getUid())
 					continue;
 				l.add(new ReplyInfo(user, reply));

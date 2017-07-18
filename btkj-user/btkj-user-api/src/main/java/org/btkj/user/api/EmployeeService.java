@@ -2,8 +2,8 @@ package org.btkj.user.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.po.EmployeePO;
 
 public interface EmployeeService {
 	
@@ -14,5 +14,5 @@ public interface EmployeeService {
 	 * @param form
 	 * @return
 	 */
-	List<Employee> team(EmployeeForm form);
+	List<EmployeePO> team(EmployeeForm form);
 }

@@ -2,7 +2,7 @@ package org.btkj.courier.pojo;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.UserPO;
 
 public class JianJieUser implements Serializable {
 
@@ -13,7 +13,7 @@ public class JianJieUser implements Serializable {
 	private String IdentityNo;
 	private String Phone;
 	
-	public JianJieUser(User user) {
+	public JianJieUser(UserPO user) {
 		this.LoginName = user.getName();
 		this.ChineseName = user.getName();
 		this.IdentityNo = user.getIdentity();

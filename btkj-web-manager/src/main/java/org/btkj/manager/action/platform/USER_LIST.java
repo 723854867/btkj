@@ -3,10 +3,10 @@ package org.btkj.manager.action.platform;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.PlatformAction;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.submit.UserSearcher;
@@ -21,7 +21,7 @@ public class USER_LIST extends PlatformAction {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Pager<UserPagingInfo>> execute(Request request, App app, User operator) {
+	protected Result<Pager<UserPagingInfo>> execute(Request request, AppPO app, UserPO operator) {
 		UserSearcher searcher = request.getParam(Params.USER_SEARCHER);
 		searcher.setAppId(app.getId());
 		searcher.setClient(Client.TENANT_MANAGER);

@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.deploy.BaseTest;
-import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.junit.Test;
 import org.rapid.util.common.serializer.SerializeUtil;
 

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.entity.User;
 import org.btkj.statistics.pojo.model.Exploits;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.statistics.pojo.model.Exploit;
 
 public class TeamInfo implements Serializable{
@@ -18,7 +18,7 @@ public class TeamInfo implements Serializable{
 	private double total;					// 总业绩
 	private List<Employee> employees;		// 员工业绩排序列表
 	
-	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, List<User> users) {
+	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, List<UserPO> users) {
 		this.total = exploits.getTotal();
 		this.employees = new ArrayList<Employee>(map.size());
 		List<Exploit> list = exploits.getEmployeeExploits();
@@ -32,9 +32,9 @@ public class TeamInfo implements Serializable{
 				if (employee.getEmployeeId() != entry.getKey())
 					continue;
 				titr.remove();
-				Iterator<User> uitr = users.iterator();
+				Iterator<UserPO> uitr = users.iterator();
 				while (uitr.hasNext()) {
-					User user = uitr.next();
+					UserPO user = uitr.next();
 					if (user.getUid() != entry.getValue())
 						continue;
 					uitr.remove();
@@ -44,9 +44,9 @@ public class TeamInfo implements Serializable{
 				this.employees.add(new Employee(employee, null));
 				break a;
 			}
-			Iterator<User> uitr = users.iterator();
+			Iterator<UserPO> uitr = users.iterator();
 			while (uitr.hasNext()) {
-				User user = uitr.next();
+				UserPO user = uitr.next();
 				if (user.getUid() != entry.getValue())
 					continue;
 				uitr.remove();
@@ -64,14 +64,14 @@ public class TeamInfo implements Serializable{
 		private UserTips user;
 		private double performance;
 		
-		public Employee(int employeeId, User user) {
+		public Employee(int employeeId, UserPO user) {
 			this.id = employeeId;
 			this.performance = 0;
 			if (null != user)
 				this.user = new UserTips(user);
 		}
 		
-		public Employee(Exploit employee, User user) {
+		public Employee(Exploit employee, UserPO user) {
 			this.id = employee.getEmployeeId();
 			this.performance = employee.getQuota();
 			if (null != user)
@@ -103,13 +103,13 @@ public class TeamInfo implements Serializable{
 		}
 	}
 	
-	private class UserTips extends org.btkj.pojo.info.tips.UserTips {
+	private class UserTips extends org.btkj.pojo.vo.UserTips {
 
 		private static final long serialVersionUID = -782901248357849215L;
 		
 		private String mobile;
 		
-		public UserTips(User user) {
+		public UserTips(UserPO user) {
 			super(user);
 			this.mobile = user.getMobile();
 		}

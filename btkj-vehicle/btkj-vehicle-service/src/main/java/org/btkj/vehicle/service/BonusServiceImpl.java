@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;

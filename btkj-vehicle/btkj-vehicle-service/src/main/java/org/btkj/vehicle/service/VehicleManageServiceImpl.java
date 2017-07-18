@@ -1,19 +1,22 @@
 package org.btkj.vehicle.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
-import org.btkj.pojo.enums.vehicle.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.info.JianJiePoliciesInfo;
-import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.vo.JianJiePoliciesInfo;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.mybatis.EntityGenerator;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
@@ -39,6 +42,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private Tx tx;
 	@Resource
 	private RouteMapper routeMapper;
+	@Resource
+	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -154,7 +159,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public void jianjieSynchronize(JianJiePoliciesInfo info) {
+	public void jianJieSynchronize(JianJiePoliciesInfo info) {
 		List<BaseInfo> infos = info.getResult();
 		int left = infos.size();
 		int idx = 0;
@@ -165,9 +170,22 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
 			Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
 			for (BaseInfo temp : list) {
+				if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title()))
+					commercials.put(temp.getBDH(), temp);
+				else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title()))
+					compulsories.put(temp.getBDH(), temp);
+				else
+					throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
+			}
+			
+			List<VehicleOrder> cm = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
+			List<VehicleOrder> cp = vehicleOrderMapper.getByNos(InsuranceType.COMPULSORY, compulsories.keySet());
+			Iterator<BaseInfo> itr = list.iterator();
+			while (itr.hasNext()) {
+				BaseInfo temp = itr.next();
+				String no = temp.getBDH();
 				if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title())) {
-					
-				} else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title())) {
+				} else {
 					
 				}
 			}

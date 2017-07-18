@@ -2,7 +2,7 @@ package org.btkj.master.pojo;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Insurer;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.Route;
 

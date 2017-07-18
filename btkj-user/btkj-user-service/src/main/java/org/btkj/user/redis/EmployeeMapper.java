@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
@@ -25,7 +25,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDao> {
+public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, EmployeeDao> {
 	
 	private final String USER_SET				= "set:employee：user:{0}";
 	private final String USER_CONTROLLER		= "employee：controller:{0}:";			// 基于用户的缓存控制键
@@ -34,7 +34,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
-		super(new ByteProtostuffSerializer<Employee>(), "hash:db:employee");
+		super(new ByteProtostuffSerializer<EmployeePO>(), "hash:db:employee");
 	}
 	
 	/**
@@ -60,14 +60,14 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	 * 
 	 * @return
 	 */
-	public List<Employee> ownedTenants(User user) {
-		Map<Integer, Employee> map =_checkLoad(user.getUid());
+	public List<EmployeePO> ownedTenants(UserPO user) {
+		Map<Integer, EmployeePO> map =_checkLoad(user.getUid());
 		if (null != map)
-			return new ArrayList<Employee>(map.values());
+			return new ArrayList<EmployeePO>(map.values());
 		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(user.getUid()));
 		if (null == list)
 			return Collections.EMPTY_LIST;
-		List<Employee> l = new ArrayList<Employee>();
+		List<EmployeePO> l = new ArrayList<EmployeePO>();
 		for (byte[] buffer : list)
 			l.add(serializer.antiConvet(buffer));
 		return l;
@@ -79,36 +79,36 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDa
 	 * @param employee
 	 * @return
 	 */
-	public List<Employee> team(Employee employee, int depth) {
+	public List<EmployeePO> team(EmployeePO employee, int depth) {
 		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + depth - 1);
 	}
 	
-	private Map<Integer, Employee> _checkLoad(int uid) {
+	private Map<Integer, EmployeePO> _checkLoad(int uid) {
 		if (!checkLoad(_userSetKey(uid)))
 			return null;
-		Map<Integer, Employee> map = dao.getByUid(uid);
+		Map<Integer, EmployeePO> map = dao.getByUid(uid);
 		if (!CollectionUtil.isEmpty(map))
 			flush(map);
 		return map;
 	}
 	
 	@Override
-	public void flush(Employee entity) {
+	public void flush(EmployeePO entity) {
 		redis.hmsset(redisKey, entity, serializer, _userSetKey(entity.getUid()));
 	}
 	
 	@Override
-	public void flush(Map<Integer, Employee> entities) {
-		Map<Integer, List<Employee>> map = new HashMap<Integer, List<Employee>>();
-		for (Employee temp : entities.values()) {
-			List<Employee> list = map.get(temp.getUid());
+	public void flush(Map<Integer, EmployeePO> entities) {
+		Map<Integer, List<EmployeePO>> map = new HashMap<Integer, List<EmployeePO>>();
+		for (EmployeePO temp : entities.values()) {
+			List<EmployeePO> list = map.get(temp.getUid());
 			if (null == list) {
-				list = new ArrayList<Employee>();
+				list = new ArrayList<EmployeePO>();
 				map.put(temp.getUid(), list);
 			}
 			list.add(temp);
 		}
-		for (Entry<Integer, List<Employee>> entry : map.entrySet())
+		for (Entry<Integer, List<EmployeePO>> entry : map.entrySet())
 			redis.hmsset(redisKey, entry.getValue(), serializer, _userSetKey(entry.getKey()));
 	}
 	

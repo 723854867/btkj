@@ -3,7 +3,7 @@ package org.btkj.bihu.vehicle.domain;
 import java.io.Serializable;
 
 import org.btkj.bihu.vehicle.RespHandler;
-import org.btkj.pojo.model.insur.vehicle.PolicyDetail;
+import org.btkj.pojo.bo.PolicyDetail;
 
 public class InsureResult implements Serializable {
 

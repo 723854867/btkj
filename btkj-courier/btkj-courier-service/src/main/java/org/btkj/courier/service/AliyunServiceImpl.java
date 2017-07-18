@@ -7,11 +7,11 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.redis.AliyunMapper;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.StsInfo;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
 import org.rapid.aliyun.policy.Action;
@@ -55,17 +55,17 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 
 	@Override
-	public StsInfo assumeRole(App app) {
+	public StsInfo assumeRole(AppPO app) {
 		return null;
 	}
 
 	@Override
-	public StsInfo assumeRole(Tenant tenant) {
+	public StsInfo assumeRole(TenantPO tenant) {
 		return null;
 	}
 
 	@Override
-	public StsInfo assumeRole(User user) {
+	public StsInfo assumeRole(UserPO user) {
 		String field = MessageFormat.format(USER_KEY, String.valueOf(user.getAppId()), String.valueOf(user.getUid()));
 		StsInfo stsInfo = aliyunMapper.getByKey(field);
 		if (null == stsInfo) {
@@ -79,12 +79,12 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 
 	@Override
-	public StsInfo assumeRole(Employee employee) {
+	public StsInfo assumeRole(EmployeePO employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	private StsInfo _doAssumeRole(User user) {
+	private StsInfo _doAssumeRole(UserPO user) {
 		Policy policy = new Policy();
 		policy.addStatement(bucketReadOnly);
 		policy.addStatement(_ossFullAccess(user));
@@ -102,7 +102,7 @@ public class AliyunServiceImpl implements AliyunService {
 		return stsInfo;
 	}
 	
-	private Statement _ossFullAccess(User user) {
+	private Statement _ossFullAccess(UserPO user) {
 		Statement statement = new Statement(Effect.Allow);
 		statement.setAction(Action.OSS_FULL_ACCESS);
 		statement.setResource(ossAccess + aliyunConfig.getConfig(AliyunOptions.OSS_BUCKET) + "/user/" + user.getUid() + "/*");

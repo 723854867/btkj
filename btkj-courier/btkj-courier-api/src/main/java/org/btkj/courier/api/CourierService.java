@@ -1,9 +1,9 @@
 package org.btkj.courier.api;
 
 import org.btkj.courier.model.QuotaNoticeSubmit;
-import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.model.CaptchaReceiver;
-import org.btkj.pojo.model.CaptchaVerifier;
+import org.btkj.pojo.bo.CaptchaReceiver;
+import org.btkj.pojo.bo.CaptchaVerifier;
+import org.btkj.pojo.po.VehicleOrder;
 import org.rapid.util.common.message.Result;
 
 /**

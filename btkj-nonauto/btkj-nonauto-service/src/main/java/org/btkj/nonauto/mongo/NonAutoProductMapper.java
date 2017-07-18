@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bson.conversions.Bson;
-import org.btkj.pojo.entity.NonAutoProduct;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.NonAutoProduct;
+import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.KeyMapper;
 

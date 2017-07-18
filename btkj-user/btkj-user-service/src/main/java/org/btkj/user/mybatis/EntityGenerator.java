@@ -2,23 +2,23 @@ package org.btkj.user.mybatis;
 
 import java.util.LinkedList;
 
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.ApplyInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Banner;
+import org.btkj.pojo.po.Customer;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.ApplyInfo;
 import org.rapid.util.common.enums.REGION_TYPE;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 	
-	public static final User newUser(int appId, String mobile) { 
-		User user = new User();
+	public static final UserPO newUser(int appId, String mobile) { 
+		UserPO user = new UserPO();
 		user.setAppId(appId);
 		user.setMobile(mobile);
 		
@@ -28,8 +28,8 @@ public class EntityGenerator {
 		return user;
 	} 
 	
-	public static final Employee newEmployee(User user, Tenant tenant, Employee parent) {
-		Employee employee = new Employee();
+	public static final EmployeePO newEmployee(UserPO user, TenantPO tenant, EmployeePO parent) {
+		EmployeePO employee = new EmployeePO();
 		employee.setUid(user.getUid());
 		employee.setTid(tenant.getTid());
 		employee.setParentId(null == parent ? 0 : parent.getId());
@@ -43,8 +43,8 @@ public class EntityGenerator {
 		return employee;
 	}
 	
-	public static final App newApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
-		App app = new App();
+	public static final AppPO newApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		AppPO app = new AppPO();
 		app.setRegion(region);
 		app.setName(name);
 		app.setMaxTenantsCount(maxTenantsCount);
@@ -56,8 +56,8 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final Tenant newTenant(int region, int appId, String name, String licenseFace, String licenseBack, String servicePhone) {
-		Tenant tenant = new Tenant();
+	public static final TenantPO newTenant(int region, int appId, String name, String licenseFace, String licenseBack, String servicePhone) {
+		TenantPO tenant = new TenantPO();
 		tenant.setName(name);
 		tenant.setAppId(appId);
 		tenant.setRegion(region);
@@ -73,7 +73,7 @@ public class EntityGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(Tenant tenant, User user, EmployeeForm chief) { 
+	public static final ApplyInfo newApply(TenantPO tenant, UserPO user, EmployeeForm chief) { 
 		ApplyInfo ai = new ApplyInfo();
 		ai.setTid(tenant.getTid());
 		ai.setUid(user.getUid());

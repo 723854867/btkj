@@ -2,10 +2,10 @@ package org.btkj.nonauto.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.entity.NonAutoProduct;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.NonAutoCategory;
+import org.btkj.pojo.po.NonAutoProduct;
+import org.btkj.pojo.vo.NonAutoProductSearcher;
 
 /**
  * 非车险服务类

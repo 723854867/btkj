@@ -3,8 +3,8 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.NonAutoProduct;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.AdministratorAction;

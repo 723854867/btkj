@@ -2,7 +2,7 @@ package org.btkj.vehicle;
 
 import java.util.TimeZone;
 
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.po.VehicleOrder;
 import org.rapid.util.lang.DateUtil;
 
 public class VehicleUtils {

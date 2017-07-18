@@ -3,9 +3,9 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
-import org.btkj.pojo.entity.App;
+import org.btkj.pojo.bo.CaptchaVerifier;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.CaptchaVerifier;
+import org.btkj.pojo.po.AppPO;
 import org.btkj.user.api.LoginService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;
@@ -28,7 +28,7 @@ public class LOGIN extends AppAction {
 	private CourierService courierService;
 	
 	@Override
-	protected Result<?> execute(Request request, Client client, App app) {
+	protected Result<?> execute(Request request, Client client, AppPO app) {
 		switch (client) {
 		case TENANT_MANAGER:
 			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));

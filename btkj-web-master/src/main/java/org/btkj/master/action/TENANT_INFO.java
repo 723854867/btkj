@@ -3,8 +3,8 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -19,7 +19,7 @@ public class TENANT_INFO extends AdministratorAction {
 	@Override
 	protected Result<?> execute(Request request, Administrator administrator) {
 		int tid = request.getParam(Params.TID);
-		Tenant tenant = tenantService.getTenantById(tid);
+		TenantPO tenant = tenantService.getTenantById(tid);
 		if (null == tenant)
 			return Result.result(BtkjCode.TENANT_NOT_EXIST);
 		return Result.result(tenant);

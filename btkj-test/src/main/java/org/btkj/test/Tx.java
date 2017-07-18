@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.test.persistence.dao.UserDao;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class Tx {
 		System.out.println("selectByAppId finish");
 	}
 	
-	public void insert(User user) throws InterruptedException {
+	public void insert(UserPO user) throws InterruptedException {
 		TimeUnit.SECONDS.sleep(3);
 		System.out.println("start to insert");
 		userDao.insert(user);

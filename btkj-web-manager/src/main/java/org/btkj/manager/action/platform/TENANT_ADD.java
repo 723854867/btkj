@@ -6,9 +6,9 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.courier.api.CourierService;
 import org.btkj.manager.action.PlatformAction;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.CaptchaVerifier;
+import org.btkj.pojo.bo.CaptchaVerifier;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -32,7 +32,7 @@ public class TENANT_ADD extends PlatformAction {
 	private CourierService courierService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, User operator) {
+	protected Result<?> execute(Request request, AppPO app, UserPO operator) {
 		String tname = request.getParam(Params.TNAME);
 		int region = request.getParam(Params.REGION);
 		if (!configService.isSubRegion(app.getRegion(), request.getParam(Params.REGION)))
@@ -41,7 +41,7 @@ public class TENANT_ADD extends PlatformAction {
 		String licenseBack = request.getParam(Params.IDENTITY_BACK);
 		String mobile = request.getParam(Params.MOBILE);
 		String servicePhone = request.getParam(Params.SERVICE_PHONE);
-		User user = userService.getUser(mobile, app.getId());
+		UserPO user = userService.getUser(mobile, app.getId());
 		if (null == user) 
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (null == user.getName())				// 资料不齐的用户不能作为商户顶级雇员

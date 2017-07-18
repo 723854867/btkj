@@ -8,10 +8,10 @@ import javax.annotation.Resource;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.nonauto.mongo.NonAutoCategoryMapper;
 import org.btkj.nonauto.mongo.NonAutoProductMapper;
-import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.entity.NonAutoProduct;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.NonAutoCategory;
+import org.btkj.pojo.po.NonAutoProduct;
+import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.springframework.stereotype.Service;
 
 @Service("nonAutoService")

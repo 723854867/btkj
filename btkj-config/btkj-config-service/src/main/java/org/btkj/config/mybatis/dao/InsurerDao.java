@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.InsurerSQLProvider;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Insurer;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface InsurerDao extends DBMapper<Integer, Insurer> {

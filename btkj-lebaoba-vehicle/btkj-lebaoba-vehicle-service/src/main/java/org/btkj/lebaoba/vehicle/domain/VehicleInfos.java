@@ -6,10 +6,10 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.btkj.pojo.enums.vehicle.VehicleType;
-import org.btkj.pojo.enums.vehicle.VehicleTypeCode;
-import org.btkj.pojo.enums.vehicle.VehicleTypeDetailCode;
-import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.enums.VehicleType;
+import org.btkj.pojo.enums.VehicleTypeCode;
+import org.btkj.pojo.enums.VehicleTypeDetailCode;
+import org.btkj.pojo.vo.VehicleInfo;
 import org.rapid.util.lang.CollectionUtil;
 
 @XmlRootElement(name = "RETURN")

@@ -9,11 +9,11 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.PlatformAction;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.submit.TenantSearcher;
@@ -30,7 +30,7 @@ public class TENANT_LIST extends PlatformAction {
 	private UserManageService userManageService;
 	
 	@Override
-	protected Result<Pager<TenantPagingInfo>> execute(Request request, App app, User operator) {
+	protected Result<Pager<TenantPagingInfo>> execute(Request request, AppPO app, UserPO operator) {
 		TenantSearcher searcher = request.getParam(Params.TENANT_SEARCHER);
 		searcher.setAppId(app.getId());
 		searcher.setClient(Client.TENANT_MANAGER);

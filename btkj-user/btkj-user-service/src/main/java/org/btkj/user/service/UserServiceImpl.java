@@ -7,14 +7,14 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.UserModel;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.po.Customer;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.pojo.submit.CustomerSearcher;
@@ -52,17 +52,17 @@ public class UserServiceImpl implements UserService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public User getUser(int uid) {
+	public UserPO getUser(int uid) {
 		return userMapper.getByKey(uid);
 	}
 	
 	@Override
-	public List<User> users(List<Integer> list) {
-		return new ArrayList<User>(userMapper.getByKeys(list).values());
+	public List<UserPO> users(List<Integer> list) {
+		return new ArrayList<UserPO>(userMapper.getByKeys(list).values());
 	}
 	
 	@Override
-	public User getUser(String mobile, int appId) {
+	public UserPO getUser(String mobile, int appId) {
 		return userMapper.getUserByMobile(appId, mobile);
 	}
 	
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 			String uid = session.get(BtkjConsts.FIELD.UID);
 			if (null == uid)
 				return null;
-			User user = userMapper.getByKey(Integer.valueOf(uid));
+			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
 			return new UserModel(appMapper.getByKey(user.getAppId()), user);
 		default:
 			return userMapper.getUserByToken(client, token);
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 			String uid = session.get(BtkjConsts.FIELD.UID);
 			if (null == uid)
 				return null;
-			User user = userMapper.getByKey(Integer.valueOf(uid));
+			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
 			String lockId = userMapper.lockUser(user.getUid());
 			if (null == lockId)
 				return Consts.RESULT.USER_STATUS_CHANGED;
@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User getUserByEmployeeId(int employeeId) {
-		Employee employee = employeeMapper.getByKey(employeeId);
+	public UserPO getUserByEmployeeId(int employeeId) {
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		return null == employee ? null : userMapper.getByKey(employee.getUid());
 	}
 	
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<Void> update(User user) {
+	public Result<Void> update(UserPO user) {
 		user.setUpdated(DateUtil.currentTime());
 		try {
 			userMapper.update(user);
@@ -123,11 +123,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<?> pwdReset(int appId, String mobile, String pwd) {
-		Result<User> result = userMapper.lockUserByMobile(appId, mobile);
+		Result<UserPO> result = userMapper.lockUserByMobile(appId, mobile);
 		if (!result.isSuccess())
 			return result;
 		try {
-			User user = result.attach();
+			UserPO user = result.attach();
 			user.setPwd(pwd);
 			userMapper.update(user);
 			return Result.success();
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public boolean tenantNumMax(User user) {
+	public boolean tenantNumMax(UserPO user) {
 		int limit = employeeMapper.ownedTenants(user).size() + applyMapper.applyListTids(user).size();
 		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
 	}

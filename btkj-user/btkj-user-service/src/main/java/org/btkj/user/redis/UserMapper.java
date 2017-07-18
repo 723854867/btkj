@@ -4,10 +4,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.UserModel;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.UserModel;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.Config;
 import org.btkj.user.LuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
@@ -27,7 +27,7 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  * 对应关系 hash:{0}:token:user - 用户 id 和用户 token 对应关系 hash:{0}:user:token - 用户
  * token 和用户 id 对应关系
  */
-public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
+public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 
 	private final String USER_LOCK 						= "string:user:{0}:lock"; 			
 
@@ -40,7 +40,7 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 	private DistributeLock distributeLock;
 
 	public UserMapper() {
-		super(new ByteProtostuffSerializer<User>(), "hash:db:user");
+		super(new ByteProtostuffSerializer<UserPO>(), "hash:db:user");
 	}
 	
 	public Pager<UserPagingInfo> paging(UserSearcher searcher) {
@@ -48,16 +48,16 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 		if (0 == total)
 			return Pager.EMPLTY;
 		searcher.calculate(total);
-		List<User> users = dao.paging(searcher);
+		List<UserPO> users = dao.paging(searcher);
 		List<UserPagingInfo> list = new ArrayList<UserPagingInfo>();
-		for (User user : users) 
+		for (UserPO user : users) 
 			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
 		return new Pager(searcher.getTotal(), list);
 	}
 	
-	public User getUserByMobile(int appId, String mobile) {
+	public UserPO getUserByMobile(int appId, String mobile) {
 		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE, _mobileUserKey(appId), redisKey, mobile);
-		User user = null;
+		UserPO user = null;
 		if (null == data) {
 			user = dao.getByMobile(appId, mobile);
 			if (null != user)
@@ -67,14 +67,14 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 		return user;
 	}
 	
-	public Result<User> lockUserByMobile(int appId, String mobile) {
+	public Result<UserPO> lockUserByMobile(int appId, String mobile) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE_LOCK, _mobileUserKey(appId), redisKey, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, serializer.antiConvet((byte[]) data));
 		if ((long) data == -2) {
-			User user = dao.getByMobile(appId, mobile);
+			UserPO user = dao.getByMobile(appId, mobile);
 			if (null == user)
 				return Result.result(Code.USER_NOT_EXIST);
 			flush(user);
@@ -106,7 +106,7 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
 						USER_LOCK, lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) {
-			User user = serializer.antiConvet((byte[]) data);
+			UserPO user = serializer.antiConvet((byte[]) data);
 			return Result.result(Code.OK.id(), lockId, new UserModel(appMapper.getByKey(user.getAppId()), user));
 		}
 		if ((long) data == 1)
@@ -135,7 +135,7 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
 		if (null == data)
 			return null;
-		User user = serializer.antiConvet(data);
+		UserPO user = serializer.antiConvet(data);
 		return new UserModel(appMapper.getByKey(user.getAppId()), user);
 	}
 
@@ -154,7 +154,7 @@ public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 	}
 	
 	@Override
-	public void flush(User entity) {
+	public void flush(UserPO entity) {
 		redis.invokeLua(LuaCmd.USER_FLUSH, redisKey, _mobileUserKey(entity.getAppId()),
 						entity.getMobile(), entity.getUid(), serializer.convert(entity));
 	}

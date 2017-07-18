@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.vehicle.CoefficientType;
-import org.btkj.pojo.enums.vehicle.VehicleBizType;
-import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.enums.VehicleBizType;
+import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 
 public class BonusUtils {

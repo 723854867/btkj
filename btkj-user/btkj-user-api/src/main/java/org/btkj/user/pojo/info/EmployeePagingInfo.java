@@ -2,7 +2,7 @@ package org.btkj.user.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Employee;
+import org.btkj.pojo.po.EmployeePO;
 
 public class EmployeePagingInfo implements Serializable {
 
@@ -21,7 +21,7 @@ public class EmployeePagingInfo implements Serializable {
 	
 	public EmployeePagingInfo() {}
 	
-	public EmployeePagingInfo(Employee employee) {
+	public EmployeePagingInfo(EmployeePO employee) {
 		this.id = employee.getId();
 		this.uid = employee.getUid();
 		this.payType = employee.getPayType();

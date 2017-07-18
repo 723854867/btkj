@@ -9,8 +9,8 @@ import java.util.Map.Entry;
 
 import org.btkj.community.mybatis.dao.CommentDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Comment;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.Comment;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;

@@ -1,7 +1,7 @@
 package org.btkj.pojo;
 
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.enums.SortField;
+import org.btkj.pojo.po.Region;
 import org.rapid.util.common.serializer.json.GsonEnumTypeAdapter;
 
 import com.google.gson.Gson;

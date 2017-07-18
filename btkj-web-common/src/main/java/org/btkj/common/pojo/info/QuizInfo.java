@@ -2,9 +2,9 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.tips.UserTips;
+import org.btkj.pojo.po.Quiz;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.UserTips;
 
 public class QuizInfo implements Serializable {
 
@@ -15,7 +15,7 @@ public class QuizInfo implements Serializable {
 	private String content;
 	private UserTips user;
 	
-	public QuizInfo(User user, Quiz quiz) {
+	public QuizInfo(UserPO user, Quiz quiz) {
 		this.id = quiz.getId();
 		this.time = quiz.getCreated();
 		this.content = quiz.getContent();

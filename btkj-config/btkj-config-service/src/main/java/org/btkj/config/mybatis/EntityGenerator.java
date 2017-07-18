@@ -1,7 +1,7 @@
 package org.btkj.config.mybatis;
 
 import org.btkj.config.pojo.entity.Area;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.po.Insurer;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {

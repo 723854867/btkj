@@ -7,14 +7,14 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.ApplyInfo;
-import org.btkj.pojo.info.TenantListInfo;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.ApplyInfo;
+import org.btkj.pojo.vo.TenantListInfo;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -51,18 +51,18 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeService employeeService;
 
 	@Override
-	public Tenant getTenantById(int tid) {
+	public TenantPO getTenantById(int tid) {
 		return tenantMapper.getByKey(tid);
 	}
 
 	@Override
-	public Result<?> apply(User user, EmployeeForm chief) {
+	public Result<?> apply(UserPO user, EmployeeForm chief) {
 		if (chief.getApp().getId() != user.getAppId())
 			return Result.result(Code.FORBID);
 		return _doApply(chief.getTenant(), user, chief);
 	}
 
-	private Result<?> _doApply(Tenant tenant, User user, EmployeeForm chief) {
+	private Result<?> _doApply(TenantPO tenant, UserPO user, EmployeeForm chief) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(tenant.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
@@ -80,15 +80,15 @@ public class TenantServiceImpl implements TenantService {
 		if (!agree) // 拒绝申请直接返回即可
 			return Result.success();
 
-		Employee chief = employeeMapper.getByKey(info.getChief());
-		Tenant tenant = tenantMapper.getByKey(info.getTid());
-		Employee employee = EntityGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
+		EmployeePO chief = employeeMapper.getByKey(info.getChief());
+		TenantPO tenant = tenantMapper.getByKey(info.getTid());
+		EmployeePO employee = EntityGenerator.newEmployee(userMapper.getByKey(info.getUid()), tenant, chief);
 		tx.insertEmployee(employee).finish();
 		return Result.success();
 	}
 
 	@Override
-	public Result<?> tenantAdd(App app, int region, String tname, User user, String licenseFace, String licenseBack, String servicePhone) {
+	public Result<?> tenantAdd(AppPO app, int region, String tname, UserPO user, String licenseFace, String licenseBack, String servicePhone) {
 		String lockId = userMapper.lockUser(user.getUid());
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
@@ -103,13 +103,13 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public TenantListInfo tenantListInfo(Client client, App app, User user) {
-		List<Employee> employees = employeeMapper.ownedTenants(user);
+	public TenantListInfo tenantListInfo(Client client, AppPO app, UserPO user) {
+		List<EmployeePO> employees = employeeMapper.ownedTenants(user);
 		List<Integer> tids = new ArrayList<Integer>(employees.size());
-		for (Employee employee : employees)
+		for (EmployeePO employee : employees)
 			tids.add(employee.getTid());
-		List<Tenant> own = new ArrayList<Tenant>(tenantMapper.getByKeys(tids).values());
-		List<Tenant> audit = new ArrayList<Tenant>(tenantMapper.getByKeys(applyMapper.applyListTids(user)).values());
+		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(tids).values());
+		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyListTids(user)).values());
 		return new TenantListInfo(own, employees, audit);
 	}
 }

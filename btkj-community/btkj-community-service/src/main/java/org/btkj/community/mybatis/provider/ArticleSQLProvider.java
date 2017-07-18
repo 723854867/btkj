@@ -12,7 +12,13 @@ public class ArticleSQLProvider extends SQLProvider {
 	}
 	
 	public String countByAppIdForUpdate() {
-		return "SELECT COUNT(*) FROM article WHERE `app_id`=#{appId} FOR UPDATE";
+		return new SQL() {
+			{
+				SELECT("COUNT(*)");
+				FROM(TABLE);
+				WHERE("`app_id`=#{appId} FOR UPDATE");
+			}
+		}.toString();
 	}
 
 	public String getByAppId() {

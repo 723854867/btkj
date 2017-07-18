@@ -3,10 +3,10 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.StsInfo;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.StsInfo;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.UserAction;
@@ -21,7 +21,7 @@ public class ASSUME_ROLE extends UserAction {
 	private AliyunService aliyunService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User user) {
+	protected Result<?> execute(Request request, AppPO app, Client client, UserPO user) {
 		StsInfo stsInfo = aliyunService.assumeRole(user);
 		return null == stsInfo ? Result.result(Code.SYSTEM_ERROR) : Result.result(stsInfo);
 	}

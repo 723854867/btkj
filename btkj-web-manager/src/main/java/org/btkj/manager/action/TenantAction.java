@@ -1,7 +1,7 @@
 package org.btkj.manager.action;
 
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.EmployeeForm;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 

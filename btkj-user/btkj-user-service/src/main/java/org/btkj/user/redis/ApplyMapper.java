@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.info.ApplyInfo;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.ApplyInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;
@@ -64,7 +64,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	 * @param uid
 	 * @return
 	 */
-	public List<Integer> applyListTids(User user) {
+	public List<Integer> applyListTids(UserPO user) {
 		List<byte[]> list = redis.hzget(_userListKey(user.getUid()), redisKey, 0, -1);
 		if (CollectionUtil.isEmpty(list))
 			return Collections.EMPTY_LIST;

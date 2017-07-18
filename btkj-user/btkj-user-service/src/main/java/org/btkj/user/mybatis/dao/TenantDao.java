@@ -10,30 +10,30 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.entity.Tenant;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.mybatis.provider.TenantSQLProvider;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.rapid.data.storage.mapper.DBMapper;
 
-public interface TenantDao extends DBMapper<Integer, Tenant> {
+public interface TenantDao extends DBMapper<Integer, TenantPO> {
 	
 	@Override
 	@InsertProvider(type = TenantSQLProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "tid", keyProperty = "tid")
-	void insert(Tenant tenant);
+	void insert(TenantPO tenant);
 	
 	@Override
 	@UpdateProvider(type = TenantSQLProvider.class, method = "update")
-	void update(Tenant entity);
+	void update(TenantPO entity);
 	
 	@Override
 	@SelectProvider(type = TenantSQLProvider.class, method = "getByKey")
-	Tenant getByKey(Integer key);
+	TenantPO getByKey(Integer key);
 	
 	@Override
 	@MapKey("tid")
 	@SelectProvider(type = TenantSQLProvider.class, method = "getByKeys")
-	Map<Integer, Tenant> getByKeys(@Param("keys") Collection<Integer> keys);
+	Map<Integer, TenantPO> getByKeys(@Param("keys") Collection<Integer> keys);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "countByAppId")
 	int countByAppId(int appId);
@@ -45,5 +45,5 @@ public interface TenantDao extends DBMapper<Integer, Tenant> {
 	int count(TenantSearcher searcher);
 	
 	@SelectProvider(type = TenantSQLProvider.class, method = "paging")
-	List<Tenant> paging(TenantSearcher searcher);
+	List<TenantPO> paging(TenantSearcher searcher);
 }

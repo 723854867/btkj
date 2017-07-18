@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
-import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.bo.InsurUnit;
+import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.vehicle.VehicleUsedType;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.insur.vehicle.InsurUnit;
-import org.btkj.pojo.model.insur.vehicle.Insurance;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 

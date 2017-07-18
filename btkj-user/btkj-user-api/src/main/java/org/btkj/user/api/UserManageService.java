@@ -1,7 +1,7 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
@@ -87,5 +87,5 @@ public interface UserManageService {
 	 * @param submit
 	 * @return
 	 */
-	void tenantSet(Tenant tenant, TenantSettingsSubmit submit);
+	void tenantSet(TenantPO tenant, TenantSettingsSubmit submit);
 }

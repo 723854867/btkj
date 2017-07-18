@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.courier.api.CourierService;
-import org.btkj.pojo.entity.Administrator;
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.po.Administrator;
+import org.btkj.pojo.po.Region;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

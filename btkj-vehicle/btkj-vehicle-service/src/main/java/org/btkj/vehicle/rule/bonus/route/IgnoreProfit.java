@@ -3,10 +3,10 @@ package org.btkj.vehicle.rule.bonus.route;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.vehicle.VehicleBizType;
-import org.btkj.pojo.model.insur.vehicle.BonusRouteBody;
-import org.btkj.pojo.submit.BonusSearcher;
+import org.btkj.pojo.bo.BonusRouteBody;
+import org.btkj.pojo.enums.VehicleBizType;
+import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
 import org.rapid.util.common.message.Result;

@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.model.insur.vehicle.Insurance;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
 import org.rapid.util.common.message.Result;
 
 public class QuoteResult implements Serializable {
@@ -588,7 +588,7 @@ public class QuoteResult implements Serializable {
 	public Result<PolicySchema> schema() {
 		if (this.Item.QuoteStatus <= 0)
 			return Result.result(BtkjCode.QUOTE_FAILURE, this.Item.QuoteResult);
-		org.btkj.pojo.model.insur.vehicle.PolicySchema result = new org.btkj.pojo.model.insur.vehicle.PolicySchema();
+		org.btkj.pojo.bo.PolicySchema result = new org.btkj.pojo.bo.PolicySchema();
 		Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
 		if (null != this.UserInfo) {
 			result.setCompulsiveStart(this.UserInfo.ForceStartDate);

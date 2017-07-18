@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
 import org.btkj.bihu.vehicle.deploy.BaseTest;
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.insur.vehicle.PolicySchema;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
@@ -25,10 +25,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void testRenewInfo() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(1);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(1);
 		tenant.setRegion(110000);
 		form.setTenant(tenant);
@@ -40,10 +40,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void testRenewInfoByVin() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(1);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(1);
 		tenant.setRegion(110000);
 		form.setTenant(tenant);
@@ -55,10 +55,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void quoteTest() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(3);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(4);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
@@ -79,10 +79,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void quoteResultTest() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(3);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(4);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
@@ -94,10 +94,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void insureTest() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(3);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(1);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);
@@ -114,10 +114,10 @@ public class BiHuVehicleTest extends BaseTest {
 	@Test
 	public void insureResultTest() throws InterruptedException {
 		EmployeeForm form = new EmployeeForm();
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(3);
 		form.setUser(user);
-		Tenant tenant = new Tenant();
+		TenantPO tenant = new TenantPO();
 		tenant.setTid(1);
 		tenant.setRegion(330100);
 		form.setTenant(tenant);

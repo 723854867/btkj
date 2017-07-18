@@ -3,7 +3,7 @@ package org.btkj.manager.action.tenant.bonus;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.web.util.Params;

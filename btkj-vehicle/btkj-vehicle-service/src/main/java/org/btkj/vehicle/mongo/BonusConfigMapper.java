@@ -1,6 +1,6 @@
 package org.btkj.vehicle.mongo;
 
-import org.btkj.pojo.entity.BonusConfig;
+import org.btkj.pojo.po.BonusConfig;
 import org.rapid.data.storage.mapper.MongoMapper;
 
 import com.mongodb.client.model.Filters;

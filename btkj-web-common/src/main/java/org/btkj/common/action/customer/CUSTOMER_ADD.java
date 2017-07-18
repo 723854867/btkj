@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -24,7 +24,7 @@ public class CUSTOMER_ADD extends UserAction {
 	private ConfigService configService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User user) {
+	protected Result<?> execute(Request request, AppPO app, Client client, UserPO user) {
 		String name = request.getParam(Params.NAME);
 		String identity = request.getParam(Params.IDENTITY);
 		String mobile = request.getParam(Params.MOBILE);

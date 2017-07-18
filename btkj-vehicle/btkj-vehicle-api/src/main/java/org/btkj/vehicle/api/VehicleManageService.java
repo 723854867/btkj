@@ -2,9 +2,9 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.vehicle.CoefficientType;
-import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
@@ -127,7 +127,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	void jianjieSynchronize(JianJiePoliciesInfo info);
+	void jianJieSynchronize(JianJiePoliciesInfo info);
 	
 	/**
 	 * 获取车险路由设置

@@ -2,7 +2,6 @@ package org.btkj.web.util;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.model.Version;
+import org.btkj.pojo.bo.Version;
 import org.btkj.web.util.action.Action;
 import org.rapid.util.common.SpringContextUtil;
-import org.rapid.util.common.consts.Const;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
@@ -100,10 +98,7 @@ public class Dispatcher extends HttpServlet {
 			Result<?> result = action.execute(req);
 			req.write(SerializeUtil.JsonUtil.GSON.toJson(result));
 		} catch (ConstConvertFailureException e) {
-			Const<?> constant = e.constant();
-			req.write(Result.jsonResult(constant.id(), 
-							MessageFormat.format(
-									e.isNil() ? Code.PARAM_MISS.value() : Code.PARAM_ERROR.value(), constant.key())));
+			req.write(Result.jsonResult(e.constant().id(), e.desc()));
 		} catch (Exception e) {
 			logger.error("Server exception!", e);
 			req.write(Result.jsonResult(Code.SYSTEM_ERROR));

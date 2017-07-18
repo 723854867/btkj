@@ -11,8 +11,8 @@ import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.RegionMapper;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.po.Region;
 import org.rapid.util.common.Consts;
 import org.springframework.stereotype.Service;
 

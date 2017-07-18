@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.master.api.CloudService;
 import org.btkj.master.pojo.info.LoginInfo;
 import org.btkj.master.redis.AdministratorMapper;
-import org.btkj.pojo.entity.Administrator;
+import org.btkj.pojo.po.Administrator;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;

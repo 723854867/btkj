@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.model.CaptchaReceiver;
+import org.btkj.pojo.bo.CaptchaReceiver;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.ParamsUtil;

@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Employee;
-import org.btkj.pojo.entity.Tenant;
-import org.btkj.pojo.entity.User;
 import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.mybatis.dao.AppDao;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.mybatis.dao.TenantDao;
@@ -45,16 +45,16 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(App app, int region, String tname, User user, String licenseFace, String licenseBack, String servicePhone) {
+	public TxCallback tenantAdd(AppPO app, int region, String tname, UserPO user, String licenseFace, String licenseBack, String servicePhone) {
 		appDao.getByKeyForUpdate(app.getId());
 		if (0 < app.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(app.getId());
 			if (tenantNum >= app.getMaxTenantsCount())
 				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
 		}
-		Tenant tenant = EntityGenerator.newTenant(region, app.getId(), tname, licenseFace, licenseBack, servicePhone);
+		TenantPO tenant = EntityGenerator.newTenant(region, app.getId(), tname, licenseFace, licenseBack, servicePhone);
 		tenantDao.insert(tenant);
-		Employee employee = EntityGenerator.newEmployee(user, tenant, null);
+		EmployeePO employee = EntityGenerator.newEmployee(user, tenant, null);
 		employeeDao.insert(employee);
 		return new TxCallback() {
 			@Override
@@ -66,7 +66,7 @@ public class Tx {
 	}
 
 	@Transactional
-	public TxCallback insertEmployee(Employee employee) {
+	public TxCallback insertEmployee(EmployeePO employee) {
 		employeeDao.getByTidForUpdate(employee.getTid()); 
 		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
 		employeeDao.insert(employee);

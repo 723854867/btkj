@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.vehicle.CoefficientType;
+import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;

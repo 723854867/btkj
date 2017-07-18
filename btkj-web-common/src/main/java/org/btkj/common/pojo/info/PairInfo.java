@@ -3,7 +3,7 @@ package org.btkj.common.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.enums.UnitType;
-import org.btkj.pojo.enums.vehicle.VehicleUsedType;
+import org.btkj.pojo.enums.VehicleUsedType;
 
 public class PairInfo implements Serializable {
 

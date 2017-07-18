@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.po.Banner;
 import org.btkj.user.mybatis.dao.BannerDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.key.Pair;

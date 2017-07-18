@@ -7,8 +7,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.test.BaseTest;
 import org.btkj.test.persistence.dao.AppDao;
 import org.btkj.test.persistence.dao.UserDao;
@@ -23,15 +23,15 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testGetAll() {
-		Map<Integer, User> map = userDao.getAll();
-		for (Entry<Integer, User> entry : map.entrySet()) {
+		Map<Integer, UserPO> map = userDao.getAll();
+		for (Entry<Integer, UserPO> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 		}
 		Set<Integer> set = new HashSet<Integer>();
 		set.add(1);
 		set.add(2);
 		map = userDao.getByKeys(set);
-		for (Entry<Integer, User> entry : map.entrySet()) {
+		for (Entry<Integer, UserPO> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 		}
 	}
@@ -50,22 +50,22 @@ public class UserServiceTest extends BaseTest {
 //			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 //		}
 		
-		Map<Integer, App> map = appDao.getAll();
-		for (Entry<Integer, App> entry : map.entrySet()) {
+		Map<Integer, AppPO> map = appDao.getAll();
+		for (Entry<Integer, AppPO> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getId() + " " + entry.getValue().getName() + " " + entry.getValue().getRegion());
 		}
 		Set<Integer> set = new HashSet<Integer>();
 		set.add(1);
 		set.add(2);
 		map = appDao.getByKeys(set);
-		for (Entry<Integer, App> entry : map.entrySet()) {
+		for (Entry<Integer, AppPO> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getId() + " " + entry.getValue().getName() + " " + entry.getValue().getRegion());
 		}
 	}
 	
 	@Test
 	public void testGetByKey() {
-		User user = userDao.getByKey(1);
+		UserPO user = userDao.getByKey(1);
 		System.out.println(user.getAppId() + " " + user.getName() + " " + user.getMobile());
 	}
 	
@@ -76,14 +76,14 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testInsert() {
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setAppId(10);
 		userDao.insert(user);
 	}
 	
 	@Test
 	public void testUpdate() {
-		User user = new User();
+		UserPO user = new UserPO();
 		user.setUid(60);
 		user.setAppId(1);
 		user.setMobile("+8617826877008");

@@ -3,7 +3,7 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

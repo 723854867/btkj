@@ -2,7 +2,7 @@ package org.btkj.user.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.info.ApplyInfo;
+import org.btkj.pojo.vo.ApplyInfo;
 
 public class ApplyPagingInfo implements Serializable {
 

@@ -3,8 +3,8 @@ package org.btkj.manager.action.tenant.employee;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.model.EmployeeForm;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;

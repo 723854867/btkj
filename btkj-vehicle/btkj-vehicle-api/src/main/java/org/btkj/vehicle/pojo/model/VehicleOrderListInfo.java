@@ -2,8 +2,8 @@ package org.btkj.vehicle.pojo.model;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
+import org.btkj.pojo.po.VehicleOrder;
 
 public class VehicleOrderListInfo implements Serializable {
 

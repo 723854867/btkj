@@ -3,7 +3,7 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.submit.NonAutoProductSearcher;
+import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.Action;

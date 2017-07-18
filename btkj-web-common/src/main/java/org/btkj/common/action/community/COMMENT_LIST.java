@@ -10,11 +10,11 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.CommentInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.App;
-import org.btkj.pojo.entity.Comment;
-import org.btkj.pojo.entity.User;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Comment;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -35,7 +35,7 @@ public class COMMENT_LIST extends UserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, App app, Client client, User operator) {
+	protected Result<?> execute(Request request, AppPO app, Client client, UserPO operator) {
 		int page = request.getParam(Params.PAGE);
 		int pageSize = request.getParam(Params.PAGE_SIZE);
 		Result<Pager<Comment>> result = communityService.comments(app.getId(), request.getParam(Params.ID), page, pageSize);
@@ -48,10 +48,10 @@ public class COMMENT_LIST extends UserAction {
 		for (Comment comment : list)
 			ids.add(comment.getUid());
 		
-		List<User> users = userService.users(new ArrayList<Integer>(ids));
+		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<CommentInfo> l = new ArrayList<CommentInfo>(list.size());
 		for (Comment comment : list) {
-			for (User user : users) {
+			for (UserPO user : users) {
 				if (user.getUid() != comment.getUid())
 					continue;
 				l.add(new CommentInfo(user, comment));

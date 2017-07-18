@@ -3,9 +3,9 @@ package org.btkj.baotu.vehicle.service;
 import java.util.Set;
 
 import org.btkj.baotu.vehicle.api.BaoTuVehicle;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.info.tips.VehiclePolicyTips;
-import org.btkj.pojo.model.EmployeeForm;
+import org.btkj.pojo.bo.EmployeeForm;
+import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
