@@ -298,7 +298,7 @@ public interface Params {
 		}
 	};
 
-	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearch") {
+	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearcher") {
 		@Override
 		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);

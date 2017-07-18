@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.submit.TenantSearcher;
+import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
-import org.rapid.util.common.SqlUtil;
 import org.rapid.util.common.enums.SORT_TYPE;
 
 public class TenantSQLProvider extends SQLProvider {

@@ -13,6 +13,7 @@ public class UserSearcher extends Page {
 	private Integer uid;
 	private Integer appId;
 	private String mobile;
+	private String name;
 	private Client client;
 	private String sortCol;
 	private boolean asc;
@@ -41,6 +42,14 @@ public class UserSearcher extends Page {
 		this.mobile = mobile;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Client getClient() {
 		return client;
 	}
@@ -65,16 +74,18 @@ public class UserSearcher extends Page {
 		this.asc = asc;
 	}
 	
-	public Map<String, String> params() {
+	public Map<String, Object> params() {
 		if (null != uid && null != appId && null != mobile)
 			return null;
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, Object> params = new HashMap<String, Object>();
 		if (null != uid)
-			params.put("uid", String.valueOf(uid));
+			params.put("uid", uid);
 		if (null != appId)
-			params.put("app_id", String.valueOf(appId));
+			params.put("app_id", appId);
 		if (null != mobile)
 			params.put("mobile", mobile);
+		if (null != name)
+			params.put("name", name);
 		return params;
 	}
 }
