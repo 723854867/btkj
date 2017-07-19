@@ -176,6 +176,10 @@ public class UserManageServiceImpl implements UserManageService {
 			tenant.setBonusScaleCountMod(submit.getBonusScaleCountMod());
 		if (null != submit.getBonusScaleRewardMod())
 			tenant.setBonusScaleRewardMod(submit.getBonusScaleRewardMod());
+		if (null != submit.getBonusScaleCountInsuranceMod())
+			tenant.setBonusScaleCountInsuranceMod(submit.getBonusScaleCountInsuranceMod());
+		if (null != submit.getBonusScaleRewardInsuranceMod())
+			tenant.setBonusScaleRewardInsuranceMod(submit.getBonusScaleRewardInsuranceMod());
 		if (null != submit.getTeamDepth()) {
 			submit.setTeamDepth(Math.max(1, submit.getTeamDepth()));
 			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));

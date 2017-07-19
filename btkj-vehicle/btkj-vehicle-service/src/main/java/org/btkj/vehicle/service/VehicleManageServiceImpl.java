@@ -8,11 +8,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.po.VehiclePolicy;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.api.VehicleManageService;
@@ -164,6 +166,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		int left = infos.size();
 		int idx = 0;
 		int pageSize = 50;
+		Map<String, VehiclePolicy> policies = new HashMap<String, VehiclePolicy>();
 		while (left > 0) {
 			pageSize = Math.min(pageSize, left);
 			List<BaseInfo> list = infos.subList(idx, idx + pageSize);
@@ -178,17 +181,13 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 					throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
 			}
 			
-			List<VehicleOrder> cm = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
-			List<VehicleOrder> cp = vehicleOrderMapper.getByNos(InsuranceType.COMPULSORY, compulsories.keySet());
-			Iterator<BaseInfo> itr = list.iterator();
-			while (itr.hasNext()) {
-				BaseInfo temp = itr.next();
-				String no = temp.getBDH();
-				if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title())) {
-				} else {
-					
-				}
+			List<VehicleOrder> orders = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
+			for (VehicleOrder order : orders) {
+				BaseInfo temp = commercials.remove(order.getTips().getDetail().getCommercialNo());
 			}
+			
+			List<VehicleOrder> cp = vehicleOrderMapper.getByNos(InsuranceType.COMPULSORY, compulsories.keySet());
+			
 		}
 	}
 	

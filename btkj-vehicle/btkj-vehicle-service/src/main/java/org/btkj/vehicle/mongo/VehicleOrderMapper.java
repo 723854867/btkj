@@ -72,33 +72,33 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		if (null != searcher.getState()) {
 			switch (searcher.getState()) {
 			case INSURE:
-				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.toString()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString())));
+				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.name()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.name()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.name()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.name())));
 				break;
 			case QUOTE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.name()));
 				break;
 			case INSURE_FAILURE:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.name()));
 				break;
 			case INSURING:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.name()));
 				break;
 			case ISSUE:
-				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString())));
+				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.name()), 
+						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.name())));
 				break;
 			case INSURE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()));
 				break;
 			case ISSUE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.name()));
 				break;
 			case ISSUED:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.toString()));
+				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.name()));
 				break;
 			default:
 				break;
@@ -117,7 +117,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	}
 	
 	/**
-	 * 通过投保单号获取订单
+	 * 通过投保单号获取订单：只获取 state 为 insure_success
 	 * 
 	 * @param type
 	 * @param policyNo
@@ -125,6 +125,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	 */
 	public List<VehicleOrder> getByNos(InsuranceType type, Set<String> nos) {
 		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
+		bson = Filters.and(bson, Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()));
 		return mongo.find(collection, bson, clazz);
 	}
 }

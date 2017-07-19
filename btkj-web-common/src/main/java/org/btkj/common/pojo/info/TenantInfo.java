@@ -1,29 +1,52 @@
-package org.btkj.pojo.po;
+package org.btkj.common.pojo.info;
 
-import org.rapid.util.common.model.UniqueModel;
+import java.io.Serializable;
 
-public class TenantPO implements UniqueModel<Integer> {
+import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.Region;
+import org.btkj.pojo.po.TenantPO;
 
-	private static final long serialVersionUID = 9101905059642013405L;
+public class TenantInfo implements Serializable {
+
+	private static final long serialVersionUID = 847805312799679291L;
 
 	private int tid;
 	private String name;
 	private int appId;
+	private String appName;
 	private int region;
-	private int teamDepth;
-	private String jianJieId;
+	private String regionName;
 	private String licenseFace;
 	private String licenseBack;
 	private String nonAutoBind;
 	private String servicePhone;
-	private int bonusScaleCountMod;				// 规模佣金统计口径模值
-	private int bonusScaleCountInsuranceMod;	// 规模佣金统计口径险企模值
-	private int bonusScaleRewardMod;			// 规模佣金奖励口径模值
-	private int bonusScaleRewardInsuranceMod;	// 规模佣金奖励口径险企模值
-	private int jianJieFetchTime;
-	private int created;
-	private int updated;
+	private int bonusScaleCountMod;
+	private int bonusScaleCountInsuranceMod;
+	private int bonusScaleRewardMod;
+	private int bonusScaleRewardInsuranceMod;
 	
+	public TenantInfo() {}
+	
+	public TenantInfo(Employee employee, Region region) {
+		TenantPO po = employee.getTenant();
+		AppPO app = employee.getApp();
+		this.tid = po.getTid();
+		this.name = po.getName();
+		this.appId = app.getId();
+		this.appName = app.getName();
+		this.region = region.getId();
+		this.regionName = region.getName();
+		this.licenseFace = po.getLicenseFace();
+		this.licenseBack = po.getLicenseBack();
+		this.nonAutoBind = po.getNonAutoBind();
+		this.servicePhone = po.getServicePhone();
+		this.bonusScaleCountMod = po.getBonusScaleCountMod();
+		this.bonusScaleCountInsuranceMod = po.getBonusScaleCountInsuranceMod();
+		this.bonusScaleRewardMod = po.getBonusScaleRewardMod();
+		this.bonusScaleRewardInsuranceMod = po.getBonusScaleRewardInsuranceMod();
+	}
+
 	public int getTid() {
 		return tid;
 	}
@@ -39,75 +62,75 @@ public class TenantPO implements UniqueModel<Integer> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getAppId() {
 		return appId;
 	}
-	
+
 	public void setAppId(int appId) {
 		this.appId = appId;
 	}
-	
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
 	public int getRegion() {
 		return region;
 	}
-	
+
 	public void setRegion(int region) {
 		this.region = region;
 	}
-	
-	public int getTeamDepth() {
-		return teamDepth;
+
+	public String getRegionName() {
+		return regionName;
 	}
-	
-	public void setTeamDepth(int teamDepth) {
-		this.teamDepth = teamDepth;
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
-	
-	public String getJianJieId() {
-		return jianJieId;
-	}
-	
-	public void setJianJieId(String jianJieId) {
-		this.jianJieId = jianJieId;
-	}
-	
+
 	public String getLicenseFace() {
 		return licenseFace;
 	}
-	
+
 	public void setLicenseFace(String licenseFace) {
 		this.licenseFace = licenseFace;
 	}
-	
+
 	public String getLicenseBack() {
 		return licenseBack;
 	}
-	
+
 	public void setLicenseBack(String licenseBack) {
 		this.licenseBack = licenseBack;
 	}
-	
+
 	public String getNonAutoBind() {
 		return nonAutoBind;
 	}
-	
+
 	public void setNonAutoBind(String nonAutoBind) {
 		this.nonAutoBind = nonAutoBind;
 	}
-	
+
 	public String getServicePhone() {
 		return servicePhone;
 	}
-	
+
 	public void setServicePhone(String servicePhone) {
 		this.servicePhone = servicePhone;
 	}
-	
+
 	public int getBonusScaleCountMod() {
 		return bonusScaleCountMod;
 	}
-	
+
 	public void setBonusScaleCountMod(int bonusScaleCountMod) {
 		this.bonusScaleCountMod = bonusScaleCountMod;
 	}
@@ -119,11 +142,11 @@ public class TenantPO implements UniqueModel<Integer> {
 	public void setBonusScaleCountInsuranceMod(int bonusScaleCountInsuranceMod) {
 		this.bonusScaleCountInsuranceMod = bonusScaleCountInsuranceMod;
 	}
-	
+
 	public int getBonusScaleRewardMod() {
 		return bonusScaleRewardMod;
 	}
-	
+
 	public void setBonusScaleRewardMod(int bonusScaleRewardMod) {
 		this.bonusScaleRewardMod = bonusScaleRewardMod;
 	}
@@ -134,34 +157,5 @@ public class TenantPO implements UniqueModel<Integer> {
 	
 	public void setBonusScaleRewardInsuranceMod(int bonusScaleRewardInsuranceMod) {
 		this.bonusScaleRewardInsuranceMod = bonusScaleRewardInsuranceMod;
-	}
-	
-	public int getJianJieFetchTime() {
-		return jianJieFetchTime;
-	}
-	
-	public void setJianJieFetchTime(int jianJieFetchTime) {
-		this.jianJieFetchTime = jianJieFetchTime;
-	}
-	
-	public int getCreated() {
-		return created;
-	}
-
-	public void setCreated(int created) {
-		this.created = created;
-	}
-
-	public int getUpdated() {
-		return updated;
-	}
-	
-	public void setUpdated(int updated) {
-		this.updated = updated;
-	}
-
-	@Override
-	public Integer key() {
-		return tid;
 	}
 }

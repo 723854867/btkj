@@ -82,7 +82,7 @@ public class USER_EDIT extends UserAction {
 	
 	@Override
 	protected boolean userIntegrityVerify(User user) {
-		return false;
+		return true;
 	}
 	
 	@Override

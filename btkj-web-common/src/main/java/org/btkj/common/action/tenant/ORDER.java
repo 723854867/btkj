@@ -42,8 +42,7 @@ public class ORDER extends TenantAction {
 		int insureGroup = request.getOptionalParam(Params.INSURE_GROUP);
 		String vehicleId = request.getParam(Params.VEHICLE_ID);
 		if (quoteGroup <= 0 || insureGroup < 0 
-				|| Integer.bitCount(quoteGroup) > GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum()
-				|| Integer.bitCount(insureGroup) > GlobalConfigContainer.getGlobalConfig().getMaxInsureNum())
+				|| Integer.bitCount(quoteGroup) > GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum())
 			return Consts.RESULT.FORBID;
 		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
 		if (!_check(employee.getTenant(), tips))

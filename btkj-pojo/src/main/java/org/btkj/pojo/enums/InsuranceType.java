@@ -27,4 +27,11 @@ public enum InsuranceType {
 	public String title() {
 		return title;
 	}
+	
+	public static final boolean illegalMod(int mod) {
+		int cmod = 0;
+		for (InsuranceType type : InsuranceType.values())
+			cmod |= type.mark;
+		return (cmod & mod) == mod;
+	}
 }

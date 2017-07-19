@@ -11,7 +11,9 @@ public class TenantSettingsSubmit implements Serializable {
 	private Integer teamDepth;
 	private Set<Long> nonAutoBind;			
 	private Integer bonusScaleCountMod;
+	private Integer bonusScaleCountInsuranceMod;
 	private Integer bonusScaleRewardMod;
+	private Integer bonusScaleRewardInsuranceMod;
 
 	public int getTid() {
 		return tid;
@@ -44,6 +46,14 @@ public class TenantSettingsSubmit implements Serializable {
 	public void setBonusScaleCountMod(Integer bonusScaleCountMod) {
 		this.bonusScaleCountMod = bonusScaleCountMod;
 	}
+	
+	public Integer getBonusScaleCountInsuranceMod() {
+		return bonusScaleCountInsuranceMod;
+	}
+	
+	public void setBonusScaleCountInsuranceMod(Integer bonusScaleCountInsuranceMod) {
+		this.bonusScaleCountInsuranceMod = bonusScaleCountInsuranceMod;
+	}
 
 	public Integer getBonusScaleRewardMod() {
 		return bonusScaleRewardMod;
@@ -51,5 +61,13 @@ public class TenantSettingsSubmit implements Serializable {
 
 	public void setBonusScaleRewardMod(Integer bonusScaleRewardMod) {
 		this.bonusScaleRewardMod = bonusScaleRewardMod;
+	}
+	
+	public Integer getBonusScaleRewardInsuranceMod() {
+		return bonusScaleRewardInsuranceMod;
+	}
+	
+	public void setBonusScaleRewardInsuranceMod(Integer bonusScaleRewardInsuranceMod) {
+		this.bonusScaleRewardInsuranceMod = bonusScaleRewardInsuranceMod;
 	}
 }

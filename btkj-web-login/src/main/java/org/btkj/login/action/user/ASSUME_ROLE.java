@@ -23,4 +23,9 @@ public class ASSUME_ROLE extends UserAction {
 		StsInfo stsInfo = aliyunService.assumeRole(user.getAppId(), user.getUid());
 		return null == stsInfo ? Result.result(Code.SYSTEM_ERROR) : Result.result(stsInfo);
 	}
+	
+	@Override
+	protected boolean userIntegrityVerify(User user) {
+		return true;
+	}
 }

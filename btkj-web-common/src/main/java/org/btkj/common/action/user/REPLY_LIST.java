@@ -61,6 +61,6 @@ public class REPLY_LIST extends UserAction {
 	
 	@Override
 	protected boolean userIntegrityVerify(User user) {
-		return false;
+		return true;
 	}
 }

@@ -37,6 +37,6 @@ public class QUIZ_INFO extends UserAction {
 	
 	@Override
 	protected boolean userIntegrityVerify(User user) {
-		return false;
+		return true;
 	}
 }

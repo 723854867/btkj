@@ -13,7 +13,6 @@ public class GlobalConfig {
 		DEFAULT_CONFIG = new GlobalConfig();
 		DEFAULT_CONFIG.setMaxTenantNum(10);
 		DEFAULT_CONFIG.setBannerNum(3);
-		DEFAULT_CONFIG.setMaxInsureNum(1);
 		DEFAULT_CONFIG.setMaxQuoteNum(3);
 		DEFAULT_CONFIG.setTeamDepth(3);
 		DEFAULT_CONFIG.setMaxBonusScaleConfig(4);
@@ -40,14 +39,6 @@ public class GlobalConfig {
 	
 	public void setBannerNum(int bannerNum) {
 		this.bannerNum = bannerNum;
-	}
-	
-	public int getMaxInsureNum() {
-		return maxInsureNum;
-	}
-	
-	public void setMaxInsureNum(int maxInsureNum) {
-		this.maxInsureNum = maxInsureNum;
 	}
 	
 	public int getMaxQuoteNum() {

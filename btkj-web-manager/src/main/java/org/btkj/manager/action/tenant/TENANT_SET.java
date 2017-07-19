@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.btkj.manager.action.TenantAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSettingsSubmit;
@@ -50,7 +51,9 @@ public class TENANT_SET extends TenantAction {
 				nonAutoBind.add(category.get_id());
 		}
 		if ((null != submit.getBonusScaleCountMod() && !BonusScaleType.illegalMod(submit.getBonusScaleCountMod()))
-				|| (null != submit.getBonusScaleRewardMod() && !BonusScaleType.illegalMod(submit.getBonusScaleRewardMod()))) 
+				|| (null != submit.getBonusScaleRewardMod() && !BonusScaleType.illegalMod(submit.getBonusScaleRewardMod()))
+				|| (null != submit.getBonusScaleCountInsuranceMod() && !InsuranceType.illegalMod(submit.getBonusScaleCountInsuranceMod()))
+				|| (null != submit.getBonusScaleCountInsuranceMod() && !InsuranceType.illegalMod(submit.getBonusScaleCountInsuranceMod()))) 
 			throw ConstConvertFailureException.errorConstException(Params.TENANT_SETTINGS_SUBMIT);
 	}
 }
