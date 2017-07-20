@@ -2,7 +2,6 @@ package org.btkj.web.util;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -15,7 +14,6 @@ import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
-import org.btkj.pojo.vo.AppSearcher;
 import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.NonAutoProductSearcher;
@@ -28,6 +26,7 @@ import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
@@ -36,6 +35,7 @@ import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.rapid.util.validator.Validator;
 
@@ -90,11 +90,12 @@ public interface Params {
 	 */
 	final Str2StrConstConverter MOBILE					= new Str2StrConstConverter(1009, "mobile") {
 		public String convert(String value) throws ConstConvertFailureException {
-			if (!Validator.isMobile(value, Locale.CHINA.getCountry()))
+			if (!PhoneUtil.isMobile(value))
 				throw ConstConvertFailureException.errorConstException(this);
-			return value;
+			return Consts.SYMBOL_PLUS + PhoneUtil.getCountryCode(value) + PhoneUtil.getNationalNumber(value);
 		};
 	};
+	
 	final Str2StrConstConverter AVATAR 					= new Str2StrConstConverter(1010, "avatar");
 	
 	final Str2IntConstConverter TID						= new Str2IntConstConverter(1011, "tid");
@@ -323,13 +324,6 @@ public interface Params {
 		@Override
 		public UserSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, UserSearcher.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<AppSearcher> APP_SEARCHER			= new Str2ObjConstConverter<AppSearcher>(1206, "appSearch") {
-		@Override
-		public AppSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, AppSearcher.class);
 		}
 	};
 	

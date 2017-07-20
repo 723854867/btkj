@@ -3,13 +3,16 @@ package org.btkj.user.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
@@ -24,12 +27,14 @@ import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
 import org.springframework.dao.DuplicateKeyException;
@@ -39,6 +44,8 @@ import org.springframework.stereotype.Service;
 public class UserManageServiceImpl implements UserManageService {
 	
 	@Resource
+	private AppMapper appMapper;
+	@Resource
 	private UserMapper userMapper;
 	@Resource
 	private ApplyMapper applyMapper;
@@ -46,6 +53,8 @@ public class UserManageServiceImpl implements UserManageService {
 	private BannerMapper bannerMapper;
 	@Resource
 	private TenantMapper tenantMapper;
+	@Resource
+	private ConfigService configService;
 	@Resource
 	private EmployeeMapper employeeMapper;
 	
@@ -185,5 +194,40 @@ public class UserManageServiceImpl implements UserManageService {
 			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));
 		}
 		tenantMapper.update(tenant);
+	}
+	
+	@Override
+	public Map<Integer, AppPO> apps() {
+		return appMapper.getAll();
+	}
+	
+	@Override
+	public Result<Integer> appAdd(int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		if (null == configService.region(region))
+			return BtkjConsts.RESULT.REGION_NOT_EXIST;
+		AppPO app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
+		appMapper.insert(app);
+		Result<Integer> result = Result.result(Code.OK);
+		result.setAttach(app.getId());
+		return result;
+	}
+	
+	@Override
+	public Result<Void> appUpdate(int appId, int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		AppPO app = appMapper.getByKey(appId);
+		if (null == app)
+			return BtkjConsts.RESULT.APP_NOT_EXIST;
+		if (0 != region) {
+			if (null == configService.region(region))
+				return BtkjConsts.RESULT.REGION_NOT_EXIST;
+			app.setRegion(region);
+		}
+		if (null != name)
+			app.setName(name);
+		app.setMaxTenantsCount(maxTenantsCount);
+		app.setMaxArticlesCount(maxArticlesCount);
+		app.setUpdated(DateUtil.currentTime());
+		appMapper.update(app);
+		return Consts.RESULT.OK;
 	}
 }

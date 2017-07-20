@@ -75,7 +75,7 @@ public class VEHICLE_COEFFICIENTS extends TenantAction {
 		searcher.setSubordinateProvince(null == region ? 0 : region.getId());
 		if (null == searcher.getPath())
 			throw ConstConvertFailureException.errorConstException(Params.BONUS_SEARCHER);
-		List<Integer> list = vehicleService.insurers(employee.getId());
+		List<Integer> list = vehicleService.insurers(employee.getTid());
 		for (int insurerId : list) {
 			if (insurerId == searcher.getInsurerId())
 				return Consts.RESULT.OK;

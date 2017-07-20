@@ -1,6 +1,9 @@
 package org.btkj.user.api;
 
+import java.util.Map;
+
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -88,4 +91,33 @@ public interface UserManageService {
 	 * @return
 	 */
 	void tenantSet(TenantPO tenant, TenantSettingsSubmit submit);
+	
+	/**
+	 * 所有平台
+	 * 
+	 * @return
+	 */
+	Map<Integer, AppPO> apps();
+	
+	/**
+	 * 新增平台
+	 * 
+	 * @param region
+	 * @param name
+	 * @param maxTenantsCount
+	 * @param maxArticlesCount
+	 * @return
+	 */
+	Result<Integer> appAdd(int region, String name, int maxTenantsCount, int maxArticlesCount);
+	
+	/**
+	 * 修改平台
+	 * 
+	 * @param appId
+	 * @param region
+	 * @param name
+	 * @param maxTenantsCount
+	 * @param maxArticlesCount
+	 */
+	Result<Void> appUpdate(int appId, int region, String name, int maxTenantsCount, int maxArticlesCount);
 }

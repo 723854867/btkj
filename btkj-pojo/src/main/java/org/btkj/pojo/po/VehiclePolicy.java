@@ -2,9 +2,12 @@ package org.btkj.pojo.po;
 
 import java.util.Map;
 
+import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.model.UniqueModel;
 
 public class VehiclePolicy implements UniqueModel<String> {
@@ -14,8 +17,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String _id;								
 	private int tid;								// 商户ID
 	private int insurerId;							// 险企ID
-	private String no;								// 保单号
-	private String deliverNo;						// 投保单号
 	private String owner;							// 车主姓名
 	private String idNo;							// 车主证件号
 	private String issueDate;						// 发证日期
@@ -23,7 +24,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String license;							// 车牌号
 	private String engine;							// 发动机号
 	private String vin;								// 车架号
-	private String vehicleName;						// 厂牌型号
+	private String name;							// 厂牌型号
 	private int seat;								// 座位数
 	private int renewalType;						// 转续保类型
 	private boolean transfer;						// 是否过户车
@@ -33,9 +34,33 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private double vesselPrice;						// 车船税
 	private double commercialPrice;					// 商业险保费	
 	private double compulsoryPrice;					// 交强险保费
+	private String commercialNo;					// 商业险保单号
+	private String commercialDeliverNo;				// 商业险投保单号
+	private String compulsoryNo;					// 交强险保单号
+	private String compulsoryDeliverNo;				// 交强险投保单号
 	private String commercialStartDate;
 	private String compulsoryStartDate;
 	private Map<CommercialInsuranceType, Insurance> insurances;
+	
+	public VehiclePolicy() {}
+	
+	public VehiclePolicy(VehicleOrder order, BaseInfo commercial, BaseInfo compulsory) {
+		this.tid = order.getTid();
+		this.insurerId = order.getInsurerId();
+		VehiclePolicyTips tips = order.getTips();
+		
+		InsurUnit owner = tips.getOwner();
+		this.owner = owner.getName();
+		this.idNo = owner.getIdNo();
+		
+		this.issueDate = tips.getIssueDate();
+		this.enrollDate = tips.getEnrollDate();
+		this.license = tips.getLicense();
+		this.engine = tips.getEngine();
+		this.vin = tips.getVin();
+		this.name = tips.getName();
+		this.seat = tips.getSeat();
+	}
 	
 	public String get_id() {
 		return _id;
@@ -59,22 +84,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 
 	public void setInsurerId(int insurerId) {
 		this.insurerId = insurerId;
-	}
-
-	public String getNo() {
-		return no;
-	}
-
-	public void setNo(String no) {
-		this.no = no;
-	}
-
-	public String getDeliverNo() {
-		return deliverNo;
-	}
-
-	public void setDeliverNo(String deliverNo) {
-		this.deliverNo = deliverNo;
 	}
 
 	public String getCommercialStartDate() {
@@ -149,12 +158,12 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.vin = vin;
 	}
 
-	public String getVehicleName() {
-		return vehicleName;
+	public String getName() {
+		return name;
 	}
-
-	public void setVehicleName(String vehicleName) {
-		this.vehicleName = vehicleName;
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getSeat() {

@@ -101,29 +101,45 @@ public class EntityGenerator {
 	public static final Customer newCustomer(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
 		Customer customer = new Customer();
 		customer.setUid(uid);
-		customer.setName(name);
-		customer.setAddress(address);
-		customer.setIdentity(identity);
-		customer.setMemo(memo);
-		customer.setMobile(mobile);
-		customer.setLicense(license);
-		while (null != regions.peek()) {
-			Region region = regions.poll();
-			REGION_TYPE type = REGION_TYPE.match(region.getLevel());
-			switch (type) {
-			case PROVINCE:
-				customer.setProvince(region.getName());
-				break;
-			case CITY:
-				customer.setCity(region.getName());
-				break;
-			case COUNTY:
-				customer.setCounty(region.getName());
-				break;
-			default:
-				break;
+		updateCustomer(customer, name, identity, mobile, license, regions, address, memo);
+		int time = DateUtil.currentTime();
+		customer.setCreated(time);
+		customer.setUpdated(time);
+		return customer;
+	}
+	
+	public static final void updateCustomer(Customer customer, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
+		if (null != name)
+			customer.setName(name);
+		if (null != address)
+			customer.setAddress(address);
+		if (null != identity)
+			customer.setIdentity(identity);
+		if (null != memo)
+			customer.setMemo(memo);
+		if (null != mobile)
+			customer.setMobile(mobile);
+		if (null != license)
+			customer.setLicense(license);
+		if (null != regions) {
+			while (null != regions.peek()) {
+				Region region = regions.poll();
+				REGION_TYPE type = REGION_TYPE.match(region.getLevel());
+				switch (type) {
+				case PROVINCE:
+					customer.setProvince(region.getName());
+					break;
+				case CITY:
+					customer.setCity(region.getName());
+					break;
+				case COUNTY:
+					customer.setCounty(region.getName());
+					break;
+				default:
+					break;
+				}
 			}
 		}
-		return customer;
+		customer.setUpdated(DateUtil.currentTime());
 	}
 }

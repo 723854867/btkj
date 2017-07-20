@@ -9,31 +9,11 @@ public class AppPO implements UniqueModel<Integer> {
 	private int id;
 	private int region;
 	private String name;
-	private int mod;
 	private int maxTenantsCount;
 	private int maxArticlesCount;
 	private int created;
 	private int updated;
 	
-	public enum Mod {
-		
-		OFF_SHELF(1);			// 是否下架
-		
-		private int mark;
-		
-		private Mod(int mark) {
-			this.mark = mark;
-		}
-		
-		public int mark() {
-			return mark;
-		}
-		
-		public boolean hit(int mod) { 
-			return (this.mark & mod) == this.mark;
-		}
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -50,14 +30,6 @@ public class AppPO implements UniqueModel<Integer> {
 		this.region = region;
 	}
 	
-	public int getMod() {
-		return mod;
-	}
-	
-	public void setMod(int mod) {
-		this.mod = mod;
-	}
-
 	public String getName() {
 		return name;
 	}

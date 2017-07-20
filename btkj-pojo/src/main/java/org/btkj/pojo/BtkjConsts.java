@@ -19,12 +19,14 @@ public interface BtkjConsts {
 	final int MIN_COMMISION_RETAIN_RATE			= -100;
 	
 	interface RESULT {
+		Result APP_NOT_EXIST					= Result.result(BtkjCode.APP_NOT_EXIST);
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);
 		Result LANE_NOT_EXIST					= Result.result(BtkjCode.LANE_NOT_EXIST);
 		Result AREA_NOT_EXIST					= Result.result(BtkjCode.AREA_NOT_EXIST);
 		Result ORDER_NOT_EXIST					= Result.result(BtkjCode.ORDER_NOT_EXIST);
 		Result REPLY_NOT_EXIST					= Result.result(BtkjCode.REPLY_NOT_EXIST);
 		Result ROUTE_NOT_EXIST					= Result.result(BtkjCode.ROUTE_NOT_EXIST);
+		Result REGION_NOT_EXIST					= Result.result(BtkjCode.REGION_NOT_EXIST);
 		Result BANNER_NOT_EXIST					= Result.result(BtkjCode.BANNER_NOT_EXIST);
 		Result TENANT_NOT_EXIST					= Result.result(BtkjCode.TENANT_NOT_EXIST);
 		Result ORDER_STATE_ERROR				= Result.result(BtkjCode.ORDER_STATE_ERROR);

@@ -40,6 +40,7 @@ public class JianJiePoliciesInfo implements Serializable {
 		private String BdType;
 		private String Cxcs;
 		private String Cz;
+		private String CzZjhm;
 		private String Bbr;
 		private String BbrZjhm;
 		private double Bf;
@@ -64,6 +65,7 @@ public class JianJiePoliciesInfo implements Serializable {
 		private String GsPhone;
 		private String AccountName;
 		private boolean isCouple;
+		private String RelationPolicyNo;			// 关联保单号
 		private String BaseStatus;
 		private String BDH;
 		private String TBDH;
@@ -90,6 +92,14 @@ public class JianJiePoliciesInfo implements Serializable {
 
 		public void setCz(String cz) {
 			Cz = cz;
+		}
+		
+		public String getCzZjhm() {
+			return CzZjhm;
+		}
+		
+		public void setCzZjhm(String czZjhm) {
+			CzZjhm = czZjhm;
 		}
 
 		public String getBbr() {
@@ -282,6 +292,14 @@ public class JianJiePoliciesInfo implements Serializable {
 
 		public void setCouple(boolean isCouple) {
 			this.isCouple = isCouple;
+		}
+		
+		public String getRelationPolicyNo() {
+			return RelationPolicyNo;
+		}
+		
+		public void setRelationPolicyNo(String relationPolicyNo) {
+			RelationPolicyNo = relationPolicyNo;
 		}
 
 		public String getBaseStatus() {

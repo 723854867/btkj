@@ -25,4 +25,6 @@
 	<dubbo:service interface="org.btkj.user.api.EmployeeService" ref="employeeService" loadbalance="${dubbo.service.loadbalance}"/>
 	
 	<dubbo:service interface="org.btkj.user.api.UserManageService" ref="userManageService" loadbalance="${dubbo.service.loadbalance}"/>
+
+	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
 </beans>

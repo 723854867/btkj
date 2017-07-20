@@ -1,7 +1,13 @@
-package org.btkj.vehicle.mybatis;
+package org.btkj.vehicle;
 
+import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.po.VehiclePolicy;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.VehicleInfomation;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
@@ -65,5 +71,42 @@ public class EntityGenerator {
 		config.setCreated(time);
 		config.setUpdated(time);
 		return config;
+	}
+	
+	public static final boolean newPolicy(VehiclePolicy policy, VehicleOrder order, BaseInfo commercial, BaseInfo compulsory) {
+		policy.setTid(order.getTid());
+		policy.setInsurerId(order.getInsurerId());
+		
+		VehiclePolicyTips tips = order.getTips();
+		InsurUnit owner = tips.getOwner();
+		if (!owner.getName().equals(commercial.getCz()))
+			return false;
+		if (!owner.getIdNo().equals(commercial.getCzZjhm()))
+			return false;
+		policy.setOwner(owner.getName());
+		policy.setIdNo(owner.getIdNo());
+		
+		policy.setIssueDate(tips.getIssueDate());
+		policy.setEnrollDate(tips.getEnrollDate());
+		policy.setName(tips.getName());
+		VehicleInfomation vehicleInfo = commercial.getVehicleInfomation();
+		if (!vehicleInfo.getCphm().equals(tips.getLicense()))
+			return false;
+		if (!vehicleInfo.getFdjh().equals(tips.getEngine()))
+			return false;
+		if (!vehicleInfo.getCjh().equals(tips.getVin()))
+			return false;
+		if (!vehicleInfo.getZws().equals(String.valueOf(tips.getSeat())))
+			return false;
+		if (vehicleInfo.isGH() ^ tips.isTransfer())
+			return false;
+		policy.setLicense(tips.getLicense());
+		policy.setEngine(tips.getEngine());
+		policy.setVin(tips.getVin());
+		policy.setSeat(tips.getSeat());
+		policy.setTransfer(tips.isTransfer());
+//		private int renewalType;						// 转续保类型
+//		private VehicleUsedType usedType;	
+		return true;
 	}
 }

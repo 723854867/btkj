@@ -84,6 +84,11 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
+	public Insurer insurerByJianJieId(int jianJieId) {
+		return insurerMapper.getByJianJieId(jianJieId);
+	}
+	
+	@Override
 	public Map<Integer, Insurer> insurers(Collection<Integer> tids) {
 		return insurerMapper.getByKeys(tids);
 	}

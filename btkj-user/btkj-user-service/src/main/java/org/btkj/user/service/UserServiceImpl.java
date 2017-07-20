@@ -141,6 +141,11 @@ public class UserServiceImpl implements UserService {
 	public Customer getCustomerById(long customerId) {
 		return customerMapper.getByKey(customerId);
 	}
+
+	@Override
+	public Result<Pager<Customer>> customers(CustomerSearcher searcher) {
+		return Result.result(customerMapper.paging(searcher));
+	}
 	
 	@Override
 	public Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
@@ -154,7 +159,25 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<Pager<Customer>> customers(CustomerSearcher searcher) {
-		return Result.result(customerMapper.paging(searcher));
+	public Result<Void> customerUpdate(long id, int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
+		Customer customer = customerMapper.getByKey(id);
+		if (null == customer)
+			return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
+		if (customer.getUid() != uid)
+			return Consts.RESULT.FORBID;
+		EntityGenerator.updateCustomer(customer, name, identity, mobile, license, regions, address, memo);
+		customerMapper.update(customer);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> customerDelete(long id, int uid) {
+		Customer customer = customerMapper.getByKey(id);
+		if (null == customer)
+			return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
+		if (customer.getUid() != uid)
+			return Consts.RESULT.FORBID;
+		customerMapper.delete(customer);
+		return Consts.RESULT.OK;
 	}
 }

@@ -11,6 +11,7 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;

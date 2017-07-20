@@ -35,4 +35,9 @@ public class CUSTOMER_LIST extends UserAction {
 		}
 		return userService.customers(searcher);
 	}
+	
+	@Override
+	protected boolean userIntegrityVerify(User user) {
+		return true;
+	}
 }

@@ -104,6 +104,14 @@ public interface UserService {
 	Customer getCustomerById(long customerId);
 	
 	/**
+	 * 客户分页
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Result<Pager<Customer>> customers(CustomerSearcher searcher);
+	
+	/**
 	 * 新增客户
 	 * 
 	 * @param uid
@@ -119,10 +127,27 @@ public interface UserService {
 	Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo);
 
 	/**
-	 * 客户分页
+	 * 修改客户
 	 * 
-	 * @param searcher
+	 * @param id
+	 * @param uid
+	 * @param name
+	 * @param identity
+	 * @param mobile
+	 * @param license
+	 * @param regions
+	 * @param address
+	 * @param memo
 	 * @return
 	 */
-	Result<Pager<Customer>> customers(CustomerSearcher searcher);
+	Result<Void> customerUpdate(long id, int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo);
+	
+	/**
+	 * 删除客户
+	 * 
+	 * @param id
+	 * @param uid
+	 * @return
+	 */
+	Result<Void> customerDelete(long id, int uid);
 }

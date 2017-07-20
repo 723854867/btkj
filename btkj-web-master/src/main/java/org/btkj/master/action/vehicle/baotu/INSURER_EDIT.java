@@ -27,10 +27,11 @@ public class INSURER_EDIT extends LoggedAction {
 			if (!NumberUtil.isPowerOfTwo(id))
 				throw ConstConvertFailureException.errorConstException(Params.ID);
 			return configManageService.insurerAdd(id, request.getParam(Params.NAME), request.getParam(Params.ICON), 
-					request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
+					request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY), request.getParam(Params.IDX));
 		case UPDATE:
 			return configManageService.insurerUpdate(request.getParam(Params.ID), request.getParam(Params.NAME), 
-					request.getParam(Params.ICON), request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
+					request.getParam(Params.ICON), request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY),
+					request.getParam(Params.IDX));
 		default:
 			return Consts.RESULT.FORBID;
 		}

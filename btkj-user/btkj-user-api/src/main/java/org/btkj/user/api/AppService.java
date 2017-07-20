@@ -37,17 +37,6 @@ public interface AppService {
 	Result<MainPageInfo> mainPage(User user, Employee employee);
 
 	/**
-	 * 添加 app
-	 * 
-	 * @param region app 的业务地区
-	 * @param name app 的名字
-	 * @param maxTenantsCount app 能添加的租户的上限
-	 * @param maxArticlesCount app 能添加的最大咨询数
-	 * @return
-	 */
-	AppPO addApp(int region, String name, int maxTenantsCount, int maxArticlesCount);
-	
-	/**
 	 * 获取该 app 的代理公司数
 	 * 
 	 * @param app

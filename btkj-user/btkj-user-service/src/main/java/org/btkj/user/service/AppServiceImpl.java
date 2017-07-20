@@ -15,7 +15,6 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.vo.MainPageInfo;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
-import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -80,13 +79,6 @@ public class AppServiceImpl implements AppService {
 		}
 		List<Banner> banners = bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
 		return Result.result(new MainPageInfo(user, tenant, banners));
-	}
-	
-	@Override
-	public AppPO addApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
-		AppPO app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
-		appMapper.insert(app);
-		return app;
 	}
 	
 	@Override

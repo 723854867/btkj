@@ -156,6 +156,11 @@ public enum BtkjCode implements ICode {
 	ROUTE_NOT_EXIST(529, "route not eixst"),
 	
 	/**
+	 * 地区不存在
+	 */
+	REGION_NOT_EXIST(540, "region not exist"),
+	
+	/**
 	 * 地区
 	 */
 	AREA_NOT_EXIST(530, "area not exist"),

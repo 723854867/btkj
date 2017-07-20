@@ -39,8 +39,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
-		Insurer insurer = EntityGenerator.newInsurer(id, name, icon, bindBiHu, leBaoBaId);
+	public Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId) {
+		Insurer insurer = EntityGenerator.newInsurer(id, name, icon, bindBiHu, leBaoBaId, jianJieId);
 		try {
 			insurerMapper.insert(insurer);
 			return Consts.RESULT.OK;
@@ -50,7 +50,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
+	public Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId) {
 		Insurer insurer = insurerMapper.getByKey(id);
 		if (null == insurer)
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
@@ -58,6 +58,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		insurer.setIcon(icon);
 		insurer.setBiHuId(bindBiHu ? id : 0);
 		insurer.setLeBaoBaId(leBaoBaId);
+		insurer.setJianJieId(jianJieId);
 		try {
 			insurerMapper.update(insurer);
 		} catch (DuplicateKeyException e) {

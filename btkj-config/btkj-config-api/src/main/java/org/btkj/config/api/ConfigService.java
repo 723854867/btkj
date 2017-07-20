@@ -62,6 +62,14 @@ public interface ConfigService {
 	Insurer getInsurerById(int insurerId);
 	
 	/**
+	 * 通过简捷ID获取险企
+	 * 
+	 * @param jianJieId
+	 * @return
+	 */
+	Insurer insurerByJianJieId(int jianJieId);
+	
+	/**
 	 * 获取险企列表
 	 * 
 	 * @param list

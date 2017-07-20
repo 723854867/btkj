@@ -1,6 +1,5 @@
 package org.btkj.common.action.tenant;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -23,6 +22,7 @@ import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
+import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.lang.StringUtil;
 import org.rapid.util.validator.Validator;
 
@@ -71,7 +71,7 @@ public class ORDER extends TenantAction {
 	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType, boolean owner) {
 		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName() || null == unit.getType())
 			return false;
-		if (null != unit.getMobile() && !Validator.isMobile(unit.getMobile(), Locale.CHINA.getCountry()))
+		if (null != unit.getMobile() && !PhoneUtil.isMobile(unit.getMobile()))
 			return false;
 		if (owner)
 			_correctUnitType(usedType, unit);

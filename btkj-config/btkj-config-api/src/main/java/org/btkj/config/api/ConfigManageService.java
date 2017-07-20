@@ -24,7 +24,7 @@ public interface ConfigManageService {
 	 * @param leBaoBaId
 	 * @return
 	 */
-	Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
+	Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId);
 	
 	/**
 	 * 修改险企
@@ -35,7 +35,7 @@ public interface ConfigManageService {
 	 * @param leBaoBaId
 	 * @return
 	 */
-	Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
+	Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId);
 	
 	/**
 	 * 获取所有地区配置信息

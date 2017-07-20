@@ -1,25 +1,27 @@
 package org.btkj.vehicle.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.po.VehiclePolicy;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
-import org.btkj.vehicle.mybatis.EntityGenerator;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
@@ -33,17 +35,24 @@ import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("vehicleManageService")
 public class VehicleManageServiceImpl implements VehicleManageService {
 	
+	private static Logger logger = LoggerFactory.getLogger(VehicleManageServiceImpl.class);
+	
 	@Resource
 	private Tx tx;
 	@Resource
 	private RouteMapper routeMapper;
+	@Resource
+	private ConfigService configService;
 	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
@@ -162,32 +171,63 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public void jianJieSynchronize(JianJiePoliciesInfo info) {
-		List<BaseInfo> infos = info.getResult();
-		int left = infos.size();
-		int idx = 0;
-		int pageSize = 50;
-		Map<String, VehiclePolicy> policies = new HashMap<String, VehiclePolicy>();
-		while (left > 0) {
-			pageSize = Math.min(pageSize, left);
-			List<BaseInfo> list = infos.subList(idx, idx + pageSize);
-			Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
-			Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
-			for (BaseInfo temp : list) {
-				if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title()))
-					commercials.put(temp.getBDH(), temp);
-				else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title()))
-					compulsories.put(temp.getBDH(), temp);
-				else
-					throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
+		List<VehiclePolicy> policies = new ArrayList<VehiclePolicy>();
+		Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
+		Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
+		for (BaseInfo temp : info.getResult()) {
+			if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title()))
+				commercials.put(temp.getBDH(), temp);
+			else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title()))
+				compulsories.put(temp.getBDH(), temp);
+			else
+				throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
+		}
+		
+		List<VehicleOrder> orders = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
+		for (VehicleOrder order : orders) {
+			PolicyDetail detail = order.getTips().getDetail();
+			BaseInfo commercial = commercials.remove(detail.getCommercialNo());
+			String relationNo = commercial.getRelationPolicyNo();
+			BaseInfo compulsory = null;
+			if (null != relationNo) {
+				compulsory = compulsories.remove(relationNo);
+				if (null == compulsory) {
+					logger.error("JianJie complete policy {}-{} compulsory data miss!", commercial.getTBDH(), relationNo);
+					continue;
+				}
+				String no = detail.getCompulsiveNo();
+				if (!StringUtil.hasText(no)) {
+					logger.error("JianJie complete policy {}-{} mapping with baotu single policy {}!", commercial.getTBDH(), relationNo, order.get_id());
+					continue;
+				}
+				if (!no.equals(relationNo)) {
+					logger.error("JianJie complete policy {}-{} compulsory no not same with baotu compulsory no {}!", commercial.getTBDH(), relationNo, no);
+					continue;
+				}
+				if ((compulsory.getCompanyId() != commercial.getCompanyId()) || (0 == commercial.getCompanyId())) {
+					logger.error("JianJie complete policy {}-{} insurerIds {}-{} are different from each other!", commercial.getTBDH(), no, commercial.getCompanyId(), compulsory.getCompanyId());
+					continue;
+				}
+			} else {
+				if (StringUtil.hasText(detail.getCompulsiveNo())) {
+					logger.error("JianJie single policy {} mapping with baotu complete policy {}-{}!", commercial.getTBDH(), order.get_id(), detail.getCompulsiveNo());
+					continue;
+				}
+				if (0 == commercial.getCompanyId()) {
+					logger.error("JianJie single policy {} has no insurer!", commercial.getTBDH());
+					continue;
+				}
 			}
-			
-			List<VehicleOrder> orders = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
-			for (VehicleOrder order : orders) {
-				BaseInfo temp = commercials.remove(order.getTips().getDetail().getCommercialNo());
+			Insurer insurer = configService.insurerByJianJieId(commercial.getCompanyId());
+			if (null == insurer) {
+				logger.error("JianJie insurer - {} not exist", commercial.getCompanyId());
+				continue;
 			}
-			
-			List<VehicleOrder> cp = vehicleOrderMapper.getByNos(InsuranceType.COMPULSORY, compulsories.keySet());
-			
+			if (insurer.getId() != order.getInsurerId()) {
+				logger.error("JianJie insurer - {} is differ with baotu order - {} insurer - {}", insurer.getJianJieId(), order.get_id(), order.getInsurerId());
+				continue;
+			}
+			policies.add(new VehiclePolicy(order, commercial, compulsory));
 		}
 	}
 	
