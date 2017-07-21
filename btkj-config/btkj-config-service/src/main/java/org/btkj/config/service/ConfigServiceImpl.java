@@ -1,9 +1,7 @@
 package org.btkj.config.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -34,6 +32,11 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
+	public Map<Integer, Region> regions(Collection<Integer> regionIds) {
+		return regionMapper.getByKeys(regionIds);
+	}
+	
+	@Override
 	public boolean isSubRegion(int region1, int region2) {
 		Region r1 = regionMapper.getByKey(region1);
 		Region r2 = regionMapper.getByKey(region2);
@@ -61,11 +64,6 @@ public class ConfigServiceImpl implements ConfigService {
 		LinkedList<Region> list = new LinkedList<Region>();
 		_regionRoute(list, region);
 		return list;
-	}
-	
-	@Override
-	public List<Region> getRegions(List<Integer> regionIds) {
-		return new ArrayList<Region>(regionMapper.getByKeys(regionIds).values());
 	}
 	
 	private void _regionRoute(LinkedList<Region> regions, int region) {

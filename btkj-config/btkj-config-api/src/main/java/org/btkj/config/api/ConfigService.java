@@ -2,7 +2,6 @@ package org.btkj.config.api;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.btkj.config.pojo.entity.Area;
@@ -18,6 +17,14 @@ public interface ConfigService {
 	 * @return
 	 */
 	Region region(int region);
+
+	/**
+	 * 一次性获取多条行政区划数据
+	 * 
+	 * @param regionIds
+	 * @return
+	 */
+	Map<Integer, Region> regions(Collection<Integer> regionIds);
 	
 	/**
 	 * 判断 region2 是否是 region 1的子行政区划
@@ -44,14 +51,6 @@ public interface ConfigService {
 	 * @return
 	 */
 	LinkedList<Region> regionRoute(int region);
-	
-	/**
-	 * 一次性获取多条行政区划数据
-	 * 
-	 * @param regionIds
-	 * @return
-	 */
-	List<Region> getRegions(List<Integer> regionIds);
 	
 	/**
 	 * 根据保险公司ID获取保险公司

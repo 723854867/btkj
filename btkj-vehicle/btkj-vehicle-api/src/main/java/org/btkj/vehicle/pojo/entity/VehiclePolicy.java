@@ -1,13 +1,14 @@
-package org.btkj.pojo.po;
+package org.btkj.vehicle.pojo.entity;
 
 import java.util.Map;
 
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.vehicle.pojo.BonusScaleType;
 import org.rapid.util.common.model.UniqueModel;
 
 public class VehiclePolicy implements UniqueModel<String> {
@@ -28,7 +29,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private int seat;								// 座位数
 	private int renewalType;						// 转续保类型
 	private boolean transfer;						// 是否过户车
-	private VehicleUsedType usedType;				// 使用性质
+	private BonusScaleType scaleType;				// 规模奖励类型
 	private double vehiclePrice;					// 购置价
 	private String salesmanMobile;					// 业务员手机号
 	private double vesselPrice;						// 车船税
@@ -206,12 +207,12 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.compulsoryPrice = compulsoryPrice;
 	}
 
-	public VehicleUsedType getUsedType() {
-		return usedType;
+	public BonusScaleType getScaleType() {
+		return scaleType;
 	}
-
-	public void setUsedType(VehicleUsedType usedType) {
-		this.usedType = usedType;
+	
+	public void setScaleType(BonusScaleType scaleType) {
+		this.scaleType = scaleType;
 	}
 
 	public double getVehiclePrice() {

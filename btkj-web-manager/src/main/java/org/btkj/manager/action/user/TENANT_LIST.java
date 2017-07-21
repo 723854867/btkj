@@ -1,8 +1,7 @@
 package org.btkj.manager.action.user;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -45,12 +44,10 @@ public class TENANT_LIST extends UserAction {
 		Set<Integer> set = new HashSet<Integer>();
 		for (TenantPagingInfo info : result.attach().getList())
 			set.add(info.getRegionId());
-		List<Region> regions = configService.getRegions(new ArrayList<Integer>(set));
-		for (Region region : regions) {
-			for (TenantPagingInfo info : result.attach().getList()) {
-				if (info.getTid() == region.getId())
-					info.setRegionName(region.getName());
-			}
+		Map<Integer, Region> regions = configService.regions(set);
+		for (TenantPagingInfo info : result.attach().getList()) {
+			Region region = regions.get(info.getRegionId());
+			info.setRegionName(null != region ? region.getName() : null);
 		}
 		return result;
 	}

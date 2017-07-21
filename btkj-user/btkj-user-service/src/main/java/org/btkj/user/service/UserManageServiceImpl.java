@@ -15,10 +15,12 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.mybatis.EntityGenerator;
+import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
@@ -197,8 +199,20 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Map<Integer, AppPO> apps() {
-		return appMapper.getAll();
+	public List<AppInfo> apps() {
+		Map<Integer, AppPO> apps = appMapper.getAll();
+		List<AppInfo> list = new ArrayList<AppInfo>();
+		Set<Integer> set = new HashSet<Integer>();
+		for (AppPO po : apps.values()) {
+			list.add(new AppInfo(po));
+			set.add(po.getRegion());
+		}
+		Map<Integer, Region> regions = configService.regions(set);
+		for (AppInfo info : list) {
+			Region region = regions.get(info.getRegion());
+			info.setRegionName(null == region ? null : region.getName());
+		}
+		return list;
 	}
 	
 	@Override

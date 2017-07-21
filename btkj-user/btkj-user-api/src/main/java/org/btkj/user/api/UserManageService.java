@@ -1,10 +1,10 @@
 package org.btkj.user.api;
 
-import java.util.Map;
+import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
@@ -97,7 +97,7 @@ public interface UserManageService {
 	 * 
 	 * @return
 	 */
-	Map<Integer, AppPO> apps();
+	List<AppInfo> apps();
 	
 	/**
 	 * 新增平台
