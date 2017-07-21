@@ -10,6 +10,7 @@ public class Route implements UniqueModel<String> {
 	private int tid;
 	private int insurerId;
 	private int lane;
+	private int jianJieId;
 	private int created;
 	private int updated;
 
@@ -43,6 +44,14 @@ public class Route implements UniqueModel<String> {
 	
 	public void setLane(int lane) {
 		this.lane = lane;
+	}
+	
+	public int getJianJieId() {
+		return jianJieId;
+	}
+	
+	public void setJianJieId(int jianJieId) {
+		this.jianJieId = jianJieId;
 	}
 	
 	public int getCreated() {

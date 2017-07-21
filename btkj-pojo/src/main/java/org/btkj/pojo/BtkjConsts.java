@@ -17,6 +17,8 @@ public interface BtkjConsts {
 	final int MIN_COMMISION_RATE				= 0;
 	final int MAX_COMMISION_RETAIN_RATE			= 200;
 	final int MIN_COMMISION_RETAIN_RATE			= -100;
+	final int MIN_RENEWAL_PERIOD				= 30;
+	final int MAX_RENEWAL_PERIOD				= 90;
 	
 	interface RESULT {
 		Result APP_NOT_EXIST					= Result.result(BtkjCode.APP_NOT_EXIST);

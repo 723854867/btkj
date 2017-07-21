@@ -8,6 +8,7 @@ public class Area implements UniqueModel<Integer> {
 
 	private int code;
 	private int renewalPeriod;				// 续保期限
+	private boolean vehiclePriceNoTax;		// 新车购置价是否不含税
 	private int biHuId;
 	private int created;
 	private int updated;
@@ -26,6 +27,14 @@ public class Area implements UniqueModel<Integer> {
 
 	public void setRenewalPeriod(int renewalPeriod) {
 		this.renewalPeriod = renewalPeriod;
+	}
+	
+	public boolean isVehiclePriceNoTax() {
+		return vehiclePriceNoTax;
+	}
+	
+	public void setVehiclePriceNoTax(boolean vehiclePriceNoTax) {
+		this.vehiclePriceNoTax = vehiclePriceNoTax;
 	}
 	
 	public int getBiHuId() {

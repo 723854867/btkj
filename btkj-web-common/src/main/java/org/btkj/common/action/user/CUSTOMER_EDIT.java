@@ -36,7 +36,7 @@ public class CUSTOMER_EDIT extends UserAction {
 			String address = request.getParam(Params.ADDRESS);
 			String memo = request.getParam(Params.CONTENT);
 			LinkedList<Region> regions = 0 == region ? null : configService.regionRoute(region);
-			if (null == regions || regions.size() < 3)
+			if (null == regions || regions.size() < 4)
 				throw ConstConvertFailureException.errorConstException(Params.REGION);
 				return userService.customerAdd(user.getUid(), name, identity, mobile, license, regions, address, memo);
 		case UPDATE:
@@ -48,7 +48,7 @@ public class CUSTOMER_EDIT extends UserAction {
 			address = request.getOptionalParam(Params.ADDRESS);
 			memo = request.getOptionalParam(Params.CONTENT);
 			regions = 0 == region ? null : configService.regionRoute(region);
-			if (null != regions && regions.size() < 3)
+			if (null != regions && regions.size() < 4)
 				throw ConstConvertFailureException.errorConstException(Params.REGION);
 			return userService.customerUpdate(request.getParam(Params.ID), user.getUid(), name, identity, mobile, license, regions, address, memo);
 		case DELETE:

@@ -2,9 +2,11 @@ package org.btkj.user.mybatis.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.po.Customer;
 import org.btkj.user.mybatis.provider.CustomerSQLProvider;
 import org.btkj.user.pojo.submit.CustomerSearcher;
@@ -26,4 +28,12 @@ public interface CustomerDao extends DBMapper<Long, Customer> {
 	
 	@SelectProvider(type = CustomerSQLProvider.class, method = "paging")
 	List<Customer> paging(CustomerSearcher searcher);
+	
+	@Override
+	@UpdateProvider(type = CustomerSQLProvider.class, method = "update")
+	void update(Customer model);
+	
+	@Override
+	@DeleteProvider(type = CustomerSQLProvider.class, method = "delete")
+	void delete(Long key);
 }

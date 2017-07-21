@@ -24,7 +24,7 @@ public interface ConfigManageService {
 	 * @param leBaoBaId
 	 * @return
 	 */
-	Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId);
+	Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
 	
 	/**
 	 * 修改险企
@@ -35,7 +35,7 @@ public interface ConfigManageService {
 	 * @param leBaoBaId
 	 * @return
 	 */
-	Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId);
+	Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
 	
 	/**
 	 * 获取所有地区配置信息
@@ -52,7 +52,7 @@ public interface ConfigManageService {
 	 * @param biHuId
 	 * @return
 	 */
-	Result<Void> areaAdd(int code, int renewalPeriod, int biHuId);
+	Result<Void> areaAdd(int code, int renewalPeriod, int biHuId, boolean priceNoTax);
 	
 	/**
 	 * 修改地区
@@ -62,5 +62,5 @@ public interface ConfigManageService {
 	 * @param biHuId
 	 * @return
 	 */
-	Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId);
+	Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId, boolean priceNoTax);
 }

@@ -248,7 +248,8 @@ public interface Params {
 		}
 	};
 	
-	final Str2StrConstConverter JIAN_JIE_ID						= new Str2StrConstConverter(1049, "jianJieId");
+	final Str2IntConstConverter JIAN_JIE_ID						= new Str2IntConstConverter(1049, "jianJieId");
+	final Str2BoolConstConverter PRICE_NO_TAX					= new Str2BoolConstConverter(1050, "priceNoTax");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);

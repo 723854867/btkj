@@ -23,6 +23,15 @@ public class RouteMapper extends RedisDBAdapter<String, Route, RouteDao> {
 		super(new ByteProtostuffSerializer<Route>(), "hash:db:route");
 	}
 	
+	public Route getByTidAndJianJieId(int tid, int jianJieId) {
+		List<Route> list = getByTid(tid);
+		for (Route route : list) {
+			if (route.getJianJieId() == jianJieId)
+				return route;
+		}
+		return null;
+	}
+	
 	public List<Route> getByTid(int tid) {
 		Map<String, Route> map = _checkLoad(tid);
 		if (null != map)

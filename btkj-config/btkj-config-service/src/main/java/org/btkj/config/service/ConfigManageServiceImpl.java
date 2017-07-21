@@ -39,8 +39,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId) {
-		Insurer insurer = EntityGenerator.newInsurer(id, name, icon, bindBiHu, leBaoBaId, jianJieId);
+	public Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
+		Insurer insurer = EntityGenerator.newInsurer(id, name, icon, bindBiHu, leBaoBaId);
 		try {
 			insurerMapper.insert(insurer);
 			return Consts.RESULT.OK;
@@ -50,7 +50,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId, int jianJieId) {
+	public Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
 		Insurer insurer = insurerMapper.getByKey(id);
 		if (null == insurer)
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
@@ -58,7 +58,6 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		insurer.setIcon(icon);
 		insurer.setBiHuId(bindBiHu ? id : 0);
 		insurer.setLeBaoBaId(leBaoBaId);
-		insurer.setJianJieId(jianJieId);
 		try {
 			insurerMapper.update(insurer);
 		} catch (DuplicateKeyException e) {
@@ -90,8 +89,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> areaAdd(int code, int renewalPeriod, int biHuId) {
-		Area area = EntityGenerator.newArea(code, renewalPeriod, biHuId);
+	public Result<Void> areaAdd(int code, int renewalPeriod, int biHuId, boolean priceNoTax) {
+		Area area = EntityGenerator.newArea(code, renewalPeriod, biHuId, priceNoTax);
 		try {
 			areaMapper.insert(area);
 			return Consts.RESULT.OK;
@@ -101,13 +100,14 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId) {
+	public Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId, boolean priceNoTax) {
 		Area area = areaMapper.getByKey(code);
 		if (null == area)
 			return BtkjConsts.RESULT.AREA_NOT_EXIST;
 		area.setBiHuId(biHuId);
 		area.setRenewalPeriod(renewalPeriod);
 		area.setUpdated(DateUtil.currentTime());
+		area.setVehiclePriceNoTax(priceNoTax);
 		areaMapper.update(area);
 		return Consts.RESULT.OK;
 	}

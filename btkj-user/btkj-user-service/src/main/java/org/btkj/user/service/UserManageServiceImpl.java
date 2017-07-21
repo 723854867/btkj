@@ -12,6 +12,7 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.EmployeePO;
@@ -24,6 +25,7 @@ import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
+import org.btkj.user.pojo.info.TenantPagingMasterInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
@@ -67,6 +69,24 @@ public class UserManageServiceImpl implements UserManageService {
 
 	@Override
 	public Result<Pager<TenantPagingInfo>> tenantPaging(TenantSearcher searcher) {
+		Pager<TenantPagingInfo> pager = tenantMapper.paging(searcher);
+		Set<Integer> set1 = new HashSet<Integer>();
+		Set<Integer> set2 = new HashSet<Integer>();
+		for (TenantPagingInfo info : pager.getList()) {
+			set1.add(info.getRegionId());
+			if (info instanceof TenantPagingMasterInfo)
+				set2.add(((TenantPagingMasterInfo) info).getAppId());
+		}
+		Map<Integer, Region> regions = configService.regions(set1);
+		Map<Integer, AppPO> apps = searcher.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
+		for (TenantPagingInfo info : pager.getList()) {
+			Region region = regions.remove(info.getRegionId());
+			info.setRegionName(null == region ? null : region.getName());
+			if (info instanceof TenantPagingMasterInfo) {
+				AppPO app = apps.remove(((TenantPagingMasterInfo) info).getAppId());
+				((TenantPagingMasterInfo) info).setAppName(null == app ? null : app.getName());
+			}
+		}
 		return Result.result(tenantMapper.paging(searcher));
 	}
 	
@@ -238,8 +258,8 @@ public class UserManageServiceImpl implements UserManageService {
 		}
 		if (null != name)
 			app.setName(name);
-		app.setMaxTenantsCount(maxTenantsCount);
-		app.setMaxArticlesCount(maxArticlesCount);
+		app.setMaxTenantsCount(Math.max(0, maxTenantsCount));
+		app.setMaxArticlesCount(Math.max(0, maxArticlesCount));
 		app.setUpdated(DateUtil.currentTime());
 		appMapper.update(app);
 		return Consts.RESULT.OK;

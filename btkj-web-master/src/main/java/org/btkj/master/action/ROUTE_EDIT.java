@@ -1,4 +1,4 @@
-package org.btkj.master.action.vehicle.baotu;
+package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
@@ -36,9 +36,9 @@ public class ROUTE_EDIT extends LoggedAction {
 			Insurer insurer = configService.getInsurerById(request.getParam(Params.ID));
 			if (null == insurer)
 				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
-			return vehicleManageService.routeAdd(tenant.getTid(), insurer.getId(), request.getParam(Params.LANE));
+			return vehicleManageService.routeAdd(tenant.getTid(), insurer.getId(), request.getParam(Params.LANE), request.getParam(Params.JIAN_JIE_ID));
 		case UPDATE:
-			return vehicleManageService.routeUpdate(request.getParam(Params.KEY), request.getParam(Params.LANE));
+			return vehicleManageService.routeUpdate(request.getParam(Params.KEY), request.getParam(Params.LANE), request.getParam(Params.JIAN_JIE_ID));
 		case DELETE:
 			vehicleManageService.routeDelete(request.getParam(Params.KEY));
 			return Consts.RESULT.OK;

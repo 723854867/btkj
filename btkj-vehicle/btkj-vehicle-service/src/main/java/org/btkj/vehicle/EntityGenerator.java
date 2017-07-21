@@ -1,10 +1,15 @@
 package org.btkj.vehicle;
 
+import java.util.List;
+
+import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
+import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.VehicleInfomation;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
@@ -19,12 +24,13 @@ import org.rapid.util.math.compare.ComparisonSymbol;
 
 public class EntityGenerator {
 
-	public static final Route newRoute(int tid, int insurerId, Lane lane) { 
+	public static final Route newRoute(int tid, int insurerId, Lane lane, int jianJieId) { 
 		Route route = new Route();
 		route.setKey(tid + Consts.SYMBOL_UNDERLINE + insurerId);
 		route.setTid(tid);
 		route.setInsurerId(insurerId);
 		route.setLane(lane.mark());
+		route.setJianJieId(jianJieId);
 		
 		int time = DateUtil.currentTime();
 		route.setCreated(time);
@@ -89,7 +95,20 @@ public class EntityGenerator {
 		policy.setIssueDate(tips.getIssueDate());
 		policy.setEnrollDate(tips.getEnrollDate());
 		policy.setName(tips.getName());
+		policy.setNature(VehicleRule.natureFromJianJie(commercial.getBaseStatus()));
+		policy.setVehiclePrice(tips.getPrice());
+		policy.setSalesmanMobile(commercial.getGsDept());
+		policy.setCommercialNo(commercial.getBDH());
+		policy.setCompulsoryNo(null != compulsory ? compulsory.getBDH() : null);
+		policy.setCommercialPrice(commercial.getBf());
+		policy.setCompulsoryPrice(null != compulsory ? compulsory.getBf() : 0);
+		policy.setVesselPrice(null != compulsory ? compulsory.getCCS() : 0);
 		VehicleInfomation vehicleInfo = commercial.getVehicleInfomation();
+		policy.setScaleType(VehicleRule.scaleTypeFromJianJie(vehicleInfo.getSsxz(), vehicleInfo.getCllx()));
+		policy.setCommercialStartDate(commercial.getQbrq());
+		policy.setCompulsoryStartDate(null != compulsory ? compulsory.getQbrq() : null);
+		policy.setCommercialIssueDate(commercial.getSkrq());
+		policy.setCompulsoryIssueDate(null != compulsory ? compulsory.getSkrq() : null);
 		if (!vehicleInfo.getCphm().equals(tips.getLicense()))
 			return false;
 		if (!vehicleInfo.getFdjh().equals(tips.getEngine()))
@@ -100,13 +119,20 @@ public class EntityGenerator {
 			return false;
 		if (vehicleInfo.isGH() ^ tips.isTransfer())
 			return false;
+		PolicyDetail detail = tips.getDetail();
+		if (!commercial.getTBDH().equals(detail.getCommercialNo()))
+			return false;
+		if (null != compulsory && !compulsory.getTBDH().equals(detail.getCompulsiveNo()))
+			return false;
 		policy.setLicense(tips.getLicense());
 		policy.setEngine(tips.getEngine());
 		policy.setVin(tips.getVin());
 		policy.setSeat(tips.getSeat());
 		policy.setTransfer(tips.isTransfer());
-//		private int renewalType;						// 转续保类型
-//		private VehicleUsedType usedType;	
+		policy.setCommercialDeliverNo(commercial.getTBDH());
+		policy.setCompulsoryDeliverNo(null != compulsory ? compulsory.getTBDH() : null);
+		
+		List<Insurance> insurances = commercial.getInsurances();
 		return true;
 	}
 }

@@ -1,4 +1,4 @@
-package org.btkj.master.action.vehicle.bihu;
+package org.btkj.master.action;
 
 import javax.annotation.Resource;
 

@@ -1,9 +1,10 @@
-package org.btkj.master.action.vehicle.baotu;
+package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.LoggedAction;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.po.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -19,11 +20,14 @@ public class AREA_EDIT extends LoggedAction {
 	@Override
 	protected Result<Void> execute(Request request, Administrator operator) {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
+		int renewalPeriod = request.getParam(Params.NUM);
+		renewalPeriod = Math.max(BtkjConsts.MIN_RENEWAL_PERIOD, renewalPeriod);
+		renewalPeriod = Math.min(BtkjConsts.MAX_RENEWAL_PERIOD, renewalPeriod);
 		switch (crudType) {
 		case CREATE:
-			return configManageService.areaAdd(request.getParam(Params.REGION), request.getParam(Params.NUM), request.getOptionalParam(Params.IDX));
+			return configManageService.areaAdd(request.getParam(Params.REGION), renewalPeriod, request.getOptionalParam(Params.IDX), request.getOptionalParam(Params.PRICE_NO_TAX));
 		case UPDATE:
-			return configManageService.areaUpdate(request.getParam(Params.REGION), request.getParam(Params.NUM), request.getOptionalParam(Params.IDX));
+			return configManageService.areaUpdate(request.getParam(Params.REGION), renewalPeriod, request.getOptionalParam(Params.IDX), request.getOptionalParam(Params.PRICE_NO_TAX));
 		default:
 			return Consts.RESULT.FORBID;
 		}

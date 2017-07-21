@@ -7,13 +7,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
@@ -51,8 +49,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private Tx tx;
 	@Resource
 	private RouteMapper routeMapper;
-	@Resource
-	private ConfigService configService;
 	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
@@ -170,7 +166,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public void jianJieSynchronize(JianJiePoliciesInfo info) {
+	public void jianJieSynchronize(int tid, JianJiePoliciesInfo info) {
 		List<VehiclePolicy> policies = new ArrayList<VehiclePolicy>();
 		Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
 		Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
@@ -218,16 +214,16 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 					continue;
 				}
 			}
-			Insurer insurer = configService.insurerByJianJieId(commercial.getCompanyId());
-			if (null == insurer) {
+			Route route = routeMapper.getByTidAndJianJieId(tid, commercial.getCompanyId());
+			if (null == route) {
 				logger.error("JianJie insurer - {} not exist", commercial.getCompanyId());
 				continue;
 			}
-			if (insurer.getId() != order.getInsurerId()) {
-				logger.error("JianJie insurer - {} is differ with baotu order - {} insurer - {}", insurer.getJianJieId(), order.get_id(), order.getInsurerId());
+			if (route.getInsurerId() != order.getInsurerId()) {
+				logger.error("JianJie insurer - {} is differ with baotu order - {} insurer - {}", route.getJianJieId(), order.get_id(), order.getInsurerId());
 				continue;
 			}
-			policies.add(new VehiclePolicy(order, commercial, compulsory));
+			policies.add(new VehiclePolicy());
 		}
 	}
 	
@@ -237,8 +233,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Result<Void> routeAdd(int tid, int insurerId, Lane lane) {
-		Route route = EntityGenerator.newRoute(tid, insurerId, lane);
+	public Result<Void> routeAdd(int tid, int insurerId, Lane lane, int jianJieId) {
+		Route route = EntityGenerator.newRoute(tid, insurerId, lane, jianJieId);
 		try {
 			routeMapper.insert(route);
 		} catch (DuplicateKeyException e) {
@@ -248,15 +244,17 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Result<Void> routeUpdate(String key, Lane lane) {
+	public Result<Void> routeUpdate(String key, Lane lane, int jianJieId) {
 		Route route = routeMapper.getByKey(key);
 		if (null == route)
 			return BtkjConsts.RESULT.ROUTE_NOT_EXIST;
+		if (0 != jianJieId)
+			route.setJianJieId(jianJieId);
 		if (route.getLane() != lane.mark()) {
 			route.setLane(lane.mark());
 			route.setUpdated(DateUtil.currentTime());
-			routeMapper.update(route);
 		}
+		routeMapper.update(route);
 		return Consts.RESULT.OK;
 	}
 	

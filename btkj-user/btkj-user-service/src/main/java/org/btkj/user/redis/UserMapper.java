@@ -110,7 +110,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
 		}
 		if ((long) data == 1)
-			return Result.result(Code.USER_NOT_EXIST);
+			return Result.result(Code.TOKEN_INVALID);
 		return Result.result(Code.USER_STATUS_CHANGED);
 	}
 

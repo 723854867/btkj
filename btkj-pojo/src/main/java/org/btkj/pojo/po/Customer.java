@@ -20,18 +20,18 @@ public class Customer implements UniqueModel<Long> {
 	private int created;
 	private int updated;
 
-	public String getName() {
-		return name;
+	public long getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(long id) {
+		this.id = id;
 	}
-	
+
 	public int getUid() {
 		return uid;
 	}
-	
+
 	public void setUid(int uid) {
 		this.uid = uid;
 	}
@@ -42,6 +42,14 @@ public class Customer implements UniqueModel<Long> {
 
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getMobile() {
@@ -99,19 +107,19 @@ public class Customer implements UniqueModel<Long> {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	
+
 	public int getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	
+
 	public int getUpdated() {
 		return updated;
 	}
-	
+
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}

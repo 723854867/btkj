@@ -47,6 +47,7 @@ public class JianJiePoliciesInfo implements Serializable {
 		private double CCS;
 		private String Qdrq;
 		private String Qbrq;
+		private String Skrq;
 		private String LshBd;
 		private String LShBzBk;
 		private String LshFp;
@@ -148,6 +149,14 @@ public class JianJiePoliciesInfo implements Serializable {
 
 		public void setQbrq(String qbrq) {
 			Qbrq = qbrq;
+		}
+		
+		public String getSkrq() {
+			return Skrq;
+		}
+		
+		public void setSkrq(String skrq) {
+			Skrq = skrq;
 		}
 
 		public String getLshBd() {

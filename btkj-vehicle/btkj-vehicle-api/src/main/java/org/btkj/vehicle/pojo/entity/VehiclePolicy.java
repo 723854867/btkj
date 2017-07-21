@@ -2,13 +2,10 @@ package org.btkj.vehicle.pojo.entity;
 
 import java.util.Map;
 
-import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
-import org.btkj.vehicle.pojo.BonusScaleType;
+import org.btkj.pojo.enums.PolicyNature;
 import org.rapid.util.common.model.UniqueModel;
 
 public class VehiclePolicy implements UniqueModel<String> {
@@ -27,7 +24,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String vin;								// 车架号
 	private String name;							// 厂牌型号
 	private int seat;								// 座位数
-	private int renewalType;						// 转续保类型
+	private PolicyNature nature;					// 转续保类型
 	private boolean transfer;						// 是否过户车
 	private BonusScaleType scaleType;				// 规模奖励类型
 	private double vehiclePrice;					// 购置价
@@ -41,27 +38,9 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String compulsoryDeliverNo;				// 交强险投保单号
 	private String commercialStartDate;
 	private String compulsoryStartDate;
+	private String commercialIssueDate;
+	private String compulsoryIssueDate;
 	private Map<CommercialInsuranceType, Insurance> insurances;
-	
-	public VehiclePolicy() {}
-	
-	public VehiclePolicy(VehicleOrder order, BaseInfo commercial, BaseInfo compulsory) {
-		this.tid = order.getTid();
-		this.insurerId = order.getInsurerId();
-		VehiclePolicyTips tips = order.getTips();
-		
-		InsurUnit owner = tips.getOwner();
-		this.owner = owner.getName();
-		this.idNo = owner.getIdNo();
-		
-		this.issueDate = tips.getIssueDate();
-		this.enrollDate = tips.getEnrollDate();
-		this.license = tips.getLicense();
-		this.engine = tips.getEngine();
-		this.vin = tips.getVin();
-		this.name = tips.getName();
-		this.seat = tips.getSeat();
-	}
 	
 	public String get_id() {
 		return _id;
@@ -85,22 +64,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 
 	public void setInsurerId(int insurerId) {
 		this.insurerId = insurerId;
-	}
-
-	public String getCommercialStartDate() {
-		return commercialStartDate;
-	}
-
-	public void setCommercialStartDate(String commercialStartDate) {
-		this.commercialStartDate = commercialStartDate;
-	}
-
-	public String getCompulsoryStartDate() {
-		return compulsoryStartDate;
-	}
-
-	public void setCompulsoryStartDate(String compulsoryStartDate) {
-		this.compulsoryStartDate = compulsoryStartDate;
 	}
 
 	public String getOwner() {
@@ -162,7 +125,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -175,12 +138,12 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.seat = seat;
 	}
 
-	public int getRenewalType() {
-		return renewalType;
+	public PolicyNature getNature() {
+		return nature;
 	}
 
-	public void setRenewalType(int renewalType) {
-		this.renewalType = renewalType;
+	public void setNature(PolicyNature nature) {
+		this.nature = nature;
 	}
 
 	public boolean isTransfer() {
@@ -191,26 +154,10 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.transfer = transfer;
 	}
 
-	public double getCommercialPrice() {
-		return commercialPrice;
-	}
-
-	public void setCommercialPrice(double commercialPrice) {
-		this.commercialPrice = commercialPrice;
-	}
-
-	public double getCompulsoryPrice() {
-		return compulsoryPrice;
-	}
-
-	public void setCompulsoryPrice(double compulsoryPrice) {
-		this.compulsoryPrice = compulsoryPrice;
-	}
-
 	public BonusScaleType getScaleType() {
 		return scaleType;
 	}
-	
+
 	public void setScaleType(BonusScaleType scaleType) {
 		this.scaleType = scaleType;
 	}
@@ -230,15 +177,95 @@ public class VehiclePolicy implements UniqueModel<String> {
 	public void setSalesmanMobile(String salesmanMobile) {
 		this.salesmanMobile = salesmanMobile;
 	}
-	
+
 	public double getVesselPrice() {
 		return vesselPrice;
 	}
-	
+
 	public void setVesselPrice(double vesselPrice) {
 		this.vesselPrice = vesselPrice;
 	}
 
+	public double getCommercialPrice() {
+		return commercialPrice;
+	}
+
+	public void setCommercialPrice(double commercialPrice) {
+		this.commercialPrice = commercialPrice;
+	}
+
+	public double getCompulsoryPrice() {
+		return compulsoryPrice;
+	}
+
+	public void setCompulsoryPrice(double compulsoryPrice) {
+		this.compulsoryPrice = compulsoryPrice;
+	}
+
+	public String getCommercialNo() {
+		return commercialNo;
+	}
+
+	public void setCommercialNo(String commercialNo) {
+		this.commercialNo = commercialNo;
+	}
+
+	public String getCommercialDeliverNo() {
+		return commercialDeliverNo;
+	}
+
+	public void setCommercialDeliverNo(String commercialDeliverNo) {
+		this.commercialDeliverNo = commercialDeliverNo;
+	}
+
+	public String getCompulsoryNo() {
+		return compulsoryNo;
+	}
+
+	public void setCompulsoryNo(String compulsoryNo) {
+		this.compulsoryNo = compulsoryNo;
+	}
+
+	public String getCompulsoryDeliverNo() {
+		return compulsoryDeliverNo;
+	}
+
+	public void setCompulsoryDeliverNo(String compulsoryDeliverNo) {
+		this.compulsoryDeliverNo = compulsoryDeliverNo;
+	}
+
+	public String getCommercialStartDate() {
+		return commercialStartDate;
+	}
+
+	public void setCommercialStartDate(String commercialStartDate) {
+		this.commercialStartDate = commercialStartDate;
+	}
+
+	public String getCompulsoryStartDate() {
+		return compulsoryStartDate;
+	}
+
+	public void setCompulsoryStartDate(String compulsoryStartDate) {
+		this.compulsoryStartDate = compulsoryStartDate;
+	}
+	
+	public String getCommercialIssueDate() {
+		return commercialIssueDate;
+	}
+	
+	public void setCommercialIssueDate(String commercialIssueDate) {
+		this.commercialIssueDate = commercialIssueDate;
+	}
+	
+	public String getCompulsoryIssueDate() {
+		return compulsoryIssueDate;
+	}
+	
+	public void setCompulsoryIssueDate(String compulsoryIssueDate) {
+		this.compulsoryIssueDate = compulsoryIssueDate;
+	}
+	
 	public Map<CommercialInsuranceType, Insurance> getInsurances() {
 		return insurances;
 	}

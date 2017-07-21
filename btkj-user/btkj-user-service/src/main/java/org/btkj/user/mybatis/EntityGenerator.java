@@ -48,8 +48,8 @@ public class EntityGenerator {
 		AppPO app = new AppPO();
 		app.setRegion(region);
 		app.setName(name);
-		app.setMaxTenantsCount(maxTenantsCount);
-		app.setMaxArticlesCount(maxArticlesCount);
+		app.setMaxTenantsCount(Math.max(0, maxTenantsCount));
+		app.setMaxArticlesCount(Math.max(0, maxArticlesCount));
 
 		int time = DateUtil.currentTime();
 		app.setCreated(time);

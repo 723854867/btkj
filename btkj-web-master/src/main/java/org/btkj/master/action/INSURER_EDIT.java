@@ -1,4 +1,4 @@
-package org.btkj.master.action.vehicle.baotu;
+package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
@@ -27,11 +27,10 @@ public class INSURER_EDIT extends LoggedAction {
 			if (!NumberUtil.isPowerOfTwo(id))
 				throw ConstConvertFailureException.errorConstException(Params.ID);
 			return configManageService.insurerAdd(id, request.getParam(Params.NAME), request.getParam(Params.ICON), 
-					request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY), request.getParam(Params.IDX));
+					request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
 		case UPDATE:
 			return configManageService.insurerUpdate(request.getParam(Params.ID), request.getParam(Params.NAME), 
-					request.getParam(Params.ICON), request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY),
-					request.getParam(Params.IDX));
+					request.getParam(Params.ICON), request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
 		default:
 			return Consts.RESULT.FORBID;
 		}

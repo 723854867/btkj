@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.bo.Bonus;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.BonusConfig;
@@ -121,16 +122,18 @@ public class BonusManager {
 	public void calculateBonus(VehicleOrder order) {
 		if (order.getState().mark() < VehicleOrderState.QUOTE_SUCCESS.mark() || null != order.getBonus() || null == order.getTips())
 			return;
+		Bonus bonus = new Bonus();
 		LinkedList<String> paths = order.getTips().commisionRoutePath();
 		BonusRoute route = null == paths.peek() ? null : bonusRoutes.get(paths.poll());
-		if (null == route)
-			return;
-		BonusConfig config = bonusConfigMapper.getByKey(order.getTid() + Consts.SYMBOL_UNDERLINE + order.getInsurerId());
-		if (null == config)
-			return;
-		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
-		coefficients.addAll(vehicleCoefficientMapper.getByTid(order.getTid()));
-		route.calculateBonus(paths, order, config, null, coefficients);
+		if (null != route) {
+			BonusConfig config = bonusConfigMapper.getByKey(order.getTid() + Consts.SYMBOL_UNDERLINE + order.getInsurerId());
+			if (null != config) {
+				List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
+				coefficients.addAll(vehicleCoefficientMapper.getByTid(order.getTid()));
+				route.calculateBonus(paths, order, config, null, coefficients, bonus);
+			}
+		}
+		order.setBonus(bonus);
 	}
 	
 	public void setVehicleDeptMapper(VehicleDeptMapper vehicleDeptMapper) {

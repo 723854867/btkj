@@ -1,16 +1,31 @@
-package org.btkj.vehicle.pojo;
+package org.btkj.pojo.enums;
 
 public enum BonusScaleType {
 	
-	PARTICULAR(1),
-
-	PROFT_COACH(2),
+	/**
+	 * 非营利客车
+	 */
+	NO_PROFIT_COACH(1),
 	
-	PROFIT_TRUCK(4),
+	/**
+	 * 非营利货车
+	 */
+	NO_PROFIT_TRUCK(2),
 	
-	NO_PROFIT_COACH(8),
+	/**
+	 * 营利客车
+	 */
+	PROFT_COACH(4),
 	
-	NO_PROFIT_TRUCK(16);
+	/**
+	 * 营利货车
+	 */
+	PROFIT_TRUCK(8),
+	
+	/**
+	 * 其他
+	 */
+	OTHER(16);
 	
 	private int mark;
 	

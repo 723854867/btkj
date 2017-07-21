@@ -127,7 +127,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	void jianJieSynchronize(JianJiePoliciesInfo info);
+	void jianJieSynchronize(int tid, JianJiePoliciesInfo info);
 	
 	/**
 	 * 获取车险路由设置
@@ -145,7 +145,7 @@ public interface VehicleManageService {
 	 * @param lane
 	 * @return
 	 */
-	Result<Void> routeAdd(int tid, int insurerId, Lane lane);
+	Result<Void> routeAdd(int tid, int insurerId, Lane lane, int jianJieId);
 	
 	/**
 	 * 更新路由
@@ -154,7 +154,7 @@ public interface VehicleManageService {
 	 * @param lane
 	 * @return
 	 */
-	Result<Void> routeUpdate(String key, Lane lane);
+	Result<Void> routeUpdate(String key, Lane lane, int jianJieId);
 	
 	/**
 	 * 删除路由

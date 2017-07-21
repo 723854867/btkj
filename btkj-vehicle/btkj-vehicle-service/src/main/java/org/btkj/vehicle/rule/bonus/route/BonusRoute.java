@@ -110,7 +110,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	}
 	
 	public void calculateBonus(LinkedList<String> paths, VehicleOrder order, Node<BonusRouteBody> parent, 
-			BonusRouteBody preEffectBody, List<VehicleCoefficient> coefficients) {
+			BonusRouteBody preEffectBody, List<VehicleCoefficient> coefficients, Bonus bonus) {
 		BonusRouteBody body = parent.getChild(id);
 		if (null != body && body.isValid()) 
 			preEffectBody = body;
@@ -118,7 +118,6 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 		if (null == nextId || null == body) {					// 计算本次的佣金:如果下一个节点没设置或者已经到末尾节点了则开始计算
 			if (null == preEffectBody)
 				return;
-			Bonus bonus = new Bonus();
 			int totalCommercialRate = 0;
 			VehiclePolicyTips tips = order.getTips();
 			Map<Integer, Integer> spinner = preEffectBody.getCommercialCommisionSpinner();
@@ -196,12 +195,11 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 			compulsoryRate = Math.max(0, compulsoryRate);
 			bonus.setCommercialBonus(tips.getSchema().getCommericalTotal() * commercialRate / 1000.0);
 			bonus.setCompulsoryBonus((tips.getSchema().getCompulsiveTotal() + tips.getSchema().getVehicleVesselTotal()) * compulsoryRate / 1000.0);
-			order.setBonus(bonus);
 		} else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)
 				return;
-			nextRoute.calculateBonus(paths, order, body, preEffectBody, coefficients);
+			nextRoute.calculateBonus(paths, order, body, preEffectBody, coefficients, bonus);
 		}
 	}
 	

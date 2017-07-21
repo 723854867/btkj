@@ -11,6 +11,7 @@ public class AreaInfo implements Serializable {
 
 	private int code;
 	private int renewalPeriod; // 续保期限
+	private boolean vehiclePriceNoTax;
 	private int biHuId;
 	private String name;
 	private int created;
@@ -21,6 +22,7 @@ public class AreaInfo implements Serializable {
 	public AreaInfo(Area area, Region region) {
 		this.code = area.getCode();
 		this.renewalPeriod = area.getRenewalPeriod();
+		this.vehiclePriceNoTax = area.isVehiclePriceNoTax();
 		this.biHuId = area.getBiHuId();
 		this.created = area.getCreated();
 		this.updated = area.getUpdated();
@@ -42,6 +44,14 @@ public class AreaInfo implements Serializable {
 
 	public void setRenewalPeriod(int renewalPeriod) {
 		this.renewalPeriod = renewalPeriod;
+	}
+	
+	public boolean isVehiclePriceNoTax() {
+		return vehiclePriceNoTax;
+	}
+	
+	public void setVehiclePriceNoTax(boolean vehiclePriceNoTax) {
+		this.vehiclePriceNoTax = vehiclePriceNoTax;
 	}
 
 	public int getBiHuId() {

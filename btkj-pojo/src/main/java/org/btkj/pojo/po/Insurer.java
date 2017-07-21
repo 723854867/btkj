@@ -11,7 +11,6 @@ public class Insurer implements UniqueModel<Integer> {
 	private String icon;
 	private int biHuId;
 	private String leBaoBaId;
-	private int jianJieId;
 	private int created;
 	private int updated;
 
@@ -55,14 +54,6 @@ public class Insurer implements UniqueModel<Integer> {
 		this.leBaoBaId = leBaoBaId;
 	}
 	
-	public int getJianJieId() {
-		return jianJieId;
-	}
-	
-	public void setJianJieId(int jianJieId) {
-		this.jianJieId = jianJieId;
-	}
-
 	public int getCreated() {
 		return created;
 	}
