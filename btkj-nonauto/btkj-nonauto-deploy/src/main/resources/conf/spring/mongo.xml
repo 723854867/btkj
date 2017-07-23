@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<bean id="mongo" class="org.rapid.data.storage.mongo.Mongo" init-method="init">
-		<property name="db" value="btkj-test" />
-		<property name="host" value="101.37.30.26" />
+		<property name="db" value="btkj-online" />
+		<property name="host" value="116.62.111.191" />
 	</bean>
 	
 	<bean id="keyMapper" class="org.rapid.data.storage.mongo.KeyMapper">
