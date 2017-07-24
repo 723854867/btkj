@@ -219,7 +219,7 @@ public class QuoteResult implements Serializable {
 		private Detail BuJiMianJingShenSunShi;	// 不计免精神
 		private Detail HcXiuLiChang;			// 指定修理厂保额
 		private int HcXiuLiChangType;			// 指定修理厂类型
-		private double RateFactor1;				// 费率系数1（无赔款优惠系数）
+		private String RateFactor1;				// 费率系数1（无赔款优惠系数）
 		private double RateFactor2;				// 费率系数2（自主渠道系数）
 		private double RateFactor3;				// 费率系数3（自主核保系数）
 		private double RateFactor4; 			// 费率系数4（交通违法浮动系数）
@@ -391,10 +391,10 @@ public class QuoteResult implements Serializable {
 		public void setHcXiuLiChangType(int hcXiuLiChangType) {
 			HcXiuLiChangType = hcXiuLiChangType;
 		}
-		public double getRateFactor1() {
+		public String getRateFactor1() {
 			return RateFactor1;
 		}
-		public void setRateFactor1(double rateFactor1) {
+		public void setRateFactor1(String rateFactor1) {
 			RateFactor1 = rateFactor1;
 		}
 		public double getRateFactor2() {

@@ -12,7 +12,10 @@ import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
@@ -29,8 +32,12 @@ import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.RouteMapper;
+import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
+import org.btkj.vehicle.redis.VehicleDeptMapper;
+import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
@@ -50,7 +57,13 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Resource
 	private RouteMapper routeMapper;
 	@Resource
+	private VehicleDeptMapper vehicleDeptMapper;
+	@Resource
+	private VehicleModelMapper vehicleModelMapper;
+	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
+	@Resource
+	private VehicleBrandMapper vehicleBrandMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -261,5 +274,80 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public void routeDelete(String key) {
 		routeMapper.delete(key);		
+	}
+	
+	@Override
+	public List<VehicleBrand> brands() {
+		return new ArrayList<VehicleBrand>(vehicleBrandMapper.getAll().values());
+	}
+	
+	@Override
+	public Result<Integer> brandAdd(String name) {
+		VehicleBrand brand = EntityGenerator.newVehicleBrand(name);
+		vehicleBrandMapper.insert(brand);
+		Result<Integer> result = Result.result(Code.OK);
+		result.setAttach(brand.getId());
+		return result;
+	}
+	
+	@Override
+	public Result<Void> brandUpdate(int id, String name) {
+		VehicleBrand brand = vehicleBrandMapper.getByKey(id);
+		if (null == brand)
+			return BtkjConsts.RESULT.VEHICLE_BRAND_NOT_EXIST;
+		brand.setName(name);
+		brand.setUpdated(DateUtil.currentTime());
+		vehicleBrandMapper.update(brand);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public List<VehicleDept> depts(int brandId) {
+		return new ArrayList<VehicleDept>(vehicleDeptMapper.getAll().values());
+	}
+	
+	@Override
+	public Result<Integer> deptAdd(int brandId, String name) {
+		VehicleDept dept = EntityGenerator.newVehicleDept(brandId, name);
+		vehicleDeptMapper.insert(dept);
+		Result<Integer> result = Result.result(Code.OK);
+		result.setAttach(dept.getId());
+		return result;
+	}
+	
+	@Override
+	public Result<Void> deptUpdate(int id, String name) {
+		VehicleDept dept = vehicleDeptMapper.getByKey(id);
+		if (null == dept)
+			return BtkjConsts.RESULT.VEHICLE_DEPT_NOT_EXIST;
+		dept.setName(name);
+		dept.setUpdated(DateUtil.currentTime());
+		vehicleDeptMapper.update(dept);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public List<VehicleModel> models(int deptId) {
+		return new ArrayList<VehicleModel>(vehicleModelMapper.getAll().values());
+	}
+	
+	@Override
+	public Result<Integer> modelAdd(int deptId, String name) {
+		VehicleModel model = EntityGenerator.newVehicleModel(deptId, name);
+		vehicleModelMapper.insert(model);
+		Result<Integer> result = Result.result(Code.OK);
+		result.setAttach(model.getId());
+		return result;
+	}
+	
+	@Override
+	public Result<Void> modelUpdate(int id, String name) {
+		VehicleModel model = vehicleModelMapper.getByKey(id);
+		if (null == model)
+			return BtkjConsts.RESULT.VEHICLE_MODEL_NOT_EXIST;
+		model.setName(name);
+		model.setUpdated(DateUtil.currentTime());
+		vehicleModelMapper.update(model);
+		return Consts.RESULT.OK;
 	}
 }

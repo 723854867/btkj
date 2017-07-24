@@ -1,5 +1,8 @@
 package org.btkj.config.mybatis;
 
+import java.math.BigDecimal;
+
+import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.lang.DateUtil;
@@ -31,5 +34,17 @@ public class EntityGenerator {
 		area.setCreated(time);
 		area.setUpdated(time);
 		return area;
+	}
+	
+	public static final Api newApi(String key, String name, int pow) {
+		Api api = new Api();
+		api.setKey(key);
+		api.setName(name);
+		api.setGroupMod(new BigDecimal(2).pow(pow).toString());
+		
+		int time = DateUtil.currentTime();
+		api.setCreated(time);
+		api.setUpdated(time);
+		return api;
 	}
 }

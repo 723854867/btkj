@@ -39,7 +39,6 @@ public class ROUTES extends LoggedAction {
 			if (null == insurer)
 				continue;
 			l.add(new RouteInfo(route, insurer));
-			break;
 		}
 		return Result.result(l);
 	}

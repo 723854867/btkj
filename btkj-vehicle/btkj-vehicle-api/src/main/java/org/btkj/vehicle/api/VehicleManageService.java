@@ -3,7 +3,10 @@ package org.btkj.vehicle.api;
 import java.util.List;
 
 import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
@@ -162,4 +165,79 @@ public interface VehicleManageService {
 	 * @param key
 	 */
 	void routeDelete(String key);
+	
+	/**
+	 * 汽车品牌列表
+	 * 
+	 * @return
+	 */
+	List<VehicleBrand> brands();
+	
+	/**
+	 * 新增品牌
+	 * 
+	 * @param name
+	 * @return
+	 */
+	Result<Integer> brandAdd(String name);
+	
+	/**
+	 * 修改品牌
+	 * 
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	Result<Void> brandUpdate(int id, String name);
+	
+	/**
+	 * 车系列表
+	 * 
+	 * @return
+	 */
+	List<VehicleDept> depts(int brandId);
+	
+	/**
+	 * 新增车系
+	 * 
+	 * @param brandId
+	 * @param name
+	 * @return
+	 */
+	Result<Integer> deptAdd(int brandId, String name);
+	
+	/**
+	 * 修改车系
+	 * 
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	Result<Void> deptUpdate(int id, String name);
+	
+	/**
+	 * 厂牌型号列表
+	 * 
+	 * @param deptId
+	 * @return
+	 */
+	List<VehicleModel> models(int deptId);
+	
+	/**
+	 * 新增厂牌型号
+	 * 
+	 * @param deptId
+	 * @param name
+	 * @return
+	 */
+	Result<Integer> modelAdd(int deptId, String name);
+	
+	/**
+	 * 修改厂牌型号
+	 * 
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	Result<Void> modelUpdate(int id, String name);
 }

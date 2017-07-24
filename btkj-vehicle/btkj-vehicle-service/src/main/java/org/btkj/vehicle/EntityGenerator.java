@@ -6,7 +6,10 @@ import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
@@ -19,6 +22,7 @@ import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.rapid.util.common.Consts;
+import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
@@ -132,7 +136,42 @@ public class EntityGenerator {
 		policy.setCommercialDeliverNo(commercial.getTBDH());
 		policy.setCompulsoryDeliverNo(null != compulsory ? compulsory.getTBDH() : null);
 		
+		// 险种解析
 		List<Insurance> insurances = commercial.getInsurances();
+		if (!CollectionUtil.isEmpty(insurances))
+			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(insurances));
 		return true;
+	}
+	
+	public static final VehicleBrand newVehicleBrand(String name) {
+		VehicleBrand brand = new VehicleBrand();
+		brand.setName(name);
+		
+		int time = DateUtil.currentTime();
+		brand.setCreated(time);
+		brand.setUpdated(time);
+		return brand;
+	}
+	
+	public static final VehicleDept newVehicleDept(int brandId, String name) {
+		VehicleDept dept = new VehicleDept();
+		dept.setName(name);
+		dept.setBrandId(brandId);
+		
+		int time = DateUtil.currentTime();
+		dept.setCreated(time);
+		dept.setUpdated(time);
+		return dept;
+	}
+	
+	public static final VehicleModel newVehicleModel(int deptId, String name) {
+		VehicleModel model = new VehicleModel();
+		model.setName(name);
+		model.setDeptId(deptId);
+		
+		int time = DateUtil.currentTime();
+		model.setCreated(time);
+		model.setUpdated(time);
+		return model;
 	}
 }

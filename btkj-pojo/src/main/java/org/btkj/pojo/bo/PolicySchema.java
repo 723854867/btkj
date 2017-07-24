@@ -18,7 +18,7 @@ public class PolicySchema implements Serializable {
 	private String compulsiveStart;				// 交强险起保时间
 	private String compulsiveEnd;				// 交强险到期时间
 	
-	private double noLossDiscountRate;			// 无赔款优惠系数
+	private String noLossDiscountRate;			// 无赔款优惠系数
 	private double autoChannelRate;				// 自主渠道系数
 	private double autoUnderwritingRate;		// 自主核保系数
 	private double trafficViolationRate;		// 交通违法系数 
@@ -81,11 +81,11 @@ public class PolicySchema implements Serializable {
 		this.compulsiveEnd = compulsiveEnd;
 	}
 	
-	public double getNoLossDiscountRate() {
+	public String getNoLossDiscountRate() {
 		return noLossDiscountRate;
 	}
 
-	public void setNoLossDiscountRate(double noLossDiscountRate) {
+	public void setNoLossDiscountRate(String noLossDiscountRate) {
 		this.noLossDiscountRate = noLossDiscountRate;
 	}
 

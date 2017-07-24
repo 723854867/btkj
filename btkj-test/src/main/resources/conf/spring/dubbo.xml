@@ -5,11 +5,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 						
-	<dubbo:application name="user-service" owner="btkj"/>
+	<dubbo:application name="test-service" owner="btkj"/>
 	
 	<dubbo:registry address="zookeeper://101.37.30.26:2181?backup=101.37.30.26:2182,101.37.30.26:2183"/>
 	
 	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
 	
 	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
+	
+	<dubbo:reference id="vehicleService" interface="org.btkj.vehicle.api.VehicleService" />
+	
+	<dubbo:reference id="leBaoBaVehicle" interface="org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle" />
+	
 </beans>

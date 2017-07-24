@@ -461,7 +461,8 @@ public class JianJiePoliciesInfo implements Serializable {
 		private static final long serialVersionUID = -7126480569300059496L;
 		private String Name;
 		private double Bf;
-		private String Be;
+		private double Be;
+		private double MpBf;
 
 		public String getName() {
 			return Name;
@@ -479,12 +480,20 @@ public class JianJiePoliciesInfo implements Serializable {
 			Bf = bf;
 		}
 
-		public String getBe() {
+		public double getBe() {
 			return Be;
 		}
 
-		public void setBe(String be) {
+		public void setBe(double be) {
 			Be = be;
+		}
+		
+		public double getMpBf() {
+			return MpBf;
+		}
+		
+		public void setMpBf(double mpBf) {
+			MpBf = mpBf;
 		}
 	}
 }

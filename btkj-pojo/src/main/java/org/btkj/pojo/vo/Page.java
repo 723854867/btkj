@@ -16,6 +16,13 @@ public class Page implements Serializable {
 	private int start;
 	private int total;
 	
+	public Page() {}
+	
+	public Page(int page, int pageSize) {
+		this.page = page;
+		this.pageSize = pageSize;
+	}
+	
 	public int getPage() {
 		return page;
 	}

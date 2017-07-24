@@ -20,10 +20,10 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 	
-	private String TIME_BASED_SET					= "zset:quiz:time:{0}";						// 时间的排序列表
-	private String REPLY_BASED_SET					= "zset:quiz:reply:{0}";					// 回复数的排序列表
-	private String BROWSE_BASED_SET					= "zset:quiz:browse:{0}";					// 浏览数的排序列表
-	private String APP_CONTROLLER					= "controller:quiz:{0}";					// 基于平台的缓存控制键
+	private final String CONTROLLER					= "controller:quiz:{0}";					// 基于平台的缓存控制键
+	private final String TIME_BASED_SET				= "zset:quiz:time:{0}";						// 时间的排序列表
+	private final String REPLY_BASED_SET			= "zset:quiz:reply:{0}";					// 回复数的排序列表
+	private final String BROWSE_BASED_SET			= "zset:quiz:browse:{0}";					// 浏览数的排序列表
 
 	public QuizMapper() {
 		super(new ByteProtostuffSerializer<Quiz>(), "hash:db:quiz");
@@ -42,7 +42,7 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 	}
 	
 	private void _checkLoad(int appId) {
-		if (!checkLoad(_appControllerField(appId)))
+		if (!checkLoad(_controllerField(appId)))
 			return;
 		Map<Integer, Quiz> map = dao.getByAppId(appId);
 		if (CollectionUtil.isEmpty(map))
@@ -107,8 +107,8 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 		}
 	}
 	
-	private String _appControllerField(int appId) {
-		return MessageFormat.format(APP_CONTROLLER, String.valueOf(appId));
+	private String _controllerField(int appId) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(appId));
 	}
 	
 	private String _setKey(int appId, SortCol col) {

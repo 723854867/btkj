@@ -1,5 +1,6 @@
 package org.btkj.user.mybatis.dao;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
@@ -25,6 +26,12 @@ public interface AppDao extends DBMapper<Integer, AppPO> {
 	@Override
 	@SelectProvider(type = AppSQLProvider.class, method = "getByKey")
 	AppPO getByKey(Integer key);
+	
+	@Override
+	@MapKey("id")
+	@SelectProvider(type = AppSQLProvider.class, method = "getByKeys")
+	Map<Integer, AppPO> getByKeys(Collection<Integer> keys);
+	
 	
 	@SelectProvider(type = AppSQLProvider.class, method = "getByKeyForUpdate")
 	AppPO getByKeyForUpdate(Integer key);

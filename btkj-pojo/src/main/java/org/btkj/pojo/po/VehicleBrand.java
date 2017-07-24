@@ -9,6 +9,7 @@ public class VehicleBrand implements UniqueModel<Integer> {
 	private int id;
 	private String name;
 	private int created;
+	private int updated;
 	
 	public int getId() {
 		return id;
@@ -32,6 +33,14 @@ public class VehicleBrand implements UniqueModel<Integer> {
 	
 	public void setCreated(int created) {
 		this.created = created;
+	}
+	
+	public int getUpdated() {
+		return updated;
+	}
+	
+	public void setUpdated(int updated) {
+		this.updated = updated;
 	}
 	
 	@Override

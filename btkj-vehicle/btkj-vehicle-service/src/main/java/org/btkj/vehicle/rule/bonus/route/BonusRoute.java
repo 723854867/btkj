@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.Bonus;
 import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.CoefficientType;
@@ -151,17 +152,19 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 						case ZXB:
 							break;
 						case CLAIMS:
-							break;
 						case NO_CLAIMS:
+							int src = VehicleRule.noLossDiscountRateAnalysis(tips.getSchema().getNoLossDiscountRate());
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
+								totalCommercialRate += tempEntry.getValue();
 							break;
 						case GENDER:
-							int src = IdentityValidator.isMale(tips.getOwner().getIdNo()) ? GENDER.MALE.mark() : GENDER.FEMALE.mark();
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)));
+							src = IdentityValidator.isMale(tips.getOwner().getIdNo()) ? GENDER.MALE.mark() : GENDER.FEMALE.mark();
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case SEAT_COUNT:
 							src = tips.getSeat();
-							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)));
+							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case VEHICLE_AGE:

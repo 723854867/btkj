@@ -1,31 +1,23 @@
-package org.btkj.pojo.po;
+package org.btkj.config.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class VehicleModel implements UniqueModel<Integer> {
+public class Api implements UniqueModel<String> {
 
-	private static final long serialVersionUID = 4837252827266556269L;
+	private static final long serialVersionUID = 2316944779358104723L;
 
-	private int id;
-	private int deptId;
+	private String key;
 	private String name;
+	private String groupMod;
 	private int created;
 	private int updated;
 
-	public int getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getDeptId() {
-		return deptId;
-	}
-
-	public void setDeptId(int deptId) {
-		this.deptId = deptId;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getName() {
@@ -36,6 +28,14 @@ public class VehicleModel implements UniqueModel<Integer> {
 		this.name = name;
 	}
 
+	public String getGroupMod() {
+		return groupMod;
+	}
+
+	public void setGroupMod(String groupMod) {
+		this.groupMod = groupMod;
+	}
+
 	public int getCreated() {
 		return created;
 	}
@@ -43,17 +43,17 @@ public class VehicleModel implements UniqueModel<Integer> {
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	
+
 	public int getUpdated() {
 		return updated;
 	}
-	
+
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
 
 	@Override
-	public Integer key() {
-		return this.id;
+	public String key() {
+		return this.key;
 	}
 }

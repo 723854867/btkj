@@ -54,6 +54,12 @@
 			<artifactId>btkj-vehicle-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.btkj</groupId>
+			<artifactId>btkj-lebaoba-vehicle-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.zaxxer</groupId>

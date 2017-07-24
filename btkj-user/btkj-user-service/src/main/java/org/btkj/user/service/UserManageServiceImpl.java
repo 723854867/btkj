@@ -203,6 +203,8 @@ public class UserManageServiceImpl implements UserManageService {
 				tenant.setNonAutoBind(builder.toString());
 			}
 		}
+		if (null != submit.getName())
+			tenant.setName(submit.getName());
 		if (null != submit.getBonusScaleCountMod())
 			tenant.setBonusScaleCountMod(submit.getBonusScaleCountMod());
 		if (null != submit.getBonusScaleRewardMod())

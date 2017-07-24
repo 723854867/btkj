@@ -2,6 +2,7 @@ package org.btkj.vehicle.pojo.model;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.bo.Bonus;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.VehicleOrder;
 
@@ -18,6 +19,7 @@ public class VehicleOrderListInfo implements Serializable {
 	private String insurerIcon; 		// 保险公司Icon
 	private String owner;
 	private String license;
+	private double bonus;
 	private double price;
 	
 	public VehicleOrderListInfo(VehicleOrder order) {
@@ -30,6 +32,8 @@ public class VehicleOrderListInfo implements Serializable {
 		this.insurerIcon = order.getInsurerIcon();
 		this.owner = order.getTips().getOwner().getName();
 		this.license = order.getTips().getLicense();
+		Bonus bonus = order.getBonus();
+		this.bonus = null != bonus ?  bonus.getCommercialBonus() + bonus.getCompulsoryBonus() : 0;
 		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE || state == VehicleOrderState.INSURE_SUCCESS) {
 			this.price = order.getTips().getSchema().getCommericalTotal() + order.getTips().getSchema().getCompulsiveTotal()
 					+ order.getTips().getSchema().getVehicleVesselTotal();
@@ -106,6 +110,14 @@ public class VehicleOrderListInfo implements Serializable {
 
 	public void setLicense(String license) {
 		this.license = license;
+	}
+	
+	public double getBonus() {
+		return bonus;
+	}
+	
+	public void setBonus(double bonus) {
+		this.bonus = bonus;
 	}
 
 	public double getPrice() {

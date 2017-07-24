@@ -20,6 +20,12 @@ public class TenantPagingInfo implements Serializable {
 	private String regionName;					// 所属行政区划名字
 	private String licenseFace;					// 营业执照正面
 	private String licenseBack;					// 营业执照反面
+	private String nonAutoBind;
+	private String servicePhone;
+	private int bonusScaleCountMod;				// 规模佣金统计口径模值
+	private int bonusScaleCountInsuranceMod;	// 规模佣金统计口径险企模值
+	private int bonusScaleRewardMod;			// 规模佣金奖励口径模值
+	private int bonusScaleRewardInsuranceMod;	// 规模佣金奖励口径险企模值
 	private int created;						// 注册时间	
 	private int updated;						// 最近修改时间
 	

@@ -1,5 +1,6 @@
 package org.btkj.config.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,14 +9,18 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.mybatis.EntityGenerator;
+import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.info.AreaInfo;
+import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Region;
+import org.btkj.pojo.vo.Page;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
@@ -26,6 +31,8 @@ import org.springframework.stereotype.Service;
 @Service("configManageService")
 public class ConfigManageServiceImpl implements ConfigManageService {
 	
+	@Resource
+	private ApiMapper apiMapper;
 	@Resource
 	private AreaMapper areaMapper;
 	@Resource
@@ -110,5 +117,38 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		area.setVehiclePriceNoTax(priceNoTax);
 		areaMapper.update(area);
 		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Pager<Api> apis(Page page) {
+		return apiMapper.paging(page);
+	}
+	
+	@Override
+	public Result<Void> apiAdd(String key, String name, int pow) {
+		Api api = EntityGenerator.newApi(key, name, pow);
+		try {
+			apiMapper.insert(api);
+		} catch (DuplicateKeyException e) {
+			return Consts.RESULT.KEY_DUPLICATED;
+		}
+		return Consts.RESULT.OK;
+	}
+
+	@Override
+	public Result<Void> apiUpdate(String key, String name, int pow) {
+		Api api = apiMapper.getByKey(key);
+		if (null == api)
+			return Consts.RESULT.API_NOT_EXIST;
+		api.setName(name);
+		api.setGroupMod(new BigDecimal(2).pow(pow).toString());
+		api.setUpdated(DateUtil.currentTime());
+		apiMapper.update(api);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public void apiDelete(String key) {
+		apiMapper.delete(key);
 	}
 }
