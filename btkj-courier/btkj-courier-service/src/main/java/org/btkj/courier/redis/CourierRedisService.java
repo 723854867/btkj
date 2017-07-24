@@ -94,8 +94,9 @@ public class CourierRedisService {
 		case TEST:
 			return Result.result(flag, captcha);
 		case ONLINE:
-			_sendCaptcha(mobile, captcha);
-			return Result.result(flag);
+			return Result.result(flag, captcha);
+//			_sendCaptcha(mobile, captcha);
+//			return Result.result(flag);
 		default:
 			return Result.result(Code.SYSTEM_ERROR);
 		}
