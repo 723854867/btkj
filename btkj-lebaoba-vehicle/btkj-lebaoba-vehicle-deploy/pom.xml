@@ -16,6 +16,16 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+	
+		<dependency>
 			<groupId>org.btkj</groupId>
 			<artifactId>btkj-lebaoba-vehicle-service</artifactId>
 			<version>${project.version}</version>

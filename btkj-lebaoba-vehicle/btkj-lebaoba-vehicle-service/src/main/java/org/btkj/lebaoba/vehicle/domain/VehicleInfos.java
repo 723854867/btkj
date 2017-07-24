@@ -11,6 +11,7 @@ import org.btkj.pojo.enums.VehicleTypeCode;
 import org.btkj.pojo.enums.VehicleTypeDetailCode;
 import org.btkj.pojo.vo.VehicleInfo;
 import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 @XmlRootElement(name = "RETURN")
 public class VehicleInfos {
@@ -199,10 +200,10 @@ private List<VehicleCommonInfo> list;
 			info.setSeat(commonInfo.seat);
 			info.setYear(commonInfo.year);
 			info.setName(commonInfo.name);
-			info.setPrice(Double.valueOf(commonInfo.price));
+			info.setPrice(StringUtil.hasText(commonInfo.price) ? Double.valueOf(commonInfo.price) : 0);
 			info.setExhaust(commonInfo.exhaust);
 			info.setLoad(commonInfo.loadWeight);
-			info.setPriceNoTax(Double.valueOf(commonInfo.priceNoTax));
+			info.setPriceNoTax(StringUtil.hasText(commonInfo.priceNoTax) ? Double.valueOf(commonInfo.priceNoTax) : 0);
 			info.setTransmissionName(commonInfo.transmissionName);
 			if (null != commonInfo.vehicleType) {
 				VehicleType vehicleType = VehicleType.match(commonInfo.vehicleType);
