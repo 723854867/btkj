@@ -16,7 +16,6 @@ import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.CollectionUtil;
@@ -38,8 +37,7 @@ public class TENANT_SET extends TenantAction {
 	protected Result<?> execute(Request request, Employee employee) {
 		TenantSettingsSubmit submit = request.getParam(Params.TENANT_SETTINGS_SUBMIT);
 		_check(submit);
-		userManageService.tenantSet(employee.getTenant(), submit);
-		return Consts.RESULT.OK;
+		return userManageService.tenantSet(employee, submit);
 	}
 	
 	private void _check(TenantSettingsSubmit submit) {

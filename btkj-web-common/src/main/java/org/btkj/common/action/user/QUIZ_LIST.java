@@ -3,6 +3,7 @@ package org.btkj.common.action.user;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -45,14 +46,11 @@ public class QUIZ_LIST extends UserAction {
 			Set<Integer> set = new HashSet<Integer>();
 			for (Quiz quiz : result.attach().getList())
 				set.add(quiz.getUid());
-			List<UserPO> users = userService.users(new ArrayList<Integer>(set));
+			Map<Integer, UserPO> users = userService.users(new ArrayList<Integer>(set));
 			List<QuizInfo> list = new ArrayList<QuizInfo>(result.attach().getList().size());
 			for (Quiz quiz : result.attach().getList()) {
-				for (UserPO u : users) {
-					if (u.getUid() != quiz.getUid())
-						continue;
-					list.add(new QuizInfo(u, quiz));
-				}
+				UserPO up = users.get(quiz.getUid());
+				list.add(new QuizInfo(up, quiz));
 			}
 			return Result.result(new Pager<QuizInfo>(result.attach().getTotal(), list));
 		default:

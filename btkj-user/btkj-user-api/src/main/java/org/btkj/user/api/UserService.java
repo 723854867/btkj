@@ -1,7 +1,8 @@
 package org.btkj.user.api;
 
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -30,10 +31,10 @@ public interface UserService {
 	/**
 	 * 一次获取多个用户
 	 * 
-	 * @param list
+	 * @param uids
 	 * @return
 	 */
-	List<UserPO> users(List<Integer> list);
+	Map<Integer, UserPO> users(Collection<Integer> uids);
 	
 	/**
 	 * 通过账号和 appId 获取用户

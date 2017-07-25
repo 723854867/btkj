@@ -3,7 +3,7 @@ package org.btkj.user.api;
 import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -90,7 +90,7 @@ public interface UserManageService {
 	 * @param submit
 	 * @return
 	 */
-	void tenantSet(TenantPO tenant, TenantSettingsSubmit submit);
+	Result<Void> tenantSet(Employee employee, TenantSettingsSubmit submit);
 	
 	/**
 	 * 所有平台

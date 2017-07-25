@@ -35,7 +35,7 @@ public class JIAN_JIE_FETCH extends TenantAction {
 				DateUtil.getDate(DateUtil.YYYYMMDD, DateUtil.currentTime()));
 		if (!info.isSuccessStatus())
 			return Result.result(Code.FAILURE, info.getErrorMessage());
-		vehicleManageService.jianJieSynchronize(employee.getTid(), info);
+		vehicleManageService.jianJieSynchronize(employee.getAppId(), employee.getTid(), info);
 		return Consts.RESULT.OK;
 	}
 }

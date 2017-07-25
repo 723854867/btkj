@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
@@ -191,7 +192,8 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public void tenantSet(TenantPO tenant, TenantSettingsSubmit submit) {
+	public Result<Void> tenantSet(Employee employee, TenantSettingsSubmit submit) {
+		TenantPO tenant = employee.getTenant();
 		if (null != submit.getNonAutoBind()) {
 			if (submit.getNonAutoBind().isEmpty())
 				tenant.setNonAutoBind(null);
@@ -203,8 +205,6 @@ public class UserManageServiceImpl implements UserManageService {
 				tenant.setNonAutoBind(builder.toString());
 			}
 		}
-		if (null != submit.getName())
-			tenant.setName(submit.getName());
 		if (null != submit.getBonusScaleCountMod())
 			tenant.setBonusScaleCountMod(submit.getBonusScaleCountMod());
 		if (null != submit.getBonusScaleRewardMod())
@@ -218,6 +218,7 @@ public class UserManageServiceImpl implements UserManageService {
 			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));
 		}
 		tenantMapper.update(tenant);
+		return Consts.RESULT.OK;
 	}
 	
 	@Override

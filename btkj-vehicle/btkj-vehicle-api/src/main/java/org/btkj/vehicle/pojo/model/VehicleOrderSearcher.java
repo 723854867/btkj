@@ -7,9 +7,27 @@ public class VehicleOrderSearcher extends Page {
 
 	private static final long serialVersionUID = 7429222681481518051L;
 
+	private Integer uid;
+	private Integer tid;
 	private String batchId;
 	private Integer employeeId;
 	private OrderFilterState state;
+	
+	public Integer getUid() {
+		return uid;
+	}
+	
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+	
+	public Integer getTid() {
+		return tid;
+	}
+	
+	public void setTid(Integer tid) {
+		this.tid = tid;
+	}
 	
 	public String getBatchId() {
 		return batchId;

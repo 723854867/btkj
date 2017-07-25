@@ -8,6 +8,7 @@ import java.util.Map;
 import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
 
 public class VehicleRule {
@@ -120,5 +121,28 @@ public class VehicleRule {
 				|| (decimal.compareTo(new BigDecimal(1.25)) >= 0 && decimal.compareTo(new BigDecimal(1.5)) < 0))
 			return 2;
 		return 3;
+	}
+	
+	public static final VehicleUsedType vehicleUsedTypeFromBiHuUsedType(int biHuUsedType) {
+		switch (biHuUsedType) {
+		case 1:
+			return VehicleUsedType.HOME_USE;
+		case 2:
+			return VehicleUsedType.ORGAN;
+		case 3:
+			return VehicleUsedType.ENTERPRISE;
+		case 4:
+			return null;
+		case 5:
+			return VehicleUsedType.LEASE;
+		case 6:
+			return VehicleUsedType.BIZ_TRUCK;
+		case 7:
+			return VehicleUsedType.NO_BIZ_TRUCK;
+		case 8:
+			return VehicleUsedType.CITY_BUS;
+		default:
+			return VehicleUsedType.HOME_USE;
+		}
 	}
 }

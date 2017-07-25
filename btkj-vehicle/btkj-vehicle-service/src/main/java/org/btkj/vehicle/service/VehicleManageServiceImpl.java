@@ -1,14 +1,19 @@
 package org.btkj.vehicle.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.PolicyDetail;
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.exception.BusinessException;
@@ -22,6 +27,7 @@ import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
+import org.btkj.vehicle.mongo.VehiclePolicyMapper;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
@@ -29,6 +35,8 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.RouteMapper;
@@ -39,6 +47,7 @@ import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
@@ -64,6 +73,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
 	private VehicleBrandMapper vehicleBrandMapper;
+	@Resource
+	private VehiclePolicyMapper vehiclePolicyMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -179,64 +190,67 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public void jianJieSynchronize(int tid, JianJiePoliciesInfo info) {
+	public void jianJieSynchronize(int appId, int tid, JianJiePoliciesInfo info) {
 		List<VehiclePolicy> policies = new ArrayList<VehiclePolicy>();
-		Map<String, BaseInfo> commercials = new HashMap<String, BaseInfo>();
-		Map<String, BaseInfo> compulsories = new HashMap<String, BaseInfo>();
+		Map<String, BaseInfo> cms = new HashMap<String, BaseInfo>();
+		Map<String, BaseInfo> cmps = new HashMap<String, BaseInfo>();
+		Set<String> cmNos = new HashSet<String>();
+		Set<String> cmpNos = new HashSet<String>();
 		for (BaseInfo temp : info.getResult()) {
-			if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title()))
-				commercials.put(temp.getBDH(), temp);
-			else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title()))
-				compulsories.put(temp.getBDH(), temp);
-			else
+			if (temp.getBdType().equals(InsuranceType.COMMERCIAL.title())) {
+				cms.put(temp.getBDH(), temp);
+				cmNos.add(temp.getTBDH());
+			} else if (temp.getBdType().equals(InsuranceType.COMPULSORY.title())) {
+				cmps.put(temp.getBDH(), temp);
+				cmpNos.add(temp.getTBDH());
+			} else
 				throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
 		}
-		
-		List<VehicleOrder> orders = vehicleOrderMapper.getByNos(InsuranceType.COMMERCIAL, commercials.keySet());
-		for (VehicleOrder order : orders) {
-			PolicyDetail detail = order.getTips().getDetail();
-			BaseInfo commercial = commercials.remove(detail.getCommercialNo());
-			String relationNo = commercial.getRelationPolicyNo();
-			BaseInfo compulsory = null;
-			if (null != relationNo) {
-				compulsory = compulsories.remove(relationNo);
-				if (null == compulsory) {
-					logger.error("JianJie complete policy {}-{} compulsory data miss!", commercial.getTBDH(), relationNo);
+		_jianJiePolicyProcess(appId, tid, InsuranceType.COMMERCIAL, cmNos, cms, cmpNos, cmps, policies);
+		_jianJiePolicyProcess(appId, tid, InsuranceType.COMPULSORY, cmpNos, cmps, cmNos, cms, policies);
+	}
+	
+	private void _jianJiePolicyProcess(int appId, int tid, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehiclePolicy> policies) {  
+		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? Collections.EMPTY_LIST : vehicleOrderMapper.getByDeliverNos(insuranceType, tid, deliverNos);
+		Iterator<Entry<String, BaseInfo>> iterator = processing.entrySet().iterator();
+		while (iterator.hasNext()) {
+			BaseInfo info = iterator.next().getValue();
+			iterator.remove();
+			Iterator<VehicleOrder> itr = orders.iterator();
+			VehicleOrder order = null;
+			while (itr.hasNext()) {
+				VehicleOrder vo = itr.next();
+				String cno = insuranceType == InsuranceType.COMMERCIAL ? vo.getTips().getDetail().getCommercialNo() : vo.getTips().getDetail().getCompulsiveNo();
+				if (!StringUtil.hasText(cno) || !cno.equals(info.getTBDH()))
 					continue;
-				}
-				String no = detail.getCompulsiveNo();
-				if (!StringUtil.hasText(no)) {
-					logger.error("JianJie complete policy {}-{} mapping with baotu single policy {}!", commercial.getTBDH(), relationNo, order.get_id());
-					continue;
-				}
-				if (!no.equals(relationNo)) {
-					logger.error("JianJie complete policy {}-{} compulsory no not same with baotu compulsory no {}!", commercial.getTBDH(), relationNo, no);
-					continue;
-				}
-				if ((compulsory.getCompanyId() != commercial.getCompanyId()) || (0 == commercial.getCompanyId())) {
-					logger.error("JianJie complete policy {}-{} insurerIds {}-{} are different from each other!", commercial.getTBDH(), no, commercial.getCompanyId(), compulsory.getCompanyId());
-					continue;
-				}
-			} else {
-				if (StringUtil.hasText(detail.getCompulsiveNo())) {
-					logger.error("JianJie single policy {} mapping with baotu complete policy {}-{}!", commercial.getTBDH(), order.get_id(), detail.getCompulsiveNo());
-					continue;
-				}
-				if (0 == commercial.getCompanyId()) {
-					logger.error("JianJie single policy {} has no insurer!", commercial.getTBDH());
-					continue;
-				}
+				order = vo;
+				itr.remove();
+				break;
 			}
-			Route route = routeMapper.getByTidAndJianJieId(tid, commercial.getCompanyId());
+			BaseInfo relationInfo = null;
+			if (null != info.getRelationPolicyNo()) {
+				relationDeliverNos.remove(info.getTBDH());
+				relationInfo = relation.remove(info.getRelationPolicyNo());
+				if (null == relationInfo) 
+					logger.error("JianJie complete policy {}-{}-{} relation data miss!", info.getBDH(), info.getTBDH(), info.getRelationPolicyNo());
+			}
+			if (null != info && (info.getCompanyId() != relationInfo.getCompanyId() || 0 == info.getCompanyId()))
+				logger.error("JianJie complete policy {} insurerIds {}-{} are different from each other!", info.getBDH(), info.getCompanyId(), relationInfo.getCompanyId());
+			Route route = routeMapper.getByTidAndJianJieId(tid, info.getCompanyId());
 			if (null == route) {
-				logger.error("JianJie insurer - {} not exist", commercial.getCompanyId());
+				logger.error("JianJie insurer - {} not exist", info.getCompanyId());
 				continue;
 			}
 			if (route.getInsurerId() != order.getInsurerId()) {
 				logger.error("JianJie insurer - {} is differ with baotu order - {} insurer - {}", route.getJianJieId(), order.get_id(), order.getInsurerId());
 				continue;
 			}
-			policies.add(new VehiclePolicy());
+			VehiclePolicy policy = new VehiclePolicy(appId, tid, route.getInsurerId());
+			if (!EntityGenerator.fillPolicy(policy, order, info, relationInfo)) {
+				logger.error("JianJie policy fill failure!");
+				continue;
+			}
+			policies.add(policy);
 		}
 	}
 	
@@ -349,5 +363,35 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		model.setUpdated(DateUtil.currentTime());
 		vehicleModelMapper.update(model);
 		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<VehicleOrder> order(int tid, String orderId) {
+		VehicleOrder order = vehicleOrderMapper.getByKey(orderId);
+		if (null == order)
+			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
+		if (tid != order.getTid())
+			return Consts.RESULT.FORBID;
+		return Result.result(order);
+	}
+	
+	@Override
+	public Pager<VehicleOrder> orders(VehicleOrderSearcher searcher) {
+		return vehicleOrderMapper.paging(searcher);
+	}
+
+	@Override
+	public Result<VehiclePolicy> policy(int tid, String orderId) {
+		VehiclePolicy policy = vehiclePolicyMapper.getByKey(orderId);
+		if (null == policy)
+			return BtkjConsts.RESULT.POLICY_NOT_EXIST;
+		if (policy.getTid() != tid)
+			return Consts.RESULT.FORBID;
+		return Result.result(policy);
+	}
+	
+	@Override
+	public Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher) {
+		return null;
 	}
 }

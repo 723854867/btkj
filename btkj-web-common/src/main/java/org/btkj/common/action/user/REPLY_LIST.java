@@ -3,6 +3,7 @@ package org.btkj.common.action.user;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -46,15 +47,11 @@ public class REPLY_LIST extends UserAction {
 		Set<Integer> ids = new HashSet<Integer>();
 		for (Reply reply : list)
 			ids.add(reply.getUid());
-		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
+		Map<Integer, UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<ReplyInfo> l = new ArrayList<ReplyInfo>(list.size());
 		for (Reply reply : list) {
-			for (UserPO temp : users) {
-				if (temp.getUid() != reply.getUid())
-					continue;
-				l.add(new ReplyInfo(temp, reply));
-				break;
-			}
+			UserPO up = users.get(reply.getUid());
+			l.add(new ReplyInfo(up, reply));
 		}
 		return Result.result(new Pager<ReplyInfo>(result.attach().getTotal(), l));
 	}

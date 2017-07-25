@@ -8,7 +8,6 @@ public class TenantSettingsSubmit implements Serializable {
 	private static final long serialVersionUID = -6167866776479943272L;
 
 	private int tid;
-	private String name;
 	private Integer teamDepth;
 	private Set<Long> nonAutoBind;			
 	private Integer bonusScaleCountMod;
@@ -16,14 +15,6 @@ public class TenantSettingsSubmit implements Serializable {
 	private Integer bonusScaleRewardMod;
 	private Integer bonusScaleRewardInsuranceMod;
 	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public int getTid() {
 		return tid;
 	}

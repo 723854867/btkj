@@ -19,7 +19,8 @@ public class ReplyInfo implements Serializable {
 		this.id = reply.getId();
 		this.time = reply.getCreated();
 		this.content = reply.getContent();
-		this.user = new UserTips(user);
+		if (null != user)
+			this.user = new UserTips(user);
 	}
 
 	public int getId() {

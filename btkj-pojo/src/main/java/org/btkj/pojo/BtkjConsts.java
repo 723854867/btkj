@@ -28,6 +28,7 @@ public interface BtkjConsts {
 		Result ORDER_NOT_EXIST					= Result.result(BtkjCode.ORDER_NOT_EXIST);
 		Result REPLY_NOT_EXIST					= Result.result(BtkjCode.REPLY_NOT_EXIST);
 		Result ROUTE_NOT_EXIST					= Result.result(BtkjCode.ROUTE_NOT_EXIST);
+		Result POLICY_NOT_EXIST					= Result.result(BtkjCode.POLICY_NOT_EXIST);
 		Result REGION_NOT_EXIST					= Result.result(BtkjCode.REGION_NOT_EXIST);
 		Result BANNER_NOT_EXIST					= Result.result(BtkjCode.BANNER_NOT_EXIST);
 		Result TENANT_NOT_EXIST					= Result.result(BtkjCode.TENANT_NOT_EXIST);

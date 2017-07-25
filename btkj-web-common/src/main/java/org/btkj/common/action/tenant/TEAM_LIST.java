@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.TeamInfo;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.pojo.model.Exploits;
 import org.btkj.user.api.EmployeeService;
@@ -47,7 +46,6 @@ public class TEAM_LIST extends TenantAction {
 		
 		Exploits exploits = statisticsService.multiExploits(new ArrayList<Integer>(map.keySet()), request.getParam(Params.BEGIN_TIME), 
 				request.getParam(Params.END_TIME), request.getParam(Params.MOD));
-		List<UserPO> users = userService.users(new ArrayList<Integer>(map.values()));
-		return Result.result(new TeamInfo(map, exploits, users));
+		return Result.result(new TeamInfo(map, exploits, userService.users(new ArrayList<Integer>(map.values()))));
 	}
 }

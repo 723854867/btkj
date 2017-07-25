@@ -40,7 +40,7 @@ public class ORDER extends TenantAction {
 	protected Result<?> execute(Request request, Employee employee) {
 		int quoteGroup = request.getParam(Params.QUOTE_GROUP);
 		int insureGroup = request.getOptionalParam(Params.INSURE_GROUP);
-		String vehicleId = request.getParam(Params.VEHICLE_ID);
+		String vehicleId = request.getOptionalParam(Params.VEHICLE_ID);
 		if (quoteGroup <= 0 || insureGroup < 0 
 				|| Integer.bitCount(quoteGroup) > GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum())
 			return Consts.RESULT.FORBID;

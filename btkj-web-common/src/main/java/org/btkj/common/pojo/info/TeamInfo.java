@@ -18,43 +18,28 @@ public class TeamInfo implements Serializable{
 	private double total;					// 总业绩
 	private List<Employee> employees;		// 员工业绩排序列表
 	
-	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, List<UserPO> users) {
+	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, Map<Integer, UserPO> users) {
 		this.total = exploits.getTotal();
 		this.employees = new ArrayList<Employee>(map.size());
 		List<Exploit> list = exploits.getEmployeeExploits();
 		Iterator<Entry<Integer, Integer>> itr = map.entrySet().iterator();
-		a : while (itr.hasNext()) {
+		while (itr.hasNext()) {
 			Entry<Integer, Integer> entry = itr.next();
 			itr.remove();
+			UserPO user = users.remove(entry.getValue());
 			Iterator<Exploit> titr = list.iterator();
+			Exploit exploit = null;
 			while (itr.hasNext()) {
-				Exploit employee = titr.next();
-				if (employee.getEmployeeId() != entry.getKey())
+				Exploit temp = titr.next();
+				if (temp.getEmployeeId() != entry.getKey())
 					continue;
 				titr.remove();
-				Iterator<UserPO> uitr = users.iterator();
-				while (uitr.hasNext()) {
-					UserPO user = uitr.next();
-					if (user.getUid() != entry.getValue())
-						continue;
-					uitr.remove();
-					this.employees.add(new Employee(employee, user));
-					break a;
-				}
-				this.employees.add(new Employee(employee, null));
-				break a;
+				exploit = temp;
 			}
-			Iterator<UserPO> uitr = users.iterator();
-			while (uitr.hasNext()) {
-				UserPO user = uitr.next();
-				if (user.getUid() != entry.getValue())
-					continue;
-				uitr.remove();
+			if (null == exploit)
 				this.employees.add(new Employee(entry.getKey(), user));
-				break a;
-			}
-			this.employees.add(new Employee(entry.getKey(), null));
-			break a;
+			else
+				this.employees.add(new Employee(exploit, user));
 		}
 	}
 	

@@ -26,6 +26,7 @@ import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
@@ -425,4 +426,11 @@ public interface Params {
 			return type;
 		}
 	};	
+	
+	final Str2ObjConstConverter<VehiclePolicySearcher> VEHICLE_POLICY_SEARCHER	= new Str2ObjConstConverter<VehiclePolicySearcher>(1217, "vehiclePolicySearcher") {
+		@Override
+		public VehiclePolicySearcher convert(String k) throws ConstConvertFailureException {
+			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehiclePolicySearcher.class);
+		}
+	};
 }

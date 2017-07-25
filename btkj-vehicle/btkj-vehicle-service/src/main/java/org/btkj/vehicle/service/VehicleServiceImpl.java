@@ -185,18 +185,21 @@ public class VehicleServiceImpl implements VehicleService {
 			return BtkjConsts.RESULT.LANE_CONFIG_ERROR;
 		}
 		
-		List<VehicleInfo> vehicleInfos = vehicleInfos(tips.getVin());
-		VehicleInfo vehicleInfo = null;
-		if (!CollectionUtil.isEmpty(vehicleInfos)) {
-			for (VehicleInfo temp : vehicleInfos) {
-				if (!temp.getId().equals(vehicleId))
-					continue;
-				vehicleInfo = temp;
+		// 指定了车辆型号
+		if (null != vehicleId) {
+			List<VehicleInfo> vehicleInfos = vehicleInfos(tips.getVin());
+			VehicleInfo vehicleInfo = null;
+			if (!CollectionUtil.isEmpty(vehicleInfos)) {
+				for (VehicleInfo temp : vehicleInfos) {
+					if (!temp.getId().equals(vehicleId))
+						continue;
+					vehicleInfo = temp;
+				}
 			}
+			if (null == vehicleInfo)
+				return Consts.RESULT.FORBID;
+			tips.bind(vehicleInfo);
 		}
-		if (null == vehicleInfo)
-			return Consts.RESULT.FAILURE;
-		tips.bind(vehicleInfo);
 		vehicleOrderMapper.deleteBatchOrder(batchId);
 		if (0 != biHuQuoteMod) {
 			Result<Void> result = biHuVehicle.order(employee, biHuQuoteMod, biHuInsureMod, tips, configService.area(employee.getRegion()).getBiHuId());
@@ -232,7 +235,9 @@ public class VehicleServiceImpl implements VehicleService {
 	public Result<VehicleOrder> orderInfo(Employee employee, String id) {
 		VehicleOrder order = vehicleOrderMapper.getByKey(id);
 		if (null == order)
-			return Result.result(BtkjCode.ORDER_NOT_EXIST);
+			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
+		if (order.getEmployeeId() != employee.getId())
+			return Consts.RESULT.FORBID;
 		return _orderInfo(employee, order);
 	}
 	

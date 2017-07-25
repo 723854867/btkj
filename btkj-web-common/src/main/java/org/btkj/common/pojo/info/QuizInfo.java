@@ -19,7 +19,8 @@ public class QuizInfo implements Serializable {
 		this.id = quiz.getId();
 		this.time = quiz.getCreated();
 		this.content = quiz.getContent();
-		this.user = new UserTips(user);
+		if (null != user)
+			this.user = new UserTips(user);
 	}
 
 	public int getId() {

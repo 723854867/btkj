@@ -18,9 +18,10 @@ public class VehicleOrder implements UniqueModel<String> {
 	private String batchId;				// 批次号，一次报价可以对多家公司进行报价、多个报价共用一个批次号
 	private int quoteMod;				// 报价模值，用来决定本次报价同时和几家公司一起报价
 	private int insureMod;				// 核保模值
-	private int employeeId;				// 雇员ID
-	private int tid;					// 商户ID
 	private int appId;					// 平台ID
+	private int uid;
+	private int tid;					// 商户ID
+	private int employeeId;				// 雇员ID
 	private int lane; 					// 线路：壁虎、乐宝吧、保途
 	private boolean insure; 			// 是否投保
 	private String desc; 				// 描述
@@ -46,6 +47,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.employeeId = employee.getId();
 		this.appId = employee.getAppId();
 		this.tid = employee.getTid();
+		this.uid = employee.getUid();
 		this.insurerId = insurer.getId();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
@@ -102,6 +104,14 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public void setAppId(int appId) {
 		this.appId = appId;
+	}
+	
+	public int getUid() {
+		return uid;
+	}
+	
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 	
 	public int getTid() {

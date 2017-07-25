@@ -3,6 +3,7 @@ package org.btkj.common.action.user;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -47,15 +48,11 @@ public class COMMENT_LIST extends UserAction {
 		for (Comment comment : list)
 			ids.add(comment.getUid());
 		
-		List<UserPO> users = userService.users(new ArrayList<Integer>(ids));
+		Map<Integer, UserPO> users = userService.users(new ArrayList<Integer>(ids));
 		List<CommentInfo> l = new ArrayList<CommentInfo>(list.size());
 		for (Comment comment : list) {
-			for (UserPO temp : users) {
-				if (temp.getUid() != comment.getUid())
-					continue;
-				l.add(new CommentInfo(temp, comment));
-				break;
-			}
+			UserPO up =  users.get(comment.getUid());
+			l.add(new CommentInfo(up, comment));
 		}
 		return Result.result(new Pager<CommentInfo>(result.attach().getTotal(), l));
 	}

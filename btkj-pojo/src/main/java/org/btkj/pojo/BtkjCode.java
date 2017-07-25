@@ -191,6 +191,11 @@ public enum BtkjCode implements ICode {
 	BONUS_SCALE_CONFIG_MAXMIUM(554, "bonus scale config maxmium"),
 	
 	/**
+	 * 保单不存在
+	 */
+	POLICY_NOT_EXIST(560, "policy not exist"),
+	
+	/**
 	 * 文章不存在
 	 */
 	ARTICLE_NOT_EXIST(600, "article not exits"),

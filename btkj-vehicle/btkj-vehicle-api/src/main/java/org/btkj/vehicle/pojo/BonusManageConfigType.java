@@ -23,9 +23,14 @@ public enum BonusManageConfigType {
 	COMMERCIAL_NO_PROFIT(8),
 	
 	/**
-	 * 其他
+	 * 商业险其他
 	 */
-	OTHER(16);
+	COMMERCIAL_OTHER(16),
+	
+	/**
+	 * 交强险其他
+	 */
+	COMPULSORY_OTHER(32);
 	
 	private int mark;
 	

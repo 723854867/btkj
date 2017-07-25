@@ -6,11 +6,11 @@ import java.util.Map;
 
 import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
+import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.po.Renewal;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.lang.DateUtil;
@@ -736,7 +736,7 @@ public class RenewInfo implements Serializable {
 				tips.setExhaust(this.UserInfo.ExhaustScale);
 				schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
 				schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-				tips.setVehicleUsedType(_usedType());
+				tips.setVehicleUsedType(VehicleRule.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
 				renewal.setCommercialNo(this.UserInfo.BizNo);
 				renewal.setCompulsiveNo(this.UserInfo.ForceNo);
 				schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
@@ -816,28 +816,5 @@ public class RenewInfo implements Serializable {
 		insured.setIdNo(this.UserInfo.InsuredIdCard);
 		insured.setMobile(StringUtil.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
 		return insured;
-	}
-	
-	private VehicleUsedType _usedType() {
-		switch (this.UserInfo.CarUsedType) {
-		case 1:
-			return VehicleUsedType.HOME_USE;
-		case 2:
-			return VehicleUsedType.ORGAN;
-		case 3:
-			return VehicleUsedType.ENTERPRISE;
-		case 4:
-			return null;
-		case 5:
-			return VehicleUsedType.LEASE;
-		case 6:
-			return VehicleUsedType.BIZ_TRUCK;
-		case 7:
-			return VehicleUsedType.NO_BIZ_TRUCK;
-		case 8:
-			return VehicleUsedType.CITY_BUS;
-		default:
-			return VehicleUsedType.HOME_USE;
-		}
 	}
 }

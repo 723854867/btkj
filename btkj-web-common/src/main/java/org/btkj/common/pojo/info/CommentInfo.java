@@ -17,9 +17,10 @@ public class CommentInfo implements Serializable {
 	
 	public CommentInfo(UserPO user, Comment comment) {
 		this.id = comment.getId();
-		this.user = new UserTips(user);
 		this.time = comment.getCreated();
 		this.content = comment.getContent();
+		if (null != user)
+			this.user = new UserTips(user);
 	}
 
 	public int getId() {

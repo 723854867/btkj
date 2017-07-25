@@ -1,8 +1,8 @@
 package org.btkj.user.service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<UserPO> users(List<Integer> list) {
-		return new ArrayList<UserPO>(userMapper.getByKeys(list).values());
+	public Map<Integer, UserPO> users(Collection<Integer> uids) {
+		return userMapper.getByKeys(uids);
 	}
 	
 	@Override

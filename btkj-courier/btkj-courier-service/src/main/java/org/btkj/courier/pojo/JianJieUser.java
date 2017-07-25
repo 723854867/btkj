@@ -11,13 +11,11 @@ public class JianJieUser implements Serializable {
 	private String LoginName;
 	private String ChineseName;
 	private String IdentityNo;
-	private String Phone;
 	
 	public JianJieUser(UserPO user) {
-		this.LoginName = user.getName();
+		this.LoginName = String.valueOf(user.getUid());
 		this.ChineseName = user.getName();
 		this.IdentityNo = user.getIdentity();
-		this.Phone = user.getMobile();
 	}
 
 	public String getLoginName() {
@@ -42,13 +40,5 @@ public class JianJieUser implements Serializable {
 
 	public void setIdentityNo(String identityNo) {
 		IdentityNo = identityNo;
-	}
-
-	public String getPhone() {
-		return Phone;
-	}
-
-	public void setPhone(String phone) {
-		Phone = phone;
 	}
 }

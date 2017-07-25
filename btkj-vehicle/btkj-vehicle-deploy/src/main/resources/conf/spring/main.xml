@@ -23,21 +23,23 @@
 		</property>
 	</bean>
 	
-	<bean id="renewalMapper" class="org.btkj.vehicle.mongo.RenewalMapper">
-		<property name="mongo" ref="mongo" />
-	</bean>
-	
-	<bean id="bonusConfigMapper" class="org.btkj.vehicle.mongo.BonusConfigMapper">
-		<property name="mongo" ref="mongo" />
+	<bean class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
+		<property name="zkClient">
+			<bean class="org.I0Itec.zkclient.ZkClient">
+				<constructor-arg name="zkServers" value="${zk.servers}" />
+				<constructor-arg name="sessionTimeout" value="${zk.session.timeout}" />
+				<constructor-arg name="connectionTimeout" value="${zk.connection.timeout}" />
+				<constructor-arg name="zkSerializer" >
+					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
 	<bean id="routeMapper" class="org.btkj.vehicle.redis.RouteMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="routeDao" />
-	</bean>
-	
-	<bean id="vehicleOrderMapper" class="org.btkj.vehicle.mongo.VehicleOrderMapper">
-		<property name="mongo" ref="mongo" />
 	</bean>
 	
 	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">

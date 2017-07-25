@@ -1,22 +1,21 @@
 package org.btkj.vehicle;
 
-import java.util.List;
-
 import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.VehicleInfomation;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.VehiclePolicyType;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
@@ -83,64 +82,60 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final boolean newPolicy(VehiclePolicy policy, VehicleOrder order, BaseInfo commercial, BaseInfo compulsory) {
-		policy.setTid(order.getTid());
-		policy.setInsurerId(order.getInsurerId());
+	public static final boolean fillPolicy(VehiclePolicy policy, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+		VehicleInfomation vehicleInfo = info.getVehicleInfomation();
+		if (null != order) {
+			VehiclePolicyTips tips = order.getTips();
+			InsurUnit owner = tips.getOwner();
+			if (!owner.getName().equals(info.getCz()))
+				return false;
+			if (!owner.getIdNo().equals(info.getCzZjhm()))
+				return false;
+			if (!vehicleInfo.getCphm().equals(tips.getLicense()))
+				return false;
+			if (!vehicleInfo.getFdjh().equals(tips.getEngine()))
+				return false;
+			if (!vehicleInfo.getCjh().equals(tips.getVin()))
+				return false;
+			if (!vehicleInfo.getZws().equals(String.valueOf(tips.getSeat())))
+				return false;
+			if (vehicleInfo.isGH() ^ tips.isTransfer())
+				return false;
+			if (null != info && !_deliverNoMatches(order, info))
+				return false;
+			if (null != relationInfo && !_deliverNoMatches(order, relationInfo))
+				return false;
+			policy.setType(VehiclePolicyType.TENANT_SELF);
+		} else
+			policy.setType(VehiclePolicyType.EXTERNAL);
+		policy.setOwner(info.getCz());
+		policy.setIdNo(info.getCzZjhm());
 		
-		VehiclePolicyTips tips = order.getTips();
-		InsurUnit owner = tips.getOwner();
-		if (!owner.getName().equals(commercial.getCz()))
-			return false;
-		if (!owner.getIdNo().equals(commercial.getCzZjhm()))
-			return false;
-		policy.setOwner(owner.getName());
-		policy.setIdNo(owner.getIdNo());
-		
-		policy.setIssueDate(tips.getIssueDate());
-		policy.setEnrollDate(tips.getEnrollDate());
-		policy.setName(tips.getName());
-		policy.setNature(VehicleRule.natureFromJianJie(commercial.getBaseStatus()));
-		policy.setVehiclePrice(tips.getPrice());
-		policy.setSalesmanMobile(commercial.getGsDept());
-		policy.setCommercialNo(commercial.getBDH());
-		policy.setCompulsoryNo(null != compulsory ? compulsory.getBDH() : null);
-		policy.setCommercialPrice(commercial.getBf());
-		policy.setCompulsoryPrice(null != compulsory ? compulsory.getBf() : 0);
-		policy.setVesselPrice(null != compulsory ? compulsory.getCCS() : 0);
-		VehicleInfomation vehicleInfo = commercial.getVehicleInfomation();
+		policy.setIssueDate(vehicleInfo.getFzrq());
+		policy.setEnrollDate(vehicleInfo.getCdrq());
+		policy.setName(vehicleInfo.getPpxh());
+		policy.setVehiclePrice(vehicleInfo.getNewCarCost());
+		policy.setSalesman(info.getGsUser());
+		policy.setSalesmanMobile(info.getGsPhone());
+		policy.setNature(VehicleRule.natureFromJianJie(info.getBaseStatus()));
 		policy.setScaleType(VehicleRule.scaleTypeFromJianJie(vehicleInfo.getSsxz(), vehicleInfo.getCllx()));
-		policy.setCommercialStartDate(commercial.getQbrq());
-		policy.setCompulsoryStartDate(null != compulsory ? compulsory.getQbrq() : null);
-		policy.setCommercialIssueDate(commercial.getSkrq());
-		policy.setCompulsoryIssueDate(null != compulsory ? compulsory.getSkrq() : null);
-		if (!vehicleInfo.getCphm().equals(tips.getLicense()))
-			return false;
-		if (!vehicleInfo.getFdjh().equals(tips.getEngine()))
-			return false;
-		if (!vehicleInfo.getCjh().equals(tips.getVin()))
-			return false;
-		if (!vehicleInfo.getZws().equals(String.valueOf(tips.getSeat())))
-			return false;
-		if (vehicleInfo.isGH() ^ tips.isTransfer())
-			return false;
-		PolicyDetail detail = tips.getDetail();
-		if (!commercial.getTBDH().equals(detail.getCommercialNo()))
-			return false;
-		if (null != compulsory && !compulsory.getTBDH().equals(detail.getCompulsiveNo()))
-			return false;
-		policy.setLicense(tips.getLicense());
-		policy.setEngine(tips.getEngine());
-		policy.setVin(tips.getVin());
-		policy.setSeat(tips.getSeat());
-		policy.setTransfer(tips.isTransfer());
-		policy.setCommercialDeliverNo(commercial.getTBDH());
-		policy.setCompulsoryDeliverNo(null != compulsory ? compulsory.getTBDH() : null);
-		
-		// 险种解析
-		List<Insurance> insurances = commercial.getInsurances();
-		if (!CollectionUtil.isEmpty(insurances))
-			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(insurances));
+		policy.setLicense(vehicleInfo.getCphm());
+		policy.setEngine(vehicleInfo.getFdjh());
+		policy.setVin(vehicleInfo.getCjh());
+		policy.setSeat(vehicleInfo.getZws());
+		policy.setTransfer(vehicleInfo.isGH());
+		policy.setDetail(info);
+		policy.setDetail(relationInfo);
+		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
+		if  (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
+			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(commercial.getInsurances()));
 		return true;
+	}
+	
+	private static final boolean _deliverNoMatches(VehicleOrder order, BaseInfo info) {
+		PolicyDetail detail = order.getTips().getDetail();
+		String no = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? detail.getCommercialNo() : detail.getCompulsiveNo();
+		return info.getTBDH().equals(no);
 	}
 	
 	public static final VehicleBrand newVehicleBrand(String name) {

@@ -2,16 +2,21 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
+import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
+import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
@@ -130,7 +135,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	void jianJieSynchronize(int tid, JianJiePoliciesInfo info);
+	void jianJieSynchronize(int appId, int tid, JianJiePoliciesInfo info);
 	
 	/**
 	 * 获取车险路由设置
@@ -240,4 +245,35 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Result<Void> modelUpdate(int id, String name);
+	
+	/**
+	 * 车险订单详情:只能查看
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	Result<VehicleOrder> order(int tid, String orderId);
+	
+	/**
+	 * 车险订单分页
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Pager<VehicleOrder> orders(VehicleOrderSearcher searcher);
+	
+	/**
+	 * 保单详情
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Result<VehiclePolicy> policy(int tid, String orderId);
+	
+	/**
+	 * 车险保单分页
+	 * @param searcher
+	 * @return
+	 */
+	Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher);
 }

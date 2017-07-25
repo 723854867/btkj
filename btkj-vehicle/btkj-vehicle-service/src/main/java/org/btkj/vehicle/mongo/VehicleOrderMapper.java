@@ -13,6 +13,7 @@ import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.MongoUtil;
 import org.rapid.util.lang.CollectionUtil;
+import org.springframework.stereotype.Component;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
@@ -23,12 +24,16 @@ import com.mongodb.client.model.UpdateOptions;
  * 
  * @author ahab
  */
+@Component("vehicleOrderMapper")
 public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	
 	private String FIELD_BATCH_ID					= "batchId";
 	private String FIELD_STATE						= "state";
 	private String FIELD_CREATED					= "created";
 	private String FIELD_EMPLOYEE_ID				= "employeeId";
+	private String FIELD_TID						= "tid";
+	private String FIELD_UID						= "uid";
+
 	
 	private String FIELD_COMMERCIAL_POLICY_NO		= "tips.detail.commercialNo";
 	private String FIELD_COMPULSORY_POLICY_NO		= "tips.detail.compulsiveNo";
@@ -69,6 +74,10 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 			list.add(Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()));
 		if (null != searcher.getEmployeeId())
 			list.add(Filters.eq(FIELD_EMPLOYEE_ID, searcher.getEmployeeId()));
+		if (null != searcher.getUid())
+			list.add(Filters.eq(FIELD_UID, searcher.getUid()));
+		if (null != searcher.getTid())
+			list.add(Filters.eq(FIELD_TID, searcher.getTid()));
 		if (null != searcher.getState()) {
 			switch (searcher.getState()) {
 			case INSURE:
@@ -123,9 +132,9 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	 * @param policyNo
 	 * @return
 	 */
-	public List<VehicleOrder> getByNos(InsuranceType type, Set<String> nos) {
+	public List<VehicleOrder> getByDeliverNos(InsuranceType type, int tid, Set<String> nos) {
 		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
-		bson = Filters.and(bson, Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()));
+		bson = Filters.and(bson, Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()), Filters.eq(FIELD_TID, tid));
 		return mongo.find(collection, bson, clazz);
 	}
 }

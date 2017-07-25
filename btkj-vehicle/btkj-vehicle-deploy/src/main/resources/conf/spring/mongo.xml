@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<bean id="mongo" class="org.rapid.data.storage.mongo.Mongo" init-method="init">
-		<property name="db" value="btkj-online" />
-		<property name="host" value="116.62.111.191" />
+		<property name="db" value="${mongo.db}" />
+		<property name="host" value="${mongo.host}" />
 	</bean>
 </beans>

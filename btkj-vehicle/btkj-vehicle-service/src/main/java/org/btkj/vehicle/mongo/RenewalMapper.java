@@ -2,11 +2,13 @@ package org.btkj.vehicle.mongo;
 
 import org.btkj.pojo.po.Renewal;
 import org.rapid.data.storage.mapper.MongoMapper;
+import org.springframework.stereotype.Component;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.UpdateOptions;
 
+@Component("renewalMapper")
 public class RenewalMapper extends MongoMapper<String, Renewal> {
 	
 	private final String FIELD_LICENSE				= "tips.license";
