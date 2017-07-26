@@ -19,6 +19,7 @@ import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.springframework.stereotype.Service;
@@ -122,6 +123,8 @@ public class Tx {
 			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
 		builder.deleteCharAt(builder.length() - 1);
 		final BonusScaleConfig config = EntityGenerator.newBonusScaleConfig(tid, rate, symbol, builder.toString());
+		bonusScaleConfigDao.insert(config);
+		ThreadLocalUtil.INT_HOLDER.set(config.getId());
 		return new TxCallback() {
 			@Override
 			public void finish() {

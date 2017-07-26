@@ -2,6 +2,7 @@ package org.btkj.vehicle.mybatis.dao;
 
 import java.util.Map;
 
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -13,7 +14,7 @@ import org.rapid.data.storage.mapper.DBMapper;
 public interface VehicleBrandDao extends DBMapper<Integer, VehicleBrand> {
 	
 	@Override
-	@SelectProvider(type = VehicleBrandSQLProvider.class, method = "insert")
+	@InsertProvider(type = VehicleBrandSQLProvider.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(VehicleBrand model);
 

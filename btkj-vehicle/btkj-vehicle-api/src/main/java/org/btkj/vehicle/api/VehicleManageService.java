@@ -108,7 +108,7 @@ public interface VehicleManageService {
 	 * @param val
 	 * @return
 	 */
-	Result<Void> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val);
+	Result<Integer> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val);
 	
 	/**
 	 * 更新规模奖励配置项

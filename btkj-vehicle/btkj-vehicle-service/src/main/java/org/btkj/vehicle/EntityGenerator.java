@@ -124,8 +124,6 @@ public class EntityGenerator {
 		policy.setTransfer(vehicleInfo.isGH());
 		policy.setDetail(info);
 		policy.setDetail(relationInfo);
-		policy.setSalesman(VehicleRule.nameFromJianJieGsUser(info.getGsUser()));
-		policy.setSalesmanMobile(info.getGsPhone());
 		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
 		if  (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
 			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(commercial.getInsurances()));

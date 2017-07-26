@@ -47,6 +47,7 @@ import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
@@ -159,10 +160,12 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Result<Void> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val) {
+	public Result<Integer> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val) {
 		try {
 			tx.bonusScaleConfigAdd(tid, rate, symbol, val).finish();
-			return Consts.RESULT.OK;
+			Result<Integer> result = Result.result(Code.OK);
+			result.setAttach(ThreadLocalUtil.getAndRemove(ThreadLocalUtil.INT_HOLDER));
+			return result;
 		} catch (BusinessException e) {
 			return Result.result(e.getCode());
 		}
@@ -317,7 +320,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public List<VehicleDept> depts(int brandId) {
-		return new ArrayList<VehicleDept>(vehicleDeptMapper.getAll().values());
+		return vehicleDeptMapper.getByBrandId(brandId);
 	}
 	
 	@Override
@@ -342,7 +345,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public List<VehicleModel> models(int deptId) {
-		return new ArrayList<VehicleModel>(vehicleModelMapper.getAll().values());
+		return vehicleModelMapper.getByDeptId(deptId);
 	}
 	
 	@Override

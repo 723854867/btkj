@@ -18,6 +18,8 @@ import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
 	
+	public static final ThreadLocal<Employee> EMPLOYEE_HOLDER	= new ThreadLocal<Employee>();
+	
 	public static final UserPO newUser(int appId, String mobile) { 
 		UserPO user = new UserPO();
 		user.setAppId(appId);

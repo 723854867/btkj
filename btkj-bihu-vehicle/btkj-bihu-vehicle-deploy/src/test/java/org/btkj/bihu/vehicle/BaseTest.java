@@ -1,4 +1,4 @@
-package org.btkj.bihu.vehicle.deploy;
+package org.btkj.bihu.vehicle;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

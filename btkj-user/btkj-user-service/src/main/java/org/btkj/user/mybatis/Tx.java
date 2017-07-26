@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("tx")
 public class Tx {
-
+	
 	@Resource
 	private AppDao appDao;
 	@Resource
@@ -45,7 +45,7 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(Employee employee, int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire) {
+	public TxCallback tenantAdd(int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire) {
 		AppPO apo = appDao.getByKeyForUpdate(appId);
 		if (0 < apo.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(appId);
@@ -56,13 +56,12 @@ public class Tx {
 		tenantDao.insert(tenant);
 		EmployeePO ep = EntityGenerator.newEmployee(uid, tenant, null);
 		employeeDao.insert(ep);
+		EntityGenerator.EMPLOYEE_HOLDER.set(new Employee(apo, null, tenant, ep));
 		return new TxCallback() {
 			@Override
 			public void finish() {
 				tenantMapper.flush(tenant);
 				employeeMapper.flush(ep);
-				employee.setTenant(tenant);
-				employee.setEntity(ep);
 			}
 		};
 	}

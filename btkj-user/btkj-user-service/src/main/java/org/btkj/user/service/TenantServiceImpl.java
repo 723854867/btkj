@@ -26,6 +26,7 @@ import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -87,9 +88,8 @@ public class TenantServiceImpl implements TenantService {
 		try {
 			if (_tenantNumMax(uid))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			Employee employee = new Employee();
-			tx.tenantAdd(employee, appId, uid, tname, license, licenseImage, servicePhone, expire).finish();
-			return Result.result(employee);
+			tx.tenantAdd(appId, uid, tname, license, licenseImage, servicePhone, expire).finish();
+			return Result.result(ThreadLocalUtil.getAndRemove(EntityGenerator.EMPLOYEE_HOLDER));
 		} finally {
 			userMapper.releaseUserLock(uid, lockId);
 		}

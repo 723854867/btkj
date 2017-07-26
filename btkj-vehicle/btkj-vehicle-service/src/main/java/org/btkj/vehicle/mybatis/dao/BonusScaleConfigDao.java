@@ -3,6 +3,7 @@ package org.btkj.vehicle.mybatis.dao;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -14,8 +15,8 @@ import org.rapid.data.storage.mapper.DBMapper;
 public interface BonusScaleConfigDao extends DBMapper<Integer, BonusScaleConfig> {
 	
 	@Override
-	@SelectProvider(type = BonusScaleConfigSQLProvider.class, method = "insert")
-	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
+	@InsertProvider(type = BonusScaleConfigSQLProvider.class, method = "insert")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	void insert(BonusScaleConfig model);
 	
 	@Override
