@@ -55,6 +55,26 @@ public class VehicleRule {
 	}
 	
 	/**
+	 * 从简捷 GsUser 中获取业务员名字
+	 * 
+	 * @param gsUser
+	 * @return
+	 */
+	public static final String nameFromJianJieGsUser(String gsUser) {
+		return gsUser.substring(0, gsUser.indexOf("("));
+	}
+	
+	/**
+	 * 从简捷 GsUser 中获业务员ID
+	 * 
+	 * @param gsUser
+	 * @return
+	 */
+	public static final String uidFromJianJieGsUser(String gsUser) {
+		return gsUser.substring(gsUser.indexOf(":") + 1, gsUser.length() - 1);
+	}
+	
+	/**
 	 * 简捷险种转换成保途险种
 	 * 
 	 * @param insurances

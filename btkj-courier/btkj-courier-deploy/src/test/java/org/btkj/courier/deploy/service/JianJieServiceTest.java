@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.deploy.BaseTest;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.junit.Test;
 import org.rapid.util.common.serializer.SerializeUtil;
@@ -17,12 +16,8 @@ public class JianJieServiceTest extends BaseTest{
 	private JianJieService jianJieService;
 	
 	@Test
-	public void testAddUser() throws InterruptedException {
-		UserPO user = new UserPO();
-		user.setUid(1);
-		user.setName("test");
-		user.setIdentity("11012719870603341X");
-		jianJieService.addUser(user);
+	public void testAddEmployee() throws InterruptedException {
+		jianJieService.addEmployee("测试", "33012719870603341X", 1);
 		TimeUnit.HOURS.sleep(1);
 	}
 

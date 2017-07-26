@@ -115,8 +115,6 @@ public class EntityGenerator {
 		policy.setEnrollDate(vehicleInfo.getCdrq());
 		policy.setName(vehicleInfo.getPpxh());
 		policy.setVehiclePrice(vehicleInfo.getNewCarCost());
-		policy.setSalesman(info.getGsUser());
-		policy.setSalesmanMobile(info.getGsPhone());
 		policy.setNature(VehicleRule.natureFromJianJie(info.getBaseStatus()));
 		policy.setScaleType(VehicleRule.scaleTypeFromJianJie(vehicleInfo.getSsxz(), vehicleInfo.getCllx()));
 		policy.setLicense(vehicleInfo.getCphm());
@@ -126,6 +124,8 @@ public class EntityGenerator {
 		policy.setTransfer(vehicleInfo.isGH());
 		policy.setDetail(info);
 		policy.setDetail(relationInfo);
+		policy.setSalesman(VehicleRule.nameFromJianJieGsUser(info.getGsUser()));
+		policy.setSalesmanMobile(info.getGsPhone());
 		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
 		if  (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
 			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(commercial.getInsurances()));

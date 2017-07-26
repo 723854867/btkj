@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public UserPO getUser(int uid) {
+	public UserPO user(int uid) {
 		return userMapper.getByKey(uid);
 	}
 	
@@ -64,6 +64,11 @@ public class UserServiceImpl implements UserService {
 	public User user(String mobile, int appId) {
 		UserPO po = userMapper.getUserByMobile(appId, mobile);
 		return null == po ? null : new User(appMapper.getByKey(po.getAppId()), po);
+	}
+	
+	@Override
+	public Result<UserPO> userLockByMobile(int appId, String mobile) {
+		return userMapper.lockUserByMobile(appId, mobile);
 	}
 	
 	@Override

@@ -31,7 +31,7 @@ public class QUIZ_INFO extends UserAction {
 		Quiz quiz = communityService.quiz(request.getParam(Params.ID));
 		if (null == quiz || quiz.getAppId() != user.getAppId())
 			return BtkjConsts.RESULT.QUIZ_NOT_EXIST;
-		UserPO publisher = userService.getUser(quiz.getUid());
+		UserPO publisher = userService.user(quiz.getUid());
 		return Result.result(new QuizInfo(publisher, quiz));
 	}
 	

@@ -12,8 +12,8 @@ public class TenantPO implements UniqueModel<Integer> {
 	private int region;
 	private int teamDepth;
 	private String jianJieId;
-	private String licenseFace;
-	private String licenseBack;
+	private String license;
+	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
 	private int bonusScaleCountMod;				// 规模佣金统计口径模值
@@ -21,6 +21,7 @@ public class TenantPO implements UniqueModel<Integer> {
 	private int bonusScaleRewardMod;			// 规模佣金奖励口径模值
 	private int bonusScaleRewardInsuranceMod;	// 规模佣金奖励口径险企模值
 	private int jianJieFetchTime;
+	private int expire;							// 到期日期
 	private int created;
 	private int updated;
 	
@@ -72,20 +73,20 @@ public class TenantPO implements UniqueModel<Integer> {
 		this.jianJieId = jianJieId;
 	}
 	
-	public String getLicenseFace() {
-		return licenseFace;
+	public String getLicense() {
+		return license;
 	}
 	
-	public void setLicenseFace(String licenseFace) {
-		this.licenseFace = licenseFace;
+	public void setLicense(String license) {
+		this.license = license;
 	}
 	
-	public String getLicenseBack() {
-		return licenseBack;
+	public String getLicenseImage() {
+		return licenseImage;
 	}
-	
-	public void setLicenseBack(String licenseBack) {
-		this.licenseBack = licenseBack;
+
+	public void setLicenseImage(String licenseImage) {
+		this.licenseImage = licenseImage;
 	}
 	
 	public String getNonAutoBind() {
@@ -142,6 +143,14 @@ public class TenantPO implements UniqueModel<Integer> {
 	
 	public void setJianJieFetchTime(int jianJieFetchTime) {
 		this.jianJieFetchTime = jianJieFetchTime;
+	}
+	
+	public int getExpire() {
+		return expire;
+	}
+	
+	public void setExpire(int expire) {
+		this.expire = expire;
 	}
 	
 	public int getCreated() {

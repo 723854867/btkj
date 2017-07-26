@@ -17,8 +17,8 @@ public class TenantInfo implements Serializable {
 	private String appName;
 	private int region;
 	private String regionName;
-	private String licenseFace;
-	private String licenseBack;
+	private String license;
+	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
 	private int bonusScaleCountMod;
@@ -37,8 +37,8 @@ public class TenantInfo implements Serializable {
 		this.appName = app.getName();
 		this.region = region.getId();
 		this.regionName = region.getName();
-		this.licenseFace = po.getLicenseFace();
-		this.licenseBack = po.getLicenseBack();
+		this.license = po.getLicense();
+		this.licenseImage = po.getLicenseImage();
 		this.nonAutoBind = po.getNonAutoBind();
 		this.servicePhone = po.getServicePhone();
 		this.bonusScaleCountMod = po.getBonusScaleCountMod();
@@ -95,20 +95,20 @@ public class TenantInfo implements Serializable {
 		this.regionName = regionName;
 	}
 
-	public String getLicenseFace() {
-		return licenseFace;
+	public String getLicense() {
+		return license;
 	}
-
-	public void setLicenseFace(String licenseFace) {
-		this.licenseFace = licenseFace;
+	
+	public void setLicense(String license) {
+		this.license = license;
 	}
-
-	public String getLicenseBack() {
-		return licenseBack;
+	
+	public String getLicenseImage() {
+		return licenseImage;
 	}
-
-	public void setLicenseBack(String licenseBack) {
-		this.licenseBack = licenseBack;
+	
+	public void setLicenseImage(String licenseImage) {
+		this.licenseImage = licenseImage;
 	}
 
 	public String getNonAutoBind() {

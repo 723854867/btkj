@@ -26,7 +26,7 @@ public interface UserService {
 	 * @param uid
 	 * @return
 	 */
-	UserPO getUser(int uid);
+	UserPO user(int uid);
 	
 	/**
 	 * 一次获取多个用户
@@ -44,6 +44,15 @@ public interface UserService {
 	 * @return
 	 */
 	User user(String mobile, int appId);
+	
+	/**
+	 * 通过账号和 appId 获取用户并且获取用户锁
+	 * 
+	 * @param appId
+	 * @param mobile
+	 * @return
+	 */
+	Result<UserPO> userLockByMobile(int appId, String mobile);
 	
 	/**
 	 * 通过 token 获取用户

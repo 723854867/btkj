@@ -91,7 +91,15 @@ public class Employee extends Identity {
 		return tenant;
 	}
 	
+	public void setTenant(TenantPO tenant) {
+		this.tenant = tenant;
+	}
+	
 	public EmployeePO getEntity() {
 		return entity;
+	}
+	
+	public void setEntity(EmployeePO entity) {
+		this.entity = entity;
 	}
 }

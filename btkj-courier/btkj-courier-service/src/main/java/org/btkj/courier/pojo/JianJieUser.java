@@ -2,8 +2,6 @@ package org.btkj.courier.pojo;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.po.UserPO;
-
 public class JianJieUser implements Serializable {
 
 	private static final long serialVersionUID = 6115356878816218781L;
@@ -12,10 +10,10 @@ public class JianJieUser implements Serializable {
 	private String ChineseName;
 	private String IdentityNo;
 	
-	public JianJieUser(UserPO user) {
-		this.LoginName = String.valueOf(user.getUid());
-		this.ChineseName = user.getName();
-		this.IdentityNo = user.getIdentity();
+	public JianJieUser(String name, String identity, int employeeId) {
+		this.LoginName = String.valueOf(employeeId);
+		this.ChineseName = name;
+		this.IdentityNo = identity;
 	}
 
 	public String getLoginName() {

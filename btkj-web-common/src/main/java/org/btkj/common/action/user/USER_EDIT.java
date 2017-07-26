@@ -2,7 +2,6 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
-import org.btkj.courier.api.JianJieService;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
@@ -16,8 +15,6 @@ public class USER_EDIT extends UserAction {
 	
 	@Resource
 	private UserService userService;
-	@Resource
-	private JianJieService jianJieService;
 	
 	@Override
 	protected Result<?> execute(Request request, User user) {
@@ -29,10 +26,7 @@ public class USER_EDIT extends UserAction {
 		boolean identityBackChanged = _identityBack(request, po);
 		if (!nameChanged && !avatarChanged && !identityChanged && !identityFaceChanged && !identityBackChanged)
 			return Consts.RESULT.OK;
-		Result<Void> result = userService.update(user.getEntity());
-		if (result.isSuccess() && (nameChanged || identityChanged))
-			jianJieService.addUser(user.getEntity());
-		return result;
+		return userService.update(user.getEntity());
 	}
 	
 	private boolean _name(Request request, UserPO user) {

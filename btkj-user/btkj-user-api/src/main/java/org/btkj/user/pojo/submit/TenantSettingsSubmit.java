@@ -9,7 +9,8 @@ public class TenantSettingsSubmit implements Serializable {
 
 	private int tid;
 	private Integer teamDepth;
-	private Set<Long> nonAutoBind;			
+	private String servicePhone;
+	private Set<Long> nonAutoBind;		
 	private Integer bonusScaleCountMod;
 	private Integer bonusScaleCountInsuranceMod;
 	private Integer bonusScaleRewardMod;
@@ -29,6 +30,14 @@ public class TenantSettingsSubmit implements Serializable {
 
 	public void setTeamDepth(Integer teamDepth) {
 		this.teamDepth = teamDepth;
+	}
+	
+	public String getServicePhone() {
+		return servicePhone;
+	}
+	
+	public void setServicePhone(String servicePhone) {
+		this.servicePhone = servicePhone;
 	}
 	
 	public Set<Long> getNonAutoBind() {

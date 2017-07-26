@@ -31,7 +31,7 @@ public interface TenantService {
 	 * @param tid
 	 * @param agree
 	 */
-	Result<Void> applyProcess(int tid, int uid, boolean agree);
+	Result<Employee> applyProcess(int tid, int uid, boolean agree);
 	
 	/**
 	 * 添加代理公司
@@ -40,12 +40,12 @@ public interface TenantService {
 	 * @param region 代理公司地区
 	 * @param tname 代理公司租户名字
 	 * @param user 顶级用户
-	 * @param licenseFace 营业执照正面
-	 * @param licenseBack 营业执照反面
+	 * @param license 营业执照号码
+	 * @param licenseImage 营业执照副本
 	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<?> tenantAdd(int appId, int uid, int region, String tname, String licenseFace, String licenseBack, String servicePhone);
+	Result<Employee> tenantAdd(int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire);
 	
 	/**
 	 * 代理公司列表

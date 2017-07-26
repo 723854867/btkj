@@ -12,6 +12,7 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
@@ -217,6 +218,25 @@ public class UserManageServiceImpl implements UserManageService {
 			submit.setTeamDepth(Math.max(1, submit.getTeamDepth()));
 			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));
 		}
+		if (null != submit.getServicePhone())
+			tenant.setServicePhone(submit.getServicePhone());
+		tenant.setUpdated(DateUtil.currentTime());
+		tenantMapper.update(tenant);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> tenantSet(User user, int tid, String name, String license, String licenseImage, int expire) {
+		TenantPO tenant = tenantMapper.getByKey(tid);
+		if (null == tenant)
+			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
+		if (tenant.getAppId() != user.getAppId())
+			return Consts.RESULT.FORBID;
+		tenant.setName(name);
+		tenant.setLicense(license);
+		tenant.setLicenseImage(licenseImage);
+		tenant.setExpire(expire);
+		tenant.setUpdated(DateUtil.currentTime());
 		tenantMapper.update(tenant);
 		return Consts.RESULT.OK;
 	}

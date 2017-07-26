@@ -65,7 +65,7 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<Void> applyProcess(int tid, int uid, boolean agree) {
+	public Result<Employee> applyProcess(int tid, int uid, boolean agree) {
 		ApplyInfo info = applyMapper.getAndDel(tid, uid);
 		if (null == info)
 			return Result.result(BtkjCode.APPLY_EXIST);
@@ -76,22 +76,23 @@ public class TenantServiceImpl implements TenantService {
 		TenantPO tenant = tenantMapper.getByKey(info.getTid());
 		EmployeePO employee = EntityGenerator.newEmployee(info.getUid(), tenant, chief);
 		tx.insertEmployee(employee).finish();
-		return Result.success();
+		return Result.result(new Employee(null, userMapper.getByKey(uid), tenant, employee));
 	}
 
 	@Override
-	public Result<?> tenantAdd(int appId, int uid, int region, String tname, String licenseFace, String licenseBack, String servicePhone) {
+	public Result<Employee> tenantAdd(int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire) {
 		String lockId = userMapper.lockUser(uid);
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
 		try {
 			if (_tenantNumMax(uid))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(appId, uid, region, tname, licenseFace, licenseBack, servicePhone).finish();
+			Employee employee = new Employee();
+			tx.tenantAdd(employee, appId, uid, tname, license, licenseImage, servicePhone, expire).finish();
+			return Result.result(employee);
 		} finally {
 			userMapper.releaseUserLock(uid, lockId);
 		}
-		return Result.success();
 	}
 
 	@Override

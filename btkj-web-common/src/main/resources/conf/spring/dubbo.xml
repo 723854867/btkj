@@ -20,9 +20,6 @@
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService"> 
 		<dubbo:method name="quotaNotice" async="true" />
 	</dubbo:reference>
-	<dubbo:reference id="jianJieService" interface="org.btkj.courier.api.JianJieService"> 
-		<dubbo:method name="addUser" async="true" />
-	</dubbo:reference>
 	
 	<dubbo:reference id="nonAutoService" interface="org.btkj.nonauto.api.NonAutoService" />
 	

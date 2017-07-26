@@ -18,8 +18,8 @@ public class TenantPagingInfo implements Serializable {
 	private int teamDepth;						// 商户团队层级数
 	private int regionId;						// 所属行政区划ID
 	private String regionName;					// 所属行政区划名字
-	private String licenseFace;					// 营业执照正面
-	private String licenseBack;					// 营业执照反面
+	private String license;						// 营业执照正面
+	private String licenseImage;				// 营业执照反面
 	private String nonAutoBind;
 	private String servicePhone;
 	private int bonusScaleCountMod;				// 规模佣金统计口径模值
@@ -36,8 +36,8 @@ public class TenantPagingInfo implements Serializable {
 		this.name = tenant.getName();
 		this.teamDepth = tenant.getTeamDepth();
 		this.regionId = tenant.getRegion();
-		this.licenseFace = tenant.getLicenseFace();
-		this.licenseBack = tenant.getLicenseBack();
+		this.license = tenant.getLicense();
+		this.licenseImage = tenant.getLicenseImage();
 		this.created = tenant.getCreated();
 		this.updated = tenant.getUpdated();
 	}
@@ -82,20 +82,20 @@ public class TenantPagingInfo implements Serializable {
 		this.regionName = regionName;
 	}
 
-	public String getLicenseFace() {
-		return licenseFace;
+	public String getLicense() {
+		return license;
 	}
-
-	public void setLicenseFace(String licenseFace) {
-		this.licenseFace = licenseFace;
+	
+	public void setLicense(String license) {
+		this.license = license;
 	}
-
-	public String getLicenseBack() {
-		return licenseBack;
+	
+	public String getLicenseImage() {
+		return licenseImage;
 	}
-
-	public void setLicenseBack(String licenseBack) {
-		this.licenseBack = licenseBack;
+	
+	public void setLicenseImage(String licenseImage) {
+		this.licenseImage = licenseImage;
 	}
 
 	public int getCreated() {

@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
@@ -44,22 +45,24 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(int appId, int uid, int region, String tname, String licenseFace, String licenseBack, String servicePhone) {
+	public TxCallback tenantAdd(Employee employee, int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire) {
 		AppPO apo = appDao.getByKeyForUpdate(appId);
 		if (0 < apo.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(appId);
 			if (tenantNum >= apo.getMaxTenantsCount())
 				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
 		}
-		TenantPO tenant = EntityGenerator.newTenant(region, appId, tname, licenseFace, licenseBack, servicePhone);
+		TenantPO tenant = EntityGenerator.newTenant(appId, tname, license, licenseImage, servicePhone, expire);
 		tenantDao.insert(tenant);
-		EmployeePO employee = EntityGenerator.newEmployee(uid, tenant, null);
-		employeeDao.insert(employee);
+		EmployeePO ep = EntityGenerator.newEmployee(uid, tenant, null);
+		employeeDao.insert(ep);
 		return new TxCallback() {
 			@Override
 			public void finish() {
 				tenantMapper.flush(tenant);
-				employeeMapper.flush(employee);
+				employeeMapper.flush(ep);
+				employee.setTenant(tenant);
+				employee.setEntity(ep);
 			}
 		};
 	}

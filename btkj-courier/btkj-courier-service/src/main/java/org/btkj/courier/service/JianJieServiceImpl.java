@@ -21,7 +21,6 @@ import org.apache.http.util.EntityUtils;
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.pojo.JianJieResp;
 import org.btkj.courier.pojo.JianJieUser;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtil;
@@ -47,7 +46,7 @@ public class JianJieServiceImpl implements JianJieService {
 	private HttpProxy httpProxy;
 	
 	@Override
-	public void addUser(UserPO user) {
+	public void addEmployee(String name, String identity, int employeeId) {
 		try {
 			URIBuilder uriBuilder = new URIBuilder(urlUserAdd);
 			long timestamp = DateUtil.currentTime();
@@ -56,7 +55,7 @@ public class JianJieServiceImpl implements JianJieService {
 			URI uri = uriBuilder.build();
 			HttpPost request = new HttpPost(uri);
 			request.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE);
-			request.setEntity(new StringEntity(SerializeUtil.JsonUtil.GSON.toJson(new JianJieUser(user))));
+			request.setEntity(new StringEntity(SerializeUtil.JsonUtil.GSON.toJson(new JianJieUser(name, identity, employeeId))));
 			httpProxy.asyncRequest(request, new AsyncRespHandler() {
 				@Override
 				public void cancelled() {

@@ -57,15 +57,15 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final TenantPO newTenant(int region, int appId, String name, String licenseFace, String licenseBack, String servicePhone) {
+	public static final TenantPO newTenant(int appId, String name, String license, String licenseImage, String servicePhone, int expire) {
 		TenantPO tenant = new TenantPO();
 		tenant.setName(name);
 		tenant.setAppId(appId);
-		tenant.setRegion(region);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
-		tenant.setLicenseFace(licenseFace);
-		tenant.setLicenseBack(licenseBack);
+		tenant.setLicense(license);
+		tenant.setLicenseImage(licenseImage);
 		tenant.setServicePhone(servicePhone);
+		tenant.setExpire(expire);
 		
 		int time = DateUtil.currentTime();
 		tenant.setCreated(time);

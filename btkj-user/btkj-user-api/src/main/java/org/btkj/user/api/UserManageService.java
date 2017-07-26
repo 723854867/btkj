@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -84,13 +85,25 @@ public interface UserManageService {
 	Result<Void> bannerDelete(int id);
 	
 	/**
-	 * 商家设置
+	 * 商家设置(商家自己)
 	 * 
 	 * @param tenant
 	 * @param submit
 	 * @return
 	 */
 	Result<Void> tenantSet(Employee employee, TenantSettingsSubmit submit);
+	
+	/**
+	 * 商家设置(平台)
+	 * 
+	 * @param user
+	 * @param name
+	 * @param license
+	 * @param licenseImage
+	 * @param expire
+	 * @return
+	 */
+	Result<Void> tenantSet(User user, int tid, String name, String license, String licenseImage, int expire);
 	
 	/**
 	 * 所有平台

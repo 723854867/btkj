@@ -8,6 +8,8 @@ import org.btkj.user.api.UserManageService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.exception.ConstConvertFailureException;
+import org.rapid.util.lang.DateUtil;
 
 public class PLATFORM_TENANT_SET extends UserAction {
 	
@@ -17,8 +19,11 @@ public class PLATFORM_TENANT_SET extends UserAction {
 	@Override
 	protected Result<Void> execute(Request request, User user) {
 		String name = request.getOptionalParam(Params.NAME);
-		String licenseBack = request.getOptionalParam(Params.IDENTITY_FACE);
-		String licenseFace = request.getOptionalParam(Params.IDENTITY_BACK);
-		return null;
+		String license = request.getOptionalParam(Params.IDENTITY);
+		String licenseImage = request.getOptionalParam(Params.IDENTITY_FACE);
+		int expire = request.getOptionalParam(Params.END_TIME);
+		if (expire <= DateUtil.currentTime())
+			throw ConstConvertFailureException.errorConstException(Params.END_TIME);
+		return userManageService.tenantSet(user, request.getParam(Params.TID), name, license, licenseImage, expire);
 	}
 }
