@@ -258,6 +258,16 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		}
 	}
 	
+	private void processJianJieGsUser(VehiclePolicy policy, String gsUser) {
+		int employeeId = 0;
+		try {
+			employeeId = Integer.valueOf(gsUser.substring(gsUser.indexOf(":") + 1, gsUser.length() - 1));
+		} catch (NumberFormatException e) {
+			logger.error("简捷用户雇员id解析出错 - {}", gsUser);
+			return;
+		}
+	}
+	
 	@Override
 	public List<Route> routes(int tid) {
 		return routeMapper.getByTid(tid);
