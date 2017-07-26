@@ -18,15 +18,15 @@ git pull
 git push origin sj1.0
 echo "btkj sync finish, start build..."
 mvn clean install -Dmaven.test.skip -P${env}
-scpconfig${test}
-scpcourier${test}
-scpuser${test}
-scpmaster${test}
-scpvehicle${test}
-scpnonauto${test}
-scpcommunity${test}
-scpbaotuvehicle${test}
-scpbihuvehicle${test}
-scplebaobavehicle${test}
-scpstatistics${test}
-scppayment${test}
+scpconfig${env}
+scpcourier${env}
+scpuser${env}
+scpmaster${env}
+scpvehicle${env}
+scpnonauto${env}
+scpcommunity${env}
+scpbaotuvehicle${env}
+scpbihuvehicle${env}
+scplebaobavehicle${env}
+scpstatistics${env}
+scppayment${env}
