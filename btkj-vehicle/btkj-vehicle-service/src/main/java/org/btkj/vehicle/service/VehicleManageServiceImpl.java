@@ -253,6 +253,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				logger.error("JianJie policy fill failure!");
 				continue;
 			}
+			
 			policies.add(policy);
 		}
 	}
