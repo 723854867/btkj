@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
@@ -12,15 +13,14 @@ import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
 import org.rapid.util.common.model.UniqueModel;
-import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 
 public class VehiclePolicy implements UniqueModel<String> {
 
 	private static final long serialVersionUID = -7788126900244400122L;
 
 	private String _id;
-	private int appId;
 	private int tid;									// 商户ID
+	private int appId;
 	private int insurerId;								// 险企ID
 	private String owner;								// 车主姓名
 	private String idNo;								// 车主证件号
@@ -36,19 +36,22 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private VehiclePolicyType type;						// 保单类型
 	private BonusScaleType scaleType;					// 规模奖励类型
 	private String vehiclePrice;						// 购置价
+	private PolicyMark mark;							// 保单标记类型
+	private int salesmanId;								// 业务员ID
 	private String salesman;							// 业务员姓名
 	private String salesmanMobile;						// 业务员手机号
-	private InternalDetail internalDetail;				// 内部保单详情
+	private OrderDetail orderDetail;					// 对应的订单详情(只有在保途平台生成的保单才有对应的订单)
 	private CommercialPolicyDetail commercialDetail;
 	private CompulsoryPolicyDetail compulsoryDetail;
 	private Map<CommercialInsuranceType, Insurance> insurances;
 	
 	public VehiclePolicy() {}
 	
-	public VehiclePolicy(int appId, int tid, int insurerId) {
-		this.tid = tid;
+	public VehiclePolicy(Employee employee, int insurerId, String id) {
+		this._id = id;
 		this.insurerId = insurerId;
-		this._id = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		this.tid = employee.getTid();
+		this.appId = employee.getAppId();
 	}
 	
 	public String get_id() {
@@ -57,6 +60,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	
+	public int getAppId() {
+		return appId;
+	}
+	
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 	
 	public int getTid() {
@@ -187,6 +198,22 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.vehiclePrice = vehiclePrice;
 	}
 	
+	public PolicyMark getMark() {
+		return mark;
+	}
+	
+	public void setMark(PolicyMark mark) {
+		this.mark = mark;
+	}
+	
+	public int getSalesmanId() {
+		return salesmanId;
+	}
+	
+	public void setSalesmanId(int salesmanId) {
+		this.salesmanId = salesmanId;
+	}
+	
 	public String getSalesman() {
 		return salesman;
 	}
@@ -211,6 +238,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	public void setSalesmanMobile(String salesmanMobile) {
 		this.salesmanMobile = salesmanMobile;
 	}
+	
+	public OrderDetail getOrderDetail() {
+		return orderDetail;
+	}
+	
+	public void setOrderDetail(OrderDetail orderDetail) {
+		this.orderDetail = orderDetail;
+	}
 
 	public Map<CommercialInsuranceType, Insurance> getInsurances() {
 		return insurances;
@@ -221,9 +256,8 @@ public class VehiclePolicy implements UniqueModel<String> {
 	}
 	
 	public void bindVehicleOrder(VehicleOrder order) {
-		this.internalDetail = new InternalDetail();
-		this.internalDetail.setUid(order.getUid());
-		this.internalDetail.setEmployeeId(order.getEmployeeId());
+		this.orderDetail = new OrderDetail();
+		this.orderDetail.setOrderId(order.get_id());
 	}
 	
 	private class CommercialPolicyDetail implements Serializable {
@@ -289,21 +323,28 @@ public class VehiclePolicy implements UniqueModel<String> {
 		}
 	}
 	
-	private class InternalDetail implements Serializable {
-		private static final long serialVersionUID = 964116787882458423L;
-		private int uid;
-		private int employeeId;
-		public int getUid() {
-			return uid;
+	public class OrderDetail implements Serializable {
+		private static final long serialVersionUID = -4809816366810831775L;
+		private String orderId;								
+		
+		public String getOrderId() {
+			return orderId;
 		}
-		public void setUid(int uid) {
-			this.uid = uid;
+		public void setOrderId(String orderId) {
+			this.orderId = orderId;
 		}
-		public int getEmployeeId() {
-			return employeeId;
+	}
+	
+	public enum PolicyMark {
+		NORMAL(1),
+		NO_EMPLOYEE(2),
+		EMPLOYEE_UNSUITABLE(4);
+		private int mark;
+		private PolicyMark(int mark) {
+			this.mark = mark;
 		}
-		public void setEmployeeId(int employeeId) {
-			this.employeeId = employeeId;
+		public int mrk() {
+			return mark;
 		}
 	}
 

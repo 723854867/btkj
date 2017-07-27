@@ -1,14 +1,17 @@
 package org.btkj.vehicle.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
@@ -135,7 +138,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	void jianJieSynchronize(int appId, int tid, JianJiePoliciesInfo info);
+	void jianJieSynchronize(Employee employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
 	
 	/**
 	 * 获取车险路由设置

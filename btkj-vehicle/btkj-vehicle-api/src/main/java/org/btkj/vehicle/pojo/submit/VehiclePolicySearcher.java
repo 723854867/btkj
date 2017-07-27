@@ -11,6 +11,7 @@ public class VehiclePolicySearcher extends Page {
 
 	private Integer tid;					// 商户ID
 	private Integer uid;					// 用户ID
+	private Integer appId;					// 平台ID
 	private Integer employeeId;				// 雇员id
 	private Integer insurerId;				// 险企ID
 	private String license;					// 车牌号
@@ -28,7 +29,31 @@ public class VehiclePolicySearcher extends Page {
 	public void setTid(Integer tid) {
 		this.tid = tid;
 	}
-
+	
+	public Integer getUid() {
+		return uid;
+	}
+	
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+	
+	public Integer getAppId() {
+		return appId;
+	}
+	
+	public void setAppId(Integer appId) {
+		this.appId = appId;
+	}
+	
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+	
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
+	
 	public Integer getInsurerId() {
 		return insurerId;
 	}

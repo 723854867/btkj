@@ -11,7 +11,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.message.Result;
 
-public class VHICLE_MODEL_EDIT extends LoggedAction {
+public class VEHICLE_MODEL_EDIT extends LoggedAction {
 	
 	@Resource
 	private VehicleManageService vehicleManageService;

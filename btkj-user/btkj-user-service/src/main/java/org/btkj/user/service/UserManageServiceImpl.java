@@ -226,13 +226,15 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(User user, int tid, String name, String license, String licenseImage, int expire) {
+	public Result<Void> tenantSet(User user, int tid, String contacts, String contactsMobile, String tname, String license, String licenseImage, int expire) {
 		TenantPO tenant = tenantMapper.getByKey(tid);
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != user.getAppId())
 			return Consts.RESULT.FORBID;
-		tenant.setName(name);
+		tenant.setContacts(contacts);
+		tenant.setContactsMobile(contactsMobile);
+		tenant.setName(tname);
 		tenant.setLicense(license);
 		tenant.setLicenseImage(licenseImage);
 		tenant.setExpire(expire);

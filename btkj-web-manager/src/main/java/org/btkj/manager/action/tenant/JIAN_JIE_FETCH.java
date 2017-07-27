@@ -1,5 +1,8 @@
 package org.btkj.manager.action.tenant;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
@@ -7,6 +10,8 @@ import org.btkj.manager.action.TenantAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
+import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.user.api.EmployeeService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
@@ -24,6 +29,8 @@ public class JIAN_JIE_FETCH extends TenantAction {
 	@Resource
 	private JianJieService jianJieService;
 	@Resource
+	private EmployeeService employeeService;
+	@Resource
 	private VehicleManageService vehicleManageService;
 	
 	@Override
@@ -35,7 +42,16 @@ public class JIAN_JIE_FETCH extends TenantAction {
 				DateUtil.getDate(DateUtil.YYYYMMDD, DateUtil.currentTime()));
 		if (!info.isSuccessStatus())
 			return Result.result(Code.FAILURE, info.getErrorMessage());
-		vehicleManageService.jianJieSynchronize(employee.getAppId(), employee.getTid(), info);
+		Set<Integer> set = new HashSet<Integer>();
+		for (BaseInfo temp : info.getResult()) {
+			String GsUser = temp.getGsUser();
+			try {
+				set.add(Integer.valueOf(GsUser.substring(GsUser.indexOf(":") + 1, GsUser.length() - 1)));
+			} catch (NumberFormatException e) {
+				continue;
+			}
+		}
+		vehicleManageService.jianJieSynchronize(employee, employeeService.employeeTips(set), info);
 		return Consts.RESULT.OK;
 	}
 }

@@ -14,14 +14,17 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.EntityGenerator;
@@ -35,6 +38,7 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy.PolicyMark;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
@@ -47,6 +51,7 @@ import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
@@ -193,7 +198,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public void jianJieSynchronize(int appId, int tid, JianJiePoliciesInfo info) {
+	public void jianJieSynchronize(Employee employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info) {
 		List<VehiclePolicy> policies = new ArrayList<VehiclePolicy>();
 		Map<String, BaseInfo> cms = new HashMap<String, BaseInfo>();
 		Map<String, BaseInfo> cmps = new HashMap<String, BaseInfo>();
@@ -209,14 +214,19 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			} else
 				throw new RuntimeException("未知的简捷保单类型  : " + temp.getBdType());
 		}
-		_jianJiePolicyProcess(appId, tid, InsuranceType.COMMERCIAL, cmNos, cms, cmpNos, cmps, policies);
-		_jianJiePolicyProcess(appId, tid, InsuranceType.COMPULSORY, cmpNos, cmps, cmNos, cms, policies);
+		List<VehicleOrder> updates = new ArrayList<VehicleOrder>();
+		_jianJiePolicyProcess(employees, employee, InsuranceType.COMMERCIAL, cmNos, cms, cmpNos, cmps, updates, policies);
+		_jianJiePolicyProcess(employees, employee, InsuranceType.COMPULSORY, cmpNos, cmps, cmNos, cms, updates, policies);
+		vehicleOrderMapper.updateStates(updates);
+		vehiclePolicyMapper.batchInsert(policies);
+		_bonusPaid(updates);
 	}
 	
-	private void _jianJiePolicyProcess(int appId, int tid, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehiclePolicy> policies) {  
-		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? Collections.EMPTY_LIST : vehicleOrderMapper.getByDeliverNos(insuranceType, tid, deliverNos);
+	private void _jianJiePolicyProcess(Map<Integer, EmployeeTip> employees, Employee employee, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehicleOrder> updates, List<VehiclePolicy> policies) {  
+		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? Collections.EMPTY_LIST : vehicleOrderMapper.getByDeliverNos(insuranceType, employee.getTid(), deliverNos);
 		Iterator<Entry<String, BaseInfo>> iterator = processing.entrySet().iterator();
 		while (iterator.hasNext()) {
+			String policyId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 			BaseInfo info = iterator.next().getValue();
 			iterator.remove();
 			Iterator<VehicleOrder> itr = orders.iterator();
@@ -227,7 +237,9 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				if (!StringUtil.hasText(cno) || !cno.equals(info.getTBDH()))
 					continue;
 				order = vo;
+				order.setState(VehicleOrderState.ISSUED);			// 设置为已出单
 				itr.remove();
+				updates.add(order);
 				break;
 			}
 			BaseInfo relationInfo = null;
@@ -235,36 +247,51 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				relationDeliverNos.remove(info.getTBDH());
 				relationInfo = relation.remove(info.getRelationPolicyNo());
 				if (null == relationInfo) 
-					logger.error("JianJie complete policy {}-{}-{} relation data miss!", info.getBDH(), info.getTBDH(), info.getRelationPolicyNo());
+					logger.error("简捷保单 - {}" + info.getBdType() + "险关联单丢失！", policyId);
+				if (info.getCompanyId() != relationInfo.getCompanyId() || 0 == info.getCompanyId())
+					logger.error("简捷保单 - {} 关联单险企不匹配", policyId);
+				if (!info.getGsUser().equals(relationInfo.getGsUser()))
+					logger.error("简捷保单 - {} 关联单业务员归属不匹配", policyId);
 			}
-			if (null != info && (info.getCompanyId() != relationInfo.getCompanyId() || 0 == info.getCompanyId()))
-				logger.error("JianJie complete policy {} insurerIds {}-{} are different from each other!", info.getBDH(), info.getCompanyId(), relationInfo.getCompanyId());
-			Route route = routeMapper.getByTidAndJianJieId(tid, info.getCompanyId());
-			if (null == route) {
-				logger.error("JianJie insurer - {} not exist", info.getCompanyId());
-				continue;
-			}
-			if (route.getInsurerId() != order.getInsurerId()) {
-				logger.error("JianJie insurer - {} is differ with baotu order - {} insurer - {}", route.getJianJieId(), order.get_id(), order.getInsurerId());
-				continue;
-			}
-			VehiclePolicy policy = new VehiclePolicy(appId, tid, route.getInsurerId());
-			if (!EntityGenerator.fillPolicy(policy, order, info, relationInfo)) {
-				logger.error("JianJie policy fill failure!");
-				continue;
-			}
-			
+			Route route = routeMapper.getByTidAndJianJieId(employee.getTid(), info.getCompanyId());
+			if (null == route)
+				logger.error("简捷保单 - {} 险企 - {} 不存在对应的保途险企映射", policyId, info.getCompanyId());
+			if (null != order && route.getInsurerId() != order.getInsurerId())
+				logger.error("简捷保单 - {} 险企 - {} 和保途订单 险企ID不匹配, 以保途订单险企为准！", policyId, info.getCompanyId());
+			VehiclePolicy policy = EntityGenerator.newVehiclePolicy(employee, route.getInsurerId(), policyId, order, info, relationInfo);
+			_processJianJieGsUser(employee.getTid(), employees, policy, info.getGsUser());
 			policies.add(policy);
 		}
 	}
 	
-	private void processJianJieGsUser(VehiclePolicy policy, String gsUser) {
+	/**
+	 * 结算佣金:归属有分歧的不参与计算
+	 */
+	private void _bonusPaid(List<VehicleOrder> orders) {
+		
+	}
+	
+	private void _processJianJieGsUser(int tid, Map<Integer, EmployeeTip> employees, VehiclePolicy policy, String gsUser) {
 		int employeeId = 0;
 		try {
 			employeeId = Integer.valueOf(gsUser.substring(gsUser.indexOf(":") + 1, gsUser.length() - 1));
 		} catch (NumberFormatException e) {
 			logger.error("简捷用户雇员id解析出错 - {}", gsUser);
 			return;
+		}
+		policy.setSalesmanId(employeeId);
+		EmployeeTip employee = employees.get(employeeId);
+		if (null == employee) {
+			logger.error("保单 - {} 没有指定业务员！", policy.get_id());
+			policy.setMark(PolicyMark.NO_EMPLOYEE);
+		} else {
+			if (employee.getTid() != tid) {
+				logger.error("保单 - {} 业务员归属错误，当前代理公司 - {}，业务员所在代理公司 - {}！", policy.get_id(), tid, employee.getTid());
+				policy.setMark(PolicyMark.EMPLOYEE_UNSUITABLE);
+			} else 
+				policy.setMark(PolicyMark.NORMAL);
+			policy.setSalesman(employee.getName());
+			policy.setSalesmanMobile(employee.getMobile());
 		}
 	}
 	
@@ -406,6 +433,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher) {
-		return null;
+		return vehiclePolicyMapper.paging(searcher);
 	}
 }

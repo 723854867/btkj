@@ -35,6 +35,7 @@ public class EntityGenerator {
 		EmployeePO employee = new EmployeePO();
 		employee.setUid(uid);
 		employee.setTid(tenant.getTid());
+		employee.setAppId(tenant.getAppId());
 		employee.setParentId(null == parent ? 0 : parent.getId());
 		employee.setLevel(null == parent ? 1 : parent.getLevel() + 1);
 		employee.setLeft(null == parent ? 1 : parent.getRight());
@@ -59,7 +60,7 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final TenantPO newTenant(int appId, String name, String license, String licenseImage, String servicePhone, int expire) {
+	public static final TenantPO newTenant(int appId, String contacts, String contactsMobile, String name, String license, String licenseImage, String servicePhone, int expire) {
 		TenantPO tenant = new TenantPO();
 		tenant.setName(name);
 		tenant.setAppId(appId);
@@ -68,6 +69,8 @@ public class EntityGenerator {
 		tenant.setLicenseImage(licenseImage);
 		tenant.setServicePhone(servicePhone);
 		tenant.setExpire(expire);
+		tenant.setContacts(contacts);
+		tenant.setContactsMobile(contactsMobile);
 		
 		int time = DateUtil.currentTime();
 		tenant.setCreated(time);

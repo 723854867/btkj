@@ -37,14 +37,16 @@ public class TENANT_ADD extends UserAction {
 
 	@Override
 	protected Result<?> execute(Request request, User user) {
+		int expire = request.getParam(Params.END_TIME);
+		if (expire <= DateUtil.currentTime())
+			throw ConstConvertFailureException.errorConstException(Params.END_TIME);
+		String contactMobile = request.getParam(Params.CONTACTS_MOBILE);
+		String name = request.getParam(Params.NAME);
 		String tname = request.getParam(Params.TNAME);
 		String license = request.getParam(Params.IDENTITY);
 		String licenseImage = request.getParam(Params.IDENTITY_FACE);
 		String mobile = request.getParam(Params.MOBILE);
 		String servicePhone = request.getParam(Params.SERVICE_PHONE);
-		int expire = request.getParam(Params.END_TIME);
-		if (expire <= DateUtil.currentTime())
-			throw ConstConvertFailureException.errorConstException(Params.END_TIME);
 		Result<UserPO> ru = userService.userLockByMobile(user.getAppId(), mobile);
 		if (!ru.isSuccess())
 			return Consts.RESULT.USER_NOT_EXIST;
@@ -52,7 +54,7 @@ public class TENANT_ADD extends UserAction {
 		try {
 			if (null == target.getName())				// 资料不齐的用户不能作为商户顶级雇员
 				return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
-			Result<Employee> result = tenantService.tenantAdd(user.getAppId(), target.getUid(), tname, license, licenseImage, servicePhone, expire);
+			Result<Employee> result = tenantService.tenantAdd(user.getAppId(), target.getUid(), name, contactMobile, tname, license, licenseImage, servicePhone, expire);
 			if (result.isSuccess())
 				jianJieService.addEmployee(target.getName() + "-" + tname, target.getIdentity(), result.attach().getId());
 			return Consts.RESULT.OK;

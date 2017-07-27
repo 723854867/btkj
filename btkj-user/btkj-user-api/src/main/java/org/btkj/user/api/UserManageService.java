@@ -103,7 +103,7 @@ public interface UserManageService {
 	 * @param expire
 	 * @return
 	 */
-	Result<Void> tenantSet(User user, int tid, String name, String license, String licenseImage, int expire);
+	Result<Void> tenantSet(User user, int tid, String contacts, String contactsMobile, String tname, String license, String licenseImage, int expire);
 	
 	/**
 	 * 所有平台

@@ -528,7 +528,7 @@ public class RenewInfo implements Serializable {
 		private double HcSanFangTeYue;				// 机动车无法找到三方特约险保额
 		private double HcJingShenSunShi;			// 精神损失险保额
 		private int HcXiuLiChangType;			// 指定专修厂类型：-1-没有；0-国产；1-进口(依赖于请求参数)
-		private double HcXiuLiChange;			// 指定修理厂险(依赖于请求参数)
+		private double HcXiuLiChang;			// 指定修理厂险(依赖于请求参数)
 		
 		public int getSource() {
 			return Source;
@@ -706,12 +706,12 @@ public class RenewInfo implements Serializable {
 			HcXiuLiChangType = hcXiuLiChangType;
 		}
 		
-		public double getHcXiuLiChange() {
-			return HcXiuLiChange;
+		public double getHcXiuLiChang() {
+			return HcXiuLiChang;
 		}
 		
-		public void setHcXiuLiChange(double hcXiuLiChange) {
-			HcXiuLiChange = hcXiuLiChange;
+		public void setHcXiuLiChang(double hcXiuLiChang) {
+			HcXiuLiChang = hcXiuLiChang;
 		}
 	}
 	
@@ -780,7 +780,7 @@ public class RenewInfo implements Serializable {
 			if (0 != this.SaveQuote.BuJiMianSheShui)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
 			if (-1 != this.SaveQuote.HcXiuLiChangType)
-				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChange));
+				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChang));
 			if (0 != this.SaveQuote.HcSanFangTeYue)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
 			schema.setInsurances(insurances.isEmpty() ? null : insurances);

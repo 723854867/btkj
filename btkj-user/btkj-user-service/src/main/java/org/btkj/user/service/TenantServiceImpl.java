@@ -81,14 +81,14 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<Employee> tenantAdd(int appId, int uid, String tname, String license, String licenseImage, String servicePhone, int expire) {
+	public Result<Employee> tenantAdd(int appId, int uid, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
 		String lockId = userMapper.lockUser(uid);
 		if (null == lockId)
 			return Consts.RESULT.USER_STATUS_CHANGED;
 		try {
 			if (_tenantNumMax(uid))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(appId, uid, tname, license, licenseImage, servicePhone, expire).finish();
+			tx.tenantAdd(appId, uid, contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire).finish();
 			return Result.result(ThreadLocalUtil.getAndRemove(EntityGenerator.EMPLOYEE_HOLDER));
 		} finally {
 			userMapper.releaseUserLock(uid, lockId);

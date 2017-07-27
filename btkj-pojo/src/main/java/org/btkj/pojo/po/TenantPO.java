@@ -8,6 +8,8 @@ public class TenantPO implements UniqueModel<Integer> {
 
 	private int tid;
 	private String name;
+	private String contacts;
+	private String contactsMobile;
 	private int appId;
 	private int region;
 	private int teamDepth;
@@ -39,6 +41,22 @@ public class TenantPO implements UniqueModel<Integer> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getContacts() {
+		return contacts;
+	}
+	
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+	
+	public String getContactsMobile() {
+		return contactsMobile;
+	}
+	
+	public void setContactsMobile(String contactsMobile) {
+		this.contactsMobile = contactsMobile;
 	}
 	
 	public int getAppId() {

@@ -1,7 +1,9 @@
 package org.btkj.vehicle.mongo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bson.conversions.Bson;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 
 /**
  * 保单映射
@@ -136,5 +139,17 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
 		bson = Filters.and(bson, Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()), Filters.eq(FIELD_TID, tid));
 		return mongo.find(collection, bson, clazz);
+	}
+	
+	/**
+	 * 一次跟新多个保单的状态
+	 * 
+	 * @param orders
+	 */
+	public void updateStates(List<VehicleOrder> orders) {
+		Map<Bson, Bson> updates = new HashMap<Bson, Bson>();
+		for (VehicleOrder order : orders) 
+			updates.put(Filters.eq(FIELD_ID, order.get_id()), Updates.set(FIELD_STATE, order.getState()));
+		mongo.bulkUpdateOne(collection, updates);
 	}
 }

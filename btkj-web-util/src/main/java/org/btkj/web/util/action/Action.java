@@ -2,6 +2,7 @@ package org.btkj.web.util.action;
 
 import org.btkj.pojo.bo.Version;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.msg.RQMsg;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
@@ -11,7 +12,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public interface Action {
+public interface Action<MESSAGE extends RQMsg> {
 	
 	Result<?> execute(Request request);
 	

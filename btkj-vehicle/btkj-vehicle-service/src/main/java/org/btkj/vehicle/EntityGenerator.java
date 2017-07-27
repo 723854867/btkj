@@ -3,6 +3,7 @@ package org.btkj.vehicle;
 import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
+import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.po.VehicleBrand;
@@ -20,12 +21,17 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.service.VehicleManageServiceImpl;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EntityGenerator {
+	
+	private static final Logger vehicle_manager_logger = LoggerFactory.getLogger(VehicleManageServiceImpl.class);
 
 	public static final Route newRoute(int tid, int insurerId, Lane lane, int jianJieId) { 
 		Route route = new Route();
@@ -82,29 +88,31 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final boolean fillPolicy(VehiclePolicy policy, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+	public static final VehiclePolicy newVehiclePolicy(Employee employee, int insurerId, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+		VehiclePolicy policy = new VehiclePolicy(employee, insurerId, policyId);
 		VehicleInfomation vehicleInfo = info.getVehicleInfomation();
 		if (null != order) {
+			policy.bindVehicleOrder(order);
 			VehiclePolicyTips tips = order.getTips();
 			InsurUnit owner = tips.getOwner();
 			if (!owner.getName().equals(info.getCz()))
-				return false;
+				_fillPolicyErrorLog(policy, "车主姓名");
 			if (!owner.getIdNo().equals(info.getCzZjhm()))
-				return false;
+				_fillPolicyErrorLog(policy, "车主证件号");
 			if (!vehicleInfo.getCphm().equals(tips.getLicense()))
-				return false;
+				_fillPolicyErrorLog(policy, "车牌号码");
 			if (!vehicleInfo.getFdjh().equals(tips.getEngine()))
-				return false;
+				_fillPolicyErrorLog(policy, "发动机号");
 			if (!vehicleInfo.getCjh().equals(tips.getVin()))
-				return false;
+				_fillPolicyErrorLog(policy, "车架号");
 			if (!vehicleInfo.getZws().equals(String.valueOf(tips.getSeat())))
-				return false;
+				_fillPolicyErrorLog(policy, "座位数");
 			if (vehicleInfo.isGH() ^ tips.isTransfer())
-				return false;
+				_fillPolicyErrorLog(policy, "过户状态");
 			if (null != info && !_deliverNoMatches(order, info))
-				return false;
+				_fillPolicyErrorLog(policy, info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? "商业险投保单号" : "交强险投保单号");
 			if (null != relationInfo && !_deliverNoMatches(order, relationInfo))
-				return false;
+				_fillPolicyErrorLog(policy, relationInfo.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? "商业险投保单号" : "交强险投保单号");
 			policy.setType(VehiclePolicyType.TENANT_SELF);
 		} else
 			policy.setType(VehiclePolicyType.EXTERNAL);
@@ -125,10 +133,15 @@ public class EntityGenerator {
 		policy.setDetail(info);
 		policy.setDetail(relationInfo);
 		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
-		if  (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
+		if (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
 			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(commercial.getInsurances()));
-		return true;
+		return policy;
 	}
+	
+	private static void _fillPolicyErrorLog(VehiclePolicy policy, String desc) {
+		vehicle_manager_logger.error("简捷保单 - {} 和保途订单 - {} 的【" + desc +"】不匹配，以简捷保单为准！", policy.get_id(), policy.getOrderDetail().getOrderId());
+	}
+	
 	
 	private static final boolean _deliverNoMatches(VehicleOrder order, BaseInfo info) {
 		PolicyDetail detail = order.getTips().getDetail();
