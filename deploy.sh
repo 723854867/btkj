@@ -3,7 +3,7 @@ env=$1
 build=$2
 IP="116.62.111.191"
 ENV="online"
-if [ "${env}"x = "test" ]; then
+if [ "${env}"x = "test"x ]; then
 	IP="101.37.30.26"
 	ENV="test"
 fi
