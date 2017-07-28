@@ -2,6 +2,7 @@ package org.btkj.community.mybatis.dao;
 
 import java.util.Map;
 
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
@@ -31,4 +32,8 @@ public interface ArticleDao extends DBMapper<Integer, Article> {
 	@Override
 	@SelectProvider(type = ArticleSQLProvider.class, method = "update")
 	void update(Article entity);
+	
+	@Override
+	@DeleteProvider(type = ArticleSQLProvider.class, method = "delete")
+	void delete(Integer key);
 }

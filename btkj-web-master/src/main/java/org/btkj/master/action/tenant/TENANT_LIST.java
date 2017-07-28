@@ -3,8 +3,8 @@ package org.btkj.master.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.master.LoggedAction;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.Administrator;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.web.util.Params;

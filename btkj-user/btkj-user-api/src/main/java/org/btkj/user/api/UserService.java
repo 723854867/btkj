@@ -10,6 +10,7 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.Customer;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.UserPO;
+import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.message.Result;
 
@@ -44,6 +45,17 @@ public interface UserService {
 	 * @return
 	 */
 	User user(String mobile, int appId);
+	
+	UserHolder userByToken(Client client, String token);
+	
+	/**
+	 * 锁定用户然后获取用户锁
+	 * 
+	 * @param client
+	 * @param mobile
+	 * @return
+	 */
+	Result<UserHolder> userLockByToken(Client client, String token);
 	
 	/**
 	 * 通过账号和 appId 获取用户并且获取用户锁

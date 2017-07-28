@@ -36,7 +36,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	private String FIELD_EMPLOYEE_ID				= "employeeId";
 	private String FIELD_TID						= "tid";
 	private String FIELD_UID						= "uid";
-
+	private String FIELD_POLICY_ID					= "policyId";
 	
 	private String FIELD_COMMERCIAL_POLICY_NO		= "tips.detail.commercialNo";
 	private String FIELD_COMPULSORY_POLICY_NO		= "tips.detail.compulsiveNo";
@@ -142,14 +142,25 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	}
 	
 	/**
-	 * 一次跟新多个保单的状态
+	 * 更新已出单
 	 * 
 	 * @param orders
 	 */
-	public void updateStates(List<VehicleOrder> orders) {
+	public void issuedUpdate(List<VehicleOrder> orders) {
 		Map<Bson, Bson> updates = new HashMap<Bson, Bson>();
 		for (VehicleOrder order : orders) 
-			updates.put(Filters.eq(FIELD_ID, order.get_id()), Updates.set(FIELD_STATE, order.getState()));
+			updates.put(Filters.eq(FIELD_ID, order.get_id()), 
+					Filters.and(Updates.set(FIELD_STATE, order.getState()), Updates.set(FIELD_POLICY_ID, order.getPolicyId())));
 		mongo.bulkUpdateOne(collection, updates);
+	}
+	
+	public List<VehicleOrder> orders(int tid, int stateMod) {
+		List<Bson> or = new ArrayList<Bson>();
+		for (VehicleOrderState state : VehicleOrderState.values()) {
+			if ((state.mark() & stateMod) != state.mark())
+				continue;
+			or.add(Filters.eq(FIELD_STATE, state));
+		}
+		return mongo.find(collection, or.isEmpty() ? Filters.eq(FIELD_TID, tid) : Filters.and(Filters.eq(FIELD_TID, tid), Filters.or(or)), clazz);
 	}
 }

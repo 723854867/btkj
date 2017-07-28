@@ -22,11 +22,14 @@ public class VehicleOrder implements UniqueModel<String> {
 	private int uid;
 	private int tid;					// 商户ID
 	private int employeeId;				// 雇员ID
+	private String salesman;			// 业务员名字
+	private String salesmanMobile;		// 业务员手机号
 	private int lane; 					// 线路：壁虎、乐宝吧、保途
 	private boolean insure; 			// 是否投保
 	private String desc; 				// 描述
 	private int created; 				// 创建时间
 	private VehicleOrderState state; 	// 保单状态
+	private String policyId;			// 保单ID
 
 	// 险企信息
 	private int insurerId; 				// 保险公司ID
@@ -56,6 +59,8 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.state = VehicleOrderState.QUOTING;
 		this.tips = tips;
 		this.created = DateUtil.currentTime();
+		this.salesman = employee.getUser().getName();
+		this.salesmanMobile = employee.getUser().getMobile();
 	}
 	
 	public String get_id() {
@@ -96,6 +101,22 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
+	}
+	
+	public String getSalesman() {
+		return salesman;
+	}
+	
+	public void setSalesman(String salesman) {
+		this.salesman = salesman;
+	}
+	
+	public String getSalesmanMobile() {
+		return salesmanMobile;
+	}
+	
+	public void setSalesmanMobile(String salesmanMobile) {
+		this.salesmanMobile = salesmanMobile;
 	}
 	
 	public int getAppId() {
@@ -208,6 +229,14 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
 		this.deliveryInfo = deliveryInfo;
+	}
+	
+	public String getPolicyId() {
+		return policyId;
+	}
+	
+	public void setPolicyId(String policyId) {
+		this.policyId = policyId;
 	}
 	
 	@Override

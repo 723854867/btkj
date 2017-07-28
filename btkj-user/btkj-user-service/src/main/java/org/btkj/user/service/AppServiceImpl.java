@@ -40,16 +40,16 @@ public class AppServiceImpl implements AppService {
 	private EmployeeService employeeService;
 	
 	@Override
+	public AppPO app(int appId) {
+		return appMapper.getByKey(appId);
+	}
+	
+	@Override
 	public App app(Client client, int appId) {
 		AppPO entity = appMapper.getByKey(appId);
 		if (null == entity)
 			return null;
 		return new App(entity, client);
-	}
-	
-	@Override
-	public AppPO getAppById(int appId) {
-		return appMapper.getByKey(appId);
 	}
 	
 	@Override

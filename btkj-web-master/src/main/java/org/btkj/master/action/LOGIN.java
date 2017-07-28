@@ -10,7 +10,7 @@ import org.btkj.web.util.action.Action;
 import org.rapid.util.common.message.Result;
 
 
-public class LOGIN implements Action {
+public class LOGIN extends Action {
 	
 	@Resource
 	private CloudService cloudService;

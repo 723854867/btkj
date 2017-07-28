@@ -48,6 +48,7 @@ public interface BtkjConsts {
 		Result VEHICLE_MODEL_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_MODEL_NOT_EXIST);
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
+		Result NON_AUTO_CATEGORY_NOT_EXIST		= Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
@@ -58,5 +59,21 @@ public interface BtkjConsts {
 	
 	interface FIELD {
 		String UID								= "uid";
+	}
+	
+	interface LIMITS {
+		final int ARTICLE_TITLE_MIN						= 6;				// 咨询标题最小值
+		final int ARTICLE_TITLE_MAX						= 50;				// 咨询标题最大值
+		final int URL_MIN								= 6;				// url 最小值
+		final int URL_MAX								= 200;				// url 最大值
+		final int NAME_MIN								= 2;
+		final int NAME_MAX								= 50;
+		final int NONAUTO_FILTER_MAX					= 5;				// 非车险分类最大筛选类别数
+		final int NONAUTO_FILTER_OPTION_MIN				= 2;				// 非车险分类最小筛选项数
+		final int NONAUTO_FILTER_OPTION_MAX				= 6;				// 非车险分类最大筛选项数
+		final int NONAUTO_SORT_MAX						= 6;				// 非车险分类最大排序类型数
+		final int NONAUTO_TAG_MAX						= 8;				// 非车险分类最大标签数
+		final int NONAUTO_LIABILITY_MIN					= 1;				// 非车险产品保险责任最小数
+		final int NONAUTO_LIABILITY_MAX					= 6;				// 非车险产品保险责任最大数
 	}
 }

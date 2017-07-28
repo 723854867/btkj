@@ -101,6 +101,11 @@ public class NonAutoCategory implements UniqueModel<Long> {
 		private static final long serialVersionUID = -2834589584602207601L;
 		private String name;					// 筛选条件的名字
 		private List<String> options;			// 删选条件的值
+		public Filter() {}
+		public Filter(String name, List<String> options) {
+			this.name = name;
+			this.options = options;
+		}
 		public String getName() {
 			return name;
 		}

@@ -9,23 +9,33 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.api.EmployeeService;
+import org.btkj.user.pojo.model.EmployeeHolder;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.data.storage.redis.DistributeSession;
+import org.rapid.data.storage.redis.Redis;
+import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.springframework.stereotype.Service;
 
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 	
+	@Resource
+	private Redis redis;
 	@Resource
 	private AppMapper appMapper;
 	@Resource
@@ -66,6 +76,60 @@ public class EmployeeServiceImpl implements EmployeeService {
 		for (EmployeePO po : employees.values()) 
 			tips.put(po.getId(), new EmployeeTip(po, apps.get(po.getAppId()), users.get(po.getUid()), tenants.get(po.getTid())));
 		return tips;
+	}
+	
+	@Override
+	public Result<EmployeeHolder> employeeByToken(Client client, String token, int employeeId) {
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		if (null == employee)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
+		UserPO user = null;
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			user = null == uid ? null : userMapper.getByKey(Integer.valueOf(uid));
+		default:
+			user = userMapper.userByToken(client, token);
+		}
+		if (null == user)
+			return Consts.RESULT.TOKEN_INVALID;
+		if (user.getUid() != employee.getUid())
+			return Consts.RESULT.FORBID;
+		AppPO app = appMapper.getByKey(employee.getAppId());
+		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		return Result.result(new EmployeeHolder(app, user, tenant, employee));
+	}
+	
+	@Override
+	public Result<EmployeeHolder> employeeLockByToken(Client client, String token, int employeeId) {
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		if (null == employee)
+			return null;
+		UserPO user = null;
+		String lockId = null;
+		AppPO app = appMapper.getByKey(employee.getAppId());
+		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			user = null == uid ? null : userMapper.getByKey(Integer.valueOf(uid));
+			lockId = null == user ? null : userMapper.lockUser(user.getUid());
+			if (null == lockId)
+				return Consts.RESULT.TOKEN_INVALID;
+			break;
+		default:
+			Result<UserPO> result = userMapper.userLockByToken(client, token);
+			if (!result.isSuccess())
+				return Result.result(result.getCode(), result.getDesc(), null);
+			user = result.attach();
+			lockId = result.getDesc();
+			break;
+		}
+		if (user.getUid() != employee.getUid())
+			return Consts.RESULT.FORBID;
+		return Result.result(Code.OK.id(), lockId, new EmployeeHolder(app, user, tenant, employee));
 	}
 	
 	@Override

@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
@@ -15,6 +15,7 @@ import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
@@ -67,12 +68,12 @@ public interface VehicleManageService {
 	Result<Void> coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name);
 	
 	/**
-	 * 规模奖励配置
+	 * 获取指定商户的管理佣金设置
 	 * 
 	 * @param tid
 	 * @return
 	 */
-	List<BonusScaleConfig> bonusScaleConfigs(int tid);
+	List<BonusManageConfig> bonusManageConfigs(int tid);
 	
 	/**
 	 * 新增管理奖励配置项
@@ -101,6 +102,14 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Result<Void> bonusManageConfigDelete(String id, int tid);
+	
+	/**
+	 * 规模奖励配置
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	List<BonusScaleConfig> bonusScaleConfigs(int tid);
 	
 	/**
 	 * 新增规模奖励配置项
@@ -134,11 +143,18 @@ public interface VehicleManageService {
 	Result<Void> bonusScaleConfigDelete(int id, int tid);
 	
 	/**
-	 * 获取指定的保单
+	 * 同步简捷保单
 	 * 
 	 * @return
 	 */
-	void jianJieSynchronize(Employee employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
+	void jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
+	
+	/**
+	 * 出单：将简捷同步过来的保单所对应的订单全部设置为已出单
+	 * 
+	 * @param tid
+	 */
+	void vehicleOrderIssue(int tid);
 	
 	/**
 	 * 获取车险路由设置
@@ -279,4 +295,6 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher);
+	
+	List<VehicleOrder> orders(int tid, int stateMod);
 }

@@ -22,12 +22,15 @@ public class TenantPagingInfo implements Serializable {
 	private String licenseImage;				// 营业执照反面
 	private String nonAutoBind;
 	private String servicePhone;
+	private String contacts;
+	private String contractsMobile;
 	private int bonusScaleCountMod;				// 规模佣金统计口径模值
 	private int bonusScaleCountInsuranceMod;	// 规模佣金统计口径险企模值
 	private int bonusScaleRewardMod;			// 规模佣金奖励口径模值
 	private int bonusScaleRewardInsuranceMod;	// 规模佣金奖励口径险企模值
 	private int created;						// 注册时间	
 	private int updated;						// 最近修改时间
+	private int expire;
 	
 	public TenantPagingInfo() {}
 	
@@ -40,6 +43,9 @@ public class TenantPagingInfo implements Serializable {
 		this.licenseImage = tenant.getLicenseImage();
 		this.created = tenant.getCreated();
 		this.updated = tenant.getUpdated();
+		this.contacts = tenant.getContacts();
+		this.contractsMobile = tenant.getContactsMobile();
+		this.expire = tenant.getExpire();
 	}
 
 	public int getTid() {
@@ -112,5 +118,77 @@ public class TenantPagingInfo implements Serializable {
 
 	public void setUpdated(int updated) {
 		this.updated = updated;
+	}
+	
+	public String getContacts() {
+		return contacts;
+	}
+	
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+	
+	public String getContractsMobile() {
+		return contractsMobile;
+	}
+	
+	public void setContractsMobile(String contractsMobile) {
+		this.contractsMobile = contractsMobile;
+	}
+	
+	public int getExpire() {
+		return expire;
+	}
+	
+	public void setExpire(int expire) {
+		this.expire = expire;
+	}
+	
+	public int getBonusScaleCountInsuranceMod() {
+		return bonusScaleCountInsuranceMod;
+	}
+	
+	public void setBonusScaleCountInsuranceMod(int bonusScaleCountInsuranceMod) {
+		this.bonusScaleCountInsuranceMod = bonusScaleCountInsuranceMod;
+	}
+	
+	public int getBonusScaleCountMod() {
+		return bonusScaleCountMod;
+	}
+	
+	public void setBonusScaleCountMod(int bonusScaleCountMod) {
+		this.bonusScaleCountMod = bonusScaleCountMod;
+	}
+	
+	public int getBonusScaleRewardInsuranceMod() {
+		return bonusScaleRewardInsuranceMod;
+	}
+	
+	public void setBonusScaleRewardInsuranceMod(int bonusScaleRewardInsuranceMod) {
+		this.bonusScaleRewardInsuranceMod = bonusScaleRewardInsuranceMod;
+	}
+	
+	public int getBonusScaleRewardMod() {
+		return bonusScaleRewardMod;
+	}
+	
+	public void setBonusScaleRewardMod(int bonusScaleRewardMod) {
+		this.bonusScaleRewardMod = bonusScaleRewardMod;
+	}
+	
+	public String getNonAutoBind() {
+		return nonAutoBind;
+	}
+	
+	public void setNonAutoBind(String nonAutoBind) {
+		this.nonAutoBind = nonAutoBind;
+	}
+	
+	public String getServicePhone() {
+		return servicePhone;
+	}
+	
+	public void setServicePhone(String servicePhone) {
+		this.servicePhone = servicePhone;
 	}
 }

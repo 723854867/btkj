@@ -28,6 +28,17 @@ public interface CommunityManageService {
 	Result<Void> replyDelete(int replyId, int appId);
 	
 	/**
+	 * 新增咨询
+	 * 
+	 * @param app
+	 * @param title
+	 * @param icon
+	 * @param link
+	 * @return
+	 */
+	Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link);
+	
+	/**
 	 * 删除咨询
 	 * 
 	 * @param articleId

@@ -16,6 +16,7 @@ import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
+import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
@@ -64,6 +65,48 @@ public class UserServiceImpl implements UserService {
 	public User user(String mobile, int appId) {
 		UserPO po = userMapper.getUserByMobile(appId, mobile);
 		return null == po ? null : new User(appMapper.getByKey(po.getAppId()), po);
+	}
+	
+	@Override
+	public UserHolder userByToken(Client client, String token) {
+		UserPO user = null;
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			if (null == uid)
+				return null;
+			user = userMapper.getByKey(Integer.valueOf(uid));
+			break;
+		default:
+			user = userMapper.userByToken(client, token);
+			break;
+		}
+		return null == user ? null : new UserHolder(appMapper.getByKey(user.getAppId()), user);
+	}
+	
+	@Override
+	public Result<UserHolder> userLockByToken(Client client, String token) {
+		UserPO user = null;
+		String lockId = null;
+		switch (client) {
+		case RECRUIT:
+			DistributeSession session = new DistributeSession(token, redis);
+			String uid = session.get(BtkjConsts.FIELD.UID);
+			user = null == uid ? null : userMapper.getByKey(Integer.valueOf(uid));
+			lockId = null == user ? null : userMapper.lockUser(user.getUid());
+			if (null == lockId)
+				return Consts.RESULT.TOKEN_INVALID;
+			break;
+		default:
+			Result<UserPO> result = userMapper.userLockByToken(client, token);
+			if (!result.isSuccess())
+				return Result.result(result.getCode(), result.getDesc(), null);
+			user = result.attach();
+			lockId = result.getDesc();
+			break;
+		}
+		return Result.result(Code.OK.id(), lockId, new UserHolder(appMapper.getByKey(user.getAppId()), user));
 	}
 	
 	@Override

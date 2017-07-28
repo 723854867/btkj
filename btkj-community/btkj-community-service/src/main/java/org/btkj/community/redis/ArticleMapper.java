@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.community.mybatis.dao.ArticleDao;
+import org.btkj.community.pojo.param.ArticleListParam;
+import org.btkj.community.pojo.param.ArticleListParam.SortCol;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.Article;
-import org.btkj.pojo.vo.ArticleSearcher;
-import org.btkj.pojo.vo.ArticleSearcher.SortCol;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
@@ -29,9 +29,9 @@ public class ArticleMapper extends RedisDBAdapter<Integer, Article, ArticleDao> 
 		super(new ByteProtostuffSerializer<Article>(), "hash:db:article");
 	}
 	
-	public Result<Pager<Article>> paging(ArticleSearcher searcher) {
-		_checkLoad(searcher.getAppId());
-		List<byte[]> list = redis.hpaging(_zsetKey(searcher.getAppId(), searcher.getSortCol()), redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
+	public Result<Pager<Article>> paging(ArticleListParam param) {
+		_checkLoad(param.getAppId());
+		List<byte[]> list = redis.hpaging(_zsetKey(param.getAppId(), param.getSortCol()), redisKey, param.getPage(), param.getPageSize(), param.redisZSortType());
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));

@@ -3,9 +3,9 @@ package org.btkj.vehicle;
 import org.btkj.pojo.VehicleRule;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
@@ -88,7 +88,7 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final VehiclePolicy newVehiclePolicy(Employee employee, int insurerId, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+	public static final VehiclePolicy newVehiclePolicy(EmployeePO employee, int insurerId, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
 		VehiclePolicy policy = new VehiclePolicy(employee, insurerId, policyId);
 		VehicleInfomation vehicleInfo = info.getVehicleInfomation();
 		if (null != order) {

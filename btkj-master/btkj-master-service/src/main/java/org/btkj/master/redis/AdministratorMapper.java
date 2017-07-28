@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.btkj.master.LuaCmd;
 import org.btkj.master.mybatis.dao.AdministratorDao;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.Administrator;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;

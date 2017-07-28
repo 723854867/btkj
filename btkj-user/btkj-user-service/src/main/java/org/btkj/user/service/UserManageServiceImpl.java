@@ -43,6 +43,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -232,12 +233,18 @@ public class UserManageServiceImpl implements UserManageService {
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != user.getAppId())
 			return Consts.RESULT.FORBID;
-		tenant.setContacts(contacts);
-		tenant.setContactsMobile(contactsMobile);
-		tenant.setName(tname);
-		tenant.setLicense(license);
-		tenant.setLicenseImage(licenseImage);
-		tenant.setExpire(expire);
+		if (StringUtil.hasText(contacts))
+			tenant.setContacts(contacts);
+		if (StringUtil.hasText(contactsMobile))
+			tenant.setContactsMobile(contactsMobile);
+		if (StringUtil.hasText(tname))
+			tenant.setName(tname);
+		if (StringUtil.hasText(license))
+			tenant.setLicense(license);
+		if (StringUtil.hasText(licenseImage))
+			tenant.setLicenseImage(licenseImage);
+		if (0 != expire)
+			tenant.setExpire(expire);
 		tenant.setUpdated(DateUtil.currentTime());
 		tenantMapper.update(tenant);
 		return Consts.RESULT.OK;

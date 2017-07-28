@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.master.LoggedAction;
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.web.util.Request;

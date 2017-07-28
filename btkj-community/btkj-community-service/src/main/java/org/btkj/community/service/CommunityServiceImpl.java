@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.community.api.CommunityService;
 import org.btkj.community.mybatis.EntityGenerator;
 import org.btkj.community.mybatis.Tx;
+import org.btkj.community.pojo.param.ArticleListParam;
 import org.btkj.community.redis.ArticleMapper;
 import org.btkj.community.redis.CommentMapper;
 import org.btkj.community.redis.QuizMapper;
@@ -17,7 +18,6 @@ import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
@@ -38,18 +38,8 @@ public class CommunityServiceImpl implements CommunityService {
 	private CommentMapper commentMapper;
 	
 	@Override
-	public Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link) {
-		try {
-			tx.articlesAdd(appId, maxArticleCount, title, icon, link);
-		} catch (BusinessException e) {
-			return Result.result(e.getCode());
-		}
-		return Consts.RESULT.OK;
-	}
-
-	@Override
-	public Result<Pager<Article>> articles(ArticleSearcher searcher) {
-		return articleMapper.paging(searcher);
+	public Result<Pager<Article>> articles(ArticleListParam param) {
+		return articleMapper.paging(param);
 	}
 	
 	@Override

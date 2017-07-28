@@ -28,7 +28,7 @@ public class Employee extends Identity {
 	}
 	
 	public int getAppId() {
-		return app.getId();
+		return null == app ? 0 : app.getId();
 	}
 	
 	public int getUid() {

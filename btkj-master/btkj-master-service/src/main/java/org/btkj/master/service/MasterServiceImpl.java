@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.master.EntityGenerator;
 import org.btkj.master.api.MasterService;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.master.redis.AdministratorMapper;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.Administrator;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
 

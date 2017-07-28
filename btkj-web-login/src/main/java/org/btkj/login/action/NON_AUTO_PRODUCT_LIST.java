@@ -13,7 +13,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class NON_AUTO_PRODUCT_LIST implements Action {
+public class NON_AUTO_PRODUCT_LIST extends Action {
 	
 	@Resource
 	private NonAutoService nonAutoService;

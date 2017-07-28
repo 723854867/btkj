@@ -3,7 +3,7 @@ package org.btkj.master;
 import javax.annotation.Resource;
 
 import org.btkj.master.api.CloudService;
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.Action;
@@ -15,7 +15,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public abstract class LoggedAction implements Action {
+public abstract class LoggedAction extends Action {
 	
 	@Resource
 	protected CloudService cloudService;

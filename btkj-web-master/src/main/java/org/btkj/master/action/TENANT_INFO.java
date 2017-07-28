@@ -3,8 +3,8 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.LoggedAction;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.po.Administrator;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;

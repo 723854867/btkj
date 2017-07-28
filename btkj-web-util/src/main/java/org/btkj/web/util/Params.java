@@ -14,7 +14,6 @@ import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
-import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
@@ -146,8 +145,6 @@ public interface Params {
 	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1017, "region");
 	final Str2IntConstConverter TENANT_REGION			= new Str2IntConstConverter(1018, "tenantRegion");
 	
-	final Str2StrConstConverter TITLE					= new Str2StrConstConverter(1019, "title");
-
 	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1020, "agree", false) {
 		public Boolean convert(String value) throws ConstConvertFailureException {
 			return Boolean.valueOf(value);
@@ -362,13 +359,6 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<ArticleSearcher> ARTICLE_SEARCHER			= new Str2ObjConstConverter<ArticleSearcher>(1210, "articleSearcher") {
-		@Override
-		public ArticleSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, ArticleSearcher.class);
-		}
-	};
-	
 	final Str2ObjConstConverter<QuizSearcher> QUIZ_SEARCHER				= new Str2ObjConstConverter<QuizSearcher>(1211, "quizSearcher") {
 		@Override
 		public QuizSearcher convert(String k) throws ConstConvertFailureException {
@@ -453,4 +443,6 @@ public interface Params {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehiclePolicySearcher.class);
 		}
 	};
+	
+	final Str2StrConstConverter PAYLOAD					= new Str2StrConstConverter(1218, "payload");
 }

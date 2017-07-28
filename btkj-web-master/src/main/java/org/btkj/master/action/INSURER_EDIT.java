@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.LoggedAction;
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;

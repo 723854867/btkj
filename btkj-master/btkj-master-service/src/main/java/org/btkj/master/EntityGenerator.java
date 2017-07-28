@@ -1,6 +1,6 @@
 package org.btkj.master;
 
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {

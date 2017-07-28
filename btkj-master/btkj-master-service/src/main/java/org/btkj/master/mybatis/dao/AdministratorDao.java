@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.master.mybatis.provider.AdministratorSQLProvider;
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface AdministratorDao extends DBMapper<Integer, Administrator> {

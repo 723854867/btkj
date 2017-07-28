@@ -15,7 +15,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class NON_AUTO_CATEGORY_INFO implements Action {
+public class NON_AUTO_CATEGORY_INFO extends Action {
 	
 	@Resource
 	private NonAutoService nonAutoService;

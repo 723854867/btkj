@@ -1,4 +1,4 @@
-package org.btkj.manager.action.tenant.employee;
+package org.btkj.manager.action.tenant;
 
 import javax.annotation.Resource;
 

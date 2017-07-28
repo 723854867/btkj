@@ -79,7 +79,7 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void articlesAdd(int appId, int maxArticleCount, String title, String icon, String link) { 
+	public TxCallback articlesAdd(int appId, int maxArticleCount, String title, String icon, String link) { 
 		if (maxArticleCount > 0) {
 			int num = articleDao.countByAppIdForUpdate(appId);
 			if (num >= maxArticleCount)
@@ -87,5 +87,11 @@ public class Tx {
 		}
 		Article article = EntityGenerator.article(appId, title, icon, link);
 		articleMapper.insert(article);
+		return new TxCallback() {
+			@Override
+			public void finish() {
+				articleMapper.flush(article);
+			}
+		};
 	}
 }

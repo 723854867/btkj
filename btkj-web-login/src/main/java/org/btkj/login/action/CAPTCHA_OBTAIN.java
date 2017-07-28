@@ -16,7 +16,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CAPTCHA_OBTAIN implements Action {
+public class CAPTCHA_OBTAIN extends Action {
 	
 	@Resource
 	private AppService appService;
@@ -26,7 +26,7 @@ public class CAPTCHA_OBTAIN implements Action {
 	@Override
 	public Result<String> execute(Request request) {
 		int appId = request.getParam(Params.APP_ID);
-		if (0 != appId && null == appService.getAppById(appId))
+		if (0 != appId && null == appService.app(appId))
 			return Result.result(BtkjCode.APP_NOT_EXIST);
 		
 		Result<String> result = courierService.captchaObtain(appId, request.getParam(Params.MOBILE));

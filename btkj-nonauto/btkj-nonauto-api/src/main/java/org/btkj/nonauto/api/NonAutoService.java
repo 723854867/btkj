@@ -6,6 +6,7 @@ import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
 import org.btkj.pojo.vo.NonAutoProductSearcher;
+import org.rapid.util.common.message.Result;
 
 /**
  * 非车险服务类
@@ -15,26 +16,18 @@ import org.btkj.pojo.vo.NonAutoProductSearcher;
 public interface NonAutoService {
 
 	/**
+	 * 获取所有的非车险类型
+	 * 
+	 * @return
+	 */
+	List<NonAutoCategory> categories();
+
+	/**
 	 * 新增或修改非车险类型
 	 * 
 	 * @param category
 	 */
 	void editCategory(NonAutoCategory category);
-	
-	/**
-	 * 获取所有的非车险类型
-	 * 
-	 * @return
-	 */
-	List<NonAutoCategory> getAllCategories();
-	
-	/**
-	 * 同时获取多条非车险种类
-	 * 
-	 * @param cids
-	 * @return
-	 */
-	List<NonAutoCategory> getCategoriesByIds(List<Long> cids);
 	
 	/**
 	 * 通过非车险Id获取非车险信息
@@ -45,11 +38,19 @@ public interface NonAutoService {
 	NonAutoCategory category(long id);
 	
 	/**
+	 * 同时获取多条非车险种类
+	 * 
+	 * @param cids
+	 * @return
+	 */
+	List<NonAutoCategory> getCategoriesByIds(List<Long> cids);
+	
+	/**
 	 * 新增或者修改非车险产品
 	 * 
 	 * @param product
 	 */
-	void editProduct(NonAutoProduct product);
+	Result<Void> editProduct(NonAutoProduct product);
 	
 	/**
 	 * 获取非车险产品列表

@@ -52,7 +52,7 @@ public class MAIN_PAGE extends UserAction {
 		Region region = configService.region(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
 		String nonAutoBind = null == employee ? null : employee.getTenant().getNonAutoBind();
-		pageInfo.setNonAutoCategories(null == employee ? nonAutoService.getAllCategories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
+		pageInfo.setNonAutoCategories(null == employee ? nonAutoService.categories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
 		return result;
 	}
 	

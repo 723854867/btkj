@@ -3,11 +3,13 @@ package org.btkj.community.service;
 import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityManageService;
+import org.btkj.community.mybatis.Tx;
 import org.btkj.community.redis.ArticleMapper;
 import org.btkj.community.redis.CommentMapper;
 import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
@@ -23,6 +25,8 @@ public class CommunityManageServiceImpl implements CommunityManageService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommunityManageService.class);
 	
+	@Resource
+	private Tx tx;
 	@Resource
 	private QuizMapper quizMapper;
 	@Resource
@@ -59,6 +63,16 @@ public class CommunityManageServiceImpl implements CommunityManageService {
 	}
 	
 	@Override
+	public Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link) {
+		try {
+			tx.articlesAdd(appId, maxArticleCount, title, icon, link).finish();;
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
 	public Result<Void> articleDelete(int articleId, int appId) {
 		Article article = articleMapper.getByKey(articleId);
 		if (null == article)
@@ -66,7 +80,7 @@ public class CommunityManageServiceImpl implements CommunityManageService {
 		if (article.getAppId() != appId)
 			return Consts.RESULT.FORBID;
 		articleMapper.delete(article);
-		return null;
+		return Consts.RESULT.OK;
 	}
 	
 	@Override

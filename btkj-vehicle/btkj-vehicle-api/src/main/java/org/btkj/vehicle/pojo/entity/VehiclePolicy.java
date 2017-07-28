@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
@@ -47,7 +47,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public VehiclePolicy() {}
 	
-	public VehiclePolicy(Employee employee, int insurerId, String id) {
+	public VehiclePolicy(EmployeePO employee, int insurerId, String id) {
 		this._id = id;
 		this.insurerId = insurerId;
 		this.tid = employee.getTid();
@@ -326,7 +326,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 	public class OrderDetail implements Serializable {
 		private static final long serialVersionUID = -4809816366810831775L;
 		private String orderId;								
-		
 		public String getOrderId() {
 			return orderId;
 		}

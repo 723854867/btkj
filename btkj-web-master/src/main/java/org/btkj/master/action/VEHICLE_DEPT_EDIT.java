@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.LoggedAction;
-import org.btkj.pojo.po.Administrator;
+import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

@@ -16,7 +16,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class USER_CHECK implements Action {
+public class USER_CHECK extends Action {
 	
 	@Resource
 	private UserService userService;

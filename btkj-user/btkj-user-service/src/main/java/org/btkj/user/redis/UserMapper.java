@@ -94,6 +94,24 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	public String lockUser(int uid) {
 		return distributeLock.tryLock(_userLockKey(uid));
 	}
+	
+	public UserPO userByToken(Client client, String token) {
+		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
+		return null == data ? null : serializer.antiConvet(data);
+	}
+	
+	public Result<UserPO> userLockByToken(Client client, String token) {
+		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
+						USER_LOCK, lockId, Config.getUserLockExpire());
+		if (data instanceof byte[]) {
+			UserPO user = serializer.antiConvet((byte[]) data);
+			return Result.result(Code.OK.id(), lockId, user);
+		}
+		if ((long) data == 1)
+			return Result.result(Code.TOKEN_INVALID);
+		return Result.result(Code.USER_STATUS_CHANGED);
+	}
 
 	/**
 	 * 通过 token 获取用户并且同时获取用户的资

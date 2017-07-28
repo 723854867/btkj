@@ -11,20 +11,20 @@ import org.rapid.util.common.message.Result;
 public interface AppService {
 	
 	/**
+	 * 通过 appId 获取 App
+	 * 
+	 * @param appId
+	 * @return
+	 */
+	AppPO app(int appId);
+	
+	/**
 	 * 通过 appId 获取 app
 	 * 
 	 * @param appId
 	 * @return
 	 */
 	App app(Client client, int appId);
-	
-	/**
-	 * 通过 appId 获取 App
-	 * 
-	 * @param appId
-	 * @return
-	 */
-	AppPO getAppById(int appId);
 	
 	/**
 	 * 非游客模式的首页：分为 app 首页、pc 端首页、管理后台首页

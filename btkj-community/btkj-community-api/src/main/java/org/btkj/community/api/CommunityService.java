@@ -1,36 +1,24 @@
 package org.btkj.community.api;
 
+import org.btkj.community.pojo.param.ArticleListParam;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.Article;
 import org.btkj.pojo.po.Comment;
 import org.btkj.pojo.po.Quiz;
 import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.vo.ArticleSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.rapid.util.common.message.Result;
 
 public interface CommunityService {
 	
 	/**
-	 * 新增咨询
-	 * 
-	 * @param app
-	 * @param title
-	 * @param icon
-	 * @param link
-	 * @return
-	 */
-	Result<Void> articleAdd(int appId, int maxArticleCount, String title, String icon, String link);
-
-	/**
 	 * 咨询分页
 	 * 
-	 * @param appId
-	 * @param searcher
+	 * @param param
 	 * @return
 	 */
-	Result<Pager<Article>> articles(ArticleSearcher searcher);
+	Result<Pager<Article>> articles(ArticleListParam param);
 	
 	/**
 	 * 评论分页

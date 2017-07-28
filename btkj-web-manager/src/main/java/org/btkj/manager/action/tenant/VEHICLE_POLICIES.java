@@ -12,7 +12,7 @@ import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class VEHICLE_POLICES extends TenantAction {
+public class VEHICLE_POLICIES extends TenantAction {
 	
 	@Resource
 	private VehicleManageService vehicleManageService;
