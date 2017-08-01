@@ -2,10 +2,10 @@ package org.btkj.nonauto.api;
 
 import java.util.List;
 
+import org.btkj.nonauto.pojo.param.NonAutoProductListParam;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
-import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -53,10 +53,10 @@ public interface NonAutoService {
 	Result<Void> editProduct(NonAutoProduct product);
 	
 	/**
-	 * 获取非车险产品列表
+	 * 非车险产品分页
 	 * 
-	 * @param searcher
+	 * @param param
 	 * @return
 	 */
-	Pager<NonAutoProduct> productList(NonAutoProductSearcher searcher);
+	Pager<NonAutoProduct> products(NonAutoProductListParam param);
 }

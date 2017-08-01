@@ -82,7 +82,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 			if (null != lockId)
 				return Result.result(Code.OK, lockId, user);
 		}
-		return Result.result(Code.USER_STATUS_CHANGED);
+		return Result.result(Code.LOCK_CONFLICT);
 	}
 	
 	/**
@@ -110,7 +110,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		}
 		if ((long) data == 1)
 			return Result.result(Code.TOKEN_INVALID);
-		return Result.result(Code.USER_STATUS_CHANGED);
+		return Result.result(Code.LOCK_CONFLICT);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		}
 		if ((long) data == 1)
 			return Result.result(Code.TOKEN_INVALID);
-		return Result.result(Code.USER_STATUS_CHANGED);
+		return Result.result(Code.LOCK_CONFLICT);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		long flag = redis.tokenRemove(_userTokenKey(client), _tokenUserKey(client), token, USER_LOCK, lockId, Config.getUserLockExpire());
 		if (-1 == flag)
-			return Result.result(Code.USER_STATUS_CHANGED);
+			return Result.result(Code.LOCK_CONFLICT);
 		if (-2 == flag)
 			return Result.result(Code.TOKEN_INVALID);
 		return Result.result(new TokenRemoveModel((int) flag, lockId));

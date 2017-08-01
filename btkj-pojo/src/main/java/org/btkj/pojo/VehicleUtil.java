@@ -2,16 +2,25 @@ package org.btkj.pojo;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
-import org.btkj.pojo.enums.BonusScaleType;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.po.EmployeePO.Mod;
+import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
+import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.rapid.util.common.Consts;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.DateUtil;
 
-public class VehicleRule {
+public class VehicleUtil {
 
 	/**
 	 * 根据简捷的的使用性质和车辆类型来返回车辆规模类型，用在规模佣金计算中
@@ -19,23 +28,23 @@ public class VehicleRule {
 	 * @param info
 	 * @return
 	 */
-	public static final BonusScaleType scaleTypeFromJianJie(String ssxz, String cllx) {
+	public static final VehicleBonusType bonusTypeFromJianJie(String ssxz, String cllx) {
 		if (ssxz.contains("非营") || ssxz.contains("机关") || ssxz.contains("自用")) {
 			if (cllx.contains("座") || cllx.contains("客车") || cllx.contains("轿车"))
-				return BonusScaleType.NO_PROFIT_COACH;
+				return VehicleBonusType.NPC;
 			else if (cllx.contains("挂车") || cllx.contains("货车") || cllx.contains("载货"))
-				return BonusScaleType.NO_PROFIT_TRUCK;
+				return VehicleBonusType.NPT;
 			else
-				return BonusScaleType.OTHER;
+				return VehicleBonusType.OTHER;
 		} else if (ssxz.contains("营业") || ssxz.contains("营运")) {
 			if (cllx.contains("座") || cllx.contains("客车") || cllx.contains("轿车"))
-				return BonusScaleType.PROFT_COACH;
+				return VehicleBonusType.PC;
 			else if (cllx.contains("挂车") || cllx.contains("货车") || cllx.contains("载货"))
-				return BonusScaleType.PROFIT_TRUCK;
+				return VehicleBonusType.PT;
 			else
-				return BonusScaleType.OTHER;
+				return VehicleBonusType.OTHER;
 		} else 
-			return BonusScaleType.OTHER;
+			return VehicleBonusType.OTHER;
 	}
 	
 	/**
@@ -164,5 +173,76 @@ public class VehicleRule {
 		default:
 			return VehicleUsedType.HOME_USE;
 		}
+	}
+	
+	public static final Mod employeeModFromVehicleUsedType(VehicleUsedType usedType) {
+		switch (usedType) {
+		case HOME_USE:
+		case ENTERPRISE:
+		case ORGAN:
+			return Mod.BONUS_NPC;
+		case LEASE:
+		case CITY_BUS:
+		case HIGHWAY_TRANSPORT:
+			return Mod.BONUS_PC;
+		case BIZ_TRUCK:
+			return Mod.BONUS_PT;
+		case NO_BIZ_TRUCK:
+			return Mod.BONUS_NPT;
+		default:
+			return Mod.BONUS_OTHER;
+		}
+	}
+	
+	/**
+	 * 获取车龄
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public static final int vehicleAge(String enrollDate, String commercialStart) {
+		long timestamp = DateUtil.getTimeGap(commercialStart, enrollDate, DateUtil.YYYY_MM_DD_HH_MM_SS, TimeZone.getDefault());
+		return timestamp <= 0 ? 0 : (int) (timestamp / (365 * 24 * 3600 * 1000));
+	}
+	
+	/**
+	 * 是否是新车，新车没有车牌
+	 * 
+	 * @return
+	 */
+	public static final boolean isNewVehicleLicense(String license) {
+		return false;
+	}
+	
+	/**
+	 * 获取以分为单位的保费
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public static final int getTotalQuotaInCent(VehicleOrder order) {
+		VehiclePolicyTips tips = order.getTips();
+		if (null == tips)
+			return 0;
+		PolicySchema schema = tips.getSchema();
+		if (null == schema)
+			return 0;
+		double total = schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
+		return (int) (total * 100);
+	}
+	
+	/**
+	 * 获取雇员关系路径上的团队成员
+	 * 
+	 * @param relationPath
+	 * @param teamDepth
+	 * @return
+	 */
+	public static LinkedList<Integer> relationEmployees(String relationPath, int teamDepth) {
+		teamDepth --;
+		LinkedList<Integer> list = CollectionUtil.toIntLinkedList(relationPath.split(Consts.SYMBOL_UNDERLINE));
+		while (list.size() > teamDepth)
+			list.poll();
+		return list;
 	}
 }

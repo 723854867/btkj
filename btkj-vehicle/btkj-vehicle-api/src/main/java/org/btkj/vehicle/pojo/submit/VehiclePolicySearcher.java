@@ -1,7 +1,7 @@
 package org.btkj.vehicle.pojo.submit;
 
-import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.vo.Page;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
 
@@ -18,7 +18,7 @@ public class VehiclePolicySearcher extends Page {
 	private String owner;					// 车主姓名
 	private String salesman;				// 业务员姓名
 	private VehiclePolicyType type;			// 保单类型
-	private BonusScaleType scaleType;		// 规模奖励类型
+	private VehicleBonusType bonusType;		// 奖励类型
 	private Boolean transfer;				// 是否过户车
 	private PolicyNature nature;			// 转续保状态
 
@@ -94,12 +94,12 @@ public class VehiclePolicySearcher extends Page {
 		this.type = type;
 	}
 
-	public BonusScaleType getScaleType() {
-		return scaleType;
+	public VehicleBonusType getBonusType() {
+		return bonusType;
 	}
-
-	public void setScaleType(BonusScaleType scaleType) {
-		this.scaleType = scaleType;
+	
+	public void setBonusType(VehicleBonusType bonusType) {
+		this.bonusType = bonusType;
 	}
 
 	public Boolean getTransfer() {

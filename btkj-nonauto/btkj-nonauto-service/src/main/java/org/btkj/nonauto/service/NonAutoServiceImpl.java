@@ -1,7 +1,6 @@
 package org.btkj.nonauto.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -10,12 +9,12 @@ import javax.annotation.Resource;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.nonauto.mongo.NonAutoCategoryMapper;
 import org.btkj.nonauto.mongo.NonAutoProductMapper;
+import org.btkj.nonauto.pojo.param.NonAutoProductListParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoCategory.Filter;
 import org.btkj.pojo.po.NonAutoProduct;
-import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
@@ -94,7 +93,7 @@ public class NonAutoServiceImpl implements NonAutoService {
 	}
 	
 	@Override
-	public Pager<NonAutoProduct> productList(NonAutoProductSearcher searcher) {
-		return nonAutoProductMapper.productList(searcher);
+	public Pager<NonAutoProduct> products(NonAutoProductListParam param) {
+		return nonAutoProductMapper.products(param);
 	}
 }

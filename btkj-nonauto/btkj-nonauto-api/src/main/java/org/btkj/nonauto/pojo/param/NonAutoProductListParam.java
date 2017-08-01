@@ -1,25 +1,35 @@
-package org.btkj.pojo.vo;
+package org.btkj.nonauto.pojo.param;
 
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.enums.SortField;
+import org.btkj.pojo.param.EmployeeParam;
 
-public class NonAutoProductSearcher extends Page {
+public class NonAutoProductListParam extends EmployeeParam {
 
-	private static final long serialVersionUID = -5942932537451808183L;
+	private static final long serialVersionUID = -505643458672915703L;
 
-	private Integer cid;							// 险种类型
+	@Min(0)
+	private int cid;								// 险种类型
+	@NotNull
 	private SortField sort;							// 排序
 	private boolean desc;							// 是否是将序，默认是false
+	@Size(max = BtkjConsts.LIMITS.NONAUTO_TAG_MAX)
 	private List<String> tags;						//　标签
+	@Size(max = BtkjConsts.LIMITS.NONAUTO_FILTER_MAX)
 	private Map<String, String> filters;			// 筛选
 	
-	public Integer getCid() {
+	public int getCid() {
 		return cid;
 	}
 	
-	public void setCid(Integer cid) {
+	public void setCid(int cid) {
 		this.cid = cid;
 	}
 	

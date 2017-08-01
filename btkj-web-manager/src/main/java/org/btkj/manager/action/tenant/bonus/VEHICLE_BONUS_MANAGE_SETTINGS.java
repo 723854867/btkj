@@ -1,5 +1,6 @@
 package org.btkj.manager.action.tenant.bonus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,6 +19,6 @@ public class VEHICLE_BONUS_MANAGE_SETTINGS extends TenantAction {
 	
 	@Override
 	protected Result<List<BonusManageConfig>> execute(Request request, Employee employee) {
-		return Result.result(vehicleManageService.bonusManageConfigs(employee.getTid()));
+		return Result.result(new ArrayList<BonusManageConfig>(vehicleManageService.bonusManageConfigs(employee.getTid()).values()));
 	}
 }

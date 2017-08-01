@@ -1,5 +1,7 @@
 package org.btkj.pojo;
 
+import java.text.MessageFormat;
+
 import org.btkj.pojo.bo.Pager;
 import org.rapid.util.common.message.Result;
 
@@ -40,14 +42,17 @@ public interface BtkjConsts {
 		Result JIAN_JIE_ID_NEEDED				= Result.result(BtkjCode.JIAN_JIE_ID_NEEDED);
 		Result EMPLOYEE_NOT_EXIST				= Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		Result CUSTOMER_NOT_EXIST				= Result.result(BtkjCode.CUSTOMER_NOT_EXIST);
+		Result BONUS_SCALE_REWARDED				= Result.result(BtkjCode.BONUS_SCALE_REWARDED);
 		Result USER_DATA_INCOMPLETE				= Result.result(BtkjCode.USER_DATA_INCOMPLETE);
 		Result COEFFICIENT_NOT_EXIST			= Result.result(BtkjCode.COEFFICIENT_NOT_EXIST);
+		Result BONUS_SCALE_NOT_EXIST			= Result.result(BtkjCode.BONUS_SCALE_NOT_EXIST);
 		Result USER_TENANT_NUM_MAXIMUM			= Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
 		Result VEHICLE_BRAND_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_BRAND_NOT_EXSIT);
 		Result VEHICLE_DEPT_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_DEPT_NOT_EXIST);
 		Result VEHICLE_MODEL_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_MODEL_NOT_EXIST);
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
+		Result BONUS_SCALE_SETTINGS_ERROR		= Result.result(BtkjCode.BONUS_SCALE_SETTINGS_ERROR);
 		Result NON_AUTO_CATEGORY_NOT_EXIST		= Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
@@ -68,6 +73,7 @@ public interface BtkjConsts {
 		final int URL_MAX								= 200;				// url 最大值
 		final int NAME_MIN								= 2;
 		final int NAME_MAX								= 50;
+		final int NONAUTO_MAX							= 8;				// 非车险类型最大数
 		final int NONAUTO_FILTER_MAX					= 5;				// 非车险分类最大筛选类别数
 		final int NONAUTO_FILTER_OPTION_MIN				= 2;				// 非车险分类最小筛选项数
 		final int NONAUTO_FILTER_OPTION_MAX				= 6;				// 非车险分类最大筛选项数
@@ -75,5 +81,13 @@ public interface BtkjConsts {
 		final int NONAUTO_TAG_MAX						= 8;				// 非车险分类最大标签数
 		final int NONAUTO_LIABILITY_MIN					= 1;				// 非车险产品保险责任最小数
 		final int NONAUTO_LIABILITY_MAX					= 6;				// 非车险产品保险责任最大数
+		final int PHONE_MIN								= 6;				// 电话字段最少字符
+		final int PHONE_MAX								= 15;				// 电话字段最大字符
+	}
+	
+	interface LOCKS {
+		static String tenantResourceLock(int tid) {
+			return MessageFormat.format("lock:tenant:resource:{0}", String.valueOf(tid));
+		}
 	}
 }

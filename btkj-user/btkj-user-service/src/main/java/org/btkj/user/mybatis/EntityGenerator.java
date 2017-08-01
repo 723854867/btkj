@@ -13,8 +13,10 @@ import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.REGION_TYPE;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class EntityGenerator {
 	
@@ -40,6 +42,15 @@ public class EntityGenerator {
 		employee.setLevel(null == parent ? 1 : parent.getLevel() + 1);
 		employee.setLeft(null == parent ? 1 : parent.getRight());
 		employee.setRight(employee.getLeft() + 1);
+		if (null == parent)
+			employee.setRelationPath(StringUtil.EMPTY);
+		else {
+			String relationPath = parent.getRelationPath();
+			if (relationPath.isEmpty())
+				employee.setRelationPath(String.valueOf(parent.getId()));
+			else
+				employee.setRelationPath(relationPath + Consts.SYMBOL_UNDERLINE + parent.getId());
+		}
 		
 		int time = DateUtil.currentTime();
 		employee.setCreated(time);

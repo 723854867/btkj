@@ -18,14 +18,95 @@ public class TenantPO implements UniqueModel<Integer> {
 	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
-	private int bonusScaleCountMod;				// 规模佣金统计口径模值
-	private int bonusScaleCountInsuranceMod;	// 规模佣金统计口径险企模值
-	private int bonusScaleRewardMod;			// 规模佣金奖励口径模值
-	private int bonusScaleRewardInsuranceMod;	// 规模佣金奖励口径险企模值
+	private int mod;
 	private int jianJieFetchTime;
 	private int expire;							// 到期日期
+	private int scaleRewardTime;			// 最近的规模奖励统计时间，格式是：(year)(month)比如201405
 	private int created;
 	private int updated;
+	
+	public enum Mod {
+		SC_NPC(1),				// 统计口径：非营业客车
+		SC_NPT(2),				// 统计口径：非营业货车
+		SC_PC(4),				// 统计口径：营业客车
+		SC_PT(8),				// 统计口径：营业货车
+		SC_OTHER(16),			// 统计口径：其他
+		SC_CM(32),				// 统计口径：商业险
+		SC_CP(64),				// 统计口径：交强险
+		RC_NPC(128),			// 奖励口径：非营业客车
+		RC_NPT(256),			// 奖励口径：非营业货车
+		RC_PC(512),				// 奖励口径：营业客车
+		RC_PT(1024),			// 奖励口径：营业货车
+		RC_OTHER(2048),			// 奖励口径：其他
+		RC_CM(4096),			// 奖励口径：商业险
+		RC_CP(8192);			// 奖励口径：交强险
+		private int mark;
+		private Mod(int mark) {
+			this.mark = mark;
+		}
+		public int mark() {
+			return mark;
+		}
+		public static final boolean check(int mod) {
+			for (Mod temp : Mod.values()) {
+				if ((temp.mark & mod) != temp.mark)
+					return false;
+			}
+			return true;
+		}
+		/**
+		 * 统计口径险种选项
+		 * @return
+		 */
+		public static final int SCInsuranceMod() {
+			return SC_CM.mark | SC_CP.mark;
+		}
+		/**
+		 * 统计口径车型选项
+		 * @return
+		 */
+		public static final Mod[] SCVehicles() {
+			return new Mod[] {SC_PC, SC_PT, SC_NPC, SC_NPT, SC_OTHER};
+		}
+		/**
+		 * 奖励口径险种选项
+		 * @return
+		 */
+		public static final int RCInsuranceMod() {
+			return RC_CM.mark | RC_CP.mark;
+		}
+		/**
+		 * 奖励口径车型选项
+		 * @return
+		 */
+		public static final Mod[] RCVehicles() {
+			return new Mod[] {RC_PC, RC_PT, RC_NPC, RC_NPT, RC_OTHER};
+		}
+		public static final boolean isScaleRewardSupport(int mod) {
+			boolean has = false;
+			for (Mod cmod : RCVehicles()) {
+				if ((cmod.mark & mod) == cmod.mark){
+					has = true;
+					break;
+				}
+			}
+			if (!has)
+				return false;
+			return (RCInsuranceMod() & mod) != 0;
+		}
+		public static final boolean isScaleStatisticSupport(int mod) {
+			boolean has = false;
+			for (Mod cmod : SCVehicles()) {
+				if ((cmod.mark & mod) == cmod.mark){
+					has = true;
+					break;
+				}
+			}
+			if (!has)
+				return false;
+			return (SCInsuranceMod() & mod) != 0;
+		}
+	}
 	
 	public int getTid() {
 		return tid;
@@ -123,36 +204,12 @@ public class TenantPO implements UniqueModel<Integer> {
 		this.servicePhone = servicePhone;
 	}
 	
-	public int getBonusScaleCountMod() {
-		return bonusScaleCountMod;
+	public int getMod() {
+		return mod;
 	}
 	
-	public void setBonusScaleCountMod(int bonusScaleCountMod) {
-		this.bonusScaleCountMod = bonusScaleCountMod;
-	}
-	
-	public int getBonusScaleCountInsuranceMod() {
-		return bonusScaleCountInsuranceMod;
-	}
-	
-	public void setBonusScaleCountInsuranceMod(int bonusScaleCountInsuranceMod) {
-		this.bonusScaleCountInsuranceMod = bonusScaleCountInsuranceMod;
-	}
-	
-	public int getBonusScaleRewardMod() {
-		return bonusScaleRewardMod;
-	}
-	
-	public void setBonusScaleRewardMod(int bonusScaleRewardMod) {
-		this.bonusScaleRewardMod = bonusScaleRewardMod;
-	}
-	
-	public int getBonusScaleRewardInsuranceMod() {
-		return bonusScaleRewardInsuranceMod;
-	}
-	
-	public void setBonusScaleRewardInsuranceMod(int bonusScaleRewardInsuranceMod) {
-		this.bonusScaleRewardInsuranceMod = bonusScaleRewardInsuranceMod;
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 	
 	public int getJianJieFetchTime() {
@@ -165,6 +222,14 @@ public class TenantPO implements UniqueModel<Integer> {
 	
 	public int getExpire() {
 		return expire;
+	}
+	
+	public int getScaleRewardTime() {
+		return scaleRewardTime;
+	}
+	
+	public void setScaleRewardTime(int scaleRewardTime) {
+		this.scaleRewardTime = scaleRewardTime;
 	}
 	
 	public void setExpire(int expire) {

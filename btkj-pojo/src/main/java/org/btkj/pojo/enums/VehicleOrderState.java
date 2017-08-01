@@ -48,9 +48,14 @@ public enum VehicleOrderState {
 	ISSUED(256),
 	
 	/**
+	 * 待结算
+	 */
+	REWARD_SDANDBY(512),
+	
+	/**
 	 * 已结算
 	 */
-	REWARDED(512);
+	REWARDED(1024);
 	
 	private int mark;
 	

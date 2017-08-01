@@ -1,6 +1,7 @@
 package org.btkj.test.persistence.dao;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
@@ -36,4 +37,8 @@ public interface UserDao extends DBMapper<Integer, UserPO> {
 	@Override
 	@UpdateProvider(type = UserSQLProvider.class, method = "update")
 	void update(UserPO model);
+	
+	@InsertProvider(type = UserSQLProvider.class, method = "batchInsert")
+	@Options(useGeneratedKeys = true, keyColumn = "uid", keyProperty = "uid")
+	void batchInsert(List<UserPO> user);
 }

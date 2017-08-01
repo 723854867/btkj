@@ -22,10 +22,10 @@ public class EmployeeTip implements Serializable {
 	private int appId;
 	private int aregion;
 	private int tregion;
-	private String name;
-	private String aname;
-	private String tname;
-	private String mobile;
+	private String name;				// 用户名字
+	private String aname;				// app名字
+	private String tname;				// 商户名字
+	private String mobile;				// 手机号
 	private String avatar;
 	
 	public EmployeeTip() {}

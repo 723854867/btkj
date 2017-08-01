@@ -48,10 +48,7 @@ public class NonAutoCategoryMapperTest {
 		NonAutoProduct product = new NonAutoProduct();
 		product.setCid(1);
 		product.setName("好产品");
-		product.setPrice(500.23);
-		product.setBonus(20.23);
 		product.setInsurerId(1);
-		product.setInsurerName("太平");
 		product.setSales(0);
 		product.setCoverage("100万");
 		product.setIcon("sss");

@@ -15,13 +15,11 @@ import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
 import org.btkj.pojo.vo.BonusSearcher;
-import org.btkj.pojo.vo.NonAutoProductSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
-import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
@@ -259,13 +257,6 @@ public interface Params {
 	final Str2IntConstConverter MIN								= new Str2IntConstConverter(1047, "min");
 	final Str2IntConstConverter MAX								= new Str2IntConstConverter(1048, "max");
 	
-	final Str2ObjConstConverter<TenantSettingsSubmit> TENANT_SETTINGS_SUBMIT = new Str2ObjConstConverter<TenantSettingsSubmit>(1049, "tenantSettingsSubmit") {
-		@Override
-		public TenantSettingsSubmit convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, TenantSettingsSubmit.class);
-		}
-	};
-	
 	final Str2IntConstConverter JIAN_JIE_ID						= new Str2IntConstConverter(1050, "jianJieId");
 	final Str2BoolConstConverter PRICE_NO_TAX					= new Str2BoolConstConverter(1051, "priceNoTax");
 	
@@ -322,13 +313,6 @@ public interface Params {
 		@Override
 		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<NonAutoProductSearcher> NON_AUTO_PRODUCT_SEARCHER = new Str2ObjConstConverter<NonAutoProductSearcher>(1202, "nonAutoProductSearch") {
-		@Override
-		public NonAutoProductSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, NonAutoProductSearcher.class);
 		}
 	};
 	

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.VehicleRule;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.Bonus;
 import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.CoefficientType;
@@ -14,7 +14,6 @@ import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.VehiclePolicyTips;
-import org.btkj.vehicle.VehicleUtils;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
 import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
@@ -153,7 +152,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 							break;
 						case CLAIMS:
 						case NO_CLAIMS:
-							int src = VehicleRule.noLossDiscountRateAnalysis(tips.getSchema().getNoLossDiscountRate());
+							int src = VehicleUtil.noLossDiscountRateAnalysis(tips.getSchema().getNoLossDiscountRate());
 							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
@@ -168,7 +167,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case VEHICLE_AGE:
-							src = VehicleUtils.vehicleAge(order);
+							src = VehicleUtil.vehicleAge(order.getTips().getEnrollDate(), order.getTips().getSchema().getCommercialStart());
 							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;

@@ -21,10 +21,7 @@ public class TenantInfo implements Serializable {
 	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
-	private int bonusScaleCountMod;
-	private int bonusScaleCountInsuranceMod;
-	private int bonusScaleRewardMod;
-	private int bonusScaleRewardInsuranceMod;
+	private int mod;
 	
 	public TenantInfo() {}
 	
@@ -41,10 +38,7 @@ public class TenantInfo implements Serializable {
 		this.licenseImage = po.getLicenseImage();
 		this.nonAutoBind = po.getNonAutoBind();
 		this.servicePhone = po.getServicePhone();
-		this.bonusScaleCountMod = po.getBonusScaleCountMod();
-		this.bonusScaleCountInsuranceMod = po.getBonusScaleCountInsuranceMod();
-		this.bonusScaleRewardMod = po.getBonusScaleRewardMod();
-		this.bonusScaleRewardInsuranceMod = po.getBonusScaleRewardInsuranceMod();
+		this.mod = po.getMod();
 	}
 
 	public int getTid() {
@@ -127,35 +121,7 @@ public class TenantInfo implements Serializable {
 		this.servicePhone = servicePhone;
 	}
 
-	public int getBonusScaleCountMod() {
-		return bonusScaleCountMod;
-	}
-
-	public void setBonusScaleCountMod(int bonusScaleCountMod) {
-		this.bonusScaleCountMod = bonusScaleCountMod;
-	}
-	
-	public int getBonusScaleCountInsuranceMod() {
-		return bonusScaleCountInsuranceMod;
-	}
-	
-	public void setBonusScaleCountInsuranceMod(int bonusScaleCountInsuranceMod) {
-		this.bonusScaleCountInsuranceMod = bonusScaleCountInsuranceMod;
-	}
-
-	public int getBonusScaleRewardMod() {
-		return bonusScaleRewardMod;
-	}
-
-	public void setBonusScaleRewardMod(int bonusScaleRewardMod) {
-		this.bonusScaleRewardMod = bonusScaleRewardMod;
-	}
-	
-	public int getBonusScaleRewardInsuranceMod() {
-		return bonusScaleRewardInsuranceMod;
-	}
-	
-	public void setBonusScaleRewardInsuranceMod(int bonusScaleRewardInsuranceMod) {
-		this.bonusScaleRewardInsuranceMod = bonusScaleRewardInsuranceMod;
+	public int getMod() {
+		return mod;
 	}
 }

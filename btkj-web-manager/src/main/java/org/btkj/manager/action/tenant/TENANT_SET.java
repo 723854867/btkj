@@ -1,23 +1,21 @@
 package org.btkj.manager.action.tenant;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.manager.action.TenantAction;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.enums.BonusScaleType;
-import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.NonAutoCategory;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.submit.TenantSettingsSubmit;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
+import org.btkj.user.pojo.param.TenantSetParam;
+import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.CollectionUtil;
 
 /**
@@ -26,32 +24,30 @@ import org.rapid.util.lang.CollectionUtil;
  * @author ahab
  *
  */
-public class TENANT_SET extends TenantAction {
+public class TENANT_SET extends EmployeeAction<TenantSetParam> {
 	
 	@Resource
 	private NonAutoService nonAutoService;
 	@Resource
 	private UserManageService userManageService;
-
+	
 	@Override
-	protected Result<?> execute(Request request, Employee employee) {
-		TenantSettingsSubmit submit = request.getParam(Params.TENANT_SETTINGS_SUBMIT);
-		_check(submit);
-		return userManageService.tenantSet(employee, submit);
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, TenantSetParam param) {
+		if (!CollectionUtil.isEmpty(param.getNonAutoBind())){
+			List<NonAutoCategory> categories = nonAutoService.categories();
+			a : for (Long cid : param.getNonAutoBind()){
+				for (NonAutoCategory category : categories) {
+					if (cid == category.get_id())
+						continue a;
+				}
+				return BtkjConsts.RESULT.NON_AUTO_CATEGORY_NOT_EXIST;
+			}
+		}
+		return userManageService.tenantSet(tenant, param);
 	}
 	
-	private void _check(TenantSettingsSubmit submit) {
-		Set<Long> nonAutoBind = submit.getNonAutoBind();
-		if (!CollectionUtil.isEmpty(nonAutoBind)) {
-			List<NonAutoCategory> categories = nonAutoService.getCategoriesByIds(new ArrayList<Long>(nonAutoBind));
-			nonAutoBind.clear();
-			for (NonAutoCategory category : categories)
-				nonAutoBind.add(category.get_id());
-		}
-		if ((null != submit.getBonusScaleCountMod() && !BonusScaleType.illegalMod(submit.getBonusScaleCountMod()))
-				|| (null != submit.getBonusScaleRewardMod() && !BonusScaleType.illegalMod(submit.getBonusScaleRewardMod()))
-				|| (null != submit.getBonusScaleCountInsuranceMod() && !InsuranceType.illegalMod(submit.getBonusScaleCountInsuranceMod()))
-				|| (null != submit.getBonusScaleCountInsuranceMod() && !InsuranceType.illegalMod(submit.getBonusScaleCountInsuranceMod()))) 
-			throw ConstConvertFailureException.errorConstException(Params.TENANT_SETTINGS_SUBMIT);
+	@Override
+	protected Client client() {
+		return Client.TENANT_MANAGER;
 	}
 }

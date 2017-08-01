@@ -15,6 +15,8 @@ public interface EmployeeService {
 	
 	Employee employee(int employeeId);
 	
+	Map<Integer, EmployeePO> employees(Collection<Integer> ids);
+	
 	Map<Integer, EmployeeTip> employeeTips(Collection<Integer> ids);
 	
 	Result<EmployeeHolder> employeeByToken(Client client, String token, int employeeId);

@@ -12,7 +12,6 @@ public class EmployeePagingInfo implements Serializable {
 	private int uid;
 	private String name;
 	private String mobile;
-	private int payType;
 	private int parentId;
 	private int parentUid;
 	private String parentName;
@@ -24,7 +23,6 @@ public class EmployeePagingInfo implements Serializable {
 	public EmployeePagingInfo(EmployeePO employee) {
 		this.id = employee.getId();
 		this.uid = employee.getUid();
-		this.payType = employee.getPayType();
 		this.parentId = employee.getParentId();
 		this.created = employee.getCreated();
 	}
@@ -59,14 +57,6 @@ public class EmployeePagingInfo implements Serializable {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public int getPayType() {
-		return payType;
-	}
-
-	public void setPayType(int payType) {
-		this.payType = payType;
 	}
 
 	public int getParentId() {

@@ -181,14 +181,29 @@ public enum BtkjCode implements ICode {
 	BONUS_MANAGE_CONFIG_NOT_EXIST(552, "bonus manage config not exist"),
 	
 	/**
+	 * 没有设置规模奖励口径
+	 */
+	BONUS_SCALE_SETTINGS_ERROR(553, "bonus scale settings error"),
+	
+	/**
 	 * 规模奖励配置项不存在
 	 */
-	BONUS_SCALE_CONFIG_NOT_EXIST(553, "bonus scale config not exist"),
+	BONUS_SCALE_CONFIG_NOT_EXIST(554, "bonus scale config not exist"),
+	
+	/**
+	 * 规模奖励审核记录不存在
+	 */
+	BONUS_SCALE_NOT_EXIST(555, "bonus scale not exist"),
 	
 	/**
 	 * 规模奖励配置项最大值
 	 */
-	BONUS_SCALE_CONFIG_MAXMIUM(554, "bonus scale config maxmium"),
+	BONUS_SCALE_CONFIG_MAXMIUM(556, "bonus scale config maxmium"),
+	
+	/**
+	 * 规模奖励已经统计过
+	 */
+	BONUS_SCALE_REWARDED(557, "bonus scale rewarded"),
 	
 	/**
 	 * 保单不存在

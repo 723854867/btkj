@@ -29,7 +29,7 @@ public class SCORE_REWARD extends TenantAction {
 		int type = request.getOptionalParam(Params.TYPE);
 		switch (type) {
 		case 0:									// 奖励首页：总计
-			return Result.result(new RewardInfo(paymentService.getAccountByEmployeeId(employee.getId())));
+			return Result.result(new RewardInfo(paymentService.account(employee.getId())));
 		case 1:									// 按照时间统计积分雇员积分
 			return Result.result(statisticsService.scoreReward(employee.getId(), request.getParam(Params.BEGIN_TIME), request.getParam(Params.END_TIME)));
 		default:

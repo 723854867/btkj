@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="mongo" class="org.rapid.data.storage.mongo.Mongo" init-method="init">
+		<property name="db" value="${mongo.db}" />
+		<property name="host" value="${mongo.host}" />
+	</bean>
+</beans>

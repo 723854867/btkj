@@ -57,6 +57,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
+	public Map<Integer, EmployeePO> employees(Collection<Integer> ids) {
+		return employeeMapper.getByKeys(ids);
+	}
+	
+	@Override
 	public Map<Integer, EmployeeTip> employeeTips(Collection<Integer> ids) {
 		Map<Integer, EmployeePO> employees = employeeMapper.getByKeys(ids);
 		Map<Integer, EmployeeTip> tips = new HashMap<Integer, EmployeeTip>();

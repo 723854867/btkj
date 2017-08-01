@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
 			String lockId = userMapper.lockUser(user.getUid());
 			if (null == lockId)
-				return Consts.RESULT.USER_STATUS_CHANGED;
+				return Consts.RESULT.LOCK_CONFLICT;
 			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
 		default:
 			return userMapper.lockUserByToken(client, token);

@@ -2,7 +2,6 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,17 +22,19 @@ public class BonusManageConfigMapper extends RedisDBAdapter<String, BonusManageC
 		super(new ByteProtostuffSerializer<BonusManageConfig>(), "hash:db:bonus_manage_config");
 	}
 	
-	public List<BonusManageConfig> getByTid(int tid) {
+	public Map<String, BonusManageConfig> getByTid(int tid) {
 		Map<String, BonusManageConfig> map = _checkLoad(tid);
 		if (null != map)
-			return new ArrayList<BonusManageConfig>(map.values());
+			return map;
 		List<byte[]> list = redis.hmsget(redisKey, _tenantSetKey(tid));
 		if (null == list)
-			return Collections.EMPTY_LIST;
-		List<BonusManageConfig> l = new ArrayList<BonusManageConfig>();
-		for (byte[] buffer : list)
-			l.add(serializer.antiConvet(buffer));
-		return l;
+			return CollectionUtil.EMPTY_MAP;
+		map = new HashMap<String, BonusManageConfig>();
+		for (byte[] buffer : list) {
+			BonusManageConfig temp = serializer.antiConvet(buffer);
+			map.put(temp.getKey(), temp);
+		}
+		return map;
 	}
 	
 	private Map<String, BonusManageConfig> _checkLoad(int tid) {

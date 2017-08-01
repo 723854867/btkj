@@ -15,12 +15,42 @@ public class EmployeePO implements UniqueModel<Integer> {
 	private int tid;
 	private int appId;
 	private int parentId;
+	private String relationPath;
 	private int left;
 	private int right;
 	private int level;
-	private int payType;
+	private int mod;
 	private int created;
 	private int updated;
+	
+	public enum Mod {
+		BONUS_SCALE(1),				// 规模佣金
+		BONUS_MANAGE(2),			// 管理佣金
+		BONUS_NPC(4),				// 非营利客车
+		BONUS_NPT(8),				// 非营利货车
+		BONUS_PC(16),				// 营利客车
+		BONUS_PT(32),				// 营利货车
+		BONUS_OTHER(64),			// 其他车
+		PAY_FULL(128),				// 全额支付
+		PAY_NET(256),				// 净保费支付
+		PAY_ADVANCE(512);			// 公司垫付
+		private static final int MOD_1 = 255;
+		private static final int MOD_2 = 383;
+		private static final int MOD_3 = 639;
+		private int mark;
+		private Mod(int mark) {
+			this.mark = mark;
+		}
+		public int mark() {
+			return mark;
+		}
+		public static final boolean check(int mod) {
+			return (MOD_1 & mod) == mod
+					|| (MOD_2 & mod) == mod
+					|| (MOD_3 & mod) == mod;
+			
+		}
+	}
 
 	public int getId() {
 		return id;
@@ -62,6 +92,14 @@ public class EmployeePO implements UniqueModel<Integer> {
 		this.parentId = parentId;
 	}
 	
+	public String getRelationPath() {
+		return relationPath;
+	}
+	
+	public void setRelationPath(String relationPath) {
+		this.relationPath = relationPath;
+	}
+	
 	public int getLeft() {
 		return left;
 	}
@@ -86,14 +124,14 @@ public class EmployeePO implements UniqueModel<Integer> {
 		this.level = level;
 	}
 	
-	public int getPayType() {
-		return payType;
+	public int getMod() {
+		return mod;
 	}
 	
-	public void setPayType(int payType) {
-		this.payType = payType;
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
-
+	
 	public int getCreated() {
 		return created;
 	}

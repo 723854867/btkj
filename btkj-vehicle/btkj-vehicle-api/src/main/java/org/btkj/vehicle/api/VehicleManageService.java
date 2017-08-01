@@ -73,7 +73,7 @@ public interface VehicleManageService {
 	 * @param tid
 	 * @return
 	 */
-	List<BonusManageConfig> bonusManageConfigs(int tid);
+	Map<String, BonusManageConfig> bonusManageConfigs(int tid);
 	
 	/**
 	 * 新增管理奖励配置项
@@ -290,11 +290,35 @@ public interface VehicleManageService {
 	Result<VehiclePolicy> policy(int tid, String orderId);
 	
 	/**
+	 * 获取商户指定时间内的保单
+	 * 
+	 * @param tid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	Map<String, VehiclePolicy> policies(int tid, int start, int end);
+	
+	/**
 	 * 车险保单分页
 	 * @param searcher
 	 * @return
 	 */
 	Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher);
 	
-	List<VehicleOrder> orders(int tid, int stateMod);
+	/**
+	 * 车险订单结算准备，需要将所有已出单车险订单状态修改为正在结算中
+	 * 
+	 * @param tid
+	 * @param stateMod
+	 * @return
+	 */
+	Result<Map<String, VehicleOrder>> orderRewardStandby(int tid);
+	
+	/**
+	 * 车险订单结算完成
+	 * 
+	 * @param tid
+	 */
+	void orderRewardComplete(int tid);
 }

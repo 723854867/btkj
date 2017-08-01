@@ -12,8 +12,10 @@ public class LogScore implements UniqueModel<Long> {
 	private int tid;
 	private int appId;
 	private int type;
-	private int bizId;
-	private double quota;
+	private String bizId;
+	private int detailType;
+	private int quota;
+	private boolean income;
 	private int year;
 	private int month;
 	private int day;
@@ -69,20 +71,36 @@ public class LogScore implements UniqueModel<Long> {
 		this.type = type;
 	}
 	
-	public int getBizId() {
+	public String getBizId() {
 		return bizId;
 	}
 	
-	public void setBizId(int bizId) {
+	public void setBizId(String bizId) {
 		this.bizId = bizId;
 	}
 	
-	public double getQuota() {
+	public int getDetailType() {
+		return detailType;
+	}
+	
+	public void setDetailType(int detailType) {
+		this.detailType = detailType;
+	}
+	
+	public int getQuota() {
 		return quota;
 	}
 	
-	public void setQuota(double quota) {
+	public void setQuota(int quota) {
 		this.quota = quota;
+	}
+	
+	public boolean isIncome() {
+		return income;
+	}
+	
+	public void setIncome(boolean income) {
+		this.income = income;
 	}
 
 	public int getYear() {

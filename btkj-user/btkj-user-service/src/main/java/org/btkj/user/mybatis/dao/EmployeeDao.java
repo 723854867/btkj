@@ -39,8 +39,9 @@ public interface EmployeeDao extends DBMapper<Integer, EmployeePO> {
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByUid")
 	Map<Integer, EmployeePO> getByUid(@Param("uid") int uid);
 	
+	@MapKey("id")
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "getByTidForUpdate")
-	List<EmployeePO> getByTidForUpdate(int tid);
+	Map<Integer, EmployeePO> getByTidForUpdate(int tid);
 	
 	/**
 	 * 团队：自己和 level - 自己的 level 范围内的成员

@@ -29,6 +29,10 @@
 	<dubbo:reference id="communityService" interface="org.btkj.community.api.CommunityService" />
 	<dubbo:reference id="communityManageService" interface="org.btkj.community.api.CommunityManageService" />
 	
+	<dubbo:reference id="statisticsService" interface="org.btkj.statistics.api.StatisticsService" /> 
+	
+	<dubbo:reference id="paymentManageService" interface="org.btkj.payment.api.PaymentManageService" />
+	
 	<dubbo:reference id="bonusService" interface="org.btkj.vehicle.api.BonusService" />
 	<dubbo:reference id="vehicleService" interface="org.btkj.vehicle.api.VehicleService" />
 	<dubbo:reference id="vehicleManageService" interface="org.btkj.vehicle.api.VehicleManageService" />

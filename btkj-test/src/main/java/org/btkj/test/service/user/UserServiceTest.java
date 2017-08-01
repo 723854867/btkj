@@ -1,6 +1,8 @@
 package org.btkj.test.service.user;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -90,5 +92,20 @@ public class UserServiceTest extends BaseTest {
 		user.setCreated(10);
 		user.setUpdated(11);
 		userDao.update(user);
+	}
+	
+	@Test
+	public void testBatchInsert() {
+		List<UserPO> users = new ArrayList<UserPO>();
+		for (int i = 0; i < 3; i++) {
+			UserPO user = new UserPO();
+			user.setAppId(i);
+			user.setMobile("+sss");
+			user.setCreated(i);
+			user.setUpdated(i);
+			users.add(user);
+		}
+		userDao.batchInsert(users);
+		System.out.println(users);
 	}
 }

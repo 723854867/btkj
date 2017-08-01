@@ -157,8 +157,8 @@ public class CourierRedisService {
 	
 	private String _buildQuotaInsurances(PolicySchema schema) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(MessageFormat.format(QUOTA_MODEL, String.valueOf(schema.getCompulsiveTotal()), 
-				String.valueOf(schema.getVehicleVesselTotal()), String.valueOf(schema.getCommericalTotal())));
+		builder.append(MessageFormat.format(QUOTA_MODEL, df2.format(schema.getCompulsiveTotal()), 
+				df2.format(schema.getVehicleVesselTotal()), df2.format(schema.getCommericalTotal())));
 		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
 			Insurance insurance = null == schema.getInsurances() ? null : schema.getInsurances().get(type);
 			if (null == insurance)

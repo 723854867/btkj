@@ -7,7 +7,6 @@ public class Account implements UniqueModel<Integer> {
 	private static final long serialVersionUID = 8272783970593831487L;
 
 	private int employeeId;
-	private int uid;
 	private int scoreAvailable;
 	private int scoreFrozen;
 	private int scoreConsume;
@@ -23,14 +22,6 @@ public class Account implements UniqueModel<Integer> {
 
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
-	}
-
-	public int getUid() {
-		return uid;
-	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
 	}
 
 	public int getScoreAvailable() {

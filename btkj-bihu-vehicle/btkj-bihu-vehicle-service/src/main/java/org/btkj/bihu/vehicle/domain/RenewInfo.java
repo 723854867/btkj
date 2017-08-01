@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
-import org.btkj.pojo.VehicleRule;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicySchema;
@@ -736,7 +736,7 @@ public class RenewInfo implements Serializable {
 				tips.setExhaust(this.UserInfo.ExhaustScale);
 				schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
 				schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-				tips.setVehicleUsedType(VehicleRule.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
+				tips.setVehicleUsedType(VehicleUtil.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
 				renewal.setCommercialNo(this.UserInfo.BizNo);
 				renewal.setCompulsiveNo(this.UserInfo.ForceNo);
 				schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);

@@ -1,6 +1,6 @@
 package org.btkj.vehicle;
 
-import org.btkj.pojo.VehicleRule;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.enums.CoefficientType;
@@ -123,8 +123,8 @@ public class EntityGenerator {
 		policy.setEnrollDate(vehicleInfo.getCdrq());
 		policy.setName(vehicleInfo.getPpxh());
 		policy.setVehiclePrice(vehicleInfo.getNewCarCost());
-		policy.setNature(VehicleRule.natureFromJianJie(info.getBaseStatus()));
-		policy.setScaleType(VehicleRule.scaleTypeFromJianJie(vehicleInfo.getSsxz(), vehicleInfo.getCllx()));
+		policy.setNature(VehicleUtil.natureFromJianJie(info.getBaseStatus()));
+		policy.setBonusType(VehicleUtil.bonusTypeFromJianJie(vehicleInfo.getSsxz(), vehicleInfo.getCllx()));
 		policy.setLicense(vehicleInfo.getCphm());
 		policy.setEngine(vehicleInfo.getFdjh());
 		policy.setVin(vehicleInfo.getCjh());
@@ -132,9 +132,10 @@ public class EntityGenerator {
 		policy.setTransfer(vehicleInfo.isGH());
 		policy.setDetail(info);
 		policy.setDetail(relationInfo);
+		policy.setIssueTime((int) DateUtil.getTime(info.getSkrq(), "yyyy-MM-dd'T'HH:mm:ss") / 1000);
 		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
 		if (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
-			policy.setInsurances(VehicleRule.jianJieInsuranceMapping(commercial.getInsurances()));
+			policy.setInsurances(VehicleUtil.jianJieInsuranceMapping(commercial.getInsurances()));
 		return policy;
 	}
 	

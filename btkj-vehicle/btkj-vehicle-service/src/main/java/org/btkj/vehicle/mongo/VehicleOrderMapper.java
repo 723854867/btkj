@@ -154,13 +154,12 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		mongo.bulkUpdateOne(collection, updates);
 	}
 	
-	public List<VehicleOrder> orders(int tid, int stateMod) {
-		List<Bson> or = new ArrayList<Bson>();
-		for (VehicleOrderState state : VehicleOrderState.values()) {
-			if ((state.mark() & stateMod) != state.mark())
-				continue;
-			or.add(Filters.eq(FIELD_STATE, state));
-		}
-		return mongo.find(collection, or.isEmpty() ? Filters.eq(FIELD_TID, tid) : Filters.and(Filters.eq(FIELD_TID, tid), Filters.or(or)), clazz);
+	public Map<String, VehicleOrder> rewardStandbyUpdate(int tid) {
+		mongo.update(collection, Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED), Updates.set(FIELD_STATE, VehicleOrderState.REWARDED));
+		return mongo.findMap(collection, Filters.eq(FIELD_STATE, VehicleOrderState.REWARD_SDANDBY), VehicleOrder.class);
+	}
+	
+	public void rewardComplete(int tid) {
+		mongo.update(collection, Filters.eq(FIELD_STATE, VehicleOrderState.REWARD_SDANDBY), Updates.set(FIELD_STATE, VehicleOrderState.REWARDED));
 	}
 }

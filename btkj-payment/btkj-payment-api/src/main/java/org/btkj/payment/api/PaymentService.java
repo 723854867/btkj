@@ -4,5 +4,5 @@ import org.btkj.payment.pojo.entity.Account;
 
 public interface PaymentService {
 
-	Account getAccountByEmployeeId(int employeeId);
+	Account account(int employeeId);
 }

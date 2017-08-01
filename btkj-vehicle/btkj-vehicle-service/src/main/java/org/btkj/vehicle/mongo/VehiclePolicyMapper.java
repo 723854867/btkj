@@ -27,8 +27,9 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 	private String FIELD_TRANSFER					= "transfer";
 	private String FIELD_NATURE						= "nature";
 	private String FIELD_TYPE						= "type";
-	private String FIELD_SCALE_TYPE					= "scaleType";
+	private String FIELD_BONUS_TYPE					= "bonusType";
 	private String FIELD_CREATED					= "created";
+	private String FIELD_ISSUE_TIME					= "issueTime";
 
 	public VehiclePolicyMapper() {
 		super("vehiclePolicy");
@@ -64,8 +65,8 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 			filters.add(Filters.eq(FIELD_NATURE, searcher.getNature()));
 		if (null != searcher.getType()) 
 			filters.add(Filters.eq(FIELD_TYPE, searcher.getType()));
-		if (null != searcher.getScaleType()) 
-			filters.add(Filters.eq(FIELD_SCALE_TYPE, searcher.getScaleType()));
+		if (null != searcher.getBonusType()) 
+			filters.add(Filters.eq(FIELD_BONUS_TYPE, searcher.getBonusType()));
 		total = filters.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(filters));
 		if (0 == total)
 			return Pager.EMPLTY;
@@ -76,5 +77,11 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 				mongo.pagingAndSort(collection, Filters.and(filters), Sorts.descending(FIELD_CREATED),
 							searcher.getStart(), searcher.getPageSize(), VehiclePolicy.class);
 		return new Pager<VehiclePolicy>(searcher.getTotal(), list);
+	}
+	
+	public List<VehiclePolicy> policies(int tid, int start, int end) {
+		return mongo.find(collection, 
+				Filters.and(Filters.eq(FIELD_TID, tid), Filters.gte(FIELD_ISSUE_TIME, start), Filters.lte(FIELD_ISSUE_TIME, start)),
+				VehiclePolicy.class);
 	}
 }

@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
 				userMapper.insert(user);
 				lockId = userMapper.lockUser(user.getUid());
 				if (null == lockId)
-					return Result.result(Code.USER_STATUS_CHANGED);
+					return Result.result(Code.LOCK_CONFLICT);
 				ru.setCode(Code.OK.id());
 			} catch (DuplicateKeyException e) {			// 如果unique冲突则说明 app-mobile 组合已经存在了，则直接再次获取
 				ru = userMapper.lockUserByMobile(app.getId(), mobile);

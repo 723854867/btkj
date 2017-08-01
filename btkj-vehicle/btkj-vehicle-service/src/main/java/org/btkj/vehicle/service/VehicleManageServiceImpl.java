@@ -38,7 +38,7 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.entity.VehiclePolicy.PolicyMark;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy.SalesmanMark;
 import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
@@ -48,6 +48,7 @@ import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
 import org.btkj.vehicle.redis.VehicleModelMapper;
+import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -71,6 +72,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private Tx tx;
 	@Resource
 	private RouteMapper routeMapper;
+	@Resource
+	private DistributeLock distributeLock;
 	@Resource
 	private VehicleDeptMapper vehicleDeptMapper;
 	@Resource
@@ -130,7 +133,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public List<BonusManageConfig> bonusManageConfigs(int tid) {
+	public Map<String, BonusManageConfig> bonusManageConfigs(int tid) {
 		return bonusManageConfigMapper.getByTid(tid);
 	}
 	
@@ -270,33 +273,34 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	private void _processJianJieGsUser(int tid, Map<Integer, EmployeeTip> employees, VehiclePolicy policy, VehicleOrder order, String gsUser) {
-		int employeeId = 0;
-		try {
-			employeeId = Integer.valueOf(gsUser.substring(gsUser.indexOf(":") + 1, gsUser.length() - 1));
-		} catch (NumberFormatException e) {
-			logger.error("简捷用户雇员id解析出错 - {}", gsUser);
-			return;
-		}
-		policy.setSalesmanId(employeeId);
-		EmployeeTip employee = employees.get(employeeId);
-		if (null == employee) {
-			logger.error("保单 - {} 没有指定业务员！", policy.get_id());
-			policy.setMark(PolicyMark.NO_EMPLOYEE);
+		if (null != order) {
+			policy.setMark(SalesmanMark.NORMAL);
+			policy.setSalesmanId(order.getEmployeeId());
+			policy.setSalesman(order.getSalesman());
+			policy.setSalesmanMobile(order.getSalesmanMobile());
 		} else {
-			if (employee.getTid() != tid) {
-				policy.setMark(PolicyMark.EMPLOYEE_UNSUITABLE);
-				if (null != order) {
-					policy.setSalesmanId(order.getEmployeeId());
-					policy.setSalesman(order.getSalesman());
-					policy.setSalesmanMobile(order.getSalesmanMobile());
-					logger.error("保途保单 - {} 业务员归属错误，当前代理公司 - {}，业务员所在代理公司 - {}；业务员 - {} 矫正为 - {}！", policy.get_id(), tid, employee.getTid(), employee.getId(), order.getEmployeeId());
-					return;
-				} else
+			int employeeId = 0;
+			try {
+				employeeId = Integer.valueOf(gsUser.substring(gsUser.indexOf(":") + 1, gsUser.length() - 1));
+			} catch (NumberFormatException e) {
+				logger.error("保单 - {} 简捷用户雇员id解析出错 - {}", policy.get_id(), gsUser);
+				policy.setMark(SalesmanMark.NONE);
+				return;
+			}
+			policy.setSalesmanId(employeeId);
+			EmployeeTip employee = employees.get(employeeId);
+			if (null == employee) {
+				logger.error("保单 - {} 没有指定业务员！", policy.get_id());
+				policy.setMark(SalesmanMark.NOT_EXIST);
+			} else {
+				if (employee.getTid() != tid) {
 					logger.error("非保途保单 - {} 业务员归属错误，当前代理公司 - {}，业务员所在代理公司 - {}；业务员 - {}！", policy.get_id(), tid, employee.getTid(), employee.getId());
-			} else 
-				policy.setMark(PolicyMark.NORMAL);
-			policy.setSalesman(employee.getName());
-			policy.setSalesmanMobile(employee.getMobile());
+					policy.setMark(SalesmanMark.UNSUITABLE);
+				} else 
+					policy.setMark(SalesmanMark.NORMAL);
+				policy.setSalesman(employee.getName());
+				policy.setSalesmanMobile(employee.getMobile());
+			}
 		}
 	}
 	
@@ -442,12 +446,40 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
+	public Map<String, VehiclePolicy> policies(int tid, int start, int end) {
+		return null;
+	}
+	
+	@Override
 	public Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher) {
 		return vehiclePolicyMapper.paging(searcher);
 	}
 	
 	@Override
-	public List<VehicleOrder> orders(int tid, int stateMod) {
-		return vehicleOrderMapper.orders(tid, stateMod);
+	public Result<Map<String, VehicleOrder>> orderRewardStandby(int tid) {
+		String lock = BtkjConsts.LOCKS.tenantResourceLock(tid);
+		String lockId = distributeLock.lock(lock);
+		if (null == lockId)
+			return Consts.RESULT.LOCK_CONFLICT;
+		try {
+			return Result.result(vehicleOrderMapper.rewardStandbyUpdate(tid));
+		} finally {
+			distributeLock.unLock(lock, lockId);
+		}
+	}
+	
+	@Override
+	public void orderRewardComplete(int tid) {
+		String lock = BtkjConsts.LOCKS.tenantResourceLock(tid);
+		String lockId = distributeLock.lock(lock, 30000);
+		if (null == lockId){
+			logger.warn("商户 - {} 车险订单结算完成状态更新锁获取失败!", tid);
+			return;
+		}
+		try {
+			vehicleOrderMapper.rewardComplete(tid);
+		} finally {
+			distributeLock.unLock(lock, lockId);
+		}
 	}
 }

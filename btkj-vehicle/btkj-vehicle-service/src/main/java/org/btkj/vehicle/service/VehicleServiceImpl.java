@@ -17,6 +17,7 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.DeliveryInfo;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.PolicyDetail;
@@ -31,7 +32,6 @@ import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.VehicleInfo;
 import org.btkj.pojo.vo.VehiclePolicyTips;
-import org.btkj.vehicle.VehicleUtils;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
@@ -283,7 +283,7 @@ public class VehicleServiceImpl implements VehicleService {
 			} else if (detail.getCode() == BtkjCode.INSURE_REPEAT.id()) {
 				order.setDesc(detail.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
-				if (VehicleUtils.isNewVehicleLicense(order.getTips().getLicense()))
+				if (VehicleUtil.isNewVehicleLicense(order.getTips().getLicense()))
 					_flushRenewal(employee, order.getTips().getVin(), order.getTips().getEngine());
 				else
 					_flushRenewal(employee, order.getTips().getLicense());

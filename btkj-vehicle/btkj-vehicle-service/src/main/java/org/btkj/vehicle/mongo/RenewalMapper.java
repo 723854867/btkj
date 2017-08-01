@@ -15,7 +15,7 @@ public class RenewalMapper extends MongoMapper<String, Renewal> {
 	private final String FIELD_CREATED				= "created";
 	
 	public RenewalMapper() {
-		super("renewal");
+		super("Renewal");
 	}
 	
 	@Override

@@ -84,7 +84,7 @@ public class TenantServiceImpl implements TenantService {
 	public Result<Employee> tenantAdd(int appId, int uid, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
 		String lockId = userMapper.lockUser(uid);
 		if (null == lockId)
-			return Consts.RESULT.USER_STATUS_CHANGED;
+			return Consts.RESULT.LOCK_CONFLICT;
 		try {
 			if (_tenantNumMax(uid))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;

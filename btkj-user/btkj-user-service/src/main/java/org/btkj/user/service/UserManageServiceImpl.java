@@ -11,10 +11,10 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Banner;
 import org.btkj.pojo.po.EmployeePO;
@@ -22,16 +22,21 @@ import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
+import org.btkj.user.mongo.BonusScaleMapper;
 import org.btkj.user.mybatis.EntityGenerator;
+import org.btkj.user.mybatis.Tx;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.TenantPagingMasterInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
+import org.btkj.user.pojo.model.BonusScale;
+import org.btkj.user.pojo.model.BonusScale.State;
+import org.btkj.user.pojo.param.EmployeeEditParam;
+import org.btkj.user.pojo.param.TenantSetParam;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
-import org.btkj.user.pojo.submit.TenantSettingsSubmit;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
@@ -51,6 +56,8 @@ import org.springframework.stereotype.Service;
 public class UserManageServiceImpl implements UserManageService {
 	
 	@Resource
+	private Tx tx;
+	@Resource
 	private AppMapper appMapper;
 	@Resource
 	private UserMapper userMapper;
@@ -64,6 +71,8 @@ public class UserManageServiceImpl implements UserManageService {
 	private ConfigService configService;
 	@Resource
 	private EmployeeMapper employeeMapper;
+	@Resource
+	private BonusScaleMapper bonusScaleMapper;
 	
 	@Override
 	public Result<Pager<UserPagingInfo>> userPaging(UserSearcher searcher) {
@@ -165,6 +174,19 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
+	public Result<Void> employeeEdit(int tid, int employeeId, EmployeeEditParam param) {
+		EmployeePO employee = employeeMapper.getByKey(param.getTargetId());
+		if (null == employee)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
+		if (employee.getTid() != tid)
+			return Consts.RESULT.FORBID;
+		employee.setMod(param.getMod());
+		employee.setUpdated(DateUtil.currentTime());
+		employeeMapper.update(employee);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
 	public Result<Void> bannerAdd(int appId, int tid, int idx, String icon, String link) {
 		Banner banner = EntityGenerator.newBanner(appId, tid, idx, icon, link);
 		try {
@@ -194,33 +216,24 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(Employee employee, TenantSettingsSubmit submit) {
-		TenantPO tenant = employee.getTenant();
-		if (null != submit.getNonAutoBind()) {
-			if (submit.getNonAutoBind().isEmpty())
+	public Result<Void> tenantSet(TenantPO tenant, TenantSetParam param) {
+		if (null != param.getNonAutoBind()) {
+			if (param.getNonAutoBind().isEmpty())
 				tenant.setNonAutoBind(null);
 			else {
 				StringBuilder builder = new StringBuilder();
-				for (long cid : submit.getNonAutoBind())
+				for (long cid : param.getNonAutoBind())
 					builder.append(cid).append(Consts.SYMBOL_UNDERLINE);
 				builder.deleteCharAt(builder.length() - 1);
 				tenant.setNonAutoBind(builder.toString());
 			}
 		}
-		if (null != submit.getBonusScaleCountMod())
-			tenant.setBonusScaleCountMod(submit.getBonusScaleCountMod());
-		if (null != submit.getBonusScaleRewardMod())
-			tenant.setBonusScaleRewardMod(submit.getBonusScaleRewardMod());
-		if (null != submit.getBonusScaleCountInsuranceMod())
-			tenant.setBonusScaleCountInsuranceMod(submit.getBonusScaleCountInsuranceMod());
-		if (null != submit.getBonusScaleRewardInsuranceMod())
-			tenant.setBonusScaleRewardInsuranceMod(submit.getBonusScaleRewardInsuranceMod());
-		if (null != submit.getTeamDepth()) {
-			submit.setTeamDepth(Math.max(1, submit.getTeamDepth()));
-			submit.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), submit.getTeamDepth()));
-		}
-		if (null != submit.getServicePhone())
-			tenant.setServicePhone(submit.getServicePhone());
+		if (null != param.getMod())
+			tenant.setMod(param.getMod());
+		if (null != param.getTeamDepth()) 
+			tenant.setTeamDepth(Math.min(GlobalConfigContainer.getGlobalConfig().getTeamDepth(), param.getTeamDepth()));
+		if (null != param.getServicePhone())
+			tenant.setServicePhone(param.getServicePhone());
 		tenant.setUpdated(DateUtil.currentTime());
 		tenantMapper.update(tenant);
 		return Consts.RESULT.OK;
@@ -295,5 +308,37 @@ public class UserManageServiceImpl implements UserManageService {
 		app.setUpdated(DateUtil.currentTime());
 		appMapper.update(app);
 		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public void calculateTeamExploits(int time, TenantPO tenant, Map<Integer, BonusScale> personalExploits) {
+		Map<String, BonusScale> exploits = tx.calculateTeamExploits(time, tenant, personalExploits);
+		bonusScaleMapper.insert(exploits);
+		tenant.setScaleRewardTime(time);
+		tenant.setUpdated(DateUtil.currentTime());
+		tenantMapper.update(tenant);
+	}
+	
+	@Override
+	public BonusScale bonusScale(String key) {
+		return bonusScaleMapper.getByKey(key);
+	}
+	
+	@Override
+	public Pager<BonusScale> bonusScales(int tid, EmployeeParam param) {
+		return bonusScaleMapper.paging(tid, param);
+	}
+	
+	@Override
+	public Result<BonusScale> bonusScaleAudit(int tid, String key, boolean agree) {
+		BonusScale bonusScale = bonusScaleMapper.getByKey(key);
+		if (null == bonusScale)
+			return BtkjConsts.RESULT.BONUS_SCALE_NOT_EXIST;
+		if (bonusScale.getTid() != tid || bonusScale.getState() != State.AUDIT)
+			return Consts.RESULT.FORBID;
+		bonusScale.setState(agree ? State.AGREE : State.REJECT);
+		bonusScale.setUpdated(DateUtil.currentTime());
+		bonusScaleMapper.update(bonusScale);
+		return Result.result(bonusScale);
 	}
 }

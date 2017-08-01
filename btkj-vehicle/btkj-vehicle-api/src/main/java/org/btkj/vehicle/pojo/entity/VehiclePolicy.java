@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.enums.BonusScaleType;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
@@ -34,13 +34,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private PolicyNature nature;						// 转续保类型
 	private boolean transfer;							// 是否过户车
 	private VehiclePolicyType type;						// 保单类型
-	private BonusScaleType scaleType;					// 规模奖励类型
+	private VehicleBonusType bonusType;					// 奖励类型
 	private String vehiclePrice;						// 购置价
-	private PolicyMark mark;							// 保单标记类型
+	private SalesmanMark mark;							// 保单标记类型
 	private int salesmanId;								// 业务员ID
 	private String salesman;							// 业务员姓名
 	private String salesmanMobile;						// 业务员手机号
 	private OrderDetail orderDetail;					// 对应的订单详情(只有在保途平台生成的保单才有对应的订单)
+	private int issueTime;								// 保单出单日期的unix时间戳
 	private CommercialPolicyDetail commercialDetail;
 	private CompulsoryPolicyDetail compulsoryDetail;
 	private Map<CommercialInsuranceType, Insurance> insurances;
@@ -182,12 +183,12 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.type = type;
 	}
 
-	public BonusScaleType getScaleType() {
-		return scaleType;
+	public VehicleBonusType getBonusType() {
+		return bonusType;
 	}
-
-	public void setScaleType(BonusScaleType scaleType) {
-		this.scaleType = scaleType;
+	
+	public void setBonusType(VehicleBonusType bonusType) {
+		this.bonusType = bonusType;
 	}
 
 	public String getVehiclePrice() {
@@ -198,11 +199,11 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.vehiclePrice = vehiclePrice;
 	}
 	
-	public PolicyMark getMark() {
+	public SalesmanMark getMark() {
 		return mark;
 	}
 	
-	public void setMark(PolicyMark mark) {
+	public void setMark(SalesmanMark mark) {
 		this.mark = mark;
 	}
 	
@@ -239,12 +240,36 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.salesmanMobile = salesmanMobile;
 	}
 	
+	public int getIssueTime() {
+		return issueTime;
+	}
+	
+	public void setIssueTime(int issueTime) {
+		this.issueTime = issueTime;
+	}
+	
 	public OrderDetail getOrderDetail() {
 		return orderDetail;
 	}
 	
 	public void setOrderDetail(OrderDetail orderDetail) {
 		this.orderDetail = orderDetail;
+	}
+	
+	public CommercialPolicyDetail getCommercialDetail() {
+		return commercialDetail;
+	}
+	
+	public void setCommercialDetail(CommercialPolicyDetail commercialDetail) {
+		this.commercialDetail = commercialDetail;
+	}
+	
+	public CompulsoryPolicyDetail getCompulsoryDetail() {
+		return compulsoryDetail;
+	}
+	
+	public void setCompulsoryDetail(CompulsoryPolicyDetail compulsoryDetail) {
+		this.compulsoryDetail = compulsoryDetail;
 	}
 
 	public Map<CommercialInsuranceType, Insurance> getInsurances() {
@@ -260,7 +285,21 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.orderDetail.setOrderId(order.get_id());
 	}
 	
-	private class CommercialPolicyDetail implements Serializable {
+	public int quotaInCent() {
+		double cm = null != commercialDetail ? commercialDetail.getPrice() : 0;
+		double cp = null != compulsoryDetail ? compulsoryDetail.getPrice() + compulsoryDetail.getVesselPrice() : 0;
+		return (int) ((cm + cp) * 100);
+	}
+	
+	public int commercialQuotaInCent() {
+		return null != commercialDetail ? (int) (commercialDetail.getPrice() * 100) : 0;
+	}
+	
+	public int compulsoryQuotaInCent() {
+		return null != compulsoryDetail ? (int) ((compulsoryDetail.getPrice() + compulsoryDetail.getVesselPrice()) * 100) : 0;
+	}
+	
+	public class CommercialPolicyDetail implements Serializable {
 		private static final long serialVersionUID = -9084610822609798686L;
 		private double price;							// 保费	
 		private String no;								// 保单号
@@ -307,7 +346,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 		}
 	}
 	
-	private class CompulsoryPolicyDetail extends CommercialPolicyDetail {
+	public class CompulsoryPolicyDetail extends CommercialPolicyDetail {
 		private static final long serialVersionUID = 861842819371203409L;
 		private double vesselPrice;						// 车船税
 		public CompulsoryPolicyDetail() {}
@@ -334,12 +373,26 @@ public class VehiclePolicy implements UniqueModel<String> {
 		}
 	}
 	
-	public enum PolicyMark {
+	public enum SalesmanMark {
+		/**
+		 * 存在两种情况：1、保途平台的保单且业务员指定正确；2、保途平台的保单且业务员指定错误(这一类没做记录被系统自动矫正了)3、非保途平台保单且业务员指定为本公司(无法识别出是否是正确的归属)
+		 */
 		NORMAL(1),
-		NO_EMPLOYEE(2),
-		EMPLOYEE_UNSUITABLE(4);
+		
+		/**
+		 * 非保途平台保单，没有业务员(业务员字段解析，业务员ID都没有)
+		 */
+		NONE(4),
+		/**
+		 * 非保途平台保单，业务员不存在(业务员字段解析正确，但是不是保途的业务员ID，保单中仅有业务员ID)
+		 */
+		NOT_EXIST(8),
+		/**
+		 * 非保途平台保单，业务员存在，但是不是该公司的业务员(业务员信息都有，只不过该业务员不属于该保单所在的代理公司)
+		 */
+		UNSUITABLE(16);
 		private int mark;
-		private PolicyMark(int mark) {
+		private SalesmanMark(int mark) {
 			this.mark = mark;
 		}
 		public int mrk() {

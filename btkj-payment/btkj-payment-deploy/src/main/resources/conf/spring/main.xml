@@ -9,8 +9,4 @@
 
 	<context:component-scan base-package="org.btkj.payment" />
 	
-	<bean id="accountMapper" class="org.btkj.payment.redis.AccountMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="accountDao" />
-	</bean>
 </beans>

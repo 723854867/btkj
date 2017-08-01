@@ -1,21 +1,33 @@
 package org.btkj.user.mybatis;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.TenantPO.Mod;
 import org.btkj.user.mybatis.dao.AppDao;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.mybatis.dao.TenantDao;
 import org.btkj.user.mybatis.dao.UserDao;
+import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.util.common.Consts;
+import org.rapid.util.lang.CollectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("tx")
 public class Tx {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Tx.class);
 	
 	@Resource
 	private AppDao appDao;
@@ -77,5 +91,60 @@ public class Tx {
 				employeeMapper.flush(employee);
 			}
 		};
+	}
+	
+	/**
+	 * 在统计期间如果商户属性修改了不管，只管当前对象属性就可以了，这里不是并发问题
+	 * 
+	 * @param tenant
+	 * @param personalExploits
+	 */
+	@Transactional
+	public Map<String, BonusScale> calculateTeamExploits(int time, TenantPO tenant, Map<Integer, BonusScale> personalExploits) {
+		int tid = tenant.getTid();
+		int teamDepth = tenant.getTeamDepth();
+		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid);
+		Map<String, BonusScale> teamExploits = new HashMap<String, BonusScale>();
+		for (Entry<Integer, BonusScale> entry : personalExploits.entrySet()) {
+			EmployeePO employee = employees.get(entry.getKey());
+			if (null == employee) {
+				logger.error("规模佣金计算：商户 - {} 业务员 - {} 不存在，本人业务被忽略", tid, entry.getKey());
+				continue;
+			}
+			if ((employee.getMod() & EmployeePO.Mod.BONUS_SCALE.mark()) != EmployeePO.Mod.BONUS_SCALE.mark()) {
+				logger.info("规模佣金计算：商户  - {} 业务员 - {} 没有设置规模奖励！", tid, entry.getKey());
+				continue;
+			}
+			LinkedList<Integer> list = VehicleUtil.relationEmployees(employee.getRelationPath(), teamDepth);
+			if (CollectionUtil.isEmpty(list))
+				continue;
+			for (int employeeId : list) {
+				EmployeePO temp = employees.get(employeeId);
+				if (null == employee) {
+					logger.error("规模佣金计算：商户 - {} 业务员 - {} 不存在，下级业务被忽略", tid, entry.getKey());
+					continue;
+				}
+				if ((temp.getMod() & EmployeePO.Mod.BONUS_SCALE.mark()) != EmployeePO.Mod.BONUS_SCALE.mark()) {
+					logger.info("规模佣金计算：商户  - {} 业务员 - {} 没有设置规模奖励！", tid, entry.getKey());
+					continue;
+				}
+				BonusScale bs = teamExploits.get(employeeId);
+				if (null == bs) {
+					bs = new BonusScale(employeeId + Consts.SYMBOL_UNDERLINE + time);
+					bs.setEmployeeId(employeeId);
+					bs.setTid(tenant.getTid());
+					teamExploits.put(bs.get_id(), bs);
+				}
+				bs.setQuota(entry.getValue().getQuota());
+				bs.setRCQuota(entry.getValue().getRCQuota());
+				bs.setSCQuota(entry.getValue().getSCQuota());
+				bs.addExploits(entry.getValue().getExploits());
+				if ((tenant.getMod() & Mod.RC_CM.mark()) == Mod.RC_CM.mark())
+					bs.setCmRate(entry.getValue().getCmRate());
+				if ((tenant.getMod() & Mod.RC_CP.mark()) == Mod.RC_CP.mark())
+					bs.setCpRate(entry.getValue().getCmRate());
+			}
+		}
+		return teamExploits;
 	}
 }
