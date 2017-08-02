@@ -1,6 +1,7 @@
 package org.btkj.vehicle.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -448,6 +449,11 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public Map<String, VehiclePolicy> policies(int tid, int start, int end) {
 		return null;
+	}
+	
+	@Override
+	public Map<String, VehiclePolicy> policies(Collection<String> ids) {
+		return vehiclePolicyMapper.getByKeys(ids);
 	}
 	
 	@Override

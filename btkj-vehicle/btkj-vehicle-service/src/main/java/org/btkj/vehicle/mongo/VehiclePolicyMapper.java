@@ -76,7 +76,7 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 							searcher.getStart(), searcher.getPageSize(), VehiclePolicy.class):
 				mongo.pagingAndSort(collection, Filters.and(filters), Sorts.descending(FIELD_CREATED),
 							searcher.getStart(), searcher.getPageSize(), VehiclePolicy.class);
-		return new Pager<VehiclePolicy>(searcher.getTotal(), list);
+		return new Pager<VehiclePolicy>(total, list);
 	}
 	
 	public List<VehiclePolicy> policies(int tid, int start, int end) {

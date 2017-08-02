@@ -87,8 +87,6 @@ public class ORDER extends TenantAction {
 				tips.getEngine(), tips.getLicense(), 
 				tips.getVin(), tips.getEnrollDate()))
 			return false;
-		if (null == tips.getVehicleUsedType())
-			return false;
 		return Validator.isVehicleLisense(tips.getLicense());
 	}
 	
@@ -114,7 +112,7 @@ public class ORDER extends TenantAction {
 		return true;
 	}
 	
-	private boolean _correctUnitType(VehicleUsedType usedType, InsurUnit unit) {
+	private void _correctUnitType(VehicleUsedType usedType, InsurUnit unit) {
 		switch (usedType) {
 		case HOME_USE:
 			unit.setType(UnitType.PERSONAL);
@@ -128,16 +126,9 @@ public class ORDER extends TenantAction {
 		case PARTICULAR:
 			unit.setType(UnitType.ENTERPRISE);
 			break;
-		case BIZ_TRUCK:
-		case NO_BIZ_TRUCK:
-		case LEASE:
-			if (unit.getType() == UnitType.OFFICE)
-				return false;
-			break;
 		default:
 			break;
 		}
-		return true;
 	}
 	
 	@Override

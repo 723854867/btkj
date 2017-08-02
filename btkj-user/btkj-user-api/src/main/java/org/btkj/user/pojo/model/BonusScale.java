@@ -20,7 +20,7 @@ public class BonusScale implements UniqueModel<String> {
 	private int cpRate;						// 交强险比例
 	private int cmRate;						// 商业险比例
 	private State state;					// 状态
-	private Set<Long> exploits;
+	private Set<String> policies;
 	private int created;
 	private int updated;
 	
@@ -110,12 +110,12 @@ public class BonusScale implements UniqueModel<String> {
 		this.state = state;
 	}
 
-	public Set<Long> getExploits() {
-		return exploits;
+	public Set<String> getPolicies() {
+		return policies;
 	}
-
-	public void setExploits(Set<Long> exploits) {
-		this.exploits = exploits;
+	
+	public void setPolicies(Set<String> policies) {
+		this.policies = policies;
 	}
 	
 	public int getUpdated() {
@@ -134,16 +134,16 @@ public class BonusScale implements UniqueModel<String> {
 		this.created = created;
 	}
 	
-	public void addExploit(long exploit) {
-		if (null == this.exploits)
-			this.exploits = new HashSet<Long>();
-		this.exploits.add(exploit);
+	public void addPolicy(String id) {
+		if (null == this.policies)
+			this.policies = new HashSet<String>();
+		this.policies.add(id);
 	}
 	
-	public void addExploits(Collection<Long> collection) {
-		if (null == this.exploits)
-			this.exploits = new HashSet<Long>();
-		this.exploits.addAll(collection);
+	public void addPolicies(Collection<String> collection) {
+		if (null == this.policies)
+			this.policies = new HashSet<String>();
+		this.policies.addAll(collection);
 	}
 
 	@Override

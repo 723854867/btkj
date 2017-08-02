@@ -21,6 +21,6 @@ public class CustomerMapper extends RedisDBAdapter<Long, Customer, CustomerDao> 
 			return Pager.EMPLTY;
 		searcher.calculate(total);
 		List<Customer> list = dao.paging(searcher);
-		return new Pager<Customer>(searcher.getTotal(), list);
+		return new Pager<Customer>(total, list);
 	}
 }

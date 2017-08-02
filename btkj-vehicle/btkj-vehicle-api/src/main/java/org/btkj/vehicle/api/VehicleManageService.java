@@ -1,5 +1,6 @@
 package org.btkj.vehicle.api;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -298,6 +299,14 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Map<String, VehiclePolicy> policies(int tid, int start, int end);
+	
+	/**
+	 * 获取指定保单
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	Map<String, VehiclePolicy> policies(Collection<String> ids);
 	
 	/**
 	 * 车险保单分页

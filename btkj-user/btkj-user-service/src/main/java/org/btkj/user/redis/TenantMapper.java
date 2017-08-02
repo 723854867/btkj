@@ -32,6 +32,6 @@ public class TenantMapper extends RedisDBAdapter<Integer, TenantPO, TenantDao> {
 		List<TenantPagingInfo> list = new ArrayList<TenantPagingInfo>(); 
 		for (TenantPO tenant : tenants) 
 			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new TenantPagingInfo(tenant) : new TenantPagingMasterInfo(tenant));
-		return new Pager<TenantPagingInfo>(searcher.getTotal(), list);
+		return new Pager<TenantPagingInfo>(total, list);
 	}
 }

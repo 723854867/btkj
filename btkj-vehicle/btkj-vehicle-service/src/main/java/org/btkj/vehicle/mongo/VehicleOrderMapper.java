@@ -125,7 +125,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class):
 				mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
 							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
-		return new Pager<VehicleOrder>(searcher.getTotal(), orders);
+		return new Pager<VehicleOrder>(total, orders);
 	}
 	
 	/**

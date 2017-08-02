@@ -48,7 +48,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 		if (0 == total)
 			return Pager.EMPLTY;
 		searcher.calculate(total);
-		return new Pager<EmployeePagingInfo>(searcher.getTotal(), dao.paging(searcher));
+		return new Pager<EmployeePagingInfo>(total, dao.paging(searcher));
 	}
 	
 	public boolean isEmployee(int tid, int uid) {

@@ -1,5 +1,6 @@
 package org.btkj.user.pojo.param;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.btkj.pojo.param.EmployeeParam;
@@ -13,6 +14,12 @@ public class EmployeeEditParam extends EmployeeParam {
 	private int mod;
 	@Min(1)
 	private int targetId;
+	@Min(-100)
+	@Max(100)
+	private int CMRate;
+	@Min(-100)
+	@Max(100)
+	private int CPRate;
 	
 	public int getMod() {
 		return mod;
@@ -28,5 +35,21 @@ public class EmployeeEditParam extends EmployeeParam {
 	
 	public void setTargetId(int targetId) {
 		this.targetId = targetId;
+	}
+	
+	public int getCMRate() {
+		return CMRate;
+	}
+	
+	public void setCMRate(int cMRate) {
+		CMRate = cMRate;
+	}
+	
+	public int getCPRate() {
+		return CPRate;
+	}
+	
+	public void setCPRate(int cPRate) {
+		CPRate = cPRate;
 	}
 }

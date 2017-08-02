@@ -138,7 +138,7 @@ public class Tx {
 				bs.setQuota(entry.getValue().getQuota());
 				bs.setRCQuota(entry.getValue().getRCQuota());
 				bs.setSCQuota(entry.getValue().getSCQuota());
-				bs.addExploits(entry.getValue().getExploits());
+				bs.addPolicies(entry.getValue().getPolicies());
 				if ((tenant.getMod() & Mod.RC_CM.mark()) == Mod.RC_CM.mark())
 					bs.setCmRate(entry.getValue().getCmRate());
 				if ((tenant.getMod() & Mod.RC_CP.mark()) == Mod.RC_CP.mark())

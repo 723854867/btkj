@@ -68,7 +68,7 @@ public class NonAutoProductMapper extends MongoMapper<Long, NonAutoProduct> {
 			products = list.isEmpty() ? 
 					mongo.paging(collection, param.getStart(), param.getPageSize(), NonAutoProduct.class):
 					mongo.paging(collection, Filters.and(list), param.getStart(), param.getPageSize(), NonAutoProduct.class);
-		return new Pager<NonAutoProduct>(param.getTotal(), products);
+		return new Pager<NonAutoProduct>(total, products);
 	}
 	
 	public void setKeyMapper(KeyMapper keyMapper) {

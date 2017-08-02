@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.annotation.Resource;
 
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.BonusScaleAuditParam;
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.pojo.bo.indentity.Employee;
@@ -14,18 +15,14 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.pojo.entity.LogScore;
-import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.model.BonusScale;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
 
 public class BONUS_SCALE_AUDIT extends EmployeeAction<BonusScaleAuditParam> {
 	
-	@Resource
-	private EmployeeService employeeService;
 	@Resource
 	private UserManageService userManageService;
 	@Resource

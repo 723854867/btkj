@@ -16,7 +16,7 @@ import org.rapid.util.lang.StringUtil;
 @XmlRootElement(name = "RETURN")
 public class VehicleInfos {
 	
-private List<VehicleCommonInfo> list;
+	private List<VehicleCommonInfo> list;
 	
     @XmlElement(name = "VehicleCommonInfo")  
 	public List<VehicleCommonInfo> getList() {

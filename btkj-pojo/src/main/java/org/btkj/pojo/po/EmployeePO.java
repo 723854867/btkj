@@ -20,6 +20,8 @@ public class EmployeePO implements UniqueModel<Integer> {
 	private int right;
 	private int level;
 	private int mod;
+	private int commercialRate;
+	private int compulsoryRate;
 	private int created;
 	private int updated;
 	
@@ -130,6 +132,22 @@ public class EmployeePO implements UniqueModel<Integer> {
 	
 	public void setMod(int mod) {
 		this.mod = mod;
+	}
+	
+	public int getCommercialRate() {
+		return commercialRate;
+	}
+	
+	public void setCommercialRate(int commercialRate) {
+		this.commercialRate = commercialRate;
+	}
+	
+	public int getCompulsoryRate() {
+		return compulsoryRate;
+	}
+	
+	public void setCompulsoryRate(int compulsoryRate) {
+		this.compulsoryRate = compulsoryRate;
 	}
 	
 	public int getCreated() {

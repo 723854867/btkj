@@ -286,9 +286,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	}
 	
 	public int quotaInCent() {
-		double cm = null != commercialDetail ? commercialDetail.getPrice() : 0;
-		double cp = null != compulsoryDetail ? compulsoryDetail.getPrice() + compulsoryDetail.getVesselPrice() : 0;
-		return (int) ((cm + cp) * 100);
+		return commercialQuotaInCent() + compulsoryQuotaInCent();
 	}
 	
 	public int commercialQuotaInCent() {

@@ -181,6 +181,8 @@ public class UserManageServiceImpl implements UserManageService {
 		if (employee.getTid() != tid)
 			return Consts.RESULT.FORBID;
 		employee.setMod(param.getMod());
+		employee.setCommercialRate(param.getCMRate());
+		employee.setCompulsoryRate(param.getCPRate());
 		employee.setUpdated(DateUtil.currentTime());
 		employeeMapper.update(employee);
 		return Consts.RESULT.OK;

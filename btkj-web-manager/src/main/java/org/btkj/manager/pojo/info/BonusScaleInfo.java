@@ -10,6 +10,7 @@ public class BonusScaleInfo implements Serializable {
 
 	private static final long serialVersionUID = 3607284224579584606L;
 
+	private String key;
 	private String name;
 	private int employeeId;
 	private int quota;
@@ -28,6 +29,14 @@ public class BonusScaleInfo implements Serializable {
 		this.CMRate = scale.getCmRate();
 		this.CPRate = scale.getCpRate();
 		this.state = scale.getState();
+	}
+	
+	public String getKey() {
+		return key;
+	}
+	
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getName() {

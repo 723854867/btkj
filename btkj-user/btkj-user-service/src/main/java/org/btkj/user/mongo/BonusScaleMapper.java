@@ -32,6 +32,6 @@ public class BonusScaleMapper extends MongoMapper<String, BonusScale> {
 			return Pager.EMPLTY;
 		param.calculate((int) total);
 		List<BonusScale> list = mongo.pagingAndSort(collection, Filters.eq(FIELD_ID, tid), Sorts.descending(FIELD_CREATED), param.getStart(), param.getPageSize(), BonusScale.class);
-		return new Pager<BonusScale>(param.getTotal(), list);
+		return new Pager<BonusScale>(total, list);
 	}
 }

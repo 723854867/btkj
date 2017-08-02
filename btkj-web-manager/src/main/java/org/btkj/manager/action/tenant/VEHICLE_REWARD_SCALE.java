@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.enums.BizType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.pojo.po.AppPO;
@@ -23,7 +25,6 @@ import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
@@ -79,22 +80,20 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			if (null == exploit)
 				continue;
 			exploits.add(exploit);
-		}
-		exploits = statisticsService.recordLogExploits(exploits);
-		for (LogExploit exploit : exploits) {
+			
 			BonusScale bs = map.get(exploit.getEmployeeId());
 			if (null == bs) {
 				bs = new BonusScale();
-				bs.addExploit(exploit.getId());
+				bs.addPolicy(policy.get_id());
 				bs.setEmployeeId(exploit.getEmployeeId());
 				map.put(exploit.getEmployeeId(), bs);
 			}
-			VehiclePolicy policy = policies.get(exploit.getBizId());
 			_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, true);			// 商业-统计口径
 			_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);		// 商业-奖励孔径
 			_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, true);			// 交强-统计口径	
 			_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);		// 交强-奖励口径
 		}
+		exploits = statisticsService.recordLogExploits(exploits);
 		for (BonusScale bs : map.values()) {
 			int SCQuota = bs.getSCQuota();
 			for (BonusScaleConfig config : configs) {
@@ -126,7 +125,7 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			exploit.setTid(policy.getTid());
 			exploit.setAppId(policy.getAppId());
 			exploit.setEmployeeId(policy.getSalesmanId());
-			exploit.setType(LogExploit.Type.VEHICLE.mark());
+			exploit.setType(BizType.VEHICLE_BONUS_SCALE.mark());
 			exploit.setDetailType(policy.getBonusType().mark());
 			exploit.setBizId(policy.get_id());
 			exploit.setQuota(policy.quotaInCent());

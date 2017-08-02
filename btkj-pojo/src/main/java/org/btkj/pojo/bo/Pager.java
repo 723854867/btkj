@@ -16,21 +16,21 @@ public class Pager<T> implements Serializable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final Pager EMPLTY				= new Pager(0, Collections.EMPTY_LIST);
 	
-	private int total;
+	private long total;
 	private List<T> list;
 	
 	public Pager() {}
 	
-	public Pager(int total, List<T> list) {
+	public Pager(long total, List<T> list) {
 		this.total = total;
 		this.list = list;
 	}
 	
-	public int getTotal() {
+	public long getTotal() {
 		return total;
 	}
 	
-	public void setTotal(int total) {
+	public void setTotal(long total) {
 		this.total = total;
 	}
 	

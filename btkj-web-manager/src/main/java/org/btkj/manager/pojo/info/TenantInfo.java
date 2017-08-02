@@ -1,17 +1,17 @@
-package org.btkj.common.pojo.info;
+package org.btkj.manager.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 
 public class TenantInfo implements Serializable {
 
-	private static final long serialVersionUID = 847805312799679291L;
+	private static final long serialVersionUID = -3396922142932109218L;
 
 	private int tid;
+	private int mod;
 	private String name;
 	private int appId;
 	private String appName;
@@ -22,21 +22,18 @@ public class TenantInfo implements Serializable {
 	private String nonAutoBind;
 	private String servicePhone;
 	
-	public TenantInfo() {}
-	
-	public TenantInfo(Employee employee, Region region) {
-		TenantPO po = employee.getTenant();
-		AppPO app = employee.getApp();
-		this.tid = po.getTid();
-		this.name = po.getName();
+	public TenantInfo(AppPO app, TenantPO tenant, Region region) {
+		this.tid = tenant.getTid();
+		this.mod = tenant.getMod();
+		this.name = tenant.getName();
 		this.appId = app.getId();
 		this.appName = app.getName();
 		this.region = region.getId();
 		this.regionName = region.getName();
-		this.license = po.getLicense();
-		this.licenseImage = po.getLicenseImage();
-		this.nonAutoBind = po.getNonAutoBind();
-		this.servicePhone = po.getServicePhone();
+		this.license = tenant.getLicense();
+		this.licenseImage = tenant.getLicenseImage();
+		this.nonAutoBind = tenant.getNonAutoBind();
+		this.servicePhone = tenant.getServicePhone();
 	}
 
 	public int getTid() {
@@ -45,6 +42,14 @@ public class TenantInfo implements Serializable {
 
 	public void setTid(int tid) {
 		this.tid = tid;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 
 	public String getName() {
@@ -90,15 +95,15 @@ public class TenantInfo implements Serializable {
 	public String getLicense() {
 		return license;
 	}
-	
+
 	public void setLicense(String license) {
 		this.license = license;
 	}
-	
+
 	public String getLicenseImage() {
 		return licenseImage;
 	}
-	
+
 	public void setLicenseImage(String licenseImage) {
 		this.licenseImage = licenseImage;
 	}

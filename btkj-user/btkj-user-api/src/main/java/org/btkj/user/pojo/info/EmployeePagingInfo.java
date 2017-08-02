@@ -2,8 +2,6 @@ package org.btkj.user.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.po.EmployeePO;
-
 public class EmployeePagingInfo implements Serializable {
 
 	private static final long serialVersionUID = 391382868580464606L;
@@ -18,15 +16,6 @@ public class EmployeePagingInfo implements Serializable {
 	private String parentMobile;
 	private int created;
 	
-	public EmployeePagingInfo() {}
-	
-	public EmployeePagingInfo(EmployeePO employee) {
-		this.id = employee.getId();
-		this.uid = employee.getUid();
-		this.parentId = employee.getParentId();
-		this.created = employee.getCreated();
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -90,7 +79,7 @@ public class EmployeePagingInfo implements Serializable {
 	public void setParentMobile(String parentMobile) {
 		this.parentMobile = parentMobile;
 	}
-
+	
 	public int getCreated() {
 		return created;
 	}

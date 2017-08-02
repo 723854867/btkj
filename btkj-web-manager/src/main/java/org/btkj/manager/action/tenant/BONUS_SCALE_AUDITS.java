@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.BonusScaleInfo;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.param.EmployeeParam;
@@ -16,16 +17,12 @@ import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
-import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.model.BonusScale;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
 
 public class BONUS_SCALE_AUDITS extends EmployeeAction<EmployeeParam> {
 	
-	@Resource
-	private EmployeeService employeeService;
 	@Resource
 	private UserManageService userManageService;
 

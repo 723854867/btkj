@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.payment.pojo.model.ScoreTips;
 import org.btkj.pojo.VehicleUtil;
@@ -26,11 +27,9 @@ import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.pojo.entity.LogScore;
-import org.btkj.user.api.EmployeeService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
@@ -43,8 +42,6 @@ import org.rapid.util.lang.DateUtil;
  */
 public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 	
-	@Resource
-	private EmployeeService employeeService;
 	@Resource
 	private StatisticsService statisticsService;
 	@Resource

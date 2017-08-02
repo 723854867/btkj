@@ -52,7 +52,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		List<UserPagingInfo> list = new ArrayList<UserPagingInfo>();
 		for (UserPO user : users) 
 			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
-		return new Pager(searcher.getTotal(), list);
+		return new Pager(total, list);
 	}
 	
 	public UserPO getUserByMobile(int appId, String mobile) {

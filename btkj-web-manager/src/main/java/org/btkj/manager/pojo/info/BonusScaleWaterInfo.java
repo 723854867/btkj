@@ -3,10 +3,11 @@ package org.btkj.manager.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.enums.VehicleBonusType;
+import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.vo.EmployeeTip;
-import org.btkj.statistics.pojo.entity.LogExploit;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 
-public class BonusScaleDetail implements Serializable {
+public class BonusScaleWaterInfo implements Serializable {
 
 	private static final long serialVersionUID = 5272761902486517280L;
 
@@ -15,13 +16,19 @@ public class BonusScaleDetail implements Serializable {
 	private int time;
 	private int quota;
 	private VehicleBonusType bonusType;
-	
-	public BonusScaleDetail(EmployeeTip et, LogExploit exploit, VehicleBonusType type) {
+	private int insurerId;
+	private String insurerName;
+	private String license;
+
+	public BonusScaleWaterInfo(EmployeeTip et, VehiclePolicy policy, Insurer insurer) {
 		this.name = null != et ? et.getName() : null;
-		this.employeeId = exploit.getEmployeeId();
-		this.time = exploit.getCreated();
-		this.quota = exploit.getQuota();
-		this.bonusType = type;
+		this.employeeId = policy.getSalesmanId();
+		this.time = policy.getIssueTime();
+		this.quota = policy.quotaInCent();
+		this.bonusType = policy.getBonusType();
+		this.insurerId = policy.getInsurerId();
+		this.insurerName = insurer.getName();
+		this.license = policy.getLicense();
 	}
 
 	public String getName() {
@@ -62,5 +69,29 @@ public class BonusScaleDetail implements Serializable {
 
 	public void setBonusType(VehicleBonusType bonusType) {
 		this.bonusType = bonusType;
+	}
+
+	public int getInsurerId() {
+		return insurerId;
+	}
+
+	public void setInsurerId(int insurerId) {
+		this.insurerId = insurerId;
+	}
+
+	public String getInsurerName() {
+		return insurerName;
+	}
+
+	public void setInsurerName(String insurerName) {
+		this.insurerName = insurerName;
+	}
+
+	public String getLicense() {
+		return license;
+	}
+
+	public void setLicense(String license) {
+		this.license = license;
 	}
 }

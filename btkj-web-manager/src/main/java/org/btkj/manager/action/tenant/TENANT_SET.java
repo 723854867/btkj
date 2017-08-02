@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.NonAutoCategory;
@@ -14,7 +14,6 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.param.TenantSetParam;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -44,10 +43,5 @@ public class TENANT_SET extends EmployeeAction<TenantSetParam> {
 			}
 		}
 		return userManageService.tenantSet(tenant, param);
-	}
-	
-	@Override
-	protected Client client() {
-		return Client.TENANT_MANAGER;
 	}
 }
