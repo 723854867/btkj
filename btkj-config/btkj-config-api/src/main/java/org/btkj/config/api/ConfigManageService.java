@@ -1,12 +1,12 @@
 package org.btkj.config.api;
 
 import java.util.List;
+import java.util.Map;
 
-import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.config.pojo.info.ModularDocument;
+import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.vo.Page;
 import org.rapid.util.common.message.Result;
 
 public interface ConfigManageService {
@@ -70,36 +70,16 @@ public interface ConfigManageService {
 	/**
 	 * api 列表
 	 * 
-	 * @param page
+	 * @param param
 	 * @return
 	 */
-	Pager<Api> apis(Page page);
+	Map<String, ModularDocument> modulars();
 	
 	/**
-	 * 新增 api
+	 * api 编辑
 	 * 
-	 * @param key
-	 * @param name
-	 * @param pow
+	 * @param param
 	 * @return
 	 */
-	Result<Void> apiAdd(String key, String name, int pow);
-	
-	/**
-	 * 修改 api
-	 * 
-	 * @param key
-	 * @param name
-	 * @param pow
-	 * @return
-	 */
-	Result<Void> apiUpdate(String key, String name, int pow);
-	
-	/**
-	 * 删除 api
-	 * 
-	 * @param key
-	 * @return
-	 */
-	void apiDelete(String key);
+	Result<?> modularEdit(ModularEditParam param);
 }

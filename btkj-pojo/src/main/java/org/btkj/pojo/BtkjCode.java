@@ -278,7 +278,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 商户壁虎配置不存在
 	 */
-	BI_HU_TENANT_CONFIG_NOT_EXIST(690, "bi hu tenant config not exist");
+	BI_HU_TENANT_CONFIG_NOT_EXIST(690, "bi hu tenant config not exist"),
+	
+	/**
+	 * 模块不存在
+	 */
+	MODULAR_NOT_EXIST(691, "modular not exist!");
 	
 	private int code;
 	private String desc;

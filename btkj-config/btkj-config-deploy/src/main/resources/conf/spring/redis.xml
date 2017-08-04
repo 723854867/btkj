@@ -31,9 +31,11 @@
 	</bean>
 	
 	<bean id="redis" class="org.rapid.data.storage.redis.Redis">
-		<!-- 
-		<constructor-arg index="0" value="classpath:conf/lua" /> -->
 		<property name="jedisPool" ref="jedisPool" />
+	</bean>
+	
+	<bean id="distributeLock" class="org.rapid.data.storage.redis.DistributeLock" >
+		<property name="redis" ref="redis" />
 	</bean>
 </beans>
 

@@ -1,11 +1,12 @@
 package org.btkj.config.mybatis;
 
-import java.math.BigDecimal;
-
-import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
+import org.btkj.config.pojo.entity.Modular;
+import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.math.tree.Node;
+import org.rapid.util.math.tree.mptt.MPTTNode;
 
 public class EntityGenerator {
 
@@ -36,15 +37,18 @@ public class EntityGenerator {
 		return area;
 	}
 	
-	public static final Api newApi(String key, String name, int pow) {
-		Api api = new Api();
-		api.setKey(key);
-		api.setName(name);
-		api.setGroupMod(new BigDecimal(2).pow(pow).toString());
+	public static final Modular newModular(ModularEditParam param, Modular parent) {
+		Modular modular = new Modular();
+		modular.setId(param.getId());
+		modular.setName(param.getName());
+		modular.setParentId(param.getParentId());
+		modular.setLeft(null == parent ? MPTTNode.INITIAL_ROOT_LEFT : parent.getRight());
+		modular.setRight(modular.getLeft() + 1);
+		modular.setLayer(null == parent ? Node.ROOT_LAYER : parent.getLayer() + 1);
 		
 		int time = DateUtil.currentTime();
-		api.setCreated(time);
-		api.setUpdated(time);
-		return api;
+		modular.setCreated(time);
+		modular.setUpdated(time);
+		return modular;
 	}
 }

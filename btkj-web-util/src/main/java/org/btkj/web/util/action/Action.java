@@ -45,23 +45,23 @@ public abstract class Action<PARAM extends Param> {
 			} catch (Exception e) {
 				throw ConstConvertFailureException.errorConstException(Params.PAYLOAD);
 			}
-			Set<ConstraintViolation<PARAM>> constraintViolations = validate(param);
-			if (!constraintViolations.isEmpty()) {
-				ConstConvertFailureException exception = ConstConvertFailureException.errorConstException(Params.PAYLOAD);
-				StringBuilder builder = new StringBuilder();
-				builder.append("payload param error for detail : [");
-				int idx = 0;
-				for (ConstraintViolation<PARAM> constraintViolation : constraintViolations) {
-						builder.append(++idx).append("、").append(constraintViolation.getPropertyPath())
-								.append(":").append(constraintViolation.getMessage()).append("; ");
-				}
-				builder.delete(builder.length() -2, builder.length());
-				builder.append("]");
-				exception.setDesc(builder.toString());
-				throw exception;
-			}
+			REQUEST_HOLDER.set(request);
 			try {
-				REQUEST_HOLDER.set(request);
+				Set<ConstraintViolation<PARAM>> constraintViolations = validate(param);
+				if (!constraintViolations.isEmpty()) {
+					ConstConvertFailureException exception = ConstConvertFailureException.errorConstException(Params.PAYLOAD);
+					StringBuilder builder = new StringBuilder();
+					builder.append("payload param error for detail : [");
+					int idx = 0;
+					for (ConstraintViolation<PARAM> constraintViolation : constraintViolations) {
+							builder.append(++idx).append("、").append(constraintViolation.getPropertyPath())
+									.append(":").append(constraintViolation.getMessage()).append("; ");
+					}
+					builder.delete(builder.length() -2, builder.length());
+					builder.append("]");
+					exception.setDesc(builder.toString());
+					throw exception;
+				}
 				return execute(param);
 			} finally {
 				REQUEST_HOLDER.remove();

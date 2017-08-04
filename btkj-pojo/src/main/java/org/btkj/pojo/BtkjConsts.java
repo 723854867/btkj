@@ -39,6 +39,7 @@ public interface BtkjConsts {
 		Result INSURER_NOT_EXIST				= Result.result(BtkjCode.INSURER_NOT_EXIST);
 		Result LANE_CONFIG_ERROR				= Result.result(BtkjCode.LANE_CONFIG_ERROR);
 		Result COMMENT_NOT_EXIST				= Result.result(BtkjCode.COMMENT_NOT_EXIST);
+		Result MODULAR_NOT_EXIST				= Result.result(BtkjCode.MODULAR_NOT_EXIST);
 		Result JIAN_JIE_ID_NEEDED				= Result.result(BtkjCode.JIAN_JIE_ID_NEEDED);
 		Result EMPLOYEE_NOT_EXIST				= Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		Result CUSTOMER_NOT_EXIST				= Result.result(BtkjCode.CUSTOMER_NOT_EXIST);
@@ -86,6 +87,10 @@ public interface BtkjConsts {
 	}
 	
 	interface LOCKS {
+		// 模块锁
+		static String modularLock() {
+			return "lock:modular";
+		}
 		static String tenantResourceLock(int tid) {
 			return MessageFormat.format("lock:tenant:resource:{0}", String.valueOf(tid));
 		}

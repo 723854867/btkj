@@ -9,6 +9,8 @@
         				
 	<context:component-scan base-package="org.btkj.config" />
 	
+	<bean id="modularDocumentFactory" class="org.btkj.config.pojo.ModularDocumentFactory" />
+	
 	<bean id="areaMapper" class="org.btkj.config.redis.AreaMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="areaDao" />
@@ -24,8 +26,8 @@
 		<property name="dao" ref="insurerDao" />
 	</bean>
 	
-	<bean id="apiMapper" class="org.btkj.config.redis.ApiMapper">
+	<bean id="modularMapper" class="org.btkj.config.redis.ModularMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="apiDao" />
+		<property name="dao" ref="modularDao" />
 	</bean>
 </beans>

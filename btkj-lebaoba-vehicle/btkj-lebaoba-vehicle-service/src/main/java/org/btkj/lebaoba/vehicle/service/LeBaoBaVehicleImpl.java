@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.lebaoba.vehicle.domain.BasicResult;
+import org.btkj.lebaoba.vehicle.domain.OrderResult;
 import org.btkj.lebaoba.vehicle.domain.OrderSubmit;
 import org.btkj.lebaoba.vehicle.domain.VehicleInfos;
 import org.btkj.lebaoba.vehicle.domain.VehicleSubmit;
@@ -97,6 +98,7 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 		}
 		
 		BasicResult br = SerializeUtil.XmlUtil.xmlToBean(result, BasicResult.class);
+		OrderResult or = SerializeUtil.XmlUtil.xmlToBean(new String(Base64.decodeBase64(br.getContent())), OrderResult.class);
 		return null;
 	}
 }

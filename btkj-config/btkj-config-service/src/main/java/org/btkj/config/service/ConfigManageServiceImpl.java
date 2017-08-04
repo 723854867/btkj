@@ -1,27 +1,33 @@
 package org.btkj.config.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.mybatis.EntityGenerator;
-import org.btkj.config.pojo.entity.Api;
+import org.btkj.config.mybatis.Tx;
+import org.btkj.config.mybatis.dao.ModularDao;
+import org.btkj.config.pojo.ModularDocumentFactory;
 import org.btkj.config.pojo.entity.Area;
+import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.info.AreaInfo;
-import org.btkj.config.redis.ApiMapper;
+import org.btkj.config.pojo.info.ModularDocument;
+import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
+import org.btkj.config.redis.ModularMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Region;
-import org.btkj.pojo.vo.Page;
+import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
@@ -32,13 +38,21 @@ import org.springframework.stereotype.Service;
 public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Resource
-	private ApiMapper apiMapper;
+	private Tx tx;
 	@Resource
 	private AreaMapper areaMapper;
 	@Resource
+	private ModularDao modularDao;
+	@Resource
 	private RegionMapper regionMapper;
 	@Resource
+	private ModularMapper modularMapper;
+	@Resource
 	private InsurerMapper insurerMapper;
+	@Resource
+	private DistributeLock distributeLock;
+	@Resource
+	private ModularDocumentFactory modularDocumentFactory;
 
 	@Override
 	public List<Insurer> insurers() {
@@ -120,35 +134,44 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Pager<Api> apis(Page page) {
-		return apiMapper.paging(page);
+	public Map<String, ModularDocument> modulars() {
+		Map<String, Modular> modulars = modularMapper.getAll();
+		if (CollectionUtil.isEmpty(modulars))
+			return null;
+		return modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
 	}
 	
 	@Override
-	public Result<Void> apiAdd(String key, String name, int pow) {
-		Api api = EntityGenerator.newApi(key, name, pow);
+	public Result<?> modularEdit(ModularEditParam param) {
+		String lock = BtkjConsts.LOCKS.modularLock();
+		String lockId = distributeLock.tryLock(lock);
+		if (null == lockId)
+			return Consts.RESULT.LOCK_CONFLICT;
 		try {
-			apiMapper.insert(api);
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
+			Modular modular = null;
+			switch (param.getType()) {
+			case CREATE:
+				try {
+					modular = tx.modularAdd(param);
+					modularMapper.flush(modular);
+					return Result.result(Code.OK, modular.getId());
+				} catch (BusinessException e) {
+					return Result.result(e.getCode());
+				}
+			case UPDATE:
+				modular = tx.modularUpdate(param);
+				modularMapper.flush(modular);
+				break;
+			case DELETE:
+				modular = tx.modularDelete(param.getId());
+				modularMapper.remove(modular);
+				break;
+			default:
+				return Consts.RESULT.FORBID;
+			}
+			return null;
+		} finally {
+			distributeLock.unLock(lock, lockId);
 		}
-		return Consts.RESULT.OK;
-	}
-
-	@Override
-	public Result<Void> apiUpdate(String key, String name, int pow) {
-		Api api = apiMapper.getByKey(key);
-		if (null == api)
-			return Consts.RESULT.API_NOT_EXIST;
-		api.setName(name);
-		api.setGroupMod(new BigDecimal(2).pow(pow).toString());
-		api.setUpdated(DateUtil.currentTime());
-		apiMapper.update(api);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public void apiDelete(String key) {
-		apiMapper.delete(key);
 	}
 }
