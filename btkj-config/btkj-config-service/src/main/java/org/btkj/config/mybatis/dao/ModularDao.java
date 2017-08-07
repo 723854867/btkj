@@ -3,7 +3,6 @@ package org.btkj.config.mybatis.dao;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
@@ -54,11 +53,4 @@ public interface ModularDao extends DBMapper<String, Modular> {
 	
 	@UpdateProvider(type = ModularSQLProvider.class, method = "updateForRightMove")
 	void updateForRightMove(@Param("step") int step, @Param("PR") int PR, @Param("CR") int CR, @Param("set") Set<String> set);
-	
-	@UpdateProvider(type = ModularSQLProvider.class, method = "updateForDelete")
-	void updateForDelete(@Param("start") int start, @Param("step") int step);
-	
-	@Override
-	@DeleteProvider(type = ModularSQLProvider.class, method = "delete")
-	void delete(String key);
 }

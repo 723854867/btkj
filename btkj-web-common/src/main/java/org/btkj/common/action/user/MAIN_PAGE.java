@@ -19,6 +19,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 /**
  * 首页信息
@@ -52,7 +53,7 @@ public class MAIN_PAGE extends UserAction {
 		Region region = configService.region(0 == pageInfo.getRegionId() ? Consts.REGION_ID_CH: pageInfo.getRegionId());
 		pageInfo.setRegion(region.getName());
 		String nonAutoBind = null == employee ? null : employee.getTenant().getNonAutoBind();
-		pageInfo.setNonAutoCategories(null == employee ? nonAutoService.categories() : null == nonAutoBind ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
+		pageInfo.setNonAutoCategories(null == employee ? nonAutoService.categories() : !StringUtil.hasText(nonAutoBind) ? null : nonAutoService.getCategoriesByIds(CollectionUtil.splitToLongList(nonAutoBind, Consts.SYMBOL_UNDERLINE)));
 		return result;
 	}
 	

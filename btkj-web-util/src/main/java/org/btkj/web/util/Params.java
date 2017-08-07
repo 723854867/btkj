@@ -170,22 +170,6 @@ public interface Params {
 	};
 	final Str2IntConstConverter UID						= new Str2IntConstConverter(1023, "uid");
 	final Str2IntConstConverter ID						= new Str2IntConstConverter(1024, "id");
-	final Str2IntConstConverter MAX_TENANTS_COUNT		= new Str2IntConstConverter(1025, "maxTenantsCount") {
-		public Integer convert(String value) throws ConstConvertFailureException {
-			int val = Integer.valueOf(value);
-			if (val < 0)
-				throw ConstConvertFailureException.errorConstException(this);
-			return val;
-		};
-	};
-	final Str2IntConstConverter MAX_ARTICLES_COUNT		= new Str2IntConstConverter(1026, "maxArticlesCount") {
-		public Integer convert(String value) throws ConstConvertFailureException {
-			int val = Integer.valueOf(value);
-			if (val < 0)
-				throw ConstConvertFailureException.errorConstException(this);
-			return val;
-		};
-	};
 	
 	final Str2ObjConstConverter<Set<Integer>> MODULES	= new Str2ObjConstConverter<Set<Integer>>(1027, "modules") {
 		@Override

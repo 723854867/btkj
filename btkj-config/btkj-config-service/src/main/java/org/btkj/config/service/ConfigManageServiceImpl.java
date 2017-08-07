@@ -156,16 +156,10 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 					modular = tx.modularAdd(param);
 					modularMapper.flush(modular);
 					return Consts.RESULT.OK;
-				case UPDATE:
+				default:
 					modular = tx.modularUpdate(param);
 					modularMapper.flush(modular);
 					return Consts.RESULT.OK;
-				case DELETE:
-					modular = tx.modularDelete(param.getId());
-					modularMapper.remove(modular);
-					return Consts.RESULT.OK;
-				default:
-					return Consts.RESULT.FORBID;
 				}
 			} catch (BusinessException e) {
 				return Result.result(e.getCode());

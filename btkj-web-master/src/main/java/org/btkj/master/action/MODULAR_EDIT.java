@@ -35,8 +35,6 @@ public class MODULAR_EDIT extends AdminAction<ModularEditParam> {
 			return Validator.JSR_VALIDATOR.validate(param, ValidateGroups.CREATE.class);
 		case UPDATE:
 			return Validator.JSR_VALIDATOR.validate(param, ValidateGroups.UPDATE.class);
-		case DELETE:
-			return Validator.JSR_VALIDATOR.validate(param, ValidateGroups.DELETE.class);
 		default:
 			throw ConstConvertFailureException.errorConstException(Params.CRUD_TYPE);
 		}

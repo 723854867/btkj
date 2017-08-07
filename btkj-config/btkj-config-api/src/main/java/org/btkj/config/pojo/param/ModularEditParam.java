@@ -7,20 +7,17 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
-import org.rapid.util.validator.custom.Power;
 
 public class ModularEditParam extends Param {
 
 	private static final long serialVersionUID = -8942948934304679356L;
 
 	private CRUD_TYPE type;
-	@NotNull(groups = {ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class})
-	@Power(groups = { ValidateGroups.CRUD.class })
+	@NotNull(groups = { ValidateGroups.UPDATE.class })
 	private String id;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
 	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
 	private String name;
-	@Power(groups = { ValidateGroups.CRUD.class })
 	private String parentId;
 
 	public CRUD_TYPE getType() {

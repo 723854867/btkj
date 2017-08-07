@@ -85,14 +85,4 @@ public class Tx {
 		modularDao.update(modular);
 		return modular;
 	}
-	
-	@Transactional
-	public Modular modularDelete(String id) { 
-		Modular modular = modularDao.getByKey(id);
-		if (null == modular)
-			throw new BusinessException(BtkjCode.MODULAR_NOT_EXIST);
-		modularDao.updateForDelete(modular.getRight(), modular.getRight() - modular.getLeft() + 1);
-		modularDao.delete(id);
-		return modular;
-	}
 }

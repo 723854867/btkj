@@ -8,7 +8,9 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.api.ConfigService;
+import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -33,6 +35,7 @@ import org.btkj.user.pojo.info.TenantPagingMasterInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.model.BonusScale.State;
+import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.TenantSetParam;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
@@ -47,6 +50,7 @@ import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 import org.springframework.dao.DuplicateKeyException;
@@ -73,6 +77,8 @@ public class UserManageServiceImpl implements UserManageService {
 	private EmployeeMapper employeeMapper;
 	@Resource
 	private BonusScaleMapper bonusScaleMapper;
+	@Resource
+	private ConfigManageService configManageService;
 	
 	@Override
 	public Result<Pager<UserPagingInfo>> userPaging(UserSearcher searcher) {
@@ -283,33 +289,45 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Integer> appAdd(int region, String name, int maxTenantsCount, int maxArticlesCount) {
-		if (null == configService.region(region))
-			return BtkjConsts.RESULT.REGION_NOT_EXIST;
-		AppPO app = EntityGenerator.newApp(region, name, maxTenantsCount, maxArticlesCount);
-		appMapper.insert(app);
-		Result<Integer> result = Result.result(Code.OK);
-		result.setAttach(app.getId());
-		return result;
+	public Result<?> appEdit(AppEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			if (null == configService.region(param.getRegion()))
+				return BtkjConsts.RESULT.REGION_NOT_EXIST;
+			AppPO app = EntityGenerator.newApp(param.getRegion(), param.getName(), param.getMaxTenantsCount(), param.getMaxArticlesCount());
+			appMapper.insert(app);
+			return Result.result(Code.OK, app.getId());
+		default:
+			app = appMapper.getByKey(param.getAppId());
+			if (null == app)
+				return BtkjConsts.RESULT.APP_NOT_EXIST;
+			if (0 != param.getRegion()) {
+				if (null == configService.region(param.getRegion()))
+					return BtkjConsts.RESULT.REGION_NOT_EXIST;
+				app.setRegion(param.getRegion());
+			}
+			if (null != param.getName())
+				app.setName(param.getName());
+			app.setMaxTenantsCount(Math.max(0, param.getMaxTenantsCount()));
+			app.setMaxArticlesCount(Math.max(0, param.getMaxArticlesCount()));
+			app.setUpdated(DateUtil.currentTime());
+			appMapper.update(app);
+			return Consts.RESULT.OK;
+		}
 	}
 	
 	@Override
-	public Result<Void> appUpdate(int appId, int region, String name, int maxTenantsCount, int maxArticlesCount) {
+	public Result<Void> appAuthorize(int appId, Set<String> modulars) {
 		AppPO app = appMapper.getByKey(appId);
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
-		if (0 != region) {
-			if (null == configService.region(region))
-				return BtkjConsts.RESULT.REGION_NOT_EXIST;
-			app.setRegion(region);
+		if (CollectionUtil.isEmpty(modulars))
+			app.setModularMod(null);
+		else {
+			Map<String, ModularDocument> modularDocs = configManageService.modulars();
+			
 		}
-		if (null != name)
-			app.setName(name);
-		app.setMaxTenantsCount(Math.max(0, maxTenantsCount));
-		app.setMaxArticlesCount(Math.max(0, maxArticlesCount));
-		app.setUpdated(DateUtil.currentTime());
-		appMapper.update(app);
-		return Consts.RESULT.OK;
+		return null;
 	}
 	
 	@Override

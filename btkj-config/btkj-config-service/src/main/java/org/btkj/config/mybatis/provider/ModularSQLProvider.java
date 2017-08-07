@@ -69,10 +69,4 @@ public class ModularSQLProvider extends SQLProvider {
 		builder.append(")");
 		return builder.toString();
 	}
-	
-	public String updateForDelete() {
-		return "UPDATE `modular` SET "
-				+ "`left`=CASE WHEN `left`>#{start} THEN `left`-#{step} ELSE `left` END, "
-				+ "`right`=CASE WHEN `right`>#{start} THEN `right`-#{step} ELSE `right` END";
-	}
 }

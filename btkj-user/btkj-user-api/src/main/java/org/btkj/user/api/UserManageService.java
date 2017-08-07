@@ -2,6 +2,7 @@ package org.btkj.user.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -13,6 +14,7 @@ import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.model.BonusScale;
+import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.TenantSetParam;
 import org.btkj.user.pojo.submit.EmployeeSearcher;
@@ -127,26 +129,21 @@ public interface UserManageService {
 	List<AppInfo> apps();
 	
 	/**
-	 * 新增平台
+	 * 编辑平台
 	 * 
-	 * @param region
-	 * @param name
-	 * @param maxTenantsCount
-	 * @param maxArticlesCount
+	 * @param param
 	 * @return
 	 */
-	Result<Integer> appAdd(int region, String name, int maxTenantsCount, int maxArticlesCount);
+	Result<?> appEdit(AppEditParam param);
 	
 	/**
-	 * 修改平台
+	 * 给平台授权
 	 * 
 	 * @param appId
-	 * @param region
-	 * @param name
-	 * @param maxTenantsCount
-	 * @param maxArticlesCount
+	 * @param modulars
+	 * @return
 	 */
-	Result<Void> appUpdate(int appId, int region, String name, int maxTenantsCount, int maxArticlesCount);
+	Result<Void> appAuthorize(int appId, Set<String> modulars);
 	
 	/**
 	 * 根据个人的总业绩获取每个人的团队总业绩
