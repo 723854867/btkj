@@ -75,4 +75,12 @@ public interface ConfigService {
 	 * @return
 	 */
 	Area area(int areaId);
+	
+	/**
+	 * 检测权限
+	 * 
+	 * @param pkg
+	 * @return
+	 */
+	boolean checkPerssion(String pkg, String mod);
 }

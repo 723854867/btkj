@@ -10,13 +10,15 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.mybatis.EntityGenerator;
 import org.btkj.config.mybatis.Tx;
-import org.btkj.config.mybatis.dao.ModularDao;
 import org.btkj.config.pojo.ModularDocumentFactory;
+import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
+import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
+import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.ModularMapper;
@@ -27,7 +29,6 @@ import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Region;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
@@ -40,9 +41,9 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	@Resource
 	private Tx tx;
 	@Resource
-	private AreaMapper areaMapper;
+	private ApiMapper apiMapper;
 	@Resource
-	private ModularDao modularDao;
+	private AreaMapper areaMapper;
 	@Resource
 	private RegionMapper regionMapper;
 	@Resource
@@ -142,36 +143,74 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<?> modularEdit(ModularEditParam param) {
+	public Result<Void> modularEdit(ModularEditParam param) {
 		String lock = BtkjConsts.LOCKS.modularLock();
 		String lockId = distributeLock.tryLock(lock);
 		if (null == lockId)
 			return Consts.RESULT.LOCK_CONFLICT;
 		try {
-			Modular modular = null;
-			switch (param.getType()) {
-			case CREATE:
-				try {
+			try {
+				Modular modular = null;
+				switch (param.getType()) {
+				case CREATE:
 					modular = tx.modularAdd(param);
 					modularMapper.flush(modular);
-					return Result.result(Code.OK, modular.getId());
-				} catch (BusinessException e) {
-					return Result.result(e.getCode());
+					return Consts.RESULT.OK;
+				case UPDATE:
+					modular = tx.modularUpdate(param);
+					modularMapper.flush(modular);
+					return Consts.RESULT.OK;
+				case DELETE:
+					modular = tx.modularDelete(param.getId());
+					modularMapper.remove(modular);
+					return Consts.RESULT.OK;
+				default:
+					return Consts.RESULT.FORBID;
 				}
-			case UPDATE:
-				modular = tx.modularUpdate(param);
-				modularMapper.flush(modular);
-				break;
-			case DELETE:
-				modular = tx.modularDelete(param.getId());
-				modularMapper.remove(modular);
-				break;
-			default:
-				return Consts.RESULT.FORBID;
+			} catch (BusinessException e) {
+				return Result.result(e.getCode());
 			}
-			return null;
 		} finally {
 			distributeLock.unLock(lock, lockId);
+		}
+	}
+	
+	@Override
+	public Map<String, Api> apis(String modularId) {
+		return apiMapper.apis(modularId);
+	}
+	
+	@Override
+	public Result<Void> apiEdit(ApiEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			Api api = EntityGenerator.newApi(param);
+			try {
+				apiMapper.insert(api);
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
+			return Consts.RESULT.OK;
+		case DELETE:
+			api = apiMapper.getByKey(param.getPkg());
+			if (null == api)
+				return Consts.RESULT.API_NOT_EXIST;
+			apiMapper.delete(api);
+			return Consts.RESULT.OK;
+		default:
+			api = apiMapper.getByKey(param.getPkg());
+			if (null == api)
+				return Consts.RESULT.API_NOT_EXIST;
+			if (null != param.getModularId()) {
+				Modular modular = modularMapper.getByKey(param.getModularId());
+				if (null == modular)
+					return BtkjConsts.RESULT.MODULAR_NOT_EXIST;
+			}
+			if (null != param.getName())
+				api.setName(param.getName());
+			api.setUpdated(DateUtil.currentTime());
+			apiMapper.update(api);
+			return Consts.RESULT.OK;
 		}
 	}
 }

@@ -3,8 +3,10 @@ package org.btkj.config.api;
 import java.util.List;
 import java.util.Map;
 
+import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
+import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.message.Result;
@@ -81,5 +83,21 @@ public interface ConfigManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<?> modularEdit(ModularEditParam param);
+	Result<Void> modularEdit(ModularEditParam param);
+	
+	/**
+	 * 接口列表
+	 * 
+	 * @param modularId
+	 * @return
+	 */
+	Map<String, Api> apis(String modularId);
+	
+	/**
+	 * 接口编辑
+	 * 
+	 * @param param
+	 * @return
+	 */
+	Result<Void> apiEdit(ApiEditParam param);
 }

@@ -1,15 +1,24 @@
 package org.btkj.config.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
-import org.rapid.util.math.tree.mptt.MPTTNode;
 
-public class Modular extends MPTTNode<String> implements UniqueModel<String> {
+public class Api implements UniqueModel<String> {
 
 	private static final long serialVersionUID = 2316944779358104723L;
 
+	private String pkg;
 	private String name;
+	private String modularId;
 	private int created;
 	private int updated;
+
+	public String getPkg() {
+		return pkg;
+	}
+
+	public void setPkg(String pkg) {
+		this.pkg = pkg;
+	}
 
 	public String getName() {
 		return name;
@@ -19,6 +28,14 @@ public class Modular extends MPTTNode<String> implements UniqueModel<String> {
 		this.name = name;
 	}
 
+	public String getModularId() {
+		return modularId;
+	}
+
+	public void setModularId(String modularId) {
+		this.modularId = modularId;
+	}
+
 	public int getCreated() {
 		return created;
 	}
@@ -26,7 +43,7 @@ public class Modular extends MPTTNode<String> implements UniqueModel<String> {
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	
+
 	public int getUpdated() {
 		return updated;
 	}
@@ -37,6 +54,6 @@ public class Modular extends MPTTNode<String> implements UniqueModel<String> {
 
 	@Override
 	public String key() {
-		return this.id;
+		return null;
 	}
 }

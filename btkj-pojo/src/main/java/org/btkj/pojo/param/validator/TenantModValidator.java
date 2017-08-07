@@ -12,6 +12,8 @@ public class TenantModValidator implements ConstraintValidator<EmployeeMod, Inte
 
 	@Override
 	public boolean isValid(Integer value, ConstraintValidatorContext context) {
+		if (null == value)
+			return false;
 		return value <= 0 ? false : TenantPO.Mod.check(value);
 	}
 }

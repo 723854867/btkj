@@ -7,36 +7,36 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
-import org.rapid.util.validator.custom.Power;
+import org.rapid.util.validator.custom.ClassName;
 
-public class ModularEditParam extends Param {
+public class ApiEditParam extends Param {
 
 	private static final long serialVersionUID = -8942948934304679356L;
 
 	private CRUD_TYPE type;
-	@NotNull(groups = {ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class})
-	@Power(groups = { ValidateGroups.CRUD.class })
-	private String id;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
-	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
+	@ClassName(groups = { ValidateGroups.CREATE.class })
+	private String pkg;
+	@NotNull(groups = { ValidateGroups.CREATE.class })
+	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX)
 	private String name;
-	@Power(groups = { ValidateGroups.CRUD.class })
-	private String parentId;
-
+	@NotNull(groups = { ValidateGroups.CREATE.class })
+	private String modularId;
+	
 	public CRUD_TYPE getType() {
 		return type;
 	}
-
+	
 	public void setType(CRUD_TYPE type) {
 		this.type = type;
 	}
 
-	public String getId() {
-		return id;
+	public String getPkg() {
+		return pkg;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPkg(String pkg) {
+		this.pkg = pkg;
 	}
 
 	public String getName() {
@@ -47,11 +47,11 @@ public class ModularEditParam extends Param {
 		this.name = name;
 	}
 
-	public String getParentId() {
-		return parentId;
+	public String getModularId() {
+		return modularId;
 	}
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
+	public void setModularId(String modularId) {
+		this.modularId = modularId;
 	}
 }

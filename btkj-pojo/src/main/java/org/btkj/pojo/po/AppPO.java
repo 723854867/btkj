@@ -11,6 +11,7 @@ public class AppPO implements UniqueModel<Integer> {
 	private String name;
 	private int maxTenantsCount;
 	private int maxArticlesCount;
+	private String modularMod;
 	private int created;
 	private int updated;
 	
@@ -52,6 +53,14 @@ public class AppPO implements UniqueModel<Integer> {
 	
 	public void setMaxArticlesCount(int maxArticlesCount) {
 		this.maxArticlesCount = maxArticlesCount;
+	}
+	
+	public String getModularMod() {
+		return modularMod;
+	}
+	
+	public void setModularMod(String modularMod) {
+		this.modularMod = modularMod;
 	}
 	
 	public int getCreated() {

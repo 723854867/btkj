@@ -1,4 +1,4 @@
-package org.btkj.master.pojo;
+package org.btkj.master.pojo.info;
 
 import java.io.Serializable;
 

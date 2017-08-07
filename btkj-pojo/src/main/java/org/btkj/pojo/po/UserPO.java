@@ -17,6 +17,7 @@ public class UserPO implements UniqueModel<Integer> {
 	private String identityBack;
 	private int appLoginTime;			
 	private int pcLoginTime;
+	private String modularMod;
 	private int created;
 	private int updated;
 
@@ -106,6 +107,14 @@ public class UserPO implements UniqueModel<Integer> {
 	
 	public void setPcLoginTime(int pcLoginTime) {
 		this.pcLoginTime = pcLoginTime;
+	}
+	
+	public String getModularMod() {
+		return modularMod;
+	}
+	
+	public void setModularMod(String modularMod) {
+		this.modularMod = modularMod;
 	}
 	
 	public int getCreated() {

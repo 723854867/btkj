@@ -4,8 +4,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.bo.Version;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.Param;
@@ -27,6 +29,8 @@ public abstract class Action<PARAM extends Param> {
 	private static final ThreadLocal<Request> REQUEST_HOLDER	= new ThreadLocal<Request>();
 	
 	protected Class<PARAM> clazz;
+	@Resource
+	private ConfigService configService;
 	
 	public Action() {
 		Type superType = getClass().getGenericSuperclass(); 
@@ -100,6 +104,10 @@ public abstract class Action<PARAM extends Param> {
 	 */
 	protected Client client(Request request) {
 		return request.getParam(Params.CLIENT);
+	}
+	
+	protected boolean checkPerssion(String modularMod) { 
+		return configService.checkPerssion(this.getClass().getName(), modularMod);
 	}
 	
 	public Version version() {
