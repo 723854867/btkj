@@ -215,7 +215,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	private void _orderRequestFailure(Map<Integer, VehicleOrder> orders, String desc) {
 		for (VehicleOrder order : orders.values()) {
-			order.setState(VehicleOrderState.SYSTEM_ERROR);
+			order.setState(VehicleOrderState.QUOTE_FAILURE);
 			order.setDesc(desc);
 		}
 	}

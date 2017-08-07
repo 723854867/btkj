@@ -144,11 +144,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		try {
 			QuoteResp resp = httpProxy.syncRequest(request, QuoteResp.JSON_HANDLER);
 			if (resp.getBusinessStatus() != 1)
-				return Result.result(BtkjCode.QUOTE_FAILURE);
+				return Result.result(BtkjCode.QUOTE_FAILURE, resp.getStatusMessage());
 			return Result.success();
 		} catch (IOException e) {
 			logger.warn("bihu quote request failure!", e);
-			return Result.result(BtkjCode.QUOTE_FAILURE);
+			return Result.result(BtkjCode.QUOTE_FAILURE, "系统错误");
 		}
 	}
 	
