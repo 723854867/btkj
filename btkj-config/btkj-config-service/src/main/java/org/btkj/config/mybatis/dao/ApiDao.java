@@ -23,7 +23,7 @@ public interface ApiDao extends DBMapper<String, Api> {
 
 	@MapKey("pkg")
 	@SelectProvider(type = ApiSQLProvider.class, method = "getByModularId")
-	Map<String, Api> getByModularId(String modularId);
+	Map<String, Api> getByModularId(int modularId);
 	
 	@Override
 	@UpdateProvider(type = ApiSQLProvider.class, method = "update")

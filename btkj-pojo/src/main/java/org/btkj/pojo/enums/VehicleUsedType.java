@@ -12,8 +12,8 @@ public enum VehicleUsedType {
 	 */
 	HOME_USE("homeUse", "家庭自用客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL};
 		}
 	},
 	
@@ -22,8 +22,8 @@ public enum VehicleUsedType {
 	 */
 	ENTERPRISE("enterprise", "企业客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -32,8 +32,8 @@ public enum VehicleUsedType {
 	 */
 	ORGAN("organ", "党政机关、事业客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.OFFICE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.OFFICE};
 		}
 	},
 	
@@ -42,8 +42,8 @@ public enum VehicleUsedType {
 	 */
 	LEASE("lease", "出租租匿客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL, UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL, VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -52,8 +52,8 @@ public enum VehicleUsedType {
 	 */
 	CITY_BUS("cityBus", "城市公交客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -62,8 +62,8 @@ public enum VehicleUsedType {
 	 */
 	HIGHWAY_TRANSPORT("highwayTransport", "公路客运客车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -72,8 +72,8 @@ public enum VehicleUsedType {
 	 */
 	BIZ_TRUCK("bizTruck", "营业货车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL, UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL, VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -82,8 +82,8 @@ public enum VehicleUsedType {
 	 */
 	NO_BIZ_TRUCK("noBizTruck", "非营业货车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL, UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL, VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -92,8 +92,8 @@ public enum VehicleUsedType {
 	 */
 	PARTICULAR("particular", "特种车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.ENTERPRISE};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.ENTERPRISE};
 		}
 	},
 	
@@ -102,8 +102,8 @@ public enum VehicleUsedType {
 	 */
 	MOTOR("motor", "摩托车") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL};
 		}
 	},
 	
@@ -112,8 +112,8 @@ public enum VehicleUsedType {
 	 */
 	TRACTOR("tractor", "拖拉机") {
 		@Override
-		public UnitType[] supportUnitTypes() {
-			return new UnitType[]{UnitType.PERSONAL};
+		public VehicleUnitType[] supportUnitTypes() {
+			return new VehicleUnitType[]{VehicleUnitType.PERSONAL};
 		}
 	};
 	
@@ -133,7 +133,7 @@ public enum VehicleUsedType {
 		return title;
 	}
 	
-	public abstract UnitType[] supportUnitTypes(); 
+	public abstract VehicleUnitType[] supportUnitTypes(); 
 	
 	public static final VehicleUsedType match(String name) {
 		for (VehicleUsedType usedType : VehicleUsedType.values()) {

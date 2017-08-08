@@ -11,7 +11,7 @@ import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
  * @author ahab
  *
  */
-public class ModularMapper extends RedisDBAdapter<String, Modular, ModularDao> {
+public class ModularMapper extends RedisDBAdapter<Integer, Modular, ModularDao> {
 
 	public ModularMapper() {
 		super(new ByteProtostuffSerializer<Modular>(), "hash:db:modular");

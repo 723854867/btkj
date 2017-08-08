@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.api.ConfigService;
-import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -322,9 +321,8 @@ public class UserManageServiceImpl implements UserManageService {
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
 		if (CollectionUtil.isEmpty(modulars))
-			app.setModularMod(null);
+			return null;
 		else {
-			Map<String, ModularDocument> modularDocs = configManageService.modulars();
 			
 		}
 		return null;

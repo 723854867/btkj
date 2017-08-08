@@ -1,17 +1,19 @@
 package org.btkj.config.mybatis;
 
-import java.math.BigInteger;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.btkj.config.mybatis.dao.ModularDao;
 import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.param.ModularEditParam;
+import org.btkj.config.redis.ApiMapper;
+import org.btkj.config.redis.ModularMapper;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.exception.BusinessException;
 import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class Tx {
 	
 	@Resource
+	private ApiMapper apiMapper;
+	@Resource
 	private ModularDao modularDao;
+	@Resource
+	private ModularMapper modularMapper;
 
 	/**
 	 * 新增模块
@@ -30,12 +36,12 @@ public class Tx {
 	 */
 	@Transactional
 	public Modular modularAdd(ModularEditParam param) {
-		Map<String, Modular> modulars = modularDao.getAll();
-		Modular parent = null == param.getParentId() ? null : modulars.get(param.getParentId());
-		if (null != param.getParentId() && null == parent)
+		Map<Integer, Modular> modulars = modularDao.getAll();
+		Modular parent = 0 == param.getParentId() ? null : modulars.get(param.getParentId());
+		if (0 != param.getParentId() && null == parent)
 			throw new BusinessException(BtkjCode.MODULAR_NOT_EXIST);
-		Modular modular = EntityGenerator.newModular(_nextModularId(modulars.keySet()), param.getName(), parent);
-		if (null != modular.getParentId())					// 左右值重排序
+		Modular modular = EntityGenerator.newModular(param.getName(), parent);
+		if (null != modular.getParentId() && 0 != modular.getParentId())					// 左右值重排序
 			modularDao.updateForInsert(modular.getLeft(), 2);
 		try {
 			modularDao.insert(modular);
@@ -45,17 +51,6 @@ public class Tx {
 		return modular;
 	}
 	
-	private String _nextModularId(Set<String> modulars) {
-		BigInteger base = new BigInteger("2");
-		int idx = 0;
-		while (true) {
-			String val = base.pow(idx++).toString();
-			if (modulars.contains(val))
-				continue;
-			return val;
-		}
-	}
-	
 	@Transactional
 	public Modular modularUpdate(ModularEditParam param) { 
 		Modular modular = modularDao.getByKey(param.getId());
@@ -63,12 +58,12 @@ public class Tx {
 			throw new BusinessException(BtkjCode.MODULAR_NOT_EXIST);
 		if (null != param.getName())
 			modular.setName(param.getName());
-		String parentId = param.getParentId();
-		if (null != parentId && (null == modular.getParentId() || !modular.getParentId().equals(parentId))) {
+		int parentId = param.getParentId();
+		if (0 != parentId && ((null == modular.getParentId() && 0 != modular.getParentId()) || modular.getParentId() != parentId)) {
 			Modular parent = modularDao.getByKey(parentId);
 			if (null == parent)
 				throw new BusinessException(BtkjCode.MODULAR_NOT_EXIST);
-			Map<String, Modular> children = modularDao.getChildren(modular.getLeft(), modular.getRight());
+			Map<Integer, Modular> children = modularDao.getChildren(modular.getLeft(), modular.getRight());
 			modular.setParentId(parentId);
 			int step = modular.getRight() - modular.getLeft() + 1;
 			int moveStep = 0;
@@ -84,5 +79,23 @@ public class Tx {
 		modular.setUpdated(DateUtil.currentTime());
 		modularDao.update(modular);
 		return modular;
+	}
+	
+	@Transactional
+	public TxCallback modularDelete(int modularId) {
+		Modular modular = modularDao.getByKey(modularId);
+		if (null == modular)
+			throw new BusinessException(BtkjCode.MODULAR_NOT_EXIST);
+		if (!CollectionUtil.isEmpty(apiMapper.apis(modularId)))
+			throw new BusinessException(BtkjCode.MODULAR_API_BINDED);
+		Map<Integer, Modular> children = modularDao.getChildren(modular.getLeft(), modular.getRight());
+		modularDao.delete(modular.getLeft(), modular.getRight());
+		modularDao.updateForDelete(modular.getRight(), modular.getRight() - modular.getLeft() + 1);
+		return new TxCallback() {
+			@Override
+			public void finish() {
+				modularMapper.remove(children);
+			}
+		};
 	}
 }

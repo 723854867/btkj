@@ -1,6 +1,5 @@
 package org.btkj.config.service;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
@@ -8,9 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
-import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
@@ -98,15 +95,5 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public Area area(int areaId) {
 		return areaMapper.getByKey(areaId);
-	}
-	
-	@Override
-	public boolean checkPerssion(String pkg, String mod) {
-		Api api = apiMapper.getByKey(pkg);
-		if (null == api)					// 如果该 api 没有参与权限配置则不需要检测权限
-			return true;
-		Modular modular = modularMapper.getByKey(api.getModularId());
-		BigInteger modularMod = new BigInteger(modular.getId());
-		return new BigInteger(mod).and(modularMod).equals(modularMod);
 	}
 }

@@ -106,10 +106,6 @@ public abstract class Action<PARAM extends Param> {
 		return request.getParam(Params.CLIENT);
 	}
 	
-	protected boolean checkPerssion(String modularMod) { 
-		return configService.checkPerssion(this.getClass().getName(), modularMod);
-	}
-	
 	public Version version() {
 		return Version.V_1_0;
 	}

@@ -23,7 +23,7 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 		super(new ByteProtostuffSerializer<Api>(), "hash:db:api");
 	}
 	
-	public Map<String, Api> apis(String modularId) {
+	public Map<String, Api> apis(int modularId) {
 		Map<String, Api> map = _checkLoad(modularId);
 		if (null != map)
 			return map;
@@ -33,12 +33,12 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 		map = new HashMap<String, Api>();
 		for (byte[] buffer : list) {
 			Api api = serializer.antiConvet(buffer);
-			map.put(api.getModularId(), api);
+			map.put(api.getPkg(), api);
 		}
 		return map;
 	}
 	
-	private Map<String, Api> _checkLoad(String modularId) {
+	private Map<String, Api> _checkLoad(int modularId) {
 		if (!checkLoad(_controllerField(modularId)))
 			return CollectionUtil.EMPTY_MAP;
 		Map<String, Api> map = dao.getByModularId(modularId);
@@ -59,9 +59,9 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 	
 	@Override
 	public void flush(Map<String, Api> entities) {
-		Map<String, List<Api>> map = new HashMap<String, List<Api>>();
+		Map<Integer, List<Api>> map = new HashMap<Integer, List<Api>>();
 		for (Api temp : entities.values()) {
-			String modularId = temp.getModularId();
+			int modularId = temp.getModularId();
 			List<Api> list = map.get(modularId);
 			if (null == list) {
 				list = new ArrayList<Api>();
@@ -69,15 +69,15 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 			}
 			list.add(temp);
 		}
-		for (Entry<String, List<Api>> entry : map.entrySet())
+		for (Entry<Integer, List<Api>> entry : map.entrySet())
 			redis.hmsset(redisKey, entry.getValue(), serializer, _setKey(entry.getKey()));
 	}
 	
-	private String _setKey(String modularId) {
-		return MessageFormat.format(TENANT_SET, modularId);
+	private String _setKey(int modularId) {
+		return MessageFormat.format(TENANT_SET, String.valueOf(modularId));
 	}
 	
-	private String _controllerField(String modularId) {
-		return MessageFormat.format(CONTROLLER, modularId);
+	private String _controllerField(int modularId) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(modularId));
 	}
 }

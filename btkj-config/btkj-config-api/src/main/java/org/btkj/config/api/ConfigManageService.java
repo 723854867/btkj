@@ -75,7 +75,7 @@ public interface ConfigManageService {
 	 * @param param
 	 * @return
 	 */
-	Map<String, ModularDocument> modulars();
+	Map<Integer, ModularDocument> modulars();
 	
 	/**
 	 * api 编辑
@@ -83,7 +83,7 @@ public interface ConfigManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<Void> modularEdit(ModularEditParam param);
+	Result<?> modularEdit(ModularEditParam param);
 	
 	/**
 	 * 接口列表
@@ -91,7 +91,7 @@ public interface ConfigManageService {
 	 * @param modularId
 	 * @return
 	 */
-	Map<String, Api> apis(String modularId);
+	Map<String, Api> apis(int modularId);
 	
 	/**
 	 * 接口编辑

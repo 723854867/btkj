@@ -3,7 +3,7 @@ package org.btkj.pojo.bo;
 import java.io.Serializable;
 
 import org.btkj.pojo.enums.IDType;
-import org.btkj.pojo.enums.UnitType;
+import org.btkj.pojo.enums.VehicleUnitType;
 
 /**
  * 保险个体
@@ -14,17 +14,17 @@ public class InsurUnit implements Serializable {
 
 	private static final long serialVersionUID = 4769388048627555288L;
 
-	private UnitType type;				// 类型
+	private VehicleUnitType type;				// 类型
 	private String name;				// 名称
 	private String mobile;				// 手机号：如果是单位则一般是联系人的手机号
 	private IDType idType;				// 证件类型
 	private String idNo;				// 证件号
 
-	public UnitType getType() {
+	public VehicleUnitType getType() {
 		return type;
 	}
 
-	public void setType(UnitType type) {
+	public void setType(VehicleUnitType type) {
 		this.type = type;
 	}
 

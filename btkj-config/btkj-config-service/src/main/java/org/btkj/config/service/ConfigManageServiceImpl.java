@@ -29,6 +29,7 @@ import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Region;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
@@ -135,76 +136,84 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Map<String, ModularDocument> modulars() {
-		Map<String, Modular> modulars = modularMapper.getAll();
+	public Map<Integer, ModularDocument> modulars() {
+		Map<Integer, Modular> modulars = modularMapper.getAll();
 		if (CollectionUtil.isEmpty(modulars))
 			return null;
 		return modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
 	}
 	
 	@Override
-	public Result<Void> modularEdit(ModularEditParam param) {
+	public Result<?> modularEdit(ModularEditParam param) {
 		String lock = BtkjConsts.LOCKS.modularLock();
 		String lockId = distributeLock.tryLock(lock);
 		if (null == lockId)
 			return Consts.RESULT.LOCK_CONFLICT;
 		try {
-			try {
-				Modular modular = null;
-				switch (param.getType()) {
-				case CREATE:
-					modular = tx.modularAdd(param);
-					modularMapper.flush(modular);
-					return Consts.RESULT.OK;
-				default:
-					modular = tx.modularUpdate(param);
-					modularMapper.flush(modular);
-					return Consts.RESULT.OK;
-				}
-			} catch (BusinessException e) {
-				return Result.result(e.getCode());
+			Modular modular = null;
+			switch (param.getType()) {
+			case CREATE:
+				modular = tx.modularAdd(param);
+				modularMapper.flush(modular);
+				return Result.result(Code.OK, modular.getId());
+			case DELETE:
+				tx.modularDelete(param.getId()).finish();
+				return Consts.RESULT.OK;
+			default:
+				modular = tx.modularUpdate(param);
+				modularMapper.flush(modular);
+				return Consts.RESULT.OK;
 			}
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
 		} finally {
 			distributeLock.unLock(lock, lockId);
 		}
 	}
 	
 	@Override
-	public Map<String, Api> apis(String modularId) {
+	public Map<String, Api> apis(int modularId) {
 		return apiMapper.apis(modularId);
 	}
 	
 	@Override
 	public Result<Void> apiEdit(ApiEditParam param) {
-		switch (param.getType()) {
-		case CREATE:
-			Api api = EntityGenerator.newApi(param);
-			try {
-				apiMapper.insert(api);
-			} catch (DuplicateKeyException e) {
-				return Consts.RESULT.KEY_DUPLICATED;
+		String lock = BtkjConsts.LOCKS.modularLock();
+		String lockId = distributeLock.tryLock(lock);
+		if (null == lockId)
+			return Consts.RESULT.LOCK_CONFLICT;
+		try {
+			if (null != param.getModularId() && null == modularMapper.getByKey(param.getModularId()))
+				return BtkjConsts.RESULT.MODULAR_NOT_EXIST;
+			switch (param.getType()) {
+			case CREATE:
+				Api api = EntityGenerator.newApi(param);
+				try {
+					apiMapper.insert(api);
+				} catch (DuplicateKeyException e) {
+					return Consts.RESULT.KEY_DUPLICATED;
+				}
+				return Consts.RESULT.OK;
+			case DELETE:
+				api = apiMapper.getByKey(param.getPkg());
+				if (null == api)
+					return Consts.RESULT.API_NOT_EXIST;
+				apiMapper.delete(api);
+				return Consts.RESULT.OK;
+			default:
+				api = apiMapper.getByKey(param.getPkg());
+				if (null == api)
+					return Consts.RESULT.API_NOT_EXIST;
+				if (null != param.getModularId())
+					api.setModularId(param.getModularId());
+				if (null != param.getName())
+					api.setName(param.getName());
+				api.setUpdated(DateUtil.currentTime());
+				apiMapper.update(api);
+				return Consts.RESULT.OK;
 			}
-			return Consts.RESULT.OK;
-		case DELETE:
-			api = apiMapper.getByKey(param.getPkg());
-			if (null == api)
-				return Consts.RESULT.API_NOT_EXIST;
-			apiMapper.delete(api);
-			return Consts.RESULT.OK;
-		default:
-			api = apiMapper.getByKey(param.getPkg());
-			if (null == api)
-				return Consts.RESULT.API_NOT_EXIST;
-			if (null != param.getModularId()) {
-				Modular modular = modularMapper.getByKey(param.getModularId());
-				if (null == modular)
-					return BtkjConsts.RESULT.MODULAR_NOT_EXIST;
-			}
-			if (null != param.getName())
-				api.setName(param.getName());
-			api.setUpdated(DateUtil.currentTime());
-			apiMapper.update(api);
-			return Consts.RESULT.OK;
+		} finally {
+			distributeLock.unLock(lock, lockId);
 		}
 	}
 }

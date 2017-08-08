@@ -17,7 +17,7 @@ public class MODULARS extends AdminAction<Param> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Map<String, ModularDocument>> execute(Administrator admin, Param param) {
+	protected Result<Map<Integer, ModularDocument>> execute(Administrator admin, Param param) {
 		return Result.result(configManageService.modulars());
 	}
 }

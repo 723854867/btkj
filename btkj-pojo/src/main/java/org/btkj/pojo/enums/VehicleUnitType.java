@@ -1,6 +1,6 @@
 package org.btkj.pojo.enums;
 
-public enum UnitType {
+public enum VehicleUnitType {
 
 	/**
 	 * 个人
@@ -20,7 +20,7 @@ public enum UnitType {
 	private int mark;
 	private String title;
 	
-	private UnitType(int mark, String title) {
+	private VehicleUnitType(int mark, String title) {
 		this.mark = mark;
 		this.title = title;
 	}

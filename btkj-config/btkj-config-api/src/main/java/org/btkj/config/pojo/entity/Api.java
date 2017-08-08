@@ -8,7 +8,7 @@ public class Api implements UniqueModel<String> {
 
 	private String pkg;
 	private String name;
-	private String modularId;
+	private int modularId;
 	private int created;
 	private int updated;
 
@@ -28,11 +28,11 @@ public class Api implements UniqueModel<String> {
 		this.name = name;
 	}
 
-	public String getModularId() {
+	public int getModularId() {
 		return modularId;
 	}
-
-	public void setModularId(String modularId) {
+	
+	public void setModularId(int modularId) {
 		this.modularId = modularId;
 	}
 

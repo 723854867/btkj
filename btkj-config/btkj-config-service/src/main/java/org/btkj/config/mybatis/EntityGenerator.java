@@ -38,9 +38,8 @@ public class EntityGenerator {
 		return area;
 	}
 	
-	public static final Modular newModular(String id, String name, Modular parent) {
+	public static final Modular newModular(String name, Modular parent) {
 		Modular modular = new Modular();
-		modular.setId(id);
 		modular.setName(name);
 		modular.setParentId(null == parent ? null : parent.getId());
 		modular.setLeft(null == parent ? MPTTNode.INITIAL_ROOT_LEFT : parent.getRight());

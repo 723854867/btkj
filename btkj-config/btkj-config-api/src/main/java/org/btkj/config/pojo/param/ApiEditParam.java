@@ -1,5 +1,6 @@
 package org.btkj.config.pojo.param;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,19 +15,20 @@ public class ApiEditParam extends Param {
 	private static final long serialVersionUID = -8942948934304679356L;
 
 	private CRUD_TYPE type;
-	@NotNull(groups = { ValidateGroups.CREATE.class })
-	@ClassName(groups = { ValidateGroups.CREATE.class })
+	@NotNull(groups = { ValidateGroups.CRUD.class })
+	@ClassName(groups = { ValidateGroups.CRUD.class })
 	private String pkg;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
-	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX)
+	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
 	private String name;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
-	private String modularId;
-	
+	@Min(value = 1, groups = { ValidateGroups.CRUD.class })
+	private Integer modularId;
+
 	public CRUD_TYPE getType() {
 		return type;
 	}
-	
+
 	public void setType(CRUD_TYPE type) {
 		this.type = type;
 	}
@@ -47,11 +49,11 @@ public class ApiEditParam extends Param {
 		this.name = name;
 	}
 
-	public String getModularId() {
+	public Integer getModularId() {
 		return modularId;
 	}
 
-	public void setModularId(String modularId) {
+	public void setModularId(Integer modularId) {
 		this.modularId = modularId;
 	}
 }

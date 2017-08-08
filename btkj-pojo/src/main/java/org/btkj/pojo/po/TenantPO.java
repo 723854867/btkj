@@ -22,7 +22,6 @@ public class TenantPO implements UniqueModel<Integer> {
 	private int jianJieFetchTime;
 	private int expire;							// 到期日期
 	private int scaleRewardTime;			// 最近的规模奖励统计时间，格式是：(year)(month)比如201405
-	private String modularMod;
 	private int created;
 	private int updated;
 	
@@ -235,14 +234,6 @@ public class TenantPO implements UniqueModel<Integer> {
 	
 	public void setExpire(int expire) {
 		this.expire = expire;
-	}
-	
-	public String getModularMod() {
-		return modularMod;
-	}
-	
-	public void setModularMod(String modularMod) {
-		this.modularMod = modularMod;
 	}
 	
 	public int getCreated() {

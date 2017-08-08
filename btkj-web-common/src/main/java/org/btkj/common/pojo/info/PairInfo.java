@@ -2,7 +2,7 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.enums.UnitType;
+import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
 
 public class PairInfo implements Serializable {
@@ -13,7 +13,7 @@ public class PairInfo implements Serializable {
 	private String name;
 	private PairInfo[] units;
 	
-	public PairInfo(UnitType unitType) {
+	public PairInfo(VehicleUnitType unitType) {
 		this.id = unitType.name();
 		this.name = unitType.title();
 	}
@@ -23,7 +23,7 @@ public class PairInfo implements Serializable {
 		this.name = type.title();
 		this.units = new PairInfo[type.supportUnitTypes().length];
 		int idx = 0;
-		for (UnitType unitType : type.supportUnitTypes()) 
+		for (VehicleUnitType unitType : type.supportUnitTypes()) 
 			this.units[idx++] = new PairInfo(unitType);
 	}
 	

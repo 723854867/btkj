@@ -11,7 +11,7 @@ import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.UnitType;
+import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.vo.VehiclePolicyTips;
@@ -115,16 +115,16 @@ public class ORDER extends TenantAction {
 	private void _correctUnitType(VehicleUsedType usedType, InsurUnit unit) {
 		switch (usedType) {
 		case HOME_USE:
-			unit.setType(UnitType.PERSONAL);
+			unit.setType(VehicleUnitType.PERSONAL);
 			break;
 		case ORGAN:
-			unit.setType(UnitType.OFFICE);
+			unit.setType(VehicleUnitType.OFFICE);
 			break;
 		case ENTERPRISE:
 		case CITY_BUS:
 		case HIGHWAY_TRANSPORT:
 		case PARTICULAR:
-			unit.setType(UnitType.ENTERPRISE);
+			unit.setType(VehicleUnitType.ENTERPRISE);
 			break;
 		default:
 			break;

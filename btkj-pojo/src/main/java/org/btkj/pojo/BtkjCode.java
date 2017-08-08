@@ -283,7 +283,12 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 模块不存在
 	 */
-	MODULAR_NOT_EXIST(691, "modular not exist!");
+	MODULAR_NOT_EXIST(691, "modular not exist!"),
+	
+	/**
+	 * 模块已经绑定了接口，要先解绑接口才可以删除模块
+	 */
+	MODULAR_API_BINDED(692, "modular api binded!");
 	
 	private int code;
 	private String desc;
