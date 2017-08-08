@@ -3,6 +3,7 @@ package org.btkj.config.mybatis.dao;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -11,6 +12,9 @@ import org.btkj.config.pojo.entity.Privilege;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface PrivilegeDao extends DBMapper<String, Privilege> {
+	
+	@InsertProvider(type = PrivilegeSQLProvider.class, method = "replace")
+	void replace(Map<String, Privilege> privileges);
 
 	@MapKey("id")
 	@SelectProvider(type = PrivilegeSQLProvider.class, method = "getByTarTypeAndTarId")

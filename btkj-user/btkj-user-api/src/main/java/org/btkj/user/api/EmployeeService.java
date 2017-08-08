@@ -13,6 +13,8 @@ import org.rapid.util.common.message.Result;
 
 public interface EmployeeService {
 	
+	EmployeePO employeeById(int employeeId);
+	
 	Employee employee(int employeeId);
 	
 	Map<Integer, EmployeePO> employees(Collection<Integer> ids);

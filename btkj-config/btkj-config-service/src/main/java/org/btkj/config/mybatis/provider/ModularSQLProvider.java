@@ -13,6 +13,16 @@ public class ModularSQLProvider extends SQLProvider {
 		addNoUpdateCol("created", "left", "right", "layer", "id");
 	}
 	
+	public String getByType() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(table);
+				WHERE("type=#{type}");
+			}
+		}.toString();
+	}
+	
 	public String getChildren() {
 		return new SQL() {
 			{

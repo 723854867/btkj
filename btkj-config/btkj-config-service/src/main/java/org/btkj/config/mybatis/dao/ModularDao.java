@@ -21,10 +21,9 @@ public interface ModularDao extends DBMapper<Integer, Modular> {
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(Modular model);
 	
-	@Override
 	@MapKey("id")
-	@SelectProvider(type = ModularSQLProvider.class, method = "getAll")
-	Map<Integer, Modular> getAll();
+	@SelectProvider(type = ModularSQLProvider.class, method = "getByType")
+	Map<Integer, Modular> getByType(int type);
 	
 	@Override
 	@SelectProvider(type = ModularSQLProvider.class, method = "getByKey")

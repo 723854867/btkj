@@ -49,7 +49,6 @@ import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 import org.springframework.dao.DuplicateKeyException;
@@ -313,19 +312,6 @@ public class UserManageServiceImpl implements UserManageService {
 			appMapper.update(app);
 			return Consts.RESULT.OK;
 		}
-	}
-	
-	@Override
-	public Result<Void> appAuthorize(int appId, Set<String> modulars) {
-		AppPO app = appMapper.getByKey(appId);
-		if (null == app)
-			return BtkjConsts.RESULT.APP_NOT_EXIST;
-		if (CollectionUtil.isEmpty(modulars))
-			return null;
-		else {
-			
-		}
-		return null;
 	}
 	
 	@Override

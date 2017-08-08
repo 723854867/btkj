@@ -1,7 +1,7 @@
 package org.btkj.config.mybatis;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.btkj.config.pojo.TarType;
@@ -71,10 +71,12 @@ public class EntityGenerator {
 		return api;
 	}
 	
-	public static final List<Privilege> newPrivileges(TarType tarType, int tarId, Set<Integer> modulars) {
-		List<Privilege> privileges = new ArrayList<Privilege>();
-		for (int modularId : modulars)
-			privileges.add(newPrivilege(tarType, tarId, modularId));
+	public static final Map<String, Privilege> newPrivileges(TarType tarType, int tarId, Set<Integer> modulars) {
+		Map<String, Privilege> privileges = new HashMap<String, Privilege>();
+		for (int modularId : modulars) {
+			Privilege privilege = newPrivilege(tarType, tarId, modularId);
+			privileges.put(privilege.getId(), privilege);
+		}
 		return privileges;
 	}
 	

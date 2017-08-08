@@ -45,6 +45,11 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 		dao.deleteByTarTypeAndTarId(tarType.mark(), tarId);
 	}
 	
+	public void replace(Map<String, Privilege> privileges) {
+		dao.replace(privileges);
+		flush(privileges);
+	}
+	
 	private Map<String, Privilege> _checkLoad(TarType tarType, int tarId) {
 		if (!checkLoad(_controllerField(tarType, tarId)))
 			return null;

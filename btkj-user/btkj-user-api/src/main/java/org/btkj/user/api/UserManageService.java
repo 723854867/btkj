@@ -2,7 +2,6 @@ package org.btkj.user.api;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -135,15 +134,6 @@ public interface UserManageService {
 	 * @return
 	 */
 	Result<?> appEdit(AppEditParam param);
-	
-	/**
-	 * 给平台授权
-	 * 
-	 * @param appId
-	 * @param modulars
-	 * @return
-	 */
-	Result<Void> appAuthorize(int appId, Set<String> modulars);
 	
 	/**
 	 * 根据个人的总业绩获取每个人的团队总业绩

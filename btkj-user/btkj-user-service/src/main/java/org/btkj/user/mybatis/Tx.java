@@ -80,20 +80,18 @@ public class Tx {
 			}
 		};
 	}
-
+	
 	@Transactional
-	public TxCallback insertEmployee(EmployeePO employee) {
-		employeeDao.getByTidForUpdate(employee.getTid()); 
+	public EmployeePO employeeAdd(int tid, int uid, int chiefId) {
+		TenantPO tenant = tenantMapper.getByKey(tid);
+		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid); 
+		EmployeePO chief = employees.get(chiefId);
+		EmployeePO employee = EntityGenerator.newEmployee(uid, tenant, chief);
 		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
 		employeeDao.insert(employee);
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				employeeMapper.flush(employee);
-			}
-		};
+		return employee;
 	}
-	
+
 	/**
 	 * 在统计期间如果商户属性修改了不管，只管当前对象属性就可以了，这里不是并发问题
 	 * 

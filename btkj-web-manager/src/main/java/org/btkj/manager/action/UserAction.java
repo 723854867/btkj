@@ -1,6 +1,7 @@
 package org.btkj.manager.action;
 
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Request;
 
 /**
@@ -9,7 +10,7 @@ import org.btkj.web.util.Request;
  * @author ahab
  *
  */
-public abstract class UserAction extends org.btkj.web.util.action.UserAction {
+public abstract class UserAction<PARAM extends Param> extends org.btkj.web.util.action.UserAction<PARAM> {
 	
 	@Override
 	public Client client(Request request) {

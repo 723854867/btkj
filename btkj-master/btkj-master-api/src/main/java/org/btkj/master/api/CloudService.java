@@ -35,4 +35,12 @@ public interface CloudService {
 	 * @return
 	 */
 	Administrator getAdministratorByToken(String token);
+	
+	/**
+	 * 根据管路员工号获取管理员
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Administrator admin(int id);
 }

@@ -88,17 +88,17 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 线路不存在
 	 */
-	LANE_NOT_EXIST(514, "lane not exist"),
+	LANE_NOT_EXIST(515, "lane not exist"),
 	
 	/**
 	 * 没有配置路由
 	 */
-	LANE_CONFIG_ERROR(515, "lane config error"),
+	LANE_CONFIG_ERROR(516, "lane config error"),
 	
 	/**
 	 * 壁虎线路未开通
 	 */
-	LANE_BIHU_NOT_OPENED(516, "lane of bihu not opened!"),
+	LANE_BIHU_NOT_OPENED(517, "lane of bihu not opened!"),
 	
 	/**
 	 * 险企不存在
@@ -223,17 +223,17 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 提问不存在
 	 */
-	QUIZ_NOT_EXIST(601, "quiz not exits"),
+	QUIZ_NOT_EXIST(602, "quiz not exits"),
 	
 	/**
 	 * 回复不存在
 	 */
-	REPLY_NOT_EXIST(602, "reply not exist"),
+	REPLY_NOT_EXIST(603, "reply not exist"),
 	
 	/**
 	 * 评论不存在
 	 */
-	COMMENT_NOT_EXIST(603, "comment not exist"),
+	COMMENT_NOT_EXIST(604, "comment not exist"),
 	
 	/**
 	 * 汽车品牌不存在

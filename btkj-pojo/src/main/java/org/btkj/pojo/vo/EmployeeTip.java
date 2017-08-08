@@ -27,6 +27,7 @@ public class EmployeeTip implements Serializable {
 	private String tname;				// 商户名字
 	private String mobile;				// 手机号
 	private String avatar;
+	private String identity;			// 身份证号
 	
 	public EmployeeTip() {}
 	
@@ -42,6 +43,7 @@ public class EmployeeTip implements Serializable {
 		this.tname = tenant.getName();
 		this.mobile = user.getMobile();
 		this.avatar = user.getAvatar();
+		this.identity = user.getIdentity();
 	}
 
 	public int getId() {
@@ -114,5 +116,13 @@ public class EmployeeTip implements Serializable {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
+	}
+	
+	public String getIdentity() {
+		return identity;
+	}
+	
+	public void setIdentity(String identity) {
+		this.identity = identity;
 	}
 }

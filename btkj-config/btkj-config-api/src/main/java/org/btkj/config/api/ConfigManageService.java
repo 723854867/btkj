@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
@@ -76,7 +77,7 @@ public interface ConfigManageService {
 	 * @param param
 	 * @return
 	 */
-	Map<Integer, ModularDocument> modulars();
+	Map<Integer, ModularDocument> modulars(TarType type, int tarId);
 	
 	/**
 	 * api 编辑
@@ -127,7 +128,7 @@ public interface ConfigManageService {
 	 * @param modularse
 	 * @return
 	 */
-	Result<Void> authorizeUser(int uid, Set<Integer> modularse);
+	Result<Void> authorizeUser(int appId, int uid, Set<Integer> modulars);
 	
 	/**
 	 * 给商户授权
@@ -136,7 +137,7 @@ public interface ConfigManageService {
 	 * @param modulars
 	 * @return
 	 */
-	Result<Void> authorizeTenant(int tid, Set<Integer> modulars);
+	Result<Void> authorizeTenant(int appId, int tid, Set<Integer> modulars);
 	
 	/**
 	 * 给雇员授权
@@ -145,5 +146,5 @@ public interface ConfigManageService {
 	 * @param modulars
 	 * @return
 	 */
-	Result<Void> authorizeEmployee(int employeeId, Set<Integer> modulars);
+	Result<Void> authorizeEmployee(int tid, int employeeId, Set<Integer> modulars);
 }

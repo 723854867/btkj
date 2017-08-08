@@ -46,6 +46,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
+	public EmployeePO employeeById(int employeeId) {
+		return employeeMapper.getByKey(employeeId);
+	}
+	
+	@Override
 	public Employee employee(int employeeId) {
 		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)

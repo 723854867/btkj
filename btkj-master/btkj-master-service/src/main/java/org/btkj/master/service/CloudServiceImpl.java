@@ -36,4 +36,9 @@ public class CloudServiceImpl implements CloudService {
 	public Administrator getAdministratorByToken(String token) {
 		return administratorMapper.getByToken(token);
 	}
+	
+	@Override
+	public Administrator admin(int id) {
+		return administratorMapper.getByKey(id);
+	}
 }
