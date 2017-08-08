@@ -1,5 +1,6 @@
 package org.btkj.config.mybatis.dao;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +29,11 @@ public interface ModularDao extends DBMapper<Integer, Modular> {
 	@Override
 	@SelectProvider(type = ModularSQLProvider.class, method = "getByKey")
 	Modular getByKey(Integer key);
+	
+	@Override
+	@MapKey("id")
+	@SelectProvider(type = ModularSQLProvider.class, method = "getByKeys")
+	Map<Integer, Modular> getByKeys(Collection<Integer> keys);
 	
 	/**
 	 * 获取所有子节点

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -11,9 +12,11 @@ import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.mybatis.EntityGenerator;
 import org.btkj.config.mybatis.Tx;
 import org.btkj.config.pojo.ModularDocumentFactory;
+import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
+import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.config.pojo.param.ApiEditParam;
@@ -22,8 +25,10 @@ import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.ModularMapper;
+import org.btkj.config.redis.PrivilegeMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.po.Region;
@@ -53,6 +58,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	private InsurerMapper insurerMapper;
 	@Resource
 	private DistributeLock distributeLock;
+	@Resource
+	private PrivilegeMapper privilegeMapper;
 	@Resource
 	private ModularDocumentFactory modularDocumentFactory;
 
@@ -215,5 +222,46 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		} finally {
 			distributeLock.unLock(lock, lockId);
 		}
+	}
+	
+	@Override
+	public Result<Void> authorizeApp(int appId, Set<Integer> modulars) {
+		if (CollectionUtil.isEmpty(modulars)) {
+			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
+		} else {
+			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
+			if (modulars.size() != modulars.size())
+				return Consts.RESULT.FORBID;
+			for (Modular modular : map.values()) {
+				if (modular.getType() != ModularType.APP.mark() || modular.getType() != ModularType.TENANT.mark())	// 只能给平台授权平台和商户模块的权限
+					return Consts.RESULT.FORBID;
+			}
+			List<Privilege> privileges = EntityGenerator.newPrivileges(TarType.APP, appId, modulars);
+		}
+		return null;
+	}
+	
+	@Override
+	public Result<Void> authorizeAdmin(int adminId, Set<Integer> modulars) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Result<Void> authorizeUser(int uid, Set<Integer> modularse) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Result<Void> authorizeTenant(int tid, Set<Integer> modulars) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Result<Void> authorizeEmployee(int employeeId, Set<Integer> modulars) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

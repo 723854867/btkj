@@ -2,26 +2,24 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.param.Param;
-import org.btkj.user.api.UserManageService;
 import org.rapid.util.common.message.Result;
 
 /**
  * 给平台授权
  * 
  * @author ahab
- *
  */
-public class APP_AUTHORIZE extends AdminAction<Param> {
+public class AUTHORIZE_APP extends AdminAction<Param> {
 	
 	@Resource
-	private UserManageService userManageService;
+	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Void> execute(Administrator admin, Param param) {
-		
+	protected Result<?> execute(Administrator admin, Param param) {
 		return null;
 	}
 }

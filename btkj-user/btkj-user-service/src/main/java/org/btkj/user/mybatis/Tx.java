@@ -16,6 +16,7 @@ import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.TenantPO.Mod;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.user.mybatis.dao.AppDao;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.mybatis.dao.TenantDao;
@@ -59,18 +60,18 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(int appId, int uid, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
-		AppPO apo = appDao.getByKeyForUpdate(appId);
+	public TxCallback tenantAdd(UserPO user, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
+		AppPO apo = appDao.getByKeyForUpdate(user.getAppId());
 		if (0 < apo.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
-			int tenantNum = tenantDao.countByAppIdForUpdate(appId);
+			int tenantNum = tenantDao.countByAppIdForUpdate(user.getAppId());
 			if (tenantNum >= apo.getMaxTenantsCount())
 				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
 		}
-		TenantPO tenant = EntityGenerator.newTenant(appId, contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire);
+		TenantPO tenant = EntityGenerator.newTenant(user.getAppId(), contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire);
 		tenantDao.insert(tenant);
-		EmployeePO ep = EntityGenerator.newEmployee(uid, tenant, null);
+		EmployeePO ep = EntityGenerator.newEmployee(user.getUid(), tenant, null);
 		employeeDao.insert(ep);
-		EntityGenerator.EMPLOYEE_HOLDER.set(new Employee(apo, null, tenant, ep));
+		EntityGenerator.EMPLOYEE_HOLDER.set(new Employee(apo, user, tenant, ep));
 		return new TxCallback() {
 			@Override
 			public void finish() {

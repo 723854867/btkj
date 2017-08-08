@@ -35,4 +35,9 @@
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="apiDao" />
 	</bean>
+	
+	<bean id="privilegeMapper" class="org.btkj.config.redis.PrivilegeMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="privilegeDao" />
+	</bean>
 </beans>

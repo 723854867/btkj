@@ -45,7 +45,7 @@ public interface TenantService {
 	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<Employee> tenantAdd(int appId, int uid, String contacts, String contactsMobile, String tname, String license, 
+	Result<Employee> tenantAdd(int appId, String mobile, String contacts, String contactsMobile, String tname, String license, 
 			String licenseImage, String servicePhone, int expire);
 	
 	/**

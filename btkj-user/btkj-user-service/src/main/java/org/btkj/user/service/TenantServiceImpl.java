@@ -12,6 +12,7 @@ import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
@@ -81,17 +82,20 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<Employee> tenantAdd(int appId, int uid, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
-		String lockId = userMapper.lockUser(uid);
-		if (null == lockId)
-			return Consts.RESULT.LOCK_CONFLICT;
+	public Result<Employee> tenantAdd(int appId, String mobile, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
+		Result<UserPO> ru = userMapper.lockUserByMobile(appId, mobile);
+		if (!ru.isSuccess())
+			return Consts.RESULT.USER_NOT_EXIST;
+		UserPO user = ru.attach();
 		try {
-			if (_tenantNumMax(uid))
+			if (null == user.getName())				// 资料不齐的用户不能作为商户顶级雇员
+				return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
+			if (_tenantNumMax(user.getUid()))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(appId, uid, contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire).finish();
+			tx.tenantAdd(user, contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire).finish();
 			return Result.result(ThreadLocalUtil.getAndRemove(EntityGenerator.EMPLOYEE_HOLDER));
 		} finally {
-			userMapper.releaseUserLock(uid, lockId);
+			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}
 	}
 

@@ -2,6 +2,7 @@ package org.btkj.config.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
@@ -100,4 +101,49 @@ public interface ConfigManageService {
 	 * @return
 	 */
 	Result<Void> apiEdit(ApiEditParam param);
+	
+	/**
+	 * 给平台授权
+	 * 
+	 * @param appId
+	 * @param modulars
+	 * @return
+	 */
+	Result<Void> authorizeApp(int appId, Set<Integer> modulars);
+	
+	/**
+	 * 给保途管理员授权
+	 * 
+	 * @param adminId
+	 * @param modulars
+	 * @return
+	 */
+	Result<Void> authorizeAdmin(int adminId, Set<Integer> modulars);
+	
+	/**
+	 * 给平台用户授权
+	 * 
+	 * @param uid
+	 * @param modularse
+	 * @return
+	 */
+	Result<Void> authorizeUser(int uid, Set<Integer> modularse);
+	
+	/**
+	 * 给商户授权
+	 * 
+	 * @param tid
+	 * @param modulars
+	 * @return
+	 */
+	Result<Void> authorizeTenant(int tid, Set<Integer> modulars);
+	
+	/**
+	 * 给雇员授权
+	 * 
+	 * @param uid
+	 * @param modulars
+	 * @return
+	 */
+	Result<Void> authorizeEmployee(int employeeId, Set<Integer> modulars);
 }

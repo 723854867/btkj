@@ -16,7 +16,7 @@ import org.rapid.util.lang.CollectionUtil;
 
 public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 	
-	private final String TENANT_SET							= "set:api:{0}";
+	private final String SET								= "set:api:{0}";
 	private final String CONTROLLER							= "api:controller:{0}";
 
 	public ApiMapper() {
@@ -40,7 +40,7 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 	
 	private Map<String, Api> _checkLoad(int modularId) {
 		if (!checkLoad(_controllerField(modularId)))
-			return CollectionUtil.EMPTY_MAP;
+			return null;
 		Map<String, Api> map = dao.getByModularId(modularId);
 		if (!CollectionUtil.isEmpty(map))
 			flush(map);
@@ -74,7 +74,7 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 	}
 	
 	private String _setKey(int modularId) {
-		return MessageFormat.format(TENANT_SET, String.valueOf(modularId));
+		return MessageFormat.format(SET, String.valueOf(modularId));
 	}
 	
 	private String _controllerField(int modularId) {

@@ -1,10 +1,17 @@
 package org.btkj.config.mybatis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
+import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.pojo.po.Insurer;
+import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.tree.Node;
 import org.rapid.util.math.tree.mptt.MPTTNode;
@@ -62,5 +69,22 @@ public class EntityGenerator {
 		api.setCreated(time);
 		api.setUpdated(time);
 		return api;
+	}
+	
+	public static final List<Privilege> newPrivileges(TarType tarType, int tarId, Set<Integer> modulars) {
+		List<Privilege> privileges = new ArrayList<Privilege>();
+		for (int modularId : modulars)
+			privileges.add(newPrivilege(tarType, tarId, modularId));
+		return privileges;
+	}
+	
+	public static final Privilege newPrivilege(TarType tarType, int tarId, int modularId) {
+		Privilege privilege = new Privilege();
+		privilege.setId(tarType.mark() + Consts.SYMBOL_UNDERLINE + tarId + Consts.SYMBOL_UNDERLINE + modularId);
+		privilege.setTarType(tarType.mark());
+		privilege.setTarId(tarId);
+		privilege.setModularId(modularId);
+		privilege.setCreated(DateUtil.currentTime());
+		return privilege;
 	}
 }
