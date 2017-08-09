@@ -1,7 +1,7 @@
 package org.btkj.config.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -99,25 +99,20 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public List<AreaInfo> areas() {
-		List<Area> list = new ArrayList<Area>(areaMapper.getAll().values());
-		if (CollectionUtil.isEmpty(list))
-			return Collections.EMPTY_LIST;
-		List<Integer> l = new ArrayList<Integer>();
-		for (Area area : list)
-			l.add(area.getCode());
-		List<Region> regions = new ArrayList<Region>(regionMapper.getByKeys(l).values());
-		List<AreaInfo> areas = new ArrayList<AreaInfo>();
-		a : for (Area area : list) {
-			for (Region region : regions) {
-				if (region.getId() == area.getCode()) {
-					areas.add(new AreaInfo(area, region));
-					continue a;
-				}
-			}
-			areas.add(new AreaInfo(area, null));
+	public Map<Integer, AreaInfo> areas() {
+		Map<Integer, Area> areas = areaMapper.getAll();
+		if (CollectionUtil.isEmpty(areas))
+			return CollectionUtil.EMPTY_MAP;
+		Set<Integer> set = new HashSet<Integer>();
+		for (Area area : areas.values())
+			set.add(area.getCode());
+		Map<Integer, Region> regions = regionMapper.getByKeys(set);
+		Map<Integer, AreaInfo> map = new HashMap<Integer, AreaInfo>();
+		for (Area area : areas.values()) {
+			Region region = regions.get(area.getCode());
+			map.put(area.getCode(), new AreaInfo(area, region));
 		}
-		return areas;
+		return map;
 	}
 	
 	@Override

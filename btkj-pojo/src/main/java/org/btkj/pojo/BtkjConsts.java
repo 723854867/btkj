@@ -75,6 +75,15 @@ public interface BtkjConsts {
 		String STATE							= "state";
 		String CREATED							= "created";
 		String POLICYID							= "policyId";
+		String INSURERID						= "insurerId";
+		String LICENSE							= "license";
+		String OWNER							= "owner";
+		String SALESMAN							= "salesman";
+		String TRANSFER							= "transfer";
+		String NATURE							= "nature";
+		String TYPE								= "type";
+		String BONUSTYPE						= "bonusType";
+		String ISSUETIME						= "issueTime";
 	}
 	
 	interface LIMITS {

@@ -1,21 +1,26 @@
 package org.btkj.manager.action.tenant.bonus;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
-import org.btkj.manager.action.TenantAction;
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.manager.action.EmployeeAction;
+import org.btkj.manager.pojo.param.VehicleModelsParam;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.po.VehicleModel;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class VEHICLE_MODELS extends TenantAction {
+public class VEHICLE_MODELS extends EmployeeAction<VehicleModelsParam> {
 	
 	@Resource
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Employee employee) {
-		return Result.result(vehicleService.vehicleModels(request.getParam(Params.ID)));
+	protected Result<List<VehicleModel>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleModelsParam param) {
+		return Result.result(vehicleService.vehicleModels(param.getDeptId()));
 	}
 }

@@ -41,7 +41,7 @@ import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy.SalesmanMark;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
-import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
+import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.RouteMapper;
@@ -457,8 +457,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher) {
-		return vehiclePolicyMapper.paging(searcher);
+	public Pager<VehiclePolicy> policies(VehiclePoliciesParam param) {
+		return vehiclePolicyMapper.policies(param);
 	}
 	
 	@Override

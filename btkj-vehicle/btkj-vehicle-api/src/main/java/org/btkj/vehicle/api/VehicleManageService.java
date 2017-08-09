@@ -21,7 +21,7 @@ import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
-import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
+import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
 
@@ -313,7 +313,7 @@ public interface VehicleManageService {
 	 * @param searcher
 	 * @return
 	 */
-	Pager<VehiclePolicy> policies(VehiclePolicySearcher searcher);
+	Pager<VehiclePolicy> policies(VehiclePoliciesParam param);
 	
 	/**
 	 * 车险订单结算准备，需要将所有已出单车险订单状态修改为正在结算中

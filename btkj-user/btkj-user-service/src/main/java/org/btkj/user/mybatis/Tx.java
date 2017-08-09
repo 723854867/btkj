@@ -10,18 +10,19 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.TenantPO.Mod;
 import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.mybatis.dao.AppDao;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.mybatis.dao.TenantDao;
 import org.btkj.user.mybatis.dao.UserDao;
 import org.btkj.user.pojo.model.BonusScale;
+import org.btkj.user.pojo.param.TenantAddParam;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
@@ -60,18 +61,18 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(UserPO user, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
+	public TxCallback tenantAdd(UserPO user, TenantAddParam param) {
 		AppPO apo = appDao.getByKeyForUpdate(user.getAppId());
 		if (0 < apo.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(user.getAppId());
 			if (tenantNum >= apo.getMaxTenantsCount())
 				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
 		}
-		TenantPO tenant = EntityGenerator.newTenant(user.getAppId(), contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire);
+		TenantPO tenant = EntityGenerator.newTenant(user.getAppId(), param);
 		tenantDao.insert(tenant);
 		EmployeePO ep = EntityGenerator.newEmployee(user.getUid(), tenant, null);
 		employeeDao.insert(ep);
-		EntityGenerator.EMPLOYEE_HOLDER.set(new Employee(apo, user, tenant, ep));
+		EntityGenerator.EMPLOYEETIP_HOLDER.set(new EmployeeTip(ep, apo, user, tenant));
 		return new TxCallback() {
 			@Override
 			public void finish() {

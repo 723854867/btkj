@@ -13,6 +13,8 @@ import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
+import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.user.pojo.param.TenantAddParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.REGION_TYPE;
 import org.rapid.util.lang.DateUtil;
@@ -21,6 +23,8 @@ import org.rapid.util.lang.StringUtil;
 public class EntityGenerator {
 	
 	public static final ThreadLocal<Employee> EMPLOYEE_HOLDER	= new ThreadLocal<Employee>();
+	public static final ThreadLocal<EmployeeTip> EMPLOYEETIP_HOLDER	= new ThreadLocal<EmployeeTip>();
+
 	
 	public static final UserPO newUser(int appId, String mobile) { 
 		UserPO user = new UserPO();
@@ -71,17 +75,18 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final TenantPO newTenant(int appId, String contacts, String contactsMobile, String name, String license, String licenseImage, String servicePhone, int expire) {
+	public static final TenantPO newTenant(int appId, TenantAddParam param) {
 		TenantPO tenant = new TenantPO();
-		tenant.setName(name);
+		tenant.setName(param.getTname());
 		tenant.setAppId(appId);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
-		tenant.setLicense(license);
-		tenant.setLicenseImage(licenseImage);
-		tenant.setServicePhone(servicePhone);
-		tenant.setExpire(expire);
-		tenant.setContacts(contacts);
-		tenant.setContactsMobile(contactsMobile);
+		tenant.setLicense(param.getLicense());
+		tenant.setLicenseImage(param.getLicenseImage());
+		tenant.setServicePhone(param.getServicePhone());
+		tenant.setExpire(param.getExpire());
+		tenant.setContacts(param.getContacts());
+		tenant.setContactsMobile(param.getContactMobile());
+		tenant.setRegion(param.getRegion());
 		
 		int time = DateUtil.currentTime();
 		tenant.setCreated(time);

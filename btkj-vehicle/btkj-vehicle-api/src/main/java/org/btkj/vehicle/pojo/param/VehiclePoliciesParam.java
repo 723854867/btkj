@@ -1,18 +1,25 @@
-package org.btkj.vehicle.pojo.submit;
+package org.btkj.vehicle.pojo.param;
+
+import javax.validation.constraints.Min;
 
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
-import org.btkj.pojo.vo.Page;
+import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
 
-public class VehiclePolicySearcher extends Page {
+public class VehiclePoliciesParam extends EmployeeParam {
 
-	private static final long serialVersionUID = 2310017996464292933L;
+	private static final long serialVersionUID = -1632938072188727220L;
 
+	@Min(1)
 	private Integer tid;					// 商户ID
+	@Min(1)
 	private Integer uid;					// 用户ID
+	@Min(1)
 	private Integer appId;					// 平台ID
-	private Integer employeeId;				// 雇员id
+	@Min(1)
+	private Integer tarId;					// 雇员id
+	@Min(1)
 	private Integer insurerId;				// 险企ID
 	private String license;					// 车牌号
 	private String owner;					// 车主姓名
@@ -21,39 +28,39 @@ public class VehiclePolicySearcher extends Page {
 	private VehicleBonusType bonusType;		// 奖励类型
 	private Boolean transfer;				// 是否过户车
 	private PolicyNature nature;			// 转续保状态
-
+	
 	public Integer getTid() {
 		return tid;
 	}
-
+	
 	public void setTid(Integer tid) {
 		this.tid = tid;
 	}
-	
+
 	public Integer getUid() {
 		return uid;
 	}
-	
+
 	public void setUid(Integer uid) {
 		this.uid = uid;
 	}
-	
+
 	public Integer getAppId() {
 		return appId;
 	}
-	
+
 	public void setAppId(Integer appId) {
 		this.appId = appId;
 	}
 	
-	public Integer getEmployeeId() {
-		return employeeId;
+	public Integer getTarId() {
+		return tarId;
 	}
 	
-	public void setEmployeeId(Integer employeeId) {
-		this.employeeId = employeeId;
+	public void setTarId(Integer tarId) {
+		this.tarId = tarId;
 	}
-	
+
 	public Integer getInsurerId() {
 		return insurerId;
 	}
@@ -97,7 +104,7 @@ public class VehiclePolicySearcher extends Page {
 	public VehicleBonusType getBonusType() {
 		return bonusType;
 	}
-	
+
 	public void setBonusType(VehicleBonusType bonusType) {
 		this.bonusType = bonusType;
 	}

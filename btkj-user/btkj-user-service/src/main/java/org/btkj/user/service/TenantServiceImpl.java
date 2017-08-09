@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
+import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.indentity.Employee;
@@ -14,12 +16,14 @@ import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
 import org.btkj.user.mybatis.Tx;
 import org.btkj.user.pojo.info.TenantListInfo;
+import org.btkj.user.pojo.param.TenantAddParam;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -46,9 +50,12 @@ public class TenantServiceImpl implements TenantService {
 	@Resource
 	private TenantMapper tenantMapper;
 	@Resource
+	private ConfigService configService;
+	@Resource
 	private EmployeeMapper employeeMapper;
 	@Resource
 	private EmployeeService employeeService;
+	
 
 	@Override
 	public TenantPO tenant(int tid) {
@@ -67,18 +74,21 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<Employee> tenantAdd(int appId, String mobile, String contacts, String contactsMobile, String tname, String license, String licenseImage, String servicePhone, int expire) {
-		Result<UserPO> ru = userMapper.lockUserByMobile(appId, mobile);
+	public Result<EmployeeTip> tenantAdd(int appId, TenantAddParam param) {
+		Area area = configService.area(param.getRegion());
+		if (null == area)
+			return BtkjConsts.RESULT.AREA_NOT_EXIST;
+		Result<UserPO> ru = userMapper.lockUserByMobile(appId, param.getMobile());
 		if (!ru.isSuccess())
 			return Consts.RESULT.USER_NOT_EXIST;
 		UserPO user = ru.attach();
 		try {
-			if (null == user.getName())				// 资料不齐的用户不能作为商户顶级雇员
+			if (null == user.getName() || null == user.getIdentity())				// 资料不齐的用户不能作为商户顶级雇员
 				return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
 			if (_tenantNumMax(user.getUid()))
 				return BtkjConsts.RESULT.USER_TENANT_NUM_MAXIMUM;
-			tx.tenantAdd(user, contacts, contactsMobile, tname, license, licenseImage, servicePhone, expire).finish();
-			return Result.result(ThreadLocalUtil.getAndRemove(EntityGenerator.EMPLOYEE_HOLDER));
+			tx.tenantAdd(user, param).finish();
+			return Result.result(ThreadLocalUtil.getAndRemove(EntityGenerator.EMPLOYEETIP_HOLDER));
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}

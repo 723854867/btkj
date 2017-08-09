@@ -49,7 +49,7 @@ public interface ConfigManageService {
 	 * 
 	 * @return
 	 */
-	List<AreaInfo> areas();
+	Map<Integer, AreaInfo> areas();
 	
 	/**
 	 * 新增地区

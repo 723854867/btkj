@@ -3,7 +3,9 @@ package org.btkj.user.api;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.TenantListInfo;
+import org.btkj.user.pojo.param.TenantAddParam;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {
@@ -28,17 +30,9 @@ public interface TenantService {
 	/**
 	 * 添加代理公司
 	 * 
-	 * @param app 如果是为多租户app添加代理公司则需要该参数
-	 * @param region 代理公司地区
-	 * @param tname 代理公司租户名字
-	 * @param user 顶级用户
-	 * @param license 营业执照号码
-	 * @param licenseImage 营业执照副本
-	 * @param servicePhone 客服电话
 	 * @return
 	 */
-	Result<Employee> tenantAdd(int appId, String mobile, String contacts, String contactsMobile, String tname, String license, 
-			String licenseImage, String servicePhone, int expire);
+	Result<EmployeeTip> tenantAdd(int appId, TenantAddParam param);
 	
 	/**
 	 * 代理公司列表
