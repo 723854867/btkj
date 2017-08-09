@@ -7,6 +7,7 @@ import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -15,8 +16,8 @@ import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
+import org.btkj.user.pojo.param.EmployeesParam;
 import org.btkj.user.pojo.param.TenantSetParam;
-import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.rapid.util.common.message.Result;
@@ -45,7 +46,7 @@ public interface UserManageService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<Pager<EmployeePagingInfo>> employeePaging(EmployeeSearcher searcher);
+	Result<Pager<EmployeePagingInfo>> employees(EmployeesParam param);
 	
 	/**
 	 * 申请分页列表
@@ -55,7 +56,17 @@ public interface UserManageService {
 	 * @param pageSize
 	 * @return
 	 */
-	Result<Pager<ApplyPagingInfo>> applyPaging(int tid, int page, int pageSize);
+	Result<Pager<ApplyPagingInfo>> applies(int tid, int page, int pageSize);
+	
+	/**
+	 * 申请审核
+	 * 
+	 * @param tid
+	 * @param uid
+	 * @param reject
+	 * @return
+	 */
+	Result<EmployeeTip> applyAudit(int tid, int uid, boolean reject);
 	
 	/**
 	 * 员工编辑

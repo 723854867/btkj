@@ -64,7 +64,17 @@ public interface BtkjConsts {
 	}
 	
 	interface FIELD {
+		String ID								= "id";
 		String UID								= "uid";
+		String TID								= "tid";
+		String APPID							= "appId";
+		String APP_ID							= "app_id";
+		String PARENT_ID						= "parent_id";
+		String BATCHID							= "batchId";
+		String EMPLOYEEID						= "employeeId";
+		String STATE							= "state";
+		String CREATED							= "created";
+		String POLICYID							= "policyId";
 	}
 	
 	interface LIMITS {

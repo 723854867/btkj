@@ -20,7 +20,7 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.math.compare.ComparisonSymbol;
@@ -280,7 +280,7 @@ public interface VehicleManageService {
 	 * @param searcher
 	 * @return
 	 */
-	Pager<VehicleOrder> orders(VehicleOrderSearcher searcher);
+	Pager<VehicleOrder> orders(VehicleOrdersParam param);
 	
 	/**
 	 * 保单详情

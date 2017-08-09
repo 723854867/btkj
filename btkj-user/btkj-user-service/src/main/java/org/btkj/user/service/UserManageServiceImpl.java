@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.api.ConfigService;
+import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.User;
@@ -22,6 +23,9 @@ import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.vo.ApplyInfo;
+import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.mongo.BonusScaleMapper;
 import org.btkj.user.mybatis.EntityGenerator;
@@ -36,8 +40,8 @@ import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.model.BonusScale.State;
 import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
+import org.btkj.user.pojo.param.EmployeesParam;
 import org.btkj.user.pojo.param.TenantSetParam;
-import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.user.redis.AppMapper;
@@ -74,6 +78,8 @@ public class UserManageServiceImpl implements UserManageService {
 	@Resource
 	private EmployeeMapper employeeMapper;
 	@Resource
+	private EmployeeService employeeService;
+	@Resource
 	private BonusScaleMapper bonusScaleMapper;
 	@Resource
 	private ConfigManageService configManageService;
@@ -107,51 +113,50 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Pager<EmployeePagingInfo>> employeePaging(EmployeeSearcher searcher) {
+	public Result<Pager<EmployeePagingInfo>> employees(EmployeesParam param) {
 		Pager<EmployeePagingInfo> pager = null;
-		if (null != searcher.getMobile()) {
-			UserPO user = userMapper.getUserByMobile(searcher.getAppId(), searcher.getMobile());
+		if (null != param.getMobile()) {
+			UserPO user = userMapper.getUserByMobile(param.getAppId(), param.getMobile());
 			if (null == user)
 				return Result.result(Pager.EMPLTY);
-			searcher.setUid(user.getUid());
-			pager = employeeMapper.paging(searcher);
+			param.setUid(user.getUid());
+			pager = employeeMapper.employees(param);
 		} else 
-			pager = employeeMapper.paging(searcher);
+			pager = employeeMapper.employees(param);
 		
 		Set<Integer> set = new HashSet<Integer>();
 		for (EmployeePagingInfo info : pager.getList()) 
 			set.add(info.getParentId());
-		List<EmployeePO> parents = new ArrayList<EmployeePO>(employeeMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		Map<Integer, EmployeePO> parents = employeeMapper.getByKeys(set);
 		for (EmployeePagingInfo info : pager.getList()) {
-			for (EmployeePO employee : parents) {
-				if (employee.getId() == info.getParentId())
-					info.setParentUid(employee.getUid());
-			}
+			EmployeePO parent = parents.get(info.getParentId());
+			if (null != parent)
+				info.setParentUid(parent.getUid());
 		}
 		set.clear();
 		for (EmployeePagingInfo info : pager.getList()) {
 			set.add(info.getUid());
 			set.add(info.getParentUid());
 		}
-		List<UserPO> users = new ArrayList<UserPO>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		Map<Integer, UserPO> users = userMapper.getByKeys(set);
 		for (EmployeePagingInfo info : pager.getList()) {
-			for (UserPO user : users) {
-				if (info.getUid() == user.getUid()) {
-					info.setName(user.getName());
-					info.setMobile(user.getMobile());
-				}
-				if (info.getParentUid() == user.getUid()) {
-					info.setParentName(user.getName());
-					info.setParentMobile(user.getMobile());
-				}
+			UserPO user = users.get(info.getUid());
+			if (null != user) {
+				info.setName(user.getName());
+				info.setMobile(user.getMobile());
+			}
+			user = users.get(info.getParentUid());
+			if (null != user) {
+				info.setParentName(user.getName());
+				info.setParentMobile(user.getMobile());
 			}
 		}
-		return Result.result(employeeMapper.paging(searcher));
+		return Result.result(pager);
 	}
 	
 	@Override
-	public Result<Pager<ApplyPagingInfo>> applyPaging(int tid, int page, int pageSize) {
-		Pager<ApplyPagingInfo> pager = applyMapper.paging(tid, page, pageSize);
+	public Result<Pager<ApplyPagingInfo>> applies(int tid, int page, int pageSize) {
+		Pager<ApplyPagingInfo> pager = applyMapper.applies(tid, page, pageSize);
 		Set<Integer> set = new HashSet<Integer>();
 		for (ApplyPagingInfo info : pager.getList()) {
 			set.add(info.getUid());
@@ -175,6 +180,17 @@ public class UserManageServiceImpl implements UserManageService {
 			}
 		}
 		return Result.result(pager);
+	}
+	
+	@Override
+	public Result<EmployeeTip> applyAudit(int tid, int uid, boolean reject) {
+		ApplyInfo info = applyMapper.getAndDel(tid, uid);
+		if (null == info)
+			return Result.result(BtkjCode.APPLY_EXIST);
+		if (reject) // 拒绝申请直接返回即可
+			return Result.success();
+		EmployeePO employee = tx.employeeAdd(tid, uid, info.getChief());
+		return Result.result(employeeService.employeeTip(employee.getId()));
 	}
 	
 	@Override

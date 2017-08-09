@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.enums.SortField;
-import org.btkj.pojo.param.EmployeeParam;
+import org.btkj.pojo.param.Param;
 
-public class NonAutoProductListParam extends EmployeeParam {
+public class NonAutoProductListParam extends Param {
 
 	private static final long serialVersionUID = -505643458672915703L;
 

@@ -3,7 +3,7 @@ package org.btkj.user.mybatis.provider;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.user.pojo.submit.EmployeeSearcher;
+import org.btkj.user.pojo.param.EmployeesParam;
 import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SORT_TYPE;
@@ -50,26 +50,26 @@ public class EmployeeSQLProvider extends SQLProvider {
 		return "update employee set `left`=case when `left`>#{value} then `left`+2 else `left` end, `right`=case when `right`>=#{value} then `right`+2 else `right` end where tid=#{tid}";
 	}
 	
-	public String count(EmployeeSearcher searcher) {
+	public String count(EmployeesParam param) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(*) FROM employee");
-		Map<String, Object> params = searcher.params();
+		Map<String, Object> params = param.params();
 		if (null != params && !params.isEmpty()) 
 			SqlUtil.appendWithWhere(builder, params);
 		return builder.toString();
 	}
 	
-	public String paging(EmployeeSearcher searcher) {
+	public String employees(EmployeesParam param) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT * FROM employee");
-		Map<String, Object> params = searcher.params();
+		Map<String, Object> params = param.params();
 		if (null != params && !params.isEmpty())
 			SqlUtil.appendWithWhere(builder, params);
-		if (null != searcher.getSortCol()) {
-			builder.append(" ORDER BY ").append(searcher.getSortCol()).append(" ");
-			builder.append(searcher.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());
+		if (null != param.getSortCol()) {
+			builder.append(" ORDER BY ").append(param.getSortCol().name()).append(" ");
+			builder.append(param.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());
 		}
-		builder.append(" LIMIT ").append(searcher.getStart()).append(",").append(searcher.getPageSize());
+		builder.append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize());
 		return builder.toString();
 	}
 }

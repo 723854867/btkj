@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bson.conversions.Bson;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.MongoUtil;
 import org.rapid.util.lang.CollectionUtil;
@@ -30,14 +31,6 @@ import com.mongodb.client.model.Updates;
 @Component("vehicleOrderMapper")
 public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	
-	private String FIELD_BATCH_ID					= "batchId";
-	private String FIELD_STATE						= "state";
-	private String FIELD_CREATED					= "created";
-	private String FIELD_EMPLOYEE_ID				= "employeeId";
-	private String FIELD_TID						= "tid";
-	private String FIELD_UID						= "uid";
-	private String FIELD_POLICY_ID					= "policyId";
-	
 	private String FIELD_COMMERCIAL_POLICY_NO		= "tips.detail.commercialNo";
 	private String FIELD_COMPULSORY_POLICY_NO		= "tips.detail.compulsiveNo";
 	
@@ -51,66 +44,70 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	}
 	
 	public void deleteBatchOrder(String batchId) {
-		mongo.deleteMany(collection, Filters.eq(FIELD_BATCH_ID, batchId));
+		mongo.deleteMany(collection, Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, batchId));
 	}
 	
 	public long orderNum(int employeeId, int begin, int end, int stateMod) {
-		Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), 
-				Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end));
+		Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), 
+				Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end));
 		List<Bson> states = new ArrayList<Bson>();
 		for (VehicleOrderState state : VehicleOrderState.values()) {
 			if ((state.mark() & stateMod) != state.mark())
 				continue;
-			states.add(Filters.eq(FIELD_STATE, state.name()));
+			states.add(Filters.eq(BtkjConsts.FIELD.STATE, state.name()));
 		}
 		Bson filter = CollectionUtil.isEmpty(states) 
-				? Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end)) 
-				: Filters.and(Filters.eq(FIELD_EMPLOYEE_ID, employeeId), Filters.gte(FIELD_CREATED, begin), Filters.lte(FIELD_CREATED, end), Filters.or(states));
+				? Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end)) 
+				: Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end), Filters.or(states));
 		return mongo.count(collection, filter);
 	}
 	
-	public Pager<VehicleOrder> paging(VehicleOrderSearcher searcher) {
+	public Pager<VehicleOrder> orders(VehicleOrdersParam param) {
 		List<VehicleOrder> orders = null;
 		long total = 0;
 		List<Bson> list = new ArrayList<Bson>();
-		if (null != searcher.getBatchId())
-			list.add(Filters.eq(FIELD_BATCH_ID, searcher.getBatchId()));
-		if (null != searcher.getEmployeeId())
-			list.add(Filters.eq(FIELD_EMPLOYEE_ID, searcher.getEmployeeId()));
-		if (null != searcher.getUid())
-			list.add(Filters.eq(FIELD_UID, searcher.getUid()));
-		if (null != searcher.getTid())
-			list.add(Filters.eq(FIELD_TID, searcher.getTid()));
-		if (null != searcher.getState()) {
-			switch (searcher.getState()) {
+		if (null != param.getAppId())
+			list.add(Filters.eq(BtkjConsts.FIELD.APPID, param.getAppId()));
+		if (null != param.getBatchId())
+			list.add(Filters.eq(BtkjConsts.FIELD.BATCHID, param.getBatchId()));
+		if (null != param.getTarId())
+			list.add(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, param.getTarId()));
+		if (null != param.getUid())
+			list.add(Filters.eq(BtkjConsts.FIELD.UID, param.getUid()));
+		if (null != param.getTid())
+			list.add(Filters.eq(BtkjConsts.FIELD.TID, param.getTid()));
+		if (null != param.getState()) {
+			switch (param.getState()) {
 			case INSURE:
-				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTING.name()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.name()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.name()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.name())));
+				list.add(Filters.or(
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.QUOTING.name()), 
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURING.name()), 
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.QUOTE_SUCCESS.name()),
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_FAILURE.name())));
 				break;
 			case QUOTE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.QUOTE_SUCCESS.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.QUOTE_SUCCESS.name()));
 				break;
 			case INSURE_FAILURE:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_FAILURE.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_FAILURE.name()));
 				break;
 			case INSURING:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURING.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURING.name()));
 				break;
 			case ISSUE:
-				list.add(Filters.or(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.name()), 
-						Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.name())));
+				list.add(Filters.or(
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUED.name()),
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_SUCCESS.name()), 
+						Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUE_APPOINTED.name())));
 				break;
 			case INSURE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_SUCCESS.name()));
 				break;
 			case ISSUE_SUCCESS:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUE_APPOINTED.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUE_APPOINTED.name()));
 				break;
 			case ISSUED:
-				list.add(Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED.name()));
+				list.add(Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUED.name()));
 				break;
 			default:
 				break;
@@ -119,12 +116,12 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		total = list.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(list));
 		if (0 == total)
 			return Pager.EMPLTY;
-		searcher.calculate((int) total);
+		param.calculate((int) total);
 		orders = list.isEmpty() ?
-				mongo.pagingAndSort(collection, Sorts.descending(FIELD_CREATED), 
-							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class):
-				mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(FIELD_CREATED),
-							searcher.getStart(), searcher.getPageSize(), VehicleOrder.class);
+				mongo.pagingAndSort(collection, Sorts.descending(BtkjConsts.FIELD.CREATED), 
+							param.getStart(), param.getPageSize(), VehicleOrder.class):
+				mongo.pagingAndSort(collection, Filters.and(list), Sorts.descending(BtkjConsts.FIELD.CREATED),
+							param.getStart(), param.getPageSize(), VehicleOrder.class);
 		return new Pager<VehicleOrder>(total, orders);
 	}
 	
@@ -137,7 +134,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	 */
 	public List<VehicleOrder> getByDeliverNos(InsuranceType type, int tid, Set<String> nos) {
 		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
-		bson = Filters.and(bson, Filters.eq(FIELD_STATE, VehicleOrderState.INSURE_SUCCESS.name()), Filters.eq(FIELD_TID, tid));
+		bson = Filters.and(bson, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_SUCCESS.name()), Filters.eq(BtkjConsts.FIELD.TID, tid));
 		return mongo.find(collection, bson, clazz);
 	}
 	
@@ -150,16 +147,16 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		Map<Bson, Bson> updates = new HashMap<Bson, Bson>();
 		for (VehicleOrder order : orders) 
 			updates.put(Filters.eq(FIELD_ID, order.get_id()), 
-					Filters.and(Updates.set(FIELD_STATE, order.getState()), Updates.set(FIELD_POLICY_ID, order.getPolicyId())));
+					Filters.and(Updates.set(BtkjConsts.FIELD.STATE, order.getState()), Updates.set(BtkjConsts.FIELD.POLICYID, order.getPolicyId())));
 		mongo.bulkUpdateOne(collection, updates);
 	}
 	
 	public Map<String, VehicleOrder> rewardStandbyUpdate(int tid) {
-		mongo.update(collection, Filters.eq(FIELD_STATE, VehicleOrderState.ISSUED), Updates.set(FIELD_STATE, VehicleOrderState.REWARDED));
-		return mongo.findMap(collection, Filters.eq(FIELD_STATE, VehicleOrderState.REWARD_SDANDBY), VehicleOrder.class);
+		mongo.update(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUED), Updates.set(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARDED));
+		return mongo.findMap(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARD_SDANDBY), VehicleOrder.class);
 	}
 	
 	public void rewardComplete(int tid) {
-		mongo.update(collection, Filters.eq(FIELD_STATE, VehicleOrderState.REWARD_SDANDBY), Updates.set(FIELD_STATE, VehicleOrderState.REWARDED));
+		mongo.update(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARD_SDANDBY), Updates.set(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARDED));
 	}
 }

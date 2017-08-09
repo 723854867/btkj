@@ -14,7 +14,6 @@ import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
-import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
@@ -65,17 +64,6 @@ public class TenantServiceImpl implements TenantService {
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
 		applyMapper.insert(EntityGenerator.newApply(chief.getTenant(), user, chief));
 		return Result.success();
-	}
-
-	@Override
-	public Result<EmployeeTip> applyProcess(int tid, int uid, boolean agree) {
-		ApplyInfo info = applyMapper.getAndDel(tid, uid);
-		if (null == info)
-			return Result.result(BtkjCode.APPLY_EXIST);
-		if (!agree) // 拒绝申请直接返回即可
-			return Result.success();
-		EmployeePO employee = tx.employeeAdd(tid, uid, info.getChief());
-		return Result.result(employeeService.employeeTip(employee.getId()));
 	}
 
 	@Override

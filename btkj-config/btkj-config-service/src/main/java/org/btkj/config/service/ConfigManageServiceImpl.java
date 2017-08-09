@@ -277,9 +277,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Override
 	public Result<Void> authorizeApp(int appId, Set<Integer> modulars) {
-		if (CollectionUtil.isEmpty(modulars))							// 如果为空或者 null 则表示清空权限
-			privilegeMapper.deletePrivileges(TarType.APP, appId);
-		else {
+		privilegeMapper.deletePrivileges(TarType.APP, appId);
+		if (!CollectionUtil.isEmpty(modulars)) {
 			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
 			if (modulars.size() != modulars.size())
 				return Consts.RESULT.FORBID;
@@ -294,9 +293,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Override
 	public Result<Void> authorizeAdmin(int adminId, Set<Integer> modulars) {
-		if (CollectionUtil.isEmpty(modulars))							// 如果为空或者 null 则表示清空权限
-			privilegeMapper.deletePrivileges(TarType.ADMIN, adminId);
-		else {
+		privilegeMapper.deletePrivileges(TarType.ADMIN, adminId);
+		if (!CollectionUtil.isEmpty(modulars)) {
 			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
 			if (modulars.size() != modulars.size())
 				return Consts.RESULT.FORBID;
@@ -311,9 +309,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Override
 	public Result<Void> authorizeUser(int appId, int uid, Set<Integer> modulars) {
-		if (CollectionUtil.isEmpty(modulars))							// 如果为空或者 null 则表示清空权限
-			privilegeMapper.deletePrivileges(TarType.USER, uid);
-		else {
+		privilegeMapper.deletePrivileges(TarType.USER, uid);
+		if (!CollectionUtil.isEmpty(modulars)) {
 			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
 			a : for (int modularId : modulars) {
 				for (Privilege privilege : privileges.values()) {
@@ -336,9 +333,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Override
 	public Result<Void> authorizeTenant(int appId, int tid, Set<Integer> modulars) {
-		if (CollectionUtil.isEmpty(modulars))							// 如果为空或者 null 则表示清空权限
-			privilegeMapper.deletePrivileges(TarType.TENANT, tid);
-		else {
+		privilegeMapper.deletePrivileges(TarType.TENANT, tid);
+		if (!CollectionUtil.isEmpty(modulars)) {
 			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
 			a : for (int modularId : modulars) {
 				for (Privilege privilege : privileges.values()) {
@@ -361,9 +357,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	
 	@Override
 	public Result<Void> authorizeEmployee(int tid, int employeeId, Set<Integer> modulars) {
-		if (CollectionUtil.isEmpty(modulars))							// 如果为空或者 null 则表示清空权限
-			privilegeMapper.deletePrivileges(TarType.EMPLOYEE, employeeId);
-		else {
+		privilegeMapper.deletePrivileges(TarType.EMPLOYEE, employeeId);
+		if (!CollectionUtil.isEmpty(modulars)) {
 			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.EMPLOYEE, employeeId);
 			a : for (int modularId : modulars) {
 				for (Privilege privilege : privileges.values()) {

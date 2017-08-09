@@ -75,4 +75,31 @@ public interface ConfigService {
 	 * @return
 	 */
 	Area area(int areaId);
+	
+	/**
+	 * 超管权限检测
+	 * 
+	 * @param adminId
+	 * @return
+	 */
+	boolean checkAdminPrivilege(String pkg, int adminId);
+	
+	/**
+	 * 平台用户权限检测
+	 * 
+	 * @param appId
+	 * @param uid
+	 * @return
+	 */
+	boolean checkUserPrivilege(String pkg, int appId, int uid);
+	
+	/**
+	 * 雇员权限检测
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param employeeId
+	 * @return
+	 */
+	boolean checkEmployeePrivilege(String pkg, int appId, int tid, int employeeId);
 }

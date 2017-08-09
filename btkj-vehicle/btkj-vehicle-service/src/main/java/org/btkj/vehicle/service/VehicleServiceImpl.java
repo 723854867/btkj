@@ -38,7 +38,7 @@ import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
-import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.redis.RouteMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
@@ -106,23 +106,23 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	private Result<Renewal> _renewalByLicense(Employee employee, String license) {
 		Renewal renewal = renewalMapper.getByLicense(license);
-		return null == renewal ? _flushRenewal(employee, license) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee.getUid(), employee.getTid(), employee.getRegion(), license) : Result.result(renewal);
 	}
 	
 	private Result<Renewal> _renewalByVinAndEngine(Employee employee, String vin, String engine) {
 		Renewal renewal = renewalMapper.getByKey(vin);
-		return null == renewal ? _flushRenewal(employee, vin, engine) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee.getUid(), employee.getTid(), employee.getRegion(), vin, engine) : Result.result(renewal);
 	}
 	
-	private Result<Renewal> _flushRenewal(Employee employee, String license) {
-		Result<Renewal> result = biHuVehicle.renewal(employee.getUid(), employee.getTid(), license, configService.area(employee.getRegion()).getBiHuId());
+	private Result<Renewal> _flushRenewal(int uid, int tid, int region, String license) {
+		Result<Renewal> result = biHuVehicle.renewal(uid, tid, license, configService.area(region).getBiHuId());
 		if (result.isSuccess())
 			_saveRenewal(result.attach());
 		return result;
 	}
 	
-	private Result<Renewal> _flushRenewal(Employee employee, String vin, String engine) {
-		Result<Renewal> result = biHuVehicle.renewal(employee.getUid(), employee.getTid(), vin, engine, configService.area(employee.getRegion()).getBiHuId());
+	private Result<Renewal> _flushRenewal(int uid, int tid, int region, String vin, String engine) {
+		Result<Renewal> result = biHuVehicle.renewal(uid, tid, vin, engine, configService.area(region).getBiHuId());
 		if (result.isSuccess()) 
 			_saveRenewal(result.attach());
 		return result;
@@ -221,11 +221,11 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Pager<VehicleOrderListInfo> orders(Employee employee, VehicleOrderSearcher searcher) {
-		Pager<VehicleOrder> pager = vehicleOrderMapper.paging(searcher);
+	public Pager<VehicleOrderListInfo> orders(int region, VehicleOrdersParam param) {
+		Pager<VehicleOrder> pager = vehicleOrderMapper.orders(param);
 		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(pager.getList().size());
 		for (VehicleOrder order : pager.getList()) {
-			_orderInfo(employee, order);
+			_orderInfo(param.getUid(), param.getTid(), region, order);
 			result.add(new VehicleOrderListInfo(order));
 		}
 		return new Pager<VehicleOrderListInfo>(pager.getTotal(), result);
@@ -238,14 +238,14 @@ public class VehicleServiceImpl implements VehicleService {
 			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
 		if (order.getEmployeeId() != employee.getId())
 			return Consts.RESULT.FORBID;
-		return _orderInfo(employee, order);
+		return _orderInfo(employee.getUid(), employee.getTid(), employee.getRegion(), order);
 	}
 	
-	private Result<VehicleOrder> _orderInfo(Employee employee, VehicleOrder order) {
+	private Result<VehicleOrder> _orderInfo(int uid, int tid, int region, VehicleOrder order) {
 		VehicleOrderState state = order.getState();
 		if (order.getLane() == Lane.BI_HU.mark()) {
 			if (order.getState() == VehicleOrderState.QUOTING) {
-				_quoteResult(employee, order);
+				_quoteResult(uid, tid, order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
 					bonusManager.calculateBonus(order);					// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
@@ -253,15 +253,15 @@ public class VehicleServiceImpl implements VehicleService {
 				}
 			}
 			if (order.getState() == VehicleOrderState.INSURING)
-				_insureResult(employee, order);
+				_insureResult(uid, tid, region, order);
 			if (state != order.getState())								// 状态变了则更新保单
 				vehicleOrderMapper.insert(order);
 		}
 		return Result.result(order);
 	}
 	
-	private void _quoteResult(Employee employee, VehicleOrder order) {
-		Result<PolicySchema> result = biHuVehicle.quoteResult(employee.getUid(), employee.getTid(), order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+	private void _quoteResult(int uid, int tid, VehicleOrder order) {
+		Result<PolicySchema> result = biHuVehicle.quoteResult(uid, tid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) {
 				order.setState(VehicleOrderState.QUOTE_FAILURE);
@@ -274,8 +274,8 @@ public class VehicleServiceImpl implements VehicleService {
 		}
 	}
 	
-	private void _insureResult(Employee employee, VehicleOrder order) {
-		Result<PolicyDetail> detail = biHuVehicle.insureResult(employee.getUid(), employee.getTid(), order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+	private void _insureResult(int uid, int tid, int region, VehicleOrder order) {
+		Result<PolicyDetail> detail = biHuVehicle.insureResult(uid, tid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
 		if (!detail.isSuccess()) {
 			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(detail.getDesc());
@@ -284,9 +284,9 @@ public class VehicleServiceImpl implements VehicleService {
 				order.setDesc(detail.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
 				if (VehicleUtil.isNewVehicleLicense(order.getTips().getLicense()))
-					_flushRenewal(employee, order.getTips().getVin(), order.getTips().getEngine());
+					_flushRenewal(uid, tid, region, order.getTips().getVin(), order.getTips().getEngine());
 				else
-					_flushRenewal(employee, order.getTips().getLicense());
+					_flushRenewal(uid, tid, region, order.getTips().getLicense());
 			}
 		} else {
 			order.setDesc(detail.getDesc());

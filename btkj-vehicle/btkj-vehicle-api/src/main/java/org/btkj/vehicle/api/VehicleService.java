@@ -13,7 +13,7 @@ import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.VehicleInfo;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
-import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
+import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -74,7 +74,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrderListInfo> orders(Employee employee, VehicleOrderSearcher searcher);
+	Pager<VehicleOrderListInfo> orders(int region, VehicleOrdersParam param);
 	
 	/**
 	 * 根据车架号获取车辆信息

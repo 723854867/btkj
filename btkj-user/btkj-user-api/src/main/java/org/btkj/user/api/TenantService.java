@@ -3,7 +3,6 @@ package org.btkj.user.api;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.TenantListInfo;
 import org.rapid.util.common.message.Result;
 
@@ -25,14 +24,6 @@ public interface TenantService {
 	 * @return
 	 */
 	Result<?> apply(User user, Employee chief);
-	
-	/**
-	 * 处理请求
-	 * 
-	 * @param tid
-	 * @param agree
-	 */
-	Result<EmployeeTip> applyProcess(int tid, int uid, boolean agree);
 	
 	/**
 	 * 添加代理公司

@@ -18,11 +18,9 @@ import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.user.pojo.submit.CustomerSearcher;
-import org.btkj.user.pojo.submit.EmployeeSearcher;
 import org.btkj.user.pojo.submit.TenantSearcher;
 import org.btkj.user.pojo.submit.UserSearcher;
 import org.btkj.vehicle.pojo.Lane;
-import org.btkj.vehicle.pojo.model.VehicleOrderSearcher;
 import org.btkj.vehicle.pojo.submit.VehiclePolicySearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
@@ -219,12 +217,6 @@ public interface Params {
 	
 	final Str2StrConstConverter ORDER_ID						= new Str2StrConstConverter(1038, "orderId");
 	
-	final Str2ObjConstConverter<VehicleOrderSearcher> VEHICLE_ORDER_SEARCHER = new Str2ObjConstConverter<VehicleOrderSearcher>(1039, "vehicleOrderSearcher") {
-		@Override
-		public VehicleOrderSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehicleOrderSearcher.class);
-		}
-	};
 	final Str2ObjConstConverter<BonusSearcher> BONUS_SEARCHER = new Str2ObjConstConverter<BonusSearcher>(1040, "bonusSearcher") {
 		@Override
 		public BonusSearcher convert(String k) throws ConstConvertFailureException {
@@ -293,13 +285,6 @@ public interface Params {
 		}
 	};
 
-	final Str2ObjConstConverter<EmployeeSearcher> EMPLOYEE_SEARCHER			= new Str2ObjConstConverter<EmployeeSearcher>(1201, "employeeSearcher") {
-		@Override
-		public EmployeeSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, EmployeeSearcher.class);
-		}
-	};
-	
 	final Str2ObjConstConverter<NonAutoProduct> NON_AUTO_PRODUCT = new Str2ObjConstConverter<NonAutoProduct>(1203, "nonAutoProduct") {
 		@Override
 		public NonAutoProduct convert(String k) throws ConstConvertFailureException {

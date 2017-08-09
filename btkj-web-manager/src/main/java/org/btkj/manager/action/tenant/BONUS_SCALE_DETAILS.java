@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.BonusScaleWaterInfo;
 import org.btkj.manager.pojo.param.BonusScaleDetailsParam;
 import org.btkj.pojo.BtkjConsts;
@@ -23,7 +24,6 @@ import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;

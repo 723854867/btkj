@@ -46,7 +46,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	 * @param pager
 	 * @param tid
 	 */
-	public Pager<ApplyPagingInfo> paging(int tid, int page, int pageSize) {
+	public Pager<ApplyPagingInfo> applies(int tid, int page, int pageSize) {
 		List<byte[]> list = redis.hpaging(_tenantListKey(tid), redisKey, page, pageSize,RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return Pager.EMPLTY;

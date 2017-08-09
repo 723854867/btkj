@@ -2,6 +2,7 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.pojo.po.AppPO;
@@ -25,6 +26,8 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 	
 	@Resource
 	protected UserService userService;
+	@Resource
+	protected ConfigService configService;
 	@Resource
 	protected EmployeeService employeeService;
 	

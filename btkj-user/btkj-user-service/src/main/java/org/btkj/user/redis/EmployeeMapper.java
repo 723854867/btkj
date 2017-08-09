@@ -15,7 +15,7 @@ import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
-import org.btkj.user.pojo.submit.EmployeeSearcher;
+import org.btkj.user.pojo.param.EmployeesParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;
@@ -43,12 +43,12 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * @param pager
 	 * @param tid
 	 */
-	public Pager<EmployeePagingInfo> paging(EmployeeSearcher searcher) {
-		int total = dao.count(searcher);
+	public Pager<EmployeePagingInfo> employees(EmployeesParam param) {
+		int total = dao.count(param);
 		if (0 == total)
 			return Pager.EMPLTY;
-		searcher.calculate(total);
-		return new Pager<EmployeePagingInfo>(total, dao.paging(searcher));
+		param.calculate(total);
+		return new Pager<EmployeePagingInfo>(total, dao.employees(param));
 	}
 	
 	public boolean isEmployee(int tid, int uid) {
