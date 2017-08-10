@@ -9,7 +9,7 @@ import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
-import org.btkj.pojo.vo.BonusSearcher;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
 import org.btkj.vehicle.redis.VehicleModelMapper;
@@ -28,8 +28,7 @@ public class Brand extends BonusRoute<BonusRoute<?>> {
 	}
 	
 	@Override
-	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusSearcher searcher,
-			List<VehicleCoefficient> coefficients) {
+	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) {
 		BonusRouteBody body = parent.getChild(id);
 		if (null == body) {
 			body = new BonusRouteBody(id, title);
@@ -37,19 +36,19 @@ public class Brand extends BonusRoute<BonusRoute<?>> {
 		}
 		String nextId = paths.poll();
 		if (null == nextId) {
-			BonusRouteBody update = searcher.getRouteBody();
+			BonusRouteBody update = param.getRouteBody();
 			body.setCommercialRate(update.getCommercialRate());
 			body.setCompulsoryRate(update.getCompulsoryRate());
 			body.setCommercialRetainRate(update.getCommercialRetainRate());
 			body.setCompulsoryRetainRate(update.getCompulsoryRetainRate());
-			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(searcher, coefficients));
+			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(param, coefficients));
 			return Consts.RESULT.OK;
 		}
 		
 		VehicleBrand brand = vehicleBrandMapper.getByKey(Integer.valueOf(nextId));
 		if (null == brand)
 			return BtkjConsts.RESULT.VEHICLE_BRAND_NOT_EXIST;
-		return _subSettings(InternalContrller.BRAND, paths, body, searcher, coefficients);
+		return _subSettings(InternalContrller.BRAND, paths, body, param, coefficients);
 	}
 	
 	/**
@@ -62,7 +61,7 @@ public class Brand extends BonusRoute<BonusRoute<?>> {
 	 * @param coefficients
 	 * @return
 	 */
-	private Result<Void> _subSettings(InternalContrller contrller, LinkedList<String> paths, BonusRouteBody parent, BonusSearcher searcher, List<VehicleCoefficient> coefficients) { 
+	private Result<Void> _subSettings(InternalContrller contrller, LinkedList<String> paths, BonusRouteBody parent, BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) { 
 		BonusRouteBody body = parent.getChild(id);
 		if (null == body) {
 			body = new BonusRouteBody(id, title);
@@ -70,12 +69,12 @@ public class Brand extends BonusRoute<BonusRoute<?>> {
 		}
 		String nextId = paths.poll();
 		if (null == nextId) {
-			BonusRouteBody update = searcher.getRouteBody();
+			BonusRouteBody update = param.getRouteBody();
 			body.setCommercialRate(update.getCommercialRate());
 			body.setCompulsoryRate(update.getCompulsoryRate());
 			body.setCommercialRetainRate(update.getCommercialRetainRate());
 			body.setCompulsoryRetainRate(update.getCompulsoryRetainRate());
-			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(searcher, coefficients));
+			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(param, coefficients));
 			return Consts.RESULT.OK;
 		}
 		
@@ -84,12 +83,12 @@ public class Brand extends BonusRoute<BonusRoute<?>> {
 			VehicleDept dept = vehicleDeptMapper.getByKey(Integer.valueOf(nextId));
 			if (null == dept)
 				return BtkjConsts.RESULT.VEHICLE_DEPT_NOT_EXIST;
-			return _subSettings(InternalContrller.DEPTE, paths, body, searcher, coefficients);
+			return _subSettings(InternalContrller.DEPTE, paths, body, param, coefficients);
 		case DEPTE:
 			VehicleModel model = vehicleModelMapper.getByKey(Integer.valueOf(nextId));
 			if (null == model)
 				return BtkjConsts.RESULT.VEHICLE_MODEL_NOT_EXIST;
-			return _subSettings(InternalContrller.MODEL, paths, body, searcher, coefficients);
+			return _subSettings(InternalContrller.MODEL, paths, body, param, coefficients);
 		case MODEL:
 		default:
 			return Consts.RESULT.FORBID;

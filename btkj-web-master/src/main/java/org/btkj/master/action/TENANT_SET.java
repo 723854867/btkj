@@ -1,4 +1,4 @@
-package org.btkj.master.action.tenant;
+package org.btkj.master.action;
 
 import org.btkj.master.LoggedAction;
 import org.btkj.master.pojo.entity.Administrator;

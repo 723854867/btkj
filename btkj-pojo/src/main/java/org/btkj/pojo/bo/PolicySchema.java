@@ -9,7 +9,7 @@ public class PolicySchema implements Serializable {
 
 	private static final long serialVersionUID = -8472548988615869922L;
 
-	private double commericalTotal;				// 商业险总计保费
+	private double commericialTotal;			// 商业险总计保费
 	private String commercialStart;				// 商业险起保时间
 	private String commercialEnd;				// 商业险到期时间
 	
@@ -41,12 +41,12 @@ public class PolicySchema implements Serializable {
 		this.vehicleVesselTotal = vehicleVesselTotal;
 	}
 	
-	public double getCommericalTotal() {
-		return commericalTotal;
+	public double getCommericialTotal() {
+		return commericialTotal;
 	}
 	
-	public void setCommericalTotal(double commericalTotal) {
-		this.commericalTotal = commericalTotal;
+	public void setCommericialTotal(double commericialTotal) {
+		this.commericialTotal = commericialTotal;
 	}
 
 	public String getCommercialStart() {

@@ -2,9 +2,10 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -19,15 +20,7 @@ public interface BonusService {
 	 * 
 	 * @return
 	 */
-	BonusRouteView bonusRouteInfo();
-
-	/**
-	 * 获取车险可配置系数
-	 * 
-	 * @param searcher
-	 * @return
-	 */
-	Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher);
+	BonusRouteView bonusPoundageConfigs();
 	
 	/**
 	 * 佣金设置
@@ -35,5 +28,13 @@ public interface BonusService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<Void> bonusSettings(BonusSearcher searcher);
+	Result<Void> bonusPoundageEdit(BonusPoundageEditParam param);
+	
+	/**
+	 * 手续费系数列表
+	 * 
+	 * @param searcher
+	 * @return
+	 */
+	Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param);
 }

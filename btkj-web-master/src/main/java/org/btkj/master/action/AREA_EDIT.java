@@ -21,8 +21,8 @@ public class AREA_EDIT extends LoggedAction {
 	protected Result<Void> execute(Request request, Administrator operator) {
 		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
 		int renewalPeriod = request.getParam(Params.NUM);
-		renewalPeriod = Math.max(BtkjConsts.MIN_RENEWAL_PERIOD, renewalPeriod);
-		renewalPeriod = Math.min(BtkjConsts.MAX_RENEWAL_PERIOD, renewalPeriod);
+		renewalPeriod = Math.max(BtkjConsts.LIMITS.MIN_RENEWAL_PERIOD, renewalPeriod);
+		renewalPeriod = Math.min(BtkjConsts.LIMITS.MAX_RENEWAL_PERIOD, renewalPeriod);
 		switch (crudType) {
 		case CREATE:
 			return configManageService.areaAdd(request.getParam(Params.REGION), renewalPeriod, request.getOptionalParam(Params.IDX), request.getOptionalParam(Params.PRICE_NO_TAX));

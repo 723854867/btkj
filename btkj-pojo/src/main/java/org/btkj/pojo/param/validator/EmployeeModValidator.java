@@ -13,7 +13,7 @@ public class EmployeeModValidator implements ConstraintValidator<EmployeeMod, In
 	@Override
 	public boolean isValid(Integer value, ConstraintValidatorContext context) {
 		if (null == value)
-			return false;
-		return value <= 0 ? false : EmployeePO.Mod.check(value);
+			return true;
+		return value < 0 ? false : EmployeePO.Mod.check(value);
 	}
 }

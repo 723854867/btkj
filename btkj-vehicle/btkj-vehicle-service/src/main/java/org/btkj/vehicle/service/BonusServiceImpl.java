@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.rule.bonus.BonusManager;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,17 @@ public class BonusServiceImpl implements BonusService {
 	private BonusManager bonusManager;
 	
 	@Override
-	public BonusRouteView bonusRouteInfo() {
+	public BonusRouteView bonusPoundageConfigs() {
 		return bonusManager.bonusRouteInfo();
-	}
-
-	@Override
-	public Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher) {
-		return bonusManager.coefficients(searcher);
 	}
 	
 	@Override
-	public Result<Void> bonusSettings(BonusSearcher searcher) {
-		return bonusManager.bonusSettings(searcher);
+	public Result<Void> bonusPoundageEdit(BonusPoundageEditParam param) {
+		return bonusManager.bonusPoundageEdit(param);
+	}
+
+	@Override
+	public Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param) {
+		return bonusManager.poundageCoefficients(param);
 	}
 }

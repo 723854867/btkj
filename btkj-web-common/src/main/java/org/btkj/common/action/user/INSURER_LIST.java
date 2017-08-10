@@ -12,7 +12,7 @@ import org.btkj.pojo.po.Insurer;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -21,7 +21,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class INSURER_LIST extends UserAction {
+public class INSURER_LIST extends UserOldAction {
 	
 	@Resource
 	private ConfigService configService;

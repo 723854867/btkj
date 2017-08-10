@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleCoefficient;
@@ -14,16 +13,17 @@ import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
-import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
+import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.math.compare.ComparisonSymbol;
 
 public interface VehicleManageService {
 	
@@ -36,40 +36,15 @@ public interface VehicleManageService {
 	List<VehicleCoefficient> coefficients(int tid);
 	
 	/**
-	 * 删除车险系数
+	 * 手续费系数编辑
 	 * 
-	 * @param type
-	 * @param id
-	 * @param tid
+	 * @param param
 	 * @return
 	 */
-	Result<Void> coefficientDelete(int tid, CoefficientType type, int id);
+	Result<?> poundageCoefficientEdit(PoundageCoefficientEditParam param);
 	
 	/**
-	 * 新增车险系数
-	 * 
-	 * @param type
-	 * @param symbol
-	 * @param value
-	 * @param name
-	 * @return
-	 */
-	Result<Void> coefficientAdd(int tid, CoefficientType type, ComparisonSymbol symbol, String[] value, String name);
-	
-	/**
-	 * 更新车险系数
-	 * 
-	 * @param type
-	 * @param id
-	 * @param symbol
-	 * @param value
-	 * @param name
-	 * @return
-	 */
-	Result<Void> coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name);
-	
-	/**
-	 * 获取指定商户的管理佣金设置
+	 * 管理佣金列表
 	 * 
 	 * @param tid
 	 * @return
@@ -77,32 +52,12 @@ public interface VehicleManageService {
 	Map<String, BonusManageConfig> bonusManageConfigs(int tid);
 	
 	/**
-	 * 新增管理奖励配置项
+	 * 管理佣金设置
 	 * 
-	 * @param tid
-	 * @param type
-	 * @param depth
-	 * @param rate
+	 * @param param
 	 * @return
 	 */
-	Result<Void> bonusManageConfigAdd(int tid, BonusManageConfigType type, int depth, int rate);
-	
-	/**
-	 * 更新管理奖励配置项
-	 * 
-	 * @param id
-	 * @param rate
-	 * @return
-	 */
-	Result<Void> bonusManageConfigUpdate(String id, int tid, int rate);
-	
-	/**
-	 * 删除管理奖励配置项
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Result<Void> bonusManageConfigDelete(String id, int tid);
+	Result<Void> bonusManageConfigEdit(int tid, BonusManageConfigEditParam param);
 	
 	/**
 	 * 规模奖励配置
@@ -113,35 +68,13 @@ public interface VehicleManageService {
 	List<BonusScaleConfig> bonusScaleConfigs(int tid);
 	
 	/**
-	 * 新增规模奖励配置项
+	 * 团队规模奖励编辑
 	 * 
 	 * @param tid
-	 * @param rate
-	 * @param symbol
-	 * @param val
+	 * @param param
 	 * @return
 	 */
-	Result<Integer> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val);
-	
-	/**
-	 * 更新规模奖励配置项
-	 * 
-	 * @param id
-	 * @param tid
-	 * @param rate
-	 * @param symbol
-	 * @param val
-	 * @return
-	 */
-	Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] val);
-	
-	/**
-	 * 删除规模奖励配置项
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Result<Void> bonusScaleConfigDelete(int id, int tid);
+	Result<?> bonusScaleConfigEdit(int tid, BonusScaleConfigEditParam param);
 	
 	/**
 	 * 同步简捷保单

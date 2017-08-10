@@ -10,10 +10,10 @@ public class EmployeeEditParam extends EmployeeParam {
 	
 	private static final long serialVersionUID = 4120403644688276398L;
 	
-	@EmployeeMod
-	private int mod;
 	@Min(1)
 	private int targetId;
+	@EmployeeMod
+	private Integer mod;
 	@Min(-100)
 	@Max(100)
 	private int CMRate;
@@ -21,11 +21,11 @@ public class EmployeeEditParam extends EmployeeParam {
 	@Max(100)
 	private int CPRate;
 	
-	public int getMod() {
+	public Integer getMod() {
 		return mod;
 	}
 	
-	public void setMod(int mod) {
+	public void setMod(Integer mod) {
 		this.mod = mod;
 	}
 	

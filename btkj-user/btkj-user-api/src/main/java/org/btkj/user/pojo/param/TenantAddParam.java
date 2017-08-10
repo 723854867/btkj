@@ -32,7 +32,7 @@ public class TenantAddParam extends Param {
 	private String licenseImage;
 	@NotNull
 	@Mobile
-	private String contactMobile;		// 联系人电弧
+	private String contactsMobile;		// 联系人电弧
 	
 	public int getExpire() {
 		return expire;
@@ -98,11 +98,11 @@ public class TenantAddParam extends Param {
 		this.licenseImage = licenseImage;
 	}
 
-	public String getContactMobile() {
-		return contactMobile;
+	public String getContactsMobile() {
+		return contactsMobile;
 	}
-
-	public void setContactMobile(String contactMobile) {
-		this.contactMobile = contactMobile;
+	
+	public void setContactsMobile(String contactsMobile) {
+		this.contactsMobile = contactsMobile;
 	}
 }

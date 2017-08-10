@@ -14,6 +14,7 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.ApplyInfo;
 import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.user.pojo.param.BannerEditParam;
 import org.btkj.user.pojo.param.TenantAddParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.REGION_TYPE;
@@ -85,7 +86,7 @@ public class EntityGenerator {
 		tenant.setServicePhone(param.getServicePhone());
 		tenant.setExpire(param.getExpire());
 		tenant.setContacts(param.getContacts());
-		tenant.setContactsMobile(param.getContactMobile());
+		tenant.setContactsMobile(param.getContactsMobile());
 		tenant.setRegion(param.getRegion());
 		
 		int time = DateUtil.currentTime();
@@ -105,13 +106,13 @@ public class EntityGenerator {
 		return ai;
 	}
 	
-	public static final Banner newBanner(int appId, int tid, int idx, String icon, String link) {
+	public static final Banner newBanner(BannerEditParam param) {
 		Banner banner = new Banner();
-		banner.setAppId(appId);
-		banner.setTid(tid);
-		banner.setId(idx);
-		banner.setImage(icon);
-		banner.setLink(link);
+		banner.setAppId(param.getAppId());
+		banner.setTid(param.getTid());
+		banner.setIdx(param.getIdx());
+		banner.setImage(param.getIcon());
+		banner.setLink(param.getLink());
 		
 		int time = DateUtil.currentTime();
 		banner.setCreated(time);

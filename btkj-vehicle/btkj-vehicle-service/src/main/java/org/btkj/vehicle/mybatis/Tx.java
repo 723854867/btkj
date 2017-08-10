@@ -1,25 +1,23 @@
 package org.btkj.vehicle.mybatis;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
-import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.springframework.stereotype.Service;
@@ -44,130 +42,99 @@ public class Tx {
 	private VehicleCoefficientMapper vehicleCoefficientMapper;
 
 	@Transactional
-	public TxCallback coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name) {
-		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
-		Iterator<VehicleCoefficient> itr = coefficients.values().iterator();
-		VehicleCoefficient coefficient = null;
-		while (itr.hasNext()) {
-			VehicleCoefficient temp = itr.next();
-			if (temp.getId() != id)
-				continue;
-			coefficient = temp;
-			itr.remove();
-			break;
-		}
+	public VehicleCoefficient coefficientUpdate(PoundageCoefficientEditParam param) {
+		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(param.getTid(), param.getCoefficientType().mark());
+		VehicleCoefficient coefficient = coefficients.remove(param.getId());
 		if (null == coefficient)
 			throw new BusinessException(BtkjCode.COEFFICIENT_NOT_EXIST);
-		for (VehicleCoefficient temp : coefficients.values()) {
-			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
-			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-			if (c.isOverlap(symbol, value, val))
-				throw new BusinessException(Code.FAILURE);
-		}
-		StringBuilder builder = new StringBuilder();
-		for (String val : value)
-			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
-		builder.deleteCharAt(builder.length() - 1);
-		coefficient.setName(name);
-		coefficient.setComparison(symbol.mark());
-		coefficient.setUpdated(DateUtil.currentTime());
-		coefficient.setComparableValue(builder.toString());
-		vehicleCoefficientDao.update(coefficient);
-		final VehicleCoefficient update = coefficient;
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				vehicleCoefficientMapper.flush(update);
+		if (null != param.getSymbol())
+			coefficient.setComparison(param.getSymbol().mark());
+		if (null != param.getVal()) {
+			for (VehicleCoefficient temp : coefficients.values()) {
+				ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
+				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
+				if (c.isOverlap(ComparisonSymbol.match(coefficient.getComparison()), param.getVal(), val))
+					throw new BusinessException(Code.FAILURE);
 			}
-		};
+			StringBuilder builder = new StringBuilder();
+			for (String val : param.getVal())
+				builder.append(val).append(Consts.SYMBOL_UNDERLINE);
+			builder.deleteCharAt(builder.length() - 1);
+			coefficient.setComparableValue(builder.toString());
+		}
+		if (null != param.getName())
+			coefficient.setName(param.getName());
+		coefficient.setUpdated(DateUtil.currentTime());
+		vehicleCoefficientDao.update(coefficient);
+		return coefficient;
 	}
 	
 	@Transactional
-	public TxCallback coefficientAdd(int tid, CoefficientType type, ComparisonSymbol symbol, String[] value, String name) {
-		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(tid, type.mark());
-		if (type.isCustom() && coefficients.size() >= type.maxCustomNum())
+	public VehicleCoefficient coefficientAdd(PoundageCoefficientEditParam param) {
+		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(param.getTid(), param.getCoefficientType().mark());
+		if (param.getCoefficientType().isCustom() && coefficients.size() >= param.getCoefficientType().maxCustomNum())
 			throw new BusinessException(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
 		for (VehicleCoefficient temp : coefficients.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-			if (c.isOverlap(symbol, value, val))
+			if (c.isOverlap(param.getSymbol(), param.getVal(), val))
 				throw new BusinessException(Code.FAILURE);
 		}
 		StringBuilder builder = new StringBuilder();
-		for (String val : value)
+		for (String val : param.getVal())
 			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
 		builder.deleteCharAt(builder.length() - 1);
-		final VehicleCoefficient coefficient = EntityGenerator.newVehicleCoefficient(tid, type, symbol, builder.toString(), name);
+		VehicleCoefficient coefficient = EntityGenerator.newVehicleCoefficient(param, builder.toString());
 		vehicleCoefficientDao.insert(coefficient);
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				vehicleCoefficientMapper.flush(coefficient);
-			}
-		};
+		return coefficient;
 	}
 	
 	@Transactional
-	public TxCallback bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] cval) {
+	public BonusScaleConfig bonusScaleConfigAdd(int tid, BonusScaleConfigEditParam param) {
 		Map<Integer, BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
 		if (configs.size() >= GlobalConfigContainer.getGlobalConfig().getMaxBonusScaleConfig())
 			throw new BusinessException(BtkjCode.BONUS_SCALE_CONFIG_MAXMIUM);
 		for (BonusScaleConfig temp : configs.values()) {
 			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-			if (c.isOverlap(symbol, cval, val))
+			if (c.isOverlap(param.getSymbol(), param.getVal(), val))
 				throw new BusinessException(Code.FAILURE);
 		}
 		StringBuilder builder = new StringBuilder();
-		for (String val : cval)
+		for (String val : param.getVal())
 			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
 		builder.deleteCharAt(builder.length() - 1);
-		final BonusScaleConfig config = EntityGenerator.newBonusScaleConfig(tid, rate, symbol, builder.toString());
+		final BonusScaleConfig config = EntityGenerator.newBonusScaleConfig(tid, param.getRate(), param.getSymbol(), builder.toString());
 		bonusScaleConfigDao.insert(config);
-		ThreadLocalUtil.INT_HOLDER.set(config.getId());
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				bonusScaleConfigMapper.flush(config);
-			}
-		};
+		return config;
 	}
 	
-	public TxCallback bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] cval) {
+	@Transactional
+	public BonusScaleConfig bonusScaleConfigUpdate(int tid, BonusScaleConfigEditParam param) {
 		Map<Integer, BonusScaleConfig> configs = bonusScaleConfigDao.getByTidForUpdate(tid);
-		Iterator<BonusScaleConfig> itr = configs.values().iterator();
-		BonusScaleConfig config = null;
-		while (itr.hasNext()) {
-			BonusScaleConfig temp = itr.next();
-			if (temp.getId() != id)
-				continue;
-			config = temp;
-			itr.remove();
-			break;
-		}
+		BonusScaleConfig config = configs.remove(param.getId());
 		if (null == config)
 			throw new BusinessException(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
-		for (BonusScaleConfig temp : configs.values()) {
-			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
-			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-			if (c.isOverlap(symbol, cval, val))
-				throw new BusinessException(Code.FAILURE);
-		}
-		StringBuilder builder = new StringBuilder();
-		for (String val : cval)
-			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
-		builder.deleteCharAt(builder.length() - 1);
-		config.setRate(rate);
-		config.setComparison(symbol.mark());
-		config.setUpdated(DateUtil.currentTime());
-		config.setComparableValue(builder.toString());
-		bonusScaleConfigDao.update(config);
-		final BonusScaleConfig update = config;
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				bonusScaleConfigMapper.flush(update);
+		if (null != param.getRate())
+			config.setRate(param.getRate());
+		if (null != param.getSymbol())
+			config.setComparison(param.getSymbol().mark());
+		if (null != param.getVal()) {
+			for (BonusScaleConfig temp : configs.values()) {
+				ComparisonSymbol symbol = ComparisonSymbol.match(temp.getComparison());
+				ComparisonSymbol csymbol = ComparisonSymbol.match(config.getComparison());
+				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
+				if (symbol.isOverlap(csymbol, param.getVal(), val))
+					throw new BusinessException(Code.RANGE_OVERLAP);
 			}
-		};
+			StringBuilder builder = new StringBuilder();
+			for (String val : param.getVal())
+				builder.append(val).append(Consts.SYMBOL_UNDERLINE);
+			builder.deleteCharAt(builder.length() - 1);
+			config.setComparableValue(builder.toString());
+		}
+		config.setUpdated(DateUtil.currentTime());
+		bonusScaleConfigDao.update(config);
+		return config;
 	}
 }

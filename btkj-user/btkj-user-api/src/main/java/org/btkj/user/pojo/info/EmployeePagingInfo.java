@@ -8,6 +8,7 @@ public class EmployeePagingInfo implements Serializable {
 
 	private int id;
 	private int uid;
+	private int mod;
 	private String name;
 	private String mobile;
 	private int parentId;
@@ -30,6 +31,14 @@ public class EmployeePagingInfo implements Serializable {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 
 	public String getName() {

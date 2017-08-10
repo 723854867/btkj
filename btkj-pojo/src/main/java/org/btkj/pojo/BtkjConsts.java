@@ -15,12 +15,7 @@ public interface BtkjConsts {
 	final int EMPLOYEE_ROOT_LEVEL				= 1;
 	
 	final int GLOBAL_TENANT_ID					= 0;
-	final int MAX_COMMISION_RATE				= 600;
-	final int MIN_COMMISION_RATE				= 0;
-	final int MAX_COMMISION_RETAIN_RATE			= 200;
-	final int MIN_COMMISION_RETAIN_RATE			= -100;
-	final int MIN_RENEWAL_PERIOD				= 30;
-	final int MAX_RENEWAL_PERIOD				= 90;
+
 	
 	interface RESULT {
 		Result APP_NOT_EXIST					= Result.result(BtkjCode.APP_NOT_EXIST);
@@ -82,8 +77,10 @@ public interface BtkjConsts {
 		String TRANSFER							= "transfer";
 		String NATURE							= "nature";
 		String TYPE								= "type";
+		String NAME								= "name";
 		String BONUSTYPE						= "bonusType";
 		String ISSUETIME						= "issueTime";
+		String MOBILE							= "mobile";
 	}
 	
 	interface LIMITS {
@@ -103,6 +100,12 @@ public interface BtkjConsts {
 		final int NONAUTO_LIABILITY_MAX					= 6;				// 非车险产品保险责任最大数
 		final int PHONE_MIN								= 6;				// 电话字段最少字符
 		final int PHONE_MAX								= 15;				// 电话字段最大字符
+		final int MAX_COMMISION_RATE					= 600;
+		final int MIN_COMMISION_RATE					= 0;
+		final int MAX_COMMISION_RETAIN_RATE				= 200;
+		final int MIN_COMMISION_RETAIN_RATE				= -100;
+		final int MIN_RENEWAL_PERIOD					= 30;
+		final int MAX_RENEWAL_PERIOD					= 90;
 	}
 	
 	interface LOCKS {

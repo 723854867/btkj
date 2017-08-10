@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.exception.BusinessException;
@@ -33,13 +32,15 @@ import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.mongo.VehiclePolicyMapper;
 import org.btkj.vehicle.mybatis.Tx;
-import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy.SalesmanMark;
+import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
+import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
@@ -54,11 +55,9 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
-import org.rapid.util.concurrent.ThreadLocalUtil;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
-import org.rapid.util.math.compare.ComparisonSymbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -96,35 +95,75 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	public List<VehicleCoefficient> coefficients(int tid) {
 		return vehicleCoefficientMapper.getByTid(tid);
 	}
-
-	@Override
-	public Result<Void> coefficientDelete(int tid, CoefficientType type, int id) {
-		VehicleCoefficient coefficient = vehicleCoefficientMapper.getByKey(id);
-		if (null == coefficient)
-			return BtkjConsts.RESULT.COEFFICIENT_NOT_EXIST;
-		if (coefficient.getTid() != tid || coefficient.getType() != type.mark())
-			return Consts.RESULT.FORBID;
-		vehicleCoefficientMapper.delete(id);
-		return Consts.RESULT.OK;
-	}
 	
 	@Override
-	public Result<Void> coefficientAdd(int tid, CoefficientType type, ComparisonSymbol symbol, String[] value, String name) {
-		try {
-			tx.coefficientAdd(tid, type, symbol, value, name).finish();
+	public Result<?> poundageCoefficientEdit(PoundageCoefficientEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			try {
+				VehicleCoefficient coefficient = tx.coefficientAdd(param);
+				vehicleCoefficientMapper.flush(coefficient);
+				return Result.result(Code.OK, coefficient.getId());
+			} catch (BusinessException e) {
+				return Result.result(e.getCode());
+			}
+		case UPDATE:
+			try {
+				VehicleCoefficient coefficient = tx.coefficientUpdate(param);
+				vehicleCoefficientMapper.flush(coefficient);
+				return Consts.RESULT.OK;
+			} catch (BusinessException e) {
+				return Result.result(e.getCode());
+			}
+		case DELETE:
+			VehicleCoefficient coefficient = vehicleCoefficientMapper.getByKey(param.getId());
+			if (null == coefficient)
+				return BtkjConsts.RESULT.COEFFICIENT_NOT_EXIST;
+			if (coefficient.getTid() != param.getTid())
+				return Consts.RESULT.FORBID;
+			vehicleCoefficientMapper.delete(param.getId());
 			return Consts.RESULT.OK;
-		} catch (BusinessException e) {
-			return Result.result(e.getCode());
+		default:
+			return Consts.RESULT.FORBID;
 		}
 	}
+
+	@Override
+	public Map<String, BonusManageConfig> bonusManageConfigs(int tid) {
+		return bonusManageConfigMapper.getByTid(tid);
+	}
 	
 	@Override
-	public Result<Void> coefficientUpdate(int tid, CoefficientType type, int id, ComparisonSymbol symbol, String[] value, String name) {
-		try {
-			tx.coefficientUpdate(tid, type, id, symbol, value, name).finish();
+	public Result<Void> bonusManageConfigEdit(int tid, BonusManageConfigEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			BonusManageConfig config = EntityGenerator.newBonusManageConfig(tid, param.getConfigType(), param.getTeamDepth(), param.getRate());
+			try {
+				bonusManageConfigMapper.insert(config);
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.FAILURE;
+			}
 			return Consts.RESULT.OK;
-		} catch (BusinessException e) {
-			return Result.result(e.getCode());
+		case UPDATE:
+			config = bonusManageConfigMapper.getByKey(param.getId());
+			if (null == config)
+				return BtkjConsts.RESULT.BONUS_MANAGE_CONFIG_NOT_EXIST;
+			if (tid != config.getTid())
+				return Consts.RESULT.FORBID;
+			config.setRate(param.getRate());
+			config.setUpdated(DateUtil.currentTime());
+			bonusManageConfigMapper.update(config);
+			return Consts.RESULT.OK;
+		case DELETE:
+			config = bonusManageConfigMapper.getByKey(param.getId());
+			if (null == config)
+				return BtkjConsts.RESULT.BONUS_MANAGE_CONFIG_NOT_EXIST;
+			if (tid != config.getTid())
+				return Consts.RESULT.FORBID;
+			bonusManageConfigMapper.delete(config);
+			return Consts.RESULT.OK;
+		default:
+			return Consts.RESULT.FORBID;
 		}
 	}
 	
@@ -134,76 +173,35 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Map<String, BonusManageConfig> bonusManageConfigs(int tid) {
-		return bonusManageConfigMapper.getByTid(tid);
-	}
-	
-	@Override
-	public Result<Void> bonusManageConfigAdd(int tid, BonusManageConfigType type, int depth, int rate) {
-		BonusManageConfig config = EntityGenerator.newBonusManageConfig(tid, type, depth, rate);
-		try {
-			bonusManageConfigMapper.insert(config);
+	public Result<?> bonusScaleConfigEdit(int tid, BonusScaleConfigEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			try {
+				BonusScaleConfig config = tx.bonusScaleConfigAdd(tid, param);
+				bonusScaleConfigMapper.flush(config);
+				return Result.result(Code.OK, config.getId());
+			} catch (BusinessException e) {
+				return Result.result(e.getCode());
+			}
+		case UPDATE:
+			try {
+				BonusScaleConfig config = tx.bonusScaleConfigUpdate(tid, param);
+				bonusScaleConfigMapper.flush(config);
+				return Consts.RESULT.OK;
+			} catch (BusinessException e) {
+				return Result.result(e.getCode());
+			}
+		case DELETE:
+			BonusScaleConfig config = bonusScaleConfigMapper.getByKey(param.getId());
+			if (null == config)
+				return BtkjConsts.RESULT.BONUS_SCALE_CONFIG_NOT_EXIST;
+			if (tid != config.getTid())
+				return Consts.RESULT.FORBID;
+			bonusScaleConfigMapper.delete(param.getId());
 			return Consts.RESULT.OK;
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.FAILURE;
-		}
-	}
-	
-	@Override
-	public Result<Void> bonusManageConfigUpdate(String id, int tid, int rate) {
-		BonusManageConfig config = bonusManageConfigMapper.getByKey(id);
-		if (null == config)
-			return BtkjConsts.RESULT.BONUS_MANAGE_CONFIG_NOT_EXIST;
-		if (tid != config.getTid())
+		default:
 			return Consts.RESULT.FORBID;
-		config.setRate(rate);
-		config.setUpdated(DateUtil.currentTime());
-		bonusManageConfigMapper.update(config);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> bonusManageConfigDelete(String id, int tid) {
-		BonusManageConfig config = bonusManageConfigMapper.getByKey(id);
-		if (null == config)
-			return BtkjConsts.RESULT.BONUS_MANAGE_CONFIG_NOT_EXIST;
-		if (tid != config.getTid())
-			return Consts.RESULT.FORBID;
-		bonusManageConfigMapper.delete(id);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Integer> bonusScaleConfigAdd(int tid, int rate, ComparisonSymbol symbol, String[] val) {
-		try {
-			tx.bonusScaleConfigAdd(tid, rate, symbol, val).finish();
-			Result<Integer> result = Result.result(Code.OK);
-			result.setAttach(ThreadLocalUtil.getAndRemove(ThreadLocalUtil.INT_HOLDER));
-			return result;
-		} catch (BusinessException e) {
-			return Result.result(e.getCode());
 		}
-	}
-	
-	@Override
-	public Result<Void> bonusScaleConfigUpdate(int id, int tid, int rate, ComparisonSymbol symbol, String[] val) {
-		try {
-			tx.bonusScaleConfigUpdate(id, tid, rate, symbol, val).finish();
-			return Consts.RESULT.OK;
-		} catch (BusinessException e) {
-			return Result.result(e.getCode());
-		}
-	}
-	
-	@Override
-	public Result<Void> bonusScaleConfigDelete(int id, int tid) {
-		BonusScaleConfig config = bonusScaleConfigMapper.getByKey(id);
-		if (null == config)
-			return BtkjConsts.RESULT.BONUS_SCALE_CONFIG_NOT_EXIST;
-		if (tid != config.getTid())
-			return Consts.RESULT.FORBID;
-		bonusScaleConfigMapper.delete(id);
-		return Consts.RESULT.OK;
 	}
 	
 	@Override

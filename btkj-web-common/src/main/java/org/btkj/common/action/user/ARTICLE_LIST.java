@@ -7,7 +7,7 @@ import org.btkj.community.pojo.param.ArticleListParam;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.UserPO;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -15,7 +15,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class ARTICLE_LIST extends UserAction<ArticleListParam> {
+public class ARTICLE_LIST extends UserOldAction<ArticleListParam> {
 	
 	@Resource
 	private CommunityService communityService;

@@ -14,7 +14,6 @@ import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.btkj.pojo.po.NonAutoProduct;
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.QuizSearcher;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.user.pojo.submit.CustomerSearcher;
@@ -215,13 +214,6 @@ public interface Params {
 	};
 	
 	final Str2StrConstConverter ORDER_ID						= new Str2StrConstConverter(1038, "orderId");
-	
-	final Str2ObjConstConverter<BonusSearcher> BONUS_SEARCHER = new Str2ObjConstConverter<BonusSearcher>(1040, "bonusSearcher") {
-		@Override
-		public BonusSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, BonusSearcher.class);
-		}
-	};	
 	
 	final Str2StrConstConverter VEHICLE_ID						= new Str2StrConstConverter(1041, "vehicleId");
 	final Str2StrConstConverter AGENT							= new Str2StrConstConverter(1042, "agent");

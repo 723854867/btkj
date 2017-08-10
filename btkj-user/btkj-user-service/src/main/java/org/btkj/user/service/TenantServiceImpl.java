@@ -95,7 +95,7 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public TenantListInfo tenantListInfo(User user) {
+	public TenantListInfo tenantListInfo(UserPO user) {
 		List<EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
 		List<Integer> tids = new ArrayList<Integer>(employees.size());
 		for (EmployeePO employee : employees)

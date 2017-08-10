@@ -227,7 +227,7 @@ public class VehicleUtil {
 		PolicySchema schema = tips.getSchema();
 		if (null == schema)
 			return 0;
-		double total = schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
+		double total = schema.getCommericialTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
 		return (int) (total * 100);
 	}
 	

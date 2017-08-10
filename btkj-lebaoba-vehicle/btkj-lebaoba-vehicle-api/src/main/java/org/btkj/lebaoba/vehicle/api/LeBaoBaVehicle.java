@@ -3,6 +3,7 @@ package org.btkj.lebaoba.vehicle.api;
 import java.util.List;
 import java.util.Set;
 
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.vo.VehicleInfo;
@@ -27,5 +28,5 @@ public interface LeBaoBaVehicle {
 	/**
 	 * 报价/投保接口
 	 */
-	Result<Void> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips);
+	Result<PolicySchema> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips);
 }

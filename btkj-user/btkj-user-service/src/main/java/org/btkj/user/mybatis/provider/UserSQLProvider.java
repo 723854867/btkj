@@ -3,7 +3,7 @@ package org.btkj.user.mybatis.provider;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SORT_TYPE;
@@ -28,26 +28,26 @@ public class UserSQLProvider extends SQLProvider {
 		}.toString();
 	}
 	
-	public String count(UserSearcher searcher) {
+	public String count(UsersParam param) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT(*) FROM user");
-		Map<String, Object> params = searcher.params();
+		Map<String, Object> params = param.params();
 		if (null != params && !params.isEmpty()) 
 			SqlUtil.appendWithWhere(builder, params);
 		return builder.toString();
 	}
 	
-	public String paging(UserSearcher searcher) {
+	public String users(UsersParam param) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT * FROM user");
-		Map<String, Object> params = searcher.params();
+		Map<String, Object> params = param.params();
 		if (null != params && !params.isEmpty())
 			SqlUtil.appendWithWhere(builder, params);
-		if (null != searcher.getSortCol()) {
-			builder.append(" ORDER BY ").append(searcher.getSortCol()).append(" ");
-			builder.append(searcher.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());
+		if (null != param.getSortCol()) {
+			builder.append(" ORDER BY ").append(param.getSortCol()).append(" ");
+			builder.append(param.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());
 		}
-		builder.append(" LIMIT ").append(searcher.getStart()).append(",").append(searcher.getPageSize());
+		builder.append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize());
 		return builder.toString();
 	}
 }

@@ -9,7 +9,7 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.user.mybatis.dao.TenantDao;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.TenantPagingMasterInfo;
-import org.btkj.user.pojo.submit.TenantSearcher;
+import org.btkj.user.pojo.param.TenantsParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
@@ -23,15 +23,15 @@ public class TenantMapper extends RedisDBAdapter<Integer, TenantPO, TenantDao> {
 		return dao.countByAppId(appId);
 	}
 	
-	public Pager<TenantPagingInfo> paging(TenantSearcher searcher) {
-		int total = dao.count(searcher);
+	public Pager<TenantPagingInfo> tenants(TenantsParam param) {
+		int total = dao.count(param);
 		if (0 == total)
 			return Pager.EMPLTY;
-		searcher.calculate(total);
-		List<TenantPO> tenants = dao.paging(searcher);
+		param.calculate(total);
+		List<TenantPO> tenants = dao.tenants(param);
 		List<TenantPagingInfo> list = new ArrayList<TenantPagingInfo>(); 
 		for (TenantPO tenant : tenants) 
-			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new TenantPagingInfo(tenant) : new TenantPagingMasterInfo(tenant));
+			list.add(param.getClient() == Client.TENANT_MANAGER ? new TenantPagingInfo(tenant) : new TenantPagingMasterInfo(tenant));
 		return new Pager<TenantPagingInfo>(total, list);
 	}
 }

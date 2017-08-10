@@ -7,11 +7,11 @@ import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
-public class USER_EDIT extends UserAction {
+public class USER_EDIT extends UserOldAction {
 	
 	@Resource
 	private UserService userService;

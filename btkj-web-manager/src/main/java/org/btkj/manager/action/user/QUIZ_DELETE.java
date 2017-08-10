@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityManageService;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
+import org.btkj.pojo.param.IdParam;
+import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.po.UserPO;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,13 +14,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class QUIZ_DELETE extends UserAction {
+public class QUIZ_DELETE extends UserAction<IdParam> {
 	
 	@Resource
 	private CommunityManageService communityManageService;
 
 	@Override
-	protected Result<?> execute(Request request, User user) {
-		return communityManageService.quizDelete(request.getParam(Params.ID), user.getAppId());
+	protected Result<?> execute(AppPO app, UserPO user, IdParam param) {
+		return communityManageService.quizDelete(param.getId(), app.getId());
 	}
 }

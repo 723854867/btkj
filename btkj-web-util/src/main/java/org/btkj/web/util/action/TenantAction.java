@@ -19,7 +19,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public abstract class TenantAction<PARAM extends EmployeeParam> extends UserAction<PARAM> {
+public abstract class TenantAction<PARAM extends EmployeeParam> extends UserOldAction<PARAM> {
 	
 	@Resource
 	private TenantService tenantService;

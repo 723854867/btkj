@@ -19,6 +19,8 @@ import org.btkj.lebaoba.vehicle.domain.OrderResult;
 import org.btkj.lebaoba.vehicle.domain.OrderSubmit;
 import org.btkj.lebaoba.vehicle.domain.VehicleInfos;
 import org.btkj.lebaoba.vehicle.domain.VehicleSubmit;
+import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Insurer;
 import org.btkj.pojo.vo.VehicleInfo;
@@ -79,7 +81,7 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 	}
 
 	@Override
-	public Result<Void> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips) {
+	public Result<PolicySchema> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips) {
 		OrderSubmit submit = new OrderSubmit();
 		String xml = SerializeUtil.XmlUtil.beanToXml(submit, Consts.UTF_8.name());
 		xml = DesUtil.EncryptDES(xml, desKey);
@@ -99,6 +101,8 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 		
 		BasicResult br = SerializeUtil.XmlUtil.xmlToBean(result, BasicResult.class);
 		OrderResult or = SerializeUtil.XmlUtil.xmlToBean(new String(Base64.decodeBase64(br.getContent())), OrderResult.class);
-		return null;
+		if (1 != or.getAiErrorInfo().getQuoteResult())
+			return Result.result(BtkjCode.QUOTE_FAILURE, or.getAiErrorInfo().getErrorInfo());
+		return Result.result(or.schema());
 	}
 }

@@ -17,7 +17,7 @@ public class EMPLOYEE_EDIT extends EmployeeAction<EmployeeEditParam> {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeEditParam param) {
+	protected Result<Void> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeEditParam param) {
 		return userManageService.employeeEdit(employee.getTid(), employee.getId(), param);
 	}
 }

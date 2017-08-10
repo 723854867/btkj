@@ -6,7 +6,7 @@ import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.pojo.info.TenantListInfo;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,14 +14,14 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class TENANT_LIST extends UserAction {
+public class TENANT_LIST extends UserOldAction {
 	
 	@Resource
 	private TenantService tenantService;
 
 	@Override
 	protected Result<TenantListInfo> execute(Request request, User user) {
-		return Result.result(tenantService.tenantListInfo(user));
+		return Result.result(tenantService.tenantListInfo(user.getEntity()));
 	}
 	
 	@Override

@@ -5,8 +5,9 @@ import java.util.Map;
 
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.rule.bonus.BonusUtils;
 
 /**
@@ -26,24 +27,24 @@ public class CoacheUseType extends BonusRoute<CoacheCategory> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) {
+	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
 		switch (usedType) {
 		case HOME_USE:								// 家庭自用
 		case ENTERPRISE:							// 企业
 		case ORGAN:									// 机关
-			return BonusUtils.noProfitCoacheCommercialCoefficients(coefficients, spinner, searcher);
+			return BonusUtils.noProfitCoacheCommercialCoefficients(coefficients, spinner, param);
 		default:
 			return null;
 		}
 	}
 	
 	@Override
-	protected Map<Integer, Integer> checkCommercialCommisionSpinner(BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
+	protected Map<Integer, Integer> checkCommercialCommisionSpinner(BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) {
 		switch (usedType) {
 		case HOME_USE:								// 家庭自用
 		case ENTERPRISE:							// 企业
 		case ORGAN:									// 机关
-			return BonusUtils.noProfitCoacheCommercialSpinnerCheck(searcher, coefficients);
+			return BonusUtils.noProfitCoacheCommercialSpinnerCheck(param, coefficients);
 		default:
 			return null;
 		}

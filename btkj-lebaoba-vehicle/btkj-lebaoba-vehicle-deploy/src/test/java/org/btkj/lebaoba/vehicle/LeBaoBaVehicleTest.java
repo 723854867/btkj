@@ -1,21 +1,23 @@
 package org.btkj.lebaoba.vehicle;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.lebaoba.BaseTest;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit.InsuredInfo;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit.LogUser;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit.UnitInfo;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit.VehicleInfo;
-import org.btkj.lebaoba.vehicle.domain.OrderSubmit.VehicleInsuranceItem;
+import org.btkj.pojo.bo.InsurUnit;
+import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.btkj.pojo.enums.IDType;
+import org.btkj.pojo.enums.VehicleType;
+import org.btkj.pojo.enums.VehicleTypeCode;
+import org.btkj.pojo.enums.VehicleUnitType;
+import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.junit.Test;
-import org.rapid.util.common.Consts;
-import org.rapid.util.common.serializer.SerializeUtil;
 
 public class LeBaoBaVehicleTest extends BaseTest {
 
@@ -27,79 +29,43 @@ public class LeBaoBaVehicleTest extends BaseTest {
 		leBaoBaVehicle.vehicleInfos("WBSDX9108BE370935");
 	}
 	
-	public static void main(String[] args) {
-		OrderSubmit submit = new OrderSubmit();
+	public void testOrder() {
+		VehiclePolicyTips tips = new VehiclePolicyTips();
+		tips.setLicense("浙AXG123");
+		tips.setVin("LFV3A23C4A3042594");
+		tips.setEngine("191318");
+		tips.setEnrollDate("2010-08-01");
+		tips.setTransfer(false);
+		tips.setVehicleUsedType(VehicleUsedType.HOME_USE);
+		tips.setSeat(5);
+		tips.setYear(2009);
+		tips.setName("迈腾FV7187TDQG轿车");
+		tips.setPrice(244000);
+		tips.setPriceNoTax(224800);
+		tips.setLoad("0");
+		tips.setExhaust("1.798");
+		tips.setTransmissionName("DSG 豪华型 涡轮增压 国Ⅳ");
+		tips.setVehicleId("6227521");
+		tips.setVehicleType(VehicleType.COACH);
+		tips.setVehicleTypeCode(VehicleTypeCode.A012);
 		
-		UnitInfo owner = new UnitInfo();
-		owner.setCustomerType("01");
-		owner.setIdNo("01");
-		owner.setName("张三");
-		owner.setIdNo("330127198");
-		VehicleInfo vehicleInfo = new VehicleInfo();
-		vehicleInfo.setID("ssss");
-		vehicleInfo.setLicenseFlag(1);
-		vehicleInfo.setLicenseNo("xxx");
-		vehicleInfo.setVin("xxxx");
-		vehicleInfo.setEngineNo("xxxx");
-		vehicleInfo.setModelCode("xxx");
-		vehicleInfo.setEnrollDate("xxx");
-		vehicleInfo.setLoanFlag(1);
-		vehicleInfo.setTransferFlag(1);
-		vehicleInfo.setTransferFlagTime("xxx");
-		vehicleInfo.setLicenseTypeCode("02");
-		vehicleInfo.setCarTypeCode("K33");
-		vehicleInfo.setVehicleType(1);
-		vehicleInfo.setVehicleTypeCode("A012");
-		vehicleInfo.setUseNature(2);
-		vehicleInfo.setCountryNature("01");
-		vehicleInfo.setIsRenewal(0);
-		vehicleInfo.setInsVehicleId("xxx");
-		vehicleInfo.setPrice("129091");
-		vehicleInfo.setPriceNoTax("123800");
-		vehicleInfo.setYear("201201");
-		vehicleInfo.setName("大众FV7146FBMGG轿车");
-		vehicleInfo.setExhaust("1.39");
-		vehicleInfo.setBrandName("一汽大众");
-		vehicleInfo.setLoadWeight("0");
-		vehicleInfo.setSeat(2);
-		vehicleInfo.setTaxType(1);
-		vehicleInfo.setCarOwnerInfo(owner);
+		InsurUnit owner = new InsurUnit();
+		owner.setType(VehicleUnitType.PERSONAL);
+		owner.setIdType(IDType.IDENTITY);
+		owner.setName("郭海滨");
+		owner.setMobile("13295815927");
+		owner.setIdNo("330106198112040434");
+		tips.setOwner(owner);
+		tips.setInsurer(owner);
+		tips.setInsured(owner);
 		
-		submit.setVehicleInfo(vehicleInfo);
-		InsuredInfo toInsuredInfo = new InsuredInfo();
-		toInsuredInfo.setCustomerType("01");
-		toInsuredInfo.setIdNo("01");
-		toInsuredInfo.setName("张三");
-		toInsuredInfo.setIdNo("330127198");
-		InsuredInfo beInsuredInfo = new InsuredInfo();
-		beInsuredInfo.setCustomerType("01");
-		beInsuredInfo.setIdNo("01");
-		beInsuredInfo.setName("张三");
-		beInsuredInfo.setIdNo("330127198");
-		submit.setToInsuredInfo(toInsuredInfo);
-		submit.setBeInsuredInfo(beInsuredInfo);
-		submit.setCommercePolicyBeginDate("xxx");
-		submit.setCommercePolicyEndDate("xxx");
-		submit.setCompulsoryPolicyBeginDate("xxx");
-		submit.setCompulsoryPolicyEndDate("xxx");
-		submit.setProductCode("xxx");
-		submit.setCompanyProvince("xxx");
-		submit.setProxyCompanyID(1);
-		
-		List<VehicleInsuranceItem> list = new ArrayList<VehicleInsuranceItem>();
-		for (int i = 0; i < 10; i++){
-			VehicleInsuranceItem insuranceItem = new VehicleInsuranceItem();
-			insuranceItem.setCode("Z" + i);
-			insuranceItem.setAmount("97802");
-			list.add(insuranceItem);
-		}
-		submit.setVehicleInsurance(list);
-		
-		LogUser logUser = new LogUser();
-		logUser.setUsername("xxx");
-		logUser.setPassword("xxx");
-		submit.setLogUser(logUser);
-		String xml = SerializeUtil.XmlUtil.beanToXml(submit, Consts.UTF_8.name());
-		System.out.println(xml);
+		PolicySchema schema = new PolicySchema();
+		schema.setCommercialStart("2017-08-19 00:00:00");
+		schema.setCompulsiveStart("2017-08-19 00:00:00");
+		Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
+		insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(1));
+		insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(1));
+		schema.setInsurances(insurances);
+		tips.setSchema(schema);
 	}
 }

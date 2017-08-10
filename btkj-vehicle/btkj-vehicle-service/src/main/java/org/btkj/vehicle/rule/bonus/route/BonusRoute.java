@@ -12,9 +12,10 @@ import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.Node;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.GENDER;
@@ -48,7 +49,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	 * @param searcher
 	 * @return
 	 */
-	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
+	public Result<Void> settings(LinkedList<String> paths, Node<BonusRouteBody> parent, BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) {
 		BonusRouteBody body = parent.getChild(id);
 		if (null == body) {
 			body = new BonusRouteBody(id, title);
@@ -56,18 +57,18 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 		}
 		String nextId = paths.poll();
 		if (null == nextId) {
-			BonusRouteBody update = searcher.getRouteBody();
+			BonusRouteBody update = param.getRouteBody();
 			body.setCommercialRate(update.getCommercialRate());
 			body.setCompulsoryRate(update.getCompulsoryRate());
 			body.setCommercialRetainRate(update.getCommercialRetainRate());
 			body.setCompulsoryRetainRate(update.getCompulsoryRetainRate());
-			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(searcher, coefficients));
+			body.setCommercialCommisionSpinner(checkCommercialCommisionSpinner(param, coefficients));
 			return Consts.RESULT.OK;
 		}
 		BonusRoute nextRoute = null == children ? null : children.get(nextId);
 		if (null == nextRoute)
 			return Consts.RESULT.FORBID;
-		return nextRoute.settings(paths, body, searcher, coefficients);
+		return nextRoute.settings(paths, body, param, coefficients);
 	}
 	
 	/**
@@ -195,7 +196,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 			int compulsoryRate = preEffectBody.getCompulsoryRate() - preEffectBody.getCompulsoryRetainRate();
 			commercialRate = Math.max(0, commercialRate);
 			compulsoryRate = Math.max(0, compulsoryRate);
-			bonus.setCommercialBonus(tips.getSchema().getCommericalTotal() * commercialRate / 1000.0);
+			bonus.setCommercialBonus(tips.getSchema().getCommericialTotal() * commercialRate / 1000.0);
 			bonus.setCompulsoryBonus((tips.getSchema().getCompulsiveTotal() + tips.getSchema().getVehicleVesselTotal()) * compulsoryRate / 1000.0);
 		} else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
@@ -210,20 +211,20 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	 * 
 	 * @return
 	 */
-	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, BonusSearcher searcher) {
+	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, PoundageCoefficientsParam param) {
 		String nextId = path.poll();
 		BonusRouteBody body = null == parent ? null : parent.getChild(id);
 		if (null == nextId)
-			return coefficients(coefficients, null == body ? null : body.getCommercialCommisionSpinner(), searcher);
+			return coefficients(coefficients, null == body ? null : body.getCommercialCommisionSpinner(), param);
 		else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)
 				return null;
-			return nextRoute.coefficients(path, body, coefficients, searcher);
+			return nextRoute.coefficients(path, body, coefficients, param);
 		}
 	}
 	
-	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) {
+	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
 		return null;
 	}
 	
@@ -233,7 +234,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	 * @param searcher
 	 * @return
 	 */
-	protected Map<Integer, Integer> checkCommercialCommisionSpinner(BonusSearcher searcher, List<VehicleCoefficient> coefficients) {
+	protected Map<Integer, Integer> checkCommercialCommisionSpinner(BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) {
 		return null;
 	}
 }

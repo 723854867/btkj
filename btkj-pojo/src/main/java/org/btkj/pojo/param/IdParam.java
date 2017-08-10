@@ -2,7 +2,7 @@ package org.btkj.pojo.param;
 
 import javax.validation.constraints.Min;
 
-public class DeleteParam extends Param {
+public class IdParam extends Param {
 
 	private static final long serialVersionUID = 1506913018095606059L;
 

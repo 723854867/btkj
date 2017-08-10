@@ -3,7 +3,6 @@ package org.btkj.vehicle;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicyDetail;
-import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.VehicleBrand;
@@ -21,6 +20,7 @@ import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.Route;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.service.VehicleManageServiceImpl;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
@@ -47,13 +47,13 @@ public class EntityGenerator {
 		return route;
 	}
 	
-	public static final VehicleCoefficient newVehicleCoefficient(int tid, CoefficientType type, ComparisonSymbol symbol, String value, String name) {
+	public static final VehicleCoefficient newVehicleCoefficient(PoundageCoefficientEditParam param, String value) {
 		VehicleCoefficient coefficient = new VehicleCoefficient();
-		coefficient.setTid(tid);
-		coefficient.setName(name);
-		coefficient.setType(type.mark());
+		coefficient.setTid(param.getTid());
+		coefficient.setName(param.getName());
+		coefficient.setType(param.getCoefficientType().mark());
 		coefficient.setComparableValue(value);
-		coefficient.setComparison(symbol.mark());
+		coefficient.setComparison(param.getSymbol().mark());
 		
 		int time = DateUtil.currentTime();
 		coefficient.setCreated(time);

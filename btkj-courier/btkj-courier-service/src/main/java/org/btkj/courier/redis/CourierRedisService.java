@@ -131,8 +131,8 @@ public class CourierRedisService {
 		try {
 			PolicySchema schema = order.getTips().getSchema();
 			double discount = (schema.getCompulsiveTotal() * submit.getCompulsoryRate() / (submit.isTaxInclude() ? 100.0 : 106.0)) 
-					+ (schema.getCommericalTotal() * submit.getCommercialRate() / (submit.isTaxInclude() ? 100.0 : 106.0));
-			double price = schema.getCommericalTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
+					+ (schema.getCommericialTotal() * submit.getCommercialRate() / (submit.isTaxInclude() ? 100.0 : 106.0));
+			double price = schema.getCommericialTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
 			tplValue = URLEncoder.encode("#license#",Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getTips().getLicense(), Consts.UTF_8.name()) 
 					+ "&" + URLEncoder.encode("#insurer#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getInsurerName(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#insurance#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(_buildQuotaInsurances(schema), Consts.UTF_8.name())
@@ -158,7 +158,7 @@ public class CourierRedisService {
 	private String _buildQuotaInsurances(PolicySchema schema) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(MessageFormat.format(QUOTA_MODEL, df2.format(schema.getCompulsiveTotal()), 
-				df2.format(schema.getVehicleVesselTotal()), df2.format(schema.getCommericalTotal())));
+				df2.format(schema.getVehicleVesselTotal()), df2.format(schema.getCommericialTotal())));
 		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
 			Insurance insurance = null == schema.getInsurances() ? null : schema.getInsurances().get(type);
 			if (null == insurance)

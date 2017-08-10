@@ -43,7 +43,7 @@ public class VehicleOrderListInfo implements Serializable {
 		this.bonus = null != bonus ? bonus.getCommercialBonus() + bonus.getCompulsoryBonus() : 0;
 		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE
 				|| state == VehicleOrderState.INSURE_SUCCESS) {
-			this.price = order.getTips().getSchema().getCommericalTotal()
+			this.price = order.getTips().getSchema().getCommericialTotal()
 					+ order.getTips().getSchema().getCompulsiveTotal()
 					+ order.getTips().getSchema().getVehicleVesselTotal();
 		}

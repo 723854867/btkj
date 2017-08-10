@@ -14,7 +14,7 @@ import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.dao.UserDao;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.info.UserPagingMasterInfo;
-import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;
@@ -43,15 +43,15 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		super(new ByteProtostuffSerializer<UserPO>(), "hash:db:user");
 	}
 	
-	public Pager<UserPagingInfo> paging(UserSearcher searcher) {
-		int total = dao.count(searcher);
+	public Pager<UserPagingInfo> users(UsersParam param) {
+		int total = dao.count(param);
 		if (0 == total)
 			return Pager.EMPLTY;
-		searcher.calculate(total);
-		List<UserPO> users = dao.paging(searcher);
+		param.calculate(total);
+		List<UserPO> users = dao.users(param);
 		List<UserPagingInfo> list = new ArrayList<UserPagingInfo>();
 		for (UserPO user : users) 
-			list.add(searcher.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
+			list.add(param.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
 		return new Pager(total, list);
 	}
 	

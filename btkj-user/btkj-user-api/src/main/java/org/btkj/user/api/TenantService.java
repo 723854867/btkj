@@ -3,6 +3,7 @@ package org.btkj.user.api;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.TenantListInfo;
 import org.btkj.user.pojo.param.TenantAddParam;
@@ -37,10 +38,7 @@ public interface TenantService {
 	/**
 	 * 代理公司列表
 	 * 
-	 * @param client
-	 * @param app
-	 * @param user
 	 * @return
 	 */
-	TenantListInfo tenantListInfo(User user);
+	TenantListInfo tenantListInfo(UserPO user);
 }

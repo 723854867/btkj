@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
@@ -15,11 +15,13 @@ import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.param.AppEditParam;
+import org.btkj.user.pojo.param.BannerEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.EmployeesParam;
+import org.btkj.user.pojo.param.PlatformTenantSetParam;
 import org.btkj.user.pojo.param.TenantSetParam;
-import org.btkj.user.pojo.submit.TenantSearcher;
-import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.pojo.param.TenantsParam;
+import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.util.common.message.Result;
 
 public interface UserManageService {
@@ -30,7 +32,7 @@ public interface UserManageService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<Pager<UserPagingInfo>> userPaging(UserSearcher searcher);
+	Result<Pager<UserPagingInfo>> users(UsersParam param);
 
 	/**
 	 * 代理公司分页列表
@@ -38,7 +40,7 @@ public interface UserManageService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<Pager<TenantPagingInfo>> tenantPaging(TenantSearcher searcher);
+	Result<Pager<TenantPagingInfo>> tenants(TenantsParam param);
 	
 	/**
 	 * 雇员分页列表
@@ -79,36 +81,12 @@ public interface UserManageService {
 	Result<Void> employeeEdit(int tid, int employeeId, EmployeeEditParam param);
 	
 	/**
-	 * 编辑轮播图
+	 * 轮播图编辑
 	 * 
-	 * @param appId
-	 * @param tid
-	 * @param idx
-	 * @param icon
-	 * @param link
+	 * @param param
 	 * @return
 	 */
-	Result<Void> bannerAdd(int appId, int tid, int idx, String icon, String link);
-	
-	/**
-	 * 新增轮播图
-	 * 
-	 * @param appId
-	 * @param tid
-	 * @param idx
-	 * @param icon
-	 * @param link
-	 * @return
-	 */
-	Result<Void> bannerEdit(int id, String icon, String link);
-	
-	/**
-	 * 删除轮播图
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Result<Void> bannerDelete(int id);
+	Result<Void> bannerEdit(BannerEditParam param);
 	
 	/**
 	 * 商家设置(商家自己)
@@ -122,14 +100,10 @@ public interface UserManageService {
 	/**
 	 * 商家设置(平台)
 	 * 
-	 * @param user
-	 * @param name
-	 * @param license
-	 * @param licenseImage
-	 * @param expire
+	 * @param param
 	 * @return
 	 */
-	Result<Void> tenantSet(User user, int tid, String contacts, String contactsMobile, String tname, String license, String licenseImage, int expire);
+	Result<Void> tenantSet(UserPO user, PlatformTenantSetParam param);
 	
 	/**
 	 * 所有平台

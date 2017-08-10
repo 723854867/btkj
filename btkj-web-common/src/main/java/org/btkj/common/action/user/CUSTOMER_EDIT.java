@@ -10,13 +10,13 @@ import org.btkj.pojo.po.Region;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 
-public class CUSTOMER_EDIT extends UserAction {
+public class CUSTOMER_EDIT extends UserOldAction {
 	
 	@Resource
 	private UserService userService;

@@ -14,7 +14,7 @@ import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserAction;
+import org.btkj.web.util.action.UserOldAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -26,7 +26,7 @@ import org.rapid.util.lang.StringUtil;
  * 
  * @author ahab
  */
-public class MAIN_PAGE extends UserAction {
+public class MAIN_PAGE extends UserOldAction {
 	
 	@Resource
 	private AppService appService;

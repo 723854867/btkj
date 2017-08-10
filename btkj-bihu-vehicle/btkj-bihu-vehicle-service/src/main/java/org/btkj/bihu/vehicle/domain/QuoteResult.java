@@ -599,7 +599,7 @@ public class QuoteResult implements Serializable {
 		if (null != this.Item) {
 			result.setCompulsiveTotal(this.Item.ForceTotal);
 			result.setVehicleVesselTotal(this.Item.TaxTotal);
-			result.setCommericalTotal(this.Item.BizTotal);
+			result.setCommericialTotal(this.Item.BizTotal);
 			if (null != this.Item.CheSun && this.Item.CheSun.BaoE != 0) 
 				insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(this.Item.CheSun.BaoE, this.Item.CheSun.BaoFei));
 			if (null != this.Item.BuJiMianCheSun && this.Item.BuJiMianCheSun.BaoE != 0)

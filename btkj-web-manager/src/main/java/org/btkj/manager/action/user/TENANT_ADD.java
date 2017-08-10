@@ -9,7 +9,9 @@ import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.pojo.param.TenantAddParam;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.PhoneUtil;
 
 public class TENANT_ADD extends UserAction<TenantAddParam> {
 	
@@ -20,6 +22,9 @@ public class TENANT_ADD extends UserAction<TenantAddParam> {
 
 	@Override
 	protected Result<EmployeeTip> execute(AppPO app, UserPO user, TenantAddParam param) {
+		String mobile = param.getMobile();
+		mobile = Consts.SYMBOL_PLUS + PhoneUtil.getCountryCode(mobile) + PhoneUtil.getNationalNumber(mobile);
+		param.setMobile(mobile);
 		Result<EmployeeTip> result = tenantService.tenantAdd(app.getId(), param);
 		if (result.isSuccess())
 			jianJieService.addEmployee(result.attach().getName() + "-" + param.getTname(), result.attach().getIdentity(), result.attach().getId());

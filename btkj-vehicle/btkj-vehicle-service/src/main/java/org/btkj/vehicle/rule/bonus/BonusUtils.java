@@ -9,8 +9,9 @@ import java.util.Map.Entry;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.VehicleBizType;
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 
 public class BonusUtils {
 
@@ -21,9 +22,9 @@ public class BonusUtils {
 	 * @param coefficients
 	 * @return
 	 */
-	public static Map<Integer, Integer> noProfitCoacheCommercialSpinnerCheck(BonusSearcher searcher, List<VehicleCoefficient> coefficients) { 
-		Map<Integer, Integer> spinner = searcher.getRouteBody().getCommercialCommisionSpinner();
-		if (searcher.getBizType() == VehicleBizType.NO_PROFIT && null != spinner) {// 非营利客车
+	public static Map<Integer, Integer> noProfitCoacheCommercialSpinnerCheck(BonusPoundageEditParam param, List<VehicleCoefficient> coefficients) { 
+		Map<Integer, Integer> spinner = param.getRouteBody().getCommercialCommisionSpinner();
+		if (param.getBizType() == VehicleBizType.NO_PROFIT && null != spinner) {// 非营利客车
 			Iterator<Entry<Integer, Integer>> iterator = spinner.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<Integer, Integer> entry = iterator.next();
@@ -48,8 +49,8 @@ public class BonusUtils {
 	 * @param coefficients
 	 * @return
 	 */
-	public static List<VehicleCoefficientsInfo> noProfitCoacheCommercialCoefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, BonusSearcher searcher) { 
-		if (searcher.getBizType() == VehicleBizType.NO_PROFIT) {			// 非营利客车
+	public static List<VehicleCoefficientsInfo> noProfitCoacheCommercialCoefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) { 
+		if (param.getBizType() == VehicleBizType.NO_PROFIT) {			// 非营利客车
 			List<VehicleCoefficientsInfo> list = new ArrayList<VehicleCoefficientsInfo>();
 			for (CoefficientType type : CoefficientType.values()) {
 				VehicleCoefficientsInfo info = new VehicleCoefficientsInfo(type);

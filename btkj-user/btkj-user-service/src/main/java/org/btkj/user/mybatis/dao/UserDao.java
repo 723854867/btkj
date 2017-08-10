@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.mybatis.provider.UserSQLProvider;
-import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface UserDao extends DBMapper<Integer, UserPO> {
@@ -35,10 +35,10 @@ public interface UserDao extends DBMapper<Integer, UserPO> {
 	Map<Integer, UserPO> getByKeys(Collection<Integer> keys);
 	
 	@SelectProvider(type = UserSQLProvider.class, method = "count")
-	int count(UserSearcher searcher);
+	int count(UsersParam param);
 	
-	@SelectProvider(type = UserSQLProvider.class, method = "paging")
-	List<UserPO> paging(UserSearcher searcher);
+	@SelectProvider(type = UserSQLProvider.class, method = "users")
+	List<UserPO> users(UsersParam param);
 	
 	@Override
 	@UpdateProvider(type = UserSQLProvider.class, method = "update")

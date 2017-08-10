@@ -13,7 +13,6 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.EmployeeParam;
@@ -39,11 +38,13 @@ import org.btkj.user.pojo.info.UserPagingInfo;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.model.BonusScale.State;
 import org.btkj.user.pojo.param.AppEditParam;
+import org.btkj.user.pojo.param.BannerEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.EmployeesParam;
+import org.btkj.user.pojo.param.PlatformTenantSetParam;
 import org.btkj.user.pojo.param.TenantSetParam;
-import org.btkj.user.pojo.submit.TenantSearcher;
-import org.btkj.user.pojo.submit.UserSearcher;
+import org.btkj.user.pojo.param.TenantsParam;
+import org.btkj.user.pojo.param.UsersParam;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.BannerMapper;
@@ -85,13 +86,13 @@ public class UserManageServiceImpl implements UserManageService {
 	private ConfigManageService configManageService;
 	
 	@Override
-	public Result<Pager<UserPagingInfo>> userPaging(UserSearcher searcher) {
-		return Result.result(userMapper.paging(searcher));
+	public Result<Pager<UserPagingInfo>> users(UsersParam param) {
+		return Result.result(userMapper.users(param));
 	}
 
 	@Override
-	public Result<Pager<TenantPagingInfo>> tenantPaging(TenantSearcher searcher) {
-		Pager<TenantPagingInfo> pager = tenantMapper.paging(searcher);
+	public Result<Pager<TenantPagingInfo>> tenants(TenantsParam param) {
+		Pager<TenantPagingInfo> pager = tenantMapper.tenants(param);
 		Set<Integer> set1 = new HashSet<Integer>();
 		Set<Integer> set2 = new HashSet<Integer>();
 		for (TenantPagingInfo info : pager.getList()) {
@@ -100,7 +101,7 @@ public class UserManageServiceImpl implements UserManageService {
 				set2.add(((TenantPagingMasterInfo) info).getAppId());
 		}
 		Map<Integer, Region> regions = configService.regions(set1);
-		Map<Integer, AppPO> apps = searcher.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
+		Map<Integer, AppPO> apps = param.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
 		for (TenantPagingInfo info : pager.getList()) {
 			Region region = regions.remove(info.getRegionId());
 			info.setRegionName(null == region ? null : region.getName());
@@ -109,7 +110,7 @@ public class UserManageServiceImpl implements UserManageService {
 				((TenantPagingMasterInfo) info).setAppName(null == app ? null : app.getName());
 			}
 		}
-		return Result.result(tenantMapper.paging(searcher));
+		return Result.result(pager);
 	}
 	
 	@Override
@@ -200,7 +201,8 @@ public class UserManageServiceImpl implements UserManageService {
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (employee.getTid() != tid)
 			return Consts.RESULT.FORBID;
-		employee.setMod(param.getMod());
+		if (null != param.getMod())
+			employee.setMod(param.getMod());
 		employee.setCommercialRate(param.getCMRate());
 		employee.setCompulsoryRate(param.getCPRate());
 		employee.setUpdated(DateUtil.currentTime());
@@ -209,32 +211,33 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> bannerAdd(int appId, int tid, int idx, String icon, String link) {
-		Banner banner = EntityGenerator.newBanner(appId, tid, idx, icon, link);
-		try {
-			bannerMapper.insert(banner);
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.FAILURE;
+	public Result<Void> bannerEdit(BannerEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			Banner banner = EntityGenerator.newBanner(param);
+			try {
+				bannerMapper.insert(banner);
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
+			return Consts.RESULT.OK;
+		case UPDATE:
+			banner = bannerMapper.getByKey(param.getId());
+			if (null == banner)
+				return BtkjConsts.RESULT.BANNER_NOT_EXIST;
+			if (null != param.getIcon())
+				banner.setImage(param.getIcon());
+			if (null != param.getLink())
+				banner.setLink(param.getLink());
+			banner.setUpdated(DateUtil.currentTime());
+			bannerMapper.update(banner);
+			return Consts.RESULT.OK;
+		case DELETE:
+			bannerMapper.delete(param.getId());
+			return Consts.RESULT.OK;
+		default:
+			return Consts.RESULT.FORBID;
 		}
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> bannerEdit(int id, String icon, String link) {
-		Banner banner = bannerMapper.getByKey(id);
-		if (null == banner)
-			return BtkjConsts.RESULT.BANNER_NOT_EXIST;
-		banner.setImage(icon);
-		banner.setLink(link);
-		banner.setUpdated(DateUtil.currentTime());
-		bannerMapper.update(banner);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> bannerDelete(int id) {
-		bannerMapper.delete(id);
-		return Consts.RESULT.OK;
 	}
 	
 	@Override
@@ -262,24 +265,24 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(User user, int tid, String contacts, String contactsMobile, String tname, String license, String licenseImage, int expire) {
-		TenantPO tenant = tenantMapper.getByKey(tid);
+	public Result<Void> tenantSet(UserPO user, PlatformTenantSetParam param) {
+		TenantPO tenant = tenantMapper.getByKey(param.getTid());
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != user.getAppId())
 			return Consts.RESULT.FORBID;
-		if (StringUtil.hasText(contacts))
-			tenant.setContacts(contacts);
-		if (StringUtil.hasText(contactsMobile))
-			tenant.setContactsMobile(contactsMobile);
-		if (StringUtil.hasText(tname))
-			tenant.setName(tname);
-		if (StringUtil.hasText(license))
-			tenant.setLicense(license);
-		if (StringUtil.hasText(licenseImage))
-			tenant.setLicenseImage(licenseImage);
-		if (0 != expire)
-			tenant.setExpire(expire);
+		if (StringUtil.hasText(param.getContacts()))
+			tenant.setContacts(param.getContacts());
+		if (StringUtil.hasText(param.getContactsMobile()))
+			tenant.setContactsMobile(param.getContactsMobile());
+		if (StringUtil.hasText(param.getTname()))
+			tenant.setName(param.getTname());
+		if (StringUtil.hasText(param.getLicense()))
+			tenant.setLicense(param.getLicense());
+		if (StringUtil.hasText(param.getLicenseImage()))
+			tenant.setLicenseImage(param.getLicenseImage());
+		if (null != param.getExpire())
+			tenant.setExpire(param.getExpire());
 		tenant.setUpdated(DateUtil.currentTime());
 		tenantMapper.update(tenant);
 		return Consts.RESULT.OK;

@@ -1,12 +1,23 @@
 package org.btkj.lebaoba.vehicle.domain;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.rapid.util.lang.CollectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @XmlRootElement(name = "RETURN")
 public class OrderResult {
+	
+	private static final Logger logger = LoggerFactory.getLogger(OrderResult.class);
 
 	private int Commission;
 	// 投保状态 1，可投保（自动核保通过） 2，需修改（需要修复） 3，补资料（需要上传资料） 4，待审核（太平专有） 5，人工审核中 6.其他错误
@@ -62,6 +73,8 @@ public class OrderResult {
 	private AiErrorInfo aiErrorInfo;
 	// 商业险信息返回集合
 	private List<AmountItem> CommerceAmountList;
+	// 交强险信息返回集合
+	private List<AmountItem> CompulsoryAmountList;
 
 	@XmlElement(name = "Commission")
 	public int getCommission() {
@@ -288,6 +301,15 @@ public class OrderResult {
 		CommerceAmountList = commerceAmountList;
 	}
 	
+	@XmlElement(name = "CompulsoryAmountList")
+	public List<AmountItem> getCompulsoryAmountList() {
+		return CompulsoryAmountList;
+	}
+	
+	public void setCompulsoryAmountList(List<AmountItem> compulsoryAmountList) {
+		CompulsoryAmountList = compulsoryAmountList;
+	}
+	
 	@XmlElement(name = "cprModel")
 	public CprModel getCprModel() {
 		return cprModel;
@@ -305,8 +327,45 @@ public class OrderResult {
 	public void setAiErrorInfo(AiErrorInfo aiErrorInfo) {
 		this.aiErrorInfo = aiErrorInfo;
 	}
+	
+	public PolicySchema schema() {
+		PolicySchema schema = new PolicySchema();
+		schema.setCommericialTotal(null == CommerceTotalPremium ? 0 : Double.valueOf(CommerceTotalPremium));
+		schema.setCompulsiveTotal(null == CompulsoryTotalPremium ? 0 : Double.valueOf(CompulsoryTotalPremium));
+		if (!CollectionUtil.isEmpty(CommerceAmountList)) {
+			Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
+			for (AmountItem item : CommerceAmountList) {
+				LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
+				if (null == insurance) {
+					logger.error("未识别的乐保吧商业险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+					continue;
+				}
+				insurance.insuranceMapping(insurances, item);
+			}
+		}
+		if (!CollectionUtil.isEmpty(CompulsoryAmountList)) {
+			for (AmountItem item : CompulsoryAmountList) {
+				LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
+				if (null == insurance) {
+					logger.error("为识别的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+					continue;
+				}
+				switch (insurance) {
+				case J1:
+					break;
+				case CCS:
+					schema.setVehicleVesselTotal(null == item.getPremium() ? 0 : Double.valueOf(item.getPremium()));
+					break;
+				default:
+					logger.error("错误的的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+					break;
+				}
+			}
+		}
+		return schema;
+	}
 
-	private class AmountItem {
+	public class AmountItem {
 		private String BenchMarkPremium; // 折扣前保费
 		private String InsuranceCode; // 险种代码
 		private String InsuranceName; // 险种名字
@@ -429,7 +488,7 @@ public class OrderResult {
 		}
 	}
 
-	private class AiErrorInfo {
+	public class AiErrorInfo {
 		private String Id;
 		// 车牌
 		private String LicenseNo;
@@ -437,8 +496,7 @@ public class OrderResult {
 		private String VIN;
 		// 1报价成功，2报价失败
 		private int QuoteResult;
-		// 错误类型 1 重复投保错误信息，2不能购买险种错误信息，3 必须购买险种信息，4 保额错误信息，5 握手错误信息，6 其它错误类别,7
-		// 过户车错误类型，8 车型错误类型，9 人保跟单折扣错误，多个错误请以|分割 如1|2|3
+		// 错误类型 1 重复投保错误信息，2不能购买险种错误信息，3 必须购买险种信息，4 保额错误信息，5 握手错误信息，6 其它错误类别,7过户车错误类型，8 车型错误类型，9 人保跟单折扣错误，多个错误请以|分割 如1|2|3
 		private String ErrorType;
 		// 报价流水号（保单的ID）
 		private String QuoteNo;

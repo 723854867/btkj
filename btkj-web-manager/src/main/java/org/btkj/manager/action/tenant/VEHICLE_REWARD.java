@@ -162,7 +162,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 	private LogScore _managerLogScore(Map<String, BonusManageConfig> configs, int employeeId, VehicleOrder order, InsuranceType type, int depth) {
 		BonusManageConfigType manageConfigType = null;
 		PolicySchema schema = order.getTips().getSchema();
-		double quota = type == InsuranceType.COMMERCIAL ? schema.getCommericalTotal() : schema.getCompulsiveTotal();
+		double quota = type == InsuranceType.COMMERCIAL ? schema.getCommericialTotal() : schema.getCompulsiveTotal();
 		if (0 == quota)
 			return null;
 		switch (order.getTips().getVehicleUsedType()) {

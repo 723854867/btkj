@@ -12,10 +12,11 @@ import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.po.BonusConfig;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.BonusSearcher;
 import org.btkj.vehicle.mongo.BonusConfigMapper;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
@@ -62,24 +63,24 @@ public class BonusManager {
 		return routeView;
 	}
 	
-	public Result<Void> bonusSettings(BonusSearcher searcher) {
-		String path = searcher.getPath();
+	public Result<Void> bonusPoundageEdit(BonusPoundageEditParam param) {
+		String path = param.getPath();
 		LinkedList<String> paths = CollectionUtil.toStrLinkedList(path.split(Consts.SYMBOL_UNDERLINE));
 		String nextId = paths.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);
 		if (null == route)
 			return Consts.RESULT.FAILURE;
-		BonusConfig config = bonusConfigMapper.getByKey(searcher.getId());
-		if (!searcher.isDelete() && null == config)
-			config = new BonusConfig(searcher.getTid(), searcher.getInsurerId());
-		if (searcher.isDelete() && null == config)
+		BonusConfig config = bonusConfigMapper.getByKey(param.getId());
+		if (!param.isDelete() && null == config)
+			config = new BonusConfig(param.getTid(), param.getInsurerId());
+		if (param.isDelete() && null == config)
 			return Consts.RESULT.FAILURE;
 		
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
-		coefficients.addAll(vehicleCoefficientMapper.getByTid(searcher.getTid()));
-		Result<Void> result = searcher.isDelete() ? route.delete(paths, config) : route.settings(paths, config, searcher, coefficients);
+		coefficients.addAll(vehicleCoefficientMapper.getByTid(param.getTid()));
+		Result<Void> result = param.isDelete() ? route.delete(paths, config) : route.settings(paths, config, param, coefficients);
 		if (result.isSuccess()) {
-			if (searcher.isDelete()) {
+			if (param.isDelete()) {
 				if ((null == config.getChildren() || config.getChildren().isEmpty()))
 					bonusConfigMapper.delete(config.get_id());
 				else
@@ -90,17 +91,19 @@ public class BonusManager {
 		return result;
 	}
 	
-	public Result<List<VehicleCoefficientsInfo>> coefficients(BonusSearcher searcher) {
-		LinkedList<String> path = CollectionUtil.toStrLinkedList(searcher.getPath().split(Consts.SYMBOL_UNDERLINE));
+	public Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param) {
+		LinkedList<String> path = CollectionUtil.toStrLinkedList(param.getPath().split(Consts.SYMBOL_UNDERLINE));
 		String nextId = path.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);
 		if (null == route)
 			return Consts.RESULT.FAILURE;
-		BonusConfig config = bonusConfigMapper.getByKey(searcher.getId());
+		BonusConfig config = bonusConfigMapper.getByKey(param.getId());
+		if (null == config)
+			return Consts.RESULT.FAILURE;
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
-		coefficients.addAll(vehicleCoefficientMapper.getByTid(searcher.getTid()));
+		coefficients.addAll(vehicleCoefficientMapper.getByTid(param.getTid()));
 		// 车牌省份过滤
-		String provinceAbbreviation = 0 == searcher.getSubordinateProvince() ? null : StringUtil.provinceAbbreviation(searcher.getSubordinateProvince());
+		String provinceAbbreviation = 0 == param.getSubordinateProvince() ? null : StringUtil.provinceAbbreviation(param.getSubordinateProvince());
 		if (null != provinceAbbreviation) {
 			Iterator<VehicleCoefficient> iterator = coefficients.iterator();
 			while (iterator.hasNext()) {
@@ -111,7 +114,7 @@ public class BonusManager {
 					iterator.remove();
 			}
 		}
-		return Result.result(route.coefficients(path, config, coefficients, searcher));
+		return Result.result(route.coefficients(path, config, coefficients, param));
 	}
 	
 	/**

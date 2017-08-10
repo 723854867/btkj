@@ -1,19 +1,25 @@
-package org.btkj.pojo.vo;
+package org.btkj.vehicle.pojo.param;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.VehicleBizType;
+import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.Consts;
 
-public class BonusSearcher {
+public class BonusPoundageEditParam extends EmployeeParam {
+
+	private static final long serialVersionUID = 2678424434239627957L;
 
 	private int tid;
-	private int subordinateProvince;			// 所属省份行政区划代码
+	@NotNull
 	private String path;
+	@Min(1)
 	private int insurerId;
 	private boolean delete;
-	private BonusRouteBody routeBody;
-	
 	private VehicleBizType bizType;
+	private BonusRouteBody routeBody;
 	
 	public int getTid() {
 		return tid;
@@ -21,14 +27,6 @@ public class BonusSearcher {
 	
 	public void setTid(int tid) {
 		this.tid = tid;
-	}
-	
-	public int getSubordinateProvince() {
-		return subordinateProvince;
-	}
-	
-	public void setSubordinateProvince(int subordinateProvince) {
-		this.subordinateProvince = subordinateProvince;
 	}
 	
 	public String getPath() {

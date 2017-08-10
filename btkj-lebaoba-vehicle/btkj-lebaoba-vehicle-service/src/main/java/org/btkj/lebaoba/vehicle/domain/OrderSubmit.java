@@ -5,6 +5,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.btkj.pojo.bo.PolicySchema;
+import org.rapid.util.lang.DateUtil;
+
 @XmlRootElement(name = "CheXianXML")
 public class OrderSubmit {
 
@@ -128,8 +131,19 @@ public class OrderSubmit {
 	public void setVehicleInsurance(List<VehicleInsuranceItem> vehicleInsurance) {
 		VehicleInsurance = vehicleInsurance;
 	}
+	
+	public static final OrderSubmit instance(String username, String password, String productCode, PolicySchema schema) {
+		OrderSubmit submit = new OrderSubmit();
+		submit.setProductCode(productCode);
+		
+		LogUser logUser = new LogUser();
+		logUser.setUsername(username);
+		logUser.setPassword(password);
+		submit.setLogUser(logUser);
+		return submit;
+	}
 
-	public static class LogUser {
+	private static class LogUser {
 		private String Username;
 		private String Password;
 		@XmlElement(name = "Username")
