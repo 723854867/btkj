@@ -2,7 +2,6 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +30,7 @@ public class VehicleCoefficientMapper extends RedisDBAdapter<Integer, VehicleCoe
 			return new ArrayList<VehicleCoefficient>(map.values());
 		List<byte[]> list = redis.hmsget(redisKey, _tenantSetKey(tid));
 		if (null == list)
-			return Collections.EMPTY_LIST;
+			return CollectionUtil.emptyArrayList();
 		List<VehicleCoefficient> l = new ArrayList<VehicleCoefficient>();
 		for (byte[] buffer : list)
 			l.add(serializer.antiConvet(buffer));

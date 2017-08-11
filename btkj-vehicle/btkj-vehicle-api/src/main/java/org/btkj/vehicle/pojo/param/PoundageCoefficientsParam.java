@@ -1,8 +1,5 @@
 package org.btkj.vehicle.pojo.param;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
 import org.btkj.pojo.enums.VehicleBizType;
 import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.Consts;
@@ -12,10 +9,8 @@ public class PoundageCoefficientsParam extends EmployeeParam {
 	private static final long serialVersionUID = -1366507633291810740L;
 
 	private int tid;
-	@NotNull
 	private String path;
 	private boolean all;
-	@Min(1)
 	private int insurerId;
 	private VehicleBizType bizType;
 	private int subordinateProvince;

@@ -302,7 +302,7 @@ public class VehicleServiceImpl implements VehicleService {
 	public List<Integer> insurers(int tid) {
 		List<Route> list = routeMapper.getByTid(tid);
 		if (CollectionUtil.isEmpty(list))
-			return Collections.EMPTY_LIST;
+			return CollectionUtil.emptyArrayList();
 		List<Integer> l = new ArrayList<Integer>();
 		for (Route route : list)
 			l.add(route.getInsurerId());

@@ -98,8 +98,8 @@ public class BonusManager {
 		if (null == route)
 			return Consts.RESULT.FAILURE;
 		BonusConfig config = bonusConfigMapper.getByKey(param.getId());
-		if (null == config)
-			return Consts.RESULT.FAILURE;
+//		if (null == config)
+//			return Result.result(Collections.EMPTY_LIST);
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
 		coefficients.addAll(vehicleCoefficientMapper.getByTid(param.getTid()));
 		// 车牌省份过滤

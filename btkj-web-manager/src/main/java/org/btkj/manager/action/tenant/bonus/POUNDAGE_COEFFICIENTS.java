@@ -60,7 +60,7 @@ public class POUNDAGE_COEFFICIENTS extends EmployeeAction<PoundageCoefficientsPa
 			return Result.result(new ArrayList<VehicleCoefficientsInfo>(map.values()));
 		} else {
 			param.setTid(tenant.getTid());
-			Region region = configService.subordinateProvince(param.getTid());
+			Region region = configService.subordinateProvince(tenant.getRegion());
 			param.setSubordinateProvince(null == region ? 0 : region.getId());
 			return bonusService.poundageCoefficients(param);
 		}

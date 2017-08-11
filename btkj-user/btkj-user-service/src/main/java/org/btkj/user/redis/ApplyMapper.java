@@ -2,7 +2,6 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.btkj.pojo.bo.Pager;
@@ -66,7 +65,7 @@ public class ApplyMapper extends RedisMapper<String, ApplyInfo> {
 	public List<Integer> applyTenants(int uid) {
 		List<byte[]> list = redis.hzget(_userListKey(uid), redisKey, 0, -1);
 		if (CollectionUtil.isEmpty(list))
-			return Collections.EMPTY_LIST;
+			return CollectionUtil.emptyArrayList();
 		List<Integer> l = new ArrayList<Integer>(list.size());
 		for (byte[] buffer : list) 
 			l.add(serializer.antiConvet(buffer).getTid());

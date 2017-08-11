@@ -194,6 +194,27 @@ public class OrderSubmit {
 		vehicleInfo.setTransferFlag(tips.isTransfer() ? 1 : 0);
 		vehicleInfo.setTransferFlagTime(!StringUtil.hasText(tips.getIssueDate()) ? null : DateUtil.convert(tips.getIssueDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 		vehicleInfo.setUseNature(_useNature(tips.getVehicleUsedType()));
+		vehicleInfo.setModelCode(tips.getName());
+		vehicleInfo.setLicenseTypeCode("02");			// 默认小型汽车
+		vehicleInfo.setCarTypeCode("K33");
+		vehicleInfo.setVehicleType(1);
+		vehicleInfo.setVehicleTypeCode("A012");
+		vehicleInfo.setPrice(String.valueOf(tips.getPrice()));
+		vehicleInfo.setPriceNoTax(String.valueOf(tips.getPriceNoTax()));
+		vehicleInfo.setYear(String.valueOf(tips.getYear()));
+		vehicleInfo.setSeat(tips.getSeat());
+		vehicleInfo.setExhaust(tips.getExhaust());
+		vehicleInfo.setLoadWeight(tips.getLoad());
+		UnitInfo owner = new UnitInfo();
+		unit = tips.getOwner();
+		owner.setIdType(LeBaoBaIdType.convert(unit.getIdType()).mark());
+		owner.setName(unit.getName());
+		owner.setIdNo(unit.getIdNo());
+		owner.setMobile(unit.getMobile());
+		customerType = CustomerType.convert(unit.getType());
+		owner.setCustomerType(null == customerType ? "01" : customerType.mark());
+		vehicleInfo.setCarOwnerInfo(owner);
+		submit.setVehicleInfo(vehicleInfo);
 		return submit;
 	}
 	
