@@ -5,8 +5,12 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 
 @XmlRootElement(name = "CheXianXML")
 public class OrderSubmit {
@@ -19,6 +23,7 @@ public class OrderSubmit {
 	private String CompulsoryPolicyBeginDate;
 	private String CommercePolicyEndDate;
 	private String commercePolicyBeginDate;
+	private String rateTemp;					// 无赔优惠系数
 	private VehicleInfo vehicleInfo;
 	private InsuredInfo BeInsuredInfo;
 	private InsuredInfo ToInsuredInfo;
@@ -95,6 +100,15 @@ public class OrderSubmit {
 	public void setCommercePolicyBeginDate(String commercePolicyBeginDate) {
 		this.commercePolicyBeginDate = commercePolicyBeginDate;
 	}
+	
+	@XmlElement(name = "rateTemp")
+	public String getRateTemp() {
+		return rateTemp;
+	}
+	
+	public void setRateTemp(String rateTemp) {
+		this.rateTemp = rateTemp;
+	}
 
 	@XmlElement(name = "vehicleInfo")
 	public VehicleInfo getVehicleInfo() {
@@ -132,15 +146,70 @@ public class OrderSubmit {
 		VehicleInsurance = vehicleInsurance;
 	}
 	
-	public static final OrderSubmit instance(String username, String password, String productCode, PolicySchema schema) {
+	public static final OrderSubmit instance(String username, String password, String productCode, VehiclePolicyTips tips) {
+		PolicySchema schema = tips.getSchema();
 		OrderSubmit submit = new OrderSubmit();
 		submit.setProductCode(productCode);
+		if (StringUtil.hasText(schema.getCommercialStart())) {
+			submit.setCommercePolicyBeginDate(DateUtil.convert(schema.getCommercialStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			submit.setCommercePolicyEndDate(DateUtil.dateOyearTail(schema.getCommercialStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			schema.setCommercialEnd(DateUtil.convert(submit.getCommercePolicyEndDate(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		}
+		if (StringUtil.hasText(schema.getCompulsiveStart())) {
+			submit.setCompulsoryPolicyBeginDate(DateUtil.convert(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			submit.setCompulsoryPolicyBeginDate(DateUtil.dateOyearTail(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			schema.setCompulsiveEnd(DateUtil.convert(submit.getCompulsoryPolicyEndDate(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		}
 		
 		LogUser logUser = new LogUser();
 		logUser.setUsername(username);
 		logUser.setPassword(password);
 		submit.setLogUser(logUser);
+		
+		InsuredInfo insuredInfo = new InsuredInfo();
+		InsurUnit unit = tips.getInsured();
+		insuredInfo.setIdType(LeBaoBaIdType.convert(unit.getIdType()).mark());
+		insuredInfo.setName(unit.getName());
+		insuredInfo.setIdNo(unit.getIdNo());
+		insuredInfo.setMobile(unit.getMobile());
+		CustomerType customerType = CustomerType.convert(unit.getType());
+		insuredInfo.setCustomerType(null == customerType ? "01" : customerType.mark());
+		submit.setBeInsuredInfo(insuredInfo);
+		
+		insuredInfo = new InsuredInfo();
+		unit = tips.getInsurer();
+		insuredInfo.setIdType(LeBaoBaIdType.convert(unit.getIdType()).mark());
+		insuredInfo.setName(unit.getName());
+		insuredInfo.setIdNo(unit.getIdNo());
+		insuredInfo.setMobile(unit.getMobile());
+		customerType = CustomerType.convert(unit.getType());
+		insuredInfo.setCustomerType(null == customerType ? "01" : customerType.mark());
+		submit.setToInsuredInfo(insuredInfo);
+		
+		VehicleInfo vehicleInfo = new VehicleInfo();
+		vehicleInfo.setLicenseNo(tips.getLicense());
+		vehicleInfo.setVin(tips.getVin());
+		vehicleInfo.setEngineNo(tips.getEngine());
+		vehicleInfo.setEnrollDate(DateUtil.convert(tips.getEnrollDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		vehicleInfo.setTransferFlag(tips.isTransfer() ? 1 : 0);
+		vehicleInfo.setTransferFlagTime(!StringUtil.hasText(tips.getIssueDate()) ? null : DateUtil.convert(tips.getIssueDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		vehicleInfo.setUseNature(_useNature(tips.getVehicleUsedType()));
 		return submit;
+	}
+	
+	private static int _useNature(VehicleUsedType usedType) {
+		switch (usedType) {
+		case HOME_USE:
+		case ENTERPRISE:
+		case ORGAN:
+		case NO_BIZ_TRUCK:
+		case MOTOR:
+		case PARTICULAR:
+		case TRACTOR:
+			return 2;
+		default:
+			return 1;
+		}
 	}
 
 	private static class LogUser {

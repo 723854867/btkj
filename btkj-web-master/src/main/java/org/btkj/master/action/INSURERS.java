@@ -5,19 +5,19 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.master.LoggedAction;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.pojo.param.Param;
 import org.btkj.pojo.po.Insurer;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class INSURERS extends LoggedAction {
+public class INSURERS extends AdminAction<Param> {
 	
 	@Resource
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<List<Insurer>> execute(Request request, Administrator operator) {
+	protected Result<List<Insurer>> execute(Administrator admin, Param param) {
 		return Result.result(configManageService.insurers());
 	}
 }

@@ -7,18 +7,18 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.pojo.info.AreaInfo;
-import org.btkj.master.LoggedAction;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
-import org.btkj.web.util.Request;
+import org.btkj.pojo.param.Param;
 import org.rapid.util.common.message.Result;
 
-public class AREAS extends LoggedAction {
+public class AREAS extends AdminAction<Param> {
 	
 	@Resource
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<List<AreaInfo>> execute(Request request, Administrator operator) {
+	protected Result<List<AreaInfo>> execute(Administrator admin, Param param) {
 		return Result.result(new ArrayList<AreaInfo>(configManageService.areas().values()));
 	}
 }

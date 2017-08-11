@@ -106,6 +106,8 @@ public interface BtkjConsts {
 		final int MIN_COMMISION_RETAIN_RATE				= -100;
 		final int MIN_RENEWAL_PERIOD					= 30;
 		final int MAX_RENEWAL_PERIOD					= 90;
+		final int MIN_PWD								= 6;
+		final int MAX_PWD								= 30;
 	}
 	
 	interface LOCKS {

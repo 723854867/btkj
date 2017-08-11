@@ -91,6 +91,7 @@ public class BiHuParams extends TreeMap<String, String> {
 			setCanShowExhaustScale(1);
 			setShowXiuLiChangeType(1);
 			setTimeFormat(1);
+			setShowAutoMoldCode(1);
 			break;
 		case QUOTE_RESULT:
 			setTimeFormat(1);

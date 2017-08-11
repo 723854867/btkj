@@ -10,6 +10,7 @@ import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.param.ApiEditParam;
+import org.btkj.config.pojo.param.AreaEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtil;
@@ -32,12 +33,12 @@ public class EntityGenerator {
 		return insurer;
 	}
 	
-	public static final Area newArea(int code, int renewalPeriod, int biHuId, boolean priceNoTax) {
+	public static final Area newArea(AreaEditParam param) {
 		Area area = new Area();
-		area.setCode(code);
-		area.setRenewalPeriod(renewalPeriod);
-		area.setVehiclePriceNoTax(priceNoTax);
-		area.setBiHuId(biHuId);
+		area.setCode(param.getCode());
+		area.setRenewalPeriod(param.getRenewalPeriod());
+		area.setVehiclePriceNoTax(param.getPriceNoTax());
+		area.setBiHuId(param.getBiHuId());
 		
 		int time = DateUtil.currentTime();
 		area.setCreated(time);

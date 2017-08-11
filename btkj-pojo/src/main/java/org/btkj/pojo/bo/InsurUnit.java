@@ -14,7 +14,7 @@ public class InsurUnit implements Serializable {
 
 	private static final long serialVersionUID = 4769388048627555288L;
 
-	private VehicleUnitType type;				// 类型
+	private VehicleUnitType type;		// 类型
 	private String name;				// 名称
 	private String mobile;				// 手机号：如果是单位则一般是联系人的手机号
 	private IDType idType;				// 证件类型

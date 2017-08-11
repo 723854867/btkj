@@ -1,16 +1,16 @@
 package org.btkj.master.action;
 
-import org.btkj.master.LoggedAction;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class LOGOUT extends LoggedAction {
+public class LOGOUT extends AdminAction<Param> {
 
 	@Override
-	protected Result<?> execute(Request request, Administrator administrator) {
-		cloudService.logout(request.getHeader(Params.TOKEN));
+	protected Result<Void> execute(Administrator admin, Param param) {
+		cloudService.logout(request().getHeader(Params.TOKEN));
 		return Result.success();
 	}
 }

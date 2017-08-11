@@ -10,6 +10,7 @@ import org.btkj.master.mybatis.dao.AdministratorDao;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.param.Param;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
@@ -40,9 +41,9 @@ public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, 
 		return null == data ? null : serializer.antiConvet(data);
 	}
 	
-	public Result<Pager<Administrator>> paging(int page, int pageSize) {
+	public Result<Pager<Administrator>> admins(Param param) {
 		checkLoad();
-		List<byte[]> list = redis.hpaging(TIME_ZSET, redisKey, page, pageSize, RedisConsts.OPTION_ZREVRANGE);
+		List<byte[]> list = redis.hpaging(TIME_ZSET, redisKey, param.getPage(), param.getPageSize(), RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));

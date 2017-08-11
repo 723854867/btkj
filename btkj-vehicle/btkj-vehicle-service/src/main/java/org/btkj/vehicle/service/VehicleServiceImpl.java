@@ -139,6 +139,9 @@ public class VehicleServiceImpl implements VehicleService {
 		}
 		renewalMapper.insert(renewal);
 	}
+	
+	private void _vehicleInfBind(Renewal renewal) {
+	}
 
 	@Override
 	public Result<Void> order(int quoteMod, int insureMod, Employee employee, VehiclePolicyTips tips, String vehicleId) {

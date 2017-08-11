@@ -1,12 +1,14 @@
 package org.btkj.master.api;
 
 import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.param.AdminEditParam;
 import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.param.Param;
 import org.rapid.util.common.message.Result;
 
 public interface MasterService {
 
-	Result<Pager<Administrator>> administrators(int page, int pageSize);
+	Result<Pager<Administrator>> admins(Param param);
 	
-	int administraorAdd(String name, String pwd);
+	Result<?> adminEdit(AdminEditParam param);
 }

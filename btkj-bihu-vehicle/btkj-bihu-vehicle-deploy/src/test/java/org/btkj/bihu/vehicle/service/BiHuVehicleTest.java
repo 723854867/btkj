@@ -15,7 +15,7 @@ public class BiHuVehicleTest extends BaseTest {
 	
 	@Test
 	public void testRenewal() {
-		Result<Renewal> result = biHuVehicle.renewal(1, 4, "皖J00740", 9);
+		Result<Renewal> result = biHuVehicle.renewal(1, 1, "浙AXG123", 9);
 		System.out.println(result);
 	}
 }

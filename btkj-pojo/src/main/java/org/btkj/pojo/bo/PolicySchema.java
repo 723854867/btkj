@@ -19,9 +19,6 @@ public class PolicySchema implements Serializable {
 	private String compulsiveEnd;				// 交强险到期时间
 	
 	private String noLossDiscountRate;			// 无赔款优惠系数
-	private double autoChannelRate;				// 自主渠道系数
-	private double autoUnderwritingRate;		// 自主核保系数
-	private double trafficViolationRate;		// 交通违法系数 
 	
 	private Map<CommercialInsuranceType, Insurance> insurances;
 	
@@ -87,30 +84,6 @@ public class PolicySchema implements Serializable {
 
 	public void setNoLossDiscountRate(String noLossDiscountRate) {
 		this.noLossDiscountRate = noLossDiscountRate;
-	}
-
-	public double getAutoChannelRate() {
-		return autoChannelRate;
-	}
-
-	public void setAutoChannelRate(double autoChannelRate) {
-		this.autoChannelRate = autoChannelRate;
-	}
-
-	public double getAutoUnderwritingRate() {
-		return autoUnderwritingRate;
-	}
-
-	public void setAutoUnderwritingRate(double autoUnderwritingRate) {
-		this.autoUnderwritingRate = autoUnderwritingRate;
-	}
-
-	public double getTrafficViolationRate() {
-		return trafficViolationRate;
-	}
-
-	public void setTrafficViolationRate(double trafficViolationRate) {
-		this.trafficViolationRate = trafficViolationRate;
 	}
 
 	public Map<CommercialInsuranceType, Insurance> getInsurances() {

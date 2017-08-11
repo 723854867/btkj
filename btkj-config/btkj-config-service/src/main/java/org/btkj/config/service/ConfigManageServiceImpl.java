@@ -22,6 +22,7 @@ import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.config.pojo.param.ApiEditParam;
+import org.btkj.config.pojo.param.AreaEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
@@ -114,29 +115,36 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		}
 		return map;
 	}
-	
 	@Override
-	public Result<Void> areaAdd(int code, int renewalPeriod, int biHuId, boolean priceNoTax) {
-		Area area = EntityGenerator.newArea(code, renewalPeriod, biHuId, priceNoTax);
-		try {
-			areaMapper.insert(area);
+	public Result<Void> areaEdit(AreaEditParam param) {
+		switch (param.getType()) {
+		case CREATE:
+			Region region = regionMapper.getByKey(param.getCode());
+			if (null == region)
+				return BtkjConsts.RESULT.REGION_NOT_EXIST;
+			Area area = EntityGenerator.newArea(param);
+			try {
+				areaMapper.insert(area);
+				return Consts.RESULT.OK;
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
+		case UPDATE:
+			area = areaMapper.getByKey(param.getCode());
+			if (null == area)
+				return BtkjConsts.RESULT.AREA_NOT_EXIST;
+			if (null != param.getBiHuId())
+				area.setBiHuId(param.getBiHuId());
+			if (null != param.getRenewalPeriod())
+				area.setRenewalPeriod(param.getRenewalPeriod());
+			if (null != param.getPriceNoTax())
+				area.setVehiclePriceNoTax(param.getPriceNoTax());
+			area.setUpdated(DateUtil.currentTime());
+			areaMapper.update(area);
 			return Consts.RESULT.OK;
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
+		default:
+			return Consts.RESULT.FORBID;
 		}
-	}
-	
-	@Override
-	public Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId, boolean priceNoTax) {
-		Area area = areaMapper.getByKey(code);
-		if (null == area)
-			return BtkjConsts.RESULT.AREA_NOT_EXIST;
-		area.setBiHuId(biHuId);
-		area.setRenewalPeriod(renewalPeriod);
-		area.setUpdated(DateUtil.currentTime());
-		area.setVehiclePriceNoTax(priceNoTax);
-		areaMapper.update(area);
-		return Consts.RESULT.OK;
 	}
 	
 	@Override

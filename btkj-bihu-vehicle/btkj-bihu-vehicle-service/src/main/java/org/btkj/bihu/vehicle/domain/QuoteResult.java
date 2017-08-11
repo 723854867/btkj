@@ -641,9 +641,6 @@ public class QuoteResult implements Serializable {
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		}
 		result.setNoLossDiscountRate(this.Item.RateFactor1);
-		result.setAutoChannelRate(this.Item.RateFactor2);
-		result.setAutoUnderwritingRate(this.Item.RateFactor3);
-		result.setTrafficViolationRate(this.Item.RateFactor4);
 		result.setInsurances(insurances.isEmpty() ? null : insurances);
 		return Result.result(result);
 	}

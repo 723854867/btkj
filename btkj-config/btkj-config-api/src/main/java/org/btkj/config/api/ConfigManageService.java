@@ -9,6 +9,7 @@ import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.config.pojo.param.ApiEditParam;
+import org.btkj.config.pojo.param.AreaEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.message.Result;
@@ -52,24 +53,12 @@ public interface ConfigManageService {
 	Map<Integer, AreaInfo> areas();
 	
 	/**
-	 * 新增地区
+	 * 地区编辑
 	 * 
-	 * @param code
-	 * @param renewalPeriod
-	 * @param biHuId
+	 * @param param
 	 * @return
 	 */
-	Result<Void> areaAdd(int code, int renewalPeriod, int biHuId, boolean priceNoTax);
-	
-	/**
-	 * 修改地区
-	 * 
-	 * @param code
-	 * @param renewalPeriod
-	 * @param biHuId
-	 * @return
-	 */
-	Result<Void> areaUpdate(int code, int renewalPeriod, int biHuId, boolean priceNoTax);
+	Result<Void> areaEdit(AreaEditParam param);
 	
 	/**
 	 * api 列表
