@@ -21,6 +21,8 @@ public class VEHICLE_ORDERS extends EmployeeAction<VehicleOrdersParam> {
 	@Override
 	protected Result<Pager<VehicleOrderListInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleOrdersParam param) {
 		param.setUid(user.getUid());
+		param.setAppId(app.getId());
+		param.setTid(tenant.getTid());
 		param.setEmployeeId(employee.getId());
 		return Result.result(vehicleService.orders(tenant.getRegion(), param));
 	}
