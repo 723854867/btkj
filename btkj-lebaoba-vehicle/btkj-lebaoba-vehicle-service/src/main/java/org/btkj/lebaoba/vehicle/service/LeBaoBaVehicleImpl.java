@@ -82,7 +82,7 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 
 	@Override
 	public Result<PolicySchema> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips) {
-		OrderSubmit submit = new OrderSubmit();
+		OrderSubmit submit = OrderSubmit.instance(username, password, "PAZYCX", tips);
 		String xml = SerializeUtil.XmlUtil.beanToXml(submit, Consts.UTF_8.name());
 		xml = DesUtil.EncryptDES(xml, desKey);
 		xml = new String(Base64.encodeBase64(xml.getBytes()));

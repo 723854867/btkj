@@ -157,7 +157,7 @@ public class OrderSubmit {
 		}
 		if (StringUtil.hasText(schema.getCompulsiveStart())) {
 			submit.setCompulsoryPolicyBeginDate(DateUtil.convert(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
-			submit.setCompulsoryPolicyBeginDate(DateUtil.dateOyearTail(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			submit.setCompulsoryPolicyEndDate(DateUtil.dateOyearTail(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 			schema.setCompulsiveEnd(DateUtil.convert(submit.getCompulsoryPolicyEndDate(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 		}
 		

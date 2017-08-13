@@ -1,23 +1,12 @@
 package org.btkj.lebaoba.vehicle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.btkj.lebaoba.BaseTest;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
-import org.btkj.pojo.bo.InsurUnit;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.IDType;
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleTypeCode;
-import org.btkj.pojo.enums.VehicleUnitType;
-import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.junit.Test;
+import org.rapid.util.common.serializer.SerializeUtil;
 
 public class LeBaoBaVehicleTest extends BaseTest {
 
@@ -29,43 +18,77 @@ public class LeBaoBaVehicleTest extends BaseTest {
 		leBaoBaVehicle.vehicleInfos("WBSDX9108BE370935");
 	}
 	
+	@Test
 	public void testOrder() {
-		VehiclePolicyTips tips = new VehiclePolicyTips();
-		tips.setLicense("浙AXG123");
-		tips.setVin("LFV3A23C4A3042594");
-		tips.setEngine("191318");
-		tips.setEnrollDate("2010-08-01");
-		tips.setTransfer(false);
-		tips.setVehicleUsedType(VehicleUsedType.HOME_USE);
-		tips.setSeat(5);
-		tips.setYear(2009);
-		tips.setName("迈腾FV7187TDQG轿车");
-		tips.setPrice(244000);
-		tips.setPriceNoTax(224800);
-		tips.setLoad("0");
-		tips.setExhaust("1.798");
-		tips.setTransmissionName("DSG 豪华型 涡轮增压 国Ⅳ");
-		tips.setVehicleId("6227521");
-		tips.setVehicleType(VehicleType.COACH);
-		tips.setVehicleTypeCode(VehicleTypeCode.A012);
-		
-		InsurUnit owner = new InsurUnit();
-		owner.setType(VehicleUnitType.PERSONAL);
-		owner.setIdType(IDType.IDENTITY);
-		owner.setName("郭海滨");
-		owner.setMobile("13295815927");
-		owner.setIdNo("330106198112040434");
-		tips.setOwner(owner);
-		tips.setInsurer(owner);
-		tips.setInsured(owner);
-		
-		PolicySchema schema = new PolicySchema();
-		schema.setCommercialStart("2017-08-19 00:00:00");
-		schema.setCompulsiveStart("2017-08-19 00:00:00");
-		Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
-		insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(1));
-		insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(1));
-		schema.setInsurances(insurances);
-		tips.setSchema(schema);
+		String json = "{"
+						+ "\"vehicleUsedType\":\"HOME_USE\","
+						+ "\"name\":\"五菱LZW6407BF客车\","
+						+ "\"license\":\"浙A229TF\","
+						+ "\"vin\":\"LZWACAGA5C7161890\","
+						+ "\"engine\":\"UC82020095\","
+						+ "\"enrollDate\":\"2012-08-29\","
+						+ "\"seat\":7,"
+						+ "\"transfer\":false,"
+						+ "\"owner\":{"
+							+ "\"type\":\"PERSONAL\","
+							+ "\"mobile\":\"18811112222\","
+							+ "\"name\":\"汪乃平\","
+							+ "\"idType\":\"IDENTITY\","
+							+ "\"idNo\":\"34282219690707151X\""
+						+ "},"
+							+ "\"insurer\":{"
+							+ "\"type\":\"PERSONAL\","
+							+ "\"mobile\":\"18811112222\","
+							+ "\"name\":\"汪乃平\","
+							+ "\"idType\":\"IDENTITY\","
+							+ "\"idNo\":\"34282219690707151X\""
+						+ "},"
+						+ "\"insured\":{"
+							+ "\"type\":\"PERSONAL\","
+							+ "\"mobile\":\"18811112222\","
+							+ "\"name\":\"汪乃平\","
+							+ "\"idType\":\"IDENTITY\","
+							+ "\"idNo\":\"34282219690707151X\""
+						+ "},"
+						+ "\"schema\":{"
+							+ "\"compulsiveStart\":\"2017-08-30 00:00:00\","
+							+ "\"commercialStart\":\"2017-08-30 00:00:00\","
+							+ "\"insurances\":{"
+								+ "\"DAMAGE\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":1"
+								+ "},"
+								+ "\"DAMAGE_DEDUCTIBLE\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":1"
+								+ "},"
+								+ "\"THIRD\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":500000"
+								+ "},"
+								+ "\"THIRD_DEDUCTIBLE\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":1}"
+								+ ",\"DRIVER\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":10000"
+								+ "},"
+								+ "\"DRIVER_DEDUCTIBLE\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":1"
+								+ "},"
+								+ "\"PASSENGER\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":10000"
+								+ "},"
+								+ "\"PASSENGER_DEDUCTIBLE\":{"
+									+ "\"price\":0,"
+									+ "\"quota\":1"
+								+ "}"
+							+ "}"
+						+ "}"
+					+ "}";
+		VehiclePolicyTips tips = SerializeUtil.JsonUtil.GSON.fromJson(json, VehiclePolicyTips.class);
+		leBaoBaVehicle.order(null, null, null, tips);
 	}
 }
