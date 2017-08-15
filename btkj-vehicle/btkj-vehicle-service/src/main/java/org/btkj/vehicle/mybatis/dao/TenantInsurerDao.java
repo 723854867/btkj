@@ -38,6 +38,6 @@ public interface TenantInsurerDao extends DBMapper<String, TenantInsurer> {
 	void delete(String key);
 	
 	@Override
-	@DeleteProvider(type = TenantInsurerSQLProvider.class, method = "delete")
-	void delete(Collection<String> keys);
+	@DeleteProvider(type = TenantInsurerSQLProvider.class, method = "deleteByKeys")
+	void deleteByKeys(Collection<String> keys);
 }

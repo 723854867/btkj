@@ -79,7 +79,7 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
 		if (!CollectionUtil.isEmpty(insurersDelete)) {
 			redis.hmsdel(redisKey, insurersDelete, _tenantSetKey(tid));
-			dao.delete(insurersDelete);
+			dao.deleteByKeys(insurersDelete);
 		}
 		int time = DateUtil.currentTime();
 		Map<String, TenantInsurer> insurers = null;
