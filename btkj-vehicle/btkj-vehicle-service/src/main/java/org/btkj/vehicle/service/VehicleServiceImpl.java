@@ -60,8 +60,6 @@ public class VehicleServiceImpl implements VehicleService {
 	@Resource
 	private Rule rule;
 	@Resource
-	private TenantInsurerMapper routeMapper;
-	@Resource
 	private BiHuVehicle biHuVehicle;			// 壁虎车险
 	@Resource
 	private BonusManager bonusManager;
@@ -75,6 +73,8 @@ public class VehicleServiceImpl implements VehicleService {
 	private LeBaoBaVehicle leBaoBaVehicle;		// 乐宝吧车险
 	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
+	@Resource
+	private TenantInsurerMapper tenantInsurerMapper;
 	
 	@Resource
 	private VehicleDeptMapper vehicleDeptMapper;
@@ -152,7 +152,7 @@ public class VehicleServiceImpl implements VehicleService {
 		TenantPO tenant = employee.getTenant();
 		Map<Integer, Insurer> quoteMap = configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteMod));
 		Set<Integer> insure = NumberUtil.splitIntoPowerOfTwoSet(insureMod);
-		Map<String, TenantInsurer> insurers = routeMapper.getByTid(employee.getTid());
+		Map<String, TenantInsurer> insurers = tenantInsurerMapper.getByTid(employee.getTid());
 		String batchId = _batchId(tips, employee);
 		int biHuQuoteMod = 0;
 		int biHuInsureMod = 0;
@@ -304,7 +304,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Override
 	public List<Integer> insurers(int tid) {
-		Map<String, TenantInsurer> map = routeMapper.getByTid(tid);
+		Map<String, TenantInsurer> map = tenantInsurerMapper.getByTid(tid);
 		if (CollectionUtil.isEmpty(map))
 			return CollectionUtil.emptyArrayList();
 		List<Integer> l = new ArrayList<Integer>();

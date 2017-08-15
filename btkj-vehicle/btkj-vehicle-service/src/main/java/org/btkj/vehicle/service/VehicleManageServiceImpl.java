@@ -456,6 +456,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
-		tenantInsurerMapper.insurerEdit(tid, insurersDelete, insurersUpdate, insurersInsert);
+		tx.insurerEdit(tid, insurersDelete, insurersUpdate, insurersInsert);
 	}
 }

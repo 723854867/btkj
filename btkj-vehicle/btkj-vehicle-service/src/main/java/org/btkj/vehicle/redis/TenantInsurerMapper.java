@@ -19,7 +19,6 @@ import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
-import org.springframework.transaction.annotation.Transactional;
 
 public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, TenantInsurerDao> {
 	
@@ -75,7 +74,6 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 		redis.hmsdel(redisKey, entity.key(), _tenantSetKey(entity.getTid()));
 	}
 	
-	@Transactional
 	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
 		if (!CollectionUtil.isEmpty(insurersDelete)) {
 			redis.hmsdel(redisKey, insurersDelete, _tenantSetKey(tid));

@@ -1,6 +1,7 @@
 package org.btkj.vehicle.mybatis;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -12,6 +13,7 @@ import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
@@ -140,5 +142,10 @@ public class Tx {
 		config.setUpdated(DateUtil.currentTime());
 		bonusScaleConfigDao.update(config);
 		return config;
+	}
+	
+	@Transactional
+	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
+		tenantInsurerMapper.insurerEdit(tid, insurersDelete, insurersUpdate, insurersInsert);
 	}
 }
