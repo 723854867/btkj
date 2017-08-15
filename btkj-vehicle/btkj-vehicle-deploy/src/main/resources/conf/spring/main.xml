@@ -37,9 +37,9 @@
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
-	<bean id="routeMapper" class="org.btkj.vehicle.redis.RouteMapper">
+	<bean id="tenantInsurerMapper" class="org.btkj.vehicle.redis.TenantInsurerMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="routeDao" />
+		<property name="dao" ref="tenantInsurerDao" />
 	</bean>
 	
 	<bean id="vehicleCoefficientMapper" class="org.btkj.vehicle.redis.VehicleCoefficientMapper">

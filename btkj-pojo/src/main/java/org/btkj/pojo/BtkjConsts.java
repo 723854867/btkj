@@ -32,7 +32,6 @@ public interface BtkjConsts {
 		Result ORDER_STATE_ERROR				= Result.result(BtkjCode.ORDER_STATE_ERROR);
 		Result ARTICLE_NOT_EXIST				= Result.result(BtkjCode.ARTICLE_NOT_EXIST);
 		Result INSURER_NOT_EXIST				= Result.result(BtkjCode.INSURER_NOT_EXIST);
-		Result LANE_CONFIG_ERROR				= Result.result(BtkjCode.LANE_CONFIG_ERROR);
 		Result COMMENT_NOT_EXIST				= Result.result(BtkjCode.COMMENT_NOT_EXIST);
 		Result MODULAR_NOT_EXIST				= Result.result(BtkjCode.MODULAR_NOT_EXIST);
 		Result JIAN_JIE_ID_NEEDED				= Result.result(BtkjCode.JIAN_JIE_ID_NEEDED);
@@ -42,18 +41,19 @@ public interface BtkjConsts {
 		Result USER_DATA_INCOMPLETE				= Result.result(BtkjCode.USER_DATA_INCOMPLETE);
 		Result COEFFICIENT_NOT_EXIST			= Result.result(BtkjCode.COEFFICIENT_NOT_EXIST);
 		Result BONUS_SCALE_NOT_EXIST			= Result.result(BtkjCode.BONUS_SCALE_NOT_EXIST);
+		Result LANE_BI_HU_NOT_OPENED			= Result.result(BtkjCode.LANE_BI_HU_NOT_OPENED);
 		Result USER_TENANT_NUM_MAXIMUM			= Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
 		Result VEHICLE_BRAND_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_BRAND_NOT_EXSIT);
 		Result VEHICLE_DEPT_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_DEPT_NOT_EXIST);
 		Result VEHICLE_MODEL_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_MODEL_NOT_EXIST);
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
+		Result INSURER_UNSUPPORT_BI_HU			= Result.result(BtkjCode.INSURER_UNSUPPORT_BI_HU);
 		Result BONUS_SCALE_SETTINGS_ERROR		= Result.result(BtkjCode.BONUS_SCALE_SETTINGS_ERROR);
 		Result NON_AUTO_CATEGORY_NOT_EXIST		= Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
-		Result BI_HU_TENANT_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BI_HU_TENANT_CONFIG_NOT_EXIST);
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

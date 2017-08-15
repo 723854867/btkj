@@ -44,7 +44,7 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	}
 	
 	public void deleteBatchOrder(String batchId) {
-		mongo.deleteMany(collection, Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, batchId));
+		mongo.deleteMany(collection, Filters.eq(BtkjConsts.FIELD.BATCHID, batchId));
 	}
 	
 	public long orderNum(int employeeId, int begin, int end, int stateMod) {

@@ -3,11 +3,11 @@ package org.btkj.vehicle.mybatis.provider;
 import org.apache.ibatis.jdbc.SQL;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
-public class RouteSQLProvider extends SQLProvider {
+public class TenantInsurerSQLProvider extends SQLProvider {
 	
-	private static final String TABLE			= "route";
+	private static final String TABLE			= "tenant_insurer";
 	
-	public RouteSQLProvider() {
+	public TenantInsurerSQLProvider() {
 		super(TABLE, "key", false);
 	}
 

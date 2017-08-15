@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.btkj.pojo.po.Insurer;
 import org.btkj.vehicle.pojo.Lane;
-import org.btkj.vehicle.pojo.entity.Route;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 
 public class RouteInfo implements Serializable {
 
@@ -22,7 +22,7 @@ public class RouteInfo implements Serializable {
 	
 	public RouteInfo() {}
 	
-	public RouteInfo(Route route, Insurer insurer) {
+	public RouteInfo(TenantInsurer route, Insurer insurer) {
 		this.key = route.getKey();
 		this.created = route.getCreated();
 		this.updated = route.getUpdated();

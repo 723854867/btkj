@@ -18,7 +18,7 @@ import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.BannerEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.EmployeesParam;
-import org.btkj.user.pojo.param.PlatformTenantSetParam;
+import org.btkj.user.pojo.param.TenantSetPTParam;
 import org.btkj.user.pojo.param.TenantSetParam;
 import org.btkj.user.pojo.param.TenantsParam;
 import org.btkj.user.pojo.param.UsersParam;
@@ -41,6 +41,13 @@ public interface UserManageService {
 	 * @return
 	 */
 	Result<Pager<TenantPagingInfo>> tenants(TenantsParam param);
+	
+	/**
+	 * 修改商户
+	 * 
+	 * @param tenant
+	 */
+	void tenantUpdate(TenantPO tenant);
 	
 	/**
 	 * 雇员分页列表
@@ -103,7 +110,7 @@ public interface UserManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<Void> tenantSet(UserPO user, PlatformTenantSetParam param);
+	Result<Void> tenantSet(UserPO user, TenantSetPTParam param);
 	
 	/**
 	 * 所有平台

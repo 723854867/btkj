@@ -3,6 +3,7 @@ package org.btkj.vehicle.api;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.po.EmployeePO;
@@ -13,10 +14,9 @@ import org.btkj.pojo.po.VehicleModel;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.pojo.vo.JianJiePoliciesInfo;
-import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.Route;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
@@ -89,40 +89,6 @@ public interface VehicleManageService {
 	 * @param tid
 	 */
 	void vehicleOrderIssue(int tid);
-	
-	/**
-	 * 获取车险路由设置
-	 * 
-	 * @param tid
-	 * @return
-	 */
-	List<Route> routes(int tid);
-	
-	/**
-	 * 新增路由
-	 * 
-	 * @param tid
-	 * @param insurerId
-	 * @param lane
-	 * @return
-	 */
-	Result<Void> routeAdd(int tid, int insurerId, Lane lane, int jianJieId);
-	
-	/**
-	 * 更新路由
-	 * 
-	 * @param key
-	 * @param lane
-	 * @return
-	 */
-	Result<Void> routeUpdate(String key, Lane lane, int jianJieId);
-	
-	/**
-	 * 删除路由
-	 * 
-	 * @param key
-	 */
-	void routeDelete(String key);
 	
 	/**
 	 * 汽车品牌列表
@@ -263,4 +229,21 @@ public interface VehicleManageService {
 	 * @param tid
 	 */
 	void orderRewardComplete(int tid);
+	
+	/**
+	 * 获取商户的险企
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Map<String, TenantInsurer> insurers(int tid);
+	
+	/**
+	 * 商户车险险企设置
+	 * 
+	 * @param insurersDelete
+	 * @param insurersUpdate
+	 * @param insurersInsert
+	 */
+	void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert);
 }

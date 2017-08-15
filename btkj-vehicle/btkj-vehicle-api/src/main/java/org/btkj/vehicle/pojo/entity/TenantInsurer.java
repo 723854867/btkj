@@ -2,7 +2,7 @@ package org.btkj.vehicle.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class Route implements UniqueModel<String> {
+public class TenantInsurer implements UniqueModel<String> {
 
 	private static final long serialVersionUID = 4987424246445479663L;
 

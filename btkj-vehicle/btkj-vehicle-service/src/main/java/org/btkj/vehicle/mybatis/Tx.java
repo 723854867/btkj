@@ -15,6 +15,7 @@ import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
+import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -35,11 +36,14 @@ public class Tx {
 	@Resource
 	private BonusScaleConfigDao bonusScaleConfigDao;
 	@Resource
+	private TenantInsurerMapper tenantInsurerMapper;
+	@Resource
 	private VehicleCoefficientDao vehicleCoefficientDao;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
 	private VehicleCoefficientMapper vehicleCoefficientMapper;
+	
 
 	@Transactional
 	public VehicleCoefficient coefficientUpdate(PoundageCoefficientEditParam param) {

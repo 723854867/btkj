@@ -13,15 +13,17 @@ public class TenantPO implements UniqueModel<Integer> {
 	private int appId;
 	private int region;
 	private int teamDepth;
-	private String jianJieId;
 	private String license;
 	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
 	private int mod;
-	private int jianJieFetchTime;
 	private int expire;							// 到期日期
 	private int scaleRewardTime;			// 最近的规模奖励统计时间，格式是：(year)(month)比如201405
+	private String jianJieId;
+	private int jianJieFetchTime;
+	private String biHuAgent;
+	private String biHuKey;
 	private int created;
 	private int updated;
 	
@@ -234,6 +236,22 @@ public class TenantPO implements UniqueModel<Integer> {
 	
 	public void setExpire(int expire) {
 		this.expire = expire;
+	}
+	
+	public String getBiHuAgent() {
+		return biHuAgent;
+	}
+	
+	public void setBiHuAgent(String biHuAgent) {
+		this.biHuAgent = biHuAgent;
+	}
+	
+	public String getBiHuKey() {
+		return biHuKey;
+	}
+	
+	public void setBiHuKey(String biHuKey) {
+		this.biHuKey = biHuKey;
 	}
 	
 	public int getCreated() {

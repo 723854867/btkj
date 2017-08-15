@@ -41,7 +41,7 @@ import org.btkj.user.pojo.param.AppEditParam;
 import org.btkj.user.pojo.param.BannerEditParam;
 import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.btkj.user.pojo.param.EmployeesParam;
-import org.btkj.user.pojo.param.PlatformTenantSetParam;
+import org.btkj.user.pojo.param.TenantSetPTParam;
 import org.btkj.user.pojo.param.TenantSetParam;
 import org.btkj.user.pojo.param.TenantsParam;
 import org.btkj.user.pojo.param.UsersParam;
@@ -103,14 +103,19 @@ public class UserManageServiceImpl implements UserManageService {
 		Map<Integer, Region> regions = configService.regions(set1);
 		Map<Integer, AppPO> apps = param.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
 		for (TenantPagingInfo info : pager.getList()) {
-			Region region = regions.remove(info.getRegionId());
+			Region region = regions.get(info.getRegionId());
 			info.setRegionName(null == region ? null : region.getName());
 			if (info instanceof TenantPagingMasterInfo) {
-				AppPO app = apps.remove(((TenantPagingMasterInfo) info).getAppId());
+				AppPO app = apps.get(((TenantPagingMasterInfo) info).getAppId());
 				((TenantPagingMasterInfo) info).setAppName(null == app ? null : app.getName());
 			}
 		}
 		return Result.result(pager);
+	}
+	
+	@Override
+	public void tenantUpdate(TenantPO tenant) {
+		tenantMapper.update(tenant);
 	}
 	
 	@Override
@@ -265,7 +270,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(UserPO user, PlatformTenantSetParam param) {
+	public Result<Void> tenantSet(UserPO user, TenantSetPTParam param) {
 		TenantPO tenant = tenantMapper.getByKey(param.getTid());
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;

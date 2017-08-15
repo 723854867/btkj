@@ -7,6 +7,7 @@ import org.btkj.manager.pojo.info.EmployeeInfo;
 import org.btkj.manager.pojo.param.EmployeeInfoParam;
 import org.btkj.payment.api.PaymentService;
 import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.pojo.po.TenantPO;
@@ -21,8 +22,11 @@ public class EMPLOYEE_INFO extends EmployeeAction<EmployeeInfoParam> {
 	
 	@Override
 	protected Result<EmployeeInfo> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeInfoParam param) {
+		EmployeeTip tip = employeeService.employeeTip(param.getTarget());
+		if (null == tip)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		EmployeeTip parent = 0 == employee.getParentId() ? null : employeeService.employeeTip(employee.getParentId());
-		Account account = paymentService.account(employee.getId());
-		return Result.result(new EmployeeInfo(user, employee, parent, account));
+		Account account = paymentService.account(param.getTarget());
+		return Result.result(new EmployeeInfo(user, tip, parent, account));
 	}
 }

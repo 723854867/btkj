@@ -21,8 +21,6 @@ import org.btkj.bihu.vehicle.domain.QuoteResult;
 import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
-import org.btkj.bihu.vehicle.pojo.entity.TenantConfig;
-import org.btkj.bihu.vehicle.redis.TenantConfigMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.bo.InsurUnit;
 import org.btkj.pojo.bo.Insurance;
@@ -33,6 +31,7 @@ import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -54,8 +53,6 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	
 	@Resource
 	private HttpProxy httpProxy;
-	@Resource
-	private TenantConfigMapper tenantConfigMapper;
 	
 	@Value("${bihu.key}")
 	private String key;
@@ -83,28 +80,25 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private int insureResultTimeout;
 
 	@Override
-	public Result<Renewal> renewal(int uid, int tid, String license, int cityCode) {
+	public Result<Renewal> renewal(TenantPO tenant, int uid, String license, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
-		return _doRenewal(uid, tid, params, cityCode);
+		return _doRenewal(tenant, uid, params, cityCode);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(int uid, int tid, String vin, String engine, int cityCode) {
+	public Result<Renewal> renewal(TenantPO tenant, int uid, String vin, String engine, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
-		return _doRenewal(uid, tid, params, cityCode);
+		return _doRenewal(tenant, uid, params, cityCode);
 	}
 	
-	private Result<Renewal> _doRenewal(int uid, int tid, BiHuParams params, int cityCode) {
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));	// 用 uid 作为 custkey
-		TenantConfig tc = tenantConfigMapper.getByKey(tid);
-		if (null != tc) 
-			params.setAgent(tc.getAgent()).setKey(tc.getKey());
-		else
-			params.setAgent(agent).setKey(key);
-		params.setCityCode(cityCode);
+	private Result<Renewal> _doRenewal(TenantPO tenant, int uid, BiHuParams params, int cityCode) {
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))	// 用 uid 作为 custkey
+				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
+				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
+				.setCityCode(cityCode);
 		HttpUriRequest request = _requestUri(renewInfoPath, params, renewInfoTimeout);
 		try {
 			RenewInfo info = httpProxy.syncRequest(request, RenewInfo.JSON_HANDLER);
@@ -124,12 +118,9 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	
 	@Override
 	public Result<Void> order(Employee employee, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode) {
-		TenantConfig tc = tenantConfigMapper.getByKey(employee.getTid());
-		if (null == tc)
-			return Result.result(BtkjCode.LANE_BIHU_NOT_OPENED);
 		BiHuParams params = new BiHuParams(RequestType.QUOTE);
-		params.setAgent(tc.getAgent())
-			.setKey(tc.getKey())
+		params.setAgent(employee.getTenant().getBiHuAgent())
+			.setKey(employee.getTenant().getBiHuKey())
 			.setQuoteGroup(quoteMod)
 			.setSubmitGroup(insureMod)
 			.setCityCode(cityCode)
@@ -302,16 +293,13 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicySchema> quoteResult(int uid, int tid, String license, int insurer) {
+	public Result<PolicySchema> quoteResult(TenantPO tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.QUOTE_RESULT);
-		params.setLicenseNo(license);
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));
-		TenantConfig tc = tenantConfigMapper.getByKey(tid);
-		if (null != tc) 
-			params.setAgent(tc.getAgent()).setKey(tc.getKey());
-		else
-			params.setAgent(agent).setKey(key);
-		params.setQuoteGroup(insurer);
+		params.setLicenseNo(license)
+				.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
+				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
+				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
+				.setQuoteGroup(insurer);
 		HttpUriRequest request = _requestUri(quoteResultPath, params, quoteResultTimeout);
 		try {
 			QuoteResult result = httpProxy.syncRequest(request, QuoteResult.JSON_HANDLER);
@@ -329,16 +317,13 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicyDetail> insureResult(int uid, int tid, String license, int insurer) {
+	public Result<PolicyDetail> insureResult(TenantPO tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.INSURE_RESULT);
-		params.setLicenseNo(license);
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));
-		TenantConfig tc = tenantConfigMapper.getByKey(tid);
-		if (null != tc) 
-			params.setAgent(tc.getAgent()).setKey(tc.getKey());
-		else
-			params.setAgent(agent).setKey(key);
-		params.setSubmitGroup(insurer);
+		params.setLicenseNo(license)
+			.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
+			.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
+			.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
+			.setSubmitGroup(insurer);
 		HttpUriRequest request = _requestUri(insureResultPath, params, insureResultTimeout);
 		try {
 			InsureResult result = httpProxy.syncRequest(request, InsureResult.JSON_HANDLER);

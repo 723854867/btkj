@@ -610,6 +610,14 @@ public class OrderSubmit {
 		private String Amount;
 		private Integer Quantity;
 		private Integer UnitAmount;
+		public VehicleInsuranceItem() {}
+		public VehicleInsuranceItem(LeBaoBaInsurance insurance) {
+			this.Code = insurance.name();
+		}
+		public VehicleInsuranceItem(LeBaoBaInsurance insurance, String amount) {
+			this.Code = insurance.name();
+			this.Amount = amount;
+		}
 		@XmlElement(name = "Code")
 		public String getCode() {
 			return Code;

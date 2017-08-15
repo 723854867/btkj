@@ -91,9 +91,9 @@ public enum BtkjCode implements ICode {
 	LANE_NOT_EXIST(515, "lane not exist"),
 	
 	/**
-	 * 没有配置路由
+	 * 改险企不支持壁虎报价
 	 */
-	LANE_CONFIG_ERROR(516, "lane config error"),
+	INSURER_UNSUPPORT_BI_HU(516, "lane unsupport bi hu"),
 	
 	/**
 	 * 壁虎线路未开通
@@ -278,7 +278,7 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 商户壁虎配置不存在
 	 */
-	BI_HU_TENANT_CONFIG_NOT_EXIST(690, "bi hu tenant config not exist"),
+	LANE_BI_HU_NOT_OPENED(690, "lane bi hu not opened"),
 	
 	/**
 	 * 模块不存在

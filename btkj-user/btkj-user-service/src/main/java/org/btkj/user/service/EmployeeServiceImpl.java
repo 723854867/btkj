@@ -126,7 +126,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Result<EmployeeHolder> employeeLockByToken(Client client, String token, int employeeId) {
 		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
-			return null;
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		UserPO user = null;
 		String lockId = null;
 		AppPO app = appMapper.getByKey(employee.getAppId());

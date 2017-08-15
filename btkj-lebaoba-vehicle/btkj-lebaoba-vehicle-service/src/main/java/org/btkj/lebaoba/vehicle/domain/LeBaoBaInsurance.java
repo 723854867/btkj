@@ -1,10 +1,21 @@
 package org.btkj.lebaoba.vehicle.domain;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.btkj.lebaoba.vehicle.domain.OrderResult.AmountItem;
+import org.btkj.lebaoba.vehicle.domain.OrderSubmit.VehicleInsuranceItem;
 import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 
 public enum LeBaoBaInsurance {
 
@@ -156,5 +167,101 @@ public enum LeBaoBaInsurance {
 				return temp;
 		}
 		return null;
+	}
+	
+	public static final List<VehicleInsuranceItem> insuranceMapping(PolicySchema schema) {
+		List<VehicleInsuranceItem> items = new ArrayList<VehicleInsuranceItem>();
+		Map<CommercialInsuranceType, Insurance> insurances = schema.getInsurances();
+		if (!CollectionUtil.isEmpty(insurances)) {
+			for (Entry<CommercialInsuranceType, Insurance> entry : insurances.entrySet()) {
+				switch (entry.getKey()) {
+				case DAMAGE:
+					break;
+				case DAMAGE_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B1));
+					break;
+				case THIRD:
+					break;
+				case THIRD_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B3));
+					break;
+				case DRIVER:
+					break;
+				case DRIVER_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B4));
+					break;
+				case PASSENGER:
+					break;
+				case PASSENGER_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B5));
+					break;
+				case ROBBERY:
+					break;
+				case ROBBERY_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B2));
+					break;
+				case GLASS:
+					break;
+				case AUTO_FIRE:
+					break;
+				case AUTO_FIRE_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B8));
+					break;
+				case SCRATCH:
+					// TODO:
+					break;
+				case SCRATCH_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B7));
+					break;
+				case WADDING:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F8));
+					break;
+				case WADDING_DEDUCTIBLE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B11));
+					break;
+				case GARAGE_DESIGNATED:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F3));
+					break;
+				case UNKNOWN_THIRD:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F12));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (StringUtil.hasText(schema.getCompulsiveStart())) {
+			items.add(new VehicleInsuranceItem(LeBaoBaInsurance.J1, "122000"));
+			items.add(new VehicleInsuranceItem(LeBaoBaInsurance.CCS, "1"));
+		}
+		return null;
+	}
+	
+	private static int _diffMonth(String cmTime, String enrollTime) {
+		GregorianCalendar cmDate = new GregorianCalendar(DateUtil.TIMEZONE_GMT_8);
+		cmDate.setTimeInMillis(DateUtil.getTime(cmTime, DateUtil.YYYY_MM_DDTHH_MM_SS));
+		GregorianCalendar enrollDate = new GregorianCalendar(DateUtil.TIMEZONE_GMT_8);
+		enrollDate.setTimeInMillis(DateUtil.getTime(enrollTime, DateUtil.YYYY_MM_DDTHH_MM_SS));
+		int month = Math.abs(cmDate.get(Calendar.YEAR) - enrollDate.get(Calendar.YEAR)) * 12;
+		month += cmDate.get(Calendar.MONTH) - enrollDate.get(Calendar.MONTH);
+		if (cmDate.get(Calendar.DAY_OF_MONTH) < enrollDate.get(Calendar.DAY_OF_MONTH))
+			month --;
+		return month;
+	}
+	
+	/**
+	 * 盗抢险、车损险、自燃险的计算方法
+	 * 
+	 * @param purchasePrice
+	 * @param depreciationRate
+	 * @param cmTime
+	 * @param enrollTime
+	 * @return
+	 */
+	private static String _calculateDepreciationPrice(String purchasePrice, String depreciationRate, String cmTime, String enrollTime) {
+		BigDecimal rate = new BigDecimal(_diffMonth(cmTime, enrollTime)).multiply(new BigDecimal(depreciationRate));
+		BigDecimal price = new BigDecimal(purchasePrice).multiply(new BigDecimal(1).subtract(rate));
+		BigDecimal cprice = new BigDecimal(purchasePrice).multiply(new BigDecimal("0.2"));
+		return price.compareTo(cprice) > 0 ? price.toString() : price.toString();
 	}
 }

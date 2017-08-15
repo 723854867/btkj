@@ -8,7 +8,7 @@ import org.btkj.pojo.param.Param;
 import org.rapid.util.validator.custom.FutureTimestamp;
 import org.rapid.util.validator.custom.Mobile;
 
-public class PlatformTenantSetParam extends Param {
+public class TenantSetPTParam extends Param {
 
 	private static final long serialVersionUID = 1753107312834412253L;
 

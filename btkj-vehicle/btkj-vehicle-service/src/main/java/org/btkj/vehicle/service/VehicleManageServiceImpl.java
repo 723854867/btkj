@@ -31,10 +31,9 @@ import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.mongo.VehiclePolicyMapper;
 import org.btkj.vehicle.mybatis.Tx;
-import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.Route;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy.SalesmanMark;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
@@ -44,7 +43,7 @@ import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
-import org.btkj.vehicle.redis.RouteMapper;
+import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
@@ -70,8 +69,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Resource
 	private Tx tx;
 	@Resource
-	private RouteMapper routeMapper;
-	@Resource
 	private DistributeLock distributeLock;
 	@Resource
 	private VehicleDeptMapper vehicleDeptMapper;
@@ -83,6 +80,8 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private VehicleBrandMapper vehicleBrandMapper;
 	@Resource
 	private VehiclePolicyMapper vehiclePolicyMapper;
+	@Resource
+	private TenantInsurerMapper tenantInsurerMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -259,7 +258,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				if (!info.getGsUser().equals(relationInfo.getGsUser()))
 					logger.error("简捷保单 - {} 关联单业务员归属不匹配", policyId);
 			}
-			Route route = routeMapper.getByTidAndJianJieId(employee.getTid(), info.getCompanyId());
+			TenantInsurer route = tenantInsurerMapper.getByTidAndJianJieId(employee.getTid(), info.getCompanyId());
 			if (null == route)
 				logger.error("简捷保单 - {} 险企 - {} 不存在对应的保途险企映射", policyId, info.getCompanyId());
 			if (null != order && route.getInsurerId() != order.getInsurerId())
@@ -305,42 +304,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public void vehicleOrderIssue(int tid) {
 		
-	}
-	
-	@Override
-	public List<Route> routes(int tid) {
-		return routeMapper.getByTid(tid);
-	}
-	
-	@Override
-	public Result<Void> routeAdd(int tid, int insurerId, Lane lane, int jianJieId) {
-		Route route = EntityGenerator.newRoute(tid, insurerId, lane, jianJieId);
-		try {
-			routeMapper.insert(route);
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
-		}
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> routeUpdate(String key, Lane lane, int jianJieId) {
-		Route route = routeMapper.getByKey(key);
-		if (null == route)
-			return BtkjConsts.RESULT.ROUTE_NOT_EXIST;
-		if (0 != jianJieId)
-			route.setJianJieId(jianJieId);
-		if (route.getLane() != lane.mark()) {
-			route.setLane(lane.mark());
-			route.setUpdated(DateUtil.currentTime());
-		}
-		routeMapper.update(route);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public void routeDelete(String key) {
-		routeMapper.delete(key);		
 	}
 	
 	@Override
@@ -484,5 +447,15 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		} finally {
 			distributeLock.unLock(lock, lockId);
 		}
+	}
+	
+	@Override
+	public Map<String, TenantInsurer> insurers(int tid) {
+		return tenantInsurerMapper.getByTid(tid);
+	}
+	
+	@Override
+	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
+		tenantInsurerMapper.insurerEdit(tid, insurersDelete, insurersUpdate, insurersInsert);
 	}
 }

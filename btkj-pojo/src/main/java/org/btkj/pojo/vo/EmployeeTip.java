@@ -17,6 +17,7 @@ public class EmployeeTip implements Serializable {
 	private static final long serialVersionUID = -273300203666288418L;
 
 	private int id;
+	private int mod;
 	private int uid;
 	private int tid;
 	private int appId;
@@ -28,11 +29,15 @@ public class EmployeeTip implements Serializable {
 	private String mobile;				// 手机号
 	private String avatar;
 	private String identity;			// 身份证号
+	private int CMRate;
+	private int CPRate;
+	private int created;
 	
 	public EmployeeTip() {}
 	
 	public EmployeeTip(EmployeePO employee, AppPO app, UserPO user, TenantPO tenant) {
 		this.id = employee.getId();
+		this.mod = employee.getMod();
 		this.uid = employee.getUid();
 		this.tid = employee.getTid();
 		this.appId = employee.getAppId();
@@ -44,6 +49,9 @@ public class EmployeeTip implements Serializable {
 		this.mobile = user.getMobile();
 		this.avatar = user.getAvatar();
 		this.identity = user.getIdentity();
+		this.CMRate = employee.getCommercialRate();
+		this.CPRate = employee.getCompulsoryRate();
+		this.created = employee.getCreated();
 	}
 
 	public int getId() {
@@ -52,6 +60,14 @@ public class EmployeeTip implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 
 	public int getUid() {
@@ -124,5 +140,45 @@ public class EmployeeTip implements Serializable {
 	
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+
+	public int getAregion() {
+		return aregion;
+	}
+
+	public void setAregion(int aregion) {
+		this.aregion = aregion;
+	}
+
+	public int getTregion() {
+		return tregion;
+	}
+
+	public void setTregion(int tregion) {
+		this.tregion = tregion;
+	}
+
+	public int getCMRate() {
+		return CMRate;
+	}
+
+	public void setCMRate(int cMRate) {
+		CMRate = cMRate;
+	}
+
+	public int getCPRate() {
+		return CPRate;
+	}
+
+	public void setCPRate(int cPRate) {
+		CPRate = cPRate;
+	}
+
+	public int getCreated() {
+		return created;
+	}
+
+	public void setCreated(int created) {
+		this.created = created;
 	}
 }

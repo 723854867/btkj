@@ -24,7 +24,7 @@ public class VEHICLE_ORDERS extends EmployeeAction<VehicleOrdersParam> {
 		param.setAppId(app.getId());
 		param.setTid(tenant.getTid());
 		param.setEmployeeId(employee.getId());
-		return Result.result(vehicleService.orders(tenant.getRegion(), param));
+		return Result.result(vehicleService.orders(tenant, param));
 	}
 	
 	@Override

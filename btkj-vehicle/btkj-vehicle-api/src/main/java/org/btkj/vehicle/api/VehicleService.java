@@ -6,6 +6,7 @@ import org.btkj.pojo.bo.DeliveryInfo;
 import org.btkj.pojo.bo.Pager;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.VehicleBrand;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.pojo.po.VehicleModel;
@@ -74,7 +75,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrderListInfo> orders(int region, VehicleOrdersParam param);
+	Pager<VehicleOrderListInfo> orders(TenantPO tenant,  VehicleOrdersParam param);
 	
 	/**
 	 * 根据车架号获取车辆信息

@@ -1,10 +1,12 @@
 package org.btkj.master.pojo.info;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 
 public class TenantInfo implements Serializable {
 
@@ -19,15 +21,18 @@ public class TenantInfo implements Serializable {
 	private int region;
 	private String regionName;
 	private int teamDepth;
-	private String jianJieId;
 	private String license;
 	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
+	private String jianJieId;
+	private String biHuAgent;
+	private String biHuKey;
 	private int expire;
 	private int created;
+	private Map<String, TenantInsurer> insurers;
 	
-	public TenantInfo(TenantPO tenant, AppPO app, Region region) {
+	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> insurers) {
 		this.tid = tenant.getTid();
 		this.name = tenant.getName();
 		this.contacts = tenant.getContacts();
@@ -44,6 +49,9 @@ public class TenantInfo implements Serializable {
 		this.servicePhone = tenant.getServicePhone();
 		this.expire = tenant.getExpire();
 		this.created = tenant.getCreated();
+		this.biHuAgent = tenant.getBiHuAgent();
+		this.biHuKey = tenant.getBiHuKey();
+		this.insurers = insurers;
 	}
 
 	public int getTid() {
@@ -157,6 +165,14 @@ public class TenantInfo implements Serializable {
 	public void setServicePhone(String servicePhone) {
 		this.servicePhone = servicePhone;
 	}
+	
+	public String getBiHuAgent() {
+		return biHuAgent;
+	}
+	
+	public String getBiHuKey() {
+		return biHuKey;
+	}
 
 	public int getExpire() {
 		return expire;
@@ -172,5 +188,13 @@ public class TenantInfo implements Serializable {
 
 	public void setCreated(int created) {
 		this.created = created;
+	}
+	
+	public Map<String, TenantInsurer> getInsurers() {
+		return insurers;
+	}
+	
+	public void setInsurers(Map<String, TenantInsurer> insurers) {
+		this.insurers = insurers;
 	}
 }
