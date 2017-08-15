@@ -2,6 +2,7 @@ package org.btkj.user.mybatis;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -91,6 +92,15 @@ public class Tx {
 		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
 		employeeDao.insert(employee);
 		return employee;
+	}
+	
+	@Transactional
+	public List<EmployeePO> team(int tid, int employeeId, int teamDepth) {
+		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid); 
+		EmployeePO employee = employees.get(employeeId);
+		if (null == employee)
+			throw new BusinessException(BtkjCode.EMPLOYEE_NOT_EXIST);
+		return employeeDao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + teamDepth - 1);
 	}
 
 	/**

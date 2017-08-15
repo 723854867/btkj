@@ -18,6 +18,7 @@ import org.btkj.pojo.po.TenantPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.api.EmployeeService;
+import org.btkj.user.mybatis.Tx;
 import org.btkj.user.pojo.model.EmployeeHolder;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Service;
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 	
+	@Resource
+	private Tx tx;
 	@Resource
 	private Redis redis;
 	@Resource
@@ -154,7 +157,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public List<EmployeePO> team(Employee employee) {
-		return employeeMapper.team(employee);
+	public List<EmployeePO> team(int tid, int employeeId, int teamDepth) {
+		return tx.team(tid, employeeId, teamDepth);
 	}
 }

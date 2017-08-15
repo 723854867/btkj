@@ -29,8 +29,8 @@ public class TENANT_SET extends AdminAction<TenantSetParam> {
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		tenant.setJianJieId(param.getJianJieId());
-		tenant.setBiHuAgent(param.getBihuAgent());
-		tenant.setBiHuKey(param.getBihuKey());
+		tenant.setBiHuAgent(param.getBiHuAgent());
+		tenant.setBiHuKey(param.getBiHuKey());
 		tenant.setUpdated(DateUtil.currentTime());
 		userManageService.tenantUpdate(tenant);
 		vehicleManageService.insurerEdit(tenant.getTid(), param.getInsurersDelete(), param.getInsurersUpdate(), param.getInsurersInsert());

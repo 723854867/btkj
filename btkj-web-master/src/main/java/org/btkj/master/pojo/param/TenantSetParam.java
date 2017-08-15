@@ -15,8 +15,8 @@ public class TenantSetParam extends Param {
 	@Min(1)
 	private int tid;
 	private String jianJieId;
-	private String bihuKey;
-	private String bihuAgent;
+	private String biHuKey;
+	private String biHuAgent;
 	private Set<String> insurersDelete;
 	private Map<String, TenantInsurer> insurersUpdate;
 	private Map<String, TenantInsurer> insurersInsert;
@@ -37,20 +37,20 @@ public class TenantSetParam extends Param {
 		this.jianJieId = jianJieId;
 	}
 	
-	public String getBihuKey() {
-		return bihuKey;
+	public String getBiHuKey() {
+		return biHuKey;
 	}
 	
-	public void setBihuKey(String bihuKey) {
-		this.bihuKey = bihuKey;
+	public void setBiHuKey(String biHuKey) {
+		this.biHuKey = biHuKey;
 	}
 	
-	public String getBihuAgent() {
-		return bihuAgent;
+	public String getBiHuAgent() {
+		return biHuAgent;
 	}
 	
-	public void setBihuAgent(String bihuAgent) {
-		this.bihuAgent = bihuAgent;
+	public void setBiHuAgent(String biHuAgent) {
+		this.biHuAgent = biHuAgent;
 	}
 	
 	public Set<String> getInsurersDelete() {

@@ -195,6 +195,6 @@
 	</bean>
 	<bean id="A052" class="org.btkj.vehicle.rule.bonus.route.CoacheCategory">
 		<constructor-arg index="0" value="A052" />
-		<constructor-arg index="1" value="36及366座以上客车" />
+		<constructor-arg index="1" value="36及36座以上客车" />
 	</bean>
 </beans>

@@ -88,7 +88,7 @@ public interface BtkjConsts {
 		final int ARTICLE_TITLE_MAX						= 50;				// 咨询标题最大值
 		final int URL_MIN								= 6;				// url 最小值
 		final int URL_MAX								= 200;				// url 最大值
-		final int NAME_MIN								= 2;
+		final int NAME_MIN								= 1;
 		final int NAME_MAX								= 50;
 		final int NONAUTO_MAX							= 8;				// 非车险类型最大数
 		final int NONAUTO_FILTER_MAX					= 5;				// 非车险分类最大筛选类别数

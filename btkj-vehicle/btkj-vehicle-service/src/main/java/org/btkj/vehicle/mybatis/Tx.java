@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.EntityGenerator;
@@ -56,6 +57,8 @@ public class Tx {
 		if (null != param.getSymbol())
 			coefficient.setComparison(param.getSymbol().mark());
 		if (null != param.getVal()) {
+			if (!CoefficientType.match(coefficient.getType()).checkValue(ComparisonSymbol.match(coefficient.getComparison()), param.getVal()))
+				throw new BusinessException(Code.FORBID);
 			for (VehicleCoefficient temp : coefficients.values()) {
 				ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
 				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
@@ -77,6 +80,8 @@ public class Tx {
 	
 	@Transactional
 	public VehicleCoefficient coefficientAdd(PoundageCoefficientEditParam param) {
+		if (!param.getCoefficientType().checkValue(param.getSymbol(), param.getVal()))
+			throw new BusinessException(Code.FORBID);
 		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(param.getTid(), param.getCoefficientType().mark());
 		if (param.getCoefficientType().isCustom() && coefficients.size() >= param.getCoefficientType().maxCustomNum())
 			throw new BusinessException(BtkjCode.COEFFICIENT_NUM_MAXMIUM);

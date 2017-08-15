@@ -37,7 +37,7 @@ public class TEAM_LIST extends TenantAction {
 
 	@Override
 	protected Result<TeamInfo> execute(Request request, Employee employee) {
-		List<EmployeePO> list = employeeService.team(employee);
+		List<EmployeePO> list = employeeService.team(employee.getTid(), employee.getId(), employee.getTeamDepth());
 		if (CollectionUtil.isEmpty(list))
 			return Consts.RESULT.EMPTY_LIST;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();

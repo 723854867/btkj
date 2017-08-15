@@ -29,8 +29,7 @@ public interface EmployeeService {
 	 
 	/**
 	 * 我的团队
-	 * @param form
 	 * @return
 	 */
-	List<EmployeePO> team(Employee employee);
+	List<EmployeePO> team(int tid, int employeeId, int teamDepth);
 }

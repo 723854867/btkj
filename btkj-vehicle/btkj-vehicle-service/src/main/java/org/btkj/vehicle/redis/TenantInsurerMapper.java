@@ -82,7 +82,7 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 		int time = DateUtil.currentTime();
 		Map<String, TenantInsurer> insurers = null;
 		if (!CollectionUtil.isEmpty(insurersUpdate)) {
-			insurers = getByKeys(insurersUpdate.keySet());
+			insurers = getByKeys(new HashSet<String>(insurersUpdate.keySet()));
 			for (TenantInsurer insurer : insurers.values()) {
 				TenantInsurer update = insurersUpdate.get(insurer.getKey());
 				if (update.getLane() != insurer.getLane() && null != Lane.match(update.getLane())) 

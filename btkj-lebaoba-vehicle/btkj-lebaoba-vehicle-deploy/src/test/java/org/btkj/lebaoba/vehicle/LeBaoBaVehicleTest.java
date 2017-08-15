@@ -29,6 +29,7 @@ public class LeBaoBaVehicleTest extends BaseTest {
 						+ "\"enrollDate\":\"2012-08-29\","
 						+ "\"seat\":7,"
 						+ "\"transfer\":false,"
+						+ "\"price\":40000.0,"
 						+ "\"owner\":{"
 							+ "\"type\":\"PERSONAL\","
 							+ "\"mobile\":\"18811112222\","

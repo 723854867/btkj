@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.EmployeePO;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
@@ -71,16 +70,6 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 		for (byte[] buffer : list)
 			l.add(serializer.antiConvet(buffer));
 		return l;
-	}
-	
-	/**
-	 * 获取指定雇员的团队
-	 * 
-	 * @param employee
-	 * @return
-	 */
-	public List<EmployeePO> team(Employee employee) {
-		return dao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + employee.getTeamDepth() - 1);
 	}
 	
 	private Map<Integer, EmployeePO> _checkLoad(int uid) {

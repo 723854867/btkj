@@ -22,6 +22,11 @@ public interface TenantInsurerDao extends DBMapper<String, TenantInsurer> {
 	@SelectProvider(type = TenantInsurerSQLProvider.class, method = "getByKey")
 	TenantInsurer getByKey(String key);
 	
+	@Override
+	@MapKey("key")
+	@SelectProvider(type = TenantInsurerSQLProvider.class, method = "getByKeys")
+	Map<String, TenantInsurer> getByKeys(Collection<String> keys);
+	
 	@MapKey("key")
 	@SelectProvider(type = TenantInsurerSQLProvider.class, method = "getByTid")
 	Map<String, TenantInsurer> getByTid(int tid);

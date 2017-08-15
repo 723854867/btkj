@@ -13,6 +13,7 @@ import org.btkj.lebaoba.vehicle.domain.OrderSubmit.VehicleInsuranceItem;
 import org.btkj.pojo.bo.Insurance;
 import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
@@ -169,46 +170,57 @@ public enum LeBaoBaInsurance {
 		return null;
 	}
 	
-	public static final List<VehicleInsuranceItem> insuranceMapping(PolicySchema schema) {
+	public static final List<VehicleInsuranceItem> insuranceMapping(VehiclePolicyTips tips, String cmstart, String enrollDate) {
+		PolicySchema schema = tips.getSchema();
 		List<VehicleInsuranceItem> items = new ArrayList<VehicleInsuranceItem>();
 		Map<CommercialInsuranceType, Insurance> insurances = schema.getInsurances();
 		if (!CollectionUtil.isEmpty(insurances)) {
 			for (Entry<CommercialInsuranceType, Insurance> entry : insurances.entrySet()) {
 				switch (entry.getKey()) {
 				case DAMAGE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.Z1, _calculateDepreciationPrice(String.valueOf(tips.getPrice()), "0.006", cmstart, enrollDate)));
 					break;
 				case DAMAGE_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B1));
 					break;
 				case THIRD:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.Z3, String.valueOf(entry.getValue().getQuota())));
 					break;
 				case THIRD_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B3));
 					break;
 				case DRIVER:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.Z4, String.valueOf(entry.getValue().getQuota())));
 					break;
 				case DRIVER_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B4));
 					break;
 				case PASSENGER:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.Z5, String.valueOf(entry.getValue().getQuota())));
 					break;
 				case PASSENGER_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B5));
 					break;
 				case ROBBERY:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.Z2, _calculateDepreciationPrice(String.valueOf(tips.getPrice()), "0.006", cmstart, enrollDate)));
 					break;
 				case ROBBERY_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B2));
 					break;
 				case GLASS:
+					if (1 == entry.getValue().getQuota())
+						items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F2, "10"));
+					else if (2 == entry.getValue().getQuota())
+						items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F2, "20"));
 					break;
 				case AUTO_FIRE:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F5, _calculateDepreciationPrice(String.valueOf(tips.getPrice()), "0.006", cmstart, enrollDate)));
 					break;
 				case AUTO_FIRE_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B8));
 					break;
 				case SCRATCH:
-					// TODO:
+					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F1, String.valueOf(entry.getValue().getPrice())));
 					break;
 				case SCRATCH_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B7));
@@ -234,7 +246,7 @@ public enum LeBaoBaInsurance {
 			items.add(new VehicleInsuranceItem(LeBaoBaInsurance.J1, "122000"));
 			items.add(new VehicleInsuranceItem(LeBaoBaInsurance.CCS, "1"));
 		}
-		return null;
+		return items;
 	}
 	
 	private static int _diffMonth(String cmTime, String enrollTime) {

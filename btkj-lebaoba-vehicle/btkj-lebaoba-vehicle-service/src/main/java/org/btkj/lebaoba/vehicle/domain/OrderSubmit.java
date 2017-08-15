@@ -3,6 +3,7 @@ package org.btkj.lebaoba.vehicle.domain;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.btkj.pojo.bo.InsurUnit;
@@ -136,8 +137,9 @@ public class OrderSubmit {
 	public void setToInsuredInfo(InsuredInfo toInsuredInfo) {
 		ToInsuredInfo = toInsuredInfo;
 	}
-
-	@XmlElement(name = "VehicleInsurance")
+	
+	@XmlElementWrapper(name = "VehicleInsurance")
+	@XmlElement(name = "VehicleInsuranceItem")
 	public List<VehicleInsuranceItem> getVehicleInsurance() {
 		return VehicleInsurance;
 	}
@@ -215,6 +217,7 @@ public class OrderSubmit {
 		owner.setCustomerType(null == customerType ? "01" : customerType.mark());
 		vehicleInfo.setCarOwnerInfo(owner);
 		submit.setVehicleInfo(vehicleInfo);
+		submit.setVehicleInsurance(LeBaoBaInsurance.insuranceMapping(tips, submit.getCommercePolicyBeginDate(), DateUtil.convert(tips.getEnrollDate(), DateUtil.YYYY_MM_DD, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8)));
 		return submit;
 	}
 	

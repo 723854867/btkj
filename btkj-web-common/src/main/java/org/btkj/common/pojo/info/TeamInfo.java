@@ -29,7 +29,7 @@ public class TeamInfo implements Serializable{
 			UserPO user = users.remove(entry.getValue());
 			Iterator<Exploit> titr = list.iterator();
 			Exploit exploit = null;
-			while (itr.hasNext()) {
+			while (titr.hasNext()) {
 				Exploit temp = titr.next();
 				if (temp.getEmployeeId() != entry.getKey())
 					continue;
