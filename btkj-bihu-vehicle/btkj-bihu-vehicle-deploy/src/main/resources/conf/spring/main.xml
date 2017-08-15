@@ -18,9 +18,4 @@
 			<bean class="org.rapid.util.net.http.SyncHttpAdapter" />
 		</property>
 	</bean>
-	
-	<bean id="tenantConfigMapper" class="org.btkj.bihu.vehicle.redis.TenantConfigMapper">
-		<property name="redis" ref="redis" />
-		<property name="dao" ref="tenantConfigDao" />
-	</bean>
 </beans>

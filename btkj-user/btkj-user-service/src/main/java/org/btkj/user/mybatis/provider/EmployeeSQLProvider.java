@@ -14,6 +14,7 @@ public class EmployeeSQLProvider extends SQLProvider {
 	
 	public EmployeeSQLProvider() {
 		super(TABLE, "id");
+		addNoUpdateCol("created", "left", "right", "level", "relation_path, app_id, uid, tid, parent_id, id");
 	}
 
 	public String getByTidAndUid() {

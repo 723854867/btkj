@@ -1,12 +1,15 @@
 package org.btkj.master.pojo.info;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.Region;
 import org.btkj.pojo.po.TenantPO;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
+import org.rapid.util.lang.CollectionUtil;
 
 public class TenantInfo implements Serializable {
 
@@ -30,9 +33,9 @@ public class TenantInfo implements Serializable {
 	private String biHuKey;
 	private int expire;
 	private int created;
-	private Map<String, TenantInsurer> insurers;
+	private List<Insurer> insurers;
 	
-	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> insurers) {
+	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.po.Insurer> insurers) {
 		this.tid = tenant.getTid();
 		this.name = tenant.getName();
 		this.contacts = tenant.getContacts();
@@ -51,7 +54,11 @@ public class TenantInfo implements Serializable {
 		this.created = tenant.getCreated();
 		this.biHuAgent = tenant.getBiHuAgent();
 		this.biHuKey = tenant.getBiHuKey();
-		this.insurers = insurers;
+		if (!CollectionUtil.isEmpty(tinsurers)) {
+			this.insurers = new ArrayList<Insurer>();
+			for (TenantInsurer tinsurer : tinsurers.values()) 
+				this.insurers.add(new Insurer(tinsurer, insurers.get(tinsurer.getInsurerId())));
+		}
 	}
 
 	public int getTid() {
@@ -190,11 +197,74 @@ public class TenantInfo implements Serializable {
 		this.created = created;
 	}
 	
-	public Map<String, TenantInsurer> getInsurers() {
+	public List<Insurer> getInsurers() {
 		return insurers;
 	}
 	
-	public void setInsurers(Map<String, TenantInsurer> insurers) {
+	public void setInsurers(List<Insurer> insurers) {
 		this.insurers = insurers;
+	}
+	
+	private class Insurer implements Serializable {
+		private static final long serialVersionUID = -9082097044068401060L;
+		private String key;
+		private int insurerId;
+		private String insurerName;
+		private int lane;
+		private int jianJieId;
+		private int created;
+		private int updated;
+		public Insurer(TenantInsurer tinsurer, org.btkj.pojo.po.Insurer insurer) {
+			this.key = tinsurer.getKey();
+			this.insurerId = tinsurer.getInsurerId();
+			if (null != insurer)
+				this.insurerName = insurer.getName();
+			this.lane = tinsurer.getLane();
+			this.jianJieId = tinsurer.getJianJieId();
+			this.created = tinsurer.getCreated();
+			this.updated = tinsurer.getUpdated();
+		}
+		public String getKey() {
+			return key;
+		}
+		public void setKey(String key) {
+			this.key = key;
+		}
+		public int getInsurerId() {
+			return insurerId;
+		}
+		public void setInsurerId(int insurerId) {
+			this.insurerId = insurerId;
+		}
+		public String getInsurerName() {
+			return insurerName;
+		}
+		public void setInsurerName(String insurerName) {
+			this.insurerName = insurerName;
+		}
+		public int getLane() {
+			return lane;
+		}
+		public void setLane(int lane) {
+			this.lane = lane;
+		}
+		public int getJianJieId() {
+			return jianJieId;
+		}
+		public void setJianJieId(int jianJieId) {
+			this.jianJieId = jianJieId;
+		}
+		public int getCreated() {
+			return created;
+		}
+		public void setCreated(int created) {
+			this.created = created;
+		}
+		public int getUpdated() {
+			return updated;
+		}
+		public void setUpdated(int updated) {
+			this.updated = updated;
+		}
 	}
 }
