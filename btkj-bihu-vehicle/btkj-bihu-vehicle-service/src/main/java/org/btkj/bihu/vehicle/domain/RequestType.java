@@ -8,6 +8,12 @@ public enum RequestType {
 	RENEWL,
 	
 	/**
+	 * 获取车型信息
+	 * 
+	 */
+	VEHICLE_INFO,
+	
+	/**
 	 * 报价/核保
 	 */
 	QUOTE,

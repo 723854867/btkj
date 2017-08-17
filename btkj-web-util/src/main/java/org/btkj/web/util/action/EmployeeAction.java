@@ -13,6 +13,7 @@ import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.model.EmployeeHolder;
 import org.btkj.web.util.Params;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -34,6 +35,10 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 	public EmployeeAction() {
 		super();
 	}
+	
+	public EmployeeAction(CrudType... crudTypes) {
+		super(crudTypes);
+	}
 
 	@Override
 	protected Result<?> execute(PARAM param) {
@@ -54,6 +59,10 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 	}
 	
 	protected abstract Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PARAM param);
+	
+	protected Client client() {
+		return request().getParam(Params.CLIENT);
+	}
 	
 	protected boolean userLock() {
 		return false;

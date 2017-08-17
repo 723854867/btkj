@@ -5,10 +5,10 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.btkj.pojo.po.TenantPO;
 
-public class TenantModValidator implements ConstraintValidator<EmployeeMod, Integer> {
+public class TenantModValidator implements ConstraintValidator<TenantMod, Integer> {
 
 	@Override
-	public void initialize(EmployeeMod constraintAnnotation) {}
+	public void initialize(TenantMod constraintAnnotation) {}
 
 	@Override
 	public boolean isValid(Integer value, ConstraintValidatorContext context) {

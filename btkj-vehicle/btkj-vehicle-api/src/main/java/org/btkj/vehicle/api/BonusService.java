@@ -1,9 +1,7 @@
 package org.btkj.vehicle.api;
 
-import java.util.List;
-
 import org.btkj.vehicle.pojo.model.BonusRouteView;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.common.message.Result;
@@ -36,5 +34,5 @@ public interface BonusService {
 	 * @param searcher
 	 * @return
 	 */
-	Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param);
+	Result<VehicleCoefficients> poundageCoefficients(PoundageCoefficientsParam param);
 }

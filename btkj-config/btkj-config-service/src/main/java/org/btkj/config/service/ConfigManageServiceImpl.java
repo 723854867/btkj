@@ -23,6 +23,7 @@ import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.AreaEditParam;
+import org.btkj.config.pojo.param.InsurerEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
@@ -41,6 +42,7 @@ import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -72,31 +74,38 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
-		Insurer insurer = EntityGenerator.newInsurer(id, name, icon, bindBiHu, leBaoBaId);
-		try {
-			insurerMapper.insert(insurer);
+	public Result<Void> insurerEdit(InsurerEditParam param) {
+		switch (param.getCrudType()) {
+		case CREATE:
+			Insurer insurer = EntityGenerator.newInsurer(param);
+			try {
+				insurerMapper.insert(insurer);
+				return Consts.RESULT.OK;
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
+		case UPDATE:
+			insurer = insurerMapper.getByKey(param.getId());
+			if (null == insurer)
+				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
+			if (StringUtil.hasText(param.getName()))
+				insurer.setName(param.getName());
+			if (StringUtil.hasText(param.getIcon()))
+				insurer.setIcon(param.getIcon());
+			if (null != param.getBiHuId())
+				insurer.setBiHuId(param.getBiHuId());
+			if (null != param.getLeBaoBaId())
+				insurer.setLeBaoBaId(param.getLeBaoBaId());
+			insurer.setUpdated(DateUtil.currentTime());
+			try {
+				insurerMapper.update(insurer);
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
 			return Consts.RESULT.OK;
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
+		default:
+			return Consts.RESULT.FORBID;
 		}
-	}
-	
-	@Override
-	public Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) {
-		Insurer insurer = insurerMapper.getByKey(id);
-		if (null == insurer)
-			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
-		insurer.setName(name);
-		insurer.setIcon(icon);
-		insurer.setBiHuId(bindBiHu ? id : 0);
-		insurer.setLeBaoBaId(leBaoBaId);
-		try {
-			insurerMapper.update(insurer);
-		} catch (DuplicateKeyException e) {
-			return Consts.RESULT.KEY_DUPLICATED;
-		}
-		return Consts.RESULT.OK;
 	}
 	
 	@Override
@@ -117,7 +126,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	@Override
 	public Result<Void> areaEdit(AreaEditParam param) {
-		switch (param.getType()) {
+		switch (param.getCrudType()) {
 		case CREATE:
 			Region region = regionMapper.getByKey(param.getCode());
 			if (null == region)
@@ -212,7 +221,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 			return Consts.RESULT.LOCK_CONFLICT;
 		try {
 			Modular modular = null;
-			switch (param.getType()) {
+			switch (param.getCrudType()) {
 			case CREATE:
 				modular = tx.modularAdd(param);
 				modularMapper.flush(modular);
@@ -246,7 +255,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		try {
 			if (null != param.getModularId() && null == modularMapper.getByKey(param.getModularId()))
 				return BtkjConsts.RESULT.MODULAR_NOT_EXIST;
-			switch (param.getType()) {
+			switch (param.getCrudType()) {
 			case CREATE:
 				Api api = EntityGenerator.newApi(param);
 				try {

@@ -6,7 +6,7 @@ import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,7 +14,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class REPLY extends UserOldAction {
+public class REPLY extends OldUserAction {
 	
 	@Resource
 	private CommunityService communityService;

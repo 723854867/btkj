@@ -18,7 +18,7 @@ import org.btkj.pojo.vo.QuizSearcher;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 
@@ -27,7 +27,7 @@ import org.rapid.util.exception.ConstConvertFailureException;
  * 
  * @author ahab
  */
-public class QUIZ_LIST extends UserOldAction {
+public class QUIZ_LIST extends OldUserAction {
 	
 	@Resource
 	private UserService userService;

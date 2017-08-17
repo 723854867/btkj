@@ -6,11 +6,10 @@ import org.btkj.master.api.CloudService;
 import org.btkj.master.pojo.info.LoginInfo;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.IAction;
 import org.rapid.util.common.message.Result;
 
-
-public class LOGIN extends Action {
+public class LOGIN implements IAction {
 	
 	@Resource
 	private CloudService cloudService;

@@ -10,13 +10,13 @@ import org.btkj.pojo.po.Region;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.enums.CRUD_TYPE;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;
 
-public class CUSTOMER_EDIT extends UserOldAction {
+public class CUSTOMER_EDIT extends OldUserAction {
 	
 	@Resource
 	private UserService userService;
@@ -25,7 +25,7 @@ public class CUSTOMER_EDIT extends UserOldAction {
 
 	@Override
 	protected Result<Void> execute(Request request, User user) {
-		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
+		CrudType crudType = request.getParam(Params.CRUD_TYPE);
 		switch (crudType) {
 		case CREATE:
 			String name = request.getParam(Params.NAME);

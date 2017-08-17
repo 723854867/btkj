@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.rule.bonus.BonusUtils;
@@ -21,7 +21,7 @@ public class CoacheCategory extends BonusRoute<BonusRoute<?>> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
+	protected List<VehicleCoefficientType> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
 		return BonusUtils.noProfitCoacheCommercialCoefficients(coefficients, spinner, param);
 	}
 	

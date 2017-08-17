@@ -6,14 +6,12 @@ import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.param.Param;
-import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
 
 public class AreaEditParam extends Param {
 
 	private static final long serialVersionUID = -5926407207895626938L;
 
-	private CRUD_TYPE type;
 	@NotNull(groups = { ValidateGroups.CRUD.class })
 	private Integer code;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
@@ -24,14 +22,6 @@ public class AreaEditParam extends Param {
 	@Min(value = BtkjConsts.LIMITS.MIN_RENEWAL_PERIOD, groups = { ValidateGroups.CRUD.class })
 	@Max(value = BtkjConsts.LIMITS.MAX_RENEWAL_PERIOD, groups = { ValidateGroups.CRUD.class })
 	private Integer renewalPeriod;
-
-	public CRUD_TYPE getType() {
-		return type;
-	}
-
-	public void setType(CRUD_TYPE type) {
-		this.type = type;
-	}
 
 	public Integer getCode() {
 		return code;

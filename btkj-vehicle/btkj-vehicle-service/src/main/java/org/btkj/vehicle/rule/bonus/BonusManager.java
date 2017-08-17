@@ -14,7 +14,7 @@ import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.vehicle.mongo.BonusConfigMapper;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
@@ -91,15 +91,13 @@ public class BonusManager {
 		return result;
 	}
 	
-	public Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param) {
+	public Result<VehicleCoefficients> poundageCoefficients(PoundageCoefficientsParam param) {
 		LinkedList<String> path = CollectionUtil.toStrLinkedList(param.getPath().split(Consts.SYMBOL_UNDERLINE));
 		String nextId = path.poll();
 		BonusRoute route = null == nextId ? null : bonusRoutes.get(nextId);
 		if (null == route)
 			return Consts.RESULT.FAILURE;
 		BonusConfig config = bonusConfigMapper.getByKey(param.getId());
-//		if (null == config)
-//			return Result.result(Collections.EMPTY_LIST);
 		List<VehicleCoefficient> coefficients = vehicleCoefficientMapper.getByTid(BtkjConsts.GLOBAL_TENANT_ID);
 		coefficients.addAll(vehicleCoefficientMapper.getByTid(param.getTid()));
 		// 车牌省份过滤

@@ -6,7 +6,7 @@ import java.util.List;
 import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.VehicleBizType;
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.Node;
@@ -25,7 +25,7 @@ public class IgnoreProfit extends BonusRoute<BonusRoute<?>> {
 	}
 	
 	@Override
-	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent, List<VehicleCoefficient> coefficients, PoundageCoefficientsParam param) {
+	public VehicleCoefficients coefficients(LinkedList<String> path, Node<BonusRouteBody> parent, List<VehicleCoefficient> coefficients, PoundageCoefficientsParam param) {
 		param.setBizType(VehicleBizType.IGNROE_PROFIT);
 		return super.coefficients(path, parent, coefficients, param);
 	}

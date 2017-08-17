@@ -726,6 +726,7 @@ public class RenewInfo implements Serializable {
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
 			tips.setName(this.UserInfo.ModleName);
+			tips.setBiHuJYId(this.UserInfo.AutoMoldCode);
 			if (this.BusinessStatus != 3) {
 				tips.setOwner(_owner());
 				tips.setInsurer(_insurer());

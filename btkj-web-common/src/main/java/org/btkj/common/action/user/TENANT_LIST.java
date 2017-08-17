@@ -6,7 +6,7 @@ import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.pojo.info.TenantListInfo;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,7 +14,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class TENANT_LIST extends UserOldAction {
+public class TENANT_LIST extends OldUserAction {
 	
 	@Resource
 	private TenantService tenantService;

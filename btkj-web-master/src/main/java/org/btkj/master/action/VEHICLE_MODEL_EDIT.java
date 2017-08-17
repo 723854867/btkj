@@ -2,30 +2,24 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.master.LoggedAction;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.rapid.util.common.Consts;
-import org.rapid.util.common.enums.CRUD_TYPE;
+import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 
-public class VEHICLE_MODEL_EDIT extends LoggedAction {
+public class VEHICLE_MODEL_EDIT extends AdminAction<VehicleModelEditParam> {
 	
 	@Resource
 	private VehicleManageService vehicleManageService;
+	
+	public VEHICLE_MODEL_EDIT() {
+		super(CrudType.CREATE, CrudType.DELETE);
+	}
 
 	@Override
-	protected Result<?> execute(Request request, Administrator operator) {
-		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
-		switch (crudType) {
-		case CREATE:
-			return vehicleManageService.modelAdd(request.getParam(Params.ID), request.getParam(Params.NAME));
-		case UPDATE:
-			return vehicleManageService.modelUpdate(request.getParam(Params.ID), request.getParam(Params.NAME));
-		default:
-			return Consts.RESULT.FORBID;
-		}
+	protected Result<?> execute(Administrator admin, VehicleModelEditParam param) {
+		return vehicleManageService.modelEdit(param);
 	}
 }

@@ -10,12 +10,21 @@ import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.web.util.Params;
 import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 
 public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 	
 	@Resource
 	protected UserService userService;
+	
+	public UserAction() {
+		super();
+	}
+	
+	public UserAction(CrudType... crudTypes) {
+		super(crudTypes);
+	}
 
 	@Override
 	protected Result<?> execute(PARAM param) {
@@ -41,7 +50,16 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 	protected abstract Result<?> execute(AppPO app, UserPO user, PARAM param);
 	
 	/**
-	 * 如果返回 true 则已经获取到了 user 的锁
+	 * 默认需要客户端传递 client 参数
+	 * 
+	 * @return
+	 */
+	public Client client() {
+		return request().getParam(Params.CLIENT);
+	}
+	
+	/**
+	 * 是否需要获取用户锁
 	 * 
 	 * @return
 	 */

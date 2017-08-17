@@ -106,6 +106,12 @@ public enum BtkjCode implements ICode {
 	INSURER_NOT_EXIST(518, "insurer not exist"),
 	
 	/**
+	 * 壁虎车型获取失败
+	 * 
+	 */
+	VEHICLE_INFO_REQUEST_FAILURE(519, "vehicle info request failure!"),
+	
+	/**
 	 * 报价失败
 	 */
 	QUOTE_FAILURE(520, "quote failure"),

@@ -27,7 +27,7 @@ public class MasterServiceImpl implements MasterService {
 	
 	@Override
 	public Result<?> adminEdit(AdminEditParam param) {
-		switch (param.getType()) {
+		switch (param.getCrudType()) {
 		case CREATE:
 			Administrator administrator = EntityGenerator.newAdministrator(param.getName(), param.getPwd());
 			administratorMapper.insert(administrator);

@@ -8,7 +8,7 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AppAction;
+import org.btkj.web.util.action.OldAppAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -17,7 +17,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class PWD_RESET extends AppAction {
+public class PWD_RESET extends OldAppAction {
 	
 	@Resource
 	private UserService userService;

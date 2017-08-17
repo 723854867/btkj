@@ -96,13 +96,15 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 			result = httpProxy.syncRequest(post, SyncStrRespHandler.INSTANCE);
 		} catch (IOException e) {
 			logger.error("乐保吧报价失败!", e);
-			return null;
+			return Result.result(BtkjCode.QUOTE_FAILURE, "请求失败！");
 		}
 		
 		BasicResult br = SerializeUtil.XmlUtil.xmlToBean(result, BasicResult.class);
 		OrderResult or = SerializeUtil.XmlUtil.xmlToBean(new String(Base64.decodeBase64(br.getContent())), OrderResult.class);
-		if (1 != or.getAiErrorInfo().getQuoteResult())
-			return Result.result(BtkjCode.QUOTE_FAILURE, or.getAiErrorInfo().getErrorInfo());
-		return Result.result(or.schema());
+		if (!or.isSuccess())
+			return Result.result(BtkjCode.QUOTE_FAILURE, or.error());
+		if (1 != or.getAttach().getAiErrorInfo().getQuoteResult())
+			return Result.result(BtkjCode.QUOTE_FAILURE, or.getAttach().getAiErrorInfo().getErrorInfo());
+		return Result.result(or.getAttach().schema());
 	}
 }

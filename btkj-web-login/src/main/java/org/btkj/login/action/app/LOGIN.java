@@ -7,7 +7,7 @@ import org.btkj.pojo.bo.indentity.App;
 import org.btkj.user.api.LoginService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AppAction;
+import org.btkj.web.util.action.OldAppAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -17,7 +17,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class LOGIN extends AppAction {
+public class LOGIN extends OldAppAction {
 	
 	@Resource
 	private LoginService loginService;

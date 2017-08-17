@@ -51,10 +51,10 @@ public class TenantPO implements UniqueModel<Integer> {
 		}
 		public static final boolean check(int mod) {
 			for (Mod temp : Mod.values()) {
-				if ((temp.mark & mod) != temp.mark)
-					return false;
+				if ((temp.mark & mod) == temp.mark)
+					return true;
 			}
-			return true;
+			return false;
 		}
 		/**
 		 * 统计口径险种选项

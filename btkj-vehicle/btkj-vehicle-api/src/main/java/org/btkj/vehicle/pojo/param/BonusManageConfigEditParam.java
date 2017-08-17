@@ -6,14 +6,12 @@ import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
-import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
 
 public class BonusManageConfigEditParam extends EmployeeParam {
 
 	private static final long serialVersionUID = -437750523425543983L;
 
-	private CRUD_TYPE type;
 	@NotNull(groups = {ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class})
 	private String id;
 	@NotNull(groups = {ValidateGroups.CREATE.class})
@@ -26,14 +24,6 @@ public class BonusManageConfigEditParam extends EmployeeParam {
 	@NotNull(groups = {ValidateGroups.CREATE.class})
 	private BonusManageConfigType configType;
 	
-	public CRUD_TYPE getType() {
-		return type;
-	}
-	
-	public void setType(CRUD_TYPE type) {
-		this.type = type;
-	}
-
 	public String getId() {
 		return id;
 	}

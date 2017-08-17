@@ -19,353 +19,341 @@ public class OrderResult {
 	
 	private static final Logger logger = LoggerFactory.getLogger(OrderResult.class);
 
-	private int Commission;
-	// 投保状态 1，可投保（自动核保通过） 2，需修改（需要修复） 3，补资料（需要上传资料） 4，待审核（太平专有） 5，人工审核中 6.其他错误
-	// 7、核保失败
-	private int InsuranceStatus;
-	// 商业险返回信息
-	private String SYReturnStr;
-	// 交强险返回信息
-	private String JQReturnStr;
-	// 折扣前总保费
-	private String BasePremium;
-	// 出险信息
-	private String ReturnStr;
-	// 公司Id
-	private int CompanyID;
-	// 保单ID
-	private String PolicyNo;
-	// 总保额
-	private String TotalAmount;
-	// 总保费
-	private String TotalPremium;
-	// 总佣金
-	private String TotalCommision;
-	// 商业险总保额
-	private String CommerceTotalAmount;
-	// 商业总保费
-	private String CommerceTotalPremium;
-	// 商业险佣金
-	private String CommerceTotalCommission;
-	// 交强险总保额
-	private String CompulsoryTotalAmount;
-	// 交强险总保费
-	private String CompulsoryTotalPremium;
-	// 交强险佣金
-	private String CompulsoryTotalCommisson;
-	// 商业险保单号
-	private String CommercePolicyNo;
-	// 交强险保单号
-	private String CompulsoryPolicyNo;
-	// 商业险出险信息
-	private String SyDanger;
-	// 交强险出险信息
-	private String JqDanger;
-	// 报价是否发生错误 1发生错误，2未发生错误
-	private int IsAnError;
-	// 上传资料类型
-	private String UploadType;
-	// 是否通融成功
-	private boolean IsApply;
-	// 核保信息
-	private CprModel cprModel;
-	// 保单错误对象信息返回
-	private AiErrorInfo aiErrorInfo;
-	// 商业险信息返回集合
-	private List<AmountItem> CommerceAmountList;
-	// 交强险信息返回集合
-	private List<AmountItem> CompulsoryAmountList;
-
-	@XmlElement(name = "Commission")
-	public int getCommission() {
-		return Commission;
-	}
-
-	public void setCommission(int commission) {
-		Commission = commission;
-	}
-
-	@XmlElement(name = "InsuranceStatus")
-	public int getInsuranceStatus() {
-		return InsuranceStatus;
-	}
-
-	public void setInsuranceStatus(int insuranceStatus) {
-		InsuranceStatus = insuranceStatus;
-	}
-
-	@XmlElement(name = "SYReturnStr")
-	public String getSYReturnStr() {
-		return SYReturnStr;
-	}
-
-	public void setSYReturnStr(String sYReturnStr) {
-		SYReturnStr = sYReturnStr;
-	}
-
-	@XmlElement(name = "JQReturnStr")
-	public String getJQReturnStr() {
-		return JQReturnStr;
-	}
-
-	public void setJQReturnStr(String jQReturnStr) {
-		JQReturnStr = jQReturnStr;
-	}
-
-	@XmlElement(name = "BasePremium")
-	public String getBasePremium() {
-		return BasePremium;
-	}
-
-	public void setBasePremium(String basePremium) {
-		BasePremium = basePremium;
-	}
-
-	@XmlElement(name = "ReturnStr")
-	public String getReturnStr() {
-		return ReturnStr;
-	}
-
-	public void setReturnStr(String returnStr) {
-		ReturnStr = returnStr;
-	}
-
-	@XmlElement(name = "CompanyID")
-	public int getCompanyID() {
-		return CompanyID;
-	}
-
-	public void setCompanyID(int companyID) {
-		CompanyID = companyID;
-	}
-
-	@XmlElement(name = "PolicyNo")
-	public String getPolicyNo() {
-		return PolicyNo;
-	}
-
-	public void setPolicyNo(String policyNo) {
-		PolicyNo = policyNo;
-	}
-
-	@XmlElement(name = "TotalAmount")
-	public String getTotalAmount() {
-		return TotalAmount;
-	}
-
-	public void setTotalAmount(String totalAmount) {
-		TotalAmount = totalAmount;
-	}
-
-	@XmlElement(name = "TotalPremium")
-	public String getTotalPremium() {
-		return TotalPremium;
-	}
-
-	public void setTotalPremium(String totalPremium) {
-		TotalPremium = totalPremium;
-	}
-
-	@XmlElement(name = "TotalCommision")
-	public String getTotalCommision() {
-		return TotalCommision;
-	}
-
-	public void setTotalCommision(String totalCommision) {
-		TotalCommision = totalCommision;
-	}
-
-	@XmlElement(name = "CommerceTotalAmount")
-	public String getCommerceTotalAmount() {
-		return CommerceTotalAmount;
-	}
-
-	public void setCommerceTotalAmount(String commerceTotalAmount) {
-		CommerceTotalAmount = commerceTotalAmount;
-	}
-
-	@XmlElement(name = "CommerceTotalPremium")
-	public String getCommerceTotalPremium() {
-		return CommerceTotalPremium;
-	}
-
-	public void setCommerceTotalPremium(String commerceTotalPremium) {
-		CommerceTotalPremium = commerceTotalPremium;
-	}
-
-	@XmlElement(name = "CommerceTotalCommission")
-	public String getCommerceTotalCommission() {
-		return CommerceTotalCommission;
-	}
-
-	public void setCommerceTotalCommission(String commerceTotalCommission) {
-		CommerceTotalCommission = commerceTotalCommission;
-	}
-
-	@XmlElement(name = "CompulsoryTotalAmount")
-	public String getCompulsoryTotalAmount() {
-		return CompulsoryTotalAmount;
-	}
-
-	public void setCompulsoryTotalAmount(String compulsoryTotalAmount) {
-		CompulsoryTotalAmount = compulsoryTotalAmount;
-	}
-
-	@XmlElement(name = "CompulsoryTotalPremium")
-	public String getCompulsoryTotalPremium() {
-		return CompulsoryTotalPremium;
-	}
-
-	public void setCompulsoryTotalPremium(String compulsoryTotalPremium) {
-		CompulsoryTotalPremium = compulsoryTotalPremium;
-	}
-
-	@XmlElement(name = "CompulsoryTotalCommisson")
-	public String getCompulsoryTotalCommisson() {
-		return CompulsoryTotalCommisson;
-	}
-
-	public void setCompulsoryTotalCommisson(String compulsoryTotalCommisson) {
-		CompulsoryTotalCommisson = compulsoryTotalCommisson;
-	}
-
-	@XmlElement(name = "CommercePolicyNo")
-	public String getCommercePolicyNo() {
-		return CommercePolicyNo;
-	}
-
-	public void setCommercePolicyNo(String commercePolicyNo) {
-		CommercePolicyNo = commercePolicyNo;
-	}
-
-	@XmlElement(name = "CompulsoryPolicyNo")
-	public String getCompulsoryPolicyNo() {
-		return CompulsoryPolicyNo;
-	}
-
-	public void setCompulsoryPolicyNo(String compulsoryPolicyNo) {
-		CompulsoryPolicyNo = compulsoryPolicyNo;
-	}
-
-	@XmlElement(name = "SyDanger")
-	public String getSyDanger() {
-		return SyDanger;
-	}
-
-	public void setSyDanger(String syDanger) {
-		SyDanger = syDanger;
-	}
-
-	@XmlElement(name = "JqDanger")
-	public String getJqDanger() {
-		return JqDanger;
-	}
-
-	public void setJqDanger(String jqDanger) {
-		JqDanger = jqDanger;
-	}
-
-	@XmlElement(name = "IsAnError")
-	public int getIsAnError() {
-		return IsAnError;
-	}
-
-	public void setIsAnError(int isAnError) {
-		IsAnError = isAnError;
-	}
-
-	@XmlElement(name = "UploadType")
-	public String getUploadType() {
-		return UploadType;
-	}
-
-	public void setUploadType(String uploadType) {
-		UploadType = uploadType;
-	}
-
-	@XmlElement(name = "IsApply")
-	public boolean isIsApply() {
-		return IsApply;
-	}
-
-	public void setIsApply(boolean isApply) {
-		IsApply = isApply;
-	}
+	private Attach attach;
+	private Message message;
 	
-	@XmlElement(name = "CommerceAmountList")
-	public List<AmountItem> getCommerceAmountList() {
-		return CommerceAmountList;
+	@XmlElement(name = "Table")
+	public Attach getAttach() {
+		return attach;
 	}
-	
-	public void setCommerceAmountList(List<AmountItem> commerceAmountList) {
-		CommerceAmountList = commerceAmountList;
+	public void setAttach(Attach attach) {
+		this.attach = attach;
 	}
-	
-	@XmlElement(name = "CompulsoryAmountList")
-	public List<AmountItem> getCompulsoryAmountList() {
-		return CompulsoryAmountList;
+	@XmlElement(name = "MESSAGE")
+	public Message getMessage() {
+		return message;
 	}
-	
-	public void setCompulsoryAmountList(List<AmountItem> compulsoryAmountList) {
-		CompulsoryAmountList = compulsoryAmountList;
+	public void setMessage(Message message) {
+		this.message = message;
 	}
-	
-	@XmlElement(name = "cprModel")
-	public CprModel getCprModel() {
-		return cprModel;
+	public boolean isSuccess() {
+		return null != message && null != message.getValue() && message.getValue().equals("OK");
 	}
-	
-	public void setCprModel(CprModel cprModel) {
-		this.cprModel = cprModel;
+	public String error() {
+		return null == message ? null : message.getValue();
 	}
-	
-	@XmlElement(name = "aiErrorInfo")
-	public AiErrorInfo getAiErrorInfo() {
-		return aiErrorInfo;
-	}
-	
-	public void setAiErrorInfo(AiErrorInfo aiErrorInfo) {
-		this.aiErrorInfo = aiErrorInfo;
-	}
-	
-	public PolicySchema schema() {
-		PolicySchema schema = new PolicySchema();
-		schema.setCommericialTotal(null == CommerceTotalPremium ? 0 : Double.valueOf(CommerceTotalPremium));
-		schema.setCompulsiveTotal(null == CompulsoryTotalPremium ? 0 : Double.valueOf(CompulsoryTotalPremium));
-		if (!CollectionUtil.isEmpty(CommerceAmountList)) {
-			Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
-			for (AmountItem item : CommerceAmountList) {
-				LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
-				if (null == insurance) {
-					logger.error("未识别的乐保吧商业险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
-					continue;
-				}
-				insurance.insuranceMapping(insurances, item);
-			}
+	public static class Attach {
+		private int Commission;
+		// 投保状态 1，可投保（自动核保通过） 2，需修改（需要修复） 3，补资料（需要上传资料） 4，待审核（太平专有） 5，人工审核中 6.其他错误
+		// 7、核保失败
+		private int InsuranceStatus;
+		// 商业险返回信息
+		private String SYReturnStr;
+		// 交强险返回信息
+		private String JQReturnStr;
+		// 折扣前总保费
+		private String BasePremium;
+		// 出险信息
+		private String ReturnStr;
+		// 公司Id
+		private int CompanyID;
+		// 保单ID
+		private String PolicyNo;
+		// 总保额
+		private String TotalAmount;
+		// 总保费
+		private String TotalPremium;
+		// 总佣金
+		private String TotalCommision;
+		// 商业险总保额
+		private String CommerceTotalAmount;
+		// 商业总保费
+		private String CommerceTotalPremium;
+		// 商业险佣金
+		private String CommerceTotalCommission;
+		// 交强险总保额
+		private String CompulsoryTotalAmount;
+		// 交强险总保费
+		private String CompulsoryTotalPremium;
+		// 交强险佣金
+		private String CompulsoryTotalCommisson;
+		// 商业险保单号
+		private String CommercePolicyNo;
+		// 交强险保单号
+		private String CompulsoryPolicyNo;
+		// 商业险出险信息
+		private String SyDanger;
+		// 交强险出险信息
+		private String JqDanger;
+		// 报价是否发生错误 1发生错误，2未发生错误
+		private int IsAnError;
+		// 上传资料类型
+		private String UploadType;
+		// 是否通融成功
+		private boolean IsApply;
+		// 核保信息
+		private CprModel cprModel;
+		// 保单错误对象信息返回
+		private AiErrorInfo aiErrorInfo;
+		// 商业险信息返回集合
+		private List<AmountItem> CommerceAmountList;
+		// 交强险信息返回集合
+		private List<AmountItem> CompulsoryAmountList;
+
+		@XmlElement(name = "Commission")
+		public int getCommission() {
+			return Commission;
 		}
-		if (!CollectionUtil.isEmpty(CompulsoryAmountList)) {
-			for (AmountItem item : CompulsoryAmountList) {
-				LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
-				if (null == insurance) {
-					logger.error("为识别的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
-					continue;
-				}
-				switch (insurance) {
-				case J1:
-					break;
-				case CCS:
-					schema.setVehicleVesselTotal(null == item.getPremium() ? 0 : Double.valueOf(item.getPremium()));
-					break;
-				default:
-					logger.error("错误的的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
-					break;
+		public void setCommission(int commission) {
+			Commission = commission;
+		}
+		@XmlElement(name = "InsuranceStatus")
+		public int getInsuranceStatus() {
+			return InsuranceStatus;
+		}
+		public void setInsuranceStatus(int insuranceStatus) {
+			InsuranceStatus = insuranceStatus;
+		}
+		@XmlElement(name = "SYReturnStr")
+		public String getSYReturnStr() {
+			return SYReturnStr;
+		}
+		public void setSYReturnStr(String sYReturnStr) {
+			SYReturnStr = sYReturnStr;
+		}
+		@XmlElement(name = "JQReturnStr")
+		public String getJQReturnStr() {
+			return JQReturnStr;
+		}
+		public void setJQReturnStr(String jQReturnStr) {
+			JQReturnStr = jQReturnStr;
+		}
+		@XmlElement(name = "BasePremium")
+		public String getBasePremium() {
+			return BasePremium;
+		}
+		public void setBasePremium(String basePremium) {
+			BasePremium = basePremium;
+		}
+		@XmlElement(name = "ReturnStr")
+		public String getReturnStr() {
+			return ReturnStr;
+		}
+		public void setReturnStr(String returnStr) {
+			ReturnStr = returnStr;
+		}
+		@XmlElement(name = "CompanyID")
+		public int getCompanyID() {
+			return CompanyID;
+		}
+		public void setCompanyID(int companyID) {
+			CompanyID = companyID;
+		}
+		@XmlElement(name = "PolicyNo")
+		public String getPolicyNo() {
+			return PolicyNo;
+		}
+		public void setPolicyNo(String policyNo) {
+			PolicyNo = policyNo;
+		}
+		@XmlElement(name = "TotalAmount")
+		public String getTotalAmount() {
+			return TotalAmount;
+		}
+		public void setTotalAmount(String totalAmount) {
+			TotalAmount = totalAmount;
+		}
+		@XmlElement(name = "TotalPremium")
+		public String getTotalPremium() {
+			return TotalPremium;
+		}
+		public void setTotalPremium(String totalPremium) {
+			TotalPremium = totalPremium;
+		}
+		@XmlElement(name = "TotalCommision")
+		public String getTotalCommision() {
+			return TotalCommision;
+		}
+		public void setTotalCommision(String totalCommision) {
+			TotalCommision = totalCommision;
+		}
+		@XmlElement(name = "CommerceTotalAmount")
+		public String getCommerceTotalAmount() {
+			return CommerceTotalAmount;
+		}
+		public void setCommerceTotalAmount(String commerceTotalAmount) {
+			CommerceTotalAmount = commerceTotalAmount;
+		}
+		@XmlElement(name = "CommerceTotalPremium")
+		public String getCommerceTotalPremium() {
+			return CommerceTotalPremium;
+		}
+		public void setCommerceTotalPremium(String commerceTotalPremium) {
+			CommerceTotalPremium = commerceTotalPremium;
+		}
+		@XmlElement(name = "CommerceTotalCommission")
+		public String getCommerceTotalCommission() {
+			return CommerceTotalCommission;
+		}
+		public void setCommerceTotalCommission(String commerceTotalCommission) {
+			CommerceTotalCommission = commerceTotalCommission;
+		}
+		@XmlElement(name = "CompulsoryTotalAmount")
+		public String getCompulsoryTotalAmount() {
+			return CompulsoryTotalAmount;
+		}
+		public void setCompulsoryTotalAmount(String compulsoryTotalAmount) {
+			CompulsoryTotalAmount = compulsoryTotalAmount;
+		}
+		@XmlElement(name = "CompulsoryTotalPremium")
+		public String getCompulsoryTotalPremium() {
+			return CompulsoryTotalPremium;
+		}
+		public void setCompulsoryTotalPremium(String compulsoryTotalPremium) {
+			CompulsoryTotalPremium = compulsoryTotalPremium;
+		}
+		@XmlElement(name = "CompulsoryTotalCommisson")
+		public String getCompulsoryTotalCommisson() {
+			return CompulsoryTotalCommisson;
+		}
+		public void setCompulsoryTotalCommisson(String compulsoryTotalCommisson) {
+			CompulsoryTotalCommisson = compulsoryTotalCommisson;
+		}
+		@XmlElement(name = "CommercePolicyNo")
+		public String getCommercePolicyNo() {
+			return CommercePolicyNo;
+		}
+		public void setCommercePolicyNo(String commercePolicyNo) {
+			CommercePolicyNo = commercePolicyNo;
+		}
+		@XmlElement(name = "CompulsoryPolicyNo")
+		public String getCompulsoryPolicyNo() {
+			return CompulsoryPolicyNo;
+		}
+		public void setCompulsoryPolicyNo(String compulsoryPolicyNo) {
+			CompulsoryPolicyNo = compulsoryPolicyNo;
+		}
+		@XmlElement(name = "SyDanger")
+		public String getSyDanger() {
+			return SyDanger;
+		}
+		public void setSyDanger(String syDanger) {
+			SyDanger = syDanger;
+		}
+		@XmlElement(name = "JqDanger")
+		public String getJqDanger() {
+			return JqDanger;
+		}
+		public void setJqDanger(String jqDanger) {
+			JqDanger = jqDanger;
+		}
+		@XmlElement(name = "IsAnError")
+		public int getIsAnError() {
+			return IsAnError;
+		}
+		public void setIsAnError(int isAnError) {
+			IsAnError = isAnError;
+		}
+		@XmlElement(name = "UploadType")
+		public String getUploadType() {
+			return UploadType;
+		}
+		public void setUploadType(String uploadType) {
+			UploadType = uploadType;
+		}
+		@XmlElement(name = "IsApply")
+		public boolean isIsApply() {
+			return IsApply;
+		}
+		public void setIsApply(boolean isApply) {
+			IsApply = isApply;
+		}
+		@XmlElement(name = "CommerceAmountList")
+		public List<AmountItem> getCommerceAmountList() {
+			return CommerceAmountList;
+		}
+		public void setCommerceAmountList(List<AmountItem> commerceAmountList) {
+			CommerceAmountList = commerceAmountList;
+		}
+		@XmlElement(name = "CompulsoryAmountList")
+		public List<AmountItem> getCompulsoryAmountList() {
+			return CompulsoryAmountList;
+		}
+		public void setCompulsoryAmountList(List<AmountItem> compulsoryAmountList) {
+			CompulsoryAmountList = compulsoryAmountList;
+		}
+		@XmlElement(name = "cprModel")
+		public CprModel getCprModel() {
+			return cprModel;
+		}
+		public void setCprModel(CprModel cprModel) {
+			this.cprModel = cprModel;
+		}
+		@XmlElement(name = "aiErrorInfo")
+		public AiErrorInfo getAiErrorInfo() {
+			return aiErrorInfo;
+		}
+		public void setAiErrorInfo(AiErrorInfo aiErrorInfo) {
+			this.aiErrorInfo = aiErrorInfo;
+		}
+		public PolicySchema schema() {
+			PolicySchema schema = new PolicySchema();
+			schema.setCommericialTotal(null == CommerceTotalPremium ? 0 : Double.valueOf(CommerceTotalPremium));
+			schema.setCompulsiveTotal(null == CompulsoryTotalPremium ? 0 : Double.valueOf(CompulsoryTotalPremium));
+			if (!CollectionUtil.isEmpty(CommerceAmountList)) {
+				Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
+				for (AmountItem item : CommerceAmountList) {
+					LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
+					if (null == insurance) {
+						logger.error("未识别的乐保吧商业险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+						continue;
+					}
+					insurance.insuranceMapping(insurances, item);
 				}
 			}
+			if (!CollectionUtil.isEmpty(CompulsoryAmountList)) {
+				for (AmountItem item : CompulsoryAmountList) {
+					LeBaoBaInsurance insurance = LeBaoBaInsurance.match(item.getInsuranceCode());
+					if (null == insurance) {
+						logger.error("为识别的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+						continue;
+					}
+					switch (insurance) {
+					case J1:
+						break;
+					case CCS:
+						schema.setVehicleVesselTotal(null == item.getPremium() ? 0 : Double.valueOf(item.getPremium()));
+						break;
+					default:
+						logger.error("错误的的乐保吧交强险种 - {} - {}", item.getInsuranceCode(), item.getInsuranceName());
+						break;
+					}
+				}
+			}
+			return schema;
 		}
-		return schema;
+	}
+	
+	private static class Message {
+		private String value;
+		private String time;
+		@XmlElement(name = "VALUE")
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
+		@XmlElement(name = "TIME")
+		public String getTime() {
+			return time;
+		}
+		public void setTime(String time) {
+			this.time = time;
+		}
 	}
 
-	public class AmountItem {
+	public static class AmountItem {
 		private String BenchMarkPremium; // 折扣前保费
 		private String InsuranceCode; // 险种代码
 		private String InsuranceName; // 险种名字
@@ -440,7 +428,7 @@ public class OrderResult {
 		}
 	}
 
-	private class CprModel {
+	private static class CprModel {
 		// 保单Id
 		private String PolicyID;
 		// 商业险核保状态 (-1 未购买 0,待核保, 1 自动核保成功，2 自动核保失败，3 人工核保中 4 人工核保成功 5 人工核保失败)
@@ -488,7 +476,7 @@ public class OrderResult {
 		}
 	}
 
-	public class AiErrorInfo {
+	public static class AiErrorInfo {
 		private String Id;
 		// 车牌
 		private String LicenseNo;

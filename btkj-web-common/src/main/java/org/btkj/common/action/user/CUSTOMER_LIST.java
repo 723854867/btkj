@@ -9,7 +9,7 @@ import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.enums.SORT_COL;
 import org.rapid.util.common.message.Result;
 
@@ -18,7 +18,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CUSTOMER_LIST extends UserOldAction {
+public class CUSTOMER_LIST extends OldUserAction {
 	
 	@Resource
 	private UserService userService;

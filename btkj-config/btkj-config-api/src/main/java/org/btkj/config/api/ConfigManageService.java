@@ -10,6 +10,7 @@ import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.AreaEditParam;
+import org.btkj.config.pojo.param.InsurerEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.message.Result;
@@ -17,33 +18,19 @@ import org.rapid.util.common.message.Result;
 public interface ConfigManageService {
 
 	/**
-	 * 获取所有的险企
+	 * 险企列表
 	 * 
 	 * @return
 	 */
 	List<Insurer> insurers();
 	
 	/**
-	 * 新增险企
+	 * 险企编辑
 	 * 
-	 * @param name
-	 * @param icon
-	 * @param biHuId
-	 * @param leBaoBaId
+	 * @param param
 	 * @return
 	 */
-	Result<Void> insurerAdd(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
-	
-	/**
-	 * 修改险企
-	 * 
-	 * @param name
-	 * @param icon
-	 * @param biHuId
-	 * @param leBaoBaId
-	 * @return
-	 */
-	Result<Void> insurerUpdate(int id, String name, String icon, boolean bindBiHu, String leBaoBaId);
+	Result<Void> insurerEdit(InsurerEditParam param);
 	
 	/**
 	 * 获取所有地区配置信息

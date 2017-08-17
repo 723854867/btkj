@@ -11,7 +11,7 @@ import javax.validation.Payload;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EmployeeModValidator.class)
+@Constraint(validatedBy = TenantModValidator.class)
 @Documented
 public @interface TenantMod {
 

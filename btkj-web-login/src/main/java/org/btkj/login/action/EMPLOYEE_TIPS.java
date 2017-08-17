@@ -10,7 +10,7 @@ import org.btkj.pojo.po.Region;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.OldAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -18,7 +18,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class EMPLOYEE_TIPS extends Action {
+public class EMPLOYEE_TIPS extends OldAction {
 	
 	@Resource
 	private ConfigService configService;

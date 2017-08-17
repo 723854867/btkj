@@ -7,11 +7,11 @@ import org.btkj.courier.pojo.info.StsInfo;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
-public class ASSUME_ROLE extends UserOldAction {
+public class ASSUME_ROLE extends OldUserAction {
 	
 	@Resource
 	private UserService userService;

@@ -21,6 +21,7 @@ public class TenantInfo implements Serializable {
 	private String licenseImage;
 	private String nonAutoBind;
 	private String servicePhone;
+	private int teamDepth;
 	
 	public TenantInfo(AppPO app, TenantPO tenant, Region region) {
 		this.tid = tenant.getTid();
@@ -34,6 +35,7 @@ public class TenantInfo implements Serializable {
 		this.licenseImage = tenant.getLicenseImage();
 		this.nonAutoBind = tenant.getNonAutoBind();
 		this.servicePhone = tenant.getServicePhone();
+		this.teamDepth = tenant.getTeamDepth();
 	}
 
 	public int getTid() {
@@ -122,5 +124,13 @@ public class TenantInfo implements Serializable {
 
 	public void setServicePhone(String servicePhone) {
 		this.servicePhone = servicePhone;
+	}
+	
+	public int getTeamDepth() {
+		return teamDepth;
+	}
+	
+	public void setTeamDepth(int teamDepth) {
+		this.teamDepth = teamDepth;
 	}
 }

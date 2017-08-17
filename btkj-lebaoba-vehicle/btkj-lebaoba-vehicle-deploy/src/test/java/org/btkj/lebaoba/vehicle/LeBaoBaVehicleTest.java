@@ -4,8 +4,10 @@ import javax.annotation.Resource;
 
 import org.btkj.lebaoba.BaseTest;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
+import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.junit.Test;
+import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 
 public class LeBaoBaVehicleTest extends BaseTest {
@@ -30,6 +32,8 @@ public class LeBaoBaVehicleTest extends BaseTest {
 						+ "\"seat\":7,"
 						+ "\"transfer\":false,"
 						+ "\"price\":40000.0,"
+						+"\"exhaust\":1.20600,"
+						+"\"vehicleId\":\"6240188\","
 						+ "\"owner\":{"
 							+ "\"type\":\"PERSONAL\","
 							+ "\"mobile\":\"18811112222\","
@@ -90,6 +94,7 @@ public class LeBaoBaVehicleTest extends BaseTest {
 						+ "}"
 					+ "}";
 		VehiclePolicyTips tips = SerializeUtil.JsonUtil.GSON.fromJson(json, VehiclePolicyTips.class);
-		leBaoBaVehicle.order(null, null, null, tips);
+		Result<PolicySchema> result = leBaoBaVehicle.order(null, null, null, tips);
+		System.out.println(result.getCode() + " " + result.getDesc());
 	}
 }

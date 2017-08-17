@@ -7,7 +7,7 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.OldAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -16,7 +16,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CAPTCHA_OBTAIN extends Action {
+public class CAPTCHA_OBTAIN extends OldAction {
 	
 	@Resource
 	private AppService appService;

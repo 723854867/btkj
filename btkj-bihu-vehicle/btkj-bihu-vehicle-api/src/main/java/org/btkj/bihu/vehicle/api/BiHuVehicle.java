@@ -1,10 +1,13 @@
 package org.btkj.bihu.vehicle.api;
 
+import java.util.List;
+
 import org.btkj.pojo.bo.PolicyDetail;
 import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.bo.indentity.Employee;
 import org.btkj.pojo.po.Renewal;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.vo.VehicleInfo;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.message.Result;
 
@@ -35,6 +38,13 @@ public interface BiHuVehicle {
 	 * @return
 	 */
 	Result<Renewal> renewal(TenantPO tenant, int uid, String vin, String engine, int cityCode);
+	
+	/**
+	 * 获取车辆信息
+	 * 
+	 * @return
+	 */
+	Result<List<VehicleInfo>> vehicleInfos(int uid, TenantPO tenant, String license, String modelName, int cityCode);
 	
 	/**
 	 * 报价/投保接口:理解为下单

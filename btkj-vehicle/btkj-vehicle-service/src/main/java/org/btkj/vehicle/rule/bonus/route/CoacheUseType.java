@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.rule.bonus.BonusUtils;
@@ -27,7 +27,7 @@ public class CoacheUseType extends BonusRoute<CoacheCategory> {
 	}
 	
 	@Override
-	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
+	protected List<VehicleCoefficientType> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
 		switch (usedType) {
 		case HOME_USE:								// 家庭自用
 		case ENTERPRISE:							// 企业

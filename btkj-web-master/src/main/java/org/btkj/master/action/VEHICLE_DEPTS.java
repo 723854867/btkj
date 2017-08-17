@@ -4,21 +4,20 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.master.LoggedAction;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.pojo.po.VehicleDept;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 
-public class VEHICLE_DEPTS extends LoggedAction {
+public class VEHICLE_DEPTS extends AdminAction<IdParam> {
 	
 	@Resource
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<List<VehicleDept>> execute(Request request, Administrator operator) {
-		return Result.result(vehicleManageService.depts(request.getParam(Params.ID)));
+	protected Result<List<VehicleDept>> execute(Administrator admin, IdParam param) {
+		return Result.result(vehicleManageService.depts(param.getId()));
 	}
 }

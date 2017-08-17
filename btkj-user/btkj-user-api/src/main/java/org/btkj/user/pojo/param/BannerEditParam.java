@@ -5,14 +5,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.param.Param;
-import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
 
 public class BannerEditParam extends Param {
 
 	private static final long serialVersionUID = -2288754924621132852L;
 
-	private CRUD_TYPE type;
 	@Min(value = 1, groups = { ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class })
 	private int id;
 	private int appId;
@@ -27,14 +25,6 @@ public class BannerEditParam extends Param {
 	private String icon;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
 	private String link;
-	
-	public CRUD_TYPE getType() {
-		return type;
-	}
-	
-	public void setType(CRUD_TYPE type) {
-		this.type = type;
-	}
 	
 	public int getId() {
 		return id;

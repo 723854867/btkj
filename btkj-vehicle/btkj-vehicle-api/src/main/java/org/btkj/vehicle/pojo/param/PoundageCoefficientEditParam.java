@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.param.EmployeeParam;
-import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.math.compare.ComparisonSymbol;
 import org.rapid.util.validator.ValidateGroups;
 
@@ -15,7 +14,6 @@ public class PoundageCoefficientEditParam extends EmployeeParam {
 
 	private static final long serialVersionUID = -5457890271653466693L;
 
-	private CRUD_TYPE type;
 	@Min(value = 1, groups = { ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class })
 	private int id;
 	private int tid;
@@ -28,14 +26,6 @@ public class PoundageCoefficientEditParam extends EmployeeParam {
 	private ComparisonSymbol symbol;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
 	private CoefficientType coefficientType;
-	
-	public CRUD_TYPE getType() {
-		return type;
-	}
-	
-	public void setType(CRUD_TYPE type) {
-		this.type = type;
-	}
 	
 	public int getId() {
 		return id;

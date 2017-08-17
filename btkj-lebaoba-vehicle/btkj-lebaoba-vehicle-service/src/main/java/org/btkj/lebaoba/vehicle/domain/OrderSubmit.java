@@ -17,8 +17,8 @@ import org.rapid.util.lang.StringUtil;
 public class OrderSubmit {
 
 	private LogUser logUser;
-	private int ProxyCompanyID;
-	private String CompanyProvince;
+	private int ProxyCompanyID = 0;
+	private String CompanyProvince = "乱传";
 	private String ProductCode;
 	private String CompulsoryPolicyEndDate;
 	private String CompulsoryPolicyBeginDate;
@@ -57,7 +57,7 @@ public class OrderSubmit {
 		CompanyProvince = companyProvince;
 	}
 
-	@XmlElement(name = "PruductCode")
+	@XmlElement(name = "ProductCode")
 	public String getProductCode() {
 		return ProductCode;
 	}
@@ -192,21 +192,22 @@ public class OrderSubmit {
 		vehicleInfo.setLicenseNo(tips.getLicense());
 		vehicleInfo.setVin(tips.getVin());
 		vehicleInfo.setEngineNo(tips.getEngine());
+		vehicleInfo.setID(tips.getVehicleId());
 		vehicleInfo.setEnrollDate(DateUtil.convert(tips.getEnrollDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 		vehicleInfo.setTransferFlag(tips.isTransfer() ? 1 : 0);
 		vehicleInfo.setTransferFlagTime(!StringUtil.hasText(tips.getIssueDate()) ? null : DateUtil.convert(tips.getIssueDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.TIMEZONE_GMT_8));
-		vehicleInfo.setUseNature(_useNature(tips.getVehicleUsedType()));
-		vehicleInfo.setModelCode(tips.getName());
-		vehicleInfo.setLicenseTypeCode("02");			// 默认小型汽车
+//		vehicleInfo.setUseNature(_useNature(tips.getVehicleUsedType()));
+//		vehicleInfo.setModelCode(tips.getName());
+//		vehicleInfo.setLicenseTypeCode("02");			// 默认小型汽车
 		vehicleInfo.setCarTypeCode("K33");
-		vehicleInfo.setVehicleType(1);
-		vehicleInfo.setVehicleTypeCode("A012");
-		vehicleInfo.setPrice(String.valueOf(tips.getPrice()));
-		vehicleInfo.setPriceNoTax(String.valueOf(tips.getPriceNoTax()));
-		vehicleInfo.setYear(String.valueOf(tips.getYear()));
-		vehicleInfo.setSeat(tips.getSeat());
-		vehicleInfo.setExhaust(tips.getExhaust());
-		vehicleInfo.setLoadWeight(tips.getLoad());
+//		vehicleInfo.setVehicleType(1);
+//		vehicleInfo.setVehicleTypeCode("A012");
+//		vehicleInfo.setPrice(String.valueOf(tips.getPrice()));
+//		vehicleInfo.setPriceNoTax(String.valueOf(tips.getPriceNoTax()));
+//		vehicleInfo.setYear(String.valueOf(tips.getYear()));
+//		vehicleInfo.setSeat(tips.getSeat());
+//		vehicleInfo.setExhaust(tips.getExhaust());
+//		vehicleInfo.setLoadWeight(tips.getLoad());
 		UnitInfo owner = new UnitInfo();
 		unit = tips.getOwner();
 		owner.setIdType(LeBaoBaIdType.convert(unit.getIdType()).mark());
@@ -519,7 +520,7 @@ public class OrderSubmit {
 		private String IdType;				// 证件类型 01-身份证 驾驶证-02, 军人证-03，护照-04，临时身份证-05，港澳通行证-06，台湾通行证-07     21-组织机构代码 22-税务登记证  23-营业执照（三证合一）  24-其他证件
 		private String Name;
 		private String IdNo;				// 证件号
-		private String Address;				// 地址
+		private String Address = "杭州市";		// 地址
 		private String Mobile;				// 电话
 		private Integer Sex;				// 性别
 		private String Birthday;			// 出生日期

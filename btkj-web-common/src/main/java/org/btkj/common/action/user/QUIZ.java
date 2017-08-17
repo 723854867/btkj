@@ -6,11 +6,11 @@ import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.bo.indentity.User;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
-public class QUIZ extends UserOldAction {
+public class QUIZ extends OldUserAction {
 	
 	@Resource
 	private CommunityService communityService;

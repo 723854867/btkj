@@ -1,12 +1,10 @@
 package org.btkj.vehicle.service;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.btkj.vehicle.rule.bonus.BonusManager;
@@ -30,7 +28,7 @@ public class BonusServiceImpl implements BonusService {
 	}
 
 	@Override
-	public Result<List<VehicleCoefficientsInfo>> poundageCoefficients(PoundageCoefficientsParam param) {
+	public Result<VehicleCoefficients> poundageCoefficients(PoundageCoefficientsParam param) {
 		return bonusManager.poundageCoefficients(param);
 	}
 }

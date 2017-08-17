@@ -6,14 +6,12 @@ import javax.validation.constraints.Size;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.param.Param;
-import org.rapid.util.common.enums.CRUD_TYPE;
 import org.rapid.util.validator.ValidateGroups;
 
 public class AppEditParam extends Param {
 
 	private static final long serialVersionUID = -3857008875210212506L;
 
-	private CRUD_TYPE type;
 	@Min(value = 1, groups = {ValidateGroups.UPDATE.class})
 	private int appId;
 	private int region;
@@ -24,14 +22,6 @@ public class AppEditParam extends Param {
 	private int maxTenantsCount;
 	@Min(value = 0, groups = {ValidateGroups.CRUD.class})
 	private int maxArticlesCount;
-	
-	public CRUD_TYPE getType() {
-		return type;
-	}
-	
-	public void setType(CRUD_TYPE type) {
-		this.type = type;
-	}
 	
 	public int getAppId() {
 		return appId;

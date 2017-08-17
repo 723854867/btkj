@@ -21,6 +21,9 @@ import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
+import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
+import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
+import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
@@ -98,21 +101,12 @@ public interface VehicleManageService {
 	List<VehicleBrand> brands();
 	
 	/**
-	 * 新增品牌
+	 * 汽车品牌编辑
 	 * 
-	 * @param name
+	 * @param param
 	 * @return
 	 */
-	Result<Integer> brandAdd(String name);
-	
-	/**
-	 * 修改品牌
-	 * 
-	 * @param id
-	 * @param name
-	 * @return
-	 */
-	Result<Void> brandUpdate(int id, String name);
+	Result<?> brandEdit(VehicleBrandEditParam param);
 	
 	/**
 	 * 车系列表
@@ -122,22 +116,12 @@ public interface VehicleManageService {
 	List<VehicleDept> depts(int brandId);
 	
 	/**
-	 * 新增车系
+	 * 车系编辑
 	 * 
-	 * @param brandId
-	 * @param name
+	 * @param param
 	 * @return
 	 */
-	Result<Integer> deptAdd(int brandId, String name);
-	
-	/**
-	 * 修改车系
-	 * 
-	 * @param id
-	 * @param name
-	 * @return
-	 */
-	Result<Void> deptUpdate(int id, String name);
+	Result<?> deptEdit(VehicleDeptEditParam param);
 	
 	/**
 	 * 厂牌型号列表
@@ -148,22 +132,12 @@ public interface VehicleManageService {
 	List<VehicleModel> models(int deptId);
 	
 	/**
-	 * 新增厂牌型号
+	 * 厂牌型号编辑
 	 * 
-	 * @param deptId
-	 * @param name
+	 * @param param
 	 * @return
 	 */
-	Result<Integer> modelAdd(int deptId, String name);
-	
-	/**
-	 * 修改厂牌型号
-	 * 
-	 * @param id
-	 * @param name
-	 * @return
-	 */
-	Result<Void> modelUpdate(int id, String name);
+	Result<?> modelEdit(VehicleModelEditParam param);
 	
 	/**
 	 * 车险订单详情:只能查看

@@ -11,7 +11,7 @@ import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.UserOldAction;
+import org.btkj.web.util.action.OldUserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -19,7 +19,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class QUIZ_INFO extends UserOldAction {
+public class QUIZ_INFO extends OldUserAction {
 	
 	@Resource
 	private UserService userService;

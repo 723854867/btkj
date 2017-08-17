@@ -7,8 +7,7 @@ import javax.annotation.Resource;
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.param.Param;
+import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.po.NonAutoCategory;
 import org.rapid.util.common.message.Result;
 
@@ -17,18 +16,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class NON_AUTO_CATEGORY_LIST extends AdminAction<Param> {
+public class NON_AUTO_CATEGORY_LIST extends AdminAction<NilParam> {
 	
 	@Resource
 	private NonAutoService nonAutoService;
 
 	@Override
-	protected Result<List<NonAutoCategory>> execute(Administrator admin, Param param) {
+	protected Result<List<NonAutoCategory>> execute(Administrator admin, NilParam param) {
 		return Result.result(nonAutoService.categories());
-	}
-	
-	@Override
-	protected Client client() {
-		return Client.BAO_TU_MANAGER;
 	}
 }

@@ -80,6 +80,7 @@ public class BiHuParams extends TreeMap<String, String> {
 	protected static final String AUTO_MOLD_CODE_SOURCE			= "AutoMoldCodeSource";		// 按照车型类型报价:1.续保车型;2.自定义车型;3.最低配置车型
 	protected static final String EXHAUST_SCALE					= "ExhaustScale";			// 排气量
 	protected static final String BIZ_SHORT_END_DATE			= "BizShortEndDate";		// 商业险截止日期 时间戳格式，范围： 小于一年.
+	protected static final String RESULT_FORMAT					= "ResultFormat";			// 0（默认）：字符串  1.详情
 	
 	private String key;
 	
@@ -99,6 +100,10 @@ public class BiHuParams extends TreeMap<String, String> {
 			setShowXiuLiChangeType(1);
 			setShowVehicleInfo(1);
 			setShowCarInfo(1);
+			break;
+		case VEHICLE_INFO:
+			setCarType("0");			// 默认轿车
+			setResultFormat("1");
 			break;
 		default:
 			break;
@@ -476,6 +481,11 @@ public class BiHuParams extends TreeMap<String, String> {
 	
 	public BiHuParams setBizShortEndDate(String bizShortEndDate) {
 		put(BIZ_SHORT_END_DATE, bizShortEndDate);
+		return this;
+	}
+	
+	public BiHuParams setResultFormat(String resultFormat) {
+		put(RESULT_FORMAT, resultFormat);
 		return this;
 	}
 }

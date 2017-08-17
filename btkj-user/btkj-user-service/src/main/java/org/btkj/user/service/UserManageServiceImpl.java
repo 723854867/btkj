@@ -217,7 +217,7 @@ public class UserManageServiceImpl implements UserManageService {
 	
 	@Override
 	public Result<Void> bannerEdit(BannerEditParam param) {
-		switch (param.getType()) {
+		switch (param.getCrudType()) {
 		case CREATE:
 			Banner banner = EntityGenerator.newBanner(param);
 			try {
@@ -312,7 +312,7 @@ public class UserManageServiceImpl implements UserManageService {
 	
 	@Override
 	public Result<?> appEdit(AppEditParam param) {
-		switch (param.getType()) {
+		switch (param.getCrudType()) {
 		case CREATE:
 			if (null == configService.region(param.getRegion()))
 				return BtkjConsts.RESULT.REGION_NOT_EXIST;

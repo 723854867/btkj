@@ -13,7 +13,8 @@ import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.pojo.vo.VehiclePolicyTips;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
+import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.Node;
@@ -211,12 +212,13 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 	 * 
 	 * @return
 	 */
-	public List<VehicleCoefficientsInfo> coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, PoundageCoefficientsParam param) {
+	public VehicleCoefficients coefficients(LinkedList<String> path, Node<BonusRouteBody> parent,  List<VehicleCoefficient> coefficients, PoundageCoefficientsParam param) {
 		String nextId = path.poll();
 		BonusRouteBody body = null == parent ? null : parent.getChild(id);
-		if (null == nextId)
-			return coefficients(coefficients, null == body ? null : body.getCommercialCommisionSpinner(), param);
-		else {
+		if (null == nextId) {
+			List<VehicleCoefficientType> list = coefficients(coefficients, null == body ? null : body.getCommercialCommisionSpinner(), param);
+			return new VehicleCoefficients(body, list);
+		} else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)
 				return null;
@@ -224,7 +226,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 		}
 	}
 	
-	protected List<VehicleCoefficientsInfo> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
+	protected List<VehicleCoefficientType> coefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) {
 		return null;
 	}
 	

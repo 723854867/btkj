@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.bo.Version;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.IAction;
 import org.rapid.util.common.SpringContextUtil;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -44,7 +44,7 @@ public class Dispatcher extends HttpServlet {
 	
 	private static final String ACTION_LOCATION					= "actionLocation";
 	
-	private Map<String, Map<Version, Action>>  container = new HashMap<String, Map<Version, Action>>();
+	private Map<String, Map<Version, IAction>>  container = new HashMap<String, Map<Version, IAction>>();
 	
 	@Autowired(required = false)
 	private InitialHook initialHook;
@@ -66,7 +66,7 @@ public class Dispatcher extends HttpServlet {
 			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
 				continue;
 			try {
-				Action action = SpringContextUtil.autowire(clazz);
+				IAction action = SpringContextUtil.autowire(clazz);
 				_addAction(action);
 			} catch (Exception e) {
 				logger.error("Action load failure, system will closed!", e);
@@ -89,7 +89,7 @@ public class Dispatcher extends HttpServlet {
 		Request req = new Request(request, response);
 		try {
 			Version version = req.getOptionalParam(Params.VERSION);
-			Action action = _getAction(req.getParam(Params.ACTION), version);
+			IAction action = _getAction(req.getParam(Params.ACTION), version);
 			if (null == action) {
 				req.write(Result.jsonResult(BtkjCode.ACTION_NOT_EXIST));
 				return;
@@ -110,18 +110,18 @@ public class Dispatcher extends HttpServlet {
 		resp.setHeader(HttpHeaders.ALLOW, METHOD_ALLOWS);
 	}
 	
-	private void _addAction(Action action) {
+	private void _addAction(IAction action) {
 		String name = action.getClass().getSimpleName().toLowerCase();
-		Map<Version, Action> map = container.get(name);
+		Map<Version, IAction> map = container.get(name);
 		if (null == map) {
-			map = new HashMap<Version, Action>();
+			map = new HashMap<Version, IAction>();
 			container.put(name, map);
 		}
 		map.put(action.version(), action);
 	}
 	
-	private Action _getAction(String name, Version version) {
-		Map<Version, Action> map = container.get(name);
+	private IAction _getAction(String name, Version version) {
+		Map<Version, IAction> map = container.get(name);
 		return null == map ? null : map.get(version);
 	}
 }

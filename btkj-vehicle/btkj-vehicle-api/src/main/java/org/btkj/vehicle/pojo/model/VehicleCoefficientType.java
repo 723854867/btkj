@@ -7,7 +7,7 @@ import java.util.List;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.po.VehicleCoefficient;
 
-public class VehicleCoefficientsInfo implements Serializable {
+public class VehicleCoefficientType implements Serializable {
 
 	private static final long serialVersionUID = -1558296883423518248L;
 
@@ -17,9 +17,9 @@ public class VehicleCoefficientsInfo implements Serializable {
 	private int maxCustomNum;
 	private List<VehicleCoefficientInfo> coefficients;
 	
-	public VehicleCoefficientsInfo() {}
+	public VehicleCoefficientType() {}
 	
-	public VehicleCoefficientsInfo(CoefficientType type) {
+	public VehicleCoefficientType(CoefficientType type) {
 		this.typeId = type.mark();
 		this.typeName = type.title();
 		this.custom = type.isCustom();

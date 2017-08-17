@@ -11,6 +11,7 @@ import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.AreaEditParam;
+import org.btkj.config.pojo.param.InsurerEditParam;
 import org.btkj.pojo.po.Insurer;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtil;
@@ -19,13 +20,13 @@ import org.rapid.util.math.tree.mptt.MPTTNode;
 
 public class EntityGenerator {
 
-	public static final Insurer newInsurer(int id, String name, String icon, boolean bindBiHu, String leBaoBaId) { 
+	public static final Insurer newInsurer(InsurerEditParam param) { 
 		Insurer insurer = new Insurer();
-		insurer.setId(id);
-		insurer.setName(name);
-		insurer.setIcon(icon);
-		insurer.setBiHuId(bindBiHu ? id : 0);
-		insurer.setLeBaoBaId(leBaoBaId);
+		insurer.setId(param.getId());
+		insurer.setName(param.getName());
+		insurer.setIcon(param.getIcon());
+		insurer.setBiHuId(param.getBiHuId());
+		insurer.setLeBaoBaId(param.getLeBaoBaId());
 		
 		int time = DateUtil.currentTime();
 		insurer.setCreated(time);

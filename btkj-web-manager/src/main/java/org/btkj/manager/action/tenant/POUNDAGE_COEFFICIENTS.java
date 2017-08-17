@@ -1,4 +1,4 @@
-package org.btkj.manager.action.tenant.bonus;
+package org.btkj.manager.action.tenant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.api.BonusService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 import org.rapid.util.common.message.Result;
 
@@ -43,21 +43,21 @@ public class POUNDAGE_COEFFICIENTS extends EmployeeAction<PoundageCoefficientsPa
 	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageCoefficientsParam param) {
 		if (param.isAll()) {
 			List<VehicleCoefficient> coefficients = vehicleManageService.coefficients(employee.getTid());
-			Map<CoefficientType, VehicleCoefficientsInfo> map = new HashMap<CoefficientType, VehicleCoefficientsInfo>();
+			Map<CoefficientType, VehicleCoefficientType> map = new HashMap<CoefficientType, VehicleCoefficientType>();
 			for (CoefficientType type : CoefficientType.values()) {
 				if (!type.isCustom())
 					continue;
-				VehicleCoefficientsInfo info = map.get(type);
+				VehicleCoefficientType info = map.get(type);
 				if (null == info) {
-					info = new VehicleCoefficientsInfo(type);
+					info = new VehicleCoefficientType(type);
 					map.put(type, info);
 				}
 			}
 			for (VehicleCoefficient coefficient : coefficients) {
-				VehicleCoefficientsInfo info = map.get(CoefficientType.match(coefficient.getType()));
+				VehicleCoefficientType info = map.get(CoefficientType.match(coefficient.getType()));
 				info.addCoefficient(coefficient, null);
 			}
-			return Result.result(new ArrayList<VehicleCoefficientsInfo>(map.values()));
+			return Result.result(new ArrayList<VehicleCoefficientType>(map.values()));
 		} else {
 			param.setTid(tenant.getTid());
 			Region region = configService.subordinateProvince(tenant.getRegion());

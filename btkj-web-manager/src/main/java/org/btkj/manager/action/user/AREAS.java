@@ -8,18 +8,18 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.param.Param;
+import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.UserPO;
 import org.rapid.util.common.message.Result;
 
-public class AREAS extends UserAction<Param> {
+public class AREAS extends UserAction<NilParam> {
 	
 	@Resource
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<List<AreaInfo>> execute(AppPO app, UserPO user, Param param) {
+	protected Result<List<AreaInfo>> execute(AppPO app, UserPO user, NilParam param) {
 		return Result.result(new ArrayList<AreaInfo>(configManageService.areas().values()));
 	}
 }

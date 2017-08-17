@@ -4,33 +4,28 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 
-import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.bo.Version;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.rapid.util.common.Consts;
+import org.rapid.util.common.consts.code.Code;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.validator.Validator;
+import org.rapid.util.validator.ValidateGroups;
 
-/**
- * 执行业务逻辑
- * 
- * @author ahab
- */
-public abstract class Action<PARAM extends Param> {
+import com.google.gson.JsonSyntaxException;
+
+public abstract class Action<PARAM extends Param> implements IAction {
 	
 	private static final ThreadLocal<Request> REQUEST_HOLDER	= new ThreadLocal<Request>();
 	
+	protected Integer crudMod;
 	protected Class<PARAM> clazz;
-	@Resource
-	private ConfigService configService;
 	
 	public Action() {
 		Type superType = getClass().getGenericSuperclass(); 
@@ -40,17 +35,22 @@ public abstract class Action<PARAM extends Param> {
 		}
 	}
 	
-	public Result<?> execute(Request request) {
-		if (null != clazz) {
-			String payload = request.getParam(Params.PAYLOAD);
-			PARAM param = null;
-			try {
-				param = SerializeUtil.JsonUtil.GSON.fromJson(payload, clazz);
-			} catch (Exception e) {
-				throw ConstConvertFailureException.errorConstException(Params.PAYLOAD);
-			}
-			REQUEST_HOLDER.set(request);
-			try {
+	public Action(CrudType... crudTypes) {
+		this();
+		crudMod = crudTypes.length == 0 ? null : 0;
+		for (CrudType type : crudTypes)
+			crudMod |= type.mark();
+	}
+
+	@Override
+	public final Result<?> execute(Request request) {
+		REQUEST_HOLDER.set(request);
+		try {
+			if (clazz == NilParam.class)					// 没有参数体
+				return execute((PARAM) NilParam.INSTANCE);
+			else {
+				String payload = request.getParam(Params.PAYLOAD);
+				PARAM param = SerializeUtil.JsonUtil.GSON.fromJson(payload, clazz);
 				Set<ConstraintViolation<PARAM>> constraintViolations = validate(param);
 				if (!constraintViolations.isEmpty()) {
 					ConstConvertFailureException exception = ConstConvertFailureException.errorConstException(Params.PAYLOAD);
@@ -67,15 +67,20 @@ public abstract class Action<PARAM extends Param> {
 					throw exception;
 				}
 				return execute(param);
-			} finally {
-				REQUEST_HOLDER.remove();
 			}
+		} catch (BusinessException e) {
+			return Result.result(e.getCode());
+		} catch (JsonSyntaxException e) {
+			throw ConstConvertFailureException.errorConstException(Params.PAYLOAD);
+		}finally {
+			REQUEST_HOLDER.remove();
 		}
-		return Consts.RESULT.OK;
 	}
 	
-	protected Result<?> execute(PARAM param) {
-		return Consts.RESULT.OK;
+	protected abstract Result<?> execute(PARAM param);
+	
+	protected Request request() {
+		return REQUEST_HOLDER.get();
 	}
 	
 	/**
@@ -85,28 +90,25 @@ public abstract class Action<PARAM extends Param> {
 	 * @return
 	 */
 	protected Set<ConstraintViolation<PARAM>> validate(PARAM param) {
-		return Validator.JSR_VALIDATOR.validate(param);
-	}
-	
-	protected Request request() {
-		return REQUEST_HOLDER.get();
-	}
-	
-	protected Client client() {
-		return request().getParam(Params.CLIENT);
-	}
-	
-	/**
-	 * 默认从
-	 * 
-	 * @param request
-	 * @return
-	 */
-	protected Client client(Request request) {
-		return request.getParam(Params.CLIENT);
-	}
-	
-	public Version version() {
-		return Version.V_1_0;
+		if (null == crudMod)
+			return Params.JSR_VALIDATOR.validate(param);
+		else {
+			CrudType crudType = request().getParam(Params.CRUD_TYPE);
+			if ((crudType.mark() & crudMod) != crudType.mark())
+				throw new BusinessException(Code.UNSUPPORTED_CRUD_TYPE);
+			param.setCrudType(crudType);
+			switch (crudType) {
+			case CREATE:
+				return Params.JSR_VALIDATOR.validate(param, ValidateGroups.CREATE.class);
+			case UPDATE:
+				return Params.JSR_VALIDATOR.validate(param, ValidateGroups.UPDATE.class);
+			case RETRIEVE:
+				return Params.JSR_VALIDATOR.validate(param, ValidateGroups.RETRIEVE.class);
+			case DELETE:
+				return Params.JSR_VALIDATOR.validate(param, ValidateGroups.DELETE.class);
+			default:
+				throw new BusinessException(Code.SYSTEM_ERROR);
+			}
+		}
 	}
 }

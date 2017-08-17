@@ -3,6 +3,7 @@ package org.btkj.bihu.vehicle.service;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,6 +16,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
 import org.btkj.bihu.vehicle.domain.BiHuParams;
+import org.btkj.bihu.vehicle.domain.BiHuVehicleInfo;
 import org.btkj.bihu.vehicle.domain.InsureResult;
 import org.btkj.bihu.vehicle.domain.QuoteResp;
 import org.btkj.bihu.vehicle.domain.QuoteResult;
@@ -32,6 +34,7 @@ import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.po.Renewal;
 import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.vo.VehicleInfo;
 import org.btkj.pojo.vo.VehiclePolicyTips;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -66,6 +69,10 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private String renewInfoPath;
 	@Value("${bihu.renewInfo.timeout}")
 	private int renewInfoTimeout;
+	@Value("${bihu.vehicleInfo.path}")
+	private String vehicleInfoPath;
+	@Value("${bihu.vehicleInfo.timeout}")
+	private int vehicleInfoTimeout;
 	@Value("${bihu.quote.path}")
 	private String biHuQuotePath;
 	@Value("${bihu.quote.timeout}")
@@ -113,6 +120,30 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			return Result.result(BtkjCode.RENEW_INFO_GET_TIMEOUT);
 		} catch (RequestFrequently e) {
 			return Result.result(BtkjCode.BIHU_REQUEST_FREQUENTLY);
+		}
+	}
+	
+	private void _vehicleInfoFilter() {
+		
+	}
+	
+	@Override
+	public Result<List<VehicleInfo>> vehicleInfos(int uid, TenantPO tenant, String license, String moldName, int cityCode) {
+		BiHuParams params = new BiHuParams(RequestType.VEHICLE_INFO);
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
+				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
+				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
+				.setCityCode(cityCode).setLicenseNo(license).setMoldName(moldName);
+		HttpUriRequest request = _requestUri(vehicleInfoPath, params, vehicleInfoTimeout);
+		try {
+			BiHuVehicleInfo info = httpProxy.syncRequest(request, BiHuVehicleInfo.JSON_HANDLER);
+			int status = info.getBusinessStatus();
+			if (status == -1000 || status == -10001 || status == -10003)
+				return Result.result(BtkjCode.VEHICLE_INFO_REQUEST_FAILURE, info.getStatusMessage());
+			return null;
+		} catch (IOException e) {
+			logger.warn("bihu vehicle info request failure!", e);
+			return Result.result(BtkjCode.RENEW_INFO_GET_TIMEOUT);
 		}
 	}
 	

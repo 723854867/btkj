@@ -74,7 +74,7 @@ public enum CoefficientType {
 			try {
 				switch (symbol) {
 				case eq:
-					if (null == value || value.length != 1 || value.length != 2)
+					if (null == value || value.length != 1 || value[0].length() != 2)
 						return false;
 					boolean find = false;
 					for (String temp : StringUtil.PROVINCES) {

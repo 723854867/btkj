@@ -4,10 +4,10 @@ import org.btkj.login.pojo.info.AppInfo;
 import org.btkj.pojo.bo.indentity.App;
 import org.btkj.pojo.enums.Client;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.AppAction;
+import org.btkj.web.util.action.OldAppAction;
 import org.rapid.util.common.message.Result;
 
-public class APP_TIPS extends AppAction {
+public class APP_TIPS extends OldAppAction {
 	
 	@Override
 	protected Result<AppInfo> execute(Request request, App app) {

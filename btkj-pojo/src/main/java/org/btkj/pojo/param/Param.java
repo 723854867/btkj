@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import org.rapid.util.common.enums.CrudType;
+
 /**
  * Request message 请求参数
  * 
@@ -21,6 +23,11 @@ public class Param implements Serializable {
 	private int pageSize = 10;
 	private int start;
 	private int total;
+	
+	/**
+	 * 操作类型
+	 */
+	private CrudType crudType;
 	
 	public int getPage() {
 		return page;
@@ -52,6 +59,14 @@ public class Param implements Serializable {
 	
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+	
+	public CrudType getCrudType() {
+		return crudType;
+	}
+	
+	public void setCrudType(CrudType crudType) {
+		this.crudType = crudType;
 	}
 	
 	public void calculate(int total) {

@@ -3,7 +3,7 @@ package org.btkj.manager.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.param.Param;
+import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.po.AppPO;
 import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.TenantService;
@@ -15,13 +15,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class TENANTS_USER extends UserAction<Param> {
+public class TENANTS_USER extends UserAction<NilParam> {
 	
 	@Resource
 	private TenantService tenantService;
 
 	@Override
-	protected Result<TenantListInfo> execute(AppPO app, UserPO user, Param param) {
+	protected Result<TenantListInfo> execute(AppPO app, UserPO user, NilParam param) {
 		return Result.result(tenantService.tenantListInfo(user));
 	}
 }

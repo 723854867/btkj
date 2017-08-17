@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.validation.Validation;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.bo.Version;
@@ -18,7 +20,7 @@ import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
-import org.rapid.util.common.enums.CRUD_TYPE;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.DateUtil;
@@ -34,6 +36,8 @@ import com.google.gson.reflect.TypeToken;
  *
  */
 public interface Params {
+	
+	final javax.validation.Validator JSR_VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 	
 	final Type INT_SET_TYPE								 = new TypeToken<List<Integer>>(){}.getType();
 	
@@ -226,16 +230,16 @@ public interface Params {
 		}
 	};
 	
-	final Str2ObjConstConverter<CRUD_TYPE> CRUD_TYPE = new Str2ObjConstConverter<CRUD_TYPE>(1212, "crudType") {
+	final Str2ObjConstConverter<CrudType> CRUD_TYPE = new Str2ObjConstConverter<CrudType>(1212, "crudType") {
 		@Override
-		public CRUD_TYPE convert(String k) throws ConstConvertFailureException {
+		public CrudType convert(String k) throws ConstConvertFailureException {
 			int value;
 			try {
 				value = Integer.valueOf(k);
 			} catch (NumberFormatException e) {
 				throw ConstConvertFailureException.errorConstException(this);
 			}
-			CRUD_TYPE type = org.rapid.util.common.enums.CRUD_TYPE.match(value);
+			CrudType type = org.rapid.util.common.enums.CrudType.match(value);
 			if (null == type)
 				throw ConstConvertFailureException.errorConstException(this);
 			return type;

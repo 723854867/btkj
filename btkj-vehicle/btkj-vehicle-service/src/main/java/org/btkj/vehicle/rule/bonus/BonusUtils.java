@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.VehicleBizType;
 import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.vehicle.pojo.model.VehicleCoefficientsInfo;
+import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
 
@@ -49,11 +49,11 @@ public class BonusUtils {
 	 * @param coefficients
 	 * @return
 	 */
-	public static List<VehicleCoefficientsInfo> noProfitCoacheCommercialCoefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) { 
+	public static List<VehicleCoefficientType> noProfitCoacheCommercialCoefficients(List<VehicleCoefficient> coefficients, Map<Integer, Integer> spinner, PoundageCoefficientsParam param) { 
 		if (param.getBizType() == VehicleBizType.NO_PROFIT) {			// 非营利客车
-			List<VehicleCoefficientsInfo> list = new ArrayList<VehicleCoefficientsInfo>();
+			List<VehicleCoefficientType> list = new ArrayList<VehicleCoefficientType>();
 			for (CoefficientType type : CoefficientType.values()) {
-				VehicleCoefficientsInfo info = new VehicleCoefficientsInfo(type);
+				VehicleCoefficientType info = new VehicleCoefficientType(type);
 				list.add(info);
 				
 				Iterator<VehicleCoefficient> iterator = coefficients.iterator();

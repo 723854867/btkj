@@ -7,7 +7,7 @@ import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
-import org.btkj.web.util.action.Action;
+import org.btkj.web.util.action.OldAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -16,7 +16,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class USER_CHECK extends Action {
+public class USER_CHECK extends OldAction {
 	
 	@Resource
 	private UserService userService;

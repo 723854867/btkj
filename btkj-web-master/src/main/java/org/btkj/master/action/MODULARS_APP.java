@@ -9,7 +9,7 @@ import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
-import org.btkj.pojo.param.Param;
+import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -17,13 +17,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class MODULARS_APP extends AdminAction<Param> {
+public class MODULARS_APP extends AdminAction<NilParam> {
 
 	@Resource
 	private ConfigManageService configManageService;
 	
 	@Override
-	protected Result<Map<Integer, ModularDocument>> execute(Administrator admin, Param param) {
+	protected Result<Map<Integer, ModularDocument>> execute(Administrator admin, NilParam param) {
 		return Result.result(configManageService.modulars(TarType.APP, 0));
 	}
 }

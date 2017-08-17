@@ -3,36 +3,23 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.master.LoggedAction;
+import org.btkj.config.pojo.param.InsurerEditParam;
+import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.rapid.util.common.Consts;
-import org.rapid.util.common.enums.CRUD_TYPE;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.NumberUtil;
 
-public class INSURER_EDIT extends LoggedAction {
+public class INSURER_EDIT extends AdminAction<InsurerEditParam> {
 	
 	@Resource
 	private ConfigManageService configManageService;
+	
+	public INSURER_EDIT() {
+		super(CrudType.CREATE, CrudType.UPDATE);
+	}
 
 	@Override
-	protected Result<Void> execute(Request request, Administrator operator) {
-		CRUD_TYPE crudType = request.getParam(Params.CRUD_TYPE);
-		switch (crudType) {
-		case CREATE:
-			int id = request.getParam(Params.ID);
-			if (!NumberUtil.isPowerOfTwo(id))
-				throw ConstConvertFailureException.errorConstException(Params.ID);
-			return configManageService.insurerAdd(id, request.getParam(Params.NAME), request.getParam(Params.ICON), 
-					request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
-		case UPDATE:
-			return configManageService.insurerUpdate(request.getParam(Params.ID), request.getParam(Params.NAME), 
-					request.getParam(Params.ICON), request.getOptionalParam(Params.AGREE), request.getOptionalParam(Params.KEY));
-		default:
-			return Consts.RESULT.FORBID;
-		}
+	protected Result<Void> execute(Administrator admin, InsurerEditParam param) {
+		return configManageService.insurerEdit(param);
 	}
 }
