@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.btkj.community.api.CommunityService;
 import org.btkj.community.pojo.param.ArticleListParam;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.UserPO;
 import org.rapid.util.common.message.Result;
 
 public class ARTICLE_LIST extends UserAction<ArticleListParam> {

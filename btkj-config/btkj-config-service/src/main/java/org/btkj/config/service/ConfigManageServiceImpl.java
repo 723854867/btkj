@@ -32,10 +32,10 @@ import org.btkj.config.redis.ModularMapper;
 import org.btkj.config.redis.PrivilegeMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.po.Region;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -157,10 +157,30 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
+	public Map<Integer, ModularDocument> modulars(ModularType type) {
+		switch (type) {
+		case BT:
+			Map<Integer, Modular> modulars = modularMapper.modulars(ModularType.BT);
+			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
+		case APP:
+			Map<Integer, ModularDocument> documents = null;
+			modulars = modularMapper.modulars(ModularType.APP);
+			if (!CollectionUtil.isEmpty(modulars))
+				documents = modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
+			modulars = modularMapper.modulars(ModularType.TENANT);
+			if (!CollectionUtil.isEmpty(modulars))
+				documents.putAll(modularDocumentFactory.build(new ArrayList<Modular>(modulars.values())));
+			return documents;
+		default:
+			return null;
+		}
+	}
+	
+	@Override
 	public Map<Integer, ModularDocument> modulars(TarType type, int tarId) {
 		switch (type) {
 		case ADMIN:
-			Map<Integer, Modular> modulars = modularMapper.modulars(ModularType.BAOTU);
+			Map<Integer, Modular> modulars = modularMapper.modulars(ModularType.BT);
 			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
 		case APP:
 			Map<Integer, ModularDocument> documents = null;
@@ -311,7 +331,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 			if (modulars.size() != modulars.size())
 				return Consts.RESULT.FORBID;
 			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.BAOTU.mark())	// 只能给平台授权平台和商户模块的权限
+				if (modular.getType() != ModularType.BT.mark())	// 只能给平台授权平台和商户模块的权限
 					return Consts.RESULT.FORBID;
 			}
 			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.APP, adminId, modulars));

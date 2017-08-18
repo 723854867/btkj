@@ -1,23 +1,29 @@
 package org.btkj.lebaoba.vehicle;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.btkj.lebaoba.BaseTest;
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.param.VehicleOrderParam;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 
 public class LeBaoBaVehicleTest extends BaseTest {
 
+	private String username = "cxdlzjcx";
+	private String password = "111111";
 	@Resource
 	private LeBaoBaVehicle leBaoBaVehicle;
 	
 	@Test
 	public void testVehicleInfos() {
-		leBaoBaVehicle.vehicleInfos("WBSDX9108BE370935");
+		List<VehicleInfo> list = leBaoBaVehicle.vehicleInfos(null, null, "WBSDX9108BE370935");
+		System.out.println(SerializeUtil.JsonUtil.GSON.toJson(list));
 	}
 	
 	@Test
@@ -55,46 +61,44 @@ public class LeBaoBaVehicleTest extends BaseTest {
 							+ "\"idType\":\"IDENTITY\","
 							+ "\"idNo\":\"34282219690707151X\""
 						+ "},"
-						+ "\"schema\":{"
-							+ "\"compulsiveStart\":\"2017-08-30 00:00:00\","
-							+ "\"commercialStart\":\"2017-08-30 00:00:00\","
-							+ "\"insurances\":{"
-								+ "\"DAMAGE\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":1"
-								+ "},"
-								+ "\"DAMAGE_DEDUCTIBLE\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":1"
-								+ "},"
-								+ "\"THIRD\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":500000"
-								+ "},"
-								+ "\"THIRD_DEDUCTIBLE\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":1}"
-								+ ",\"DRIVER\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":10000"
-								+ "},"
-								+ "\"DRIVER_DEDUCTIBLE\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":1"
-								+ "},"
-								+ "\"PASSENGER\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":10000"
-								+ "},"
-								+ "\"PASSENGER_DEDUCTIBLE\":{"
-									+ "\"price\":0,"
-									+ "\"quota\":1"
-								+ "}"
+						+ "\"compulsiveStart\":\"2017-08-30 00:00:00\","
+						+ "\"commercialStart\":\"2017-08-30 00:00:00\","
+						+ "\"insurances\":{"
+							+ "\"DAMAGE\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":1"
+							+ "},"
+							+ "\"DAMAGE_DEDUCTIBLE\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":1"
+							+ "},"
+							+ "\"THIRD\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":500000"
+							+ "},"
+							+ "\"THIRD_DEDUCTIBLE\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":1}"
+							+ ",\"DRIVER\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":10000"
+							+ "},"
+							+ "\"DRIVER_DEDUCTIBLE\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":1"
+							+ "},"
+							+ "\"PASSENGER\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":10000"
+							+ "},"
+							+ "\"PASSENGER_DEDUCTIBLE\":{"
+								+ "\"price\":0,"
+								+ "\"quota\":1"
 							+ "}"
 						+ "}"
 					+ "}";
-		VehiclePolicyTips tips = SerializeUtil.JsonUtil.GSON.fromJson(json, VehiclePolicyTips.class);
-		Result<PolicySchema> result = leBaoBaVehicle.order(null, null, null, tips);
+		VehicleOrderParam param = SerializeUtil.JsonUtil.GSON.fromJson(json, VehicleOrderParam.class);
+		Result<PolicySchema> result = leBaoBaVehicle.order(username, password, "PAZYCX", true, param);
 		System.out.println(result.getCode() + " " + result.getDesc());
 	}
 }

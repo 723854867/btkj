@@ -1,5 +1,7 @@
 package org.btkj.vehicle.rule.bonus.route;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,12 +9,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.Bonus;
-import org.btkj.pojo.bo.BonusRouteBody;
+import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CoefficientType;
-import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehiclePolicyTips;
+import org.btkj.pojo.model.Bonus;
+import org.btkj.pojo.model.BonusRouteBody;
+import org.btkj.pojo.model.PolicySchema;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.model.VehicleCoefficients;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
@@ -179,7 +182,7 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 								totalCommercialRate += tempEntry.getValue();
 							break;
 						case PURCHASE_PRICE:
-							src = (int) (tips.getPrice());
+							src = Integer.valueOf(tips.getPrice());
 							if (IntComparable.SINGLETON.compare(symbol, src, CollectionUtil.toIntegerArray(params)))
 								totalCommercialRate += tempEntry.getValue();
 							break;
@@ -197,8 +200,10 @@ public class BonusRoute<NODE extends BonusRoute<?>> extends Node<NODE>{
 			int compulsoryRate = preEffectBody.getCompulsoryRate() - preEffectBody.getCompulsoryRetainRate();
 			commercialRate = Math.max(0, commercialRate);
 			compulsoryRate = Math.max(0, compulsoryRate);
-			bonus.setCommercialBonus(tips.getSchema().getCommericialTotal() * commercialRate / 1000.0);
-			bonus.setCompulsoryBonus((tips.getSchema().getCompulsiveTotal() + tips.getSchema().getVehicleVesselTotal()) * compulsoryRate / 1000.0);
+			PolicySchema schema = tips.getSchema();
+			bonus.setCommercialBonus(new BigDecimal(schema.getCommercialTotal()).multiply(new BigDecimal(commercialRate)).divide(new BigDecimal(1000)).setScale(2, RoundingMode.HALF_UP).toString());
+			BigDecimal decimal = new BigDecimal(schema.getCompulsoryTotal()).add(new BigDecimal(schema.getVehicleVesselTotal()));
+			bonus.setCompulsoryBonus(decimal.multiply(new BigDecimal(compulsoryRate)).divide(new BigDecimal(1000)).setScale(2, RoundingMode.HALF_UP).toString());
 		} else {
 			BonusRoute nextRoute = null == children ? null : children.get(nextId);
 			if (null == nextRoute)

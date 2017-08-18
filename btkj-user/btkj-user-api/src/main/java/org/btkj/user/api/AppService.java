@@ -1,11 +1,11 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.bo.indentity.App;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.vo.MainPageInfo;
+import org.btkj.pojo.info.MainPageInfo;
+import org.btkj.pojo.model.identity.App;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.model.identity.User;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {

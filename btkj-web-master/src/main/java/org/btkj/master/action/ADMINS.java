@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.master.AdminAction;
 import org.btkj.master.api.MasterService;
 import org.btkj.master.pojo.entity.Administrator;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.common.message.Result;
 

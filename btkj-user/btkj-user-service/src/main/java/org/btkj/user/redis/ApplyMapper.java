@@ -4,8 +4,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.vo.ApplyInfo;
+import org.btkj.pojo.info.ApplyInfo;
+import org.btkj.pojo.model.Pager;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;

@@ -7,6 +7,7 @@ import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.SORT_TYPE;
+import org.rapid.util.lang.CollectionUtil;
 
 public class CustomerSQLProvider extends SQLProvider {
 
@@ -19,7 +20,7 @@ public class CustomerSQLProvider extends SQLProvider {
 	public String total(CustomerSearcher searcher) {
 		StringBuilder builder = new StringBuilder("SELECT COUNT(*) FROM customer WHERE uid=#{uid} ");
 		Map<String, String> params = searcher.params();
-		if (null != params) {
+		if (!CollectionUtil.isEmpty(params)) {
 			for (Entry<String, String> entry : params.entrySet()) 
 				builder.append("AND ").append(entry.getKey()).append(Consts.SYMBOL_EQUAL).append(entry.getValue()).append(" ");
 		}

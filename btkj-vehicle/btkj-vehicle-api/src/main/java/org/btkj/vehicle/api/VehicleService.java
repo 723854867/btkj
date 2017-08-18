@@ -2,17 +2,20 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.VehicleBrand;
-import org.btkj.pojo.po.VehicleDept;
-import org.btkj.pojo.po.VehicleModel;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.VehicleInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
+import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.DeliveryInfo;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.rapid.util.common.message.Result;
@@ -46,13 +49,8 @@ public interface VehicleService {
 	
 	/**
 	 * 下单：包括报价、投保、报价并投保
-	 * 
-	 * @param employeeForm
-	 * @param tips
-	 * @param vehicleId
-	 * @return
 	 */
-	Result<Void> order(int quoteMod, int insureMod, Employee employee, VehiclePolicyTips tips, String vehicleId);
+	Result<Void> order(AppPO app, TenantPO tenant, UserPO user, EmployeePO employee, VehicleOrderParam param);
 	
 	/**
 	 * 查看订单详情
@@ -82,7 +80,7 @@ public interface VehicleService {
 	 * @param vin
 	 * @return
 	 */
-	List<VehicleInfo> vehicleInfos(String vin);
+	List<VehicleInfo> vehicleInfos(TenantPO tenant, String vin);
 	
 	/**
 	 * 所有品牌

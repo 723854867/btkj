@@ -17,8 +17,8 @@ import org.btkj.config.redis.InsurerMapper;
 import org.btkj.config.redis.ModularMapper;
 import org.btkj.config.redis.PrivilegeMapper;
 import org.btkj.config.redis.RegionMapper;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.po.Region;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.Region;
 import org.rapid.util.common.Consts;
 import org.springframework.stereotype.Service;
 

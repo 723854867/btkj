@@ -6,9 +6,9 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.BaseTest;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.VehicleInfo;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.info.VehicleInfo;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;
 
@@ -19,7 +19,7 @@ public class BiHuVehicleTest extends BaseTest {
 	
 	@Test
 	public void testRenewal() {
-		Result<Renewal> result = biHuVehicle.renewal(new TenantPO(), 1, "浙H0155R", 9);
+		Result<Renewal> result = biHuVehicle.renewal(new TenantPO(), 1, "浙CD0W71", 9);
 		System.out.println(result);
 	}
 	

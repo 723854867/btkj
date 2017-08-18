@@ -3,7 +3,7 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.indentity.App;
+import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

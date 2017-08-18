@@ -2,7 +2,7 @@ package org.btkj.nonauto.mongo;
 
 import java.util.List;
 
-import org.btkj.pojo.po.NonAutoCategory;
+import org.btkj.pojo.entity.NonAutoCategory;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.KeyMapper;
 

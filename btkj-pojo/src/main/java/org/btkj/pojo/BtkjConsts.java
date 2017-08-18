@@ -2,7 +2,7 @@ package org.btkj.pojo;
 
 import java.text.MessageFormat;
 
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.model.Pager;
 import org.rapid.util.common.message.Result;
 
 public interface BtkjConsts {
@@ -42,6 +42,7 @@ public interface BtkjConsts {
 		Result COEFFICIENT_NOT_EXIST			= Result.result(BtkjCode.COEFFICIENT_NOT_EXIST);
 		Result BONUS_SCALE_NOT_EXIST			= Result.result(BtkjCode.BONUS_SCALE_NOT_EXIST);
 		Result LANE_BI_HU_NOT_OPENED			= Result.result(BtkjCode.LANE_BI_HU_NOT_OPENED);
+		Result ERROR_INSURANCE_SCHEMA			= Result.result(BtkjCode.ERROR_INSURANCE_SCHEMA);
 		Result USER_TENANT_NUM_MAXIMUM			= Result.result(BtkjCode.USER_TENANT_NUM_MAXIMUM);
 		Result VEHICLE_BRAND_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_BRAND_NOT_EXSIT);
 		Result VEHICLE_DEPT_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_DEPT_NOT_EXIST);
@@ -49,11 +50,16 @@ public interface BtkjConsts {
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
 		Result INSURER_UNSUPPORT_BI_HU			= Result.result(BtkjCode.INSURER_UNSUPPORT_BI_HU);
+		Result LANE_LE_BAO_BA_NOT_OPENED		= Result.result(BtkjCode.LANE_LE_BAO_BA_NOT_OPENED);
+		Result INSURER_UNSUPPORT_LE_BAO_BA		= Result.result(BtkjCode.INSURER_UNSUPPORT_LE_BAO_BA);
 		Result BONUS_SCALE_SETTINGS_ERROR		= Result.result(BtkjCode.BONUS_SCALE_SETTINGS_ERROR);
 		Result NON_AUTO_CATEGORY_NOT_EXIST		= Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
+		Result INSURER_MOD_NOT_SUBSET_OF_QUOTE	= Result.result(BtkjCode.INSURER_MOD_NOT_SUBSET_OF_QUOTE);
+		Result ID_TYPE_UNSUITABLE_TO_UNIT_TYPE	= Result.result(BtkjCode.ID_TYPE_UNSUITABLE_TO_UNIT_TYPE);
+		
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

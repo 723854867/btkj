@@ -3,8 +3,8 @@ package org.btkj.login.action.app;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
-import org.btkj.pojo.bo.indentity.App;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

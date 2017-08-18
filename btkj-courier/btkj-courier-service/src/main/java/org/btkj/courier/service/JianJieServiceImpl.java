@@ -21,7 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.pojo.JianJieResp;
 import org.btkj.courier.pojo.JianJieUser;
-import org.btkj.pojo.vo.JianJiePoliciesInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.net.http.HttpProxy;

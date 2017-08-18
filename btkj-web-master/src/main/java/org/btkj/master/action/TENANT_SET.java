@@ -6,7 +6,7 @@ import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.master.pojo.param.TenantSetParam;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.entity.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.vehicle.api.VehicleManageService;
@@ -31,6 +31,8 @@ public class TENANT_SET extends AdminAction<TenantSetParam> {
 		tenant.setJianJieId(param.getJianJieId());
 		tenant.setBiHuAgent(param.getBiHuAgent());
 		tenant.setBiHuKey(param.getBiHuKey());
+		tenant.setLeBaoBaUsername(param.getLeBaoBaUsername());
+		tenant.setLeBaoBaPassword(param.getLeBaoBaPassword());
 		tenant.setUpdated(DateUtil.currentTime());
 		userManageService.tenantUpdate(tenant);
 		vehicleManageService.insurerEdit(tenant.getTid(), param.getInsurersDelete(), param.getInsurersUpdate(), param.getInsurersInsert());

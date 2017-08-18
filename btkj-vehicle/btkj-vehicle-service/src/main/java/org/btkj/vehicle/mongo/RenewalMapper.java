@@ -1,6 +1,6 @@
 package org.btkj.vehicle.mongo;
 
-import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.entity.Renewal;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.springframework.stereotype.Component;
 

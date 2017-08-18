@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.TenantInsurerDao;
 import org.btkj.vehicle.pojo.Lane;

@@ -1,6 +1,6 @@
 package org.btkj.user.pojo.info;
 
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.UserPO;
 
 public class UserPagingMasterInfo extends UserPagingInfo {
 

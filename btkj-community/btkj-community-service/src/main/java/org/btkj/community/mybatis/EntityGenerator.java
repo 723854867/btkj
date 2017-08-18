@@ -1,10 +1,10 @@
 package org.btkj.community.mybatis;
 
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.Article;
-import org.btkj.pojo.po.Comment;
-import org.btkj.pojo.po.Quiz;
-import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.entity.Article;
+import org.btkj.pojo.entity.Comment;
+import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.entity.Reply;
+import org.btkj.pojo.model.identity.User;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {

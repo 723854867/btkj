@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.model.Pager;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.TenantPagingInfo;
 import org.btkj.user.pojo.param.TenantsParam;

@@ -2,7 +2,7 @@ package org.btkj.user.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.entity.TenantPO;
 
 /**
  * 后台商户分页列表数据：(平台端)

@@ -1,21 +1,23 @@
 package org.btkj.pojo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.enums.VehicleUsedType;
-import org.btkj.pojo.po.EmployeePO.Mod;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.Insurance;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehiclePolicyTips;
+import org.btkj.pojo.info.JianJiePoliciesInfo.Insurance;
+import org.btkj.pojo.model.PolicySchema;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
@@ -89,48 +91,48 @@ public class VehicleUtil {
 	 * @param insurances
 	 * @return
 	 */
-	public static final Map<CommercialInsuranceType, org.btkj.pojo.bo.Insurance> jianJieInsuranceMapping(List<Insurance> insurances) {
-		Map<CommercialInsuranceType, org.btkj.pojo.bo.Insurance> map = new HashMap<CommercialInsuranceType, org.btkj.pojo.bo.Insurance>();
+	public static final Map<CommercialInsuranceType, org.btkj.pojo.model.Insurance> jianJieInsuranceMapping(List<Insurance> insurances) {
+		Map<CommercialInsuranceType, org.btkj.pojo.model.Insurance> map = new HashMap<CommercialInsuranceType, org.btkj.pojo.model.Insurance>();
 		for (Insurance temp : insurances) {
 			String name = temp.getName();
 			if (name.contains("三者")) {
-				map.put(CommercialInsuranceType.THIRD, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.THIRD, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("车辆损失") || name.contains("车损失")) {
-				map.put(CommercialInsuranceType.DAMAGE, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.DAMAGE, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("司机") || name.contains("驾驶员") || name.contains("驾驶人")) {
-				map.put(CommercialInsuranceType.DAMAGE, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.DAMAGE, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("乘客")) {
-				map.put(CommercialInsuranceType.PASSENGER, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.PASSENGER, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("盗抢")) {
-				map.put(CommercialInsuranceType.ROBBERY, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.ROBBERY, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("玻璃")) 
-				map.put(CommercialInsuranceType.GLASS, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
+				map.put(CommercialInsuranceType.GLASS, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 			else if (name.contains("自燃")) {
-				map.put(CommercialInsuranceType.AUTO_FIRE, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.AUTO_FIRE, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("划痕")) {
-				map.put(CommercialInsuranceType.SCRATCH, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.SCRATCH, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			} else if (name.contains("修理")) 
-				map.put(CommercialInsuranceType.GARAGE_DESIGNATED, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
+				map.put(CommercialInsuranceType.GARAGE_DESIGNATED, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 			else if (name.contains("无法")) 
-				map.put(CommercialInsuranceType.UNKNOWN_THIRD, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
+				map.put(CommercialInsuranceType.UNKNOWN_THIRD, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 			else if (name.contains("涉水")) {
-				map.put(CommercialInsuranceType.WADDING, new org.btkj.pojo.bo.Insurance(temp.getBe(), temp.getBf()));
-				if (0 != temp.getMpBf()) 
-					map.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new org.btkj.pojo.bo.Insurance(1, temp.getBf()));
+				map.put(CommercialInsuranceType.WADDING, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
+				if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
+					map.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 			}
 		}
 		return map;
@@ -152,6 +154,33 @@ public class VehicleUtil {
 		return 3;
 	}
 	
+	public static final IDType idTypeFromBiHuIdType(int biHuIdType) {
+		switch (biHuIdType) {
+		case 1:
+			return IDType.IDENTITY;
+		case 2:
+			return IDType.ORGANIZATION_LICENSE;
+		case 3:
+			return IDType.PASSPORT;
+		case 4:
+			return IDType.MILITARY_CARD;
+		case 5:
+			return IDType.RE_ENTRY_PERMIT;
+		case 0:
+		case 6:
+		case 8:
+			return IDType.OTHER;
+		case 7:
+			return IDType.EEP_HK_MACAU;
+		case 9:
+			return IDType.BUSINESS_LICENSE;
+		case 10:
+			return IDType.TAX_REGISTRATION_CERTIFICATE;
+		default:
+			throw new IllegalArgumentException("unknown bihu id type " + biHuIdType);
+		}
+	}
+	
 	public static final VehicleUsedType vehicleUsedTypeFromBiHuUsedType(int biHuUsedType) {
 		switch (biHuUsedType) {
 		case 1:
@@ -160,8 +189,6 @@ public class VehicleUtil {
 			return VehicleUsedType.ORGAN;
 		case 3:
 			return VehicleUsedType.ENTERPRISE;
-		case 4:
-			return null;
 		case 5:
 			return VehicleUsedType.LEASE;
 		case 6:
@@ -214,6 +241,17 @@ public class VehicleUtil {
 		return false;
 	}
 	
+	public static final String totalPremium(VehicleOrder order) {
+		VehiclePolicyTips tips = order.getTips();
+		if (null == tips)
+			return "0";
+		PolicySchema schema = tips.getSchema();
+		if (null == schema)
+			return "0";
+		BigDecimal total = new BigDecimal(schema.getCommercialTotal()).add(new BigDecimal(schema.getCompulsoryTotal())).add(new BigDecimal(schema.getVehicleVesselTotal()));
+		return total.setScale(2, RoundingMode.HALF_UP).toString();
+	}
+	
 	/**
 	 * 获取以分为单位的保费
 	 * 
@@ -221,14 +259,8 @@ public class VehicleUtil {
 	 * @return
 	 */
 	public static final int getTotalQuotaInCent(VehicleOrder order) {
-		VehiclePolicyTips tips = order.getTips();
-		if (null == tips)
-			return 0;
-		PolicySchema schema = tips.getSchema();
-		if (null == schema)
-			return 0;
-		double total = schema.getCommericialTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
-		return (int) (total * 100);
+		String premuim = totalPremium(order);
+		return new BigDecimal(premuim).multiply(new BigDecimal(100)).intValue();
 	}
 	
 	/**

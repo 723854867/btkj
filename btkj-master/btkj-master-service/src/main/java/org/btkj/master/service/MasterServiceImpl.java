@@ -7,7 +7,7 @@ import org.btkj.master.api.MasterService;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.master.pojo.param.AdminEditParam;
 import org.btkj.master.redis.AdministratorMapper;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;

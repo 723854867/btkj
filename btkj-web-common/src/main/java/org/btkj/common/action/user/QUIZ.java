@@ -3,7 +3,7 @@ package org.btkj.common.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.OldUserAction;

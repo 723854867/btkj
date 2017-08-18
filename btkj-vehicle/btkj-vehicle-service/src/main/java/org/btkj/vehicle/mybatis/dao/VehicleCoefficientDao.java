@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.po.VehicleCoefficient;
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.vehicle.mybatis.provider.VehicleCoefficientSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 

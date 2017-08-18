@@ -1,14 +1,15 @@
 package org.btkj.bihu.vehicle.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicySchema;
 import org.btkj.pojo.enums.CommercialInsuranceType;
+import org.btkj.pojo.model.Insurance;
+import org.btkj.pojo.model.PolicySchema;
 import org.rapid.util.common.message.Result;
 
 public class QuoteResult implements Serializable {
@@ -192,9 +193,9 @@ public class QuoteResult implements Serializable {
 	public class Item implements Serializable {
 		private static final long serialVersionUID = -1290916775545123870L;
 		private int Source;
-		private double BizTotal;				// 商业险总额
-		private double ForceTotal;				// 交强险总额(90天之外的取不到，值为0)
-		private double TaxTotal;				// 车船税总额(90天之外的取不到，值为0)
+		private String BizTotal;				// 商业险总额
+		private String ForceTotal;				// 交强险总额(90天之外的取不到，值为0)
+		private String TaxTotal;				// 车船税总额(90天之外的取不到，值为0)
 		private int QuoteStatus;				// 报价状态，-1=未报价， 0=报价失败，>0报价成功
 		private String QuoteResult;				// 报价信息
 		private Detail CheSun;					// 车损险
@@ -229,22 +230,22 @@ public class QuoteResult implements Serializable {
 		public void setSource(int source) {
 			Source = source;
 		}
-		public double getBizTotal() {
+		public String getBizTotal() {
 			return BizTotal;
 		}
-		public void setBizTotal(double bizTotal) {
+		public void setBizTotal(String bizTotal) {
 			BizTotal = bizTotal;
 		}
-		public double getForceTotal() {
+		public String getForceTotal() {
 			return ForceTotal;
 		}
-		public void setForceTotal(double forceTotal) {
+		public void setForceTotal(String forceTotal) {
 			ForceTotal = forceTotal;
 		}
-		public double getTaxTotal() {
+		public String getTaxTotal() {
 			return TaxTotal;
 		}
-		public void setTaxTotal(double taxTotal) {
+		public void setTaxTotal(String taxTotal) {
 			TaxTotal = taxTotal;
 		}
 		public int getQuoteStatus() {
@@ -417,18 +418,18 @@ public class QuoteResult implements Serializable {
 		}
 		public class Detail implements Serializable {
 			private static final long serialVersionUID = 2576669839303824040L;
-			private double BaoE;			// 保额
-			private double BaoFei;			// 保费
-			public double getBaoE() {
+			private String BaoE;			// 保额
+			private String BaoFei;			// 保费
+			public String getBaoE() {
 				return BaoE;
 			}
-			public void setBaoE(double baoE) {
+			public void setBaoE(String baoE) {
 				BaoE = baoE;
 			}
-			public double getBaoFei() {
+			public String getBaoFei() {
 				return BaoFei;
 			}
-			public void setBaoFei(double baoFei) {
+			public void setBaoFei(String baoFei) {
 				BaoFei = baoFei;
 			}
 		}
@@ -588,56 +589,57 @@ public class QuoteResult implements Serializable {
 	public Result<PolicySchema> schema() {
 		if (this.Item.QuoteStatus <= 0)
 			return Result.result(BtkjCode.QUOTE_FAILURE, this.Item.QuoteResult);
-		org.btkj.pojo.bo.PolicySchema result = new org.btkj.pojo.bo.PolicySchema();
+		org.btkj.pojo.model.PolicySchema result = new org.btkj.pojo.model.PolicySchema();
 		Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
 		if (null != this.UserInfo) {
-			result.setCompulsiveStart(this.UserInfo.ForceStartDate);
-			result.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
+			result.setCompulsoryStart(this.UserInfo.ForceStartDate);
+			result.setCompulsoryEnd(this.UserInfo.ForceExpireDate);
 			result.setCommercialStart(this.UserInfo.BusinessStartDate);
 			result.setCommercialEnd(this.UserInfo.BusinessExpireDate);
 		}
 		if (null != this.Item) {
-			result.setCompulsiveTotal(this.Item.ForceTotal);
+			result.setCompulsoryTotal(this.Item.ForceTotal);
 			result.setVehicleVesselTotal(this.Item.TaxTotal);
-			result.setCommericialTotal(this.Item.BizTotal);
-			if (null != this.Item.CheSun && this.Item.CheSun.BaoE != 0) 
+			result.setCommercialTotal(this.Item.BizTotal);
+			if (null != this.Item.CheSun) 
 				insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(this.Item.CheSun.BaoE, this.Item.CheSun.BaoFei));
-			if (null != this.Item.BuJiMianCheSun && this.Item.BuJiMianCheSun.BaoE != 0)
+			if (null != this.Item.BuJiMianCheSun)
 				insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.Item.BuJiMianCheSun.BaoE, this.Item.BuJiMianCheSun.BaoFei));
-			if (null != this.Item.SanZhe && this.Item.SanZhe.BaoE != 0)
+			if (null != this.Item.SanZhe)
 				insurances.put(CommercialInsuranceType.THIRD, new Insurance(this.Item.SanZhe.BaoE, this.Item.SanZhe.BaoFei));
-			if (null != this.Item.BuJiMianSanZhe && this.Item.BuJiMianSanZhe.BaoE != 0)
+			if (null != this.Item.BuJiMianSanZhe)
 				insurances.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSanZhe.BaoE, this.Item.BuJiMianSanZhe.BaoFei));
-			if (null != this.Item.SiJi && this.Item.SiJi.BaoE != 0)
+			if (null != this.Item.SiJi)
 				insurances.put(CommercialInsuranceType.DRIVER, new Insurance(this.Item.SiJi.BaoE, this.Item.SiJi.BaoFei));
-			if (null != this.Item.BuJiMianSiJi && this.Item.BuJiMianSiJi.BaoE != 0)
+			if (null != this.Item.BuJiMianSiJi)
 				insurances.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSiJi.BaoE, this.Item.BuJiMianSiJi.BaoFei));
-			if (null != this.Item.ChengKe && this.Item.ChengKe.BaoE != 0)
+			if (null != this.Item.ChengKe)
 				insurances.put(CommercialInsuranceType.PASSENGER, new Insurance(this.Item.ChengKe.BaoE, this.Item.ChengKe.BaoFei));
-			if (null != this.Item.BuJiMianChengKe && this.Item.BuJiMianChengKe.BaoE != 0)
+			if (null != this.Item.BuJiMianChengKe)
 				insurances.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.Item.BuJiMianChengKe.BaoE, this.Item.BuJiMianChengKe.BaoFei));
-			if (null != this.Item.DaoQiang && this.Item.DaoQiang.BaoE != 0)
+			if (null != this.Item.DaoQiang)
 				insurances.put(CommercialInsuranceType.ROBBERY, new Insurance(this.Item.DaoQiang.BaoE, this.Item.DaoQiang.BaoFei));
-			if (null != this.Item.BuJiMianDaoQiang && this.Item.BuJiMianDaoQiang.BaoE != 0)
+			if (null != this.Item.BuJiMianDaoQiang)
 				insurances.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.Item.BuJiMianDaoQiang.BaoE, this.Item.BuJiMianDaoQiang.BaoFei));
-			if (null != this.Item.BoLi && this.Item.BoLi.BaoE != 0)
+			if (null != this.Item.BoLi)
 				insurances.put(CommercialInsuranceType.GLASS, new Insurance(this.Item.BoLi.BaoE, this.Item.BoLi.BaoFei));
-			if (null != this.Item.ZiRan && this.Item.ZiRan.BaoE != 0)
+			if (null != this.Item.ZiRan)
 				insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(this.Item.ZiRan.BaoE, this.Item.ZiRan.BaoFei));
-			if (null != this.Item.BuJiMianZiRan && this.Item.BuJiMianZiRan.BaoE != 0)
+			if (null != this.Item.BuJiMianZiRan)
 				insurances.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.Item.BuJiMianZiRan.BaoE, this.Item.BuJiMianZiRan.BaoFei));
-			if (null != this.Item.HuaHen && this.Item.HuaHen.BaoE != 0)
+			if (null != this.Item.HuaHen)
 				insurances.put(CommercialInsuranceType.SCRATCH, new Insurance(this.Item.HuaHen.BaoE, this.Item.HuaHen.BaoFei));
-			if (null != this.Item.BuJiMianHuaHen && this.Item.BuJiMianHuaHen.BaoE != 0)
+			if (null != this.Item.BuJiMianHuaHen)
 				insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.Item.BuJiMianHuaHen.BaoE, this.Item.BuJiMianHuaHen.BaoFei));
-			if (null != this.Item.SheShui && this.Item.SheShui.BaoE != 0)
+			if (null != this.Item.SheShui)
 				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.Item.SheShui.BaoE, this.Item.SheShui.BaoFei));
-			if (null != this.Item.BuJiMianSheShui && this.Item.BuJiMianSheShui.BaoE != 0)
+			if (null != this.Item.BuJiMianSheShui)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
-			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && this.Item.HcXiuLiChang.BaoE != 0) {
-				double quota = this.Item.HcXiuLiChangType == 1 ? 1 + this.Item.HcXiuLiChang.BaoE : this.Item.HcXiuLiChang.BaoE;
+			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang) {
+				String quota = this.Item.HcXiuLiChangType == 1 
+						? new BigDecimal(1).add(new BigDecimal(this.Item.HcXiuLiChang.BaoE)).toString() : this.Item.HcXiuLiChang.BaoE;
 				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(quota, this.Item.HcXiuLiChang.BaoFei));
-			} if (null != this.Item.HcSanFangTeYue && this.Item.HcSanFangTeYue.BaoE != 0)
+			} if (null != this.Item.HcSanFangTeYue)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		}
 		result.setNoLossDiscountRate(this.Item.RateFactor1);

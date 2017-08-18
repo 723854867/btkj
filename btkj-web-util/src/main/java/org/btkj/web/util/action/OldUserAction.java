@@ -3,9 +3,9 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

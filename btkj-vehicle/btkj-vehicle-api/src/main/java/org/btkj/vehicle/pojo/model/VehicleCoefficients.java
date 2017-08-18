@@ -3,7 +3,7 @@ package org.btkj.vehicle.pojo.model;
 import java.io.Serializable;
 import java.util.List;
 
-import org.btkj.pojo.bo.BonusRouteBody;
+import org.btkj.pojo.model.BonusRouteBody;
 
 public class VehicleCoefficients implements Serializable {
 

@@ -5,49 +5,41 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.InsurUnit;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.pojo.param.VehicleOrderParam.InsuranceItem;
+import org.btkj.pojo.param.VehicleOrderParam.Unit;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
-import org.rapid.util.lang.PhoneUtil;
-import org.rapid.util.lang.StringUtil;
-import org.rapid.util.validator.Validator;
+import org.rapid.util.lang.CollectionUtil;
 
 /**
  * 车险下单：包括报价、投保、报价并投保三种方式
  * 
  * @author ahab
  */
-public class ORDER extends TenantAction {
+public class ORDER extends EmployeeAction<VehicleOrderParam> {
 	
 	@Resource
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(Request request, Employee employee) {
-		int quoteGroup = request.getParam(Params.QUOTE_GROUP);
-		int insureGroup = request.getOptionalParam(Params.INSURE_GROUP);
-		String vehicleId = request.getOptionalParam(Params.VEHICLE_ID);
-		if (quoteGroup <= 0 || insureGroup < 0 
-				|| Integer.bitCount(quoteGroup) > GlobalConfigContainer.getGlobalConfig().getMaxQuoteNum())
-			return Consts.RESULT.FORBID;
-		VehiclePolicyTips tips = request.getParam(Params.VEHICLE_POLICY_TIPS);
-		if (!_check(employee.getTenant(), tips))
-			throw ConstConvertFailureException.errorConstException(Params.VEHICLE_POLICY_TIPS);
-		return vehicleService.order(quoteGroup, insureGroup, employee, tips, vehicleId);
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleOrderParam param) {
+		if ((param.getQuoteMod() & param.getInsureMod()) != param.getInsureMod())
+			return BtkjConsts.RESULT.INSURER_MOD_NOT_SUBSET_OF_QUOTE;
+		Result<Void> result = _check(param);
+		if (!result.isSuccess())
+			return result;
+		return vehicleService.order(app, tenant, user, employee, param);
 	}
 	
 	/**
@@ -55,80 +47,64 @@ public class ORDER extends TenantAction {
 	 * 
 	 * @param submit
 	 */
-	private boolean _check(TenantPO tenant, VehiclePolicyTips tips) {
-		if (null == tips.getOwner() || null == tips.getInsurer() || null == tips.getInsured() || null == tips.getSchema())
-			return false;
-		VehicleUsedType usedType = tips.getVehicleUsedType();
-		if (null == usedType)
-			return false;
-		return _checkInsurUnit(tips.getOwner(), usedType, true)
-				&& _checkInsurUnit(tips.getInsurer(), usedType, false)
-				&& _checkInsurUnit(tips.getInsured(), usedType, false)
-				&& _checkVehicle(tips)
-				&& _checkSchema(tips.getSchema());
+	private Result<Void> _check(VehicleOrderParam param) {
+		VehicleUsedType usedType = param.getUsedType();
+		Result<Void> result = _checkInsurUnit(param.getOwner(), usedType, true);
+		if (!result.isSuccess())
+			return result;
+		result = _checkInsurUnit(param.getInsurer(), usedType, false);
+		if (!result.isSuccess())
+			return result;
+		result = _checkInsurUnit(param.getInsured(), usedType, false);
+		return result.isSuccess() ? _checkSchema(param) : result;
 	}
 	
-	private boolean _checkInsurUnit(InsurUnit unit, VehicleUsedType usedType, boolean owner) {
-		if (null == unit.getIdType() || null == unit.getIdNo() || null == unit.getName() || null == unit.getType())
-			return false;
-		if (null != unit.getMobile() && !PhoneUtil.isMobile(unit.getMobile()))
-			return false;
-		if (owner)
-			_correctUnitType(usedType, unit);
+	private Result<Void> _checkInsurUnit(Unit unit, VehicleUsedType usedType, boolean owner) {
+		if (owner) {								// 车主需要修正类型
+			switch (usedType) {
+			case HOME_USE:
+				unit.setType(VehicleUnitType.PERSONAL);
+				break;
+			case ORGAN:
+				unit.setType(VehicleUnitType.OFFICE);
+				break;
+			case ENTERPRISE:
+			case CITY_BUS:
+			case HIGHWAY_TRANSPORT:
+			case PARTICULAR:
+				unit.setType(VehicleUnitType.ENTERPRISE);
+				break;
+			default:
+				break;
+			}
+		}
 		if ((unit.getIdType().unitMod() & unit.getType().mark()) != unit.getType().mark())
-			return false;
+			return BtkjConsts.RESULT.ID_TYPE_UNSUITABLE_TO_UNIT_TYPE;
 		if (!unit.getIdType().check(unit.getIdNo()))
-			return false;
-		return true;
+			return Consts.RESULT.ERROR_ID_NO;
+		return Consts.RESULT.OK;
 	}
 	
-	private boolean _checkVehicle(VehiclePolicyTips tips) {
-		if (!StringUtil.hasText(
-				tips.getEngine(), tips.getLicense(), 
-				tips.getVin(), tips.getEnrollDate()))
-			return false;
-		return Validator.isVehicleLisense(tips.getLicense());
-	}
-	
-	private boolean _checkSchema(PolicySchema schema) {
-		String cpi = schema.getCompulsiveStart();
-		String cmi = schema.getCommercialStart();
+	private Result<Void> _checkSchema(VehicleOrderParam param) {
+		String cpi = param.getCompulsoryStart();
+		String cmi = param.getCommercialStart();
 		if (null == cpi && null == cmi)
-			return false;
+			return BtkjConsts.RESULT.ERROR_INSURANCE_SCHEMA;
 		if (null != cmi) {
-			Map<CommercialInsuranceType, Insurance> map = schema.getInsurances();
-			if (null == map)
-				return false;
+			Map<CommercialInsuranceType, InsuranceItem> map = param.getInsurances();
 			map.remove(null);
+			if (CollectionUtil.isEmpty(map))
+				return BtkjConsts.RESULT.ERROR_INSURANCE_SCHEMA;
 			int mod = 0;
 			for (CommercialInsuranceType type : map.keySet()) 
 				mod |= type.mark();
-			for (Entry<CommercialInsuranceType, Insurance> entry : map.entrySet()) {
+			for (Entry<CommercialInsuranceType, InsuranceItem> entry : map.entrySet()) {
 				int need = entry.getKey().need();
 				if ((mod & need) != need)
-					return false;
+					return BtkjConsts.RESULT.ERROR_INSURANCE_SCHEMA;
 			}
 		}
-		return true;
-	}
-	
-	private void _correctUnitType(VehicleUsedType usedType, InsurUnit unit) {
-		switch (usedType) {
-		case HOME_USE:
-			unit.setType(VehicleUnitType.PERSONAL);
-			break;
-		case ORGAN:
-			unit.setType(VehicleUnitType.OFFICE);
-			break;
-		case ENTERPRISE:
-		case CITY_BUS:
-		case HIGHWAY_TRANSPORT:
-		case PARTICULAR:
-			unit.setType(VehicleUnitType.ENTERPRISE);
-			break;
-		default:
-			break;
-		}
+		return Consts.RESULT.OK;
 	}
 	
 	@Override

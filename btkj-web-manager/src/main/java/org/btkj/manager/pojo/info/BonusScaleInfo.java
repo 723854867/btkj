@@ -2,7 +2,7 @@ package org.btkj.manager.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.user.pojo.model.BonusScale;
 import org.btkj.user.pojo.model.BonusScale.State;
 

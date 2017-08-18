@@ -3,8 +3,8 @@ package org.btkj.vehicle.pojo.param;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.btkj.pojo.bo.BonusRouteBody;
 import org.btkj.pojo.enums.VehicleBizType;
+import org.btkj.pojo.model.BonusRouteBody;
 import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.Consts;
 

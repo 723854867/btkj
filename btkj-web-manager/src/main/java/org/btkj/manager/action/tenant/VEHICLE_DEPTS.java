@@ -6,11 +6,11 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.VehicleDeptsParam;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
-import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.vehicle.api.VehicleService;
 import org.rapid.util.common.message.Result;
 

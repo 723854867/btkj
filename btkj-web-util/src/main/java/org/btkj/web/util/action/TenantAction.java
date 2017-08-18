@@ -3,8 +3,8 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;

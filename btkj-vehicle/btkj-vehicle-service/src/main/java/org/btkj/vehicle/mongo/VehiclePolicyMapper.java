@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.data.storage.mapper.MongoMapper;

@@ -3,14 +3,14 @@ package org.btkj.vehicle.pojo.entity;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.btkj.pojo.bo.Insurance;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.model.Insurance;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
 import org.rapid.util.common.model.UniqueModel;
 

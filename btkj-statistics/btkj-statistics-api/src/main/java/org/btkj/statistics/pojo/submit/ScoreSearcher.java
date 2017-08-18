@@ -1,6 +1,6 @@
 package org.btkj.statistics.pojo.submit;
 
-import org.btkj.pojo.vo.StatisticSearcher;
+import org.btkj.pojo.info.StatisticSearcher;
 
 public class ScoreSearcher extends StatisticSearcher {
 

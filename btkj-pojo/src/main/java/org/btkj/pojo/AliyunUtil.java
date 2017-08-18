@@ -2,7 +2,7 @@ package org.btkj.pojo;
 
 import java.text.MessageFormat;
 
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.UserPO;
 
 public class AliyunUtil {
 

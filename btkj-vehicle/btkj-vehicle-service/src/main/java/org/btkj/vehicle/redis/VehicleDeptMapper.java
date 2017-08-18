@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.vehicle.mybatis.dao.VehicleDeptDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;

@@ -6,12 +6,12 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.Recipient;
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.enums.DeliveryType;
-import org.btkj.pojo.po.Customer;
-import org.btkj.pojo.po.Region;
+import org.btkj.pojo.model.DeliveryInfo;
+import org.btkj.pojo.model.Recipient;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.api.UserService;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;

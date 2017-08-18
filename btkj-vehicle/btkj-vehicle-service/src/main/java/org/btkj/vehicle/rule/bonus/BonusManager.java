@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Bonus;
+import org.btkj.pojo.entity.BonusConfig;
+import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.po.BonusConfig;
-import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.model.Bonus;
 import org.btkj.vehicle.mongo.BonusConfigMapper;
 import org.btkj.vehicle.pojo.model.BonusRouteView;
 import org.btkj.vehicle.pojo.model.VehicleCoefficients;

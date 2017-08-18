@@ -3,7 +3,7 @@ package org.btkj.test.persistence.mapper;
 import java.util.Collection;
 import java.util.Map;
 
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.UserPO;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
 public class UserSQLProvider extends SQLProvider {

@@ -3,11 +3,11 @@ package org.btkj.user.api;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
-import org.btkj.pojo.vo.EmployeeTip;
 import org.btkj.user.pojo.info.AppInfo;
 import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.btkj.user.pojo.info.EmployeePagingInfo;

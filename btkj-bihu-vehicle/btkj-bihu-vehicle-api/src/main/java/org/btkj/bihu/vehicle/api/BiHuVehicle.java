@@ -2,13 +2,12 @@ package org.btkj.bihu.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.bo.PolicyDetail;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.VehicleInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.model.VehicleAuditModel;
+import org.btkj.pojo.param.VehicleOrderParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -49,7 +48,7 @@ public interface BiHuVehicle {
 	/**
 	 * 报价/投保接口:理解为下单
 	 */
-	Result<Void> order(Employee employee, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode);
+	Result<Void> order(String agent, String key, int uid, int quoteMod, int insureMod, int cityCode, VehicleOrderParam param);
 	
 	/**
 	 * 获取报价信息
@@ -65,5 +64,5 @@ public interface BiHuVehicle {
 	 * @param employeeForm
 	 * @return
 	 */
-	Result<PolicyDetail> insureResult(TenantPO tenant, int uid, String license, int insurer);
+	Result<VehicleAuditModel> insureResult(TenantPO tenant, int uid, String license, int insurer);
 }

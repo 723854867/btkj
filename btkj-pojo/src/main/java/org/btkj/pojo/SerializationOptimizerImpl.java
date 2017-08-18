@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.btkj.pojo.bo.BtkjUserLoginModel;
-import org.btkj.pojo.bo.Version;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.model.BtkjUserLoginModel;
+import org.btkj.pojo.model.Version;
 
 import com.alibaba.dubbo.common.serialize.support.SerializationOptimizer;
 

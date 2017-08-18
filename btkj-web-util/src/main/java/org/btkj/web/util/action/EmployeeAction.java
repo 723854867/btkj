@@ -3,12 +3,12 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.model.EmployeeHolder;

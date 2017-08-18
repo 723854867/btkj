@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.RewardInfo;
 import org.btkj.payment.api.PaymentService;
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

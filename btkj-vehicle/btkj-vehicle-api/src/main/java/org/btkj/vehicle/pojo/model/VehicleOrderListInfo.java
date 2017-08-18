@@ -1,10 +1,13 @@
 package org.btkj.vehicle.pojo.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-import org.btkj.pojo.bo.Bonus;
+import org.btkj.pojo.VehicleUtil;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.model.Bonus;
 
 public class VehicleOrderListInfo implements Serializable {
 
@@ -19,8 +22,8 @@ public class VehicleOrderListInfo implements Serializable {
 	private String insurerIcon; 		// 保险公司Icon
 	private String owner;
 	private String license;
-	private double bonus;
-	private double price;
+	private String bonus;
+	private String price;
 	
 	public VehicleOrderListInfo() {}
 	
@@ -35,10 +38,9 @@ public class VehicleOrderListInfo implements Serializable {
 		this.owner = order.getTips().getOwner().getName();
 		this.license = order.getTips().getLicense();
 		Bonus bonus = order.getBonus();
-		this.bonus = null != bonus ?  bonus.getCommercialBonus() + bonus.getCompulsoryBonus() : 0;
+		this.bonus = null != bonus ?  new BigDecimal(bonus.getCommercialBonus()).add(new BigDecimal(bonus.getCompulsoryBonus())).setScale(2, RoundingMode.HALF_UP).toString() : "0";
 		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE || state == VehicleOrderState.INSURE_SUCCESS) {
-			this.price = order.getTips().getSchema().getCommericialTotal() + order.getTips().getSchema().getCompulsiveTotal()
-					+ order.getTips().getSchema().getVehicleVesselTotal();
+			this.price = VehicleUtil.totalPremium(order);
 		}
 	}
 
@@ -114,19 +116,19 @@ public class VehicleOrderListInfo implements Serializable {
 		this.license = license;
 	}
 	
-	public double getBonus() {
+	public String getBonus() {
 		return bonus;
 	}
 	
-	public void setBonus(double bonus) {
+	public void setBonus(String bonus) {
 		this.bonus = bonus;
 	}
 
-	public double getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 }

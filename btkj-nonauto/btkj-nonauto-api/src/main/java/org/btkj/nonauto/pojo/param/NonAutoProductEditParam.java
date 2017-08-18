@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.NonAutoProduct;
 import org.btkj.pojo.param.Param;
-import org.btkj.pojo.po.NonAutoProduct;
 import org.rapid.util.lang.DateUtil;
 
 public class NonAutoProductEditParam extends Param {

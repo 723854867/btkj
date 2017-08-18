@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.Customer;
-import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.message.Result;

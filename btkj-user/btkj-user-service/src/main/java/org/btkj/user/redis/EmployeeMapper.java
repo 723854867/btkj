@@ -10,8 +10,8 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.model.Pager;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.pojo.info.EmployeePagingInfo;
 import org.btkj.user.pojo.param.EmployeesParam;

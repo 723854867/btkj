@@ -7,7 +7,7 @@ import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.master.pojo.param.AuthorizeParam;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.entity.AppPO;
 import org.btkj.user.api.AppService;
 import org.rapid.util.common.message.Result;
 

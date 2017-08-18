@@ -1,8 +1,8 @@
 package org.btkj.login.action.app;
 
 import org.btkj.login.pojo.info.AppInfo;
-import org.btkj.pojo.bo.indentity.App;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.identity.App;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.OldAppAction;
 import org.rapid.util.common.message.Result;

@@ -3,9 +3,9 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.indentity.App;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.LoginService;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.EntityGenerator;

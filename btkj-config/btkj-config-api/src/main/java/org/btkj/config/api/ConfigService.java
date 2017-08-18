@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.btkj.config.pojo.entity.Area;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.po.Region;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.Region;
 
 public interface ConfigService {
 	

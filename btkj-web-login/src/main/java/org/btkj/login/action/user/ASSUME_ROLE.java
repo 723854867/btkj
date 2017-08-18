@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.pojo.info.StsInfo;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.OldUserAction;

@@ -8,11 +8,11 @@ import javax.validation.Validation;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
-import org.btkj.pojo.bo.Version;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
-import org.btkj.pojo.vo.QuizSearcher;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.QuizSearcher;
+import org.btkj.pojo.info.VehiclePolicyTips;
+import org.btkj.pojo.model.Version;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.vehicle.pojo.Lane;
 import org.rapid.util.common.Consts;

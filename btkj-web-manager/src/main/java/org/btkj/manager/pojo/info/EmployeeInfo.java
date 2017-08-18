@@ -3,8 +3,8 @@ package org.btkj.manager.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.payment.pojo.entity.Account;
-import org.btkj.pojo.po.UserPO;
-import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.info.EmployeeTip;
 
 public class EmployeeInfo implements Serializable {
 

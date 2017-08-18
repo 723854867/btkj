@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.user.mybatis.provider.UserSQLProvider;
 import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.data.storage.mapper.DBMapper;

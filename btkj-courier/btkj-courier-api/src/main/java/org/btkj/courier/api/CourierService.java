@@ -1,7 +1,7 @@
 package org.btkj.courier.api;
 
 import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.rapid.util.common.message.Result;
 
 /**

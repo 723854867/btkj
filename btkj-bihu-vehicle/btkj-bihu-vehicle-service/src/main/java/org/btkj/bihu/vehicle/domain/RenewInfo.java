@@ -4,15 +4,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.btkj.bihu.vehicle.BiHuUtil;
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.InsurUnit;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehiclePolicyTips;
+import org.btkj.pojo.model.InsurUnit;
+import org.btkj.pojo.model.Insurance;
+import org.btkj.pojo.model.PolicySchema;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 
@@ -99,7 +98,7 @@ public class RenewInfo implements Serializable {
 		private String LicenseOwner;		// 车主姓名
 		private String PostedName;			// 投保人
 		private String InsuredName;			// 被保险人
-		private double PurchasePrice;		// 新车购置价格
+		private String PurchasePrice;		// 新车购置价格
 		/**
 		 * 证件类型
 		 * 1：身份证
@@ -131,10 +130,10 @@ public class RenewInfo implements Serializable {
 		private String HolderIdCard;			// 投保人证件号
 		private int HolderIdType;				// 投保人证件类型(参考 IdType)
 		private String HolderMobile;			// 投保人联系方式
-		private double RateFactor1;				// 费率系数1(无赔款系数)
-		private double RateFactor2;				// 费率系数2(自主渠道系数)
-		private double RateFactor3;				// 费率系数3(自主核保系数)
-		private double RateFactor4;				// 费率系数4(交通非法浮动系数)
+		private String RateFactor1;				// 费率系数1(无赔款系数)
+		private String RateFactor2;				// 费率系数2(自主渠道系数)
+		private String RateFactor3;				// 费率系数3(自主核保系数)
+		private String RateFactor4;				// 费率系数4(交通非法浮动系数)
 		/**
 		 * 燃料种类
 		 * 1：汽油
@@ -241,11 +240,11 @@ public class RenewInfo implements Serializable {
 			InsuredName = insuredName;
 		}
 		
-		public double getPurchasePrice() {
+		public String getPurchasePrice() {
 			return PurchasePrice;
 		}
 		
-		public void setPurchasePrice(double purchasePrice) {
+		public void setPurchasePrice(String purchasePrice) {
 			PurchasePrice = purchasePrice;
 		}
 		
@@ -393,35 +392,35 @@ public class RenewInfo implements Serializable {
 			HolderMobile = holderMobile;
 		}
 		
-		public double getRateFactor1() {
+		public String getRateFactor1() {
 			return RateFactor1;
 		}
 		
-		public void setRateFactor1(double rateFactor1) {
+		public void setRateFactor1(String rateFactor1) {
 			RateFactor1 = rateFactor1;
 		}
 		
-		public double getRateFactor2() {
+		public String getRateFactor2() {
 			return RateFactor2;
 		}
 		
-		public void setRateFactor2(double rateFactor2) {
+		public void setRateFactor2(String rateFactor2) {
 			RateFactor2 = rateFactor2;
 		}
 		
-		public double getRateFactor3() {
+		public String getRateFactor3() {
 			return RateFactor3;
 		}
 		
-		public void setRateFactor3(double rateFactor3) {
+		public void setRateFactor3(String rateFactor3) {
 			RateFactor3 = rateFactor3;
 		}
 		
-		public double getRateFactor4() {
+		public String getRateFactor4() {
 			return RateFactor4;
 		}
 		
-		public void setRateFactor4(double rateFactor4) {
+		public void setRateFactor4(String rateFactor4) {
 			RateFactor4 = rateFactor4;
 		}
 		
@@ -507,28 +506,28 @@ public class RenewInfo implements Serializable {
 	}
 	public class SaveQuote {
 		private int Source;		// 资源枚举列表
-		private double CheSun;				// 车损保额
-		private double SanZhe;				// 第三方责任险保额
-		private double DaoQiang;			// 全车盗抢保险保额
-		private double SiJi;				// 车上人员责任险(司机)保额
-		private double ChengKe;				// 车上人员责任险(乘客)保额
-		private double BoLi;				// 玻璃单独破碎险保额：0-不投保；1-国产；2-进口
-		private double HuaHen;				// 车身划痕损失险保额
-		private double BuJiMianCheSun;		// 不计免赔险(车损)保额
-		private double BuJiMianSanZhe;		// 不计免赔险(三者)保额
-		private double BuJiMianDaoQiang;	// 不计免赔险(盗抢)保额
-		private double SheShui;				// 涉水行驶损失险保额
-		private double ZiRan;				// 自燃损失险保额
-		private double BuJiMianChengKe;		// 不计免乘客保额
-		private double BuJiMianSiJi;		// 不计免司机保额
-		private double BuJiMianHuaHen;		// 不计免划痕保额
-		private double BuJiMianSheShui;		// 不计免涉水保额
-		private double BuJiMianZiRan;		// 不计免自然保额
-		private double BuJiMianJingShenSunShi;		// 不计免精神损失保额
-		private double HcSanFangTeYue;				// 机动车无法找到三方特约险保额
-		private double HcJingShenSunShi;			// 精神损失险保额
+		private String CheSun;				// 车损保额
+		private String SanZhe;				// 第三方责任险保额
+		private String DaoQiang;			// 全车盗抢保险保额
+		private String SiJi;				// 车上人员责任险(司机)保额
+		private String ChengKe;				// 车上人员责任险(乘客)保额
+		private String BoLi;				// 玻璃单独破碎险保额：0-不投保；1-国产；2-进口
+		private String HuaHen;				// 车身划痕损失险保额
+		private String BuJiMianCheSun;		// 不计免赔险(车损)保额
+		private String BuJiMianSanZhe;		// 不计免赔险(三者)保额
+		private String BuJiMianDaoQiang;	// 不计免赔险(盗抢)保额
+		private String SheShui;				// 涉水行驶损失险保额
+		private String ZiRan;				// 自燃损失险保额
+		private String BuJiMianChengKe;		// 不计免乘客保额
+		private String BuJiMianSiJi;		// 不计免司机保额
+		private String BuJiMianHuaHen;		// 不计免划痕保额
+		private String BuJiMianSheShui;		// 不计免涉水保额
+		private String BuJiMianZiRan;		// 不计免自然保额
+		private String BuJiMianJingShenSunShi;		// 不计免精神损失保额
+		private String HcSanFangTeYue;				// 机动车无法找到三方特约险保额
+		private String HcJingShenSunShi;			// 精神损失险保额
 		private int HcXiuLiChangType;			// 指定专修厂类型：-1-没有；0-国产；1-进口(依赖于请求参数)
-		private double HcXiuLiChang;			// 指定修理厂险(依赖于请求参数)
+		private String HcXiuLiChang;			// 指定修理厂险(依赖于请求参数)
 		
 		public int getSource() {
 			return Source;
@@ -538,163 +537,163 @@ public class RenewInfo implements Serializable {
 			Source = source;
 		}
 		
-		public double getCheSun() {
+		public String getCheSun() {
 			return CheSun;
 		}
 		
-		public void setCheSun(double cheSun) {
+		public void setCheSun(String cheSun) {
 			CheSun = cheSun;
 		}
 		
-		public double getSanZhe() {
+		public String getSanZhe() {
 			return SanZhe;
 		}
 		
-		public void setSanZhe(double sanZhe) {
+		public void setSanZhe(String sanZhe) {
 			SanZhe = sanZhe;
 		}
 		
-		public double getDaoQiang() {
+		public String getDaoQiang() {
 			return DaoQiang;
 		}
 		
-		public void setDaoQiang(double daoQiang) {
+		public void setDaoQiang(String daoQiang) {
 			DaoQiang = daoQiang;
 		}
 		
-		public double getSiJi() {
+		public String getSiJi() {
 			return SiJi;
 		}
 		
-		public void setSiJi(double siJi) {
+		public void setSiJi(String siJi) {
 			SiJi = siJi;
 		}
 		
-		public double getChengKe() {
+		public String getChengKe() {
 			return ChengKe;
 		}
 		
-		public void setChengKe(double chengKe) {
+		public void setChengKe(String chengKe) {
 			ChengKe = chengKe;
 		}
 		
-		public double getBoLi() {
+		public String getBoLi() {
 			return BoLi;
 		}
 		
-		public void setBoLi(double boLi) {
+		public void setBoLi(String boLi) {
 			BoLi = boLi;
 		}
 		
-		public double getHuaHen() {
+		public String getHuaHen() {
 			return HuaHen;
 		}
 		
-		public void setHuaHen(double huaHen) {
+		public void setHuaHen(String huaHen) {
 			HuaHen = huaHen;
 		}
 		
-		public double getBuJiMianCheSun() {
+		public String getBuJiMianCheSun() {
 			return BuJiMianCheSun;
 		}
 		
-		public void setBuJiMianCheSun(double buJiMianCheSun) {
+		public void setBuJiMianCheSun(String buJiMianCheSun) {
 			BuJiMianCheSun = buJiMianCheSun;
 		}
 		
-		public double getBuJiMianSanZhe() {
+		public String getBuJiMianSanZhe() {
 			return BuJiMianSanZhe;
 		}
 		
-		public void setBuJiMianSanZhe(double buJiMianSanZhe) {
+		public void setBuJiMianSanZhe(String buJiMianSanZhe) {
 			BuJiMianSanZhe = buJiMianSanZhe;
 		}
 		
-		public double getBuJiMianDaoQiang() {
+		public String getBuJiMianDaoQiang() {
 			return BuJiMianDaoQiang;
 		}
 		
-		public void setBuJiMianDaoQiang(double buJiMianDaoQiang) {
+		public void setBuJiMianDaoQiang(String buJiMianDaoQiang) {
 			BuJiMianDaoQiang = buJiMianDaoQiang;
 		}
 		
-		public double getSheShui() {
+		public String getSheShui() {
 			return SheShui;
 		}
 		
-		public void setSheShui(double sheShui) {
+		public void setSheShui(String sheShui) {
 			SheShui = sheShui;
 		}
 		
-		public double getZiRan() {
+		public String getZiRan() {
 			return ZiRan;
 		}
 		
-		public void setZiRan(double ziRan) {
+		public void setZiRan(String ziRan) {
 			ZiRan = ziRan;
 		}
 		
-		public double getBuJiMianChengKe() {
+		public String getBuJiMianChengKe() {
 			return BuJiMianChengKe;
 		}
 		
-		public void setBuJiMianChengKe(double buJiMianChengKe) {
+		public void setBuJiMianChengKe(String buJiMianChengKe) {
 			BuJiMianChengKe = buJiMianChengKe;
 		}
 		
-		public double getBuJiMianSiJi() {
+		public String getBuJiMianSiJi() {
 			return BuJiMianSiJi;
 		}
 		
-		public void setBuJiMianSiJi(double buJiMianSiJi) {
+		public void setBuJiMianSiJi(String buJiMianSiJi) {
 			BuJiMianSiJi = buJiMianSiJi;
 		}
 		
-		public double getBuJiMianHuaHen() {
+		public String getBuJiMianHuaHen() {
 			return BuJiMianHuaHen;
 		}
 		
-		public void setBuJiMianHuaHen(double buJiMianHuaHen) {
+		public void setBuJiMianHuaHen(String buJiMianHuaHen) {
 			BuJiMianHuaHen = buJiMianHuaHen;
 		}
 		
-		public double getBuJiMianSheShui() {
+		public String getBuJiMianSheShui() {
 			return BuJiMianSheShui;
 		}
 		
-		public void setBuJiMianSheShui(double buJiMianSheShui) {
+		public void setBuJiMianSheShui(String buJiMianSheShui) {
 			BuJiMianSheShui = buJiMianSheShui;
 		}
 		
-		public double getBuJiMianZiRan() {
+		public String getBuJiMianZiRan() {
 			return BuJiMianZiRan;
 		}
 		
-		public void setBuJiMianZiRan(double buJiMianZiRan) {
+		public void setBuJiMianZiRan(String buJiMianZiRan) {
 			BuJiMianZiRan = buJiMianZiRan;
 		}
 		
-		public double getBuJiMianJingShenSunShi() {
+		public String getBuJiMianJingShenSunShi() {
 			return BuJiMianJingShenSunShi;
 		}
 		
-		public void setBuJiMianJingShenSunShi(double buJiMianJingShenSunShi) {
+		public void setBuJiMianJingShenSunShi(String buJiMianJingShenSunShi) {
 			BuJiMianJingShenSunShi = buJiMianJingShenSunShi;
 		}
 		
-		public double getHcSanFangTeYue() {
+		public String getHcSanFangTeYue() {
 			return HcSanFangTeYue;
 		}
 		
-		public void setHcSanFangTeYue(double hcSanFangTeYue) {
+		public void setHcSanFangTeYue(String hcSanFangTeYue) {
 			HcSanFangTeYue = hcSanFangTeYue;
 		}
 		
-		public double getHcJingShenSunShi() {
+		public String getHcJingShenSunShi() {
 			return HcJingShenSunShi;
 		}
 		
-		public void setHcJingShenSunShi(double hcJingShenSunShi) {
+		public void setHcJingShenSunShi(String hcJingShenSunShi) {
 			HcJingShenSunShi = hcJingShenSunShi;
 		}
 		
@@ -706,11 +705,11 @@ public class RenewInfo implements Serializable {
 			HcXiuLiChangType = hcXiuLiChangType;
 		}
 		
-		public double getHcXiuLiChang() {
+		public String getHcXiuLiChang() {
 			return HcXiuLiChang;
 		}
 		
-		public void setHcXiuLiChang(double hcXiuLiChang) {
+		public void setHcXiuLiChang(String hcXiuLiChang) {
 			HcXiuLiChang = hcXiuLiChang;
 		}
 	}
@@ -722,11 +721,12 @@ public class RenewInfo implements Serializable {
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
 			renewal.set_id(this.UserInfo.CarVin);
-			tips.setEnrollDate(this.UserInfo.RegisterDate);
+			tips.setEnrollDate(DateUtil.convert(this.UserInfo.RegisterDate, DateUtil.YYYY_MM_DD, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
 			tips.setName(this.UserInfo.ModleName);
 			tips.setBiHuJYId(this.UserInfo.AutoMoldCode);
+			schema.setNoLossDiscountRate(this.UserInfo.RateFactor1);
 			if (this.BusinessStatus != 3) {
 				tips.setOwner(_owner());
 				tips.setInsurer(_insurer());
@@ -735,54 +735,54 @@ public class RenewInfo implements Serializable {
 				tips.setSeat(this.UserInfo.SeatCount);
 				tips.setPrice(this.UserInfo.PurchasePrice);
 				tips.setExhaust(this.UserInfo.ExhaustScale);
-				schema.setCompulsiveStart(this.UserInfo.NextForceStartDate);
+				schema.setCompulsoryStart(this.UserInfo.NextForceStartDate);
 				schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-				tips.setVehicleUsedType(VehicleUtil.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
+				tips.setUsedType(VehicleUtil.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
 				renewal.setCommercialNo(this.UserInfo.BizNo);
 				renewal.setCompulsiveNo(this.UserInfo.ForceNo);
-				schema.setCompulsiveEnd(this.UserInfo.ForceExpireDate);
+				schema.setCompulsoryEnd(this.UserInfo.ForceExpireDate);
 				schema.setCommercialEnd(this.UserInfo.BusinessExpireDate);
 			}
 		}
 		if (BusinessStatus != 3 && null != this.SaveQuote) {
 			Map<CommercialInsuranceType, Insurance> insurances = new HashMap<CommercialInsuranceType, Insurance>();
-			if (0 != this.SaveQuote.CheSun)
+			if (null != this.SaveQuote.CheSun && Double.valueOf(this.SaveQuote.CheSun) != 0)
 				insurances.put(CommercialInsuranceType.DAMAGE, new Insurance(this.SaveQuote.CheSun));
-			if (0 != this.SaveQuote.BuJiMianCheSun)
+			if (null != this.SaveQuote.BuJiMianCheSun && Double.valueOf(this.SaveQuote.BuJiMianCheSun) != 0)
 				insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianCheSun));
-			if (0 != this.SaveQuote.SanZhe)
+			if (null != this.SaveQuote.SanZhe && Double.valueOf(this.SaveQuote.SanZhe) != 0)
 				insurances.put(CommercialInsuranceType.THIRD, new Insurance(this.SaveQuote.SanZhe));
-			if (0 != this.SaveQuote.BuJiMianSanZhe)
+			if (null != this.SaveQuote.BuJiMianSanZhe && Double.valueOf(this.SaveQuote.BuJiMianSanZhe) != 0)
 				insurances.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSanZhe));
-			if (0 != this.SaveQuote.SiJi)
+			if (null != this.SaveQuote.SiJi && Double.valueOf(this.SaveQuote.SiJi) != 0)
 				insurances.put(CommercialInsuranceType.DRIVER, new Insurance(this.SaveQuote.SiJi));
-			if (0 != this.SaveQuote.BuJiMianSiJi)
+			if (null != this.SaveQuote.BuJiMianSiJi && Double.valueOf(this.SaveQuote.BuJiMianSiJi) != 0)
 				insurances.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSiJi));
-			if (0 != this.SaveQuote.ChengKe)
+			if (null != this.SaveQuote.ChengKe && Double.valueOf(this.SaveQuote.ChengKe) != 0)
 				insurances.put(CommercialInsuranceType.PASSENGER, new Insurance(this.SaveQuote.ChengKe));
-			if (0 != this.SaveQuote.BuJiMianChengKe)
+			if (null != this.SaveQuote.BuJiMianChengKe && Double.valueOf(this.SaveQuote.BuJiMianChengKe) != 0)
 				insurances.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianChengKe));
-			if (0 != this.SaveQuote.DaoQiang)
+			if (null != this.SaveQuote.DaoQiang && Double.valueOf(this.SaveQuote.DaoQiang) != 0)
 				insurances.put(CommercialInsuranceType.ROBBERY, new Insurance(this.SaveQuote.DaoQiang));
-			if (0 != this.SaveQuote.BuJiMianDaoQiang)
+			if (null != this.SaveQuote.BuJiMianDaoQiang && Double.valueOf(this.SaveQuote.BuJiMianDaoQiang) != 0)
 				insurances.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianDaoQiang));
-			if (0 != this.SaveQuote.BoLi)
+			if (null != this.SaveQuote.BoLi && Double.valueOf(this.SaveQuote.BoLi) != 0)
 				insurances.put(CommercialInsuranceType.GLASS, new Insurance(this.SaveQuote.BoLi));
-			if (0 != this.SaveQuote.ZiRan)
+			if (null != this.SaveQuote.ZiRan && Double.valueOf(this.SaveQuote.ZiRan) != 0)
 				insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(this.SaveQuote.ZiRan));
-			if (0 != this.SaveQuote.BuJiMianZiRan)
+			if (null != this.SaveQuote.BuJiMianZiRan && Double.valueOf(this.SaveQuote.BuJiMianZiRan) != 0)
 				insurances.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianZiRan));
-			if (0 != this.SaveQuote.HuaHen)
+			if (null != this.SaveQuote.HuaHen && Double.valueOf(this.SaveQuote.HuaHen) != 0)
 				insurances.put(CommercialInsuranceType.SCRATCH, new Insurance(this.SaveQuote.HuaHen));
-			if (0 != this.SaveQuote.BuJiMianHuaHen)
+			if (null != this.SaveQuote.BuJiMianHuaHen && Double.valueOf(this.SaveQuote.BuJiMianHuaHen) != 0)
 				insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianHuaHen));
-			if (0 != this.SaveQuote.SheShui)
+			if (null != this.SaveQuote.SheShui && Double.valueOf(this.SaveQuote.SheShui) != 0)
 				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.SaveQuote.SheShui));
-			if (0 != this.SaveQuote.BuJiMianSheShui)
+			if (null != this.SaveQuote.BuJiMianSheShui && Double.valueOf(this.SaveQuote.BuJiMianSheShui) != 0)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
 			if (-1 != this.SaveQuote.HcXiuLiChangType)
-				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(this.SaveQuote.HcXiuLiChangType, this.SaveQuote.HcXiuLiChang));
-			if (0 != this.SaveQuote.HcSanFangTeYue)
+				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(String.valueOf(this.SaveQuote.HcXiuLiChangType), this.SaveQuote.HcXiuLiChang));
+			if (null != this.SaveQuote.HcSanFangTeYue && Double.valueOf(this.SaveQuote.HcSanFangTeYue) != 0)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
 			schema.setInsurances(insurances.isEmpty() ? null : insurances);
 			renewal.setInsurerId(this.SaveQuote.Source);
@@ -796,7 +796,7 @@ public class RenewInfo implements Serializable {
 	private InsurUnit _owner() {
 		InsurUnit owner = new InsurUnit();
 		owner.setName(this.UserInfo.LicenseOwner);
-		owner.setIdType(BiHuUtil.idType(this.UserInfo.IdType));
+		owner.setIdType(VehicleUtil.idTypeFromBiHuIdType(this.UserInfo.IdType));
 		owner.setIdNo(this.UserInfo.CredentislasNum);
 		return owner;
 	}
@@ -804,7 +804,7 @@ public class RenewInfo implements Serializable {
 	private InsurUnit _insurer() {
 		InsurUnit insurer = new InsurUnit();
 		insurer.setName(this.UserInfo.PostedName);
-		insurer.setIdType(BiHuUtil.idType(this.UserInfo.HolderIdType));
+		insurer.setIdType(VehicleUtil.idTypeFromBiHuIdType(this.UserInfo.HolderIdType));
 		insurer.setIdNo(this.UserInfo.HolderIdCard);
 		insurer.setMobile(StringUtil.hasText(this.UserInfo.HolderMobile) ? this.UserInfo.HolderMobile : null);
 		return insurer;
@@ -813,7 +813,7 @@ public class RenewInfo implements Serializable {
 	private InsurUnit _insured() {
 		InsurUnit insured = new InsurUnit();
 		insured.setName(this.UserInfo.InsuredName);
-		insured.setIdType(BiHuUtil.idType(this.UserInfo.InsuredIdType));
+		insured.setIdType(VehicleUtil.idTypeFromBiHuIdType(this.UserInfo.InsuredIdType));
 		insured.setIdNo(this.UserInfo.InsuredIdCard);
 		insured.setMobile(StringUtil.hasText(this.UserInfo.InsuredMobile) ? this.UserInfo.HolderMobile : null);
 		return insured;

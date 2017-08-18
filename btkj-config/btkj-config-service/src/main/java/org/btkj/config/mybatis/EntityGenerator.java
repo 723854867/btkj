@@ -12,7 +12,8 @@ import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.AreaEditParam;
 import org.btkj.config.pojo.param.InsurerEditParam;
-import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.enums.ModularType;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.math.tree.Node;
@@ -47,13 +48,14 @@ public class EntityGenerator {
 		return area;
 	}
 	
-	public static final Modular newModular(String name, Modular parent) {
+	public static final Modular newModular(String name, Modular parent, ModularType type) {
 		Modular modular = new Modular();
 		modular.setName(name);
 		modular.setParentId(null == parent ? null : parent.getId());
 		modular.setLeft(null == parent ? MPTTNode.INITIAL_ROOT_LEFT : parent.getRight());
 		modular.setRight(modular.getLeft() + 1);
 		modular.setLayer(null == parent ? Node.ROOT_LAYER : parent.getLayer() + 1);
+		modular.setType(type.mark());
 		
 		int time = DateUtil.currentTime();
 		modular.setCreated(time);

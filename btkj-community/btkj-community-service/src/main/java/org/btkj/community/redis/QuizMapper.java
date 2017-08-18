@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 
 import org.btkj.community.mybatis.dao.QuizDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.po.Quiz;
-import org.btkj.pojo.vo.QuizSearcher;
-import org.btkj.pojo.vo.QuizSearcher.SortCol;
+import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.info.QuizSearcher;
+import org.btkj.pojo.info.QuizSearcher.SortCol;
+import org.btkj.pojo.model.Pager;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;

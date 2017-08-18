@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.nonauto.api.NonAutoService;
+import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.param.NilParam;
-import org.btkj.pojo.po.NonAutoCategory;
 import org.rapid.util.common.message.Result;
 
 /**

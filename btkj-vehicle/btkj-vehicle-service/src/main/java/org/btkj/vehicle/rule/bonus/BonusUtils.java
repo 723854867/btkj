@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.enums.VehicleBizType;
-import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;

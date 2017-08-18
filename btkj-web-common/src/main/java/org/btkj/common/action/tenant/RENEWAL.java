@@ -2,8 +2,8 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.Renewal;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

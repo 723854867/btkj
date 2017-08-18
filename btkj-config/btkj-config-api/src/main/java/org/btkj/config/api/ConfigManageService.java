@@ -12,7 +12,8 @@ import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.config.pojo.param.AreaEditParam;
 import org.btkj.config.pojo.param.InsurerEditParam;
 import org.btkj.config.pojo.param.ModularEditParam;
-import org.btkj.pojo.po.Insurer;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.enums.ModularType;
 import org.rapid.util.common.message.Result;
 
 public interface ConfigManageService {
@@ -54,6 +55,14 @@ public interface ConfigManageService {
 	 * @return
 	 */
 	Map<Integer, ModularDocument> modulars(TarType type, int tarId);
+	
+	/**
+	 * 权限模块结构
+	 * 
+	 * @param type
+	 * @return
+	 */
+	Map<Integer, ModularDocument> modulars(ModularType type);
 	
 	/**
 	 * api 编辑

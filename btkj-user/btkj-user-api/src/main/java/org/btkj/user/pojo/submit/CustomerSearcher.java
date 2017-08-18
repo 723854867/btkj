@@ -3,7 +3,8 @@ package org.btkj.user.pojo.submit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.btkj.pojo.vo.Page;
+import org.btkj.pojo.info.Page;
+import org.rapid.util.lang.StringUtil;
 
 public class CustomerSearcher extends Page {
 
@@ -65,14 +66,12 @@ public class CustomerSearcher extends Page {
 	}
 	
 	public Map<String, String> params() {
-		if (null == name && null == mobile && null == license)
-			return null;
 		Map<String, String> map = new HashMap<String, String>();
-		if (null != name)
+		if (StringUtil.hasText(name))
 			map.put("name", name);
-		if (null != mobile)
+		if (StringUtil.hasText(mobile))
 			map.put("mobile", mobile);
-		if (null != license)
+		if (StringUtil.hasText(license))
 			map.put("license", license);
 		return map;
 	}

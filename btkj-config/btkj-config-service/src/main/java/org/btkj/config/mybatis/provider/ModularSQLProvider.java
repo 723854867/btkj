@@ -31,17 +31,22 @@ public class ModularSQLProvider extends SQLProvider {
 				WHERE("`left`>=#{left}");
 				AND();
 				WHERE("`right`<=#{right}");
+				AND();
+				WHERE("`type`=#{type}");
 			}
 		}.toString();
 	}
 	
 	public String updateForInsert() {
-		return "UPDATE modular SET `left`=CASE WHEN `left`>#{threshold} THEN `left`+#{step} ELSE `left` END, `right`=CASE WHEN `right`>=#{threshold} THEN `right`+#{step} ELSE `right` END";
+		return "UPDATE modular SET "
+				+ "`left`=CASE WHEN `left`>#{threshold} THEN `left`+#{step} ELSE `left` END, "
+				+ "`right`=CASE WHEN `right`>=#{threshold} THEN `right`+#{step} ELSE `right` END "
+				+ "WHERE `type`=#{type}";
 	}
 	
 	public String updateForMove(Map<String, Object> params) {
 		StringBuilder builder = new StringBuilder("UPDATE `modular` SET `left`=`left`+#{step}, `right`=`right`+#{step}"
-				+ " WHERE `left`>=#{start} AND `right`<=#{end} AND `id` IN(");
+				+ " WHERE `left`>=#{start} AND `right`<=#{end} AND `type`=#{type} AND `id` IN(");
 		Set<Integer> set = (Set<Integer>) params.get("set");
 		for (int id : set)
 			builder.append(id).append(",");
@@ -56,7 +61,7 @@ public class ModularSQLProvider extends SQLProvider {
 				.append(" AND `right`<").append(params.get("CL")).append(" THEN `right`+").append(params.get("step"))
 				.append(" ELSE `right` END, `left`=CASE WHEN `left`>").append(params.get("PR")).append(" AND `left`<")
 				.append(params.get("CL")).append(" THEN `left`+").append(params.get("step")).append("  ELSE `left` END")
-				.append(" WHERE `id` NOT IN(");
+				.append(" WHERE `type`=#{type} AND `id` NOT IN(");
 		Set<Integer> set = (Set<Integer>) params.get("set");
 		for (int id : set)
 			builder.append(id).append(",");
@@ -71,7 +76,7 @@ public class ModularSQLProvider extends SQLProvider {
 				.append(" AND `right`<").append(params.get("PR")).append(" THEN `right`+").append(params.get("step"))
 				.append(" ELSE `right` END, `left`=CASE WHEN `left`>").append(params.get("CR")).append(" AND `left`<")
 				.append(params.get("PR")).append(" THEN `left`+").append(params.get("step")).append(" ELSE `left` END")
-				.append(" WHERE `id` NOT IN(");
+				.append(" WHERE `type`=#{type} AND `id` NOT IN(");
 		Set<Integer> set = (Set<Integer>) params.get("set");
 		for (int id : set)
 			builder.append(id).append(",");
@@ -80,10 +85,12 @@ public class ModularSQLProvider extends SQLProvider {
 		return builder.toString();
 	}
 	
-	public String updateForDelete() {
-		return "UPDATE `modular SET "
-				+ "`left`=CASE WHEN `left`>#{start} THEN `left`-#{step} ELSE `left` END, "
-				+ "`right`=CASE WHEN `right`>#{start} THEN `right`-#{step} ELSE `right` END";
+	public String updateForDelete(Map<String, Integer> map) {
+		StringBuilder builder = new StringBuilder("UPDATE `modular` SET `left`=CASE WHEN `left`>");
+		builder.append(map.get("start")).append(" THEN `left`-").append(map.get("step")).append(" ELSE `left` END, "
+				+ "`right`=CASE WHEN `right`>").append(map.get("start")).append(" THEN `right`-").append(map.get("step"))
+				.append(" ELSE `right` END WHERE `type`=").append(map.get("type"));
+		return builder.toString();
 	}
 	
 	@Override
@@ -91,9 +98,11 @@ public class ModularSQLProvider extends SQLProvider {
 		return new SQL() {
 			{
 				DELETE_FROM(table);
-				WHERE("left>=#{left}");
+				WHERE("`left`>=#{start}");
 				AND();
-				WHERE("right<=#{right}");
+				WHERE("`right`<=#{end}");
+				AND();
+				WHERE("`type`=#{type}");
 			}
 		}.toString();
 	}

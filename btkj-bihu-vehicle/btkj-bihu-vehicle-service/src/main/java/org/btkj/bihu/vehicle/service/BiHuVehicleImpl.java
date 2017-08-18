@@ -24,18 +24,18 @@ import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.bo.InsurUnit;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicyDetail;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
+import org.btkj.pojo.enums.LicenseType;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.VehicleInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.model.VehicleAuditModel;
+import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.pojo.param.VehicleOrderParam.InsuranceItem;
+import org.btkj.pojo.param.VehicleOrderParam.Unit;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -53,6 +53,10 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private static final Logger logger = LoggerFactory.getLogger(BiHuVehicleImpl.class);
 	
 	private static final String SEC_CODE					= "SecCode";
+	private static final String TWO							= "2";
+	private static final String ONE							= "1";
+	private static final String ZERO						= "0";
+	private static final String ONE_NEG						= "-1";
 	
 	@Resource
 	private HttpProxy httpProxy;
@@ -90,7 +94,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	public Result<Renewal> renewal(TenantPO tenant, int uid, String license, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
-		return _doRenewal(tenant, uid, params, cityCode);
+		return _doRenewal(tenant, uid, params, cityCode, LicenseType.RENEWAL_CAR);
 	}
 	
 	@Override
@@ -98,14 +102,16 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
-		return _doRenewal(tenant, uid, params, cityCode);
+		return _doRenewal(tenant, uid, params, cityCode, LicenseType.SECONDARY_CAR);
 	}
 	
-	private Result<Renewal> _doRenewal(TenantPO tenant, int uid, BiHuParams params, int cityCode) {
+	private Result<Renewal> _doRenewal(TenantPO tenant, int uid, BiHuParams params, int cityCode, LicenseType licenseType) {
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))	// 用 uid 作为 custkey
-				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
-				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
 				.setCityCode(cityCode);
+		if (StringUtil.hasText(tenant.getBiHuAgent(), tenant.getBiHuKey()))
+			params.setAgent(tenant.getBiHuAgent()).setKey(tenant.getBiHuKey());
+		else
+			params.setAgent(agent).setKey(key);
 		HttpUriRequest request = _requestUri(renewInfoPath, params, renewInfoTimeout);
 		try {
 			RenewInfo info = httpProxy.syncRequest(request, RenewInfo.JSON_HANDLER);
@@ -114,6 +120,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 				return Result.result(BtkjCode.RENEW_INFO_GET_FAILURE);
 			
 			Renewal renewal = info.toRenewal();
+			if (null != renewal.getTips() && StringUtil.hasText(renewal.getTips().getName())) {
+				BiHuVehicleInfo vehicleInfo = _vehicleInfo(params, renewal.getTips().getName(), licenseType);
+				if (null != vehicleInfo)
+					renewal.getTips().setTransmissionName(vehicleInfo.searchAlia(renewal.getTips().getBiHuJYId()));
+			}
 			return status == 3 ? Result.result(BtkjCode.RENEW_INFO_VEHICLE_ONLY, renewal) : Result.result(renewal);
 		} catch (IOException e) {
 			logger.warn("bihu renew request failure!", e);
@@ -123,17 +134,38 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		}
 	}
 	
-	private void _vehicleInfoFilter() {
-		
+	private BiHuVehicleInfo _vehicleInfo(BiHuParams renewParam , String moldName, LicenseType licenseType) {
+		BiHuParams params = new BiHuParams(RequestType.VEHICLE_INFO);
+		params.setCustKey(renewParam.getCustKey()).setAgent(renewParam.getAgent()).setKey(renewParam.getKey())
+				.setCityCode(renewParam.getCityCode()).setMoldName(moldName);
+		switch (licenseType) {
+		case RENEWAL_CAR:
+			params.setLicenseNo(renewParam.getLicenseNo());
+			break;
+		case SECONDARY_CAR:
+			params.setCarVin(renewParam.getCarVin()).setEngineNo(renewParam.getKey());
+			break;
+		default:
+			break;
+		}
+		HttpUriRequest request = _requestUri(vehicleInfoPath, params, vehicleInfoTimeout);
+		try {
+			BiHuVehicleInfo info = httpProxy.syncRequest(request, BiHuVehicleInfo.JSON_HANDLER);
+			return info.getBusinessStatus() == 1 ? info : null;
+		} catch (IOException e) {
+			logger.warn("bihu vehicle info request failure!", e);
+			return null;
+		}
 	}
 	
 	@Override
 	public Result<List<VehicleInfo>> vehicleInfos(int uid, TenantPO tenant, String license, String moldName, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.VEHICLE_INFO);
-		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
-				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
-				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
-				.setCityCode(cityCode).setLicenseNo(license).setMoldName(moldName);
+		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid))).setCityCode(cityCode).setLicenseNo(license).setMoldName(moldName);
+		if (StringUtil.hasText(tenant.getBiHuAgent(), tenant.getBiHuKey()))
+			params.setAgent(tenant.getBiHuAgent()).setKey(tenant.getBiHuKey());
+		else
+			params.setAgent(agent).setKey(key);
 		HttpUriRequest request = _requestUri(vehicleInfoPath, params, vehicleInfoTimeout);
 		try {
 			BiHuVehicleInfo info = httpProxy.syncRequest(request, BiHuVehicleInfo.JSON_HANDLER);
@@ -148,20 +180,16 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<Void> order(Employee employee, int quoteMod, int insureMod, VehiclePolicyTips tips, int cityCode) {
+	public Result<Void> order(String agent, String key, int uid, int quoteMod, int insureMod, int cityCode, VehicleOrderParam param) {
 		BiHuParams params = new BiHuParams(RequestType.QUOTE);
-		params.setAgent(employee.getTenant().getBiHuAgent())
-			.setKey(employee.getTenant().getBiHuKey())
-			.setQuoteGroup(quoteMod)
-			.setSubmitGroup(insureMod)
-			.setCityCode(cityCode)
-			.setCustKey(DigestUtils.md5Hex(String.valueOf(employee.getUid())));
+		params.setAgent(agent).setKey(key).setQuoteGroup(quoteMod).setSubmitGroup(insureMod)
+			.setCityCode(cityCode).setCustKey(DigestUtils.md5Hex(String.valueOf(uid)));
 		
-		_buildOwner(params, tips.getOwner());
-		_buildInsured(params, tips.getInsured());
-		_buildInsurer(params, tips.getInsurer());
-		_buildVehicle(params, tips);
-		_buildSchema(params, tips.getSchema());
+		_buildOwner(params, param.getOwner());
+		_buildInsured(params, param.getInsured());
+		_buildInsurer(params, param.getInsurer());
+		_buildVehicle(params, param);
+		_buildSchema(params, param);
 		HttpUriRequest request = _requestUri(biHuQuotePath, params, quoteTimeout);
 		try {
 			QuoteResp resp = httpProxy.syncRequest(request, QuoteResp.JSON_HANDLER);
@@ -174,7 +202,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		}
 	}
 	
-	private void _buildOwner(BiHuParams params, InsurUnit owner) { 
+	private void _buildOwner(BiHuParams params, Unit owner) { 
 		if (null == owner)
 			return;
 		params.setCarOwnerName(owner.getName());
@@ -182,7 +210,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		params.setOwnerIdCardType(_biHuIdType(owner.getIdType()));
 	}
 	
-	private void _buildInsured(BiHuParams params, InsurUnit insured) { 
+	private void _buildInsured(BiHuParams params, Unit insured) { 
 		if (null == insured)
 			return;
 		params.setInsuredName(insured.getName());
@@ -192,7 +220,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			params.setInsuredMobile(insured.getMobile());
 	}
 	
-	private void _buildInsurer(BiHuParams params, InsurUnit insurer) { 
+	private void _buildInsurer(BiHuParams params, Unit insurer) { 
 		if (null == insurer)
 			return;
 		params.setHolderName(insurer.getName());
@@ -215,122 +243,119 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		}
 	}
 	
-	private void _buildVehicle(BiHuParams params, VehiclePolicyTips tips) {
-		params.setLicenseNo(tips.getLicense());
-		params.setEngineNo(tips.getEngine());
-		params.setCarVin(tips.getVin());
-		params.setRegisterDate(tips.getEnrollDate());
-		params.setMoldName(tips.getName());
-		if (null != tips.getIssueDate())
-			params.setTransferDate(tips.getIssueDate());
-		params.setSeatCount(String.valueOf(tips.getSeat()));
+	private void _buildVehicle(BiHuParams params, VehicleOrderParam param) {
+		params.setLicenseNo(param.getLicense());
+		params.setEngineNo(param.getEngine());
+		params.setCarVin(param.getVin());
+		params.setRegisterDate(DateUtil.convert(param.getEnrollDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DD, DateUtil.TIMEZONE_GMT_8));
+		params.setMoldName(param.getName());
+		if (null != param.getIssueDate())
+			params.setTransferDate(param.getIssueDate());
+		params.setSeatCount(String.valueOf(param.getSeat()));
 	}
 	
-	private void _buildSchema(BiHuParams params, PolicySchema schema) {
-		if (null != schema.getCommercialStart()) {
-			if (null != schema.getCompulsiveStart()) {
+	private void _buildSchema(BiHuParams params, VehicleOrderParam param) {
+		if (null != param.getCommercialStart()) {
+			if (null != param.getCompulsoryStart()) {
 				params.setForceTax(String.valueOf(1));
-				params.setForceTimeStamp(String.valueOf((int) (DateUtil.getTime(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
+				params.setForceTimeStamp(String.valueOf((int) (DateUtil.getTime(param.getCompulsoryStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
 			} else
 				params.setForceTax(String.valueOf(0));
-			params.setBizTimeStamp(String.valueOf((int) (DateUtil.getTime(schema.getCommercialStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
+			params.setBizTimeStamp(String.valueOf((int) (DateUtil.getTime(param.getCommercialStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
 		} else {
-			if (null == schema.getCompulsiveStart())
+			if (null == param.getCompulsoryStart())
 				throw new IllegalArgumentException("compulsory and commercial insur must choose one!");
 			else {
 				params.setForceTax(String.valueOf(2));
-				params.setForceTimeStamp(String.valueOf((int) (DateUtil.getTime(schema.getCompulsiveStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
+				params.setForceTimeStamp(String.valueOf((int) (DateUtil.getTime(param.getCompulsoryStart(), DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000)));
 			}
 		}
 		
-		Map<CommercialInsuranceType, Insurance> commercial = schema.getInsurances();
+		Map<CommercialInsuranceType, InsuranceItem> commercial = param.getInsurances();
 		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
-			Insurance insurance = null == commercial ? null : commercial.get(type);
+			InsuranceItem insurance = null == commercial ? null : commercial.get(type);
 			switch (type) {
 			case DAMAGE:
-				params.setCheSun(null != insurance ? 1 : 0);
+				params.setCheSun(null != insurance ? ONE : ZERO);
 				break;
 			case DAMAGE_DEDUCTIBLE:
-				params.setBuJiMianCheSun(null != insurance ? 1 : 0);
+				params.setBuJiMianCheSun(null != insurance ? ONE : ZERO);
 				break;
 			case THIRD:
-				params.setSanZhe(null != insurance ? insurance.getQuota() : 0);
+				params.setSanZhe(null != insurance ? insurance.getQuota() : ZERO);
 				break;
 			case THIRD_DEDUCTIBLE:
-				params.setBuJiMianSanZhe(null != insurance ? 1 : 0);
+				params.setBuJiMianSanZhe(null != insurance ? ONE : ZERO);
 				break;
 			case DRIVER:
-				params.setSiJi(null != insurance ? insurance.getQuota() : 0);
+				params.setSiJi(null != insurance ? insurance.getQuota() : ZERO);
 				break;
 			case DRIVER_DEDUCTIBLE:
-				params.setBuJiMianSiJi(null != insurance ? 1 : 0);
+				params.setBuJiMianSiJi(null != insurance ? ONE : ZERO);
 				break;
 			case PASSENGER:
-				params.setChengKe(null != insurance ? insurance.getQuota() : 0);
+				params.setChengKe(null != insurance ? insurance.getQuota() : ZERO);
 				break;
 			case PASSENGER_DEDUCTIBLE:
-				params.setBuJiMianChengKe(null != insurance ? 1 : 0);
+				params.setBuJiMianChengKe(null != insurance ? ONE : ZERO);
 				break;
 			case ROBBERY:
-				params.setDaoQiang(null != insurance ? 1 : 0);
+				params.setDaoQiang(null != insurance ? ONE : ZERO);
 				break;
 			case ROBBERY_DEDUCTIBLE:
-				params.setBuJiMianDaoQiang(null != insurance ? 1 : 0);
+				params.setBuJiMianDaoQiang(null != insurance ? ONE : ZERO);
 				break;
 			case GLASS:
 				if (null != insurance) {
-					int value = (int) insurance.getQuota();
-					if (value != 1 && value != 2)
-						value = 0;
-					params.setBoLi(value);
+					if (!insurance.getQuota().equals(ONE) && !insurance.getQuota().equals(TWO))
+						params.setBoLi(ZERO);
+					else
+						params.setBoLi(insurance.getQuota());
 				} else
-					params.setBoLi(0);
+					params.setBoLi(ZERO);
 				break;
 			case AUTO_FIRE:
-				params.setZiRan(null != insurance ? 1 : 0);
+				params.setZiRan(null != insurance ? ONE : ZERO);
 				break;
 			case AUTO_FIRE_DEDUCTIBLE:
-				params.setBuJiMianZiRan(null != insurance ? 1 : 0);
+				params.setBuJiMianZiRan(null != insurance ? ONE : ZERO);
 				break;
 			case SCRATCH:
-				params.setHuaHen(null != insurance ? insurance.getQuota() : 0);
+				params.setHuaHen(null != insurance ? insurance.getQuota() : ZERO);
 				break;
 			case SCRATCH_DEDUCTIBLE:
-				params.setBuJiMianHuaHen(null != insurance ? 1 : 0);
+				params.setBuJiMianHuaHen(null != insurance ? ONE : ZERO);
 				break;
 			case WADDING:
-				params.setSheShui(null != insurance ? 1 : 0);
+				params.setSheShui(null != insurance ? ONE : ZERO);
 				break;
 			case WADDING_DEDUCTIBLE:
-				params.setBuJiMianSheShui(null != insurance ? 1 : 0);
+				params.setBuJiMianSheShui(null != insurance ? ONE : ZERO);
 				break;
 			case GARAGE_DESIGNATED:
 				if (null != insurance) {
-					int value = (int) insurance.getQuota();
-					if (value != -1 && value != 0 && value != 1)
-						value = -1;
-					params.setHcXiuLiChangType(value);
+					if (!insurance.getQuota().equals(ONE_NEG) && !insurance.getQuota().equals(ZERO) && !insurance.getQuota().equals(ONE))
+						params.setHcXiuLiChangType(ONE_NEG);
+					else
+						params.setHcXiuLiChangType(insurance.getQuota());
 					params.setHcXiuLiChang(insurance.getPrice());
 				}
 				break;
 			case UNKNOWN_THIRD:
-				params.setHcSanFangTeYue(null != insurance ? 1 : 0);
+				params.setHcSanFangTeYue(null != insurance ? ONE : ZERO);
 				break;
 			default:
 				break;
 			}
 		}
-		params.setBuJiMianJingShenSunShi(0); // 不计免精神损失不做该项投保
+		params.setBuJiMianJingShenSunShi(ZERO); // 不计免精神损失不做该项投保
 	}
 	
 	@Override
 	public Result<PolicySchema> quoteResult(TenantPO tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.QUOTE_RESULT);
-		params.setLicenseNo(license)
-				.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
-				.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
-				.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
-				.setQuoteGroup(insurer);
+		params.setLicenseNo(license).setCustKey(DigestUtils.md5Hex(String.valueOf(uid))).setAgent(tenant.getBiHuAgent())
+				.setKey(tenant.getBiHuKey()).setQuoteGroup(insurer);
 		HttpUriRequest request = _requestUri(quoteResultPath, params, quoteResultTimeout);
 		try {
 			QuoteResult result = httpProxy.syncRequest(request, QuoteResult.JSON_HANDLER);
@@ -348,20 +373,17 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicyDetail> insureResult(TenantPO tenant, int uid, String license, int insurer) {
+	public Result<VehicleAuditModel> insureResult(TenantPO tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.INSURE_RESULT);
-		params.setLicenseNo(license)
-			.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
-			.setAgent(!StringUtil.hasText(tenant.getBiHuAgent()) ? agent : tenant.getBiHuAgent())
-			.setKey(!StringUtil.hasText(tenant.getBiHuKey()) ? key : tenant.getBiHuKey())
-			.setSubmitGroup(insurer);
+		params.setLicenseNo(license).setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
+			.setAgent(tenant.getBiHuAgent()).setKey(tenant.getBiHuKey()).setSubmitGroup(insurer);
 		HttpUriRequest request = _requestUri(insureResultPath, params, insureResultTimeout);
 		try {
 			InsureResult result = httpProxy.syncRequest(request, InsureResult.JSON_HANDLER);
 			if (result.getBusinessStatus() != 1)
 				return Result.result(Code.REQUEST_FAILURE);
 			if (result.getItem().getSubmitStatus() == 1)
-				return Result.result(result.detail());
+				return Result.result(result.auditModel());
 			if (result.getItem().getSubmitStatus() == 2)
 				return Result.result(BtkjCode.INSURE_REPEAT, result.getItem().getSubmitResult());
 			if (result.getItem().getSubmitStatus() == 3)

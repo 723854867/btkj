@@ -2,9 +2,9 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.EmployeePO.Mod;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.user.pojo.PayType;
 
 public class EmployeeInfo implements Serializable {

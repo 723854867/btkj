@@ -13,19 +13,19 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.VehicleBrand;
-import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.po.VehicleDept;
-import org.btkj.pojo.po.VehicleModel;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.EmployeeTip;
-import org.btkj.pojo.vo.JianJiePoliciesInfo;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
@@ -240,7 +240,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			VehicleOrder order = null;
 			while (itr.hasNext()) {
 				VehicleOrder vo = itr.next();
-				String cno = insuranceType == InsuranceType.COMMERCIAL ? vo.getTips().getDetail().getCommercialNo() : vo.getTips().getDetail().getCompulsiveNo();
+				String cno = insuranceType == InsuranceType.COMMERCIAL ? vo.getTips().getSchema().getCommercialNo() : vo.getTips().getSchema().getCompulsoryNo();
 				if (!StringUtil.hasText(cno) || !cno.equals(info.getTBDH()))
 					continue;
 				order = vo;

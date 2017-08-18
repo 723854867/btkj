@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.courier.api.CourierService;
 import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.courier.redis.CourierRedisService;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.rapid.util.common.message.Result;
 import org.springframework.stereotype.Service;
 

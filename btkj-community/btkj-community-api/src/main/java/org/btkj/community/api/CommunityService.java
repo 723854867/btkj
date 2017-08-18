@@ -1,13 +1,13 @@
 package org.btkj.community.api;
 
 import org.btkj.community.pojo.param.ArticleListParam;
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.Article;
-import org.btkj.pojo.po.Comment;
-import org.btkj.pojo.po.Quiz;
-import org.btkj.pojo.po.Reply;
-import org.btkj.pojo.vo.QuizSearcher;
+import org.btkj.pojo.entity.Article;
+import org.btkj.pojo.entity.Comment;
+import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.entity.Reply;
+import org.btkj.pojo.info.QuizSearcher;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.identity.User;
 import org.rapid.util.common.message.Result;
 
 public interface CommunityService {

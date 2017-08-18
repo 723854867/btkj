@@ -23,8 +23,8 @@ import org.rapid.util.lang.CollectionUtil;
  */
 public class ModularMapper extends RedisDBAdapter<Integer, Modular, ModularDao> {
 	
-	private final String SET							= "set:modular:{}";
-	private final String CONTROLLER						= "modular:controller:{}";
+	private final String SET							= "set:modular:{0}";
+	private final String CONTROLLER						= "modular:controller:{0}";
 
 	public ModularMapper() {
 		super(new ByteProtostuffSerializer<Modular>(), "hash:db:modular");
@@ -57,6 +57,27 @@ public class ModularMapper extends RedisDBAdapter<Integer, Modular, ModularDao> 
 	@Override
 	public void flush(Modular entity) {
 		redis.hmsset(redisKey, entity, serializer, _setKey(entity.getType()));
+	}
+	
+	@Override
+	public void remove(Modular entity) {
+		redis.hmsdel(redisKey, entity.key(), _setKey(entity.getType()));
+	}
+	
+	@Override
+	public void remove(Map<Integer, Modular> entities) {
+		Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+		for (Modular temp : entities.values()) {
+			int type = temp.getType();
+			List<Integer> list = map.get(type);
+			if (null == list) {
+				list = new ArrayList<Integer>();
+				map.put(type, list);
+			}
+			list.add(temp.getId());
+		}
+		for (Entry<Integer, List<Integer>> entry : map.entrySet())
+			redis.hmsdel(redisKey, entry.getValue(), _setKey(entry.getKey()));
 	}
 	
 	@Override

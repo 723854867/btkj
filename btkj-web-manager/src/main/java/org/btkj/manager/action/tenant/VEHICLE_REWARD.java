@@ -1,5 +1,7 @@
 package org.btkj.manager.action.tenant;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,16 +17,16 @@ import org.btkj.manager.action.EmployeeAction;
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.payment.pojo.model.ScoreTips;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.enums.BizType;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.EmployeePO.Mod;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
-import org.btkj.pojo.po.VehicleOrder;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.pojo.entity.LogScore;
 import org.btkj.vehicle.api.VehicleManageService;
@@ -162,10 +164,10 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 	private LogScore _managerLogScore(Map<String, BonusManageConfig> configs, int employeeId, VehicleOrder order, InsuranceType type, int depth) {
 		BonusManageConfigType manageConfigType = null;
 		PolicySchema schema = order.getTips().getSchema();
-		double quota = type == InsuranceType.COMMERCIAL ? schema.getCommericialTotal() : schema.getCompulsiveTotal();
-		if (0 == quota)
+		String quota = type == InsuranceType.COMMERCIAL ? schema.getCommercialTotal() : schema.getCompulsoryTotal();
+		if (quota.equals("0"))
 			return null;
-		switch (order.getTips().getVehicleUsedType()) {
+		switch (order.getTips().getUsedType()) {
 		case ORGAN:
 		case HOME_USE:
 		case ENTERPRISE:
@@ -195,7 +197,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setIncome(true);
 		logScore.setType(BizType.VEHICLE_BOUNS_MANAGE.mark());
 		logScore.setDetailType(manageConfigType.mark());
-		logScore.setQuota((int)(quota * config.getRate() / 10));
+		logScore.setQuota(new BigDecimal(quota).multiply(new BigDecimal(config.getRate())).divide(new BigDecimal(10)).setScale(0, RoundingMode.HALF_UP).intValue());
 		int time = order.getCreated() * 1000;
 		logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
 		logScore.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));

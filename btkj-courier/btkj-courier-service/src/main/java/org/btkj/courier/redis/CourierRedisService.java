@@ -2,8 +2,9 @@ package org.btkj.courier.redis;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.btkj.courier.Config;
 import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
-import org.btkj.pojo.bo.Insurance;
-import org.btkj.pojo.bo.PolicySchema;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.model.Insurance;
+import org.btkj.pojo.model.PolicySchema;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.Env;
@@ -50,7 +51,6 @@ public class CourierRedisService {
 	private String PARAM_TPL_VALUE		= "tpl_value";
 	private String PARAM_MOBILE			= "mobile";
 	private String QUOTA_MODEL			= "交强险{0}，车船税{1}，商业险{2}(商业险包含：";
-	private DecimalFormat df2 			= new DecimalFormat("###.##");
 	private String template				= "【车险报价通知】尊敬的{0}车主，您的车险即将到期。{1}报价：{2}；总计{3}，优惠后价格{4}，共优惠{5}。联系人：{6}，联系电话:{7}";
 	
 	@Resource
@@ -130,15 +130,19 @@ public class CourierRedisService {
 		String tplValue = null;
 		try {
 			PolicySchema schema = order.getTips().getSchema();
-			double discount = (schema.getCompulsiveTotal() * submit.getCompulsoryRate() / (submit.isTaxInclude() ? 100.0 : 106.0)) 
-					+ (schema.getCommericialTotal() * submit.getCommercialRate() / (submit.isTaxInclude() ? 100.0 : 106.0));
-			double price = schema.getCommericialTotal() + schema.getCompulsiveTotal() + schema.getVehicleVesselTotal();
+			BigDecimal discount = new BigDecimal(schema.getCompulsoryTotal())
+									.multiply(new BigDecimal(submit.getCompulsoryRate()))
+									.divide(new BigDecimal(submit.isTaxInclude() ? 100 : 106))
+									.add(new BigDecimal(schema.getCommercialTotal())
+											.multiply(new BigDecimal(submit.getCommercialRate()))
+											.divide(new BigDecimal(submit.isTaxInclude() ? 100 : 106)));
+			BigDecimal price = new BigDecimal(schema.getCommercialTotal()).add(new BigDecimal(schema.getCompulsoryStart())).add(new BigDecimal(schema.getVehicleVesselTotal()));
 			tplValue = URLEncoder.encode("#license#",Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getTips().getLicense(), Consts.UTF_8.name()) 
 					+ "&" + URLEncoder.encode("#insurer#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(order.getInsurerName(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#insurance#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(_buildQuotaInsurances(schema), Consts.UTF_8.name())
-					+ "&" + URLEncoder.encode("#price#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(price), Consts.UTF_8.name())
-					+ "&" + URLEncoder.encode("#price1#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(price - discount), Consts.UTF_8.name())
-					+ "&" + URLEncoder.encode("#price2#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(df2.format(discount), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(price.setScale(2, RoundingMode.HALF_UP).toString(), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price1#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(price.subtract(discount).setScale(2, RoundingMode.HALF_UP).toString(), Consts.UTF_8.name())
+					+ "&" + URLEncoder.encode("#price2#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(discount.setScale(2, RoundingMode.HALF_UP).toString(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#name#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentName(), Consts.UTF_8.name())
 					+ "&" + URLEncoder.encode("#mobile#", Consts.UTF_8.name()) + "=" + URLEncoder.encode(submit.getAgentMobile(), Consts.UTF_8.name());
 			List<NameValuePair> params = new ArrayList<NameValuePair>(3);
@@ -157,8 +161,7 @@ public class CourierRedisService {
 	
 	private String _buildQuotaInsurances(PolicySchema schema) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(MessageFormat.format(QUOTA_MODEL, df2.format(schema.getCompulsiveTotal()), 
-				df2.format(schema.getVehicleVesselTotal()), df2.format(schema.getCommericialTotal())));
+		builder.append(MessageFormat.format(QUOTA_MODEL, schema.getCompulsoryTotal(), schema.getVehicleVesselTotal(), schema.getCommercialTotal()));
 		for (CommercialInsuranceType type : CommercialInsuranceType.values()) {
 			Insurance insurance = null == schema.getInsurances() ? null : schema.getInsurances().get(type);
 			if (null == insurance)
@@ -169,10 +172,11 @@ public class CourierRedisService {
 			case DRIVER:
 			case PASSENGER:
 			case SCRATCH:
-				builder.append(type.title()).append(df2.format(insurance.getQuota() / 10000.0)).append("万、");
+				String value = new BigDecimal(insurance.getQuota()).divide(new BigDecimal("10000")).setScale(2, RoundingMode.HALF_UP).toString();
+				builder.append(type.title()).append(value).append("万、");
 				break;
 			case GLASS:
-				builder.append(type.title()).append("(").append(insurance.getQuota() == 1 ? "国产" : "进口").append(")、");
+				builder.append(type.title()).append("(").append(insurance.getQuota().equals("1") ? "国产" : "进口").append(")、");
 				break;
 			case GARAGE_DESIGNATED:
 			case UNKNOWN_THIRD:

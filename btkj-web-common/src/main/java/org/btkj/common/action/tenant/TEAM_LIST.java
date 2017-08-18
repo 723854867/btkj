@@ -8,8 +8,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.TeamInfo;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.pojo.model.Exploits;
 import org.btkj.user.api.EmployeeService;

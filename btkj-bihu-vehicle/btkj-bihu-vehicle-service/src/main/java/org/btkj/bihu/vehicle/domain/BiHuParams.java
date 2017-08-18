@@ -119,6 +119,10 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
+	public String getAgent() {
+		return get(AGENT);
+	}
+	
 	public BiHuParams setAgent(String agent) {
 		put(AGENT, agent);
 		return this;
@@ -129,9 +133,22 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
+	public String getCityCode() {
+		return get(CITY_CODE);
+	}
+	
 	public BiHuParams setCityCode(int cityCode) {
 		put(CITY_CODE, String.valueOf(cityCode));
 		return this;
+	}
+	
+	public BiHuParams setCityCode(String cityCode) {
+		put(CITY_CODE, cityCode);
+		return this;
+	}
+	
+	public String getLicenseNo() {
+		return get(LICENSE_NO);
 	}
 	
 	public BiHuParams setLicenseNo(String licenseNo) {
@@ -177,6 +194,10 @@ public class BiHuParams extends TreeMap<String, String> {
 	public BiHuParams setShowAutoMoldCode(int showAutoMoldCode) {
 		put(SHOW_AUTO_MOLD_CODE, String.valueOf(showAutoMoldCode));
 		return this;
+	}
+	
+	public String getCustKey() {
+		return get(CUST_KEY);
 	}
 	
 	public BiHuParams setCustKey(String custKey) {
@@ -299,9 +320,17 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
+	public String getEngineNo() {
+		return get(ENGINE_NO);
+	}
+	
 	public BiHuParams setEngineNo(String engineNo) {
 		put(ENGINE_NO, engineNo);
 		return this;
+	}
+	
+	public String getCarVin() {
+		return get(CAR_VIN);
 	}
 	
 	public BiHuParams setCarVin(String vin) {
@@ -324,92 +353,92 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
-	public BiHuParams setBoLi(double boLi) {
+	public BiHuParams setBoLi(String boLi) {
 		put(BOLI, String.valueOf(boLi));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianCheSun(double buJiMianCheSun) {
+	public BiHuParams setBuJiMianCheSun(String buJiMianCheSun) {
 		put(BU_JI_MIAN_CHE_SUN, String.valueOf(buJiMianCheSun));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianDaoQiang(double buJiMianDaoQiang) {
+	public BiHuParams setBuJiMianDaoQiang(String buJiMianDaoQiang) {
 		put(BU_JI_MIAN_DAO_QIANG, String.valueOf(buJiMianDaoQiang));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianSanZhe(double buJiMianSanZhe) {
+	public BiHuParams setBuJiMianSanZhe(String buJiMianSanZhe) {
 		put(BU_JI_MIAN_SAN_ZHE, String.valueOf(buJiMianSanZhe));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianChengKe(double buJiMianChengKe) {
+	public BiHuParams setBuJiMianChengKe(String buJiMianChengKe) {
 		put(BU_JI_MIAN_CHENG_KE, String.valueOf(buJiMianChengKe));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianSiJi(double buJiMianSiJi) {
+	public BiHuParams setBuJiMianSiJi(String buJiMianSiJi) {
 		put(BU_JI_MIAN_SI_JI, String.valueOf(buJiMianSiJi));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianHuaHen(double buJiMianHuaHen) {
+	public BiHuParams setBuJiMianHuaHen(String buJiMianHuaHen) {
 		put(BU_JI_MIAN_HUA_HEN, String.valueOf(buJiMianHuaHen));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianSheShui(double buJiMianSheShui) {
+	public BiHuParams setBuJiMianSheShui(String buJiMianSheShui) {
 		put(BU_JI_MIAN_SHE_SHUI, String.valueOf(buJiMianSheShui));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianZiRan(double buJiMianZiRan) {
+	public BiHuParams setBuJiMianZiRan(String buJiMianZiRan) {
 		put(BU_JI_MIAN_ZI_RAN, String.valueOf(buJiMianZiRan));
 		return this;
 	}
 	
-	public BiHuParams setBuJiMianJingShenSunShi(double buJiMianJingShenSunShi) {
+	public BiHuParams setBuJiMianJingShenSunShi(String buJiMianJingShenSunShi) {
 		put(BU_JI_MIAN_JING_SHEN_SUN_SHI, String.valueOf(buJiMianJingShenSunShi));
 		return this;
 	}
 	
-	public BiHuParams setSheShui(double sheShui) {
+	public BiHuParams setSheShui(String sheShui) {
 		put(SHE_SHUI, String.valueOf(sheShui));
 		return this;
 	}
 	
-	public BiHuParams setHuaHen(double huaHen) {
+	public BiHuParams setHuaHen(String huaHen) {
 		put(HUA_HEN, String.valueOf(huaHen));
 		return this;
 	}
 	
-	public BiHuParams setSiJi(double siJi) {
+	public BiHuParams setSiJi(String siJi) {
 		put(SI_JI, String.valueOf(siJi));
 		return this;
 	}
 	
-	public BiHuParams setChengKe(double chengKe) {
+	public BiHuParams setChengKe(String chengKe) {
 		put(CHENG_KE, String.valueOf(chengKe));
 		return this;
 	}
 	
-	public BiHuParams setCheSun(double cheSun) {
+	public BiHuParams setCheSun(String cheSun) {
 		put(CHE_SUN, String.valueOf(cheSun));
 		return this;
 	}
 	
-	public BiHuParams setDaoQiang(double daoQiang) {
+	public BiHuParams setDaoQiang(String daoQiang) {
 		put(DAO_QIANG, String.valueOf(daoQiang));
 		return this;
 	}
 	
-	public BiHuParams setSanZhe(double sanZhe) {
+	public BiHuParams setSanZhe(String sanZhe) {
 		put(SAN_ZHE, String.valueOf(sanZhe));
 		return this;
 	}
 	
-	public BiHuParams setZiRan(double ziRan) {
+	public BiHuParams setZiRan(String ziRan) {
 		put(ZI_RAN, String.valueOf(ziRan));
 		return this;
 	}
@@ -429,17 +458,17 @@ public class BiHuParams extends TreeMap<String, String> {
 		return this;
 	}
 	
-	public BiHuParams setHcSanFangTeYue(double hcSanFangTeYue) {
+	public BiHuParams setHcSanFangTeYue(String hcSanFangTeYue) {
 		put(HC_SAN_FANG_TE_YUE, String.valueOf(hcSanFangTeYue));
 		return this;
 	}
 	
-	public BiHuParams setHcXiuLiChang(double hcXiuLiChang) {
+	public BiHuParams setHcXiuLiChang(String hcXiuLiChang) {
 		put(HC_XIU_LI_CHANG, String.valueOf(hcXiuLiChang));
 		return this;
 	}
 	
-	public BiHuParams setHcXiuLiChangType(int hcXiuLiChangType) {
+	public BiHuParams setHcXiuLiChangType(String hcXiuLiChangType) {
 		put(HC_XIU_LI_CHANG_TYPE, String.valueOf(hcXiuLiChangType));
 		return this;
 	}

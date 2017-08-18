@@ -1,13 +1,10 @@
 package org.btkj.lebaoba.vehicle.api;
 
 import java.util.List;
-import java.util.Set;
 
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.vo.VehicleInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.param.VehicleOrderParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -23,10 +20,10 @@ public interface LeBaoBaVehicle {
 	 * @param vin
 	 * @return
 	 */
-	List<VehicleInfo> vehicleInfos(String vin);
+	List<VehicleInfo> vehicleInfos(String username, String password, String vin);
 	
 	/**
 	 * 报价/投保接口
 	 */
-	Result<PolicySchema> order(Employee employee, Set<Insurer> quote, Set<Insurer> insure, VehiclePolicyTips tips);
+	Result<PolicySchema> order(String username, String password, String insurer, boolean insure, VehicleOrderParam param);
 }

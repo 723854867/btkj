@@ -12,12 +12,12 @@ import org.btkj.community.redis.QuizMapper;
 import org.btkj.community.redis.ReplyMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.Article;
+import org.btkj.pojo.entity.Comment;
+import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.entity.Reply;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.Article;
-import org.btkj.pojo.po.Comment;
-import org.btkj.pojo.po.Quiz;
-import org.btkj.pojo.po.Reply;
+import org.btkj.pojo.model.identity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

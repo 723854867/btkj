@@ -10,8 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.param.Param;
-import org.btkj.pojo.po.NonAutoCategory;
 import org.rapid.util.lang.DateUtil;
 
 public class NonAutoEditParam extends Param {
@@ -90,9 +90,9 @@ public class NonAutoEditParam extends Param {
 		category.setTags(tags);
 		category.setSorts(sorts);
 		if (null != this.filters) {
-			List<org.btkj.pojo.po.NonAutoCategory.Filter> list = new ArrayList<org.btkj.pojo.po.NonAutoCategory.Filter>();
+			List<org.btkj.pojo.entity.NonAutoCategory.Filter> list = new ArrayList<org.btkj.pojo.entity.NonAutoCategory.Filter>();
 			for (Filter filter : this.filters) 
-				list.add(new org.btkj.pojo.po.NonAutoCategory.Filter(filter.name, filter.options));
+				list.add(new org.btkj.pojo.entity.NonAutoCategory.Filter(filter.name, filter.options));
 			category.setFilters(list);
 		}
 		int time = DateUtil.currentTime();

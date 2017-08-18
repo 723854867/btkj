@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.vo.VehicleInfo;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
@@ -24,6 +24,6 @@ public class VEHICLE_INFOS extends TenantAction {
 
 	@Override
 	protected Result<List<VehicleInfo>> execute(Request request, Employee employee) {
-		return Result.result(vehicleService.vehicleInfos(request.getParam(Params.VIN)));
+		return Result.result(vehicleService.vehicleInfos(employee.getTenant(), request.getParam(Params.VIN)));
 	}
 }

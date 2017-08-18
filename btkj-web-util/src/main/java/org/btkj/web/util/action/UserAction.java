@@ -2,10 +2,10 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.Param;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
 import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.web.util.Params;

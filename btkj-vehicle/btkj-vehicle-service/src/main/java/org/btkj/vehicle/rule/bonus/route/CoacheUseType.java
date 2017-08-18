@@ -3,8 +3,8 @@ package org.btkj.vehicle.rule.bonus.route;
 import java.util.List;
 import java.util.Map;
 
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.VehicleUsedType;
-import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.pojo.model.VehicleCoefficientType;
 import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;

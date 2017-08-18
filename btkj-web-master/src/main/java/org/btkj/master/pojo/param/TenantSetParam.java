@@ -17,6 +17,8 @@ public class TenantSetParam extends Param {
 	private String jianJieId;
 	private String biHuKey;
 	private String biHuAgent;
+	private String leBaoBaUsername;
+	private String leBaoBaPassword;
 	private Set<String> insurersDelete;
 	private Map<String, TenantInsurer> insurersUpdate;
 	private Map<String, TenantInsurer> insurersInsert;
@@ -47,6 +49,23 @@ public class TenantSetParam extends Param {
 	
 	public String getBiHuAgent() {
 		return biHuAgent;
+	}
+	
+	public String getLeBaoBaPassword() {
+		return leBaoBaPassword;
+	}
+	
+	public void setLeBaoBaPassword(String leBaoBaPassword) {
+		this.leBaoBaPassword = leBaoBaPassword;
+	}
+
+	public String getLeBaoBaUsername() {
+		return leBaoBaUsername;
+	}
+
+
+	public void setLeBaoBaUsername(String leBaoBaUsername) {
+		this.leBaoBaUsername = leBaoBaUsername;
 	}
 	
 	public void setBiHuAgent(String biHuAgent) {

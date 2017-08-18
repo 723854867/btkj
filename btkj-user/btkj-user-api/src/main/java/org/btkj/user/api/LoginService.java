@@ -1,7 +1,7 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.bo.indentity.App;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.model.identity.App;
 import org.rapid.util.common.message.Result;
 
 public interface LoginService {

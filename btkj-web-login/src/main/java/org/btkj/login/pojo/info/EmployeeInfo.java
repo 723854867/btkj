@@ -1,8 +1,8 @@
 package org.btkj.login.pojo.info;
 
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.po.Region;
-import org.btkj.pojo.vo.UserTips;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.info.UserTips;
+import org.btkj.pojo.model.identity.Employee;
 
 public class EmployeeInfo extends UserTips {
 

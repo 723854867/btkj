@@ -1,10 +1,10 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.UserPO;
-import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.pojo.info.TenantListInfo;
 import org.btkj.user.pojo.param.TenantAddParam;
 import org.rapid.util.common.message.Result;

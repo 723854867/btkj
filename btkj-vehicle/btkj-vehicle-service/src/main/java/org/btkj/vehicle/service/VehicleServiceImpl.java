@@ -1,12 +1,12 @@
 package org.btkj.vehicle.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -17,21 +17,25 @@ import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.DeliveryInfo;
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.PolicyDetail;
-import org.btkj.pojo.bo.PolicySchema;
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.po.Insurer;
-import org.btkj.pojo.po.Renewal;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.po.VehicleBrand;
-import org.btkj.pojo.po.VehicleDept;
-import org.btkj.pojo.po.VehicleModel;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.VehicleInfo;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehicleInfo;
+import org.btkj.pojo.model.DeliveryInfo;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.model.VehicleAuditModel;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.vehicle.LeBaoBaOrderTask;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
@@ -52,10 +56,14 @@ import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.NumberUtil;
 import org.rapid.util.lang.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service("vehicleService")
 public class VehicleServiceImpl implements VehicleService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(VehicleServiceImpl.class);
 	
 	@Resource
 	private Rule rule;
@@ -141,86 +149,112 @@ public class VehicleServiceImpl implements VehicleService {
 		renewalMapper.insert(renewal);
 	}
 	
-	private void _vehicleInfBind(Renewal renewal) {
-	}
-
 	@Override
-	public Result<Void> order(int quoteMod, int insureMod, Employee employee, VehiclePolicyTips tips, String vehicleId) {
-		ICode code = rule.orderCheck(employee, tips.getSchema());
+	public Result<Void> order(AppPO app, TenantPO tenant, UserPO user, EmployeePO employee, VehicleOrderParam param) {
+		ICode code = rule.orderCheck(tenant.getRegion(), param);
 		if (code != Code.OK)
 			return Result.result(code);
-		TenantPO tenant = employee.getTenant();
-		Map<Integer, Insurer> quoteMap = configService.insurers(NumberUtil.splitIntoPowerOfTwoList(quoteMod));
-		Set<Integer> insure = NumberUtil.splitIntoPowerOfTwoSet(insureMod);
-		Map<String, TenantInsurer> insurers = tenantInsurerMapper.getByTid(employee.getTid());
-		String batchId = _batchId(tips, employee);
 		int biHuQuoteMod = 0;
 		int biHuInsureMod = 0;
-		Map<Lane, Map<Integer, VehicleOrder>> orders = new HashMap<Lane, Map<Integer, VehicleOrder>>();
-		a : for (Entry<Integer, Insurer> entry : quoteMap.entrySet()) {
-			Iterator<TenantInsurer> itr = insurers.values().iterator();
-			while (itr.hasNext()) {
-				TenantInsurer route = itr.next();
-				if (route.getInsurerId() != entry.getValue().getId())
-					continue;
-				itr.remove();
-				Lane lane = Lane.match(route.getLane());
-				Map<Integer, VehicleOrder> temp = orders.get(lane);
-				if (null == temp) {
-					temp = new HashMap<Integer, VehicleOrder>();
-					orders.put(lane, temp);
-				}
-				boolean submit = null == insure ? false : insure.remove(entry.getKey());
-				temp.put(entry.getKey(), new VehicleOrder(batchId, quoteMod, insureMod, employee, entry.getValue(), lane.mark(), submit, tips));
-				switch (lane) {
-				case BI_HU:
-					if (0 == entry.getValue().getBiHuId())
-						return BtkjConsts.RESULT.INSURER_UNSUPPORT_BI_HU;
-					if (!StringUtil.hasText(tenant.getBiHuAgent()) || !StringUtil.hasText(tenant.getBiHuKey()))
-						return BtkjConsts.RESULT.LANE_BI_HU_NOT_OPENED;
-					biHuQuoteMod |= entry.getKey();
-					if (submit)
-						biHuInsureMod |= entry.getKey();
-					break;
-				case LE_BAO_BA:
-					break;
-				default:
-					break;
-				}
-				continue a;
+		Map<String, Boolean> leBaoBa = new HashMap<String, Boolean>();
+		VehicleInfo vehicleInfo = _vehicleInfo(tenant, param);
+		Set<Integer> insures = NumberUtil.splitIntoPowerOfTwoSet(param.getInsureMod());
+		Map<Integer, Insurer> insurers = configService.insurers(NumberUtil.splitIntoPowerOfTwoSet(param.getQuoteMod()));
+		Map<Lane, Map<Object, VehicleOrder>> orders = new HashMap<Lane, Map<Object, VehicleOrder>>();
+		for (TenantInsurer tinsurer : tenantInsurerMapper.getByTid(tenant.getTid()).values()) {
+			Insurer insurer = insurers.remove(tinsurer.getInsurerId());
+			if (null == insurer)										
+				continue;
+			Lane lane = Lane.match(tinsurer.getLane());
+			Map<Object, VehicleOrder> temp = orders.get(lane);
+			if (null == temp) {
+				temp = new HashMap<Object, VehicleOrder>();
+				orders.put(lane, temp);
 			}
-			return Consts.RESULT.FORBID;
+			boolean insure = null == insures ? false : insures.remove(insurer.getId());
+			VehicleOrder order = new VehicleOrder(app, tenant, user, employee, insurer, lane.mark(), insure, param, vehicleInfo);
+			switch (lane) {
+			case BI_HU:
+				if (0 == insurer.getBiHuId())
+					return BtkjConsts.RESULT.INSURER_UNSUPPORT_BI_HU;
+				if (!StringUtil.hasText(tenant.getBiHuAgent(), tenant.getBiHuKey()))
+					return BtkjConsts.RESULT.LANE_BI_HU_NOT_OPENED;
+				biHuQuoteMod |= insurer.getBiHuId();
+				if (insure)
+					biHuInsureMod |= insurer.getBiHuId();
+				temp.put(insurer.getBiHuId(), order);
+				break;
+			case LE_BAO_BA:
+				if (!StringUtil.hasText(insurer.getLeBaoBaId()))
+					return BtkjConsts.RESULT.INSURER_UNSUPPORT_LE_BAO_BA;
+				if (!StringUtil.hasText(tenant.getLeBaoBaPassword(), tenant.getLeBaoBaUsername()))
+					return BtkjConsts.RESULT.LANE_LE_BAO_BA_NOT_OPENED;
+				leBaoBa.put(insurer.getLeBaoBaId(), insure);
+				temp.put(insurer.getLeBaoBaId(), order);
+				break;
+			default:
+				break;
+			}
 		}
 		
-		// 指定了车辆型号
-		if (null != vehicleId) {
-			List<VehicleInfo> vehicleInfos = vehicleInfos(tips.getVin());
-			VehicleInfo vehicleInfo = null;
-			if (!CollectionUtil.isEmpty(vehicleInfos)) {
-				for (VehicleInfo temp : vehicleInfos) {
-					if (!temp.getId().equals(vehicleId))
-						continue;
-					vehicleInfo = temp;
-				}
-			}
-			if (null == vehicleInfo)
-				return Consts.RESULT.FORBID;
-			tips.bind(vehicleInfo);
-		}
-		vehicleOrderMapper.deleteBatchOrder(batchId);
+		vehicleOrderMapper.delete(employee.getId(), param.getLicense());
 		if (0 != biHuQuoteMod) {
-			Result<Void> result = biHuVehicle.order(employee, biHuQuoteMod, biHuInsureMod, tips, configService.area(employee.getRegion()).getBiHuId());
+			Result<Void> result = biHuVehicle.order(tenant.getBiHuAgent(), tenant.getBiHuKey(), user.getUid(), biHuQuoteMod, biHuInsureMod, configService.area(tenant.getRegion()).getBiHuId(), param);
 			if (!result.isSuccess())
 				_orderRequestFailure(orders.get(Lane.BI_HU), result.getDesc());
 		}
-		for (Map<Integer, VehicleOrder> map : orders.values()) {
-			for (VehicleOrder order : map.values())
-				vehicleOrderMapper.insert(order);
+		for (Entry<String, Boolean> entry : leBaoBa.entrySet()) {
+			VehicleOrder order = orders.get(Lane.LE_BAO_BA).get(entry.getKey());
+			LeBaoBaOrderTask task = new LeBaoBaOrderTask(tenant, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle);
+			
 		}
+		vehicleOrderMapper.insert(orders);
 		return Result.success();
 	}
 	
-	private void _orderRequestFailure(Map<Integer, VehicleOrder> orders, String desc) {
+	private VehicleInfo _vehicleInfo(TenantPO tenant, VehicleOrderParam param) {
+		List<VehicleInfo> vehicleInfos = vehicleInfos(tenant, param.getVin());
+		if (CollectionUtil.isEmpty(vehicleInfos))
+			return null;
+		VehicleInfo vehicleInfo = null;
+		if (StringUtil.hasText(param.getVehicleId())) {				// 指定了乐保吧ID
+			for (VehicleInfo temp : vehicleInfos) {
+				if (temp.getId().equals(param.getVehicleId())) 
+					return temp;
+			}
+			logger.warn("车架号 - {} 对应的乐保吧车型 - {}不存在！", param.getVin(), param.getVehicleId());
+		} 
+		if (StringUtil.hasText(param.getTransmissionName())) {		// 根据壁虎返回的变速器类型获取对应乐保吧的车型
+			for (VehicleInfo temp : vehicleInfos) {
+				if (temp.getTransmissionName().equals(param.getTransmissionName()))
+					return temp;
+			}
+			logger.warn("车架号- {} 找不到变速器类型为 - {} 的乐保吧车型！", param.getVin(), param.getTransmissionName());
+		} 
+		String desc = new StringBuilder(param.getVin()).append("/").append(StringUtil.hasText(param.getVehicleId()) ? param.getVehicleId() : "")
+						.append("/").append(StringUtil.hasText(param.getTransmissionName()) ? param.getTransmissionName() : "").toString();
+		logger.info("{} 没有找到指定乐保吧车型，系统自动识别车型！", desc);
+		BigDecimal price = null;
+		for (VehicleInfo temp : vehicleInfos) {
+			if (!StringUtil.hasText(temp.getPrice())) {
+				logger.warn("车架号 - {} 发现购置价为 0 的车型！", param.getVin());
+				return temp;
+			}
+			if (null == price) {
+				price = new BigDecimal(temp.getPrice());
+				vehicleInfo = temp;
+			} else {
+				BigDecimal decimal = new BigDecimal(temp.getPrice());
+				if (price.compareTo(decimal) > 0) {
+					price = decimal;
+					vehicleInfo = temp;
+				}
+			}
+		}
+		return vehicleInfo;
+	}
+	
+	private void _orderRequestFailure(Map<Object, VehicleOrder> orders, String desc) {
 		for (VehicleOrder order : orders.values()) {
 			order.setState(VehicleOrderState.QUOTE_FAILURE);
 			order.setDesc(desc);
@@ -282,13 +316,13 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	private void _insureResult(TenantPO tenant, int uid, int region, VehicleOrder order) {
-		Result<PolicyDetail> detail = biHuVehicle.insureResult(tenant, uid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
-		if (!detail.isSuccess()) {
-			if (detail.getCode() == BtkjCode.INSURE_FAILURE.id()) {
-				order.setDesc(detail.getDesc());
+		Result<VehicleAuditModel> result = biHuVehicle.insureResult(tenant, uid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+		if (!result.isSuccess()) {
+			if (result.getCode() == BtkjCode.INSURE_FAILURE.id()) {
+				order.setDesc(result.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
-			} else if (detail.getCode() == BtkjCode.INSURE_REPEAT.id()) {
-				order.setDesc(detail.getDesc());
+			} else if (result.getCode() == BtkjCode.INSURE_REPEAT.id()) {
+				order.setDesc(result.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
 				if (VehicleUtil.isNewVehicleLicense(order.getTips().getLicense()))
 					_flushRenewal(tenant, uid, region, order.getTips().getVin(), order.getTips().getEngine());
@@ -296,9 +330,11 @@ public class VehicleServiceImpl implements VehicleService {
 					_flushRenewal(tenant, uid, region, order.getTips().getLicense());
 			}
 		} else {
-			order.setDesc(detail.getDesc());
+			order.setDesc(result.getDesc());
 			order.setState(VehicleOrderState.INSURE_SUCCESS);
-			order.getTips().setDetail(detail.attach());
+			PolicySchema schema = order.getTips().getSchema();
+			schema.setCommercialNo(result.attach().getCommercialNo());
+			schema.setCompulsoryNo(result.attach().getCompulsoryNo());
 		}
 	}
 	
@@ -314,8 +350,8 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public List<VehicleInfo> vehicleInfos(String vin) {
-		return leBaoBaVehicle.vehicleInfos(vin);
+	public List<VehicleInfo> vehicleInfos(TenantPO tenant, String vin) {
+		return leBaoBaVehicle.vehicleInfos(tenant.getLeBaoBaUsername(), tenant.getLeBaoBaPassword(), vin);
 	}
 	
 	@Override
@@ -349,9 +385,5 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	public long orderNum(int employeeId, int begin, int end, int stateMod) {
 		return vehicleOrderMapper.orderNum(employeeId, begin, end, stateMod);
-	}
-	
-	private String _batchId(VehiclePolicyTips tips, Employee employee) {
-		return employee.getId() + Consts.SYMBOL_UNDERLINE + tips.getLicense();
 	}
 }

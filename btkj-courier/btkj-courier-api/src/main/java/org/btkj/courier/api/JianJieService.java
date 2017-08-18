@@ -1,6 +1,6 @@
 package org.btkj.courier.api;
 
-import org.btkj.pojo.vo.JianJiePoliciesInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo;
 
 /**
  * 简捷服务类

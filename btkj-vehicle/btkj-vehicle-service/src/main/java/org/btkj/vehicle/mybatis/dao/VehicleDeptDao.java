@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.po.VehicleDept;
+import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.vehicle.mybatis.provider.VehicleDeptSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 

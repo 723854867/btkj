@@ -7,9 +7,9 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.config.GlobalConfigContainer;
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
-import org.btkj.pojo.po.VehicleCoefficient;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;

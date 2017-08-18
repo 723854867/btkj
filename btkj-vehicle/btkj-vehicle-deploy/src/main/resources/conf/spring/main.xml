@@ -37,6 +37,17 @@
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
+	<bean id="executorService" class="org.rapid.util.concurrent.ExecutorService" init-method="init">
+		<property name="minPoolSize" value="${executor.minPoolSize}" />
+		<property name="maxPoolSize" value="${executor.maxPoolSize}" />
+		<property name="keepAliveTime" value="${executor.keepAliveTime}" />
+		<property name="queueCapacity" value="${executor.queueCapacity}" />
+		<property name="allowCoreThreadTimeOut" value="${executor.allowCoreThreadTimeOut}" />
+		<property name="rejectedHandler">
+			<bean class="org.btkj.vehicle.LeBaoBaTaskRejectedHandler" />
+		</property>
+	</bean>
+	
 	<bean id="tenantInsurerMapper" class="org.btkj.vehicle.redis.TenantInsurerMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="tenantInsurerDao" />

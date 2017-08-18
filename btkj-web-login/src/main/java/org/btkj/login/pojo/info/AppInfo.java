@@ -2,7 +2,7 @@ package org.btkj.login.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.bo.indentity.App;
+import org.btkj.pojo.model.identity.App;
 
 public class AppInfo implements Serializable {
 

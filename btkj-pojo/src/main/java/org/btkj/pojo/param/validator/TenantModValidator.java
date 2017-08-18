@@ -3,7 +3,7 @@ package org.btkj.pojo.param.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.entity.TenantPO;
 
 public class TenantModValidator implements ConstraintValidator<TenantMod, Integer> {
 

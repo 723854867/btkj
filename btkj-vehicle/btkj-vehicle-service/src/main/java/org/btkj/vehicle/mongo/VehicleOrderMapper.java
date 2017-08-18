@@ -8,10 +8,11 @@ import java.util.Set;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.po.VehicleOrder;
+import org.btkj.pojo.model.Pager;
+import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.MongoUtil;
@@ -31,6 +32,7 @@ import com.mongodb.client.model.Updates;
 @Component("vehicleOrderMapper")
 public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	
+	private String FIELD_LICENSE					= "tips.license";
 	private String FIELD_COMMERCIAL_POLICY_NO		= "tips.detail.commercialNo";
 	private String FIELD_COMPULSORY_POLICY_NO		= "tips.detail.compulsiveNo";
 	
@@ -43,8 +45,17 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		mongo.replaceOne(collection, Filters.eq(FIELD_ID, model.key()), model, new UpdateOptions().upsert(true));
 	}
 	
-	public void deleteBatchOrder(String batchId) {
-		mongo.deleteMany(collection, Filters.eq(BtkjConsts.FIELD.BATCHID, batchId));
+	public void insert(Map<Lane, Map<Object, VehicleOrder>> orders) {
+		Map<String, VehicleOrder> map = new HashMap<String, VehicleOrder>();
+		for (Map<Object, VehicleOrder> temp : orders.values()) {
+			for (VehicleOrder order : temp.values())
+				map.put(order.get_id(), order);
+		}
+		mongo.bulkReplaceOne(collection, map);
+	}
+	
+	public void delete(int employeeId, String license) {
+		mongo.deleteMany(collection, Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.eq(FIELD_LICENSE, license)));
 	}
 	
 	public long orderNum(int employeeId, int begin, int end, int stateMod) {

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.Region;
-import org.btkj.pojo.po.TenantPO;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.TenantPO;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -35,7 +35,7 @@ public class TenantInfo implements Serializable {
 	private int created;
 	private List<Insurer> insurers;
 	
-	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.po.Insurer> insurers) {
+	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.entity.Insurer> insurers) {
 		this.tid = tenant.getTid();
 		this.name = tenant.getName();
 		this.contacts = tenant.getContacts();
@@ -214,7 +214,7 @@ public class TenantInfo implements Serializable {
 		private int jianJieId;
 		private int created;
 		private int updated;
-		public Insurer(TenantInsurer tinsurer, org.btkj.pojo.po.Insurer insurer) {
+		public Insurer(TenantInsurer tinsurer, org.btkj.pojo.entity.Insurer insurer) {
 			this.key = tinsurer.getKey();
 			this.insurerId = tinsurer.getInsurerId();
 			if (null != insurer)

@@ -26,9 +26,9 @@ public enum BtkjCode implements ICode {
 	APPLY_EXIST(502, "apply exist"),
 	
 	/**
-	 * 申请不存在
+	 * 核保模值不是报价模值的子集
 	 */
-	APPLY_NOT_EXIST(503, "apply not exist"),
+	INSURER_MOD_NOT_SUBSET_OF_QUOTE(503, "insurer mod not subse of quote"),
 	
 	/**
 	 * 已经是雇员了
@@ -36,9 +36,9 @@ public enum BtkjCode implements ICode {
 	ALREADY_IS_EMPLOYEE(504, "already is employee"),
 	
 	/**
-	 * 手机号已经被占用了
+	 * 证件类型和主人类型不匹配
 	 */
-	MOBILE_EXIST(505, "mobile exist"),
+	ID_TYPE_UNSUITABLE_TO_UNIT_TYPE(505, "id type unsuitable to unit type"),
 	
 	/**
 	 * 用户代理商个数最大值
@@ -93,73 +93,78 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 改险企不支持壁虎报价
 	 */
-	INSURER_UNSUPPORT_BI_HU(516, "lane unsupport bi hu"),
+	INSURER_UNSUPPORT_BI_HU(516, "insurer unsupport bi hu"),
 	
 	/**
-	 * 壁虎线路未开通
+	 * 该险企不支持乐保吧报价
 	 */
-	LANE_BIHU_NOT_OPENED(517, "lane of bihu not opened!"),
+	INSURER_UNSUPPORT_LE_BAO_BA(517, "insurer unsupport le bao ba"),
+	
+	/**
+	 * 没有选择投保方案
+	 */
+	ERROR_INSURANCE_SCHEMA(518, "error insurance schema"),
 	
 	/**
 	 * 险企不存在
 	 */
-	INSURER_NOT_EXIST(518, "insurer not exist"),
+	INSURER_NOT_EXIST(520, "insurer not exist"),
 	
 	/**
 	 * 壁虎车型获取失败
 	 * 
 	 */
-	VEHICLE_INFO_REQUEST_FAILURE(519, "vehicle info request failure!"),
+	VEHICLE_INFO_REQUEST_FAILURE(521, "vehicle info request failure!"),
 	
 	/**
 	 * 报价失败
 	 */
-	QUOTE_FAILURE(520, "quote failure"),
+	QUOTE_FAILURE(522, "quote failure"),
 	
 	/**
 	 * 核保失败
 	 */
-	INSURE_FAILURE(521, "insure failure"),
+	INSURE_FAILURE(523, "insure failure"),
 	
 	/**
 	 * 重复投保
 	 */
-	INSURE_REPEAT(522, "insure repeat"),
+	INSURE_REPEAT(524, "insure repeat"),
 	
 	/**
 	 * 没有报价
 	 */
-	NOT_QUOTE(523, "not quote"),
+	NOT_QUOTE(525, "not quote"),
 	
 	/**
 	 * 壁虎请求太频繁
 	 */
-	BIHU_REQUEST_FREQUENTLY(524, "bihu request frequently"),
+	BIHU_REQUEST_FREQUENTLY(526, "bihu request frequently"),
 	
 	/**
 	 * 车主名字错误
 	 */
-	CAR_OWNER_NAME_ERROR(525, "car owner name error"),
+	CAR_OWNER_NAME_ERROR(527, "car owner name error"),
 	
 	/**
 	 * 订单不存在
 	 */
-	ORDER_NOT_EXIST(526, "order not exist!"),
+	ORDER_NOT_EXIST(528, "order not exist!"),
 	
 	/**
 	 * 订单状态错误
 	 */
-	ORDER_STATE_ERROR(527, "order state error"),
+	ORDER_STATE_ERROR(529, "order state error"),
 	
 	/**
 	 * 不在续保期内：起保时间太长
 	 */
-	NOT_IN_RENEWAL_PERIOD(528, "not in renewal period"),
+	NOT_IN_RENEWAL_PERIOD(530, "not in renewal period"),
 	
 	/**
 	 * 路由不存在
 	 */
-	ROUTE_NOT_EXIST(529, "route not eixst"),
+	ROUTE_NOT_EXIST(531, "route not eixst"),
 	
 	/**
 	 * 地区不存在
@@ -282,19 +287,34 @@ public enum BtkjCode implements ICode {
 	JIAN_JIE_ID_NEEDED(680, "jian jie id needed"),
 	
 	/**
-	 * 商户壁虎配置不存在
+	 * 商户未开通壁虎
 	 */
 	LANE_BI_HU_NOT_OPENED(690, "lane bi hu not opened"),
 	
 	/**
+	 * 商户未开通乐保吧
+	 */
+	LANE_LE_BAO_BA_NOT_OPENED(691, "lane le bao ba not opened"),
+	
+	/**
 	 * 模块不存在
 	 */
-	MODULAR_NOT_EXIST(691, "modular not exist!"),
+	MODULAR_NOT_EXIST(692, "modular not exist!"),
 	
 	/**
 	 * 模块已经绑定了接口，要先解绑接口才可以删除模块
 	 */
-	MODULAR_API_BINDED(692, "modular api binded!");
+	MODULAR_API_BINDED(693, "modular api binded!"),
+	
+	/**
+	 * 模块类型不对
+	 */
+	MODULAR_TYPE_UNMATCH(694, "modular type unmatch"),
+	
+	/**
+	 * 模块根节点已经存在
+	 */
+	MODULAR_ROOT_EXIST(695, "modular root exist");
 	
 	private int code;
 	private String desc;

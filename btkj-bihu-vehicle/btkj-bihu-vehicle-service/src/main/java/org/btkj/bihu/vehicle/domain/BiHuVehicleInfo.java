@@ -1,8 +1,11 @@
 package org.btkj.bihu.vehicle.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.btkj.bihu.vehicle.RespHandler;
+import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class BiHuVehicleInfo {
 	
@@ -34,6 +37,38 @@ public class BiHuVehicleInfo {
 
 	public void setItems(List<Item> items) {
 		Items = items;
+	}
+	
+	public String searchAlia(String biHuJYId) { 
+		if (CollectionUtil.isEmpty(Items))
+			return null;
+		if (StringUtil.hasText(biHuJYId)) {
+			for (Item item : Items) {
+				if (!StringUtil.hasText(item.VehicleNo))
+					continue;
+				if (item.VehicleNo.equals(biHuJYId))
+					return item.VehicleAlias;
+			}
+		} 
+		BigDecimal price = null;
+		String alias = null;
+		for (Item item : Items) {
+			if (!StringUtil.hasText(item.PurchasePrice) && StringUtil.hasText(item.VehicleAlias)) {
+				price = new BigDecimal("0");
+				alias = item.VehicleAlias;
+			}
+			if (null == price) {
+				price = new BigDecimal(item.PurchasePrice);
+				alias = item.VehicleAlias;
+			} else {
+				BigDecimal temp = new BigDecimal(item.PurchasePrice);
+				if (price.compareTo(temp) > 0) {
+					price = temp;
+					alias = item.VehicleAlias;
+				}
+			}
+		}
+		return alias;
 	}
 
 	private class Item {

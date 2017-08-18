@@ -1,18 +1,18 @@
 package org.btkj.vehicle;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.bo.InsurUnit;
-import org.btkj.pojo.bo.PolicyDetail;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleCoefficient;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.VehicleBrand;
-import org.btkj.pojo.po.VehicleCoefficient;
-import org.btkj.pojo.po.VehicleDept;
-import org.btkj.pojo.po.VehicleModel;
-import org.btkj.pojo.po.VehicleOrder;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.BaseInfo;
-import org.btkj.pojo.vo.JianJiePoliciesInfo.VehicleInfomation;
-import org.btkj.pojo.vo.VehiclePolicyTips;
+import org.btkj.pojo.info.VehiclePolicyTips;
+import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.info.JianJiePoliciesInfo.VehicleInfomation;
+import org.btkj.pojo.model.InsurUnit;
+import org.btkj.pojo.model.PolicySchema;
 import org.btkj.vehicle.pojo.BonusManageConfigType;
 import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.VehiclePolicyType;
@@ -143,8 +143,8 @@ public class EntityGenerator {
 	
 	
 	private static final boolean _deliverNoMatches(VehicleOrder order, BaseInfo info) {
-		PolicyDetail detail = order.getTips().getDetail();
-		String no = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? detail.getCommercialNo() : detail.getCompulsiveNo();
+		PolicySchema schema = order.getTips().getSchema();
+		String no = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? schema.getCommercialNo() : schema.getCompulsoryNo();
 		return info.getTBDH().equals(no);
 	}
 	

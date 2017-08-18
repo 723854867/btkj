@@ -4,10 +4,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.Config;
 import org.btkj.user.LuaCmd;
 import org.btkj.user.model.TokenRemoveModel;

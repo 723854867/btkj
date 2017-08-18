@@ -3,8 +3,8 @@ package org.btkj.manager.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.param.BannerEditParam;
 import org.rapid.util.common.enums.CrudType;

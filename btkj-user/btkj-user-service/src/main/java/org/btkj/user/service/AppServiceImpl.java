@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.indentity.App;
-import org.btkj.pojo.bo.indentity.Employee;
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.AppPO;
-import org.btkj.pojo.po.Banner;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.po.TenantPO;
-import org.btkj.pojo.vo.MainPageInfo;
+import org.btkj.pojo.info.MainPageInfo;
+import org.btkj.pojo.model.identity.App;
+import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;

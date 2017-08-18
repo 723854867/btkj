@@ -5,7 +5,7 @@ public enum ModularType {
 	/**
 	 * 保途云模块
 	 */
-	BAOTU(1),
+	BT(1),
 	
 	/**
 	 * 平台模块

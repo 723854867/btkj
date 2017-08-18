@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.btkj.pojo.po.AppPO;
+import org.btkj.pojo.entity.AppPO;
 import org.btkj.test.persistence.mapper.AppSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 

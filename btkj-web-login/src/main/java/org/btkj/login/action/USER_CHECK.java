@@ -2,7 +2,7 @@ package org.btkj.login.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.indentity.User;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;

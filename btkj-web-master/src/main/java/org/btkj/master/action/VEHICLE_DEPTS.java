@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.param.IdParam;
-import org.btkj.pojo.po.VehicleDept;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.rapid.util.common.message.Result;
 

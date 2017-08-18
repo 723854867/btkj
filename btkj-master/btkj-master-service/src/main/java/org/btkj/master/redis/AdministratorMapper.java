@@ -9,7 +9,7 @@ import org.btkj.master.LuaCmd;
 import org.btkj.master.mybatis.dao.AdministratorDao;
 import org.btkj.master.pojo.entity.Administrator;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.bo.Pager;
+import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.Param;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.RedisConsts;

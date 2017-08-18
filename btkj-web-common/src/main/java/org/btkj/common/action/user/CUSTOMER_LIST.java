@@ -2,9 +2,9 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.bo.Pager;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.Customer;
+import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.web.util.Params;

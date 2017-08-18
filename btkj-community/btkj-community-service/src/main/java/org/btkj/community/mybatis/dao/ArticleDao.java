@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ArticleSQLProvider;
-import org.btkj.pojo.po.Article;
+import org.btkj.pojo.entity.Article;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface ArticleDao extends DBMapper<Integer, Article> {

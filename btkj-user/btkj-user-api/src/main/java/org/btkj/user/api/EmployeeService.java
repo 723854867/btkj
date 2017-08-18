@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.bo.indentity.Employee;
+import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.po.EmployeePO;
-import org.btkj.pojo.vo.EmployeeTip;
+import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.pojo.model.EmployeeHolder;
 import org.rapid.util.common.message.Result;
 

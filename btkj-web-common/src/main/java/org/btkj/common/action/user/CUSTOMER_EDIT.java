@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.bo.indentity.User;
-import org.btkj.pojo.po.Region;
+import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;

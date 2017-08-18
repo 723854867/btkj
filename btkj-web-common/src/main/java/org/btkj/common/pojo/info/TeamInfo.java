@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.statistics.pojo.model.Exploits;
-import org.btkj.pojo.po.UserPO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.statistics.pojo.model.Exploit;
 
 public class TeamInfo implements Serializable{
@@ -88,7 +88,7 @@ public class TeamInfo implements Serializable{
 		}
 	}
 	
-	private class UserTips extends org.btkj.pojo.vo.UserTips {
+	private class UserTips extends org.btkj.pojo.info.UserTips {
 
 		private static final long serialVersionUID = -782901248357849215L;
 		

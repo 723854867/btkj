@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.CoefficientType;
-import org.btkj.pojo.po.VehicleCoefficient;
 
 public class VehicleCoefficientType implements Serializable {
 
