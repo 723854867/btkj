@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
@@ -20,7 +20,7 @@ public class POUNDAGE_COEFFICIENT_EDIT extends AdminAction<PoundageCoefficientEd
 	}
 	
 	@Override
-	protected Result<?> execute(Administrator admin, PoundageCoefficientEditParam param) {
+	protected Result<?> execute(Admin admin, PoundageCoefficientEditParam param) {
 		param.setTid(BtkjConsts.GLOBAL_TENANT_ID);
 		return vehicleManageService.poundageCoefficientEdit(param);
 	}

@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.param.AuthorizeParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
@@ -24,7 +24,7 @@ public class AUTHORIZE_APP extends AdminAction<AuthorizeParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Void> execute(Administrator admin, AuthorizeParam param) {
+	protected Result<Void> execute(Admin admin, AuthorizeParam param) {
 		AppPO app = appService.app(param.getTarId());
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;

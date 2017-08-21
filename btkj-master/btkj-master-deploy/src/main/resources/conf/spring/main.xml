@@ -9,8 +9,8 @@
         				
 	<context:component-scan base-package="org.btkj.master" />
 	
-	<bean id="administratorMapper" class="org.btkj.master.redis.AdministratorMapper">
+	<bean id="adminMapper" class="org.btkj.master.redis.AdminMapper">
 		<property name="redis" ref="redis" />
-		<property name="dao" ref="administratorDao" />
+		<property name="dao" ref="adminDao" />
 	</bean>
 </beans>

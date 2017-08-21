@@ -735,11 +735,11 @@ public class RenewInfo implements Serializable {
 				tips.setSeat(this.UserInfo.SeatCount);
 				tips.setPrice(this.UserInfo.PurchasePrice);
 				tips.setExhaust(this.UserInfo.ExhaustScale);
+				tips.setUsedType(VehicleUtil.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
 				schema.setCompulsoryStart(this.UserInfo.NextForceStartDate);
 				schema.setCommercialStart(this.UserInfo.NextBusinessStartDate);
-				tips.setUsedType(VehicleUtil.vehicleUsedTypeFromBiHuUsedType(this.UserInfo.CarUsedType));
-				renewal.setCommercialNo(this.UserInfo.BizNo);
-				renewal.setCompulsiveNo(this.UserInfo.ForceNo);
+				schema.setCommercialNo(this.UserInfo.BizNo);
+				schema.setCompulsoryNo(this.UserInfo.ForceNo);
 				schema.setCompulsoryEnd(this.UserInfo.ForceExpireDate);
 				schema.setCommercialEnd(this.UserInfo.BusinessExpireDate);
 			}

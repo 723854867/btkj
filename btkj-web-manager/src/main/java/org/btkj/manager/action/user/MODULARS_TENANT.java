@@ -10,6 +10,7 @@ import org.btkj.config.pojo.info.ModularDocument;
 import org.btkj.manager.action.UserAction;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;
 
@@ -20,6 +21,6 @@ public class MODULARS_TENANT extends UserAction<NilParam> {
 
 	@Override
 	protected Result<Map<Integer, ModularDocument>> execute(AppPO app, UserPO user, NilParam param) {
-		return Result.result(configManageService.modulars(TarType.TENANT, app.getId()));
+		return Result.result(configManageService.modulars(app.getId(), TarType.APP, ModularType.TENANT));
 	}
 }

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;
 
@@ -18,7 +18,7 @@ public class AREAS extends AdminAction<NilParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<List<AreaInfo>> execute(Administrator admin, NilParam param) {
+	protected Result<List<AreaInfo>> execute(Admin admin, NilParam param) {
 		return Result.result(new ArrayList<AreaInfo>(configManageService.areas().values()));
 	}
 }

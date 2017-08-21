@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.master.EntityGenerator;
 import org.btkj.master.api.MasterService;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.param.AdminEditParam;
-import org.btkj.master.redis.AdministratorMapper;
+import org.btkj.master.redis.AdminMapper;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.common.Consts;
@@ -18,19 +18,19 @@ import org.springframework.stereotype.Service;
 public class MasterServiceImpl implements MasterService {
 	
 	@Resource
-	private AdministratorMapper administratorMapper;
+	private AdminMapper adminMapper;
 	
 	@Override
-	public Result<Pager<Administrator>> admins(Param param) {
-		return administratorMapper.admins(param);
+	public Result<Pager<Admin>> admins(Param param) {
+		return adminMapper.admins(param);
 	}
 	
 	@Override
 	public Result<?> adminEdit(AdminEditParam param) {
 		switch (param.getCrudType()) {
 		case CREATE:
-			Administrator administrator = EntityGenerator.newAdministrator(param.getName(), param.getPwd());
-			administratorMapper.insert(administrator);
+			Admin administrator = EntityGenerator.newAdministrator(param.getName(), param.getPwd());
+			adminMapper.insert(administrator);
 			return Result.result(Code.OK, administrator.getId());
 		default:
 			return Consts.RESULT.FORBID;

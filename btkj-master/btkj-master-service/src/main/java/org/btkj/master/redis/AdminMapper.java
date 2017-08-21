@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.master.LuaCmd;
-import org.btkj.master.mybatis.dao.AdministratorDao;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.mybatis.dao.AdminDao;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.Param;
@@ -16,51 +16,51 @@ import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class AdministratorMapper extends RedisDBAdapter<Integer, Administrator, AdministratorDao> {
+public class AdminMapper extends RedisDBAdapter<Integer, Admin, AdminDao> {
 	
-	private String TIME_ZSET				= "zset:administrator";
-	private String ADMINISTRATOR_TOKEN		= "hash:administrator:token";
-	private String TOKEN_ADMINISTRATOR		= "hash:token:administrator"; 
+	private String TIME_ZSET				= "zset:admin";
+	private String ADMIN_TOKEN				= "hash:admin:token";
+	private String TOKEN_ADMIN				= "hash:token:admin"; 
 
-	public AdministratorMapper() {
-		super(new ByteProtostuffSerializer<Administrator>(), "hash:db:administrator");
+	public AdminMapper() {
+		super(new ByteProtostuffSerializer<Admin>(), "hash:db:admin");
 	}
 	
-	public String tokenReplace(Administrator administrator) {
-		return redis.tokenReplace(ADMINISTRATOR_TOKEN, TOKEN_ADMINISTRATOR, administrator.getId());
+	public String tokenReplace(Admin administrator) {
+		return redis.tokenReplace(ADMIN_TOKEN, TOKEN_ADMIN, administrator.getId());
 	}
 	
 	public void tokenRemove(String token) {
-		long flag = redis.tokenRemove(ADMINISTRATOR_TOKEN, TOKEN_ADMINISTRATOR, token);
+		long flag = redis.tokenRemove(ADMIN_TOKEN, TOKEN_ADMIN, token);
 		if (-2 == flag)
 			return;
 	}
 	
-	public Administrator getByToken(String token) { 
-		byte[] data = redis.invokeLua(LuaCmd.ADMINISTRATOR_LOAD_BY_TOKEN, TOKEN_ADMINISTRATOR, redisKey, token);
+	public Admin getByToken(String token) { 
+		byte[] data = redis.invokeLua(LuaCmd.ADMIN_LOAD_BY_TOKEN, TOKEN_ADMIN, redisKey, token);
 		return null == data ? null : serializer.antiConvet(data);
 	}
 	
-	public Result<Pager<Administrator>> admins(Param param) {
+	public Result<Pager<Admin>> admins(Param param) {
 		checkLoad();
 		List<byte[]> list = redis.hpaging(TIME_ZSET, redisKey, param.getPage(), param.getPageSize(), RedisConsts.OPTION_ZREVRANGE);
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));
-		List<Administrator> temp = new ArrayList<Administrator>();
+		List<Admin> temp = new ArrayList<Admin>();
 		for (byte[] data : list)
 			temp.add(serializer.antiConvet(data));
-		return Result.result(new Pager<Administrator>(total, temp));
+		return Result.result(new Pager<Admin>(total, temp));
 	}
 	
 	@Override
-	public void flush(Administrator entity) {
+	public void flush(Admin entity) {
 		redis.hmzset(redisKey, entity, TIME_ZSET, entity.getCreated(), serializer);
 	}
 	
 	@Override
-	public void flush(Map<Integer, Administrator> entities) {
-		Administrator[] array = entities.values().toArray(new Administrator[]{});
+	public void flush(Map<Integer, Admin> entities) {
+		Admin[] array = entities.values().toArray(new Admin[]{});
 		Map<String, double[]> zsetParams = new HashMap<String, double[]>();
 		double[] scores = new double[array.length];
 		int idx = 0;

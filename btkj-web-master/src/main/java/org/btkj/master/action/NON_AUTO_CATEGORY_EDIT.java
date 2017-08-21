@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.nonauto.pojo.param.NonAutoEditParam;
 import org.rapid.util.common.Consts;
@@ -20,7 +20,7 @@ public class NON_AUTO_CATEGORY_EDIT extends AdminAction<NonAutoEditParam> {
 	private NonAutoService nonAutoService;
 	
 	@Override
-	protected Result<?> execute(Administrator admin, NonAutoEditParam param) {
+	protected Result<?> execute(Admin admin, NonAutoEditParam param) {
 		nonAutoService.editCategory(param.entity());
 		return Consts.RESULT.OK;
 	}

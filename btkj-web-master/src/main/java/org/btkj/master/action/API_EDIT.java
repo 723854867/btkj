@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.pojo.param.ApiEditParam;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 
@@ -19,7 +19,7 @@ public class API_EDIT extends AdminAction<ApiEditParam> {
 	}
 
 	@Override
-	protected Result<Void> execute(Administrator admin, ApiEditParam param) {
+	protected Result<Void> execute(Admin admin, ApiEditParam param) {
 		return configManageService.apiEdit(param);
 	}
 }

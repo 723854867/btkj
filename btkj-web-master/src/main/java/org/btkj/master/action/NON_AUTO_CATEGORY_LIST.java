@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.param.NilParam;
@@ -22,7 +22,7 @@ public class NON_AUTO_CATEGORY_LIST extends AdminAction<NilParam> {
 	private NonAutoService nonAutoService;
 
 	@Override
-	protected Result<List<NonAutoCategory>> execute(Administrator admin, NilParam param) {
+	protected Result<List<NonAutoCategory>> execute(Admin admin, NilParam param) {
 		return Result.result(nonAutoService.categories());
 	}
 }

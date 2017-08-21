@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.info.AppInfo;
@@ -17,7 +17,7 @@ public class APPS extends AdminAction<NilParam> {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<List<AppInfo>> execute(Administrator admin, NilParam param) {
+	protected Result<List<AppInfo>> execute(Admin admin, NilParam param) {
 		return Result.result(userManageService.apps());
 	}
 }

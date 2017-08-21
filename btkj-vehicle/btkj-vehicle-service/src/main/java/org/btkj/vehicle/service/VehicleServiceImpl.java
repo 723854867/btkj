@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -53,6 +53,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.concurrent.ExecutorService;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.NumberUtil;
 import org.rapid.util.lang.StringUtil;
@@ -80,16 +81,17 @@ public class VehicleServiceImpl implements VehicleService {
 	@Resource
 	private LeBaoBaVehicle leBaoBaVehicle;		// 乐宝吧车险
 	@Resource
-	private VehicleOrderMapper vehicleOrderMapper;
-	@Resource
-	private TenantInsurerMapper tenantInsurerMapper;
-	
+	private ExecutorService executorService;
 	@Resource
 	private VehicleDeptMapper vehicleDeptMapper;
 	@Resource
 	private VehicleBrandMapper vehicleBrandMapper;
 	@Resource
 	private VehicleModelMapper vehicleModelMapper;
+	@Resource
+	private VehicleOrderMapper vehicleOrderMapper;
+	@Resource
+	private TenantInsurerMapper tenantInsurerMapper;
 	
 	@Override
 	public Result<Renewal> renewal(Employee employee, String license, String name) {
@@ -203,12 +205,11 @@ public class VehicleServiceImpl implements VehicleService {
 			if (!result.isSuccess())
 				_orderRequestFailure(orders.get(Lane.BI_HU), result.getDesc());
 		}
+		vehicleOrderMapper.insert(orders);			// 因为乐保吧报价是异步的，因此在报价之前要先把数据入库
 		for (Entry<String, Boolean> entry : leBaoBa.entrySet()) {
 			VehicleOrder order = orders.get(Lane.LE_BAO_BA).get(entry.getKey());
-			LeBaoBaOrderTask task = new LeBaoBaOrderTask(tenant, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle);
-			
+			executorService.execute(new LeBaoBaOrderTask(tenant, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, vehicleOrderMapper));
 		}
-		vehicleOrderMapper.insert(orders);
 		return Result.success();
 	}
 	

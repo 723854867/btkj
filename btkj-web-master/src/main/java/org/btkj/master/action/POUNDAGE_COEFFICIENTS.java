@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.enums.CoefficientType;
@@ -23,7 +23,7 @@ public class POUNDAGE_COEFFICIENTS extends AdminAction<NilParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<?> execute(Administrator admin, NilParam param) {
+	protected Result<?> execute(Admin admin, NilParam param) {
 		List<VehicleCoefficient> coefficients = vehicleManageService.coefficients(BtkjConsts.GLOBAL_TENANT_ID);
 		Map<CoefficientType, VehicleCoefficientType> map = new HashMap<CoefficientType, VehicleCoefficientType>();
 		for (CoefficientType type : CoefficientType.values()) {

@@ -1,5 +1,6 @@
 package org.btkj.pojo.param;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,7 +19,6 @@ import org.rapid.util.validator.custom.CarVin;
 import org.rapid.util.validator.custom.Date;
 import org.rapid.util.validator.custom.Mobile;
 import org.rapid.util.validator.custom.Numeric;
-import org.rapid.util.validator.custom.Power;
 
 /**
  * 报价参数
@@ -29,10 +29,8 @@ public class VehicleOrderParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 5252138275575928498L;
 
-	@Power
 	@Min(1)
 	private int quoteMod;									// 报价险企模值
-	@Power
 	@Min(0)
 	private int insureMod;									// 核保险企模值
 	
@@ -289,7 +287,8 @@ public class VehicleOrderParam extends EmployeeParam {
 		this.insurances = insurances;
 	}
 	
-	public class Unit {
+	public class Unit implements Serializable {
+		private static final long serialVersionUID = -5366462716100333615L;
 		@NotNull
 		private VehicleUnitType type;		// 类型
 		@NotNull
@@ -334,7 +333,8 @@ public class VehicleOrderParam extends EmployeeParam {
 		}
 	}
 	
-	public class InsuranceItem {
+	public class InsuranceItem implements Serializable {
+		private static final long serialVersionUID = 596592567507107727L;
 		@NotNull
 		@Numeric
 		private String quota;

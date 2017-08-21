@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.entity.VehicleBrand;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.vehicle.api.VehicleManageService;
@@ -17,7 +17,7 @@ public class VEHICLE_BRANDS extends AdminAction<NilParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<List<VehicleBrand>> execute(Administrator admin, NilParam param) {
+	protected Result<List<VehicleBrand>> execute(Admin admin, NilParam param) {
 		return Result.result(vehicleManageService.brands());
 	}
 }

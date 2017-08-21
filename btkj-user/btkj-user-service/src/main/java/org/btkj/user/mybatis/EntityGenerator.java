@@ -20,6 +20,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.REGION_TYPE;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
+import org.rapid.util.math.tree.Node;
 
 public class EntityGenerator {
 	
@@ -44,7 +45,7 @@ public class EntityGenerator {
 		employee.setTid(tenant.getTid());
 		employee.setAppId(tenant.getAppId());
 		employee.setParentId(null == parent ? 0 : parent.getId());
-		employee.setLevel(null == parent ? 1 : parent.getLevel() + 1);
+		employee.setLevel(null == parent ? Node.ROOT_LAYER : parent.getLevel() + 1);
 		employee.setLeft(null == parent ? 1 : parent.getRight());
 		employee.setRight(employee.getLeft() + 1);
 		if (null == parent)

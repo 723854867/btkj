@@ -13,14 +13,11 @@ public class Renewal implements UniqueModel<String> {
 	private static final long serialVersionUID = 6082011346840718571L;
 
 	private String _id;
+	private int created;						// 创建时间
 	private int insurerId;						// 保险公司ID
 	private String insurerName;					// 保险公司名字
 	private String insurerIcon;					// 保险公司图标
-	
-	private String commercialNo;				// 商业险保单号
-	private String compulsiveNo;				// 交强险保单号
 	private VehiclePolicyTips tips;
-	private int created;						// 创建时间
 	
 	public String get_id() {
 		return _id;
@@ -52,22 +49,6 @@ public class Renewal implements UniqueModel<String> {
 	
 	public void setInsurerIcon(String insurerIcon) {
 		this.insurerIcon = insurerIcon;
-	}
-	
-	public String getCommercialNo() {
-		return commercialNo;
-	}
-	
-	public void setCommercialNo(String commercialNo) {
-		this.commercialNo = commercialNo;
-	}
-	
-	public String getCompulsiveNo() {
-		return compulsiveNo;
-	}
-	
-	public void setCompulsiveNo(String compulsiveNo) {
-		this.compulsiveNo = compulsiveNo;
 	}
 	
 	public VehiclePolicyTips getTips() {

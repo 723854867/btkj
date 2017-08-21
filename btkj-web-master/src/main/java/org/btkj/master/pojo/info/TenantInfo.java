@@ -31,6 +31,8 @@ public class TenantInfo implements Serializable {
 	private String jianJieId;
 	private String biHuAgent;
 	private String biHuKey;
+	private String leBaoBaUsername;
+	private String leBaoBaPassword;
 	private int expire;
 	private int created;
 	private List<Insurer> insurers;
@@ -54,6 +56,8 @@ public class TenantInfo implements Serializable {
 		this.created = tenant.getCreated();
 		this.biHuAgent = tenant.getBiHuAgent();
 		this.biHuKey = tenant.getBiHuKey();
+		this.leBaoBaUsername = tenant.getLeBaoBaUsername();
+		this.leBaoBaPassword = tenant.getLeBaoBaPassword();
 		if (!CollectionUtil.isEmpty(tinsurers)) {
 			this.insurers = new ArrayList<Insurer>();
 			for (TenantInsurer tinsurer : tinsurers.values()) 
@@ -180,7 +184,15 @@ public class TenantInfo implements Serializable {
 	public String getBiHuKey() {
 		return biHuKey;
 	}
-
+	
+	public String getLeBaoBaPassword() {
+		return leBaoBaPassword;
+	}
+	
+	public String getLeBaoBaUsername() {
+		return leBaoBaUsername;
+	}
+	
 	public int getExpire() {
 		return expire;
 	}

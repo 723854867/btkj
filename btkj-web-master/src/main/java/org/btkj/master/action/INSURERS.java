@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;
@@ -17,7 +17,7 @@ public class INSURERS extends AdminAction<NilParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<List<Insurer>> execute(Administrator admin, NilParam param) {
+	protected Result<List<Insurer>> execute(Admin admin, NilParam param) {
 		return Result.result(configManageService.insurers());
 	}
 }

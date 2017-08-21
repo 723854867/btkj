@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.user.api.UserManageService;
 import org.btkj.user.pojo.param.AppEditParam;
 import org.rapid.util.common.enums.CrudType;
@@ -19,7 +19,7 @@ public class APP_EDIT extends AdminAction<AppEditParam> {
 	}
 
 	@Override
-	protected Result<?> execute(Administrator admin, AppEditParam param) {
+	protected Result<?> execute(Admin admin, AppEditParam param) {
 		return userManageService.appEdit(param);
 	}
 }

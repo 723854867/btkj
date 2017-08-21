@@ -1,6 +1,6 @@
 package org.btkj.master.api;
 
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.info.LoginInfo;
 import org.rapid.util.common.message.Result;
 
@@ -34,7 +34,7 @@ public interface CloudService {
 	 * @param token
 	 * @return
 	 */
-	Administrator getAdministratorByToken(String token);
+	Admin getAdministratorByToken(String token);
 	
 	/**
 	 * 根据管路员工号获取管理员
@@ -42,5 +42,5 @@ public interface CloudService {
 	 * @param id
 	 * @return
 	 */
-	Administrator admin(int id);
+	Admin admin(int id);
 }

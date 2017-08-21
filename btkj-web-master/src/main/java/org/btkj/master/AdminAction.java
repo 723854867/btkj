@@ -3,7 +3,7 @@ package org.btkj.master;
 import javax.annotation.Resource;
 
 import org.btkj.master.api.CloudService;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.action.Action;
@@ -26,11 +26,11 @@ public abstract class AdminAction<PARAM extends Param> extends Action<PARAM> {
 
 	@Override
 	protected Result<?> execute(PARAM param) {
-		Administrator admin = cloudService.getAdministratorByToken(request().getHeader(Params.TOKEN));
+		Admin admin = cloudService.getAdministratorByToken(request().getHeader(Params.TOKEN));
 		if (null == admin)
 			return Consts.RESULT.TOKEN_INVALID;
 		return execute(admin, param);
 	}
 	
-	protected abstract Result<?> execute(Administrator admin, PARAM param);
+	protected abstract Result<?> execute(Admin admin, PARAM param);
 }

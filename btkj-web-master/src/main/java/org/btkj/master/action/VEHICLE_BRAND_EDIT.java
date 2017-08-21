@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
 import org.rapid.util.common.enums.CrudType;
@@ -19,7 +19,7 @@ public class VEHICLE_BRAND_EDIT extends AdminAction<VehicleBrandEditParam> {
 	}
 
 	@Override
-	protected Result<?> execute(Administrator admin, VehicleBrandEditParam param) {
+	protected Result<?> execute(Admin admin, VehicleBrandEditParam param) {
 		return vehicleManageService.brandEdit(param);
 	}
 }

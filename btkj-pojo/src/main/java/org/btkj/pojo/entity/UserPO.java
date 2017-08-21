@@ -17,8 +17,20 @@ public class UserPO implements UniqueModel<Integer> {
 	private String identityBack;
 	private int appLoginTime;			
 	private int pcLoginTime;
+	private int mod;
 	private int created;
 	private int updated;
+	
+	public enum Mod {
+		FULL_PRIVILEGES(1);
+		private int mark;
+		private Mod(int mark) {
+			this.mark = mark;
+		}
+		public int mark() {
+			return mark;
+		}
+	}
 
 	public int getUid() {
 		return uid;
@@ -106,6 +118,14 @@ public class UserPO implements UniqueModel<Integer> {
 	
 	public void setPcLoginTime(int pcLoginTime) {
 		this.pcLoginTime = pcLoginTime;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 	
 	public int getCreated() {

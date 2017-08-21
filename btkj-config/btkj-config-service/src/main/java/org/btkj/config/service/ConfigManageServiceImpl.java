@@ -157,80 +157,28 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Map<Integer, ModularDocument> modulars(ModularType type) {
-		switch (type) {
-		case BT:
-			Map<Integer, Modular> modulars = modularMapper.modulars(ModularType.BT);
-			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-		case APP:
-			Map<Integer, ModularDocument> documents = null;
-			modulars = modularMapper.modulars(ModularType.APP);
-			if (!CollectionUtil.isEmpty(modulars))
-				documents = modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-			modulars = modularMapper.modulars(ModularType.TENANT);
-			if (!CollectionUtil.isEmpty(modulars))
-				documents.putAll(modularDocumentFactory.build(new ArrayList<Modular>(modulars.values())));
-			return documents;
-		default:
-			return null;
-		}
-	}
-	
-	@Override
-	public Map<Integer, ModularDocument> modulars(TarType type, int tarId) {
-		switch (type) {
-		case ADMIN:
-			Map<Integer, Modular> modulars = modularMapper.modulars(ModularType.BT);
-			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-		case APP:
-			Map<Integer, ModularDocument> documents = null;
-			modulars = modularMapper.modulars(ModularType.APP);
-			if (!CollectionUtil.isEmpty(modulars))
-				documents = modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-			modulars = modularMapper.modulars(ModularType.TENANT);
-			if (!CollectionUtil.isEmpty(modulars))
-				documents.putAll(modularDocumentFactory.build(new ArrayList<Modular>(modulars.values())));
-			return documents;
-		case USER:
-			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, tarId);
+	public Map<Integer, ModularDocument> modulars(int tarId, TarType tarType, ModularType modularType) {
+		Map<Integer, Modular> modulars = null;
+		if (tarId > 0) {
+			Map<String, Privilege> privileges = privilegeMapper.privileges(tarType, tarId);
 			Set<Integer> set = new HashSet<Integer>();
 			for (Privilege privilege : privileges.values()) 
 				set.add(privilege.getModularId());
 			modulars = modularMapper.getByKeys(set);
-			if (CollectionUtil.isEmpty(modulars))
-				return null;
-			Iterator<Modular> iterator = modulars.values().iterator();
-			while (iterator.hasNext()) {
-				Modular modular = iterator.next();
-				if (modular.getType() == ModularType.TENANT.mark())
-					iterator.remove();
-			}
-			return modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-		case TENANT:
-			privileges = privilegeMapper.privileges(TarType.APP, tarId);
-			set = new HashSet<Integer>();
-			for (Privilege privilege : privileges.values()) 
-				set.add(privilege.getModularId());
-			modulars = modularMapper.getByKeys(set);
-			if (CollectionUtil.isEmpty(modulars))
-				return null;
-			iterator = modulars.values().iterator();
-			while (iterator.hasNext()) {
-				Modular modular = iterator.next();
-				if (modular.getType() == ModularType.APP.mark())
-					iterator.remove();
-			}
-			return modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-		case EMPLOYEE:
-			privileges = privilegeMapper.privileges(TarType.TENANT, tarId);
-			set = new HashSet<Integer>();
-			for (Privilege privilege : privileges.values()) 
-				set.add(privilege.getModularId());
-			modulars = modularMapper.getByKeys(set);
-			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(new ArrayList<Modular>(modulars.values()));
-		default:
-			return null;
+		} else {
+			modulars = modularMapper.modulars(modularType);
+			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
 		}
+		
+		if (CollectionUtil.isEmpty(modulars))
+			return null;
+		Iterator<Modular> iterator = modulars.values().iterator();
+		while (iterator.hasNext()) {
+			Modular modular = iterator.next();
+			if (modular.getType() == modularType.mark())
+				iterator.remove();
+		}
+		return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
 	}
 	
 	@Override

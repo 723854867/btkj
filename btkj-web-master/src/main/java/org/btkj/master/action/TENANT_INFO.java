@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Administrator;
+import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.info.TenantInfo;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.AppPO;
@@ -33,7 +33,7 @@ public class TENANT_INFO extends AdminAction<IdParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<TenantInfo> execute(Administrator admin, IdParam param) {
+	protected Result<TenantInfo> execute(Admin admin, IdParam param) {
 		TenantPO tenant = tenantService.tenant(param.getId());
 		if (null == tenant)
 			return Result.result(BtkjCode.TENANT_NOT_EXIST);
