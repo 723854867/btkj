@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.param.EmployeeParam;
-import org.rapid.util.math.compare.ComparisonSymbol;
+import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.validator.ValidateGroups;
 
 public class BonusScaleConfigEditParam extends EmployeeParam {
@@ -20,7 +20,7 @@ public class BonusScaleConfigEditParam extends EmployeeParam {
 	@Max(value = 500, groups = { ValidateGroups.CREATE.class })
 	private Integer rate;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
-	private ComparisonSymbol symbol;
+	private Comparison symbol;
 	private String[] val;
 
 	public Integer getId() {
@@ -39,11 +39,11 @@ public class BonusScaleConfigEditParam extends EmployeeParam {
 		this.rate = rate;
 	}
 
-	public ComparisonSymbol getSymbol() {
+	public Comparison getSymbol() {
 		return symbol;
 	}
 
-	public void setSymbol(ComparisonSymbol symbol) {
+	public void setSymbol(Comparison symbol) {
 		this.symbol = symbol;
 	}
 

@@ -20,6 +20,7 @@ public class API_EDIT extends AdminAction<ApiEditParam> {
 
 	@Override
 	protected Result<Void> execute(Admin admin, ApiEditParam param) {
-		return configManageService.apiEdit(param);
+		Result<Void> result = configManageService.apiEdit(param);
+		return result;
 	}
 }

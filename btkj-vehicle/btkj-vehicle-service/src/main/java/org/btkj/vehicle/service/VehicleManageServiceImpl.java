@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
@@ -38,7 +37,6 @@ import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy.SalesmanMark;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
 import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
 import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
@@ -48,7 +46,6 @@ import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
-import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
 import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.data.storage.redis.DistributeLock;
@@ -89,46 +86,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
 	private BonusManageConfigMapper bonusManageConfigMapper;
-	@Resource
-	private VehicleCoefficientMapper vehicleCoefficientMapper;
 	
-	@Override
-	public List<VehicleCoefficient> coefficients(int tid) {
-		return vehicleCoefficientMapper.getByTid(tid);
-	}
-	
-	@Override
-	public Result<?> poundageCoefficientEdit(PoundageCoefficientEditParam param) {
-		switch (param.getCrudType()) {
-		case CREATE:
-			try {
-				VehicleCoefficient coefficient = tx.coefficientAdd(param);
-				vehicleCoefficientMapper.flush(coefficient);
-				return Result.result(Code.OK, coefficient.getId());
-			} catch (BusinessException e) {
-				return Result.result(e.getCode());
-			}
-		case UPDATE:
-			try {
-				VehicleCoefficient coefficient = tx.coefficientUpdate(param);
-				vehicleCoefficientMapper.flush(coefficient);
-				return Consts.RESULT.OK;
-			} catch (BusinessException e) {
-				return Result.result(e.getCode());
-			}
-		case DELETE:
-			VehicleCoefficient coefficient = vehicleCoefficientMapper.getByKey(param.getId());
-			if (null == coefficient)
-				return BtkjConsts.RESULT.COEFFICIENT_NOT_EXIST;
-			if (coefficient.getTid() != param.getTid())
-				return Consts.RESULT.FORBID;
-			vehicleCoefficientMapper.delete(param.getId());
-			return Consts.RESULT.OK;
-		default:
-			return Consts.RESULT.FORBID;
-		}
-	}
-
 	@Override
 	public Map<String, BonusManageConfig> bonusManageConfigs(int tid) {
 		return bonusManageConfigMapper.getByTid(tid);
@@ -418,7 +376,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	
 	@Override
 	public Map<String, VehiclePolicy> policies(int tid, int start, int end) {
-		return null;
+		return vehiclePolicyMapper.policies(tid, start, end);
 	}
 	
 	@Override

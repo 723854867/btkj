@@ -58,7 +58,7 @@ public interface ConfigService {
 	 * @param insurerId
 	 * @return
 	 */
-	Insurer getInsurerById(int insurerId);
+	Insurer insurer(int insurerId);
 	
 	/**
 	 * 获取险企列表

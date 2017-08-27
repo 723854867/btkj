@@ -4,7 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.vehicle.pojo.OrderFilterState;
+import org.btkj.vehicle.pojo.enums.OrderFilterState;
 
 public class VehicleOrdersParam extends EmployeeParam {
 

@@ -25,6 +25,7 @@ public class AUTHORIZE_ADMIN extends AdminAction<AuthorizeParam> {
 		Admin target = cloudService.admin(param.getTarId());
 		if (null == target)
 			return Consts.RESULT.USER_NOT_EXIST;
-		return configManageService.authorizeAdmin(param.getTarId(), param.getModulars());
+		configManageService.authorizeAdmin(param.getTarId(), param.getModulars());
+		return Consts.RESULT.OK;
 	}
 }

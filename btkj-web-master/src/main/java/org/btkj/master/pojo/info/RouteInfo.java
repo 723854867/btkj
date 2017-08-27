@@ -3,8 +3,8 @@ package org.btkj.master.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.Insurer;
-import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
+import org.btkj.vehicle.pojo.enums.Lane;
 
 public class RouteInfo implements Serializable {
 

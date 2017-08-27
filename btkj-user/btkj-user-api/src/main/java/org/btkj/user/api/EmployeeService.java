@@ -26,6 +26,15 @@ public interface EmployeeService {
 	Result<EmployeeHolder> employeeByToken(Client client, String token, int employeeId);
 	
 	Result<EmployeeHolder> employeeLockByToken(Client client, String token, int employeeId);
+	
+	/**
+	 * 加入商户检测
+	 * 
+	 * @param uid
+	 * @param parentId
+	 * @return
+	 */
+	Result<Void> tenantJoinCheck(int uid, int parentId);
 	 
 	/**
 	 * 我的团队

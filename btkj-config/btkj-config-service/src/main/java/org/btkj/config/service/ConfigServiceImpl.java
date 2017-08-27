@@ -7,10 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.config.pojo.TarType;
-import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
-import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
@@ -89,7 +86,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
-	public Insurer getInsurerById(int insurerId) {
+	public Insurer insurer(int insurerId) {
 		return insurerMapper.getByKey(insurerId);
 	}
 	
@@ -105,70 +102,70 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	public boolean checkAdminPrivilege(String pkg, int adminId) {
-		Api api = apiMapper.getByKey(pkg);
-		if (null == api)
-			return true;
-		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.ADMIN, adminId);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId())
-				return true;
-		}
+//		Api api = apiMapper.getByKey(pkg);
+//		if (null == api)
+//			return true;
+//		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.ADMIN, adminId);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId())
+//				return true;
+//		}
 		return false;
 	}
 	
 	@Override
 	public boolean checkUserPrivilege(String pkg, int appId, int uid) {
-		Api api = apiMapper.getByKey(pkg);
-		if (null == api)
-			return true;
-		boolean find = false;
-		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId()) {
-				find = true;
-				break;
-			}
-		}
-		if (!find)
-			return false;
-		privileges = privilegeMapper.privileges(TarType.USER, uid);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId()) 
-				return true;
-		}
+//		Api api = apiMapper.getByKey(pkg);
+//		if (null == api)
+//			return true;
+//		boolean find = false;
+//		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId()) {
+//				find = true;
+//				break;
+//			}
+//		}
+//		if (!find)
+//			return false;
+//		privileges = privilegeMapper.privileges(TarType.USER, uid);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId()) 
+//				return true;
+//		}
 		return false;
 	}
 	
 	@Override
 	public boolean checkEmployeePrivilege(String pkg, int appId, int tid, int employeeId) {
-		Api api = apiMapper.getByKey(pkg);
-		if (null == api)
-			return true;
-		boolean find = false;
-		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId()) {
-				find = true;
-				break;
-			}
-		}
-		if (!find)
-			return false;
-		find = false;
-		privileges = privilegeMapper.privileges(TarType.TENANT, tid);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId()) {
-				find = true;
-				break;
-			}
-		}
-		if (!find)
-			return false;
-		privileges = privilegeMapper.privileges(TarType.EMPLOYEE, employeeId);
-		for (Privilege privilege : privileges.values()) {
-			if (privilege.getModularId() == api.getModularId()) 
-				return true;
-		}
+//		Api api = apiMapper.getByKey(pkg);
+//		if (null == api)
+//			return true;
+//		boolean find = false;
+//		Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId()) {
+//				find = true;
+//				break;
+//			}
+//		}
+//		if (!find)
+//			return false;
+//		find = false;
+//		privileges = privilegeMapper.privileges(TarType.TENANT, tid);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId()) {
+//				find = true;
+//				break;
+//			}
+//		}
+//		if (!find)
+//			return false;
+//		privileges = privilegeMapper.privileges(TarType.EMPLOYEE, employeeId);
+//		for (Privilege privilege : privileges.values()) {
+//			if (privilege.getModularId() == api.getModularId()) 
+//				return true;
+//		}
 		return false;
 	}
 }

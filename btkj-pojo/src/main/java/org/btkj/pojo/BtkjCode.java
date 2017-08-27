@@ -9,81 +9,35 @@ import org.rapid.util.common.consts.code.ICode;
  */
 public enum BtkjCode implements ICode {
 	
-	/**
-	 * action 不存在
-	 */
-	ACTION_NOT_EXIST(500, "action not exist"),
+	ACTION_NOT_EXIST(500, "接口不存在"),
 	
-	/**
-	 * app 已经下架了
-	 */
-	APP_NOT_EXIST(501, "app not exist"),
+	APP_NOT_EXIST(501, "app不存在"),
 	
-	/**
-	 * 已经存在申请了
-	 * 
-	 */
-	APPLY_EXIST(502, "apply exist"),
+	APPLY_EXIST(502, "重复提交申请"),
 	
-	/**
-	 * 核保模值不是报价模值的子集
-	 */
 	INSURER_MOD_NOT_SUBSET_OF_QUOTE(503, "insurer mod not subse of quote"),
 	
-	/**
-	 * 已经是雇员了
-	 */
-	ALREADY_IS_EMPLOYEE(504, "already is employee"),
+	ALREADY_IS_EMPLOYEE(504, "已经是该商户的员工了"),
 	
-	/**
-	 * 证件类型和主人类型不匹配
-	 */
-	ID_TYPE_UNSUITABLE_TO_UNIT_TYPE(505, "id type unsuitable to unit type"),
+	ID_TYPE_UNSUITABLE_TO_UNIT_TYPE(505, "证件类型和个体类型不匹配"),
 	
-	/**
-	 * 用户代理商个数最大值
-	 */
-	USER_TENANT_NUM_MAXIMUM(506, "tenant number maximum"),
+	USER_TENANT_NUM_MAXIMUM(506, "商户个数达到上限"),
 	
-	/**
-	 * app 大力上个数最大值
-	 */
-	APP_TENANT_NUM_MAXIMUM(507, "tenant number maximum"),
+	APP_TENANT_NUM_MAXIMUM(507, "商户个数达到上限"),
 	
-	/**
-	 * 代理公司不存在
-	 */
-	TENANT_NOT_EXIST(508, "tenant not exist"),
+	TENANT_NOT_EXIST(508, "商户不存在"),
 	
-	/**
-	 * 雇员不存在
-	 */
-	EMPLOYEE_NOT_EXIST(509, "employee not exist"),
+	EMPLOYEE_NOT_EXIST(509, "员工不存在"),
 	
-	/**
-	 * 用户资料不全
-	 */
-	USER_DATA_INCOMPLETE(510, "user data is incomplete"),
+	USER_DATA_INCOMPLETE(510, "用户资料不全"),
 	
-	/**
-	 * 非车险类型不存在
-	 */
-	NON_AUTO_CATEGORY_NOT_EXIST(511, "non auto category not exist!"),
+	NON_AUTO_CATEGORY_NOT_EXIST(511, "非车险类型不存在"),
 	
-	/**
-	 * 续保信息获取超时
-	 */
-	RENEW_INFO_GET_TIMEOUT(512, "renew info get timeout!"),
+	RENEW_INFO_GET_TIMEOUT(512, "续保信息获取超时"),
 	
-	/**
-	 * 续保信息获取失败
-	 */
-	RENEW_INFO_GET_FAILURE(513, "renew info get failure!"),
+	RENEW_INFO_GET_FAILURE(513, "续保信息获取失败"),
 	
-	/**
-	 * 获取车辆信息成功(车架号，发动机号，品牌型号，初登日期可以取到)，获取险种失败
-	 */
-	RENEW_INFO_VEHICLE_ONLY(514, "renew info vehicle only"),
+	RENEW_INFO_VEHICLE_ONLY(514, "获取车辆信息成功(车架号，发动机号，品牌型号，初登日期可以取到)，获取险种失败"),
 	
 	/**
 	 * 线路不存在
@@ -314,7 +268,15 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 模块根节点已经存在
 	 */
-	MODULAR_ROOT_EXIST(695, "modular root exist");
+	MODULAR_ROOT_EXIST(695, "modular root exist"),
+	
+	POUNDAGE_NODE_NOT_EXIST(700, "手续费节点不存在"),
+	POUNDAGE_CONFIG_NOT_EXIST(701, "手续费配置不存在"),
+	POUNDAGE_CONFIG_NODE_NOT_EXIST(701, "手续费节点配置不存在"),
+	POUNDAGE_COEFFICIENT_NOT_EXIST(702, "手续费系数不存在"),
+	POUNDAGE_COEFFICIENT_NOT_CUSTOM(703, "手续费系数不允许自定义范围"),
+	POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST(704, "手续费系数范围不存在"),
+	POUNDAGE_COEFFICIENT_RANGE_MAXMIUM(705, "手续费系数范围数目最大值");
 	
 	private int code;
 	private String desc;

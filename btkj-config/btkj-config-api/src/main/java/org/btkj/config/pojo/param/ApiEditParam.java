@@ -13,7 +13,9 @@ public class ApiEditParam extends Param {
 
 	private static final long serialVersionUID = -8942948934304679356L;
 
-	@NotNull(groups = { ValidateGroups.CRUD.class })
+	@Min(value = 1, groups = { ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class })
+	private int id;
+	@NotNull(groups = { ValidateGroups.CREATE.class })
 	@ClassName(groups = { ValidateGroups.CRUD.class })
 	private String pkg;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
@@ -23,6 +25,14 @@ public class ApiEditParam extends Param {
 	@Min(value = 1, groups = { ValidateGroups.CRUD.class })
 	private Integer modularId;
 
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getPkg() {
 		return pkg;
 	}

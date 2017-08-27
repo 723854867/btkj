@@ -29,7 +29,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
-import org.rapid.util.math.compare.ComparisonSymbol;
+import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.math.compare.IntComparable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,43 +73,45 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 				return BtkjConsts.RESULT.BONUS_SCALE_REWARDED;
 		}
 		Map<String, VehiclePolicy> policies = vehicleManageService.policies(tenant.getTid(), start, end);
-		List<LogExploit> exploits = new ArrayList<LogExploit>();
-		Map<Integer, BonusScale> map = new HashMap<Integer, BonusScale>();
-		for (VehiclePolicy policy : policies.values()) {
-			LogExploit exploit = _exploit(policy);
-			if (null == exploit)
-				continue;
-			exploits.add(exploit);
-			
-			BonusScale bs = map.get(exploit.getEmployeeId());
-			if (null == bs) {
-				bs = new BonusScale();
-				bs.addPolicy(policy.get_id());
-				bs.setEmployeeId(exploit.getEmployeeId());
-				map.put(exploit.getEmployeeId(), bs);
-			}
-			_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, true);			// 商业-统计口径
-			_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);		// 商业-奖励孔径
-			_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, true);			// 交强-统计口径	
-			_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);		// 交强-奖励口径
-		}
-		exploits = statisticsService.recordLogExploits(exploits);
-		for (BonusScale bs : map.values()) {
-			int SCQuota = bs.getSCQuota();
-			for (BonusScaleConfig config : configs) {
-				ComparisonSymbol symbol = ComparisonSymbol.match(config.getComparison());
-				if (null == symbol)
+		if (!CollectionUtil.isEmpty(policies)) {
+			List<LogExploit> exploits = new ArrayList<LogExploit>();
+			Map<Integer, BonusScale> map = new HashMap<Integer, BonusScale>();
+			for (VehiclePolicy policy : policies.values()) {
+				LogExploit exploit = _exploit(policy);
+				if (null == exploit)
 					continue;
-				String[] params = config.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-				if (!IntComparable.SINGLETON.compare(symbol, SCQuota, CollectionUtil.toIntegerArray(params)))
-					continue;
-				bs.setCmRate(config.getRate());
-				break;
+				exploits.add(exploit);
+				
+				BonusScale bs = map.get(exploit.getEmployeeId());
+				if (null == bs) {
+					bs = new BonusScale();
+					bs.addPolicy(policy.get_id());
+					bs.setEmployeeId(exploit.getEmployeeId());
+					map.put(exploit.getEmployeeId(), bs);
+				}
+				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, true);			// 商业-统计口径
+				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);		// 商业-奖励孔径
+				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, true);			// 交强-统计口径	
+				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);		// 交强-奖励口径
 			}
+			exploits = statisticsService.recordLogExploits(exploits);
+			for (BonusScale bs : map.values()) {
+				int SCQuota = bs.getSCQuota();
+				for (BonusScaleConfig config : configs) {
+					Comparison symbol = Comparison.match(config.getComparison());
+					if (null == symbol)
+						continue;
+					String[] params = config.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
+					if (!IntComparable.SINGLETON.compare(symbol, SCQuota, CollectionUtil.toIntegerArray(params)))
+						continue;
+					bs.setCmRate(config.getRate());
+					break;
+				}
+			}
+			if (map.isEmpty())
+				return Consts.RESULT.OK;
+			userManageService.calculateTeamExploits(time, tenant, map);
 		}
-		if (map.isEmpty())
-			return Consts.RESULT.OK;
-		userManageService.calculateTeamExploits(time, tenant, map);
 		return Consts.RESULT.OK;
 	}
 	

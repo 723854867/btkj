@@ -8,7 +8,7 @@ public class ApiSQLProvider extends SQLProvider {
 	private static final String TABLE			= "api";
 
 	public ApiSQLProvider() {
-		super(TABLE, "pkg", false);
+		super(TABLE, "id");
 	}
 	
 	public String getByModularId() {

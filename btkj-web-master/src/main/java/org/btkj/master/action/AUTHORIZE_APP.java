@@ -9,6 +9,7 @@ import org.btkj.master.pojo.param.AuthorizeParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.user.api.AppService;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -28,6 +29,7 @@ public class AUTHORIZE_APP extends AdminAction<AuthorizeParam> {
 		AppPO app = appService.app(param.getTarId());
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
-		return configManageService.authorizeApp(param.getTarId(), param.getModulars());
+		configManageService.authorizeApp(param.getTarId(), param.getModulars());
+		return Consts.RESULT.OK;
 	}
 }

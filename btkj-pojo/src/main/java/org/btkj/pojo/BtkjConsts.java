@@ -9,15 +9,10 @@ public interface BtkjConsts {
 	
 	final String ZK_CONFIG_PATH					= "/config/btkj";
 	
-	/**
-	 * 租户顶级用户的 level
-	 */
-	final int EMPLOYEE_ROOT_LEVEL				= 1;
-	
 	final int GLOBAL_TENANT_ID					= 0;
-
 	
 	interface RESULT {
+		Result APPLY_EXIST						= Result.result(BtkjCode.APPLY_EXIST);
 		Result APP_NOT_EXIST					= Result.result(BtkjCode.APP_NOT_EXIST);
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);
 		Result LANE_NOT_EXIST					= Result.result(BtkjCode.LANE_NOT_EXIST);
@@ -37,6 +32,7 @@ public interface BtkjConsts {
 		Result JIAN_JIE_ID_NEEDED				= Result.result(BtkjCode.JIAN_JIE_ID_NEEDED);
 		Result EMPLOYEE_NOT_EXIST				= Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		Result CUSTOMER_NOT_EXIST				= Result.result(BtkjCode.CUSTOMER_NOT_EXIST);
+		Result ALREADY_IS_EMPLOYEE				= Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
 		Result BONUS_SCALE_REWARDED				= Result.result(BtkjCode.BONUS_SCALE_REWARDED);
 		Result USER_DATA_INCOMPLETE				= Result.result(BtkjCode.USER_DATA_INCOMPLETE);
 		Result COEFFICIENT_NOT_EXIST			= Result.result(BtkjCode.COEFFICIENT_NOT_EXIST);
@@ -50,16 +46,21 @@ public interface BtkjConsts {
 		Result VEHICLE_TYPE_NOT_EXIST			= Result.result(BtkjCode.VEHICLE_TYPE_NOT_EXIST);
 		Result COEFFICIENT_NUM_MAXMIUM			= Result.result(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
 		Result INSURER_UNSUPPORT_BI_HU			= Result.result(BtkjCode.INSURER_UNSUPPORT_BI_HU);
+		Result POUNDAGE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.POUNDAGE_CONFIG_NOT_EXIST);
 		Result LANE_LE_BAO_BA_NOT_OPENED		= Result.result(BtkjCode.LANE_LE_BAO_BA_NOT_OPENED);
+		Result POUNDAGE_NODE_NOT_EXIST			= Result.result(BtkjCode.POUNDAGE_NODE_NOT_EXIST);
 		Result INSURER_UNSUPPORT_LE_BAO_BA		= Result.result(BtkjCode.INSURER_UNSUPPORT_LE_BAO_BA);
 		Result BONUS_SCALE_SETTINGS_ERROR		= Result.result(BtkjCode.BONUS_SCALE_SETTINGS_ERROR);
 		Result NON_AUTO_CATEGORY_NOT_EXIST		= Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST);
 		Result CUSTOMER_IDENTITY_DUPLICATE		= Result.result(BtkjCode.CUSTOMER_IDENTITY_DUPLICATE);
 		Result BONUS_SCALE_CONFIG_NOT_EXIST		= Result.result(BtkjCode.BONUS_SCALE_CONFIG_NOT_EXIST);
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
+		Result POUNDAGE_COEFFICIENT_NOT_CUSTOM	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_NOT_CUSTOM);
+		Result POUNDAGE_COEFFICIENT_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_NOT_EXIST);
+		Result POUNDAGE_CONFIG_NODE_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_CONFIG_NODE_NOT_EXIST);
 		Result INSURER_MOD_NOT_SUBSET_OF_QUOTE	= Result.result(BtkjCode.INSURER_MOD_NOT_SUBSET_OF_QUOTE);
 		Result ID_TYPE_UNSUITABLE_TO_UNIT_TYPE	= Result.result(BtkjCode.ID_TYPE_UNSUITABLE_TO_UNIT_TYPE);
-		
+		Result POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
 		
 		Result EMPTY_PAGING						= Result.result(Pager.EMPLTY);
 	}

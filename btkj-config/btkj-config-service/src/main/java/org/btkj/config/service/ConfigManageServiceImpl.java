@@ -175,7 +175,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		Iterator<Modular> iterator = modulars.values().iterator();
 		while (iterator.hasNext()) {
 			Modular modular = iterator.next();
-			if (modular.getType() == modularType.mark())
+			if (modular.getType() != modularType.mark())
 				iterator.remove();
 		}
 		return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
@@ -210,7 +210,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Map<String, Api> apis(int modularId) {
+	public Map<Integer, Api> apis(int modularId) {
 		return apiMapper.apis(modularId);
 	}
 	
@@ -233,13 +233,13 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 				}
 				return Consts.RESULT.OK;
 			case DELETE:
-				api = apiMapper.getByKey(param.getPkg());
+				api = apiMapper.getByKey(param.getId());
 				if (null == api)
 					return Consts.RESULT.API_NOT_EXIST;
 				apiMapper.delete(api);
 				return Consts.RESULT.OK;
 			default:
-				api = apiMapper.getByKey(param.getPkg());
+				api = apiMapper.getByKey(param.getId());
 				if (null == api)
 					return Consts.RESULT.API_NOT_EXIST;
 				if (null != param.getModularId())
@@ -250,112 +250,26 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 				apiMapper.update(api);
 				return Consts.RESULT.OK;
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Consts.RESULT.FAILURE;
 		} finally {
 			distributeLock.unLock(lock, lockId);
 		}
 	}
 	
 	@Override
-	public Result<Void> authorizeApp(int appId, Set<Integer> modulars) {
-		privilegeMapper.deletePrivileges(TarType.APP, appId);
-		if (!CollectionUtil.isEmpty(modulars)) {
-			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
-			if (modulars.size() != modulars.size())
-				return Consts.RESULT.FORBID;
-			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.APP.mark() || modular.getType() != ModularType.TENANT.mark())	// 只能给平台授权平台和商户模块的权限
-					return Consts.RESULT.FORBID;
-			}
-			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.APP, appId, modulars));
-		}
-		return Consts.RESULT.OK;
+	public void authorizeApp(int appId, Set<Integer> modulars) {
+		tx.authorizeApp(appId, modulars).finish();
 	}
 	
 	@Override
-	public Result<Void> authorizeAdmin(int adminId, Set<Integer> modulars) {
-		privilegeMapper.deletePrivileges(TarType.ADMIN, adminId);
-		if (!CollectionUtil.isEmpty(modulars)) {
-			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
-			if (modulars.size() != modulars.size())
-				return Consts.RESULT.FORBID;
-			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.BT.mark())	// 只能给平台授权平台和商户模块的权限
-					return Consts.RESULT.FORBID;
-			}
-			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.APP, adminId, modulars));
-		}
-		return Consts.RESULT.OK;
+	public void authorizeAdmin(int adminId, Set<Integer> modulars) {
+		tx.authorizeAdmin(adminId, modulars).finish();
 	}
 	
 	@Override
-	public Result<Void> authorizeUser(int appId, int uid, Set<Integer> modulars) {
-		privilegeMapper.deletePrivileges(TarType.USER, uid);
-		if (!CollectionUtil.isEmpty(modulars)) {
-			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
-			a : for (int modularId : modulars) {
-				for (Privilege privilege : privileges.values()) {
-					if (privilege.getModularId() == modularId)
-						continue a;
-				}
-				return Consts.RESULT.FORBID;
-			}
-			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
-			if (modulars.size() != modulars.size())
-				return Consts.RESULT.FORBID;
-			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.APP.mark())
-					return Consts.RESULT.FORBID;
-			}
-			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.USER, uid, modulars));
-		}
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> authorizeTenant(int appId, int tid, Set<Integer> modulars) {
-		privilegeMapper.deletePrivileges(TarType.TENANT, tid);
-		if (!CollectionUtil.isEmpty(modulars)) {
-			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.APP, appId);
-			a : for (int modularId : modulars) {
-				for (Privilege privilege : privileges.values()) {
-					if (privilege.getModularId() == modularId)
-						continue a;
-				}
-				return Consts.RESULT.FORBID;
-			}
-			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
-			if (modulars.size() != modulars.size())
-				return Consts.RESULT.FORBID;
-			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.TENANT.mark())
-					return Consts.RESULT.FORBID;
-			}
-			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.TENANT, tid, modulars));
-		}
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> authorizeEmployee(int tid, int employeeId, Set<Integer> modulars) {
-		privilegeMapper.deletePrivileges(TarType.EMPLOYEE, employeeId);
-		if (!CollectionUtil.isEmpty(modulars)) {
-			Map<String, Privilege> privileges = privilegeMapper.privileges(TarType.EMPLOYEE, employeeId);
-			a : for (int modularId : modulars) {
-				for (Privilege privilege : privileges.values()) {
-					if (privilege.getModularId() == modularId)
-						continue a;
-				}
-				return Consts.RESULT.FORBID;
-			}
-			Map<Integer, Modular> map = modularMapper.getByKeys(modulars);
-			if (modulars.size() != modulars.size())
-				return Consts.RESULT.FORBID;
-			for (Modular modular : map.values()) {
-				if (modular.getType() != ModularType.TENANT.mark())
-					return Consts.RESULT.FORBID;
-			}
-			privilegeMapper.replace(EntityGenerator.newPrivileges(TarType.EMPLOYEE, employeeId, modulars));
-		}
-		return Consts.RESULT.OK;
+	public void authorize(int srcId, TarType srcType, int tarId, TarType tarType, ModularType modularType, Set<Integer> modulars) {
+		tx.authorize(srcId, srcType, tarId, tarType, modularType, modulars);
 	}
 }

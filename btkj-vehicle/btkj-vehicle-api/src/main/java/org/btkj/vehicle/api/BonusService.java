@@ -1,9 +1,14 @@
 package org.btkj.vehicle.api;
 
-import org.btkj.vehicle.pojo.model.BonusRouteView;
-import org.btkj.vehicle.pojo.model.VehicleCoefficients;
-import org.btkj.vehicle.pojo.param.BonusPoundageEditParam;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientsParam;
+import java.util.List;
+import java.util.Map;
+
+import org.btkj.vehicle.pojo.model.CoefficientRange;
+import org.btkj.vehicle.pojo.model.PoundageNodeConfigInfo;
+import org.btkj.vehicle.pojo.model.PoundageStructure;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
+import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
+import org.btkj.vehicle.pojo.param.PoundageNodeConfigParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,25 +19,41 @@ import org.rapid.util.common.message.Result;
 public interface BonusService {
 	
 	/**
-	 * 获取佣金路由结构表
+	 * 手续费配置节点结构
 	 * 
 	 * @return
 	 */
-	BonusRouteView bonusPoundageConfigs();
+	Map<Integer, PoundageStructure> poundageNodeStructure();
 	
 	/**
-	 * 佣金设置
+	 * 获取指定系数类型的系数范围
 	 * 
-	 * @param searcher
+	 * @param cfgCoefficientId
 	 * @return
 	 */
-	Result<Void> bonusPoundageEdit(BonusPoundageEditParam param);
+	Result<List<CoefficientRange>> poundageCoefficientRanges(int tid, int cfgCoefficientId);
 	
 	/**
-	 * 手续费系数列表
+	 * 编辑指定系数类型的系数范围
 	 * 
-	 * @param searcher
+	 * @param param
 	 * @return
 	 */
-	Result<VehicleCoefficients> poundageCoefficients(PoundageCoefficientsParam param);
+	Result<Integer> poundageCoefficientRangeEdit(PoundageCoefficientRangeEditParam param); 
+	
+	/**
+	 * 手续费配置
+	 * 
+	 * @param param
+	 * @return
+	 */
+	Result<Void> poundageConfigEdit(PoundageConfigEditParam param); 
+	
+	/**
+	 * 获取指定手续费节点的配置
+	 * 
+	 * @param param
+	 * @return
+	 */
+	PoundageNodeConfigInfo poundageNodeConfig(PoundageNodeConfigParam param);
 }

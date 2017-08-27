@@ -30,6 +30,7 @@ public class LOGIN extends OldAppAction {
 		case TENANT_MANAGER:
 			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
 		case APP:
+		case RECRUIT:
 			String mobile = request.getParam(Params.MOBILE);
 			if (courierService.captchaVerify(app.getId(), mobile, request.getParam(Params.CAPTCHA)).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);

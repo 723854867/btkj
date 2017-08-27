@@ -40,14 +40,8 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 		return map;
 	}
 	
-	public void deletePrivileges(TarType tarType, int tarId) {
-		redis.hmsdrop(tarType, tarId);
-		dao.deleteByTarTypeAndTarId(tarType.mark(), tarId);
-	}
-	
-	public void replace(Map<String, Privilege> privileges) {
-		dao.replace(privileges);
-		flush(privileges);
+	public void privilegesClear(TarType tarType, int tarId) { 
+		redis.hmsdrop(redisKey, _setKey(tarType.mark(), tarId));
 	}
 	
 	private Map<String, Privilege> _checkLoad(TarType tarType, int tarId) {

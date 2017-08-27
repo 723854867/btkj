@@ -10,7 +10,6 @@ import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.model.BtkjUserLoginModel;
 import org.btkj.pojo.model.Version;
 
 import com.alibaba.dubbo.common.serialize.support.SerializationOptimizer;
@@ -28,7 +27,6 @@ public class SerializationOptimizerImpl implements SerializationOptimizer {
 		list.add(UserPO.class);
 		list.add(EmployeePO.class);
 		
-		list.add(BtkjUserLoginModel.class);
 		list.add(Version.class);
 		return list;
 	}

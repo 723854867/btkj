@@ -15,6 +15,7 @@ public class GlobalConfig {
 		DEFAULT_CONFIG.setBannerNum(3);
 		DEFAULT_CONFIG.setTeamDepth(3);
 		DEFAULT_CONFIG.setMaxBonusScaleConfig(4);
+		DEFAULT_CONFIG.setEmployeeInviteUrl("http://www.baidu.com");
 	}
 
 	private int maxTenantNum;
@@ -22,6 +23,7 @@ public class GlobalConfig {
 	private int maxInsureNum;			// 一次请求同时投保的险企最大数
 	private int teamDepth;				// 团队深度表示团队下限的层数：自己算一层
 	private int maxBonusScaleConfig;	// 规模奖励配置项最大记录条数
+	private String employeeInviteUrl;	// 邀请h5地址
 	
 	public int getMaxTenantNum() {
 		return maxTenantNum;
@@ -53,5 +55,13 @@ public class GlobalConfig {
 	
 	public void setMaxBonusScaleConfig(int maxBonusScaleConfig) {
 		this.maxBonusScaleConfig = maxBonusScaleConfig;
+	}
+	
+	public String getEmployeeInviteUrl() {
+		return employeeInviteUrl;
+	}
+	
+	public void setEmployeeInviteUrl(String employeeInviteUrl) {
+		this.employeeInviteUrl = employeeInviteUrl;
 	}
 }

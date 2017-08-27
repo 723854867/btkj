@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
@@ -20,7 +19,6 @@ import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
 import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
 import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
 import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
@@ -29,22 +27,6 @@ import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
 
 public interface VehicleManageService {
-	
-	/**
-	 * 获取车险系数
-	 * 
-	 * @param tid
-	 * @return
-	 */
-	List<VehicleCoefficient> coefficients(int tid);
-	
-	/**
-	 * 手续费系数编辑
-	 * 
-	 * @param param
-	 * @return
-	 */
-	Result<?> poundageCoefficientEdit(PoundageCoefficientEditParam param);
 	
 	/**
 	 * 管理佣金列表

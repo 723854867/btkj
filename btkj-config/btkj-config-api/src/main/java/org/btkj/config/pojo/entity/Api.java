@@ -2,15 +2,24 @@ package org.btkj.config.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class Api implements UniqueModel<String> {
+public class Api implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 2316944779358104723L;
 
+	private int id;
 	private String pkg;
 	private String name;
 	private int modularId;
 	private int created;
 	private int updated;
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getPkg() {
 		return pkg;
@@ -53,7 +62,7 @@ public class Api implements UniqueModel<String> {
 	}
 
 	@Override
-	public String key() {
-		return null;
+	public Integer key() {
+		return id;
 	}
 }

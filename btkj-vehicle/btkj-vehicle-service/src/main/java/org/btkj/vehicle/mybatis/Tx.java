@@ -7,23 +7,22 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.config.GlobalConfigContainer;
-import org.btkj.pojo.entity.VehicleCoefficient;
-import org.btkj.pojo.enums.CoefficientType;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.vehicle.EntityGenerator;
+import org.btkj.vehicle.cache.domain.CfgCoefficient;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
-import org.btkj.vehicle.mybatis.dao.VehicleCoefficientDao;
+import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
-import org.btkj.vehicle.redis.VehicleCoefficientMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.lang.DateUtil;
-import org.rapid.util.math.compare.ComparisonSymbol;
+import org.rapid.util.math.compare.Comparison;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,63 +40,56 @@ public class Tx {
 	@Resource
 	private TenantInsurerMapper tenantInsurerMapper;
 	@Resource
-	private VehicleCoefficientDao vehicleCoefficientDao;
-	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
-	private VehicleCoefficientMapper vehicleCoefficientMapper;
+	private PoundageCoefficientRangeDao poundageCoefficientRangeDao;
 	
-
 	@Transactional
-	public VehicleCoefficient coefficientUpdate(PoundageCoefficientEditParam param) {
-		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(param.getTid(), param.getCoefficientType().mark());
-		VehicleCoefficient coefficient = coefficients.remove(param.getId());
-		if (null == coefficient)
-			throw new BusinessException(BtkjCode.COEFFICIENT_NOT_EXIST);
-		if (null != param.getSymbol())
-			coefficient.setComparison(param.getSymbol().mark());
+	public PoundageCoefficientRange poundageCoefficientRangeUpdate(PoundageCoefficientRangeEditParam param) {
+		PoundageCoefficientRange range = poundageCoefficientRangeDao.getByKey(param.getId());
+		if (null == range)
+			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
+		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), range.getCfgCoefficientId());
 		if (null != param.getVal()) {
-			if (!CoefficientType.match(coefficient.getType()).checkValue(ComparisonSymbol.match(coefficient.getComparison()), param.getVal()))
-				throw new BusinessException(Code.FORBID);
-			for (VehicleCoefficient temp : coefficients.values()) {
-				ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
+			int comparison = null != param.getSymbol() ? param.getSymbol().mark() : range.getComparison();
+			for (PoundageCoefficientRange temp : ranges.values()) {
+				Comparison c = Comparison.match(temp.getComparison());
 				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-				if (c.isOverlap(ComparisonSymbol.match(coefficient.getComparison()), param.getVal(), val))
-					throw new BusinessException(Code.FAILURE);
+				if (c.isOverlap(Comparison.match(comparison), param.getVal(), val))
+					throw new BusinessException(Code.RANGE_OVERLAP);
 			}
 			StringBuilder builder = new StringBuilder();
 			for (String val : param.getVal())
 				builder.append(val).append(Consts.SYMBOL_UNDERLINE);
 			builder.deleteCharAt(builder.length() - 1);
-			coefficient.setComparableValue(builder.toString());
+			range.setComparison(comparison);
+			range.setComparableValue(builder.toString());
 		}
 		if (null != param.getName())
-			coefficient.setName(param.getName());
-		coefficient.setUpdated(DateUtil.currentTime());
-		vehicleCoefficientDao.update(coefficient);
-		return coefficient;
+			range.setName(param.getName());
+		range.setUpdated(DateUtil.currentTime());
+		poundageCoefficientRangeDao.update(range);
+		return range;
 	}
 	
 	@Transactional
-	public VehicleCoefficient coefficientAdd(PoundageCoefficientEditParam param) {
-		if (!param.getCoefficientType().checkValue(param.getSymbol(), param.getVal()))
-			throw new BusinessException(Code.FORBID);
-		Map<Integer, VehicleCoefficient> coefficients = vehicleCoefficientDao.getByTidAndTypeForUpdate(param.getTid(), param.getCoefficientType().mark());
-		if (param.getCoefficientType().isCustom() && coefficients.size() >= param.getCoefficientType().maxCustomNum())
-			throw new BusinessException(BtkjCode.COEFFICIENT_NUM_MAXMIUM);
-		for (VehicleCoefficient temp : coefficients.values()) {
-			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
+	public PoundageCoefficientRange poundageCoefficientRangeAdd(PoundageCoefficientRangeEditParam param, CfgCoefficient coefficient) {
+		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), coefficient.getId());
+		if (ranges.size() > coefficient.getMaxRanges())
+			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_MAXMIUM);
+		for (PoundageCoefficientRange temp : ranges.values()) {
+			Comparison c = Comparison.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(param.getSymbol(), param.getVal(), val))
-				throw new BusinessException(Code.FAILURE);
+				throw new BusinessException(Code.RANGE_OVERLAP);
 		}
 		StringBuilder builder = new StringBuilder();
 		for (String val : param.getVal())
 			builder.append(val).append(Consts.SYMBOL_UNDERLINE);
 		builder.deleteCharAt(builder.length() - 1);
-		VehicleCoefficient coefficient = EntityGenerator.newVehicleCoefficient(param, builder.toString());
-		vehicleCoefficientDao.insert(coefficient);
-		return coefficient;
+		PoundageCoefficientRange range = EntityGenerator.newPoundageCoefficientRange(param, builder.toString());
+		poundageCoefficientRangeDao.insert(range);
+		return range;
 	}
 	
 	@Transactional
@@ -106,7 +98,7 @@ public class Tx {
 		if (configs.size() >= GlobalConfigContainer.getGlobalConfig().getMaxBonusScaleConfig())
 			throw new BusinessException(BtkjCode.BONUS_SCALE_CONFIG_MAXMIUM);
 		for (BonusScaleConfig temp : configs.values()) {
-			ComparisonSymbol c = ComparisonSymbol.match(temp.getComparison());
+			Comparison c = Comparison.match(temp.getComparison());
 			String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 			if (c.isOverlap(param.getSymbol(), param.getVal(), val))
 				throw new BusinessException(Code.FAILURE);
@@ -132,8 +124,8 @@ public class Tx {
 			config.setComparison(param.getSymbol().mark());
 		if (null != param.getVal()) {
 			for (BonusScaleConfig temp : configs.values()) {
-				ComparisonSymbol symbol = ComparisonSymbol.match(temp.getComparison());
-				ComparisonSymbol csymbol = ComparisonSymbol.match(config.getComparison());
+				Comparison symbol = Comparison.match(temp.getComparison());
+				Comparison csymbol = Comparison.match(config.getComparison());
 				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 				if (symbol.isOverlap(csymbol, param.getVal(), val))
 					throw new BusinessException(Code.RANGE_OVERLAP);

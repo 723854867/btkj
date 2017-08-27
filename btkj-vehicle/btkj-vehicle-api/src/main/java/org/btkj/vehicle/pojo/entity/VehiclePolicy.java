@@ -11,7 +11,7 @@ import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.model.Insurance;
-import org.btkj.vehicle.pojo.VehiclePolicyType;
+import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
 import org.rapid.util.common.model.UniqueModel;
 
 public class VehiclePolicy implements UniqueModel<String> {

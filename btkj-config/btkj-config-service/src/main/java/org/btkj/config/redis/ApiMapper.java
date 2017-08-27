@@ -14,7 +14,7 @@ import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;
 
-public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
+public class ApiMapper extends RedisDBAdapter<Integer, Api, ApiDao> {
 	
 	private final String SET								= "set:api:{0}";
 	private final String CONTROLLER							= "api:controller:{0}";
@@ -23,25 +23,25 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 		super(new ByteProtostuffSerializer<Api>(), "hash:db:api");
 	}
 	
-	public Map<String, Api> apis(int modularId) {
-		Map<String, Api> map = _checkLoad(modularId);
+	public Map<Integer, Api> apis(int modularId) {
+		Map<Integer, Api> map = _checkLoad(modularId);
 		if (null != map)
 			return map;
 		List<byte[]> list = redis.hmsget(redisKey, _setKey(modularId));
 		if (null == list)
 			return Collections.EMPTY_MAP;
-		map = new HashMap<String, Api>();
+		map = new HashMap<Integer, Api>();
 		for (byte[] buffer : list) {
 			Api api = serializer.antiConvet(buffer);
-			map.put(api.getPkg(), api);
+			map.put(api.getId(), api);
 		}
 		return map;
 	}
 	
-	private Map<String, Api> _checkLoad(int modularId) {
+	private Map<Integer, Api> _checkLoad(int modularId) {
 		if (!checkLoad(_controllerField(modularId)))
 			return null;
-		Map<String, Api> map = dao.getByModularId(modularId);
+		Map<Integer, Api> map = dao.getByModularId(modularId);
 		if (!CollectionUtil.isEmpty(map))
 			flush(map);
 		return map;
@@ -58,7 +58,7 @@ public class ApiMapper extends RedisDBAdapter<String, Api, ApiDao> {
 	}
 	
 	@Override
-	public void flush(Map<String, Api> entities) {
+	public void flush(Map<Integer, Api> entities) {
 		Map<Integer, List<Api>> map = new HashMap<Integer, List<Api>>();
 		for (Api temp : entities.values()) {
 			int modularId = temp.getModularId();

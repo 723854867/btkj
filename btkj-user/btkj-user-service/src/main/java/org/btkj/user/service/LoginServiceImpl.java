@@ -17,6 +17,7 @@ import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
 import org.rapid.data.storage.redis.DistributeSession;
 import org.rapid.data.storage.redis.Redis;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
@@ -89,25 +90,27 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	private Result<LoginInfo> _doLogin(Client client, UserPO user, String mobile) {
-		String token = client == Client.RECRUIT 
-				? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() 
-						: userMapper.tokenReplace(client, user.getUid(), mobile);
-		if (client == Client.RECRUIT) {						// 直接使用分布式 session
+		String token = client == Client.RECRUIT ? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() : userMapper.tokenReplace(client, user.getUid(), mobile);
+		switch (client) {
+		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
 			session.setInactiveInterval(DateUtil.MILLIS_FIVE_MINUTES);
 			session.put(BtkjConsts.FIELD.UID, user.getUid());
-		} else {
+			break;
+		case TENANT_MANAGER:
 			int time = DateUtil.currentTime();
-			switch (client) {
-			case TENANT_MANAGER:
-				user.setPcLoginTime(time);
-				break;
-			default:
-				user.setAppLoginTime(time);
-				break;
-			}
+			user.setPcLoginTime(time);
 			user.setUpdated(time);
 			userMapper.update(user);
+			break;
+		case APP:
+			time = DateUtil.currentTime();
+			user.setAppLoginTime(time);
+			user.setUpdated(time);
+			userMapper.update(user);
+			break;
+		default:
+			return Consts.RESULT.FORBID;
 		}
 		return Result.result(new LoginInfo(token, user));
 	}

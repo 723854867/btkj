@@ -14,7 +14,7 @@ import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.user.pojo.submit.CustomerSearcher;
-import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.enums.Lane;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;

@@ -7,19 +7,10 @@ public class Modular extends MPTTNode<Integer> implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 2316944779358104723L;
 
-	private String name;
 	private int type;
 	private int created;
 	private int updated;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public int getType() {
 		return type;
 	}

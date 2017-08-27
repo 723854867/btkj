@@ -39,16 +39,15 @@ import org.btkj.vehicle.LeBaoBaOrderTask;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
-import org.btkj.vehicle.pojo.Lane;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
+import org.btkj.vehicle.pojo.enums.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
+import org.btkj.vehicle.realm.Rule;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
 import org.btkj.vehicle.redis.VehicleDeptMapper;
 import org.btkj.vehicle.redis.VehicleModelMapper;
-import org.btkj.vehicle.rule.Rule;
-import org.btkj.vehicle.rule.bonus.BonusManager;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
@@ -70,8 +69,6 @@ public class VehicleServiceImpl implements VehicleService {
 	private Rule rule;
 	@Resource
 	private BiHuVehicle biHuVehicle;			// 壁虎车险
-	@Resource
-	private BonusManager bonusManager;
 	@Resource
 	private BaoTuVehicle baoTuVehicle;			// 保途车险
 	@Resource
@@ -141,7 +138,7 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	private void _saveRenewal(Renewal renewal) {
 		if (0 != renewal.getInsurerId()) {
-			Insurer insurer = configService.getInsurerById(renewal.getInsurerId());
+			Insurer insurer = configService.insurer(renewal.getInsurerId());
 			if (null != insurer) {
 				renewal.setInsurerId(insurer.getId());
 				renewal.setInsurerName(insurer.getName());
@@ -289,7 +286,7 @@ public class VehicleServiceImpl implements VehicleService {
 			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(tenant, uid, order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
-					bonusManager.calculateBonus(order);					// 报价成功计算手续费
+//					bonusManager.calculateBonus(order);					// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);
 				}
@@ -303,7 +300,7 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	private void _quoteResult(TenantPO tenant, int uid, VehicleOrder order) {
-		Result<PolicySchema> result = biHuVehicle.quoteResult(tenant, uid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+		Result<PolicySchema> result = biHuVehicle.quoteResult(tenant, uid, order.getTips().getLicense(), configService.insurer(order.getInsurerId()).getBiHuId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id()) {
 				order.setState(VehicleOrderState.QUOTE_FAILURE);
@@ -317,7 +314,7 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	private void _insureResult(TenantPO tenant, int uid, int region, VehicleOrder order) {
-		Result<VehicleAuditModel> result = biHuVehicle.insureResult(tenant, uid, order.getTips().getLicense(), configService.getInsurerById(order.getInsurerId()).getBiHuId());
+		Result<VehicleAuditModel> result = biHuVehicle.insureResult(tenant, uid, order.getTips().getLicense(), configService.insurer(order.getInsurerId()).getBiHuId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.INSURE_FAILURE.id()) {
 				order.setDesc(result.getDesc());

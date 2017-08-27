@@ -3,29 +3,29 @@ package org.btkj.vehicle;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleCoefficient;
 import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
-import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.info.JianJiePoliciesInfo.VehicleInfomation;
+import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.InsurUnit;
 import org.btkj.pojo.model.PolicySchema;
-import org.btkj.vehicle.pojo.BonusManageConfigType;
-import org.btkj.vehicle.pojo.Lane;
-import org.btkj.vehicle.pojo.VehiclePolicyType;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientEditParam;
+import org.btkj.vehicle.pojo.enums.BonusManageConfigType;
+import org.btkj.vehicle.pojo.enums.Lane;
+import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
+import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
 import org.btkj.vehicle.service.VehicleManageServiceImpl;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;
-import org.rapid.util.math.compare.ComparisonSymbol;
+import org.rapid.util.math.compare.Comparison;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,18 +45,18 @@ public class EntityGenerator {
 		return temp;
 	}
 	
-	public static final VehicleCoefficient newVehicleCoefficient(PoundageCoefficientEditParam param, String value) {
-		VehicleCoefficient coefficient = new VehicleCoefficient();
-		coefficient.setTid(param.getTid());
-		coefficient.setName(param.getName());
-		coefficient.setType(param.getCoefficientType().mark());
-		coefficient.setComparableValue(value);
-		coefficient.setComparison(param.getSymbol().mark());
+	public static final PoundageCoefficientRange newPoundageCoefficientRange(PoundageCoefficientRangeEditParam param, String value) {
+		PoundageCoefficientRange temp = new PoundageCoefficientRange();
+		temp.setTid(param.getTid());
+		temp.setName(param.getName());
+		temp.setComparableValue(value);
+		temp.setComparison(param.getSymbol().mark());
+		temp.setCfgCoefficientId(param.getCfgCoefficientId());
 		
 		int time = DateUtil.currentTime();
-		coefficient.setCreated(time);
-		coefficient.setUpdated(time);
-		return coefficient;
+		temp.setCreated(time);
+		temp.setUpdated(time);
+		return temp;
 	}
 	
 	public static final BonusManageConfig newBonusManageConfig(int tid, BonusManageConfigType type, int depth, int rate) {
@@ -73,7 +73,7 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final BonusScaleConfig newBonusScaleConfig(int tid, int rate, ComparisonSymbol symbol, String value) {
+	public static final BonusScaleConfig newBonusScaleConfig(int tid, int rate, Comparison symbol, String value) {
 		BonusScaleConfig config = new BonusScaleConfig();
 		config.setTid(tid);
 		config.setRate(rate);

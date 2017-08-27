@@ -72,7 +72,7 @@ public interface ConfigManageService {
 	 * @param modularId
 	 * @return
 	 */
-	Map<String, Api> apis(int modularId);
+	Map<Integer, Api> apis(int modularId);
 	
 	/**
 	 * 接口编辑
@@ -89,7 +89,7 @@ public interface ConfigManageService {
 	 * @param modulars
 	 * @return
 	 */
-	Result<Void> authorizeApp(int appId, Set<Integer> modulars);
+	void authorizeApp(int appId, Set<Integer> modulars);
 	
 	/**
 	 * 给保途管理员授权
@@ -98,32 +98,16 @@ public interface ConfigManageService {
 	 * @param modulars
 	 * @return
 	 */
-	Result<Void> authorizeAdmin(int adminId, Set<Integer> modulars);
+	void authorizeAdmin(int adminId, Set<Integer> modulars);
 	
 	/**
-	 * 给平台用户授权
+	 * 授权
 	 * 
-	 * @param uid
-	 * @param modularse
-	 * @return
-	 */
-	Result<Void> authorizeUser(int appId, int uid, Set<Integer> modulars);
-	
-	/**
-	 * 给商户授权
-	 * 
-	 * @param tid
+	 * @param srcId
+	 * @param srcType
+	 * @param tarId
+	 * @param tarType
 	 * @param modulars
-	 * @return
 	 */
-	Result<Void> authorizeTenant(int appId, int tid, Set<Integer> modulars);
-	
-	/**
-	 * 给雇员授权
-	 * 
-	 * @param uid
-	 * @param modulars
-	 * @return
-	 */
-	Result<Void> authorizeEmployee(int tid, int employeeId, Set<Integer> modulars);
+	void authorize(int srcId, TarType srcType, int tarId, TarType tarType, ModularType modularType, Set<Integer> modulars);
 }

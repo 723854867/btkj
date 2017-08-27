@@ -1,7 +1,7 @@
 package org.btkj.pojo.enums;
 
 import org.rapid.util.lang.StringUtil;
-import org.rapid.util.math.compare.ComparisonSymbol;
+import org.rapid.util.math.compare.Comparison;
 
 public enum CoefficientType {
 
@@ -20,7 +20,7 @@ public enum CoefficientType {
 	 */
 	GENDER(3, "性别") {
 		@Override
-		public boolean checkValue(ComparisonSymbol symbol, String[] value) {
+		public boolean checkValue(Comparison symbol, String[] value) {
 			try {
 				switch (symbol) {
 				case eq:
@@ -42,7 +42,7 @@ public enum CoefficientType {
 	 */
 	ZXB(4, "转续保") {
 		@Override
-		public boolean checkValue(ComparisonSymbol symbol, String[] value) {
+		public boolean checkValue(Comparison symbol, String[] value) {
 			try {
 				switch (symbol) {
 				case eq:
@@ -70,7 +70,7 @@ public enum CoefficientType {
 	 */
 	LICENSE(6, "车牌") {
 		@Override
-		public boolean checkValue(ComparisonSymbol symbol, String[] value) {
+		public boolean checkValue(Comparison symbol, String[] value) {
 			try {
 				switch (symbol) {
 				case eq:
@@ -172,7 +172,7 @@ public enum CoefficientType {
 	 * @param value
 	 * @return
 	 */
-	public boolean checkValue(ComparisonSymbol symbol, String[] value) {
+	public boolean checkValue(Comparison symbol, String[] value) {
 		try {
 			switch (symbol) {
 			case gt:

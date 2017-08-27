@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.vehicle.pojo.BonusManageConfigType;
+import org.btkj.vehicle.pojo.enums.BonusManageConfigType;
 import org.rapid.util.validator.ValidateGroups;
 
 public class BonusManageConfigEditParam extends EmployeeParam {

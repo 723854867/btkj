@@ -15,12 +15,14 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.mybatis.Tx;
 import org.btkj.user.pojo.model.EmployeeHolder;
 import org.btkj.user.redis.AppMapper;
+import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
@@ -43,6 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private AppMapper appMapper;
 	@Resource
 	private UserMapper userMapper;
+	@Resource
+	private ApplyMapper applyMapper;
 	@Resource
 	private TenantMapper tenantMapper;
 	@Resource
@@ -154,6 +158,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (user.getUid() != employee.getUid())
 			return Consts.RESULT.FORBID;
 		return Result.result(Code.OK.id(), lockId, new EmployeeHolder(app, user, tenant, employee));
+	}
+	
+	@Override
+	public Result<Void> tenantJoinCheck(int uid, int parentId) {
+		EmployeePO parent = employeeMapper.getByKey(parentId);
+		if (null == parent)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
+		ApplyInfo ai = applyMapper.getByTidAndUid(parent.getTid(), uid);
+		if (null != ai)
+			return BtkjConsts.RESULT.APPLY_EXIST;
+		if (employeeMapper.isEmployee(parent.getTid(), uid))
+			return BtkjConsts.RESULT.ALREADY_IS_EMPLOYEE;
+		return Consts.RESULT.OK;
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.Pager;
-import org.btkj.vehicle.pojo.Lane;
+import org.btkj.vehicle.pojo.enums.Lane;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.data.storage.mongo.MongoUtil;
@@ -163,8 +163,8 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	}
 	
 	public Map<String, VehicleOrder> rewardStandbyUpdate(int tid) {
-		mongo.update(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUED), Updates.set(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARDED));
-		return mongo.findMap(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARD_SDANDBY), VehicleOrder.class);
+		mongo.update(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.ISSUED.name()), Updates.set(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARD_SDANDBY.name()));
+		return mongo.findMap(collection, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.REWARD_SDANDBY.name()), VehicleOrder.class);
 	}
 	
 	public void rewardComplete(int tid) {

@@ -24,4 +24,10 @@
 		</property>
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
+	
+	<bean id="org.btkj.common.Config">
+		<property name="port" value="${port}" />
+		<property name="host" value="${host}" />
+		<property name="protocol" value="${protocol}" />
+	</bean>
 </beans>

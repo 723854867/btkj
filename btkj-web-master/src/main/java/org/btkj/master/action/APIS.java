@@ -20,7 +20,7 @@ public class APIS extends AdminAction<ApisParam> {
 
 	@Override
 	protected Result<List<Api>> execute(Admin admin, ApisParam param) {
-		Map<String, Api> map = configManageService.apis(param.getModularId());
+		Map<Integer, Api> map = configManageService.apis(param.getModularId());
 		return Result.result(new ArrayList<Api>(map.values()));
 	}
 }

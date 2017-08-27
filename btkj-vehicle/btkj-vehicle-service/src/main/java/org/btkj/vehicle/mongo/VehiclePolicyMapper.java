@@ -2,6 +2,7 @@ package org.btkj.vehicle.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
@@ -65,8 +66,8 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 		return new Pager<VehiclePolicy>(total, list);
 	}
 	
-	public List<VehiclePolicy> policies(int tid, int start, int end) {
-		return mongo.find(collection, Filters.and(
+	public Map<String, VehiclePolicy> policies(int tid, int start, int end) {
+		return mongo.findMap(collection, Filters.and(
 						Filters.eq(BtkjConsts.FIELD.TID, tid), 
 						Filters.gte(BtkjConsts.FIELD.ISSUETIME, start), 
 						Filters.lte(BtkjConsts.FIELD.ISSUETIME, start)),
