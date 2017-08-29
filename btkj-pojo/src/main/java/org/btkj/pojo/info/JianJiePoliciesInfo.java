@@ -55,8 +55,8 @@ public class JianJiePoliciesInfo implements Serializable {
 		private String Company;
 		private String Dept;
 		private String ChannelSource;
-		private VehicleInfomation vehicleInfomation;
-		private List<Insurance> insurances;
+		private VehicleInfomation VehicleInfomation;
+		private List<Insurance> Insurances;
 		private String ChannelType;
 		private String CdUser;
 		private String CdPhone;
@@ -65,7 +65,7 @@ public class JianJiePoliciesInfo implements Serializable {
 		private String GsDept;
 		private String GsPhone;
 		private String AccountName;
-		private boolean isCouple;
+		private boolean IsCouple;
 		private String RelationPolicyNo;			// 关联保单号
 		private String BaseStatus;
 		private String BDH;
@@ -216,19 +216,19 @@ public class JianJiePoliciesInfo implements Serializable {
 		}
 
 		public VehicleInfomation getVehicleInfomation() {
-			return vehicleInfomation;
+			return VehicleInfomation;
 		}
-
+		
 		public void setVehicleInfomation(VehicleInfomation vehicleInfomation) {
-			this.vehicleInfomation = vehicleInfomation;
+			VehicleInfomation = vehicleInfomation;
 		}
 
 		public List<Insurance> getInsurances() {
-			return insurances;
+			return Insurances;
 		}
-
+		
 		public void setInsurances(List<Insurance> insurances) {
-			this.insurances = insurances;
+			Insurances = insurances;
 		}
 
 		public String getChannelType() {
@@ -295,12 +295,12 @@ public class JianJiePoliciesInfo implements Serializable {
 			AccountName = accountName;
 		}
 
-		public boolean isCouple() {
-			return isCouple;
+		public boolean isIsCouple() {
+			return IsCouple;
 		}
-
-		public void setCouple(boolean isCouple) {
-			this.isCouple = isCouple;
+		
+		public void setIsCouple(boolean isCouple) {
+			IsCouple = isCouple;
 		}
 		
 		public String getRelationPolicyNo() {

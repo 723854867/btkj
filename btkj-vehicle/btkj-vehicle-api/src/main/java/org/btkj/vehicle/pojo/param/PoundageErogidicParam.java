@@ -10,9 +10,10 @@ import javax.validation.constraints.Size;
 
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.pojo.entity.PoundageConfig.MirrorCoefficient;
+import org.btkj.vehicle.pojo.model.PoundageErogidicMessage;
 import org.rapid.util.common.Consts;
 
-public class PoundageConfigEditParam extends EmployeeParam {
+public class PoundageErogidicParam extends EmployeeParam implements PoundageErogidicMessage {
 
 	private static final long serialVersionUID = -6538523637011056257L;
 
@@ -25,7 +26,9 @@ public class PoundageConfigEditParam extends EmployeeParam {
 	@NotNull
 	@Size(min = 1)
 	private LinkedList<Integer> nodePath;
+	private int cfgCoefficientId;
 
+	@Override
 	public int getTid() {
 		return tid;
 	}
@@ -50,6 +53,7 @@ public class PoundageConfigEditParam extends EmployeeParam {
 		this.node = node;
 	}
 
+	@Override
 	public int getInsurerId() {
 		return insurerId;
 	}
@@ -58,12 +62,21 @@ public class PoundageConfigEditParam extends EmployeeParam {
 		this.insurerId = insurerId;
 	}
 
+	@Override
 	public LinkedList<Integer> getNodePath() {
 		return nodePath;
 	}
 	
 	public void setNodePath(LinkedList<Integer> nodePath) {
 		this.nodePath = nodePath;
+	}
+	
+	public int getCfgCoefficientId() {
+		return cfgCoefficientId;
+	}
+	
+	public void setCfgCoefficientId(int cfgCoefficientId) {
+		this.cfgCoefficientId = cfgCoefficientId;
 	}
 	
 	public String key() {
@@ -74,7 +87,9 @@ public class PoundageConfigEditParam extends EmployeeParam {
 		EDIT,					// 编辑节点配置：新增和修改
 		DELETE,					// 删除配置
 		EFFECTIVE,				// 使节点生效
-		INEFFECTIVE;			// 使节点失效
+		INEFFECTIVE,			// 使节点失效
+		
+		NODE_CONFIG;			// 获取节点配置
 	}
 
 	public class Node implements Serializable {

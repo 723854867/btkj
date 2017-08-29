@@ -10,6 +10,7 @@ import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.data.storage.mapper.MongoMapper;
+import org.rapid.util.lang.CollectionUtil;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.client.model.Filters;
@@ -22,8 +23,10 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 		super("vehiclePolicy");
 	}
 	
-	public void batchInsert(List<VehiclePolicy> policies) {
-		mongo.insertMany(collection, policies);
+	public void batchInsert(Map<String, VehiclePolicy> policies) {
+		if (CollectionUtil.isEmpty(policies))
+			return;
+		mongo.bulkReplaceOne(collection, policies);
 	}
 	
 	public Pager<VehiclePolicy> policies(VehiclePoliciesParam param) {

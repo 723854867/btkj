@@ -4,12 +4,12 @@ import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.entity.Admin;
-import org.btkj.master.pojo.param.TenantSetParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.vehicle.pojo.param.TenantSetParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
@@ -35,7 +35,7 @@ public class TENANT_SET extends AdminAction<TenantSetParam> {
 		tenant.setLeBaoBaPassword(param.getLeBaoBaPassword());
 		tenant.setUpdated(DateUtil.currentTime());
 		userManageService.tenantUpdate(tenant);
-		vehicleManageService.insurerEdit(tenant.getTid(), param.getInsurersDelete(), param.getInsurersUpdate(), param.getInsurersInsert());
+		vehicleManageService.insurerEdit(param);
 		return Consts.RESULT.OK;
 	}
 }

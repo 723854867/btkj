@@ -15,7 +15,6 @@ public class RouteInfo implements Serializable {
 	private String insurerName;
 	private String insurerIcon;
 	private int lane;
-	private int jianJieId;
 	private String laneName;
 	private int created;
 	private int updated;
@@ -30,7 +29,6 @@ public class RouteInfo implements Serializable {
 		this.insurerId = insurer.getId();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
-		this.jianJieId = route.getJianJieId();
 		Lane lane = Lane.match(this.lane);
 		this.laneName = lane.title();
 	}
@@ -75,14 +73,6 @@ public class RouteInfo implements Serializable {
 		this.lane = lane;
 	}
 	
-	public int getJianJieId() {
-		return jianJieId;
-	}
-	
-	public void setJianJieId(int jianJieId) {
-		this.jianJieId = jianJieId;
-	}
-
 	public String getLaneName() {
 		return laneName;
 	}

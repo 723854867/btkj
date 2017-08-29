@@ -1,15 +1,17 @@
 package org.btkj.vehicle.realm;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.VehicleBrand;
+import org.btkj.pojo.entity.VehicleDept;
+import org.btkj.pojo.entity.VehicleModel;
+import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.cache.domain.CfgCoefficient;
 import org.btkj.vehicle.cache.domain.CfgCoefficientRange;
@@ -19,19 +21,19 @@ import org.btkj.vehicle.cache.domain.CfgPoundageNode;
 import org.btkj.vehicle.cache.domain.CfgPoundageStructure;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
 import org.btkj.vehicle.pojo.entity.PoundageConfig;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.MirrorCoefficient;
 import org.btkj.vehicle.pojo.entity.PoundageConfig.MirrorPoundageNode;
+import org.btkj.vehicle.pojo.enums.PoundageNodeType;
 import org.btkj.vehicle.pojo.model.CoefficientRange;
 import org.btkj.vehicle.pojo.model.CoefficientStructure;
 import org.btkj.vehicle.pojo.model.CoefficientStructure.CoefficientNode;
-import org.btkj.vehicle.pojo.model.PoundageNodeConfigInfo;
+import org.btkj.vehicle.pojo.model.PoundageErogidicMessage;
 import org.btkj.vehicle.pojo.model.PoundageStructure;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.Node;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.Type;
-import org.btkj.vehicle.pojo.param.PoundageNodeConfigParam;
+import org.btkj.vehicle.pojo.param.PoundageErogidicParam;
+import org.btkj.vehicle.realm.poundage.ErgodicCallback;
 import org.btkj.vehicle.redis.PoundageCoefficientRangeMapper;
-import org.rapid.util.common.Consts;
+import org.btkj.vehicle.redis.VehicleBrandMapper;
+import org.btkj.vehicle.redis.VehicleDeptMapper;
+import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 import org.slf4j.Logger;
@@ -42,6 +44,8 @@ import org.springframework.stereotype.Component;
 public class Poundage {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Poundage.class);
+	
+	public static final int NO_BIZ_COACH_COEFFICIENT_STRUCTURE				= 1;
 
 	@Resource
 	private CacheService cacheService;
@@ -52,6 +56,22 @@ public class Poundage {
 	private Map<Integer, PoundageStructure> poundageStructures;
 	@Resource
 	private PoundageCoefficientRangeMapper poundageCoefficientRangeMapper;
+	
+	@Resource
+	private VehicleDeptMapper vehicleDeptMapper;
+	@Resource
+	private VehicleBrandMapper vehicleBrandMapper;
+	@Resource
+	private VehicleModelMapper vehicleModelMapper;
+	
+	@Resource(name = "normalErogidicCallback")
+	private ErgodicCallback<?> normalErogidicCallback;
+	@Resource(name = "updateErogidicCallback")
+	private ErgodicCallback<?> updateErogidicCallback;
+	@Resource(name = "nodeConfigErogidicCallback")
+	private ErgodicCallback<?> nodeConfigErogidicCallback;
+	
+	private Map<Integer, CoefficientStructure> coefficientStructures = new HashMap<Integer, CoefficientStructure>();
 	
 	public void init() { 
 		Map<Integer, CfgPoundageStructure> map = cacheService.getAll(CacheService.CFG_POUNDAGE_STRUCTURE);
@@ -91,7 +111,11 @@ public class Poundage {
 			System.exit(1);
 		}
 		
-		CoefficientStructure temp = new CoefficientStructure();
+		CoefficientStructure temp = coefficientStructures.get(coefficientStructure.getId());
+		if (null == temp) {
+			temp = new CoefficientStructure();
+			coefficientStructures.put(coefficientStructure.getId(), temp);
+		}
 		temp.setId(coefficientStructure.getId());
 		if (!CollectionUtil.isEmpty(coefficientStructure.getNodes())) {
 			Map<Integer, CoefficientNode> map = new HashMap<Integer, CoefficientNode>();
@@ -142,175 +166,99 @@ public class Poundage {
 		}
 	}
 	
-	public Result<Void> poundageConfigEdit(PoundageConfigEditParam param) {
-		if (null == configService.insurer(param.getInsurerId()))
+	/**
+	 * 计算手续费
+	 */
+	public void calculate(VehicleOrder order) {
+		
+	}
+	
+	public Result<?> poundageErgodic(PoundageErogidicParam param) {
+		switch (param.getType()) {
+		case EDIT:
+			return poundageErgodic(param, updateErogidicCallback);
+		case NODE_CONFIG:
+			return poundageErgodic(param, nodeConfigErogidicCallback);
+		default:
+			return poundageErgodic(param, normalErogidicCallback);
+		}
+	}
+	
+	public <MESSAGE extends PoundageErogidicMessage> Result<?> poundageErgodic(MESSAGE message, ErgodicCallback callback) {
+		if (null == configService.insurer(message.getInsurerId()))
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
-		PoundageConfig config = poundageConfigMapper.getByKey(param.key());
-		if (param.getType() == Type.EDIT && null == config) 
-			config = new PoundageConfig(param.getTid(), param.getInsurerId());
-		Map<Integer, MirrorPoundageNode> structure = null == config ? null : config.getStructure();
-		Integer cfgPoundageNodeId = param.getNodePath().poll(); 
-		PoundageStructure current = poundageStructures.get(cfgPoundageNodeId);
+		int cfgNodeId = message.getNodePath().poll();
+		PoundageStructure current = poundageStructures.get(cfgNodeId);
 		if (null == current)
 			return BtkjConsts.RESULT.POUNDAGE_NODE_NOT_EXIST;
-		MirrorPoundageNode mirrorCurrent = null == structure ? null : structure.get(cfgPoundageNodeId);
-		if (param.getType() == Type.EDIT && null == mirrorCurrent) {
-			mirrorCurrent = new MirrorPoundageNode();
-			mirrorCurrent.setCfgPoundageNodeId(cfgPoundageNodeId);
-			if (null == structure)
-				structure = new HashMap<Integer, MirrorPoundageNode>();
-			structure.put(cfgPoundageNodeId, mirrorCurrent);
-			config.setStructure(structure);
-		}
-		if (null == mirrorCurrent)
-			return BtkjConsts.RESULT.POUNDAGE_CONFIG_NODE_NOT_EXIST;
-		Result<Void> result = _poundageConfigEdit(config, param, current, mirrorCurrent, null);
-		if (param.getType() == Type.DELETE && CollectionUtil.isEmpty(mirrorCurrent.getChildren())
-				&& 0 == mirrorCurrent.getCommercialRate() && 0 == mirrorCurrent.getCompulsoryRate()
-				&& 0 == mirrorCurrent.getCommercialRetainRate() && 0 == mirrorCurrent.getCompulsoryRetainRate()) {
-			structure.remove(mirrorCurrent.getCfgPoundageNodeId());
-			if (CollectionUtil.isEmpty(structure))
-				poundageConfigMapper.delete(config.key());
-		}
+		PoundageConfig config = callback.getPoundageConfig(message, cfgNodeId);
+		Result<?> result = _poundageErgodic(message, current, config.getStructure().get(cfgNodeId), null, callback);
+		if (result.isSuccess()) 
+			callback.finishErgodic(config, config.getStructure().get(cfgNodeId), null);
 		return result;
 	}
 	
-	private Result<Void> _poundageConfigEdit(PoundageConfig config, PoundageConfigEditParam param, PoundageStructure current, MirrorPoundageNode mirrorCurrent, MirrorPoundageNode parent) {
-		Integer cfgPoundageNodeId = param.getNodePath().poll();
-		if (null == cfgPoundageNodeId)
-			return _poundageConfigEdit(param, current, mirrorCurrent, parent);
+	private <MESSAGE extends PoundageErogidicMessage> Result<?> _poundageErgodic(MESSAGE message, PoundageStructure current, MirrorPoundageNode mirrorCurrent, MirrorPoundageNode parent, ErgodicCallback callback) {
+		Integer nextNodeId = message.getNodePath().poll();
+		if (null == nextNodeId)
+			return callback.execute(message, current, mirrorCurrent);
 		else {
-			current = null == current.getChildren() ? null : current.getChildren().get(cfgPoundageNodeId);
+			Map<Integer, PoundageStructure> children = _children(current);
+			current = null == children ? null : children.get(nextNodeId);
 			if (null == current)
 				return BtkjConsts.RESULT.POUNDAGE_NODE_NOT_EXIST;
-			MirrorPoundageNode nextMirrorCurrent = null == mirrorCurrent.getChildren() ? null : mirrorCurrent.getChildren().get(cfgPoundageNodeId);
-			if (param.getType() == Type.EDIT && null == nextMirrorCurrent) {
-				nextMirrorCurrent = new MirrorPoundageNode();
-				nextMirrorCurrent.setCfgPoundageNodeId(cfgPoundageNodeId);
-				if (null != parent)
-					parent.addChild(nextMirrorCurrent);
-			}
+			MirrorPoundageNode nextMirrorCurrent = callback.nextMirrorPoundageNode(nextNodeId, mirrorCurrent, parent);
 			if (null == nextMirrorCurrent)
-				return BtkjConsts.RESULT.POUNDAGE_CONFIG_NODE_NOT_EXIST;
-			Result<Void> result = _poundageConfigEdit(config, param, current, nextMirrorCurrent, mirrorCurrent);
-			if (null != parent && param.getType() == Type.DELETE && CollectionUtil.isEmpty(mirrorCurrent.getChildren())
-					&& 0 == mirrorCurrent.getCommercialRate() && 0 == mirrorCurrent.getCompulsoryRate()
-					&& 0 == mirrorCurrent.getCommercialRetainRate() && 0 == mirrorCurrent.getCompulsoryRetainRate())
-				parent.removeChild(mirrorCurrent);
+				return BtkjConsts.RESULT.POUNDAGE_NODE_CONFIG_NOT_EXIST;
+			Result<?> result = _poundageErgodic(message, current, nextMirrorCurrent, mirrorCurrent, callback);
+			if (result.isSuccess())
+				callback.finishErgodic(null, mirrorCurrent, parent);
 			return result;
 		}
 	}
 	
-	private Result<Void> _poundageConfigEdit(PoundageConfigEditParam param, PoundageStructure current, MirrorPoundageNode mirrorCurrent, MirrorPoundageNode parent) {
-		switch (param.getType()) {
-		case EDIT:
-			Node node = param.getNode();
-			mirrorCurrent.setCommercialRate(node.getCommercialRate());
-			mirrorCurrent.setCompulsoryRate(node.getCompulsoryRate());
-			mirrorCurrent.setCommercialRetainRate(node.getCommercialRetainRate());
-			mirrorCurrent.setCompulsoryRetainRate(node.getCompulsoryRetainRate());
-			_poundageCoefficientEdit(param.getTid(), node.getCoefficients(), current, mirrorCurrent);
-			break;
-		case DELETE:
-			mirrorCurrent.setCommercialRate(0);
-			mirrorCurrent.setCompulsoryRate(0);
-			mirrorCurrent.setCoefficients(null);
-			mirrorCurrent.setCommercialRetainRate(0);
-			mirrorCurrent.setCompulsoryRetainRate(0);
-			parent.removeChild(mirrorCurrent);
-		case EFFECTIVE:
-			mirrorCurrent.setCoefficientsEffective(true);
-			break;
-		case INEFFECTIVE:
-			mirrorCurrent.setCoefficientsEffective(false);
-			break;
-		default:
-			return Consts.RESULT.FORBID;
-		}
-		return Consts.RESULT.OK;
-	}
-	
-	private Result<Void> _poundageCoefficientEdit(int tid, Map<Integer, MirrorCoefficient> update, PoundageStructure current, MirrorPoundageNode mirrorCurrent) {
-		if (!CollectionUtil.isEmpty(update)) {
-			CoefficientStructure cs = current.getCoefficientStructure();
-			Map<Integer, CoefficientNode> refrence = null == cs ? null : cs.getNodes();
-			if (null == refrence) 
-				return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_NOT_EXIST;
-			Result<Void> result = _poundageCoefficientCheck(tid, update, refrence);
-			if (!result.isSuccess())
-				return result;
-			mirrorCurrent.setCoefficients(update);
-		} else 
-			mirrorCurrent.setCoefficients(null);
-		return Consts.RESULT.OK;
-	}
-	
-	private Result<Void> _poundageCoefficientCheck(int tid, Map<Integer, MirrorCoefficient> update, Map<Integer, CoefficientNode> refrence) {
-		for (Entry<Integer, MirrorCoefficient> entry : update.entrySet()) {
-			CoefficientNode coefficient = refrence.get(entry.getKey());
-			if (null == coefficient)
-				return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_NOT_EXIST;
-			MirrorCoefficient mirrorCoefficient = entry.getValue();
-			mirrorCoefficient.setId(entry.getKey());
-			Map<Integer, Integer> ratios = mirrorCoefficient.getRatios();
-			Set<Integer> ranges = null;
-			if (coefficient.isCustom())
-				ranges = poundageCoefficientRangeMapper.ranges(tid, coefficient.getCfgCoefficientId()).keySet();
-			else 
-				ranges = null == coefficient.getRanges() ? null : coefficient.getRanges().keySet();
-			for (Entry<Integer, Integer> e : ratios.entrySet()) {
-				if (!ranges.remove(e.getKey()))
-					return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST;
+	/**
+	 * 有些节点需要自定义
+	 * 
+	 * @param structure
+	 * @return
+	 */
+	private Map<Integer, PoundageStructure> _children(PoundageStructure structure) {
+		Map<Integer, PoundageStructure> nodes = new HashMap<Integer, PoundageStructure>();
+		switch (structure.getType()) {
+		case SPECIAL:
+			Map<Integer, VehicleBrand> brands = vehicleBrandMapper.getAll();
+			for (VehicleBrand brand : brands.values()) {
+				PoundageStructure node = new PoundageStructure();
+				node.setId(brand.getId());
+				node.setName(brand.getName());
+				node.setType(PoundageNodeType.VEHICLE_BRAND);
+				node.setCoefficientStructure(coefficientStructures.get(NO_BIZ_COACH_COEFFICIENT_STRUCTURE));
 			}
-			update = entry.getValue().getChildren();
-			if (CollectionUtil.isEmpty(update))
-				continue;
-			refrence = coefficient.getChildren();
-			if (null == refrence)
-				return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_NOT_EXIST;
-			return _poundageCoefficientCheck(tid, update, refrence);
+			return nodes;
+		case VEHICLE_BRAND:
+			Map<Integer, VehicleDept> depts = vehicleDeptMapper.getAll();
+			for (VehicleDept dept : depts.values()) {
+				PoundageStructure node = new PoundageStructure();
+				node.setId(dept.getId());
+				node.setName(dept.getName());
+				node.setType(PoundageNodeType.VEHICLE_NAME);
+				node.setCoefficientStructure(coefficientStructures.get(NO_BIZ_COACH_COEFFICIENT_STRUCTURE));
+			}
+			return nodes;
+		case VEHICLE_DEPT:
+			Map<Integer, VehicleModel> models = vehicleModelMapper.getAll();
+			for (VehicleModel model : models.values()) {
+				PoundageStructure node = new PoundageStructure();
+				node.setId(model.getId());
+				node.setName(model.getName());
+				node.setType(PoundageNodeType.VEHICLE_NAME);
+				node.setCoefficientStructure(coefficientStructures.get(NO_BIZ_COACH_COEFFICIENT_STRUCTURE));
+			}
+			return nodes;
+		default:
+			return null == structure.getChildren() ? null : structure.getChildren();
 		}
-		return Consts.RESULT.OK;
-	}
-	
-	public PoundageNodeConfigInfo poundageNodeConfig(PoundageNodeConfigParam param) {
-		PoundageConfig config = poundageConfigMapper.getByKey(param.key());
-		Map<Integer, MirrorPoundageNode> structure = null == config ? null : config.getStructure();
-		if (CollectionUtil.isEmpty(structure))
-			return null;
-		MirrorPoundageNode node = _searchMirrorPoundageNode(structure, param.getNodePath());
-		if (null == node)
-			return null;
-		Map<Integer, MirrorCoefficient> coefficients = node.getCoefficients();
-		MirrorCoefficient coefficient = null;
-		if (!CollectionUtil.isEmpty(coefficients)) 
-			coefficient = _searchMirrorCoefficient(coefficients, param.getCfgCoefficientId());
-		return new PoundageNodeConfigInfo(node, coefficient);
-	}
-	
-	private MirrorPoundageNode _searchMirrorPoundageNode(Map<Integer, MirrorPoundageNode> nodes, LinkedList<Integer> nodePath) {
-		Integer cfgPoundageNodeId = nodePath.poll();
-		MirrorPoundageNode node = nodes.get(cfgPoundageNodeId);
-		if (nodePath.isEmpty()) 
-			return node;
-		else {
-			if (null == node || CollectionUtil.isEmpty(node.getChildren()))
-				return null;
-			return _searchMirrorPoundageNode(node.getChildren(), nodePath);
-		}
-	}
-	
-	private MirrorCoefficient _searchMirrorCoefficient(Map<Integer, MirrorCoefficient> coefficients, int cfgCoefficientId) {
-		for (Entry<Integer, MirrorCoefficient> entry : coefficients.entrySet()) {
-			if (entry.getKey() == cfgCoefficientId)
-				return entry.getValue();
-			if (CollectionUtil.isEmpty(entry.getValue().getChildren())) 
-				continue;
-			MirrorCoefficient coefficient = _searchMirrorCoefficient(entry.getValue().getChildren(), cfgCoefficientId);
-			if (null != coefficient)
-				return coefficient;
-		}
-		return null;
 	}
 	
 	public Map<Integer, PoundageStructure> getPoundageStructures() {

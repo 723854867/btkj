@@ -1,7 +1,6 @@
 package org.btkj.vehicle.mybatis;
 
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -14,10 +13,11 @@ import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
+import org.btkj.vehicle.pojo.param.TenantSetParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
+import org.btkj.vehicle.redis.JianJieInsurerMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -39,6 +39,8 @@ public class Tx {
 	private BonusScaleConfigDao bonusScaleConfigDao;
 	@Resource
 	private TenantInsurerMapper tenantInsurerMapper;
+	@Resource
+	private JianJieInsurerMapper jianJieInsurerMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -142,7 +144,7 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert) {
-		tenantInsurerMapper.insurerEdit(tid, insurersDelete, insurersUpdate, insurersInsert);
+	public void insurerEdit(TenantSetParam param) {
+		tenantInsurerMapper.insurerEdit(param);
 	}
 }

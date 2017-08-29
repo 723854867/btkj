@@ -2,23 +2,23 @@ package org.btkj.vehicle.pojo.entity;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class TenantInsurer implements UniqueModel<String> {
+public class JianJieInsurer implements UniqueModel<Integer> {
 
-	private static final long serialVersionUID = 4987424246445479663L;
+	private static final long serialVersionUID = 7634665860196111662L;
 
-	private String key;
+	private int id;
 	private int tid;
+	private int companyId;
 	private int insurerId;
-	private int lane;
 	private int created;
 	private int updated;
 
-	public String getKey() {
-		return key;
+	public int getId() {
+		return id;
 	}
-	
-	public void setKey(String key) {
-		this.key = key;
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getTid() {
@@ -29,6 +29,14 @@ public class TenantInsurer implements UniqueModel<String> {
 		this.tid = tid;
 	}
 
+	public int getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
+
 	public int getInsurerId() {
 		return insurerId;
 	}
@@ -37,14 +45,6 @@ public class TenantInsurer implements UniqueModel<String> {
 		this.insurerId = insurerId;
 	}
 
-	public int getLane() {
-		return lane;
-	}
-	
-	public void setLane(int lane) {
-		this.lane = lane;
-	}
-	
 	public int getCreated() {
 		return created;
 	}
@@ -62,7 +62,7 @@ public class TenantInsurer implements UniqueModel<String> {
 	}
 
 	@Override
-	public String key() {
-		return this.key;
+	public Integer key() {
+		return this.id;
 	}
 }

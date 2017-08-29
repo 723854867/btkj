@@ -9,21 +9,23 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.Type;
+import org.btkj.vehicle.pojo.param.PoundageErogidicParam;
+import org.btkj.vehicle.pojo.param.PoundageErogidicParam.Type;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
-public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageConfigEditParam> {
+public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageErogidicParam> {
 	
 	@Resource
 	private BonusService bonusService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigEditParam param) {
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageErogidicParam param) {
+		if (param.getType() == Type.NODE_CONFIG)
+			return Consts.RESULT.FORBID;
 		param.setTid(tenant.getTid());
 		if (param.getType() == Type.EDIT) {
-			PoundageConfigEditParam.Node node = param.getNode();
+			PoundageErogidicParam.Node node = param.getNode();
 			if (null == node)
 				return Consts.RESULT.FORBID;
 			node.setCommercialRate(Math.min(node.getCommercialRate(), BtkjConsts.LIMITS.MAX_COMMISION_RATE));
@@ -35,6 +37,6 @@ public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageConfigEditParam
 			node.setCommercialRetainRate(Math.max(node.getCommercialRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
 			node.setCompulsoryRetainRate(Math.max(node.getCompulsoryRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
 		}
-		return null;
+		return bonusService.poundageErgodic(param);
 	}
 }

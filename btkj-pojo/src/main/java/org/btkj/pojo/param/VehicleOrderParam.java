@@ -13,6 +13,7 @@ import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
+import org.btkj.pojo.info.VehicleInfo;
 import org.rapid.util.validator.custom.CarEngine;
 import org.rapid.util.validator.custom.CarLicense;
 import org.rapid.util.validator.custom.CarVin;
@@ -285,6 +286,20 @@ public class VehicleOrderParam extends EmployeeParam {
 	
 	public void setInsurances(Map<CommercialInsuranceType, InsuranceItem> insurances) {
 		this.insurances = insurances;
+	}
+	
+	public void bindVehicleInfo(VehicleInfo vehicleInfo) { 
+		this.vehicleId = vehicleInfo.getId();
+		this.seat = vehicleInfo.getSeat();
+		if (null != vehicleInfo.getPrice())
+			this.price = vehicleInfo.getPrice();
+		if (null != vehicleInfo.getPriceNoTax())
+			this.priceNoTax = vehicleInfo.getPriceNoTax();
+		this.name = vehicleInfo.getName();
+		this.load = vehicleInfo.getLoad();
+		this.transmissionName = vehicleInfo.getTransmissionName();
+		this.load = vehicleInfo.getLoad();
+		this.exhaust = vehicleInfo.getExhaust();
 	}
 	
 	public class Unit implements Serializable {

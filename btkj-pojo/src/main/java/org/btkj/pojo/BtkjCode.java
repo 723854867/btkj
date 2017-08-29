@@ -59,6 +59,8 @@ public enum BtkjCode implements ICode {
 	 */
 	ERROR_INSURANCE_SCHEMA(518, "error insurance schema"),
 	
+	VEHICLE_INFO_NILL(519, "车辆信息获取失败!"),
+	
 	/**
 	 * 险企不存在
 	 */
@@ -272,7 +274,7 @@ public enum BtkjCode implements ICode {
 	
 	POUNDAGE_NODE_NOT_EXIST(700, "手续费节点不存在"),
 	POUNDAGE_CONFIG_NOT_EXIST(701, "手续费配置不存在"),
-	POUNDAGE_CONFIG_NODE_NOT_EXIST(701, "手续费节点配置不存在"),
+	POUNDAGE_NODE_CONFIG_NOT_EXIST(701, "手续费节点配置不存在"),
 	POUNDAGE_COEFFICIENT_NOT_EXIST(702, "手续费系数不存在"),
 	POUNDAGE_COEFFICIENT_NOT_CUSTOM(703, "手续费系数不允许自定义范围"),
 	POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST(704, "手续费系数范围不存在"),

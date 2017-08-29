@@ -55,11 +55,11 @@ public class VehicleUtil {
 	 * @return
 	 */
 	public static final PolicyNature natureFromJianJie(String baseStatus) {
-		if (baseStatus.equals("新"))
+		if (baseStatus.equals("新保"))
 			return PolicyNature.NEW;
-		else if (baseStatus.equals("转"))
+		else if (baseStatus.equals("转保"))
 			return PolicyNature.RE_INSURANCE;
-		else if (baseStatus.equals("续"))
+		else if (baseStatus.equals("续保"))
 			return PolicyNature.RENEWAL;
 		else
 			throw new RuntimeException("简捷续保状态错误 ： " + baseStatus);

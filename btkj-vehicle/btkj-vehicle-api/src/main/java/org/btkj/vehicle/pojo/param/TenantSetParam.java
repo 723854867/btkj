@@ -1,4 +1,4 @@
-package org.btkj.master.pojo.param;
+package org.btkj.vehicle.pojo.param;
 
 import java.util.Map;
 import java.util.Set;

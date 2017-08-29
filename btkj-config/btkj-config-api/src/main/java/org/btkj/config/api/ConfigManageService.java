@@ -49,6 +49,14 @@ public interface ConfigManageService {
 	Result<Void> areaEdit(AreaEditParam param);
 	
 	/**
+	 * 获取指定类型的模块
+	 * 
+	 * @param type
+	 * @return
+	 */
+	Map<Integer, ModularDocument> modulars(ModularType type);
+	
+	/**
 	 * 获取权限模块
 	 * 
 	 * @param tarId: 目标ID

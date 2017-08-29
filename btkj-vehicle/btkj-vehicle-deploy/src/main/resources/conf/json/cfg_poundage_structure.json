@@ -52,12 +52,12 @@
 		"cfgPoundageNodeId":16,
 		"cfgCoefficientStructureId":1,
 		"children":{
-			"17":{"cfgPoundageNodeId":17,"cfgCoefficientStructureId":1},
-			"18":{"cfgPoundageNodeId":18,"cfgCoefficientStructureId":1},
 			"2":{
 				"cfgPoundageNodeId":2,
 				"cfgCoefficientStructureId":1,
 				"children":{
+					"17":{"cfgPoundageNodeId":17,"cfgCoefficientStructureId":1},
+					"18":{"cfgPoundageNodeId":18},
 					"19":{
 						"cfgPoundageNodeId":19,
 						"cfgCoefficientStructureId":1,

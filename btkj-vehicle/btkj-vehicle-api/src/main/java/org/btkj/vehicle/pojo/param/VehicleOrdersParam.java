@@ -1,10 +1,10 @@
 package org.btkj.vehicle.pojo.param;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.pojo.enums.OrderFilterState;
+import org.rapid.util.validator.custom.CarLicense;
 
 public class VehicleOrdersParam extends EmployeeParam {
 
@@ -16,8 +16,8 @@ public class VehicleOrdersParam extends EmployeeParam {
 	private Integer uid;
 	@Min(1)
 	private Integer tid;
-	@Size(min = 1, max = 20)
-	private String batchId;
+	@CarLicense
+	private String license;
 	@Min(1)
 	private Integer tarId;
 	private OrderFilterState state;
@@ -46,12 +46,12 @@ public class VehicleOrdersParam extends EmployeeParam {
 		this.tid = tid;
 	}
 
-	public String getBatchId() {
-		return batchId;
+	public String getLicense() {
+		return license;
 	}
-
-	public void setBatchId(String batchId) {
-		this.batchId = batchId;
+	
+	public void setLicense(String license) {
+		this.license = license;
 	}
 
 	public Integer getTarId() {

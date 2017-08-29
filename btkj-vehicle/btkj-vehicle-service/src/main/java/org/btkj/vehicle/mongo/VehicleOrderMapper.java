@@ -79,8 +79,8 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		List<Bson> list = new ArrayList<Bson>();
 		if (null != param.getAppId())
 			list.add(Filters.eq(BtkjConsts.FIELD.APPID, param.getAppId()));
-		if (null != param.getBatchId())
-			list.add(Filters.eq(BtkjConsts.FIELD.BATCHID, param.getBatchId()));
+		if (null != param.getLicense())
+			list.add(Filters.eq(FIELD_LICENSE, param.getLicense()));
 		if (null != param.getTarId())
 			list.add(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, param.getTarId()));
 		if (null != param.getUid())
@@ -155,6 +155,8 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	 * @param orders
 	 */
 	public void issuedUpdate(List<VehicleOrder> orders) {
+		if (CollectionUtil.isEmpty(orders))
+			return;
 		Map<Bson, Bson> updates = new HashMap<Bson, Bson>();
 		for (VehicleOrder order : orders) 
 			updates.put(Filters.eq(FIELD_ID, order.get_id()), 

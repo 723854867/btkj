@@ -24,6 +24,7 @@ public interface BtkjConsts {
 		Result REGION_NOT_EXIST					= Result.result(BtkjCode.REGION_NOT_EXIST);
 		Result BANNER_NOT_EXIST					= Result.result(BtkjCode.BANNER_NOT_EXIST);
 		Result TENANT_NOT_EXIST					= Result.result(BtkjCode.TENANT_NOT_EXIST);
+		Result VEHICLE_INFO_NILL				= Result.result(BtkjCode.VEHICLE_INFO_NILL);
 		Result ORDER_STATE_ERROR				= Result.result(BtkjCode.ORDER_STATE_ERROR);
 		Result ARTICLE_NOT_EXIST				= Result.result(BtkjCode.ARTICLE_NOT_EXIST);
 		Result INSURER_NOT_EXIST				= Result.result(BtkjCode.INSURER_NOT_EXIST);
@@ -57,7 +58,7 @@ public interface BtkjConsts {
 		Result BONUS_MANAGE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.BONUS_MANAGE_CONFIG_NOT_EXIST);
 		Result POUNDAGE_COEFFICIENT_NOT_CUSTOM	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_NOT_CUSTOM);
 		Result POUNDAGE_COEFFICIENT_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_NOT_EXIST);
-		Result POUNDAGE_CONFIG_NODE_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_CONFIG_NODE_NOT_EXIST);
+		Result POUNDAGE_NODE_CONFIG_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_NODE_CONFIG_NOT_EXIST);
 		Result INSURER_MOD_NOT_SUBSET_OF_QUOTE	= Result.result(BtkjCode.INSURER_MOD_NOT_SUBSET_OF_QUOTE);
 		Result ID_TYPE_UNSUITABLE_TO_UNIT_TYPE	= Result.result(BtkjCode.ID_TYPE_UNSUITABLE_TO_UNIT_TYPE);
 		Result POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST	= Result.result(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
@@ -72,7 +73,6 @@ public interface BtkjConsts {
 		String APPID							= "appId";
 		String APP_ID							= "app_id";
 		String PARENT_ID						= "parent_id";
-		String BATCHID							= "batchId";
 		String EMPLOYEEID						= "employeeId";
 		String STATE							= "state";
 		String CREATED							= "created";

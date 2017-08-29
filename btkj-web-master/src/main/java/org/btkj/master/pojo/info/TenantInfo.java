@@ -223,7 +223,6 @@ public class TenantInfo implements Serializable {
 		private int insurerId;
 		private String insurerName;
 		private int lane;
-		private int jianJieId;
 		private int created;
 		private int updated;
 		public Insurer(TenantInsurer tinsurer, org.btkj.pojo.entity.Insurer insurer) {
@@ -232,7 +231,6 @@ public class TenantInfo implements Serializable {
 			if (null != insurer)
 				this.insurerName = insurer.getName();
 			this.lane = tinsurer.getLane();
-			this.jianJieId = tinsurer.getJianJieId();
 			this.created = tinsurer.getCreated();
 			this.updated = tinsurer.getUpdated();
 		}
@@ -259,12 +257,6 @@ public class TenantInfo implements Serializable {
 		}
 		public void setLane(int lane) {
 			this.lane = lane;
-		}
-		public int getJianJieId() {
-			return jianJieId;
-		}
-		public void setJianJieId(int jianJieId) {
-			this.jianJieId = jianJieId;
 		}
 		public int getCreated() {
 			return created;

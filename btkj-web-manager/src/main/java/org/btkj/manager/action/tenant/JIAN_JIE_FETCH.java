@@ -15,6 +15,7 @@ import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.param.EmployeeParam;
+import org.btkj.user.api.UserManageService;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -31,6 +32,8 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 	
 	@Resource
 	private JianJieService jianJieService;
+	@Resource
+	private UserManageService userManageService;
 	@Resource
 	private VehicleManageService vehicleManageService;
 	
@@ -53,6 +56,9 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 			}
 		}
 		vehicleManageService.jianJieSynchronize(employee, employeeService.employeeTips(set), info);
+		tenant.setJianJieFetchTime(DateUtil.currentTime());
+		tenant.setUpdated(DateUtil.currentTime());
+		userManageService.tenantUpdate(tenant);
 		return Consts.RESULT.OK;
 	}
 }

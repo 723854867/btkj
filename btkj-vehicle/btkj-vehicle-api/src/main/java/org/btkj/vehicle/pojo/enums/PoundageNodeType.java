@@ -19,7 +19,10 @@ public enum PoundageNodeType {
 	
 	TRANSFER,		
 	
-	SPECIAL,		
+	SPECIAL,
+	VEHICLE_BRAND,
+	VEHICLE_DEPT,
+	VEHICLE_NAME,
 	
 	HOME_USE,		
 	ORGAN,			
@@ -28,14 +31,6 @@ public enum PoundageNodeType {
 	CITY_BUS,	
 	HIGHWAY,		
 	
-	A1,			
-	A2,				
-	A3,				
-	A4,				
-	A5,				
-	
-	B1,				
-	B2,				
-	B3,				
-	B4;				
+	SEAT_COUNT,				
+	LOAD;				
 }

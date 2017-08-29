@@ -79,6 +79,11 @@
 		<property name="dao" ref="bonusScaleConfigDao" />
 	</bean>
 	
+	<bean id="jianJieInsurerMapper" class="org.btkj.vehicle.redis.JianJieInsurerMapper">
+		<property name="redis" ref="redis" />
+		<property name="dao" ref="jianJieInsurerDao" />
+	</bean>
+	
 	<bean id="poundageCoefficientRangeMapper" class="org.btkj.vehicle.redis.PoundageCoefficientRangeMapper">
 		<property name="redis" ref="redis" />
 		<property name="dao" ref="poundageCoefficientRangeDao" />

@@ -43,6 +43,7 @@ import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.enums.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
+import org.btkj.vehicle.realm.Poundage;
 import org.btkj.vehicle.realm.Rule;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.btkj.vehicle.redis.VehicleBrandMapper;
@@ -67,6 +68,8 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Resource
 	private Rule rule;
+	@Resource
+	private Poundage poundage;
 	@Resource
 	private BiHuVehicle biHuVehicle;			// 壁虎车险
 	@Resource
@@ -157,6 +160,9 @@ public class VehicleServiceImpl implements VehicleService {
 		int biHuInsureMod = 0;
 		Map<String, Boolean> leBaoBa = new HashMap<String, Boolean>();
 		VehicleInfo vehicleInfo = _vehicleInfo(tenant, param);
+		if (null == vehicleInfo) 
+			return BtkjConsts.RESULT.VEHICLE_INFO_NILL;
+		param.bindVehicleInfo(vehicleInfo);
 		Set<Integer> insures = NumberUtil.splitIntoPowerOfTwoSet(param.getInsureMod());
 		Map<Integer, Insurer> insurers = configService.insurers(NumberUtil.splitIntoPowerOfTwoSet(param.getQuoteMod()));
 		Map<Lane, Map<Object, VehicleOrder>> orders = new HashMap<Lane, Map<Object, VehicleOrder>>();
@@ -286,7 +292,7 @@ public class VehicleServiceImpl implements VehicleService {
 			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(tenant, uid, order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
-//					bonusManager.calculateBonus(order);					// 报价成功计算手续费
+					poundage.calculate(order);							// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);
 				}

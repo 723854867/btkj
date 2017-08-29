@@ -14,6 +14,7 @@ import org.btkj.pojo.model.InsurUnit;
 import org.btkj.pojo.model.PolicySchema;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.JianJieInsurer;
 import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
@@ -33,15 +34,23 @@ public class EntityGenerator {
 	
 	private static final Logger vehicle_manager_logger = LoggerFactory.getLogger(VehicleManageServiceImpl.class);
 
-	public static final TenantInsurer newTenantInsurer(int tid, int insurerId, Lane lane, int jianJieId, int time) { 
+	public static final TenantInsurer newTenantInsurer(int tid, int insurerId, Lane lane, int time) { 
 		TenantInsurer temp = new TenantInsurer();
 		temp.setKey(tid + Consts.SYMBOL_UNDERLINE + insurerId);
 		temp.setTid(tid);
 		temp.setInsurerId(insurerId);
 		temp.setLane(lane.mark());
-		temp.setJianJieId(jianJieId);
 		temp.setCreated(time);
 		temp.setUpdated(time);
+		return temp;
+	}
+	
+	public static final JianJieInsurer newJianJieInsurer(int tid, int insurerId, int companyId) { 
+		JianJieInsurer temp = new JianJieInsurer();
+		temp.setCompanyId(companyId);
+		temp.setTid(tid);
+		temp.setInsurerId(insurerId);
+		temp.setCreated(DateUtil.currentTime());
 		return temp;
 	}
 	

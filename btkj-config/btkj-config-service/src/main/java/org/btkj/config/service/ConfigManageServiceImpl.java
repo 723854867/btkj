@@ -157,6 +157,23 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
+	public Map<Integer, ModularDocument> modulars(ModularType type) {
+		Map<Integer, Modular> modulars = null;
+		switch (type) {
+		case BT:
+			modulars = modularMapper.getAll();
+			break;
+		case APP:
+		case TENANT:
+			modulars = modularMapper.modulars(type);
+			break;
+		default:
+			return null;
+		}
+		return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
+	}
+	
+	@Override
 	public Map<Integer, ModularDocument> modulars(int tarId, TarType tarType, ModularType modularType) {
 		Map<Integer, Modular> modulars = null;
 		if (tarId > 0) {

@@ -3,7 +3,6 @@ package org.btkj.vehicle.api;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleBrand;
@@ -15,10 +14,13 @@ import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.JianJieInsurer;
 import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
+import org.btkj.vehicle.pojo.param.JianJieInsurerEditParam;
+import org.btkj.vehicle.pojo.param.TenantSetParam;
 import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
 import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
 import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
@@ -196,10 +198,22 @@ public interface VehicleManageService {
 	
 	/**
 	 * 商户车险险企设置
-	 * 
-	 * @param insurersDelete
-	 * @param insurersUpdate
-	 * @param insurersInsert
 	 */
-	void insurerEdit(int tid, Set<String> insurersDelete, Map<String, TenantInsurer> insurersUpdate, Map<String, TenantInsurer> insurersInsert);
+	void insurerEdit(TenantSetParam param);
+	
+	/**
+	 * 获取指定商户开通的所有简捷险企
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Map<Integer, JianJieInsurer> jianJieInsurers(int tid);
+	
+	/**
+	 * 简捷险企编辑
+	 * 
+	 * @param param
+	 * @return
+	 */
+	Result<?> jianJieInsurerEdit(JianJieInsurerEditParam param);
 }

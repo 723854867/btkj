@@ -16,11 +16,9 @@ import org.btkj.vehicle.cache.domain.CfgCoefficientRange;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.model.CoefficientRange;
-import org.btkj.vehicle.pojo.model.PoundageNodeConfigInfo;
 import org.btkj.vehicle.pojo.model.PoundageStructure;
 import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageNodeConfigParam;
+import org.btkj.vehicle.pojo.param.PoundageErogidicParam;
 import org.btkj.vehicle.realm.Poundage;
 import org.btkj.vehicle.redis.PoundageCoefficientRangeMapper;
 import org.rapid.util.common.Consts;
@@ -119,12 +117,7 @@ public class BonusServiceImpl implements BonusService {
 	}
 	
 	@Override
-	public Result<Void> poundageConfigEdit(PoundageConfigEditParam param) {
-		return poundage.poundageConfigEdit(param);
-	}
-	
-	@Override
-	public PoundageNodeConfigInfo poundageNodeConfig(PoundageNodeConfigParam param) {
-		return poundage.poundageNodeConfig(param);
+	public Result<?> poundageErgodic(PoundageErogidicParam param) {
+		return poundage.poundageErgodic(param);
 	}
 }
