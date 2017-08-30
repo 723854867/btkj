@@ -1,5 +1,7 @@
 package org.btkj.vehicle.pojo.enums;
 
+import org.rapid.util.math.compare.Comparison;
+
 public enum PoundageCoefficientType {
 
 	/**
@@ -51,4 +53,37 @@ public enum PoundageCoefficientType {
 	 * 年龄
 	 */
 	AGE;
+	
+	public boolean checkValue(Comparison comparison, String[] values) {
+		switch (comparison) {
+		case gt:
+		case gte:
+		case lt:
+		case lte:
+		case eq:
+			if (values.length != 1)
+				return false;
+			String val = values[0];
+			try {
+				Integer.valueOf(val);
+			} catch (Exception e) {
+				return false;
+			}
+			return true;
+		case bteween:
+		case lbteween:
+		case rbteween:
+			if (values.length != 2)
+				return false;
+			try {
+				int min = Integer.valueOf(values[0]);
+				int max = Integer.valueOf(values[1]);
+				return max > min;
+			} catch (Exception e) {
+				return false;
+			}
+		default:
+			return false;
+		}
+	}
 }

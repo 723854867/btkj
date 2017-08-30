@@ -132,8 +132,8 @@ public class Tx {
 		privilegeDao.deleteByTarTypeAndTarId(TarType.APP.mark(), appId);
 		Set<Integer> set = null;
 		if (!CollectionUtil.isEmpty(modulars)) {
-			set = _modularsFilter(ModularType.APP, modulars);
-			set.addAll(_modularsFilter(ModularType.TENANT, modulars));
+			set = _modularsFilter(ModularType.ADMIM, modulars);
+			set.addAll(_modularsFilter(ModularType.EMPLOYEE, modulars));
 		}
 		Map<String, Privilege> privileges = CollectionUtil.isEmpty(set) ? null : EntityGenerator.newPrivileges(TarType.APP, appId, set);
 		if (!CollectionUtil.isEmpty(privileges))
@@ -151,7 +151,7 @@ public class Tx {
 	@Transactional
 	public TxCallback authorizeAdmin(int adminId, Set<Integer> modulars) {
 		privilegeDao.deleteByTarTypeAndTarId(TarType.ADMIN.mark(), adminId);
-		Set<Integer> set = CollectionUtil.isEmpty(modulars) ? null : _modularsFilter(ModularType.BT, modulars);
+		Set<Integer> set = CollectionUtil.isEmpty(modulars) ? null : _modularsFilter(ModularType.ADMIM, modulars);
 		Map<String, Privilege> privileges = CollectionUtil.isEmpty(set) ? null : EntityGenerator.newPrivileges(TarType.ADMIN, adminId, set);
 		if (!CollectionUtil.isEmpty(privileges))
 			privilegeDao.replace(privileges.values());

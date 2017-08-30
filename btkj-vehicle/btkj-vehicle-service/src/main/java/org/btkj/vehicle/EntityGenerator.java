@@ -2,6 +2,7 @@ package org.btkj.vehicle;
 
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.VehicleBrand;
 import org.btkj.pojo.entity.VehicleDept;
 import org.btkj.pojo.entity.VehicleModel;
@@ -95,8 +96,8 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final VehiclePolicy newVehiclePolicy(EmployeePO employee, int insurerId, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
-		VehiclePolicy policy = new VehiclePolicy(employee, insurerId, policyId);
+	public static final VehiclePolicy newVehiclePolicy(EmployeePO employee, Insurer insurer, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+		VehiclePolicy policy = new VehiclePolicy(employee, insurer, policyId);
 		VehicleInfomation vehicleInfo = info.getVehicleInfomation();
 		if (null != order) {
 			policy.bindVehicleOrder(order);
@@ -126,8 +127,8 @@ public class EntityGenerator {
 		policy.setOwner(info.getCz());
 		policy.setIdNo(info.getCzZjhm());
 		
-		policy.setIssueDate(vehicleInfo.getFzrq());
-		policy.setEnrollDate(vehicleInfo.getCdrq());
+		policy.setIssueDate(DateUtil.convert(vehicleInfo.getFzrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		policy.setEnrollDate(DateUtil.convert(vehicleInfo.getCdrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
 		policy.setName(vehicleInfo.getPpxh());
 		policy.setVehiclePrice(vehicleInfo.getNewCarCost());
 		policy.setNature(VehicleUtil.natureFromJianJie(info.getBaseStatus()));
@@ -136,14 +137,19 @@ public class EntityGenerator {
 		policy.setEngine(vehicleInfo.getFdjh());
 		policy.setVin(vehicleInfo.getCjh());
 		policy.setSeat(vehicleInfo.getZws());
+		policy.setPrice(vehicleInfo.getNewCarCost());
 		policy.setTransfer(vehicleInfo.isGH());
 		policy.setDetail(info);
 		policy.setDetail(relationInfo);
-		policy.setIssueTime((int) DateUtil.getTime(info.getSkrq(), "yyyy-MM-dd'T'HH:mm:ss") / 1000);
+		policy.setIssuanceTime(DateUtil.getSecondTime(info.getSkrq(), DateUtil.YYYY_MM_DDTHH_MM_SS));
 		BaseInfo commercial = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? info : relationInfo;
 		if (null != commercial && !CollectionUtil.isEmpty(commercial.getInsurances())) 
 			policy.setInsurances(VehicleUtil.jianJieInsuranceMapping(commercial.getInsurances()));
 		return policy;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(DateUtil.getSecondTime("2017-08-28T13:59:30", DateUtil.YYYY_MM_DDTHH_MM_SS));
 	}
 	
 	private static void _fillPolicyErrorLog(VehiclePolicy policy, String desc) {

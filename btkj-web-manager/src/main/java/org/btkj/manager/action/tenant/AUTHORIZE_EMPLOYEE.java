@@ -36,7 +36,7 @@ public class AUTHORIZE_EMPLOYEE extends EmployeeAction<AuthorizeEmployeeParam> {
 			srcId = tenant.getTid();
 			srcType = TarType.TENANT;
 		}
-		configManageService.authorize(srcId, srcType, target.getId(), TarType.EMPLOYEE, ModularType.TENANT, param.getModulars());
+		configManageService.authorize(srcId, srcType, target.getId(), TarType.EMPLOYEE, ModularType.EMPLOYEE, param.getModulars());
 		return Consts.RESULT.OK;
 	}
 }

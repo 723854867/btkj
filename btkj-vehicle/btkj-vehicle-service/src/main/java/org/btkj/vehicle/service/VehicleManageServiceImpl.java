@@ -198,7 +198,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	private void _jianJiePolicyProcess(Map<Integer, EmployeeTip> employees, EmployeePO employee, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehicleOrder> updates, Map<String, VehiclePolicy> policies) {  
-		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? CollectionUtil.emptyArrayList() : vehicleOrderMapper.getByDeliverNos(insuranceType, employee.getTid(), deliverNos);
+		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? CollectionUtil.emptyArrayList() : vehicleOrderMapper.getByDeliverNos(insuranceType, deliverNos);
 		Iterator<Entry<String, BaseInfo>> iterator = processing.entrySet().iterator();
 		while (iterator.hasNext()) {
 			BaseInfo info = iterator.next().getValue();
@@ -237,16 +237,20 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				itr.remove();
 				break;
 			}
-			JianJieInsurer insurer = jianJieInsurerMapper.getByCompanyId(employee.getTid(), info.getCompanyId());
-			if (null == insurer)
+			JianJieInsurer jianJieInsurer = jianJieInsurerMapper.getByCompanyId(employee.getTid(), info.getCompanyId());
+			if (null == jianJieInsurer)
 				logger.error("简捷保单 - {} 险企 - {} 不存在对应的保途险企映射", policyId, info.getCompanyId());
-			if (null != order && insurer.getInsurerId() != order.getInsurerId())
-				logger.error("简捷保单 - {} 险企 - {} 和保途订单 险企ID不匹配, 以保途订单险企为准！", policyId, info.getCompanyId());
+			else {
+				if (null != order && jianJieInsurer.getInsurerId() != order.getInsurerId())
+					logger.error("简捷保单 - {} 险企 - {} 和保途订单 险企ID不匹配, 以保途订单险企为准！", policyId, info.getCompanyId());
+			}
 			if (null != policy)
 				policy.setDetail(info);
-			else
-				policy = EntityGenerator.newVehiclePolicy(employee, insurer.getInsurerId(), policyId, order, info, relationInfo);
-			_processJianJieGsUser(employee.getTid(), employees, policy, order, info.getGsUser());
+			else {
+				Insurer insurer = null == jianJieInsurer ? null : configService.insurer(jianJieInsurer.getInsurerId());
+				policy = EntityGenerator.newVehiclePolicy(employee, insurer, policyId, order, info, relationInfo);
+			}
+			_internalPolicyProcess(employee.getTid(), employees, policy, order, info.getGsUser());
 			policies.put(policyId, policy);
 		}
 	}
@@ -263,12 +267,13 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		return DigestUtils.md5Hex(cmNo + Consts.SYMBOL_UNDERLINE + cpNo);
 	}
 	
-	private void _processJianJieGsUser(int tid, Map<Integer, EmployeeTip> employees, VehiclePolicy policy, VehicleOrder order, String gsUser) {
+	private void _internalPolicyProcess(int tid, Map<Integer, EmployeeTip> employees, VehiclePolicy policy, VehicleOrder order, String gsUser) {
 		if (null != order) {
 			policy.setMark(SalesmanMark.NORMAL);
 			policy.setSalesmanId(order.getEmployeeId());
 			policy.setSalesman(order.getSalesman());
 			policy.setSalesmanMobile(order.getSalesmanMobile());
+			policy.setDeliveryInfo(order.getDeliveryInfo());
 		} else {
 			int employeeId = 0;
 			try {
@@ -293,11 +298,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				policy.setSalesmanMobile(employee.getMobile());
 			}
 		}
-	}
-	
-	@Override
-	public void vehicleOrderIssue(int tid) {
-		
 	}
 	
 	@Override

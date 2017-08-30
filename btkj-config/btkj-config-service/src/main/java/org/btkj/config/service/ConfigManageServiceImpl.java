@@ -157,14 +157,42 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
+	public Map<Integer, ModularDocument> modulars(Integer tarId, ModularType type) {
+		Map<Integer, Modular> map = modularMapper.modulars(type);
+		Map<Integer, ModularDocument> modulars = CollectionUtil.isEmpty(map) ? null : modularDocumentFactory.build(map);
+		if (!CollectionUtil.isEmpty(modulars) && null != tarId) {
+			Map<String, Privilege> privileges = privilegeMapper.privileges(type, tarId);
+			Set<Integer> set = new HashSet<Integer>();
+			for (Privilege privilege : privileges.values())
+				set.add(privilege.getModularId());
+			_ownerCheck(modulars, set);
+		}
+		return modulars;
+	}
+	
+	private boolean _ownerCheck(Map<Integer, ModularDocument> modulars, Set<Integer> set) {
+		for (ModularDocument document : modulars.values()) {
+			if (set.remove(document.node().getId()))
+				document.setOwn(true);
+			if (set.isEmpty())
+				return true;
+			if (CollectionUtil.isEmpty(document.children()))
+				continue;
+			if (_ownerCheck(document.children(), set))
+				return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public Map<Integer, ModularDocument> modulars(ModularType type) {
 		Map<Integer, Modular> modulars = null;
 		switch (type) {
-		case BT:
+		case ADMIM:
 			modulars = modularMapper.getAll();
 			break;
-		case APP:
-		case TENANT:
+		case USER:
+		case EMPLOYEE:
 			modulars = modularMapper.modulars(type);
 			break;
 		default:

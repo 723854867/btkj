@@ -242,6 +242,8 @@ public enum BtkjCode implements ICode {
 	 */
 	JIAN_JIE_ID_NEEDED(680, "jian jie id needed"),
 	
+	COMPARISON_VALUE_ERROR(681, "比较值错误"),
+	
 	/**
 	 * 商户未开通壁虎
 	 */

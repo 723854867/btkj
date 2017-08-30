@@ -23,7 +23,7 @@ public class BonusScaleWaterInfo implements Serializable {
 	public BonusScaleWaterInfo(EmployeeTip et, VehiclePolicy policy, Insurer insurer) {
 		this.name = null != et ? et.getName() : null;
 		this.employeeId = policy.getSalesmanId();
-		this.time = policy.getIssueTime();
+		this.time = policy.getIssuanceTime();
 		this.quota = policy.quotaInCent();
 		this.bonusType = policy.getBonusType();
 		this.insurerId = policy.getInsurerId();

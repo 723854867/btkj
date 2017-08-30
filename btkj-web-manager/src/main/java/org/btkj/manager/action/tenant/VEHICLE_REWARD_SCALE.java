@@ -131,12 +131,12 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			exploit.setDetailType(policy.getBonusType().mark());
 			exploit.setBizId(policy.get_id());
 			exploit.setQuota(policy.quotaInCent());
-			exploit.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssueTime()));
-			exploit.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssueTime()));
-			exploit.setDay(DateUtil.dayOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssueTime()));
-			exploit.setWeek(DateUtil.weekOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssueTime()));
-			exploit.setSeason(DateUtil.season(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssueTime()));
-			exploit.setCreated(policy.getIssueTime());
+			exploit.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setDay(DateUtil.dayOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setWeek(DateUtil.weekOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setSeason(DateUtil.season(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setCreated(policy.getIssuanceTime());
 			return exploit;
 		}
 	}

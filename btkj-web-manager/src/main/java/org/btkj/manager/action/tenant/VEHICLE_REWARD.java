@@ -19,10 +19,10 @@ import org.btkj.payment.pojo.model.ScoreTips;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.enums.BizType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.PolicySchema;
@@ -62,11 +62,11 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		Set<Integer> set = new HashSet<Integer>();
 		for (VehicleOrder order : orders.values()) 
 			set.add(order.getEmployeeId());
-		Map<Integer, EmployeePO> employees = employeeService.employees(set);
+		Map<Integer, EmployeePO> employees = employeeService.employees(set);						
 		Map<Integer, LinkedList<Integer>> manageMap = new HashMap<Integer, LinkedList<Integer>>();
 		int teamDepth = tenant.getTeamDepth();
 		Map<String, BonusManageConfig> configs = null;
-		if (teamDepth > 1) {								// 如果基层设置为小于 1 则不会有管理奖励
+		if (teamDepth > 1) {								// 如果层级设置为小于 1 则不会有管理奖励
 			set.clear();
 			configs = vehicleManageService.bonusManageConfigs(tenant.getTid());
 			for (EmployeePO temp : employees.values()) {
@@ -90,7 +90,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 			if (null != order.getBonus()) {					// 获取手续费
 				LogScore logScore = _vehicleBonuslogScore(order);
 				logScores.add(logScore);
-				_scoreTips(ep.getId(), scores, logScore, BizType.VEHICLE_BONUS);
+				_scoreTips(ep.getId(), scores, logScore, BizType.VEHICLE_POUNDAGE);
 			}
 			LinkedList<Integer> list = manageMap.get(order.getEmployeeId());
 			if (!CollectionUtil.isEmpty(list)) {			// 获取管理费
@@ -129,7 +129,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setEmployeeId(order.getEmployeeId());
 		logScore.setBizId(order.get_id());
 		logScore.setIncome(true);
-		logScore.setType(BizType.VEHICLE_BONUS.mark());
+		logScore.setType(BizType.VEHICLE_POUNDAGE.mark());
 		logScore.setQuota(VehicleUtil.getTotalQuotaInCent(order));
 		int time = order.getCreated() * 1000;
 		logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
@@ -149,7 +149,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setEmployeeId(employeeId);
 		logScore.setBizId(order.get_id());
 		logScore.setIncome(true);
-		logScore.setType(BizType.VEHICLE_BONUS.mark());
+		logScore.setType(BizType.VEHICLE_POUNDAGE.mark());
 		logScore.setQuota(VehicleUtil.getTotalQuotaInCent(order));
 		int time = order.getCreated() * 1000;
 		logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));

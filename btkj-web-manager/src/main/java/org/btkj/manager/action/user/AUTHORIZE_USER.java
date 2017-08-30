@@ -33,7 +33,7 @@ public class AUTHORIZE_USER extends UserAction<AuthorizeParam> {
 			srcId = app.getId();
 			srcType = TarType.APP;
 		}
-		configManageService.authorize(srcId, srcType, target.getUid(), TarType.USER, ModularType.APP, param.getModulars());
+		configManageService.authorize(srcId, srcType, target.getUid(), TarType.USER, ModularType.USER, param.getModulars());
 		return Consts.RESULT.OK;
 	}
 }

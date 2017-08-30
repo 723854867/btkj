@@ -71,13 +71,6 @@ public interface VehicleManageService {
 	void jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
 	
 	/**
-	 * 出单：将简捷同步过来的保单所对应的订单全部设置为已出单
-	 * 
-	 * @param tid
-	 */
-	void vehicleOrderIssue(int tid);
-	
-	/**
 	 * 汽车品牌列表
 	 * 
 	 * @return

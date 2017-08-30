@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import org.btkj.config.mybatis.dao.PrivilegeDao;
 import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Privilege;
+import org.btkj.pojo.enums.ModularType;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.key.Pair;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
@@ -23,6 +24,21 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 
 	public PrivilegeMapper() {
 		super(new ByteProtostuffSerializer<Privilege>(), "hash:db:privilege");
+	}
+	
+	public Map<String, Privilege> privileges(ModularType type, int tarId) { 
+		Map<String, Privilege> map = _checkLoad(type, tarId);
+		if (null != map)
+			return map;
+		List<byte[]> list = redis.hmsget(redisKey, _setKey(type.mark(), tarId));
+		if (null == list)
+			return Collections.EMPTY_MAP;
+		map = new HashMap<String, Privilege>();
+		for (byte[] buffer : list) {
+			Privilege temp = serializer.antiConvet(buffer);
+			map.put(temp.getId(), temp);
+		}
+		return map;
 	}
 	
 	public Map<String, Privilege> privileges(TarType tarType, int tarId) { 
@@ -42,6 +58,15 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 	
 	public void privilegesClear(TarType tarType, int tarId) { 
 		redis.hmsdrop(redisKey, _setKey(tarType.mark(), tarId));
+	}
+	
+	private Map<String, Privilege> _checkLoad(ModularType type, int tarId) {
+		if (!checkLoad(_controllerField(type, tarId)))
+			return null;
+		Map<String, Privilege> map = dao.getByTarTypeAndTarId(type.mark(), tarId);
+		if (!CollectionUtil.isEmpty(map))
+			flush(map);
+		return map;
 	}
 	
 	private Map<String, Privilege> _checkLoad(TarType tarType, int tarId) {
@@ -76,6 +101,10 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 	
 	private String _setKey(int tarType, int tarId) {
 		return MessageFormat.format(SET, String.valueOf(tarType), String.valueOf(tarId));
+	}
+	
+	private String _controllerField(ModularType type, int tarId) {
+		return MessageFormat.format(CONTROLLER, String.valueOf(type.mark()), String.valueOf(tarId));
 	}
 	
 	private String _controllerField(TarType tarType, int tarId) {

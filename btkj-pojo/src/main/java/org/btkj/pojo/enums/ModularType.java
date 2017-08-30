@@ -5,17 +5,17 @@ public enum ModularType {
 	/**
 	 * 保途云模块
 	 */
-	BT(1),
+	ADMIM(1),
 	
 	/**
 	 * 平台模块
 	 */
-	APP(2),
+	USER(2),
 	
 	/**
 	 * 商户模块
 	 */
-	TENANT(4);
+	EMPLOYEE(4);
 	
 	private int mark;
 	

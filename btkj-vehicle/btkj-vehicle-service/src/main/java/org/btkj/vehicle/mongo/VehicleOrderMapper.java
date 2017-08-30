@@ -143,9 +143,9 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 	 * @param policyNo
 	 * @return
 	 */
-	public List<VehicleOrder> getByDeliverNos(InsuranceType type, int tid, Set<String> nos) {
+	public List<VehicleOrder> getByDeliverNos(InsuranceType type, Set<String> nos) {
 		Bson bson = MongoUtil.or(type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_POLICY_NO : FIELD_COMPULSORY_POLICY_NO, nos);
-		bson = Filters.and(bson, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_SUCCESS.name()), Filters.eq(BtkjConsts.FIELD.TID, tid));
+		bson = Filters.and(bson, Filters.eq(BtkjConsts.FIELD.STATE, VehicleOrderState.INSURE_SUCCESS.name()));
 		return mongo.find(collection, bson, clazz);
 	}
 	

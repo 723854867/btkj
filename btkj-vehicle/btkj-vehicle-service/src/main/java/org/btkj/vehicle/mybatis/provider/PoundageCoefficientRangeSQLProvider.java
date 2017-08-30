@@ -24,14 +24,6 @@ public class PoundageCoefficientRangeSQLProvider extends SQLProvider {
 	}
 	
 	public String getByTidAndCfgCoefficientIdForUpdate() {
-		return new SQL() {
-			{
-				SELECT("*");
-				FROM(TABLE);
-				WHERE("tid=#{tid}");
-				AND();
-				WHERE("cfg_coefficient_id=#{cfgCoefficientId} FOR UPDATE");
-			}
-		}.toString();
+		return "SELECT * FROM `poundage_coefficient_range` where `tid`=#{tid} AND `cfg_coefficient_id`=#{cfgCoefficientId} FOR UPDATE";
 	}
 }

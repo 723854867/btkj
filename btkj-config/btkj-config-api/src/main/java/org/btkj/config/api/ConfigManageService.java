@@ -48,6 +48,8 @@ public interface ConfigManageService {
 	 */
 	Result<Void> areaEdit(AreaEditParam param);
 	
+	Map<Integer, ModularDocument> modulars(Integer tarId, ModularType type);
+	
 	/**
 	 * 获取指定类型的模块
 	 * 

@@ -5,7 +5,7 @@ public enum BizType {
 	/**
 	 * 车险手续费
 	 */
-	VEHICLE_BONUS(1),
+	VEHICLE_POUNDAGE(1),
 	
 	/**
 	 * 车险管理佣金

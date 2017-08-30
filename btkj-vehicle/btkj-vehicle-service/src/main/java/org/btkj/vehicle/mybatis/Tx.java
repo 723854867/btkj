@@ -8,6 +8,7 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.vehicle.EntityGenerator;
+import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.cache.domain.CfgCoefficient;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
@@ -36,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class Tx {
 	
 	@Resource
+	private CacheService cacheService;
+	@Resource
 	private BonusScaleConfigDao bonusScaleConfigDao;
 	@Resource
 	private TenantInsurerMapper tenantInsurerMapper;
@@ -51,9 +54,12 @@ public class Tx {
 		PoundageCoefficientRange range = poundageCoefficientRangeDao.getByKey(param.getId());
 		if (null == range)
 			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
+		CfgCoefficient coefficient = cacheService.getById(CacheService.CFG_COEFFICIENT, param.getCfgCoefficientId());
 		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), range.getCfgCoefficientId());
 		if (null != param.getVal()) {
 			int comparison = null != param.getSymbol() ? param.getSymbol().mark() : range.getComparison();
+			if (coefficient.getType().checkValue(Comparison.match(comparison), param.getVal()))
+				throw new BusinessException(BtkjCode.COMPARISON_VALUE_ERROR);
 			for (PoundageCoefficientRange temp : ranges.values()) {
 				Comparison c = Comparison.match(temp.getComparison());
 				String[] val = temp.getComparableValue().split(Consts.SYMBOL_UNDERLINE);

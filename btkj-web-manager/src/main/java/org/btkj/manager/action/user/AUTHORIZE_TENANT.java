@@ -29,7 +29,7 @@ public class AUTHORIZE_TENANT extends UserAction<AuthorizeParam> {
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != app.getId())
 			return Consts.RESULT.FORBID;
-		configManageService.authorize(app.getId(), TarType.APP, param.getTarId(), TarType.TENANT, ModularType.TENANT, param.getModulars());
+		configManageService.authorize(app.getId(), TarType.APP, param.getTarId(), TarType.TENANT, ModularType.EMPLOYEE, param.getModulars());
 		return Consts.RESULT.OK;
 	}
 }

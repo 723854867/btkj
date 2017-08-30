@@ -4,15 +4,18 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
+import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Insurance;
 import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
 import org.rapid.util.common.model.UniqueModel;
+import org.rapid.util.lang.DateUtil;
 
 public class VehiclePolicy implements UniqueModel<String> {
 
@@ -22,6 +25,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private int tid;									// 商户ID
 	private int appId;
 	private int insurerId;								// 险企ID
+	private String insurerName;
 	private String owner;								// 车主姓名
 	private String idNo;								// 车主证件号
 	private String issueDate;							// 发证日期
@@ -31,6 +35,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String vin;									// 车架号
 	private String name;								// 厂牌型号
 	private String seat;								// 座位数
+	private String price;								// 新车购置价
 	private PolicyNature nature;						// 转续保类型
 	private boolean transfer;							// 是否过户车
 	private VehiclePolicyType type;						// 保单类型
@@ -41,16 +46,20 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private String salesman;							// 业务员姓名
 	private String salesmanMobile;						// 业务员手机号
 	private OrderDetail orderDetail;					// 对应的订单详情(只有在保途平台生成的保单才有对应的订单)
-	private int issueTime;								// 保单出单日期的unix时间戳
+	private int issuanceTime;							// 保单出单日期的unix时间戳
+	private DeliveryInfo deliveryInfo;					// 配送信息
 	private CommercialPolicyDetail commercialDetail;
 	private CompulsoryPolicyDetail compulsoryDetail;
 	private Map<CommercialInsuranceType, Insurance> insurances;
 	
 	public VehiclePolicy() {}
 	
-	public VehiclePolicy(EmployeePO employee, int insurerId, String id) {
+	public VehiclePolicy(EmployeePO employee, Insurer insurer, String id) {
 		this._id = id;
-		this.insurerId = insurerId;
+		if (null != insurer) {
+			this.insurerId = insurer.getId();
+			this.insurerName = insurer.getName();
+		}
 		this.tid = employee.getTid();
 		this.appId = employee.getAppId();
 	}
@@ -85,6 +94,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 
 	public void setInsurerId(int insurerId) {
 		this.insurerId = insurerId;
+	}
+	
+	public String getInsurerName() {
+		return insurerName;
+	}
+	
+	public void setInsurerName(String insurerName) {
+		this.insurerName = insurerName;
 	}
 
 	public String getOwner() {
@@ -157,6 +174,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 
 	public void setSeat(String seat) {
 		this.seat = seat;
+	}
+	
+	public String getPrice() {
+		return price;
+	}
+	
+	public void setPrice(String price) {
+		this.price = price;
 	}
 
 	public PolicyNature getNature() {
@@ -240,12 +265,12 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.salesmanMobile = salesmanMobile;
 	}
 	
-	public int getIssueTime() {
-		return issueTime;
+	public int getIssuanceTime() {
+		return issuanceTime;
 	}
 	
-	public void setIssueTime(int issueTime) {
-		this.issueTime = issueTime;
+	public void setIssuanceTime(int issuanceTime) {
+		this.issuanceTime = issuanceTime;
 	}
 	
 	public OrderDetail getOrderDetail() {
@@ -254,6 +279,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public void setOrderDetail(OrderDetail orderDetail) {
 		this.orderDetail = orderDetail;
+	}
+	
+	public DeliveryInfo getDeliveryInfo() {
+		return deliveryInfo;
+	}
+	
+	public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
+		this.deliveryInfo = deliveryInfo;
 	}
 	
 	public CommercialPolicyDetail getCommercialDetail() {
@@ -309,8 +342,8 @@ public class VehiclePolicy implements UniqueModel<String> {
 			this.price = info.getBf();
 			this.no = info.getBDH();
 			this.deliverNo = info.getTBDH();
-			this.startDate = info.getQbrq();
-			this.issueDate = info.getSkrq();
+			this.startDate = DateUtil.convert(info.getQbrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8);
+			this.issueDate = DateUtil.convert(info.getSkrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8);
 		}
 		public double getPrice() {
 			return price;
