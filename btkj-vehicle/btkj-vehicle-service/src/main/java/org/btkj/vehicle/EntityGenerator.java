@@ -148,14 +148,9 @@ public class EntityGenerator {
 		return policy;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(DateUtil.getSecondTime("2017-08-28T13:59:30", DateUtil.YYYY_MM_DDTHH_MM_SS));
-	}
-	
 	private static void _fillPolicyErrorLog(VehiclePolicy policy, String desc) {
 		vehicle_manager_logger.error("简捷保单 - {} 和保途订单 - {} 的【" + desc +"】不匹配，以简捷保单为准！", policy.get_id(), policy.getOrderDetail().getOrderId());
 	}
-	
 	
 	private static final boolean _deliverNoMatches(VehicleOrder order, BaseInfo info) {
 		PolicySchema schema = order.getTips().getSchema();

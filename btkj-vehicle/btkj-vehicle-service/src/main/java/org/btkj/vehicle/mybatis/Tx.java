@@ -58,7 +58,7 @@ public class Tx {
 		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), range.getCfgCoefficientId());
 		if (null != param.getVal()) {
 			int comparison = null != param.getSymbol() ? param.getSymbol().mark() : range.getComparison();
-			if (coefficient.getType().checkValue(Comparison.match(comparison), param.getVal()))
+			if (!coefficient.getType().checkValue(Comparison.match(comparison), param.getVal()))
 				throw new BusinessException(BtkjCode.COMPARISON_VALUE_ERROR);
 			for (PoundageCoefficientRange temp : ranges.values()) {
 				Comparison c = Comparison.match(temp.getComparison());

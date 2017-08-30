@@ -3,8 +3,6 @@ package org.btkj.manager.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.config.pojo.TarType;
-import org.btkj.manager.ManagerUtil;
 import org.btkj.manager.action.UserAction;
 import org.btkj.manager.pojo.param.AuthorizeParam;
 import org.btkj.pojo.entity.AppPO;
@@ -27,13 +25,7 @@ public class AUTHORIZE_USER extends UserAction<AuthorizeParam> {
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (target.getAppId() != app.getId())
 			return Consts.RESULT.FORBID;
-		int srcId = user.getUid();
-		TarType srcType = TarType.USER;
-		if (ManagerUtil.hasFullPrivileges(user)) {
-			srcId = app.getId();
-			srcType = TarType.APP;
-		}
-		configManageService.authorize(srcId, srcType, target.getUid(), TarType.USER, ModularType.USER, param.getModulars());
+		configManageService.authorize(target.getUid(), param.getModulars(), ModularType.USER);
 		return Consts.RESULT.OK;
 	}
 }

@@ -3,7 +3,6 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.config.pojo.TarType;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.AuthorizeEmployeeParam;
 import org.btkj.pojo.BtkjConsts;
@@ -14,7 +13,6 @@ import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.ModularType;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.math.tree.Node;
 
 public class AUTHORIZE_EMPLOYEE extends EmployeeAction<AuthorizeEmployeeParam> {
 	
@@ -30,13 +28,7 @@ public class AUTHORIZE_EMPLOYEE extends EmployeeAction<AuthorizeEmployeeParam> {
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (target.getTid() != tenant.getTid())
 			return Consts.RESULT.FORBID;
-		int srcId = employee.getId();
-		TarType srcType = TarType.EMPLOYEE;
-		if (employee.getLevel() == Node.ROOT_LAYER) {
-			srcId = tenant.getTid();
-			srcType = TarType.TENANT;
-		}
-		configManageService.authorize(srcId, srcType, target.getId(), TarType.EMPLOYEE, ModularType.EMPLOYEE, param.getModulars());
+		configManageService.authorize(param.getTarId(), param.getModulars(), ModularType.EMPLOYEE);
 		return Consts.RESULT.OK;
 	}
 }

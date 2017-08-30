@@ -281,6 +281,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			} catch (NumberFormatException e) {
 				logger.error("保单 - {} 简捷用户雇员id解析出错 - {}", policy.get_id(), gsUser);
 				policy.setMark(SalesmanMark.NONE);
+				policy.setSalesman(gsUser);
 				return;
 			}
 			policy.setSalesmanId(employeeId);
@@ -288,6 +289,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			if (null == employee) {
 				logger.error("保单 - {} 没有指定业务员！", policy.get_id());
 				policy.setMark(SalesmanMark.NOT_EXIST);
+				policy.setSalesman(gsUser);
 			} else {
 				if (employee.getTid() != tid) {
 					logger.error("非保途保单 - {} 业务员归属错误，当前代理公司 - {}，业务员所在代理公司 - {}；业务员 - {}！", policy.get_id(), tid, employee.getTid(), employee.getId());

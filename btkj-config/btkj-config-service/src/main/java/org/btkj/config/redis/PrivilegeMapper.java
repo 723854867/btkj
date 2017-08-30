@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.config.mybatis.dao.PrivilegeDao;
-import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.pojo.enums.ModularType;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
@@ -20,7 +19,7 @@ import org.rapid.util.lang.CollectionUtil;
 public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, PrivilegeDao> {
 	
 	private final String SET								= "set:privilege:{0}:{1}";
-	private final String CONTROLLER							= "privilege:controller:{0}:{1}";
+	private final String CONTROLLER							= "controller:privilege:{0}:{1}";
 
 	public PrivilegeMapper() {
 		super(new ByteProtostuffSerializer<Privilege>(), "hash:db:privilege");
@@ -41,38 +40,14 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 		return map;
 	}
 	
-	public Map<String, Privilege> privileges(TarType tarType, int tarId) { 
-		Map<String, Privilege> map = _checkLoad(tarType, tarId);
-		if (null != map)
-			return map;
-		List<byte[]> list = redis.hmsget(redisKey, _setKey(tarType.mark(), tarId));
-		if (null == list)
-			return Collections.EMPTY_MAP;
-		map = new HashMap<String, Privilege>();
-		for (byte[] buffer : list) {
-			Privilege temp = serializer.antiConvet(buffer);
-			map.put(temp.getId(), temp);
-		}
-		return map;
-	}
-	
-	public void privilegesClear(TarType tarType, int tarId) { 
-		redis.hmsdrop(redisKey, _setKey(tarType.mark(), tarId));
+	public void privilegesClear(ModularType type, int tarId) { 
+		redis.hmsdrop(redisKey, _setKey(type.mark(), tarId));
 	}
 	
 	private Map<String, Privilege> _checkLoad(ModularType type, int tarId) {
 		if (!checkLoad(_controllerField(type, tarId)))
 			return null;
-		Map<String, Privilege> map = dao.getByTarTypeAndTarId(type.mark(), tarId);
-		if (!CollectionUtil.isEmpty(map))
-			flush(map);
-		return map;
-	}
-	
-	private Map<String, Privilege> _checkLoad(TarType tarType, int tarId) {
-		if (!checkLoad(_controllerField(tarType, tarId)))
-			return null;
-		Map<String, Privilege> map = dao.getByTarTypeAndTarId(tarType.mark(), tarId);
+		Map<String, Privilege> map = dao.getByTypeAndTarId(type.mark(), tarId);
 		if (!CollectionUtil.isEmpty(map))
 			flush(map);
 		return map;
@@ -80,14 +55,14 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 	
 	@Override
 	public void flush(Privilege entity) {
-		redis.hmsset(redisKey, entity, serializer, _setKey(entity.getTarType(), entity.getTarId()));
+		redis.hmsset(redisKey, entity, serializer, _setKey(entity.getType(), entity.getTarId()));
 	}
 	
 	@Override
 	public void flush(Map<String, Privilege> entities) {
 		Map<Pair<Integer, Integer>, List<Privilege>> map = new HashMap<Pair<Integer, Integer>, List<Privilege>>();
 		for (Privilege temp : entities.values()) {
-			Pair<Integer, Integer> key = new Pair<Integer, Integer>(temp.getTarType(), temp.getTarId());
+			Pair<Integer, Integer> key = new Pair<Integer, Integer>(temp.getType(), temp.getTarId());
 			List<Privilege> list = map.get(key);
 			if (null == list) {
 				list = new ArrayList<Privilege>();
@@ -105,9 +80,5 @@ public class PrivilegeMapper extends RedisDBAdapter<String, Privilege, Privilege
 	
 	private String _controllerField(ModularType type, int tarId) {
 		return MessageFormat.format(CONTROLLER, String.valueOf(type.mark()), String.valueOf(tarId));
-	}
-	
-	private String _controllerField(TarType tarType, int tarId) {
-		return MessageFormat.format(CONTROLLER, String.valueOf(tarType.mark()), String.valueOf(tarId));
 	}
 }

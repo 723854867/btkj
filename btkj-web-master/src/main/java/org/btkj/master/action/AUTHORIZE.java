@@ -7,6 +7,7 @@ import org.btkj.master.AdminAction;
 import org.btkj.master.MasterUtil;
 import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.param.AuthorizeParam;
+import org.btkj.pojo.enums.ModularType;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
@@ -30,7 +31,7 @@ public class AUTHORIZE extends AdminAction<AuthorizeParam> {
 			return Consts.RESULT.FORBID;
 		if (MasterUtil.hasFullPrivileges(admin))
 			return Consts.RESULT.NO_PRIVILEGE;
-		configManageService.authorizeAdmin(param.getTarId(), param.getModulars());
+		configManageService.authorize(param.getTarId(), param.getModulars(), ModularType.ADMIM);
 		return Consts.RESULT.OK;
 	}
 }

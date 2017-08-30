@@ -11,25 +11,25 @@ public class PrivilegeSQLProvider extends SQLProvider {
 		super(TABLE, "id", false);
 	}
 	
-	public String getByTarTypeAndTarId() {
+	public String getByTypeAndTarId() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(TABLE);
-				WHERE("tar_type=#{tarType}");
+				WHERE("`type`=#{type}");
 				AND();
-				WHERE("tar_id=#{tarId}");
+				WHERE("`tar_id`=#{tarId}");
 			}
 		}.toString();
 	}
 	
-	public String deleteByTarTypeAndTarId() {
+	public String deleteByTypeAndTarId() {
 		return new SQL() {
 			{
 				DELETE_FROM(table);
-				WHERE("tar_type=#{tarType}");
+				WHERE("`type`=#{type}");
 				AND();
-				WHERE("tar_id=#{tarId}");
+				WHERE("`tar_id`=#{tarId}");
 			}
 		}.toString();
 	}

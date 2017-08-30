@@ -89,7 +89,7 @@ public class BonusServiceImpl implements BonusService {
 					return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_NOT_EXIST;
 				if (!coefficient.isCustom())
 					return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_NOT_CUSTOM;
-				if (coefficient.getType().checkValue(param.getSymbol(), param.getVal()))
+				if (!coefficient.getType().checkValue(param.getSymbol(), param.getVal()))
 					return BtkjConsts.RESULT.COMPARISON_VALUE_ERROR;
 				PoundageCoefficientRange range = tx.poundageCoefficientRangeAdd(param, coefficient);
 				poundageCoefficientRangeMapper.flush(range);

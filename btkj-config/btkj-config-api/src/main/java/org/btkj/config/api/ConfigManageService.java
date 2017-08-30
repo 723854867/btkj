@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.info.AreaInfo;
 import org.btkj.config.pojo.info.ModularDocument;
@@ -51,24 +50,6 @@ public interface ConfigManageService {
 	Map<Integer, ModularDocument> modulars(Integer tarId, ModularType type);
 	
 	/**
-	 * 获取指定类型的模块
-	 * 
-	 * @param type
-	 * @return
-	 */
-	Map<Integer, ModularDocument> modulars(ModularType type);
-	
-	/**
-	 * 获取权限模块
-	 * 
-	 * @param tarId: 目标ID
-	 * @param tarType：目标类型
-	 * @param modularType：模块类型
-	 * @return
-	 */
-	Map<Integer, ModularDocument> modulars(int tarId, TarType tarType, ModularType modularType);
-	
-	/**
 	 * api 编辑
 	 * 
 	 * @param param
@@ -93,31 +74,11 @@ public interface ConfigManageService {
 	Result<Void> apiEdit(ApiEditParam param);
 	
 	/**
-	 * 给平台授权
-	 * 
-	 * @param appId
-	 * @param modulars
-	 * @return
-	 */
-	void authorizeApp(int appId, Set<Integer> modulars);
-	
-	/**
-	 * 给保途管理员授权
-	 * 
-	 * @param adminId
-	 * @param modulars
-	 * @return
-	 */
-	void authorizeAdmin(int adminId, Set<Integer> modulars);
-	
-	/**
 	 * 授权
 	 * 
-	 * @param srcId
-	 * @param srcType
 	 * @param tarId
-	 * @param tarType
 	 * @param modulars
+	 * @param type
 	 */
-	void authorize(int srcId, TarType srcType, int tarId, TarType tarType, ModularType modularType, Set<Integer> modulars);
+	void authorize(int tarId, Set<Integer> modulars, ModularType type);
 }

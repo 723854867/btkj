@@ -8,7 +8,7 @@ public class Privilege implements UniqueModel<String> {
 
 	private String id;
 	private int tarId;
-	private int tarType;
+	private int type;
 	private int modularId;
 	private int created;
 
@@ -28,12 +28,12 @@ public class Privilege implements UniqueModel<String> {
 		this.tarId = tarId;
 	}
 
-	public int getTarType() {
-		return tarType;
+	public int getType() {
+		return type;
 	}
-
-	public void setTarType(int tarType) {
-		this.tarType = tarType;
+	
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public int getModularId() {

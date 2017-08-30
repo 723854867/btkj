@@ -3,7 +3,6 @@ package org.btkj.config.mybatis;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,7 +12,6 @@ import javax.annotation.Resource;
 import org.btkj.config.mybatis.dao.ModularDao;
 import org.btkj.config.mybatis.dao.PrivilegeDao;
 import org.btkj.config.pojo.ModularDocumentFactory;
-import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Modular;
 import org.btkj.config.pojo.entity.Privilege;
 import org.btkj.config.pojo.info.ModularDocument;
@@ -128,79 +126,24 @@ public class Tx {
 	}
 	
 	@Transactional
-	public TxCallback authorizeApp(int appId, Set<Integer> modulars) {
-		privilegeDao.deleteByTarTypeAndTarId(TarType.APP.mark(), appId);
-		Set<Integer> set = null;
-		if (!CollectionUtil.isEmpty(modulars)) {
-			set = _modularsFilter(ModularType.ADMIM, modulars);
-			set.addAll(_modularsFilter(ModularType.EMPLOYEE, modulars));
-		}
-		Map<String, Privilege> privileges = CollectionUtil.isEmpty(set) ? null : EntityGenerator.newPrivileges(TarType.APP, appId, set);
+	public TxCallback authorize(int tarId, Set<Integer> modulars, ModularType type) {
+		privilegeDao.deleteByTypeAndTarId(type.mark(), tarId);
+		Set<Integer> set = CollectionUtil.isEmpty(modulars) ? null : _modularsFilter(type, modulars);
+		Map<String, Privilege> privileges = CollectionUtil.isEmpty(set) ? null : EntityGenerator.newPrivileges(type, tarId, set);
 		if (!CollectionUtil.isEmpty(privileges))
 			privilegeDao.replace(privileges.values());
 		return new TxCallback() {
 			@Override
 			public void finish() {
-				privilegeMapper.privilegesClear(TarType.APP, appId);
+				privilegeMapper.privilegesClear(type, tarId);
 				if (!CollectionUtil.isEmpty(privileges))
 					privilegeMapper.flush(privileges);
-			}
-		};
-	}
-	
-	@Transactional
-	public TxCallback authorizeAdmin(int adminId, Set<Integer> modulars) {
-		privilegeDao.deleteByTarTypeAndTarId(TarType.ADMIN.mark(), adminId);
-		Set<Integer> set = CollectionUtil.isEmpty(modulars) ? null : _modularsFilter(ModularType.ADMIM, modulars);
-		Map<String, Privilege> privileges = CollectionUtil.isEmpty(set) ? null : EntityGenerator.newPrivileges(TarType.ADMIN, adminId, set);
-		if (!CollectionUtil.isEmpty(privileges))
-			privilegeDao.replace(privileges.values());
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				privilegeMapper.privilegesClear(TarType.ADMIN, adminId);
-				if (!CollectionUtil.isEmpty(privileges))
-					privilegeMapper.flush(privileges);
-			}
-		};
-	}
-	
-	@Transactional
-	public TxCallback authorize(int srcId, TarType srcType, int tarId, TarType tarType, ModularType modularType, Set<Integer> modulars) {
-		privilegeDao.deleteByTarTypeAndTarId(tarType.mark(), tarId);
-		Map<String, Privilege> privileges = CollectionUtil.isEmpty(modulars) ? Collections.EMPTY_MAP : privilegeMapper.privileges(srcType, srcId);
-		Set<Integer> owns = new HashSet<Integer>();
-		for (Privilege privilege : privileges.values())
-			owns.add(privilege.getModularId());
-		Set<Integer> set = _modularsFilter(modularType, modulars, owns);
-		Map<String, Privilege> newPrivileges = CollectionUtil.isEmpty(set) ? Collections.EMPTY_MAP : EntityGenerator.newPrivileges(tarType, tarId, set);
-		privilegeDao.replace(newPrivileges.values());
-		return new TxCallback() {
-			@Override
-			public void finish() {
-				privilegeMapper.privilegesClear(tarType, tarId);
-				if (!CollectionUtil.isEmpty(newPrivileges))
-					privilegeMapper.flush(newPrivileges);
 			}
 		};
 	}
 	
 	private Set<Integer> _modularsFilter(ModularType type, Set<Integer> modulars) { 
 		Map<Integer, Modular> map = modularMapper.modulars(type);
-		Map<Integer, ModularDocument> documents = CollectionUtil.isEmpty(map) ? Collections.EMPTY_MAP : modularDocumentFactory.build(map);
-		return _doFilter(type, documents, modulars);
-	}
-	
-	private Set<Integer> _modularsFilter(ModularType type, Set<Integer> modulars, Set<Integer> owns) { 
-		Map<Integer, Modular> map = modularMapper.modulars(type);
-		Iterator<Integer> iterator = map.keySet().iterator();
-		while (iterator.hasNext()) {
-			int modularId = iterator.next();
-			if (!owns.remove(modularId)) {
-				iterator.remove();
-				modulars.remove(modularId);
-			}
-		}
 		Map<Integer, ModularDocument> documents = CollectionUtil.isEmpty(map) ? Collections.EMPTY_MAP : modularDocumentFactory.build(map);
 		return _doFilter(type, documents, modulars);
 	}

@@ -19,9 +19,9 @@ public interface PrivilegeDao extends DBMapper<String, Privilege> {
 	void replace(Collection<Privilege> collection);
 
 	@MapKey("id")
-	@SelectProvider(type = PrivilegeSQLProvider.class, method = "getByTarTypeAndTarId")
-	Map<String, Privilege> getByTarTypeAndTarId(@Param("tarType") int tarType, @Param("tarId") int tarId);
+	@SelectProvider(type = PrivilegeSQLProvider.class, method = "getByTypeAndTarId")
+	Map<String, Privilege> getByTypeAndTarId(@Param("type") int type, @Param("tarId") int tarId);
 	
-	@DeleteProvider(type = PrivilegeSQLProvider.class, method = "deleteByTarTypeAndTarId")
-	void deleteByTarTypeAndTarId(@Param("tarType") int tarType, @Param("tarId") int tarId);
+	@DeleteProvider(type = PrivilegeSQLProvider.class, method = "deleteByTypeAndTarId")
+	void deleteByTypeAndTarId(@Param("type") int type, @Param("tarId") int tarId);
 }

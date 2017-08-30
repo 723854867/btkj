@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
@@ -75,19 +74,19 @@ public class EntityGenerator {
 		return api;
 	}
 	
-	public static final Map<String, Privilege> newPrivileges(TarType tarType, int tarId, Set<Integer> modulars) {
+	public static final Map<String, Privilege> newPrivileges(ModularType type, int tarId, Set<Integer> modulars) {
 		Map<String, Privilege> privileges = new HashMap<String, Privilege>();
 		for (int modularId : modulars) {
-			Privilege privilege = newPrivilege(tarType, tarId, modularId);
+			Privilege privilege = newPrivilege(type, tarId, modularId);
 			privileges.put(privilege.getId(), privilege);
 		}
 		return privileges;
 	}
 	
-	public static final Privilege newPrivilege(TarType tarType, int tarId, int modularId) {
+	public static final Privilege newPrivilege(ModularType type, int tarId, int modularId) {
 		Privilege privilege = new Privilege();
-		privilege.setId(tarType.mark() + Consts.SYMBOL_UNDERLINE + tarId + Consts.SYMBOL_UNDERLINE + modularId);
-		privilege.setTarType(tarType.mark());
+		privilege.setId(type.mark() + Consts.SYMBOL_UNDERLINE + tarId + Consts.SYMBOL_UNDERLINE + modularId);
+		privilege.setType(type.mark());
 		privilege.setTarId(tarId);
 		privilege.setModularId(modularId);
 		privilege.setCreated(DateUtil.currentTime());

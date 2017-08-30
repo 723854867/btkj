@@ -3,7 +3,6 @@ package org.btkj.config.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +13,6 @@ import org.btkj.config.api.ConfigManageService;
 import org.btkj.config.mybatis.EntityGenerator;
 import org.btkj.config.mybatis.Tx;
 import org.btkj.config.pojo.ModularDocumentFactory;
-import org.btkj.config.pojo.TarType;
 import org.btkj.config.pojo.entity.Api;
 import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.pojo.entity.Modular;
@@ -184,49 +182,6 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 		return false;
 	}
 	
-	@Override
-	public Map<Integer, ModularDocument> modulars(ModularType type) {
-		Map<Integer, Modular> modulars = null;
-		switch (type) {
-		case ADMIM:
-			modulars = modularMapper.getAll();
-			break;
-		case USER:
-		case EMPLOYEE:
-			modulars = modularMapper.modulars(type);
-			break;
-		default:
-			return null;
-		}
-		return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
-	}
-	
-	@Override
-	public Map<Integer, ModularDocument> modulars(int tarId, TarType tarType, ModularType modularType) {
-		Map<Integer, Modular> modulars = null;
-		if (tarId > 0) {
-			Map<String, Privilege> privileges = privilegeMapper.privileges(tarType, tarId);
-			Set<Integer> set = new HashSet<Integer>();
-			for (Privilege privilege : privileges.values()) 
-				set.add(privilege.getModularId());
-			modulars = modularMapper.getByKeys(set);
-		} else {
-			modulars = modularMapper.modulars(modularType);
-			return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
-		}
-		
-		if (CollectionUtil.isEmpty(modulars))
-			return null;
-		Iterator<Modular> iterator = modulars.values().iterator();
-		while (iterator.hasNext()) {
-			Modular modular = iterator.next();
-			if (modular.getType() != modularType.mark())
-				iterator.remove();
-		}
-		return CollectionUtil.isEmpty(modulars) ? null : modularDocumentFactory.build(modulars);
-	}
-	
-	@Override
 	public Result<?> modularEdit(ModularEditParam param) {
 		String lock = BtkjConsts.LOCKS.modularLock();
 		String lockId = distributeLock.tryLock(lock);
@@ -304,17 +259,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public void authorizeApp(int appId, Set<Integer> modulars) {
-		tx.authorizeApp(appId, modulars).finish();
-	}
-	
-	@Override
-	public void authorizeAdmin(int adminId, Set<Integer> modulars) {
-		tx.authorizeAdmin(adminId, modulars).finish();
-	}
-	
-	@Override
-	public void authorize(int srcId, TarType srcType, int tarId, TarType tarType, ModularType modularType, Set<Integer> modulars) {
-		tx.authorize(srcId, srcType, tarId, tarType, modularType, modulars);
+	public void authorize(int tarId, Set<Integer> modulars, ModularType type) {
+		tx.authorize(tarId, modulars, type).finish();
 	}
 }
