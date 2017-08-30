@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.Pager;
 import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
@@ -18,6 +19,9 @@ import com.mongodb.client.model.Sorts;
 
 @Component("vehiclePolicyMapper")
 public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
+	
+	private static final String FIELD_COMPULSORY_NO		= "compulsoryDetail.no";
+	private static final String FIELD_COMMERCIAL_NO		= "commercialDetail.no";
 
 	public VehiclePolicyMapper() {
 		super("vehiclePolicy");
@@ -27,6 +31,11 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 		if (CollectionUtil.isEmpty(policies))
 			return;
 		mongo.bulkReplaceOne(collection, policies);
+	}
+	
+	public VehiclePolicy getByNo(InsuranceType type, String no) {
+		String field = type == InsuranceType.COMMERCIAL ? FIELD_COMMERCIAL_NO : FIELD_COMPULSORY_NO;
+		return mongo.findOne(collection, Filters.eq(field, no), VehiclePolicy.class);
 	}
 	
 	public Pager<VehiclePolicy> policies(VehiclePoliciesParam param) {

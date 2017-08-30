@@ -204,12 +204,18 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 			BaseInfo info = iterator.next().getValue();
 			iterator.remove();
 			BaseInfo relationInfo = null;
+			VehiclePolicy policy = null;
 			if (null != info.getRelationPolicyNo()) {
 				relationDeliverNos.remove(info.getTBDH());
 				relationInfo = relation.remove(info.getRelationPolicyNo());
-				if (null == relationInfo) 
-					logger.error("简捷保单 - {}" + info.getBdType() + "险关联单丢失！", info.getTBDH());
-				else {
+				if (null == relationInfo) {
+					InsuranceType type = InsuranceType.COMMERCIAL;
+					if (info.getBdType().equals(InsuranceType.COMMERCIAL.title()))
+						type = InsuranceType.COMPULSORY;
+					policy = vehiclePolicyMapper.getByNo(type, info.getRelationPolicyNo());
+					if (null == policy)
+						logger.error("简捷保单 - {}" + info.getBdType() + "险关联单丢失！", info.getTBDH());
+				} else {
 					if (info.getCompanyId() != relationInfo.getCompanyId() || 0 == info.getCompanyId())
 						logger.error("简捷保单 - {} 关联单险企不匹配", info.getTBDH());
 					if (!info.getGsUser().equals(relationInfo.getGsUser()))
@@ -236,7 +242,10 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				logger.error("简捷保单 - {} 险企 - {} 不存在对应的保途险企映射", policyId, info.getCompanyId());
 			if (null != order && insurer.getInsurerId() != order.getInsurerId())
 				logger.error("简捷保单 - {} 险企 - {} 和保途订单 险企ID不匹配, 以保途订单险企为准！", policyId, info.getCompanyId());
-			VehiclePolicy policy = EntityGenerator.newVehiclePolicy(employee, insurer.getInsurerId(), policyId, order, info, relationInfo);
+			if (null != policy)
+				policy.setDetail(info);
+			else
+				policy = EntityGenerator.newVehiclePolicy(employee, insurer.getInsurerId(), policyId, order, info, relationInfo);
 			_processJianJieGsUser(employee.getTid(), employees, policy, order, info.getGsUser());
 			policies.put(policyId, policy);
 		}
