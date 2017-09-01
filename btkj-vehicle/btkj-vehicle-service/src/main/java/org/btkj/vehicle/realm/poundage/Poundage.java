@@ -1,6 +1,5 @@
 package org.btkj.vehicle.realm.poundage;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,11 +19,14 @@ import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.entity.PoundageConfig;
 import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
 import org.btkj.vehicle.pojo.entity.PoundageNode;
+import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.model.CoefficientDocument;
+import org.btkj.vehicle.pojo.model.NodeConfigModel;
 import org.btkj.vehicle.pojo.model.PoundageDocument;
 import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.Type;
+import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.NodeConfigInfo;
 import org.btkj.vehicle.redis.PoundageCoefficientRangeMapper;
+import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
@@ -41,6 +43,8 @@ public class Poundage {
 	private CacheService cacheService;
 	@Resource
 	private ConfigService configService;
+	@Resource
+	private TenantInsurerMapper tenantInsurerMapper;
 	@Resource
 	private PoundageConfigMapper poundageConfigMapper;
 	@Resource
@@ -122,104 +126,80 @@ public class Poundage {
 		}
 	}
 	
-	public NodeConfig poundageConfig(int tid, int insurerId, int nodeId) {
+	public NodeConfigModel poundageConfig(int tid, int insurerId, int nodeId, int coefficientId) {
 		PoundageConfig config = poundageConfigMapper.getByKey(String.valueOf(tid));
 		Map<Integer, Map<Integer, NodeConfig>> map = null == config ? null : config.getConfigs();
 		Map<Integer, NodeConfig> configs = null == map ? null : map.get(insurerId);
-		return null == configs ? null : configs.get(nodeId);
+		NodeConfig nodeConfig = null == configs ? null : configs.get(nodeId);
+		Map<Integer, Map<Integer, Integer>> ratios = null == nodeConfig ? null : nodeConfig.getRatios();
+		return null == nodeConfig ? null : new NodeConfigModel(nodeConfig, null == ratios ? null : ratios.get(coefficientId));
 	}
 	
 	public Result<Void> poundageConfigEdit(PoundageConfigEditParam param) {
 		PoundageConfig config = poundageConfigMapper.getByKey(String.valueOf(param.getTid()));
-		if (null == config && param.getType() == Type.EDIT) 
+		if (null == config) 
 			config = new PoundageConfig(param.getTid());
 		Map<Integer, Map<Integer, NodeConfig>> map = null == config ? null : config.getConfigs();
-		if (null == map && param.getType() == Type.EDIT) {
+		if (null == map) {
 			map = new HashMap<Integer, Map<Integer, NodeConfig>>();
 			config.setConfigs(map);
 		}
 		Map<Integer, NodeConfig> configs = null == map ? null : map.get(param.getInsurerId());
-		if (null == configs && param.getType() == Type.EDIT) {
+		if (null == configs) {
+			TenantInsurer insurer = tenantInsurerMapper.getByTidAndInsurerId(param.getTid(), param.getInsurerId());
+			if (null == insurer)
+				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
 			configs = new HashMap<Integer, NodeConfig>();
 			map.put(param.getInsurerId(), configs);
 		}
 		NodeConfig nodeConfig = null == configs ? null : configs.get(param.getNodeId());
-		switch (param.getType()) {
-		case BIND:
-		case UNBIND:
-			if (null == nodeConfig)
-				return BtkjConsts.RESULT.POUNDAGE_CONFIG_NOT_EXIST;
-			nodeConfig.setEffective(param.getType() == Type.BIND ? true : false);
-			poundageConfigMapper.insert(config);
-			break;
-		case EDIT:
-			PoundageNode node = cacheService.getById(CacheService.POUNDAGE_NODE, param.getNodeId());
+		PoundageNode node = null;
+		if (null == nodeConfig) {
+			node = cacheService.getById(CacheService.POUNDAGE_NODE, param.getNodeId());
 			if (null == node)
 				return BtkjConsts.RESULT.POUNDAGE_NODE_NOT_EXIST;
-			if (null == param.getConfig())
-				configs.remove(param.getNodeId());
-			else {
-				if (null == nodeConfig)
-					nodeConfig = new NodeConfig();
-				NodeConfig update = param.getConfig();
-				nodeConfig.setCmRate(update.getCmRate());
-				nodeConfig.setCpRate(update.getCpRate());
-				nodeConfig.setCmRetainRate(update.getCmRetainRate());
-				nodeConfig.setCpRetainRate(update.getCpRetainRate());
-				if (!CollectionUtil.isEmpty(update.getRatios())) {
-					_coefficientRatiosVerify(param.getTid(), update.getRatios(), node);
-					update.setEffective(nodeConfig.isEffective());
-					nodeConfig.setRatios(update.getRatios());
+			nodeConfig = new NodeConfig();
+			configs.put(node.getId(), nodeConfig);
+		}
+		NodeConfigInfo info = param.getConfig();
+		if (null == info)
+			configs.remove(param.getNodeId());
+		else {
+			nodeConfig.setCmRate(info.getCmRate());
+			nodeConfig.setCpRate(info.getCpRate());
+			nodeConfig.setEffective(info.isEffective());
+			nodeConfig.setCmRetainRate(info.getCmRetainRate());
+			nodeConfig.setCpRetainRate(info.getCpRetainRate());
+			if (null != info.getRangeId() && null != info.getCoefficientId()) {
+				if (null == node) {
+					node = cacheService.getById(CacheService.POUNDAGE_NODE, param.getNodeId());
+					if (null == node)
+						return BtkjConsts.RESULT.POUNDAGE_NODE_NOT_EXIST;
 				}
-			}
-			poundageConfigMapper.insert(config);
-			break;
-		default:
-			return Consts.RESULT.FORBID;
-		}
-		return Consts.RESULT.OK;
-	}
-	
-	private Result<Void> _coefficientRatiosVerify(int tid, Map<Integer, Map<Integer, Integer>> ratios, PoundageNode node) {
-		Map<Integer, CoefficientDocument> coefficients = _coefficientDocuments(node);
-		for (Entry<Integer, Map<Integer, Integer>> entry : ratios.entrySet()) {
-			if (null == entry.getKey())
-				return Consts.RESULT.FORBID;
-			CoefficientDocument coefficient = _coefficient(tid, coefficients, entry.getKey());
-			if (null == coefficient)
-				return BtkjConsts.RESULT.COEFFICIENT_NOT_EXIST;
-			Map<Integer, CoefficientRange> ranges = coefficientRanges(tid, entry.getKey());
-			if (CollectionUtil.isEmpty(ranges) || null == entry.getValue())
-				return Consts.RESULT.FORBID;
-			for (Entry<Integer, Integer> e : entry.getValue().entrySet()) {
-				if (ranges.containsKey(e.getKey()))
+				Map<Integer, CoefficientDocument> coefficients = coefficientDocuments(param.getNodeId()).attach();
+				if (!_hasCoefficient(coefficients, info.getCoefficientId()))
+					return Consts.RESULT.FORBID;
+				Map<Integer, CoefficientRange> ranges = coefficientRanges(param.getTid(), info.getCoefficientId());
+				CoefficientRange range = null == ranges ? null : ranges.get(info.getRangeId());
+				if (null == range)
 					return BtkjConsts.RESULT.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST;
-				e.setValue(Math.min(BtkjConsts.LIMITS.MAX_COEFFICIENT_RANGE_RATIO, e.getValue()));
-				e.setValue(Math.max(BtkjConsts.LIMITS.MIN_COEFFICIENT_RANGE_RATIO, e.getValue()));
+				nodeConfig.addRatio(info.getCoefficientId(), info.getRangeId(), info.getRangeRate());
 			}
 		}
+		poundageConfigMapper.insert(config);
 		return Consts.RESULT.OK;
 	}
-
-	private Map<Integer, CoefficientDocument> _coefficientDocuments(PoundageNode node) {
-		if (CollectionUtil.isEmpty(node.getCoefficients()))
-			return Collections.EMPTY_MAP;
-		Set<Integer> coefficients = new HashSet<Integer>(node.getCoefficients());
-		Map<Integer, CoefficientDocument> map = new HashMap<Integer, CoefficientDocument>();
-		_searcheCoefficients(map, coefficientDocuments, coefficients);
-		return map;
-	}
 	
-	private CoefficientDocument _coefficient(int tid, Map<Integer, CoefficientDocument> documents, int coefficientId) {
-		if (CollectionUtil.isEmpty(documents))
-			return null;
-		for (Entry<Integer, CoefficientDocument> entry : documents.entrySet()) {
-			if (entry.getKey() == coefficientId)
-				return entry.getValue();
-			CoefficientDocument document = _coefficient(tid, entry.getValue().children(), coefficientId);
-			if (null != document)
-				return document;
+	private boolean _hasCoefficient(Map<Integer, CoefficientDocument> coefficients, int coefficient) { 
+		if (CollectionUtil.isEmpty(coefficients))
+			return false;
+		for (Entry<Integer, CoefficientDocument> entry : coefficients.entrySet()) {
+			if (entry.getKey() == coefficient)
+				return true;
+			boolean flag = _hasCoefficient(entry.getValue().children(), coefficient);
+			if (flag)
+				return true;
 		}
-		return null;
+		return false;
 	}
 }

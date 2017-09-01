@@ -12,8 +12,8 @@ import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.pojo.entity.CoefficientNode;
 import org.btkj.vehicle.pojo.entity.CoefficientRange;
 import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
 import org.btkj.vehicle.pojo.model.CoefficientDocument;
+import org.btkj.vehicle.pojo.model.NodeConfigModel;
 import org.btkj.vehicle.pojo.model.PoundageDocument;
 import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
 import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
@@ -91,8 +91,8 @@ public class BonusServiceImpl implements BonusService {
 	}
 	
 	@Override
-	public NodeConfig poundageConfig(int tid, int insurerId, int nodeId) {
-		return poundage.poundageConfig(tid, insurerId, nodeId);
+	public NodeConfigModel poundageConfig(int tid, int insurerId, int nodeId, int coefficientId) {
+		return poundage.poundageConfig(tid, insurerId, nodeId, coefficientId);
 	}
 	
 	@Override

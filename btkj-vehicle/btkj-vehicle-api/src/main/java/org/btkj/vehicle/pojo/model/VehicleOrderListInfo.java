@@ -39,9 +39,8 @@ public class VehicleOrderListInfo implements Serializable {
 		this.license = order.getTips().getLicense();
 		Bonus bonus = order.getBonus();
 		this.bonus = null != bonus ?  new BigDecimal(bonus.getCommercialBonus()).add(new BigDecimal(bonus.getCompulsoryBonus())).setScale(2, RoundingMode.HALF_UP).toString() : "0";
-		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE || state == VehicleOrderState.INSURE_SUCCESS) {
+		if (state.mark() > VehicleOrderState.QUOTE_FAILURE.mark())
 			this.price = VehicleUtil.totalPremium(order);
-		}
 	}
 
 	public String getId() {

@@ -9,7 +9,7 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
+import org.btkj.vehicle.pojo.model.NodeConfigModel;
 import org.rapid.util.common.message.Result;
 
 public class POUNDAGE_CONFIG extends EmployeeAction<PoundageConfigParam> {
@@ -18,7 +18,7 @@ public class POUNDAGE_CONFIG extends EmployeeAction<PoundageConfigParam> {
 	private BonusService bonusService;
 
 	@Override
-	protected Result<NodeConfig> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigParam param) {
-		return Result.result(bonusService.poundageConfig(tenant.getTid(), param.getInsurerId(), param.getNodeId()));
+	protected Result<NodeConfigModel> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigParam param) {
+		return Result.result(bonusService.poundageConfig(tenant.getTid(), param.getInsurerId(), param.getNodeId(), param.getCoefficientId()));
 	}
 }

@@ -1,10 +1,10 @@
 package org.btkj.vehicle.pojo.param;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
 
 public class PoundageConfigEditParam extends EmployeeParam {
 
@@ -15,15 +15,7 @@ public class PoundageConfigEditParam extends EmployeeParam {
 	private int insurerId;
 	@Min(1)
 	private int nodeId;
-	@NotNull
-	private Type type;
-	private NodeConfig config;
-	
-	public enum Type {
-		EDIT,
-		BIND,
-		UNBIND;
-	}
+	private NodeConfigInfo config;
 	
 	public int getTid() {
 		return tid;
@@ -49,19 +41,71 @@ public class PoundageConfigEditParam extends EmployeeParam {
 		this.nodeId = nodeId;
 	}
 	
-	public Type getType() {
-		return type;
-	}
-	
-	public void setType(Type type) {
-		this.type = type;
-	}
-	
-	public NodeConfig getConfig() {
+	public NodeConfigInfo getConfig() {
 		return config;
 	}
 	
-	public void setConfig(NodeConfig config) {
+	public void setConfig(NodeConfigInfo config) {
 		this.config = config;
+	}
+	
+	public class NodeConfigInfo implements Serializable {
+		private static final long serialVersionUID = 8759990509093971749L;
+		private int cmRate;
+		private int cpRate;
+		private int cmRetainRate;
+		private int cpRetainRate;
+		private Integer coefficientId;
+		private Integer rangeId;
+		private int rangeRate;
+		private boolean effective;
+		public int getCmRate() {
+			return cmRate;
+		}
+		public void setCmRate(int cmRate) {
+			this.cmRate = cmRate;
+		}
+		public int getCpRate() {
+			return cpRate;
+		}
+		public void setCpRate(int cpRate) {
+			this.cpRate = cpRate;
+		}
+		public int getCmRetainRate() {
+			return cmRetainRate;
+		}
+		public void setCmRetainRate(int cmRetainRate) {
+			this.cmRetainRate = cmRetainRate;
+		}
+		public int getCpRetainRate() {
+			return cpRetainRate;
+		}
+		public void setCpRetainRate(int cpRetainRate) {
+			this.cpRetainRate = cpRetainRate;
+		}
+		public Integer getCoefficientId() {
+			return coefficientId;
+		}
+		public void setCoefficientId(Integer coefficientId) {
+			this.coefficientId = coefficientId;
+		}
+		public Integer getRangeId() {
+			return rangeId;
+		}
+		public void setRangeId(Integer rangeId) {
+			this.rangeId = rangeId;
+		}
+		public int getRangeRate() {
+			return rangeRate;
+		}
+		public void setRangeRate(int rangeRate) {
+			this.rangeRate = rangeRate;
+		}
+		public boolean isEffective() {
+			return effective;
+		}
+		public void setEffective(boolean effective) {
+			this.effective = effective;
+		}
 	}
 }

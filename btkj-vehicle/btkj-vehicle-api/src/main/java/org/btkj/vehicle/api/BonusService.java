@@ -3,8 +3,8 @@ package org.btkj.vehicle.api;
 import java.util.Map;
 
 import org.btkj.vehicle.pojo.entity.CoefficientRange;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
 import org.btkj.vehicle.pojo.model.CoefficientDocument;
+import org.btkj.vehicle.pojo.model.NodeConfigModel;
 import org.btkj.vehicle.pojo.model.PoundageDocument;
 import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
 import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
@@ -56,7 +56,7 @@ public interface BonusService {
 	 * @param nodeId
 	 * @return
 	 */
-	NodeConfig poundageConfig(int tid, int insurerId, int nodeId);
+	NodeConfigModel poundageConfig(int tid, int insurerId, int nodeId, int coefficientId);
 	
 	/**
 	 * 手续费配置编辑

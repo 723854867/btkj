@@ -32,6 +32,17 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 		super(new ByteProtostuffSerializer<TenantInsurer>(), "hash:db:tenant_insurer");
 	}
 	
+	public TenantInsurer getByTidAndInsurerId(int tid, int insurerId) {
+		Map<String, TenantInsurer> map = getByTid(tid);
+		if (CollectionUtil.isEmpty(map))
+			return null;
+		for (TenantInsurer insurer : map.values()) {
+			if (insurer.getInsurerId() == insurerId)
+				return insurer;
+		}
+		return null;
+	}
+	
 	public Map<String, TenantInsurer> getByTid(int tid) {
 		Map<String, TenantInsurer> map = _checkLoad(tid);
 		if (null != map)

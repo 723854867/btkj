@@ -1,6 +1,7 @@
 package org.btkj.vehicle.pojo.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.rapid.util.common.model.UniqueModel;
@@ -90,6 +91,16 @@ public class PoundageConfig implements UniqueModel<String> {
 		}
 		public void setRatios(Map<Integer, Map<Integer, Integer>> ratios) {
 			this.ratios = ratios;
+		}
+		public void addRatio(int coefficientId, int rangeId, int ratio) { 
+			if (null == this.ratios)
+				this.ratios = new HashMap<Integer, Map<Integer, Integer>>();
+			Map<Integer, Integer> map = this.ratios.get(coefficientId);
+			if (null == map) {
+				map = new HashMap<Integer, Integer>();
+				this.ratios.put(coefficientId, map);
+			}
+			map.put(rangeId, ratio);
 		}
 	}
 	

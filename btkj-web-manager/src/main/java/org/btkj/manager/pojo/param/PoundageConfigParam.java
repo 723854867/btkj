@@ -12,6 +12,8 @@ public class PoundageConfigParam extends EmployeeParam {
 	private int insurerId;
 	@Min(1)
 	private int nodeId;
+	@Min(1)
+	private int coefficientId;
 	
 	public int getInsurerId() {
 		return insurerId;
@@ -27,5 +29,13 @@ public class PoundageConfigParam extends EmployeeParam {
 	
 	public void setNodeId(int nodeId) {
 		this.nodeId = nodeId;
+	}
+	
+	public int getCoefficientId() {
+		return coefficientId;
+	}
+	
+	public void setCoefficientId(int coefficientId) {
+		this.coefficientId = coefficientId;
 	}
 }

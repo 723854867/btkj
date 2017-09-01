@@ -323,6 +323,7 @@ public class QuoteResult {
 					}
 					insurance.insuranceMapping(insurances, item);
 				}
+				schema.setInsurances(insurances);
 			}
 			if (!CollectionUtil.isEmpty(cpList)) {
 				for (AmountItem item : cpList) {
@@ -333,6 +334,7 @@ public class QuoteResult {
 					}
 					switch (insurance) {
 					case J1:
+						schema.setCompulsoryTotal(null == item.getPremium() ? "0" : item.getPremium());
 						break;
 					case CCS:
 						schema.setVehicleVesselTotal(null == item.getPremium() ? "0" : item.getPremium());
