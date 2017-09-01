@@ -6,8 +6,8 @@ import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.Bonus;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.param.VehicleOrderParam;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.model.UniqueModel;
-import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 import org.rapid.util.lang.DateUtil;
 
 public class VehicleOrder implements UniqueModel<String> {
@@ -60,7 +60,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.salesmanMobile = user.getMobile();
 		this.state = VehicleOrderState.QUOTING;
 		this.tips = new VehiclePolicyTips(param, vehicleInfo);
-		this._id = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
+		this._id = employee.getId() + Consts.SYMBOL_UNDERLINE + param.getLicense() + Consts.SYMBOL_UNDERLINE + insurer.getId();
 	}
 	
 	public String get_id() {

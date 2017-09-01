@@ -56,6 +56,7 @@ public class Tx {
 			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
 		CoefficientNode coefficient = cacheService.getById(CacheService.COEFFICIENT_NODE, param.getCoefficientId());
 		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), range.getCfgCoefficientId());
+		ranges.remove(range.getId());
 		if (null != param.getVal()) {
 			int comparison = null != param.getSymbol() ? param.getSymbol().mark() : range.getComparison();
 			if (!coefficient.getType().checkValue(Comparison.match(comparison), param.getVal()))

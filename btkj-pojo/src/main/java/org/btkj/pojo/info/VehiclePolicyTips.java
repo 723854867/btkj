@@ -18,7 +18,6 @@ import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.pojo.param.VehicleOrderParam.InsuranceItem;
 import org.rapid.util.lang.CollectionUtil;
-import org.rapid.util.lang.StringUtil;
 
 /**
  * 保单基本信息
@@ -80,27 +79,13 @@ public class VehiclePolicyTips implements Serializable {
 		this.enrollDate = param.getEnrollDate();
 		this.priceNoTax = param.getPriceNoTax();
 		this.transmissionName = param.getTransmissionName();
-		this.seat = null == param.getSeat() ? 0 : param.getSeat();
+		this.seat = param.getSeat();
 		this.year = null == param.getYear() ? 0 : param.getYear();
 		if (null != vehicleInfo) {
 			this.leBaoBaJYId = vehicleInfo.getInsVehicleId();
 			this.vehicleType = vehicleInfo.getVehicleType();
 			this.vehicleTypeCode = vehicleInfo.getVehicleTypeCode();
 			this.vehicleTypeDetailCode = vehicleInfo.getVehicleTypeDetailCode();
-			if (0 == seat)
-				this.seat = vehicleInfo.getSeat();
-			if (0 == year)
-				this.year = vehicleInfo.getYear();
-			if (!StringUtil.hasText(load))
-				this.load = vehicleInfo.getLoad();
-			if (!StringUtil.hasText(price))
-				this.price = vehicleInfo.getPrice();
-			if (!StringUtil.hasText(exhaust))
-				this.load = vehicleInfo.getExhaust();
-			if (!StringUtil.hasText(priceNoTax))
-				this.priceNoTax = vehicleInfo.getPriceNoTax();
-			if (!StringUtil.hasText(transmissionName))
-				this.transmissionName = vehicleInfo.getTransmissionName();
 		}
 		this.owner = new InsurUnit();
 		this.owner.setType(param.getOwner().getType());

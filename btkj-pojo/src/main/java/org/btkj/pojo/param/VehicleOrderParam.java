@@ -291,12 +291,12 @@ public class VehicleOrderParam extends EmployeeParam {
 	public void bindVehicleInfo(VehicleInfo vehicleInfo) { 
 		this.vehicleId = vehicleInfo.getId();
 		this.seat = vehicleInfo.getSeat();
+		this.year = vehicleInfo.getYear();
 		if (null != vehicleInfo.getPrice())
 			this.price = vehicleInfo.getPrice();
 		if (null != vehicleInfo.getPriceNoTax())
 			this.priceNoTax = vehicleInfo.getPriceNoTax();
 		this.name = vehicleInfo.getName();
-		this.load = vehicleInfo.getLoad();
 		this.transmissionName = vehicleInfo.getTransmissionName();
 		this.load = vehicleInfo.getLoad();
 		this.exhaust = vehicleInfo.getExhaust();

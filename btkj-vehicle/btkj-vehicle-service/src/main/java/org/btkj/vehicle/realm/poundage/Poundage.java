@@ -150,6 +150,7 @@ public class Poundage {
 			if (null == nodeConfig)
 				return BtkjConsts.RESULT.POUNDAGE_CONFIG_NOT_EXIST;
 			nodeConfig.setEffective(param.getType() == Type.BIND ? true : false);
+			poundageConfigMapper.insert(config);
 			break;
 		case EDIT:
 			PoundageNode node = cacheService.getById(CacheService.POUNDAGE_NODE, param.getNodeId());
@@ -167,12 +168,14 @@ public class Poundage {
 				nodeConfig.setCpRetainRate(update.getCpRetainRate());
 				if (!CollectionUtil.isEmpty(update.getRatios())) {
 					_coefficientRatiosVerify(param.getTid(), update.getRatios(), node);
+					update.setEffective(nodeConfig.isEffective());
 					nodeConfig.setRatios(update.getRatios());
 				}
 			}
+			poundageConfigMapper.insert(config);
 			break;
 		default:
-			break;
+			return Consts.RESULT.FORBID;
 		}
 		return Consts.RESULT.OK;
 	}

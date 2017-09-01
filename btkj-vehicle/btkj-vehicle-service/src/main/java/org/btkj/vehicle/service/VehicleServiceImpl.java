@@ -148,9 +148,10 @@ public class VehicleServiceImpl implements VehicleService {
 		int biHuInsureMod = 0;
 		Map<String, Boolean> leBaoBa = new HashMap<String, Boolean>();
 		VehicleInfo vehicleInfo = _vehicleInfo(tenant, param);
-		if (null == vehicleInfo) 
+		if (null != vehicleInfo)
+			param.bindVehicleInfo(vehicleInfo);
+		if (null == param.getPrice() || null == param.getSeat() || null == param.getName())
 			return BtkjConsts.RESULT.VEHICLE_INFO_NILL;
-		param.bindVehicleInfo(vehicleInfo);
 		Set<Integer> insures = NumberUtil.splitIntoPowerOfTwoSet(param.getInsureMod());
 		Map<Integer, Insurer> insurers = configService.insurers(NumberUtil.splitIntoPowerOfTwoSet(param.getQuoteMod()));
 		Map<Lane, Map<Object, VehicleOrder>> orders = new HashMap<Lane, Map<Object, VehicleOrder>>();
@@ -190,7 +191,6 @@ public class VehicleServiceImpl implements VehicleService {
 			}
 		}
 		
-		vehicleOrderMapper.delete(employee.getId(), param.getLicense());
 		if (0 != biHuQuoteMod) {
 			Result<Void> result = biHuVehicle.order(tenant.getBiHuAgent(), tenant.getBiHuKey(), user.getUid(), biHuQuoteMod, biHuInsureMod, configService.area(tenant.getRegion()).getBiHuId(), param);
 			if (!result.isSuccess())
@@ -206,8 +206,10 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	private VehicleInfo _vehicleInfo(TenantPO tenant, VehicleOrderParam param) {
 		List<VehicleInfo> vehicleInfos = vehicleInfos(tenant, param.getVin());
-		if (CollectionUtil.isEmpty(vehicleInfos))
+		if (CollectionUtil.isEmpty(vehicleInfos)) {
+			logger.warn("车架号 - {} 获取不到乐保吧车型");
 			return null;
+		}
 		VehicleInfo vehicleInfo = null;
 		if (StringUtil.hasText(param.getVehicleId())) {				// 指定了乐保吧ID
 			for (VehicleInfo temp : vehicleInfos) {
