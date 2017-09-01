@@ -3,9 +3,6 @@ package org.btkj.vehicle;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
@@ -22,7 +19,7 @@ import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 import org.btkj.vehicle.pojo.enums.BonusManageConfigType;
 import org.btkj.vehicle.pojo.enums.Lane;
 import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
+import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
 import org.btkj.vehicle.service.VehicleManageServiceImpl;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
@@ -55,13 +52,13 @@ public class EntityGenerator {
 		return temp;
 	}
 	
-	public static final PoundageCoefficientRange newPoundageCoefficientRange(PoundageCoefficientRangeEditParam param, String value) {
+	public static final PoundageCoefficientRange newPoundageCoefficientRange(CoefficientRangeEditParam param, String value) {
 		PoundageCoefficientRange temp = new PoundageCoefficientRange();
 		temp.setTid(param.getTid());
 		temp.setName(param.getName());
 		temp.setComparableValue(value);
 		temp.setComparison(param.getSymbol().mark());
-		temp.setCfgCoefficientId(param.getCfgCoefficientId());
+		temp.setCfgCoefficientId(param.getCoefficientId());
 		
 		int time = DateUtil.currentTime();
 		temp.setCreated(time);
@@ -156,37 +153,5 @@ public class EntityGenerator {
 		PolicySchema schema = order.getTips().getSchema();
 		String no = info.getBdType().equals(InsuranceType.COMMERCIAL.title()) ? schema.getCommercialNo() : schema.getCompulsoryNo();
 		return info.getTBDH().equals(no);
-	}
-	
-	public static final VehicleBrand newVehicleBrand(String name) {
-		VehicleBrand brand = new VehicleBrand();
-		brand.setName(name);
-		
-		int time = DateUtil.currentTime();
-		brand.setCreated(time);
-		brand.setUpdated(time);
-		return brand;
-	}
-	
-	public static final VehicleDept newVehicleDept(int brandId, String name) {
-		VehicleDept dept = new VehicleDept();
-		dept.setName(name);
-		dept.setBrandId(brandId);
-		
-		int time = DateUtil.currentTime();
-		dept.setCreated(time);
-		dept.setUpdated(time);
-		return dept;
-	}
-	
-	public static final VehicleModel newVehicleModel(int deptId, String name) {
-		VehicleModel model = new VehicleModel();
-		model.setName(name);
-		model.setDeptId(deptId);
-		
-		int time = DateUtil.currentTime();
-		model.setCreated(time);
-		model.setUpdated(time);
-		return model;
 	}
 }

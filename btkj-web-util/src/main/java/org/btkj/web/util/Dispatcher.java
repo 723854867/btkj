@@ -17,7 +17,6 @@ import org.btkj.web.util.action.IAction;
 import org.rapid.util.common.SpringContextUtil;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.reflect.ClassUtil;
 import org.slf4j.Logger;
@@ -96,7 +95,7 @@ public class Dispatcher extends HttpServlet {
 			}
 			
 			Result<?> result = action.execute(req);
-			req.write(SerializeUtil.JsonUtil.GSON.toJson(result));
+			req.write(action.gson().toJson(result));
 		} catch (ConstConvertFailureException e) {
 			req.write(Result.jsonResult(e.constant().id(), e.desc()));
 		} catch (Exception e) {

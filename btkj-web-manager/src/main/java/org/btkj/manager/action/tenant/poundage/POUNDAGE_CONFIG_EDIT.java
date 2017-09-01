@@ -9,34 +9,30 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.param.PoundageErogidicParam;
-import org.btkj.vehicle.pojo.param.PoundageErogidicParam.Type;
-import org.rapid.util.common.Consts;
+import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
+import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
+import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.Type;
 import org.rapid.util.common.message.Result;
 
-public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageErogidicParam> {
+public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageConfigEditParam> {
 	
 	@Resource
 	private BonusService bonusService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageErogidicParam param) {
-		if (param.getType() == Type.NODE_CONFIG)
-			return Consts.RESULT.FORBID;
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigEditParam param) {
 		param.setTid(tenant.getTid());
-		if (param.getType() == Type.EDIT) {
-			PoundageErogidicParam.Node node = param.getNode();
-			if (null == node)
-				return Consts.RESULT.FORBID;
-			node.setCommercialRate(Math.min(node.getCommercialRate(), BtkjConsts.LIMITS.MAX_COMMISION_RATE));
-			node.setCompulsoryRate(Math.min(node.getCompulsoryRate(), BtkjConsts.LIMITS.MAX_COMMISION_RATE));
-			node.setCommercialRate(Math.max(node.getCommercialRate(), BtkjConsts.LIMITS.MIN_COMMISION_RATE));
-			node.setCompulsoryRate(Math.max(node.getCompulsoryRate(), BtkjConsts.LIMITS.MIN_COMMISION_RATE));
-			node.setCommercialRetainRate(Math.min(node.getCommercialRetainRate(), BtkjConsts.LIMITS.MAX_COMMISION_RETAIN_RATE));
-			node.setCompulsoryRetainRate(Math.min(node.getCompulsoryRetainRate(), BtkjConsts.LIMITS.MAX_COMMISION_RETAIN_RATE));
-			node.setCommercialRetainRate(Math.max(node.getCommercialRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
-			node.setCompulsoryRetainRate(Math.max(node.getCompulsoryRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
+		if (param.getType() == Type.EDIT && null != param.getConfig()) {
+			NodeConfig config = param.getConfig();
+			config.setCmRate(Math.min(config.getCmRate(), BtkjConsts.LIMITS.MAX_COMMISION_RATE));
+			config.setCpRate(Math.min(config.getCpRate(), BtkjConsts.LIMITS.MAX_COMMISION_RATE));
+			config.setCmRate(Math.max(config.getCmRate(), BtkjConsts.LIMITS.MIN_COMMISION_RATE));
+			config.setCpRate(Math.max(config.getCpRate(), BtkjConsts.LIMITS.MIN_COMMISION_RATE));
+			config.setCmRetainRate(Math.min(config.getCmRetainRate(), BtkjConsts.LIMITS.MAX_COMMISION_RETAIN_RATE));
+			config.setCpRetainRate(Math.min(config.getCpRetainRate(), BtkjConsts.LIMITS.MAX_COMMISION_RETAIN_RATE));
+			config.setCmRetainRate(Math.max(config.getCmRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
+			config.setCpRetainRate(Math.max(config.getCpRetainRate(), BtkjConsts.LIMITS.MIN_COMMISION_RETAIN_RATE));
 		}
-		return bonusService.poundageErgodic(param);
+		return bonusService.poundageConfigEdit(param);
 	}
 }

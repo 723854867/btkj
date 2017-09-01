@@ -6,17 +6,13 @@ import org.springframework.stereotype.Component;
 @Component("cacheService")
 public class CacheService extends org.rapid.util.common.cache.CacheService<JsonCache<?, ?>> {
 	
-	public static final String CFG_COEFFICIENT 				= "cfgCoefficient";
-	public static final String CFG_POUNDAGE_NODE			= "cfgPoundageCache";
-	public static final String CFG_COEFFICIENT_RANGE 		= "cfgCoefficientRange";
-	public static final String CFG_POUNDAGE_STRUCTURE 		= "cfgPoundageStructure";
-	public static final String CFG_COEFFICIENT_STRUCTURE 	= "cfgCoefficientStructure";
+	public static final String POUNDAGE_NODE 				= "poundageNode";
+	public static final String COEFFICIENT_NODE 			= "coefficientNode";
+	public static final String COEFFICIENT_RANGE 			= "coefficientRange";
 
 	public CacheService() {
-		addCache(new CfgCoefficientCache(CFG_COEFFICIENT, 						"classpath:conf/json/cfg_coefficient.json"));
-		addCache(new CfgPoundageNodeCache(CFG_POUNDAGE_NODE, 					"classpath:conf/json/cfg_poundage_node.json"));
-		addCache(new CfgCoefficientRangeCache(CFG_COEFFICIENT_RANGE, 			"classpath:conf/json/cfg_coefficient_range.json"));
-		addCache(new CfgPoundageStructureCache(CFG_POUNDAGE_STRUCTURE, 			"classpath:conf/json/cfg_poundage_structure.json"));
-		addCache(new CfgCoefficientStructureCache(CFG_COEFFICIENT_STRUCTURE, 	"classpath:conf/json/cfg_coefficient_structure.json"));
+		addCache(new PoundageNodeCache(POUNDAGE_NODE, 							"classpath:conf/json/poundage_node.json"));
+		addCache(new CoefficientNodeCache(COEFFICIENT_NODE, 					"classpath:conf/json/coefficient_node.json"));
+		addCache(new CoefficientRangeCache(COEFFICIENT_RANGE, 					"classpath:conf/json/coefficient_range.json"));
 	}
 }

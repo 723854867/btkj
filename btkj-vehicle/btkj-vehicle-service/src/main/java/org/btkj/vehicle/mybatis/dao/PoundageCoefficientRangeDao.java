@@ -2,6 +2,7 @@ package org.btkj.vehicle.mybatis.dao;
 
 import java.util.Map;
 
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
@@ -34,4 +35,8 @@ public interface PoundageCoefficientRangeDao extends DBMapper<Integer, PoundageC
 	@Override
 	@UpdateProvider(type = PoundageCoefficientRangeSQLProvider.class, method = "update")
 	void update(PoundageCoefficientRange model);
+	
+	@Override
+	@DeleteProvider(type = PoundageCoefficientRangeSQLProvider.class, method = "delete")
+	void delete(Integer key);
 }

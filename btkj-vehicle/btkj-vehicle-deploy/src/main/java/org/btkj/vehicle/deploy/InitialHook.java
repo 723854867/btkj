@@ -2,7 +2,7 @@ package org.btkj.vehicle.deploy;
 
 import javax.annotation.Resource;
 
-import org.btkj.vehicle.realm.Poundage;
+import org.btkj.vehicle.realm.poundage.Poundage;
 import org.rapid.util.common.Application;
 import org.rapid.util.common.cache.CacheService;
 import org.springframework.stereotype.Component;

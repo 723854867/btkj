@@ -1,12 +1,13 @@
 package org.btkj.vehicle.api;
 
-import java.util.List;
 import java.util.Map;
 
-import org.btkj.vehicle.pojo.model.CoefficientRange;
-import org.btkj.vehicle.pojo.model.PoundageStructure;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
-import org.btkj.vehicle.pojo.param.PoundageErogidicParam;
+import org.btkj.vehicle.pojo.entity.CoefficientRange;
+import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
+import org.btkj.vehicle.pojo.model.CoefficientDocument;
+import org.btkj.vehicle.pojo.model.PoundageDocument;
+import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
+import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -21,15 +22,23 @@ public interface BonusService {
 	 * 
 	 * @return
 	 */
-	Map<Integer, PoundageStructure> poundageNodeStructure();
+	Map<Integer, PoundageDocument> poundageDocuments();
 	
 	/**
-	 * 获取指定系数类型的系数范围
+	 * 手续费配置节点关联系数
 	 * 
-	 * @param cfgCoefficientId
+	 * @param poundageNodeId
 	 * @return
 	 */
-	Result<List<CoefficientRange>> poundageCoefficientRanges(int tid, int cfgCoefficientId);
+	Result<Map<Integer, CoefficientDocument>> coefficientDocuments(int poundageNodeId);
+	
+	/**
+	 * 获取指定系数的系数范围
+	 * 
+	 * @param coefficientId
+	 * @return
+	 */
+	Map<Integer, CoefficientRange> coefficientRanges(int tid, int coefficientId);
 	
 	/**
 	 * 编辑指定系数类型的系数范围
@@ -37,13 +46,23 @@ public interface BonusService {
 	 * @param param
 	 * @return
 	 */
-	Result<Integer> poundageCoefficientRangeEdit(PoundageCoefficientRangeEditParam param); 
+	Result<Integer> coefficientRangeEdit(CoefficientRangeEditParam param); 
 	
 	/**
-	 * 手续费递归操作
+	 * 获取指定险企指定节点的手续费配置
+	 * 
+	 * @param tid
+	 * @param insurerId
+	 * @param nodeId
+	 * @return
+	 */
+	NodeConfig poundageConfig(int tid, int insurerId, int nodeId);
+	
+	/**
+	 * 手续费配置编辑
 	 * 
 	 * @param param
 	 * @return
 	 */
-	Result<?> poundageErgodic(PoundageErogidicParam param); 
+	Result<Void> poundageConfigEdit(PoundageConfigEditParam param);
 }

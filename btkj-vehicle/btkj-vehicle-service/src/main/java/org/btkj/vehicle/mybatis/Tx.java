@@ -9,13 +9,13 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.cache.CacheService;
-import org.btkj.vehicle.cache.domain.CfgCoefficient;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
 import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
+import org.btkj.vehicle.pojo.entity.CoefficientNode;
 import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageCoefficientRangeEditParam;
+import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
 import org.btkj.vehicle.pojo.param.TenantSetParam;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.JianJieInsurerMapper;
@@ -50,11 +50,11 @@ public class Tx {
 	private PoundageCoefficientRangeDao poundageCoefficientRangeDao;
 	
 	@Transactional
-	public PoundageCoefficientRange poundageCoefficientRangeUpdate(PoundageCoefficientRangeEditParam param) {
+	public PoundageCoefficientRange coefficientRangeUpdate(CoefficientRangeEditParam param) {
 		PoundageCoefficientRange range = poundageCoefficientRangeDao.getByKey(param.getId());
 		if (null == range)
 			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST);
-		CfgCoefficient coefficient = cacheService.getById(CacheService.CFG_COEFFICIENT, param.getCfgCoefficientId());
+		CoefficientNode coefficient = cacheService.getById(CacheService.COEFFICIENT_NODE, param.getCoefficientId());
 		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), range.getCfgCoefficientId());
 		if (null != param.getVal()) {
 			int comparison = null != param.getSymbol() ? param.getSymbol().mark() : range.getComparison();
@@ -81,9 +81,9 @@ public class Tx {
 	}
 	
 	@Transactional
-	public PoundageCoefficientRange poundageCoefficientRangeAdd(PoundageCoefficientRangeEditParam param, CfgCoefficient coefficient) {
+	public PoundageCoefficientRange coefficientRangeAdd(CoefficientRangeEditParam param, CoefficientNode coefficient) {
 		Map<Integer, PoundageCoefficientRange> ranges = poundageCoefficientRangeDao.getByTidAndCfgCoefficientIdForUpdate(param.getTid(), coefficient.getId());
-		if (ranges.size() > coefficient.getMaxRanges())
+		if (ranges.size() > coefficient.getMaxmiumCustom())
 			throw new BusinessException(BtkjCode.POUNDAGE_COEFFICIENT_RANGE_MAXMIUM);
 		for (PoundageCoefficientRange temp : ranges.values()) {
 			Comparison c = Comparison.match(temp.getComparison());

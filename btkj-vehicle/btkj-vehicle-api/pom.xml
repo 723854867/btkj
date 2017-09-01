@@ -13,4 +13,11 @@
 	<artifactId>btkj-vehicle-api</artifactId>
 	<name>btkj-vehicle-api</name>
 	<url>http://maven.apache.org</url>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+	</dependencies>
 </project>

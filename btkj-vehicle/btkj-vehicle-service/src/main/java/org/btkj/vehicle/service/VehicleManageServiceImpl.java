@@ -17,9 +17,6 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.VehicleOrderState;
@@ -43,18 +40,12 @@ import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.JianJieInsurerEditParam;
 import org.btkj.vehicle.pojo.param.TenantSetParam;
-import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
-import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
-import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
 import org.btkj.vehicle.redis.JianJieInsurerMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
-import org.btkj.vehicle.redis.VehicleBrandMapper;
-import org.btkj.vehicle.redis.VehicleDeptMapper;
-import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -79,13 +70,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Resource
 	private DistributeLock distributeLock;
 	@Resource
-	private VehicleDeptMapper vehicleDeptMapper;
-	@Resource
-	private VehicleModelMapper vehicleModelMapper;
-	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
-	@Resource
-	private VehicleBrandMapper vehicleBrandMapper;
 	@Resource
 	private VehiclePolicyMapper vehiclePolicyMapper;
 	@Resource
@@ -299,88 +284,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				policy.setSalesman(employee.getName());
 				policy.setSalesmanMobile(employee.getMobile());
 			}
-		}
-	}
-	
-	@Override
-	public List<VehicleBrand> brands() {
-		return new ArrayList<VehicleBrand>(vehicleBrandMapper.getAll().values());
-	}
-	
-	@Override
-	public Result<?> brandEdit(VehicleBrandEditParam param) {
-		switch (param.getCrudType()) {
-		case CREATE:
-			VehicleBrand brand = EntityGenerator.newVehicleBrand(param.getName());
-			vehicleBrandMapper.insert(brand);
-			return Result.result(Code.OK, brand.getId());
-		case UPDATE:
-			brand = vehicleBrandMapper.getByKey(param.getId());
-			if (null == brand)
-				return BtkjConsts.RESULT.VEHICLE_BRAND_NOT_EXIST;
-			brand.setName(param.getName());
-			brand.setUpdated(DateUtil.currentTime());
-			vehicleBrandMapper.update(brand);
-			return Consts.RESULT.OK;
-		default:
-			return Consts.RESULT.FORBID;
-		}
-		
-	}
-	
-	@Override
-	public List<VehicleDept> depts(int brandId) {
-		return vehicleDeptMapper.getByBrandId(brandId);
-	}
-	
-	@Override
-	public Result<?> deptEdit(VehicleDeptEditParam param) {
-		switch (param.getCrudType()) {
-		case CREATE:
-			VehicleBrand brand = vehicleBrandMapper.getByKey(param.getBrandId());
-			if (null == brand)
-				return BtkjConsts.RESULT.VEHICLE_BRAND_NOT_EXIST;
-			VehicleDept dept = EntityGenerator.newVehicleDept(param.getBrandId(), param.getName());
-			vehicleDeptMapper.insert(dept);
-			return Result.result(Code.OK, dept.getId());
-		case UPDATE:
-			dept = vehicleDeptMapper.getByKey(param.getId());
-			if (null == dept)
-				return BtkjConsts.RESULT.VEHICLE_DEPT_NOT_EXIST;
-			dept.setName(param.getName());
-			dept.setUpdated(DateUtil.currentTime());
-			vehicleDeptMapper.update(dept);
-			return Consts.RESULT.OK;
-		default:
-			return Consts.RESULT.FORBID;
-		}
-	}
-	
-	@Override
-	public List<VehicleModel> models(int deptId) {
-		return vehicleModelMapper.getByDeptId(deptId);
-	}
-	
-	@Override
-	public Result<?> modelEdit(VehicleModelEditParam param) {
-		switch (param.getCrudType()) {
-		case CREATE:
-			VehicleDept dept = vehicleDeptMapper.getByKey(param.getDeptId());
-			if (null == dept)
-				return BtkjConsts.RESULT.VEHICLE_DEPT_NOT_EXIST;
-			VehicleModel model = EntityGenerator.newVehicleModel(param.getDeptId(), param.getName());
-			vehicleModelMapper.insert(model);
-			return Result.result(Code.OK, model.getId());
-		case UPDATE:
-			model = vehicleModelMapper.getByKey(param.getId());
-			if (null == model)
-				return BtkjConsts.RESULT.VEHICLE_MODEL_NOT_EXIST;
-			model.setName(param.getName());
-			model.setUpdated(DateUtil.currentTime());
-			vehicleModelMapper.update(model);
-			return Consts.RESULT.OK;
-		default:
-			return Consts.RESULT.FORBID;
 		}
 	}
 	

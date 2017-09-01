@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
@@ -21,9 +18,6 @@ import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
 import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.btkj.vehicle.pojo.param.JianJieInsurerEditParam;
 import org.btkj.vehicle.pojo.param.TenantSetParam;
-import org.btkj.vehicle.pojo.param.VehicleBrandEditParam;
-import org.btkj.vehicle.pojo.param.VehicleDeptEditParam;
-import org.btkj.vehicle.pojo.param.VehicleModelEditParam;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
 import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
@@ -69,52 +63,6 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	void jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
-	
-	/**
-	 * 汽车品牌列表
-	 * 
-	 * @return
-	 */
-	List<VehicleBrand> brands();
-	
-	/**
-	 * 汽车品牌编辑
-	 * 
-	 * @param param
-	 * @return
-	 */
-	Result<?> brandEdit(VehicleBrandEditParam param);
-	
-	/**
-	 * 车系列表
-	 * 
-	 * @return
-	 */
-	List<VehicleDept> depts(int brandId);
-	
-	/**
-	 * 车系编辑
-	 * 
-	 * @param param
-	 * @return
-	 */
-	Result<?> deptEdit(VehicleDeptEditParam param);
-	
-	/**
-	 * 厂牌型号列表
-	 * 
-	 * @param deptId
-	 * @return
-	 */
-	List<VehicleModel> models(int deptId);
-	
-	/**
-	 * 厂牌型号编辑
-	 * 
-	 * @param param
-	 * @return
-	 */
-	Result<?> modelEdit(VehicleModelEditParam param);
 	
 	/**
 	 * 车险订单详情:只能查看

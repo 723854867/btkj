@@ -276,7 +276,6 @@ public enum BtkjCode implements ICode {
 	
 	POUNDAGE_NODE_NOT_EXIST(700, "手续费节点不存在"),
 	POUNDAGE_CONFIG_NOT_EXIST(701, "手续费配置不存在"),
-	POUNDAGE_NODE_CONFIG_NOT_EXIST(701, "手续费节点配置不存在"),
 	POUNDAGE_COEFFICIENT_NOT_EXIST(702, "手续费系数不存在"),
 	POUNDAGE_COEFFICIENT_NOT_CUSTOM(703, "手续费系数不允许自定义范围"),
 	POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST(704, "手续费系数范围不存在"),

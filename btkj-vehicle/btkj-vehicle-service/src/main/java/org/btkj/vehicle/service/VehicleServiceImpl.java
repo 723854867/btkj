@@ -23,9 +23,6 @@ import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Renewal;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.entity.VehicleBrand;
-import org.btkj.pojo.entity.VehicleDept;
-import org.btkj.pojo.entity.VehicleModel;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.VehicleInfo;
@@ -43,12 +40,9 @@ import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.btkj.vehicle.pojo.enums.Lane;
 import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
 import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
-import org.btkj.vehicle.realm.Poundage;
 import org.btkj.vehicle.realm.Rule;
+import org.btkj.vehicle.realm.poundage.Poundage;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
-import org.btkj.vehicle.redis.VehicleBrandMapper;
-import org.btkj.vehicle.redis.VehicleDeptMapper;
-import org.btkj.vehicle.redis.VehicleModelMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;
@@ -82,12 +76,6 @@ public class VehicleServiceImpl implements VehicleService {
 	private LeBaoBaVehicle leBaoBaVehicle;		// 乐宝吧车险
 	@Resource
 	private ExecutorService executorService;
-	@Resource
-	private VehicleDeptMapper vehicleDeptMapper;
-	@Resource
-	private VehicleBrandMapper vehicleBrandMapper;
-	@Resource
-	private VehicleModelMapper vehicleModelMapper;
 	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
@@ -356,21 +344,6 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	public List<VehicleInfo> vehicleInfos(TenantPO tenant, String vin) {
 		return leBaoBaVehicle.vehicleInfos(tenant.getLeBaoBaUsername(), tenant.getLeBaoBaPassword(), vin);
-	}
-	
-	@Override
-	public List<VehicleBrand> vehicleBrands() {
-		return new ArrayList<VehicleBrand>(vehicleBrandMapper.getAll().values());
-	}
-	
-	@Override
-	public List<VehicleDept> vehicleDepts(int brandId) {
-		return vehicleDeptMapper.getByBrandId(brandId);
-	}
-	
-	@Override
-	public List<VehicleModel> vehicleModels(int deptId) {
-		return vehicleModelMapper.getByDeptId(deptId);
 	}
 	
 	@Override

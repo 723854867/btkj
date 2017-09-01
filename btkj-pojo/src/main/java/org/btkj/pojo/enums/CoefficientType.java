@@ -102,44 +102,17 @@ public enum CoefficientType {
 	/**
 	 * 车龄
 	 */
-	VEHICLE_AGE(7, "车龄") {
-		@Override
-		public boolean isCustom() {
-			return true;
-		}
-		@Override
-		public int maxCustomNum() {
-			return 4;
-		}
-	},
+	VEHICLE_AGE(7, "车龄"),
 	
 	/**
 	 * 购置价
 	 */
-	PURCHASE_PRICE(8, "购置价") {
-		@Override
-		public boolean isCustom() {
-			return true;
-		}
-		@Override
-		public int maxCustomNum() {
-			return 4;
-		}
-	},
+	PURCHASE_PRICE(8, "购置价"),
 	
 	/**
 	 * 年龄
 	 */
-	AGE(9, "年龄") {
-		@Override
-		public boolean isCustom() {
-			return true;
-		}
-		@Override
-		public int maxCustomNum() {
-			return 4;
-		}
-	};
+	AGE(9, "年龄");
 	
 	private int mark;
 	private String title;
@@ -155,14 +128,6 @@ public enum CoefficientType {
 	
 	public String title() {
 		return title;
-	}
-	
-	public boolean isCustom() {
-		return false;
-	}
-	
-	public int maxCustomNum() {
-		return 0;
 	}
 	
 	/**

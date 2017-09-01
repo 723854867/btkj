@@ -1,0 +1,24 @@
+package org.btkj.manager.action.tenant.poundage;
+
+import javax.annotation.Resource;
+
+import org.btkj.manager.action.EmployeeAction;
+import org.btkj.manager.pojo.param.PoundageConfigParam;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.vehicle.api.BonusService;
+import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
+import org.rapid.util.common.message.Result;
+
+public class POUNDAGE_CONFIG extends EmployeeAction<PoundageConfigParam> {
+	
+	@Resource
+	private BonusService bonusService;
+
+	@Override
+	protected Result<NodeConfig> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigParam param) {
+		return Result.result(bonusService.poundageConfig(tenant.getTid(), param.getInsurerId(), param.getNodeId()));
+	}
+}
