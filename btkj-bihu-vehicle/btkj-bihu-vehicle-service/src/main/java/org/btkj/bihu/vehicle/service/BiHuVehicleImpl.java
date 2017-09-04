@@ -332,15 +332,6 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			case WADDING_DEDUCTIBLE:
 				params.setBuJiMianSheShui(null != insurance ? ONE : ZERO);
 				break;
-			case GARAGE_DESIGNATED:
-				if (null != insurance) {
-					if (!insurance.getQuota().equals(ONE_NEG) && !insurance.getQuota().equals(ZERO) && !insurance.getQuota().equals(ONE))
-						params.setHcXiuLiChangType(ONE_NEG);
-					else
-						params.setHcXiuLiChangType(insurance.getQuota());
-					params.setHcXiuLiChang(insurance.getPrice());
-				}
-				break;
 			case UNKNOWN_THIRD:
 				params.setHcSanFangTeYue(null != insurance ? ONE : ZERO);
 				break;

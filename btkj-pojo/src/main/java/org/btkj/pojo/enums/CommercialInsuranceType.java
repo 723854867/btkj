@@ -133,11 +133,6 @@ public enum CommercialInsuranceType {
 	},
 	
 	/**
-	 * 指定修理厂
-	 */
-	GARAGE_DESIGNATED(1 << 17, "指定修理厂", false),
-	
-	/**
 	 * 无法找到第三方
 	 */
 	UNKNOWN_THIRD(1 << 18, "第三方特约险", false);

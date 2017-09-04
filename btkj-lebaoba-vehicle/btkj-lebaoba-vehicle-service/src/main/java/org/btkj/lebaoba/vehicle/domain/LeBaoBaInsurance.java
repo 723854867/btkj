@@ -135,12 +135,6 @@ public enum LeBaoBaInsurance {
 			insurances.put(CommercialInsuranceType.GLASS, new Insurance(item.getAmount(), item.getPremium()));
 		}
 	},					
-	F3 {				// 指定专修厂特约条款
-		@Override
-		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(item.getAmount(), item.getPremium()));
-		}
-	},					
 	F12 {				// 机动车损失保险无法找到第三方特约险
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
@@ -239,9 +233,6 @@ public enum LeBaoBaInsurance {
 					break;
 				case WADDING_DEDUCTIBLE:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.B11));
-					break;
-				case GARAGE_DESIGNATED:
-					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F3));
 					break;
 				case UNKNOWN_THIRD:
 					items.add(new VehicleInsuranceItem(LeBaoBaInsurance.F12));

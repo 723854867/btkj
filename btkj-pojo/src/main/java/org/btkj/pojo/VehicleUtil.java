@@ -153,9 +153,7 @@ public class VehicleUtil {
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
 						map.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
 				}
-			} else if (name.contains("修理")) 
-				map.put(CommercialInsuranceType.GARAGE_DESIGNATED, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
-			else if (name.contains("无法")) 
+			} else if (name.contains("无法")) 
 				map.put(CommercialInsuranceType.UNKNOWN_THIRD, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 			else if (name.contains("涉水")) {
 				if (_isDeductible(name))

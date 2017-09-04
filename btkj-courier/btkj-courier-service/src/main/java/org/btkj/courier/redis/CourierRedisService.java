@@ -178,7 +178,6 @@ public class CourierRedisService {
 			case GLASS:
 				builder.append(type.title()).append("(").append(insurance.getQuota().equals("1") ? "国产" : "进口").append(")、");
 				break;
-			case GARAGE_DESIGNATED:
 			case UNKNOWN_THIRD:
 			case WADDING:
 			case AUTO_FIRE:

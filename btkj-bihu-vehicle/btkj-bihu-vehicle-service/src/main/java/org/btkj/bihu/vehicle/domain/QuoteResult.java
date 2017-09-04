@@ -1,7 +1,6 @@
 package org.btkj.bihu.vehicle.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -635,11 +634,7 @@ public class QuoteResult implements Serializable {
 				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.Item.SheShui.BaoE, this.Item.SheShui.BaoFei));
 			if (null != this.Item.BuJiMianSheShui && Double.valueOf(this.Item.BuJiMianSheShui.BaoFei) != 0)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.Item.BuJiMianSheShui.BaoE, this.Item.BuJiMianSheShui.BaoFei));
-			if (-1 != this.Item.HcXiuLiChangType && null != this.Item.HcXiuLiChang && Double.valueOf(this.Item.HcXiuLiChang.BaoFei) != 0) {
-				String quota = this.Item.HcXiuLiChangType == 1 
-						? new BigDecimal(1).add(new BigDecimal(this.Item.HcXiuLiChang.BaoE)).toString() : this.Item.HcXiuLiChang.BaoE;
-				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(quota, this.Item.HcXiuLiChang.BaoFei));
-			} if (null != this.Item.HcSanFangTeYue && Double.valueOf(this.Item.HcSanFangTeYue.BaoFei) != 0)
+			if (null != this.Item.HcSanFangTeYue && Double.valueOf(this.Item.HcSanFangTeYue.BaoFei) != 0)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.Item.HcSanFangTeYue.BaoE, this.Item.HcSanFangTeYue.BaoFei));
 		}
 		result.setNoLossDiscountRate(this.Item.RateFactor1);

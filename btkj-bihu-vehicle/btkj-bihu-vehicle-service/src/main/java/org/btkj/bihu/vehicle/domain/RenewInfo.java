@@ -780,8 +780,6 @@ public class RenewInfo implements Serializable {
 				insurances.put(CommercialInsuranceType.WADDING, new Insurance(this.SaveQuote.SheShui));
 			if (null != this.SaveQuote.BuJiMianSheShui && Double.valueOf(this.SaveQuote.BuJiMianSheShui) != 0)
 				insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(this.SaveQuote.BuJiMianSheShui));
-			if (-1 != this.SaveQuote.HcXiuLiChangType)
-				insurances.put(CommercialInsuranceType.GARAGE_DESIGNATED, new Insurance(String.valueOf(this.SaveQuote.HcXiuLiChangType), this.SaveQuote.HcXiuLiChang));
 			if (null != this.SaveQuote.HcSanFangTeYue && Double.valueOf(this.SaveQuote.HcSanFangTeYue) != 0)
 				insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(this.SaveQuote.HcSanFangTeYue));
 			schema.setInsurances(insurances.isEmpty() ? null : insurances);
