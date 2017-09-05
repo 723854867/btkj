@@ -1,6 +1,7 @@
 package org.btkj.user.service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -176,5 +177,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<EmployeePO> team(int tid, int employeeId, int teamDepth) {
 		return tx.team(tid, employeeId, teamDepth);
+	}
+	
+	@Override
+	public Map<Integer, EmployeeTip> employeeTips(AppPO app, UserPO user) {
+		Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
+		if (CollectionUtil.isEmpty(employees))
+			return Collections.EMPTY_MAP;
+		Set<Integer> set = new HashSet<Integer>();
+		for (EmployeePO employee : employees.values())
+			set.add(employee.getTid());
+		Map<Integer, TenantPO> tenants = tenantMapper.getByKeys(set);
+		Map<Integer, EmployeeTip> map = new HashMap<Integer, EmployeeTip>();
+		for (EmployeePO employee : employees.values())
+			map.put(employee.getId(), new EmployeeTip(employee, app, user, tenants.get(employee.getTid())));
+		return map;
 	}
 }

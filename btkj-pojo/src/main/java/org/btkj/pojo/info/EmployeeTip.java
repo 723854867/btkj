@@ -29,6 +29,7 @@ public class EmployeeTip implements Serializable {
 	private String mobile;				// 手机号
 	private String avatar;
 	private String identity;			// 身份证号
+	private int layer;
 	private int CMRate;
 	private int CPRate;
 	private int created;
@@ -52,6 +53,7 @@ public class EmployeeTip implements Serializable {
 		this.CMRate = employee.getCommercialRate();
 		this.CPRate = employee.getCompulsoryRate();
 		this.created = employee.getCreated();
+		this.layer = employee.getLevel();
 	}
 
 	public int getId() {
@@ -180,5 +182,13 @@ public class EmployeeTip implements Serializable {
 
 	public void setCreated(int created) {
 		this.created = created;
+	}
+	
+	public int getLayer() {
+		return layer;
+	}
+	
+	public void setLayer(int layer) {
+		this.layer = layer;
 	}
 }

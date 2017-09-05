@@ -47,7 +47,7 @@ public class EntityGenerator {
 		return area;
 	}
 	
-	public static final Modular newModular(String name, Modular parent, ModularType type) {
+	public static final Modular newModular(String name, String cid, Modular parent, ModularType type) {
 		Modular modular = new Modular();
 		modular.setName(name);
 		modular.setParentId(null == parent ? null : parent.getId());
@@ -55,6 +55,7 @@ public class EntityGenerator {
 		modular.setRight(modular.getLeft() + 1);
 		modular.setLayer(null == parent ? Node.ROOT_LAYER : parent.getLayer() + 1);
 		modular.setType(type.mark());
+		modular.setCid(cid);
 		
 		int time = DateUtil.currentTime();
 		modular.setCreated(time);

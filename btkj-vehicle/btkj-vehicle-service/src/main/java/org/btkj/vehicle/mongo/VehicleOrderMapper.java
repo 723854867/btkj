@@ -51,7 +51,8 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 			for (VehicleOrder order : temp.values())
 				map.put(order.get_id(), order);
 		}
-		mongo.bulkReplaceOne(collection, map);
+		if (!CollectionUtil.isEmpty(orders))
+			mongo.bulkReplaceOne(collection, map);
 	}
 	
 	public void delete(int employeeId, String license) {

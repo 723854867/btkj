@@ -29,9 +29,9 @@ public class AUTHORIZE extends AdminAction<AuthorizeParam> {
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (target.getId() == admin.getId())
 			return Consts.RESULT.FORBID;
-		if (MasterUtil.hasFullPrivileges(admin))
+		if (!MasterUtil.hasFullPrivileges(admin))
 			return Consts.RESULT.NO_PRIVILEGE;
-		configManageService.authorize(param.getTarId(), param.getModulars(), ModularType.ADMIM);
+		configManageService.authorize(param.getTarId(), param.getModulars(), ModularType.ADMIN);
 		return Consts.RESULT.OK;
 	}
 }

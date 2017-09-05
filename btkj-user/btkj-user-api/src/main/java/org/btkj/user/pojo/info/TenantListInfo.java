@@ -16,11 +16,11 @@ public class TenantListInfo implements Serializable {
 	private List<OwnedTenants> own;			// 已经拥有的代理公司列表
 	private List<AuditTenants> audit;		// 正在审核的代理公司列表
 	
-	public TenantListInfo(List<TenantPO> own, List<EmployeePO> employees, List<TenantPO> audit) {
+	public TenantListInfo(List<TenantPO> own, Map<Integer, EmployeePO> employees, List<TenantPO> audit) {
 		this.own = new ArrayList<OwnedTenants>();
 		this.audit = new ArrayList<AuditTenants>();
 		Map<Integer, EmployeePO> map = new HashMap<Integer, EmployeePO>();
-		for (EmployeePO employee : employees) 
+		for (EmployeePO employee : employees.values()) 
 			map.put(employee.getTid(), employee);
 		for (TenantPO tenant : own) 
 			this.own.add(new OwnedTenants(tenant, map.get(tenant.getTid())));

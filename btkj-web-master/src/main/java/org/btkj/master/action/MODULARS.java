@@ -21,7 +21,7 @@ public class MODULARS extends AdminAction<ModularsParam> {
 
 	@Override
 	protected Result<Map<Integer, ModularDocument>> execute(Admin admin, ModularsParam param) {
-		if (param.getType() == ModularType.ADMIM)
+		if (param.getType() != ModularType.ADMIN)
 			param.setTarId(null);
 		if (!MasterUtil.hasFullPrivileges(admin))
 			return Consts.RESULT.NO_PRIVILEGE;

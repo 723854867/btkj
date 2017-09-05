@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.identity.Employee;
@@ -41,4 +43,12 @@ public interface EmployeeService {
 	 * @return
 	 */
 	List<EmployeePO> team(int tid, int employeeId, int teamDepth);
+	
+	/**
+	 * 获取用户拥有的雇员信息
+	 * 
+	 * @param user
+	 * @return
+	 */
+	Map<Integer, EmployeeTip> employeeTips(AppPO app, UserPO user);
 }

@@ -191,6 +191,7 @@ public class VehicleServiceImpl implements VehicleService {
 			}
 		}
 		
+		vehicleOrderMapper.delete(employee.getId(), param.getLicense());
 		if (0 != biHuQuoteMod) {
 			Result<Void> result = biHuVehicle.order(tenant.getBiHuAgent(), tenant.getBiHuKey(), user.getUid(), biHuQuoteMod, biHuInsureMod, configService.area(tenant.getRegion()).getBiHuId(), param);
 			if (!result.isSuccess())

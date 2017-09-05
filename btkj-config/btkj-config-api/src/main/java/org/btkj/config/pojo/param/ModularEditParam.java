@@ -16,6 +16,9 @@ public class ModularEditParam extends Param {
 	@Min(value = 1, groups = { ValidateGroups.UPDATE.class, ValidateGroups.DELETE.class })
 	private int id;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
+	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX)
+	private String cid;
+	@NotNull(groups = { ValidateGroups.CREATE.class })
 	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
 	private String name;
 	private int parentId;
@@ -28,6 +31,14 @@ public class ModularEditParam extends Param {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getCid() {
+		return cid;
+	}
+	
+	public void setCid(String cid) {
+		this.cid = cid;
 	}
 
 	public String getName() {

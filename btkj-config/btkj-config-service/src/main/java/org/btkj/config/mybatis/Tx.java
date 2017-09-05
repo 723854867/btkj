@@ -64,7 +64,7 @@ public class Tx {
 			throw new BusinessException(BtkjCode.MODULAR_TYPE_UNMATCH);
 		if (null == parent && !modulars.isEmpty())
 			throw new BusinessException(BtkjCode.MODULAR_ROOT_EXIST);
-		Modular modular = EntityGenerator.newModular(param.getName(), parent, param.getModularType());
+		Modular modular = EntityGenerator.newModular(param.getName(), param.getCid(), parent, param.getModularType());
 		if (null != modular.getParentId() && 0 != modular.getParentId())					// 左右值重排序
 			modularDao.updateForInsert(modular.getLeft(), 2, param.getModularType().mark());
 		try {

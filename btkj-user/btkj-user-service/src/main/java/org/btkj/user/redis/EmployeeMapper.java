@@ -2,7 +2,6 @@ package org.btkj.user.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,17 +58,19 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * 
 	 * @return
 	 */
-	public List<EmployeePO> ownedTenants(int uid) {
+	public Map<Integer, EmployeePO> ownedTenants(int uid) {
 		Map<Integer, EmployeePO> map =_checkLoad(uid);
 		if (null != map)
-			return new ArrayList<EmployeePO>(map.values());
+			return map;
 		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(uid));
 		if (null == list)
-			return Collections.EMPTY_LIST;
-		List<EmployeePO> l = new ArrayList<EmployeePO>();
-		for (byte[] buffer : list)
-			l.add(serializer.antiConvet(buffer));
-		return l;
+			return CollectionUtil.emptyHashMap();
+		map = new HashMap<Integer, EmployeePO>();
+		for (byte[] buffer : list) {
+			EmployeePO employee = serializer.antiConvet(buffer);
+			map.put(employee.getId(), employee);
+		}
+		return map;
 	}
 	
 	private Map<Integer, EmployeePO> _checkLoad(int uid) {

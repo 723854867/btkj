@@ -1,6 +1,7 @@
 package org.btkj.config.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -166,6 +167,35 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 			_ownerCheck(modulars, set);
 		}
 		return modulars;
+	}
+	
+	@Override
+	public Set<String> modularsPossessed(Integer tarId, ModularType type) {
+		Map<String, Privilege> privileges = privilegeMapper.privileges(type, tarId);
+		if (CollectionUtil.isEmpty(privileges))
+			return Collections.EMPTY_SET;
+		Set<Integer> set = new HashSet<Integer>();
+		for (Privilege privilege : privileges.values())
+			set.add(privilege.getModularId());
+		Map<Integer, Modular> modulars = modularMapper.getByKeys(set);
+		if (CollectionUtil.isEmpty(modulars))
+			return Collections.EMPTY_SET;
+		Set<String> cids = new HashSet<String>();
+		for (Modular modular : modulars.values())
+			cids.add(modular.getCid());
+		return cids;
+	}
+	
+	@Override
+	public Map<Integer, Set<String>> modularsPossessed(Set<Integer> employees) {
+		Map<Integer, Set<String>> map = new HashMap<Integer, Set<String>>();
+		for (int employeeId : employees) {
+			Set<String> cids = modularsPossessed(employeeId, ModularType.EMPLOYEE);
+			if (CollectionUtil.isEmpty(cids))
+				continue;
+			map.put(employeeId, cids);
+		}
+		return map;
 	}
 	
 	private boolean _ownerCheck(Map<Integer, ModularDocument> modulars, Set<Integer> set) {

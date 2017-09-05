@@ -1,6 +1,7 @@
 package org.btkj.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -70,9 +71,9 @@ public class AppServiceImpl implements AppService {
 		if (null == tenant) {
 			int mainTid = userMapper.mainTenant(user.getUid());
 			if (0 == mainTid) {
-				List<EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
+				Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
 				if (null != employees && !employees.isEmpty()) 
-					mainTid = employees.get(0).getTid();
+					mainTid = employees.values().iterator().next().getTid();
 			}
 			if (0 != mainTid)
 				tenant = tenantMapper.getByKey(mainTid);

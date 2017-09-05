@@ -49,6 +49,10 @@ public interface ConfigManageService {
 	
 	Map<Integer, ModularDocument> modulars(Integer tarId, ModularType type);
 	
+	Set<String> modularsPossessed(Integer tarId, ModularType type);
+	
+	Map<Integer, Set<String>> modularsPossessed(Set<Integer> employees);
+	
 	/**
 	 * api 编辑
 	 * 

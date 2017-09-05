@@ -5,7 +5,7 @@ public enum ModularType {
 	/**
 	 * 保途云模块
 	 */
-	ADMIM(1),
+	ADMIN(1),
 	
 	/**
 	 * 平台模块

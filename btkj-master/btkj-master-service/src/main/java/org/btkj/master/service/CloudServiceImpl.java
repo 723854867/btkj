@@ -18,13 +18,13 @@ public class CloudServiceImpl implements CloudService {
 
 	@Override
 	public Result<LoginInfo> login(int id, String pwd) {
-		Admin administrator = adminMapper.getByKey(id);
-		if (null == administrator)
+		Admin admin = adminMapper.getByKey(id);
+		if (null == admin)
 			return Result.result(Code.USER_NOT_EXIST);
-		if (!administrator.getPwd().equals(pwd))
+		if (!admin.getPwd().equals(pwd))
 			return Result.result(Code.PWD_ERROR);
-		String token = adminMapper.tokenReplace(administrator);
-		return Result.result(new LoginInfo(token, administrator.getId()));
+		String token = adminMapper.tokenReplace(admin);
+		return Result.result(new LoginInfo(token, admin));
 	}
 	
 	@Override
