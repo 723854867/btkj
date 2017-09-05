@@ -30,7 +30,7 @@ public enum LeBaoBaInsurance {
 	B1 {				// 车损险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},
 	Z2 {				// 盗抢险
@@ -42,7 +42,7 @@ public enum LeBaoBaInsurance {
 	B2 {				// 盗抢险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},	
 	Z3 {				// 三者险
@@ -54,7 +54,7 @@ public enum LeBaoBaInsurance {
 	B3 {				// 三者险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},	
 	Z4 {				// 座位险(司机)
@@ -66,7 +66,7 @@ public enum LeBaoBaInsurance {
 	B4 {				// 座位险(司机)不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},
 	Z5 {				// 座位险(乘客)
@@ -78,7 +78,7 @@ public enum LeBaoBaInsurance {
 	B5 {				// 座位险(乘客)不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},					
 	B6 {				// 座位险不计免赔
@@ -94,19 +94,19 @@ public enum LeBaoBaInsurance {
 	B7 {				// 划痕险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance("", item.getPremium()));
 		}
 	},		
 	F5 {				// 自燃险
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance("1", item.getPremium()));
 		}
 	},	
 	B8 {				// 自燃险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance("1", item.getPremium()));
 		}
 	},					
 	B9 {				// 附加险不计免赔
@@ -116,13 +116,13 @@ public enum LeBaoBaInsurance {
 	F8 {				// 涉水发动机损坏险
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.WADDING, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.WADDING, new Insurance("1", item.getPremium()));
 		}
 	},	
 	B11 {				// 涉水发动机损坏险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},				
 	B12 {				// 主险不计免赔
@@ -132,13 +132,13 @@ public enum LeBaoBaInsurance {
 	F2 {				// 破碎险
 		@Override	
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.GLASS, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.GLASS, new Insurance(item.getAmount().equals("10") ? "1" : "2", item.getPremium()));
 		}
 	},					
 	F12 {				// 机动车损失保险无法找到第三方特约险
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance(item.getAmount(), item.getPremium()));
+			insurances.put(CommercialInsuranceType.UNKNOWN_THIRD, new Insurance("1", item.getPremium()));
 		}
 	},				
 	J1 {				// 交强险

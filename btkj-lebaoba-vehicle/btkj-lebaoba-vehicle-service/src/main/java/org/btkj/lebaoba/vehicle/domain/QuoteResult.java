@@ -1,5 +1,6 @@
 package org.btkj.lebaoba.vehicle.domain;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,7 +310,7 @@ public class QuoteResult {
 		public void setAiErrorInfo(AiErrorInfo aiErrorInfo) {
 			this.aiErrorInfo = aiErrorInfo;
 		}
-		public PolicySchema schema() {
+		public PolicySchema schema(int seat) {
 			PolicySchema schema = new PolicySchema();
 			schema.setCommercialTotal(null == CommerceTotalPremium ? "0" : CommerceTotalPremium);
 			schema.setCompulsoryTotal(null == CompulsoryTotalPremium ? "0" : CompulsoryTotalPremium);
@@ -322,6 +323,15 @@ public class QuoteResult {
 						continue;
 					}
 					insurance.insuranceMapping(insurances, item);
+					switch (insurance) {
+					case Z5:
+						Insurance temp = insurances.get(CommercialInsuranceType.PASSENGER);
+						if (null != temp)
+							temp.setQuota(new BigDecimal(temp.getQuota()).divide(new BigDecimal(seat - 1)).toString());
+						break;
+					default:
+						break;
+					}
 				}
 				schema.setInsurances(insurances);
 			}

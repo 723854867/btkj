@@ -2,7 +2,7 @@ package org.btkj.vehicle.pojo.entity;
 
 import java.util.Set;
 
-import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.vehicle.pojo.enums.CoefficientType;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.math.tree.NodeImpl;
 

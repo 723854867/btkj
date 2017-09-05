@@ -28,7 +28,7 @@ public class BonusManageConfigMapper extends RedisDBAdapter<String, BonusManageC
 			return map;
 		List<byte[]> list = redis.hmsget(redisKey, _tenantSetKey(tid));
 		if (null == list)
-			return CollectionUtil.EMPTY_MAP;
+			return CollectionUtil.emptyHashMap();
 		map = new HashMap<String, BonusManageConfig>();
 		for (byte[] buffer : list) {
 			BonusManageConfig temp = serializer.antiConvet(buffer);

@@ -1,5 +1,6 @@
 package org.btkj.manager.action;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class MODULARS_POSSESSED extends UserAction<NilParam> {
 	protected Result<ModularsInfo> execute(AppPO app, UserPO user, NilParam param) {
 		Set<String> pset = configManageService.modularsPossessed(user.getUid(), ModularType.USER);
 		Map<Integer, EmployeeTip> employees = employeeService.employeeTips(app, user);
-		Map<Integer, Set<String>> tsets = CollectionUtil.isEmpty(employees) ? null : configManageService.modularsPossessed(employees.keySet());
+		Map<Integer, Set<String>> tsets = CollectionUtil.isEmpty(employees) ? null : configManageService.modularsPossessed(new HashSet<Integer>(employees.keySet()));
 		return Result.result(new ModularsInfo(pset, tsets, employees));
 	}
 }

@@ -11,14 +11,18 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.cache.domain.CfgVehicle;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
+import org.btkj.vehicle.pojo.entity.CoefficientRange;
 import org.btkj.vehicle.pojo.entity.PoundageConfig;
 import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
 import org.btkj.vehicle.pojo.entity.PoundageNode;
+import org.btkj.vehicle.pojo.enums.CoefficientType;
 import org.btkj.vehicle.pojo.enums.PoundageType;
 import org.btkj.vehicle.pojo.model.CoefficientDocument;
 import org.btkj.vehicle.pojo.model.PoundageDocument;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.math.tree.PBTreeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +75,13 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		if (!CollectionUtil.isEmpty(config.getRatios())) {
 			Result<Map<Integer, CoefficientDocument>> result = poundage.coefficientDocuments(pnode.getId());
 			if (!CollectionUtil.isEmpty(result.attach())) {
-				
+				Map<String, Integer> record = new HashMap<String, Integer>();
+				_recursionCoefficient(order, config.getRatios(), result.attach(), record, null);
+				int ratio = 0;
+				for (Integer detla : record.values()) {
+					if (null != detla)
+						ratio += detla;
+				}
 			}
 		}
 	}
@@ -133,8 +143,31 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		}
 	}
 	
-	private void _recursionCoefficient(Map<Integer, Map<Integer, Integer>> ratios, Map<Integer, CoefficientDocument> coefficients) {
-		
+	private void _recursionCoefficient(VehicleOrder order, Map<Integer, Map<Integer, Integer>> ratios, Map<Integer, CoefficientDocument> coefficients, Map<String, Integer> record, String path) {
+		if (CollectionUtil.isEmpty(coefficients))
+			return;
+		for (Entry<Integer, CoefficientDocument> entry : coefficients.entrySet()) {
+			String nextPath = null == path ? String.valueOf(entry.getKey()) : path + Consts.SYMBOL_UNDERLINE + entry.getKey();
+			Integer ratio = record.remove(path);
+			Map<Integer, Integer> rangeRatios = ratios.get(entry.getKey());
+			if (null != rangeRatios) {
+				CoefficientType coefficientType = entry.getValue().node().getType();
+				Map<Integer, CoefficientRange> ranges = poundage.coefficientRanges(order.getTid(), entry.getKey());
+				if (!CollectionUtil.isEmpty(ranges)) {
+					for (CoefficientRange range : ranges.values()) {
+						if (!coefficientType.satisfy(range, order)) 
+							continue;
+						Integer temp = rangeRatios.get(range.getId());
+						if (null == temp)
+							continue;
+						ratio = temp;	
+						break;					// 同一个系数多个范围最多有且只有一个范围能够满足条件
+					}
+				}
+			}
+			record.put(nextPath, ratio);
+			_recursionCoefficient(order, ratios, entry.getValue().children(), record, nextPath);
+		}
 	}
 	
 	private class MatchNode {

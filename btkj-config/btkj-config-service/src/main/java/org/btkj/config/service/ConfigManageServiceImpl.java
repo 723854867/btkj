@@ -1,7 +1,6 @@
 package org.btkj.config.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -111,7 +110,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	public Map<Integer, AreaInfo> areas() {
 		Map<Integer, Area> areas = areaMapper.getAll();
 		if (CollectionUtil.isEmpty(areas))
-			return CollectionUtil.EMPTY_MAP;
+			return CollectionUtil.emptyHashMap();
 		Set<Integer> set = new HashSet<Integer>();
 		for (Area area : areas.values())
 			set.add(area.getCode());
@@ -173,13 +172,13 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	public Set<String> modularsPossessed(Integer tarId, ModularType type) {
 		Map<String, Privilege> privileges = privilegeMapper.privileges(type, tarId);
 		if (CollectionUtil.isEmpty(privileges))
-			return Collections.EMPTY_SET;
+			return CollectionUtil.emptyHashSet();
 		Set<Integer> set = new HashSet<Integer>();
 		for (Privilege privilege : privileges.values())
 			set.add(privilege.getModularId());
 		Map<Integer, Modular> modulars = modularMapper.getByKeys(set);
 		if (CollectionUtil.isEmpty(modulars))
-			return Collections.EMPTY_SET;
+			return CollectionUtil.emptyHashSet();
 		Set<String> cids = new HashSet<String>();
 		for (Modular modular : modulars.values())
 			cids.add(modular.getCid());

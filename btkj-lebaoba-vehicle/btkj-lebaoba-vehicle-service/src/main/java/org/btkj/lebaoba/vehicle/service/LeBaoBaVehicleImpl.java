@@ -110,7 +110,7 @@ public class LeBaoBaVehicleImpl implements LeBaoBaVehicle {
 			ir = _insure( username, password, qr.attach().getAttach());
 		if (!qr.isSuccess())
 			return Result.result(qr.getCode(), qr.getDesc(), null);
-		PolicySchema schema = qr.attach().getAttach().schema();
+		PolicySchema schema = qr.attach().getAttach().schema(param.getSeat());
 		schema.setCommercialStart(param.getCommercialStart());
 		schema.setCompulsoryStart(param.getCompulsoryStart());
 		Result<PolicySchema> result = Result.result(schema);
