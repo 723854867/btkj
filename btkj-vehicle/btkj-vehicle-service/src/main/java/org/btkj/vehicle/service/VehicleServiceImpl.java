@@ -191,16 +191,19 @@ public class VehicleServiceImpl implements VehicleService {
 			}
 		}
 		
-		vehicleOrderMapper.delete(employee.getId(), param.getLicense());
 		if (0 != biHuQuoteMod) {
 			Result<Void> result = biHuVehicle.order(tenant.getBiHuAgent(), tenant.getBiHuKey(), user.getUid(), biHuQuoteMod, biHuInsureMod, configService.area(tenant.getRegion()).getBiHuId(), param);
-			if (!result.isSuccess())
+			if (!result.isSuccess()) {
+				if (result.getCode() == Code.REQUEST_FREQUENTLY.id())
+					return result;
 				_orderRequestFailure(orders.get(Lane.BI_HU), result.getDesc());
+			}
 		}
+		vehicleOrderMapper.delete(employee.getId(), param.getLicense());
 		vehicleOrderMapper.insert(orders);			// 因为乐保吧报价是异步的，因此在报价之前要先把数据入库
 		for (Entry<String, Boolean> entry : leBaoBa.entrySet()) {
 			VehicleOrder order = orders.get(Lane.LE_BAO_BA).get(entry.getKey());
-			executorService.execute(new LeBaoBaOrderTask(tenant, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, vehicleOrderMapper));
+			executorService.execute(new LeBaoBaOrderTask(tenant, employee, poundage, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, vehicleOrderMapper));
 		}
 		return Result.success();
 	}
@@ -283,7 +286,11 @@ public class VehicleServiceImpl implements VehicleService {
 			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(tenant, employee.getUid(), order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
-					poundage.calculate(order, employee);							// 报价成功计算手续费
+					try {
+						poundage.calculate(order, employee);							// 报价成功计算手续费
+					} catch (Exception e) {
+						logger.error("手续费计算错误！", e);
+					}
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);
 				}

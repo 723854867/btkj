@@ -12,6 +12,7 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
 import org.btkj.vehicle.pojo.entity.CoefficientNode;
@@ -71,7 +72,8 @@ public class Poundage {
 	 * 计算手续费
 	 */
 	public void calculate(VehicleOrder order, EmployeePO employee) {
-		poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);
+		if ((employee.getMod() & Mod.PAY_FULL.mark()) == Mod.PAY_FULL.mark())
+			poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);
 	}
 	
 	public Map<Integer, PoundageDocument> poundageDocuments() {

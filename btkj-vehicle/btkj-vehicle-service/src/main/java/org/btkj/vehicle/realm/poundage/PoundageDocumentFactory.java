@@ -85,7 +85,7 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 			cmrate += employee.getCommercialRate();
 			cprate += employee.getCompulsoryRate();
 		}
-		if (!CollectionUtil.isEmpty(config.getRatios())) {
+		if (!CollectionUtil.isEmpty(config.getRatios()) && config.isEffective()) {
 			Result<Map<Integer, CoefficientDocument>> result = poundage.coefficientDocuments(pnode.getId());
 			if (!CollectionUtil.isEmpty(result.attach())) {
 				Map<String, Integer> record = new HashMap<String, Integer>();
@@ -98,18 +98,18 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 				cmrate += ratio;
 			}
 		}
-		cmrate = Math.max(0, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
+		cmrate = Math.max(cmrate, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
 		cmrate = Math.min(cmrate, BtkjConsts.LIMITS.MAX_POUNDAGE_RATE);
-		cprate = Math.max(0, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
-		cprate = Math.min(cmrate, BtkjConsts.LIMITS.MAX_POUNDAGE_RATE);
+		cprate = Math.max(cprate, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
+		cprate = Math.min(cprate, BtkjConsts.LIMITS.MAX_POUNDAGE_RATE);
 		String cmtotal = order.getTips().getSchema().getCommercialTotal();
 		String cmbonus = null;
 		if (null != cmtotal)
-			cmbonus = new BigDecimal(cmtotal).multiply(new BigDecimal(cmrate)).setScale(2, RoundingMode.HALF_UP).toString();
+			cmbonus = new BigDecimal(cmtotal).multiply(new BigDecimal(cmrate)).divide(new BigDecimal(1000)).setScale(2, RoundingMode.HALF_UP).toString();
 		String cptotal = order.getTips().getSchema().getCompulsoryTotal();
 		String cpbonus = null;
 		if (null != cptotal)
-			cpbonus = new BigDecimal(cptotal).multiply(new BigDecimal(cprate)).setScale(2, RoundingMode.HALF_UP).toString();
+			cpbonus = new BigDecimal(cptotal).multiply(new BigDecimal(cprate)).divide(new BigDecimal(1000)).setScale(2, RoundingMode.HALF_UP).toString();
 		BonusPoundage bonus = new BonusPoundage(cmbonus, cpbonus);
 		order.setBonus(bonus);
 	}
@@ -150,7 +150,7 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 			MatchNode current = recursions.remove(pmod);
 			int nmod = type.mod() | pmod;
 			NodeConfig config = configs.get(node.getId());
-			if (null != config && config.isEffective()) {
+			if (null != config) {
 				current = new MatchNode(nmod, config, node);
 				Iterator<MatchNode> iterator = recursions.values().iterator();
 				while (iterator.hasNext()) {

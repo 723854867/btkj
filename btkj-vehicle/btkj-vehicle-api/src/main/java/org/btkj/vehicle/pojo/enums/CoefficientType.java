@@ -2,15 +2,19 @@ package org.btkj.vehicle.pojo.enums;
 
 import java.math.BigDecimal;
 
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.vehicle.pojo.entity.CoefficientRange;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
 import org.rapid.util.math.compare.BigDecimalComparable;
 import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.math.compare.IntComparable;
+import org.rapid.util.validator.IdentityValidator;
 
 public enum CoefficientType {
 
@@ -56,7 +60,11 @@ public enum CoefficientType {
 		}
 		@Override
 		public boolean satisfy(CoefficientRange range, VehicleOrder order) {
-			return false;
+			if (order.getTips().getOwner().getIdType() != IDType.IDENTITY)
+				return false;
+			int value = IdentityValidator.isMale(order.getTips().getOwner().getIdNo()) 
+					? org.rapid.util.common.enums.GENDER.MALE.mark() : org.rapid.util.common.enums.GENDER.FEMALE.mark();
+			return String.valueOf(value).equals(range.getComparison());
 		}
 	},
 	
@@ -152,7 +160,8 @@ public enum CoefficientType {
 	VEHICLE_AGE(7, "车龄") {
 		@Override
 		public boolean satisfy(CoefficientRange range, VehicleOrder order) {
-			return false;
+			int age = VehicleUtil.vehicleAge(DateUtil.convert(order.getTips().getEnrollDate(), DateUtil.YYYY_MM_DD, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8), order.getTips().getSchema().getCommercialStart());
+			return IntComparable.SINGLETON.compare(Comparison.match(range.getComparison()), age, CollectionUtil.toIntegerArray(range.getComparableValue().split(Consts.SYMBOL_UNDERLINE)));
 		}
 	},
 	
@@ -172,7 +181,9 @@ public enum CoefficientType {
 	AGE(9, "年龄") {
 		@Override
 		public boolean satisfy(CoefficientRange range, VehicleOrder order) {
-			return IntComparable.SINGLETON.compare(Comparison.match(range.getComparison()), 0, CollectionUtil.toIntegerArray(range.getComparableValue().split(Consts.SYMBOL_UNDERLINE)));
+			if (order.getTips().getOwner().getIdType() != IDType.IDENTITY)
+				return false;
+			return IntComparable.SINGLETON.compare(Comparison.match(range.getComparison()), IdentityValidator.getAge(order.getTips().getOwner().getIdNo()), CollectionUtil.toIntegerArray(range.getComparableValue().split(Consts.SYMBOL_UNDERLINE)));
 		}
 	};
 	

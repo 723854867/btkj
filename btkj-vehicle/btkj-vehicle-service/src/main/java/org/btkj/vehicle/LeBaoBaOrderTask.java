@@ -2,12 +2,14 @@ package org.btkj.vehicle;
 
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
+import org.btkj.vehicle.realm.poundage.Poundage;
 import org.rapid.util.common.message.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +21,22 @@ public class LeBaoBaOrderTask implements Runnable {
 	private String insurer;
 	private boolean insure;
 	private TenantPO tenant;
+	private EmployeePO employee;
 	private VehicleOrder order;
 	private VehicleOrderParam param;
 	
+	private Poundage poundage;
 	private LeBaoBaVehicle leBaoBaVehicle;
 	private VehicleOrderMapper vehicleOrderMapper;
 	
-	public LeBaoBaOrderTask(TenantPO tenant, String insurer, boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, VehicleOrderMapper vehicleOrderMapper) {
+	public LeBaoBaOrderTask(TenantPO tenant, EmployeePO employee, Poundage poundage, String insurer, boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, VehicleOrderMapper vehicleOrderMapper) {
 		this.order = order;
 		this.param = param;
 		this.tenant = tenant;
 		this.insure = insure;
 		this.insurer = insurer;
+		this.employee = employee;
+		this.poundage = poundage;
 		this.leBaoBaVehicle = leBaoBaVehicle;
 		this.vehicleOrderMapper = vehicleOrderMapper;
 	}
@@ -51,13 +57,18 @@ public class LeBaoBaOrderTask implements Runnable {
 				order.setState(insure ? VehicleOrderState.INSURE_SUCCESS : VehicleOrderState.QUOTE_SUCCESS);
 			if (result.isSuccess())
 				order.getTips().setSchema(result.attach());
+			if (order.getState().mark() >= VehicleOrderState.QUOTE_SUCCESS.mark())
+				try {
+					poundage.calculate(order, employee);
+				} catch (Exception e) {
+					logger.error("手续费计算错误！", e);
+				}
 			vehicleOrderMapper.insert(order);
 		} catch (Exception e) {
 			order.setState(VehicleOrderState.SYSTEM_ERROR);
 			order.setDesc(e.getMessage());
 			logger.error("乐保吧报价系统异常！", e);
 		}
-		
 	}
 	
 	void onReject() {

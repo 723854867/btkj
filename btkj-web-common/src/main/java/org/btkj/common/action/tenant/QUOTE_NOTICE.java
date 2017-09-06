@@ -16,7 +16,7 @@ import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
-public class QUOTAE_NOTICE extends EmployeeAction<QuoteNoticeParam> {
+public class QUOTE_NOTICE extends EmployeeAction<QuoteNoticeParam> {
 	
 	@Resource
 	private CourierService courierService;

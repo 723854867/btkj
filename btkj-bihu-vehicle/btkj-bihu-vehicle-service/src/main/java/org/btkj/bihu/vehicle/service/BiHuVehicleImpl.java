@@ -196,6 +196,8 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			if (resp.getBusinessStatus() != 1)
 				return Result.result(BtkjCode.QUOTE_FAILURE, resp.getStatusMessage());
 			return Result.success();
+		} catch (RequestFrequently e) {
+			return Result.result(Code.REQUEST_FREQUENTLY, "请求太频繁");
 		} catch (IOException e) {
 			logger.warn("bihu quote request failure!", e);
 			return Result.result(BtkjCode.QUOTE_FAILURE, "系统错误");
