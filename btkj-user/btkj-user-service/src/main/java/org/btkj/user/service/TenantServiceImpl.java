@@ -1,8 +1,10 @@
 package org.btkj.user.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -98,7 +100,10 @@ public class TenantServiceImpl implements TenantService {
 	@Override
 	public TenantListInfo tenantListInfo(UserPO user) {
 		Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
-		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(employees.keySet()).values());
+		Set<Integer> set = new HashSet<Integer>();
+		for (EmployeePO employee : employees.values())
+			set.add(employee.getTid());
+		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(set).values());
 		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyTenants(user.getUid())).values());
 		return new TenantListInfo(own, employees, audit);
 	}
