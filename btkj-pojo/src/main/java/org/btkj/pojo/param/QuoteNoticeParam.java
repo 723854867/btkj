@@ -1,17 +1,31 @@
-package org.btkj.courier.pojo.submit;
+package org.btkj.pojo.param;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
-public class QuotaNoticeSubmit implements Serializable {
+import org.rapid.util.validator.custom.Mobile;
+
+public class QuoteNoticeParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 8914379389984041334L;
 
+	@NotNull
+	private String orderId;
 	private int commercialRate;
 	private int compulsoryRate;
 	private boolean taxInclude; // 是否包增值税
 	private String agentMobile;
 	private String agentName;
+	@Mobile
+	@NotNull
 	private String customerMobile;
+	
+	public String getOrderId() {
+		return orderId;
+	}
+	
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
 
 	public int getCommercialRate() {
 		return commercialRate;

@@ -3,7 +3,7 @@ package org.btkj.pojo.entity;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.VehiclePolicyTips;
-import org.btkj.pojo.model.Bonus;
+import org.btkj.pojo.model.BonusPoundage;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.rapid.util.common.Consts;
@@ -36,7 +36,7 @@ public class VehicleOrder implements UniqueModel<String> {
 	private String insurerName; 		// 保险公司名字
 	private String insurerIcon; 		// 保险公司Icon
 	
-	private Bonus bonus;				// 奖励
+	private BonusPoundage bonus;				// 奖励
 	private VehiclePolicyTips tips;
 	private DeliveryInfo deliveryInfo;	// 配送信息
 	
@@ -207,11 +207,11 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.tips = tips;
 	}
 	
-	public Bonus getBonus() {
+	public BonusPoundage getBonus() {
 		return bonus;
 	}
 	
-	public void setBonus(Bonus bonus) {
+	public void setBonus(BonusPoundage bonus) {
 		this.bonus = bonus;
 	}
 	

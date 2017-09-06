@@ -1,7 +1,7 @@
 package org.btkj.courier.api;
 
-import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.param.QuoteNoticeParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -32,5 +32,5 @@ public interface CourierService {
 	 * @param submit
 	 * @return
 	 */
-	void quotaNotice(VehicleOrder order, QuotaNoticeSubmit submit);
+	void quotaNotice(VehicleOrder order, QuoteNoticeParam submit);
 }

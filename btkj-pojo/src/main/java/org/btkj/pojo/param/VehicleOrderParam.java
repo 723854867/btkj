@@ -14,6 +14,7 @@ import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.info.VehicleInfo;
+import org.rapid.util.lang.DateUtil;
 import org.rapid.util.validator.custom.CarEngine;
 import org.rapid.util.validator.custom.CarLicense;
 import org.rapid.util.validator.custom.CarVin;
@@ -44,7 +45,7 @@ public class VehicleOrderParam extends EmployeeParam {
 	@CarEngine
 	@NotNull
 	private String engine;									// 发动机号
-	@Date
+	@Date(fomat = DateUtil.YYYY_MM_DD)
 	@NotNull
 	private String enrollDate; 								// 初登日期
 	@Date

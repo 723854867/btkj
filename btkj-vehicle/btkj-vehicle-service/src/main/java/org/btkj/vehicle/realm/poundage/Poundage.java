@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
@@ -69,7 +70,8 @@ public class Poundage {
 	/**
 	 * 计算手续费
 	 */
-	public void calculate(VehicleOrder order) {
+	public void calculate(VehicleOrder order, EmployeePO employee) {
+		poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);
 	}
 	
 	public Map<Integer, PoundageDocument> poundageDocuments() {

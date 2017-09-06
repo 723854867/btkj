@@ -56,7 +56,7 @@ public interface VehicleService {
 	 * @param id
 	 * @return
 	 */
-	Result<VehicleOrder> orderInfo(Employee employee, String id);
+	Result<VehicleOrder> orderInfo(TenantPO tenant, EmployeePO employee, String id);
 	
 	/**
 	 * 获取商户的险企列表
@@ -70,7 +70,7 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrderListInfo> orders(TenantPO tenant,  VehicleOrdersParam param);
+	Pager<VehicleOrderListInfo> orders(TenantPO tenant, EmployeePO employee, VehicleOrdersParam param);
 	
 	/**
 	 * 根据车架号获取车辆信息

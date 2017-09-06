@@ -6,9 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleTypeCode;
-import org.btkj.pojo.enums.VehicleTypeDetailCode;
 import org.btkj.pojo.info.VehicleInfo;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -205,29 +202,6 @@ public class VehicleInfos {
 			info.setLoad(commonInfo.loadWeight);
 			info.setPriceNoTax(commonInfo.priceNoTax);
 			info.setTransmissionName(commonInfo.transmissionName);
-			if (null != commonInfo.vehicleType) {
-				VehicleType vehicleType = VehicleType.match(commonInfo.vehicleType);
-				info.setVehicleType(vehicleType);
-				if (null != vehicleType && null != commonInfo.vehicleTypeCode) {
-					VehicleTypeCode[] typeCodes = vehicleType.typeCode();
-					for (VehicleTypeCode typeCode : typeCodes) {
-						if (!typeCode.name().equals(commonInfo.vehicleTypeCode)) 
-							continue;
-						info.setVehicleTypeCode(typeCode);
-						VehicleTypeDetailCode[] detailCodes = typeCode.typeDetailCode();
-						if (null != detailCodes && null != commonInfo.vehicleTypeDetailCode) {
-							for (VehicleTypeDetailCode detailCode : detailCodes) {
-								if (!detailCode.name().equals("V" + commonInfo.vehicleTypeDetailCode))
-									continue;
-								info.setVehicleTypeDetailCode(detailCode);
-								break;
-							}
-						}
-						break;
-					}
-					
-				}
-			}
 			temp.add(info);
 		}
 		return temp;

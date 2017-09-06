@@ -22,11 +22,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.btkj.courier.Config;
-import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.model.Insurance;
 import org.btkj.pojo.model.PolicySchema;
+import org.btkj.pojo.param.QuoteNoticeParam;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.Env;
@@ -126,7 +126,7 @@ public class CourierRedisService {
 		}
 	}
 	
-	public void sendQuotaNotice(VehicleOrder order, QuotaNoticeSubmit submit) {
+	public void sendQuotaNotice(VehicleOrder order, QuoteNoticeParam submit) {
 		String tplValue = null;
 		try {
 			PolicySchema schema = order.getTips().getSchema();

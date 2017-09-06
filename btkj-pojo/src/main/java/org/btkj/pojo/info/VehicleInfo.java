@@ -2,10 +2,6 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleTypeCode;
-import org.btkj.pojo.enums.VehicleTypeDetailCode;
-
 public class VehicleInfo implements Serializable {
 
 	private static final long serialVersionUID = 230292822921825687L;
@@ -20,9 +16,6 @@ public class VehicleInfo implements Serializable {
 	private String load;									// 核定载质量
 	private String exhaust;									// 排量
 	private String transmissionName;						// 变速器类型
-	private VehicleType vehicleType;						// 车辆种类
-	private VehicleTypeCode vehicleTypeCode;				// 车辆种类类型
-	private VehicleTypeDetailCode vehicleTypeDetailCode;	// 特种车特有：特种车的详细分类
 	
 	public String getId() {
 		return id;
@@ -102,29 +95,5 @@ public class VehicleInfo implements Serializable {
 	
 	public void setTransmissionName(String transmissionName) {
 		this.transmissionName = transmissionName;
-	}
-	
-	public VehicleType getVehicleType() {
-		return vehicleType;
-	}
-	
-	public void setVehicleType(VehicleType vehicleType) {
-		this.vehicleType = vehicleType;
-	}
-	
-	public VehicleTypeCode getVehicleTypeCode() {
-		return vehicleTypeCode;
-	}
-	
-	public void setVehicleTypeCode(VehicleTypeCode vehicleTypeCode) {
-		this.vehicleTypeCode = vehicleTypeCode;
-	}
-	
-	public VehicleTypeDetailCode getVehicleTypeDetailCode() {
-		return vehicleTypeDetailCode;
-	}
-	
-	public void setVehicleTypeDetailCode(VehicleTypeDetailCode vehicleTypeDetailCode) {
-		this.vehicleTypeDetailCode = vehicleTypeDetailCode;
 	}
 }

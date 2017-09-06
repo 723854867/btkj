@@ -1,5 +1,7 @@
 package org.btkj.vehicle.realm.poundage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -7,7 +9,12 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.VehicleUtil;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.model.BonusPoundage;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.cache.domain.CfgVehicle;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
@@ -22,7 +29,6 @@ import org.btkj.vehicle.pojo.model.PoundageDocument;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
-import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.math.tree.PBTreeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +51,7 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		return new PoundageDocument(node);
 	}
 	
-	public void caculatePoundage(Map<Integer, PoundageDocument> documents, VehicleOrder order) {
+	public void caculatePoundage(Map<Integer, PoundageDocument> documents, VehicleOrder order, EmployeePO employee) {
 		PoundageConfig poundageConfig = poundageConfigMapper.getByKey(String.valueOf(order.getTid()));
 		Map<Integer, Map<Integer, NodeConfig>> insurersConfig = null == poundageConfig ? null : poundageConfig.getConfigs();
 		Map<Integer, NodeConfig> map = null == insurersConfig ? null : insurersConfig.get(order.getInsurerId());
@@ -72,6 +78,13 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		}
 		NodeConfig config = temp.config;
 		PoundageNode pnode = temp.node;
+		int cmrate = config.getCmRate() - config.getCmRetainRate();
+		int cprate = config.getCpRate() - config.getCpRetainRate();
+		Mod mod = VehicleUtil.employeeModFromVehicleUsedType(order.getTips().getUsedType());
+		if ((employee.getMod() & mod.mark()) == mod.mark()) {
+			cmrate += employee.getCommercialRate();
+			cprate += employee.getCompulsoryRate();
+		}
 		if (!CollectionUtil.isEmpty(config.getRatios())) {
 			Result<Map<Integer, CoefficientDocument>> result = poundage.coefficientDocuments(pnode.getId());
 			if (!CollectionUtil.isEmpty(result.attach())) {
@@ -82,8 +95,23 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 					if (null != detla)
 						ratio += detla;
 				}
+				cmrate += ratio;
 			}
 		}
+		cmrate = Math.max(0, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
+		cmrate = Math.min(cmrate, BtkjConsts.LIMITS.MAX_POUNDAGE_RATE);
+		cprate = Math.max(0, BtkjConsts.LIMITS.MIN_POUNDAGE_RATE);
+		cprate = Math.min(cmrate, BtkjConsts.LIMITS.MAX_POUNDAGE_RATE);
+		String cmtotal = order.getTips().getSchema().getCommercialTotal();
+		String cmbonus = null;
+		if (null != cmtotal)
+			cmbonus = new BigDecimal(cmtotal).multiply(new BigDecimal(cmrate)).setScale(2, RoundingMode.HALF_UP).toString();
+		String cptotal = order.getTips().getSchema().getCompulsoryTotal();
+		String cpbonus = null;
+		if (null != cptotal)
+			cpbonus = new BigDecimal(cptotal).multiply(new BigDecimal(cprate)).setScale(2, RoundingMode.HALF_UP).toString();
+		BonusPoundage bonus = new BonusPoundage(cmbonus, cpbonus);
+		order.setBonus(bonus);
 	}
 	
 	private void _recursionNode(Map<Integer, MatchNode> recursions, Map<Integer, PoundageDocument> documents, VehicleOrder order, int pmod, Map<Integer, NodeConfig> configs) {

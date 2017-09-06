@@ -117,6 +117,8 @@ public interface BtkjConsts {
 		final int MAX_RENEWAL_PERIOD					= 90;
 		final int MIN_PWD								= 6;
 		final int MAX_PWD								= 30;
+		final int MAX_POUNDAGE_RATE						= 800;
+		final int MIN_POUNDAGE_RATE						= 0;
 	}
 	
 	interface LOCKS {

@@ -7,7 +7,7 @@ import java.math.RoundingMode;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.model.Bonus;
+import org.btkj.pojo.model.BonusPoundage;
 
 public class VehicleOrderListInfo implements Serializable {
 
@@ -37,7 +37,7 @@ public class VehicleOrderListInfo implements Serializable {
 		this.insurerIcon = order.getInsurerIcon();
 		this.owner = order.getTips().getOwner().getName();
 		this.license = order.getTips().getLicense();
-		Bonus bonus = order.getBonus();
+		BonusPoundage bonus = order.getBonus();
 		this.bonus = null != bonus ?  new BigDecimal(bonus.getCommercialBonus()).add(new BigDecimal(bonus.getCompulsoryBonus())).setScale(2, RoundingMode.HALF_UP).toString() : "0";
 		if (state.mark() > VehicleOrderState.QUOTE_FAILURE.mark())
 			this.price = VehicleUtil.totalPremium(order);

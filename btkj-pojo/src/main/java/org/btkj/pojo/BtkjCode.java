@@ -100,7 +100,7 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 车主名字错误
 	 */
-	CAR_OWNER_NAME_ERROR(527, "car owner name error"),
+	CAR_OWNER_NAME_ERROR(527, "车主姓名不匹配"),
 	
 	/**
 	 * 订单不存在

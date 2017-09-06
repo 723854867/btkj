@@ -721,7 +721,7 @@ public class RenewInfo implements Serializable {
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
 			renewal.set_id(this.UserInfo.CarVin);
-			tips.setEnrollDate(DateUtil.convert(this.UserInfo.RegisterDate, DateUtil.YYYY_MM_DD, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+			tips.setEnrollDate(this.UserInfo.RegisterDate);
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
 			tips.setName(this.UserInfo.ModleName);

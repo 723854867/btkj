@@ -94,13 +94,13 @@ public enum LeBaoBaInsurance {
 	B7 {				// 划痕险不计免赔
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance("", item.getPremium()));
+			insurances.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new Insurance("1", item.getPremium()));
 		}
 	},		
 	F5 {				// 自燃险
 		@Override
 		public void insuranceMapping(Map<CommercialInsuranceType, Insurance> insurances, AmountItem item) {
-			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance("1", item.getPremium()));
+			insurances.put(CommercialInsuranceType.AUTO_FIRE, new Insurance(item.getAmount(), item.getPremium()));
 		}
 	},	
 	B8 {				// 自燃险不计免赔

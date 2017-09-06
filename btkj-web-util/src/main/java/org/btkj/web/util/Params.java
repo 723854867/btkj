@@ -7,7 +7,6 @@ import java.util.TimeZone;
 import javax.validation.Validation;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.btkj.courier.pojo.submit.QuotaNoticeSubmit;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.info.QuizSearcher;
@@ -208,13 +207,6 @@ public interface Params {
 	
 	final Str2IntConstConverter QUOTE_GROUP					= new Str2IntConstConverter(1107, "quoteGroup");
 	final Str2IntConstConverter INSURE_GROUP				= new Str2IntConstConverter(1108, "insureGroup"); 
-	
-	final Str2ObjConstConverter<QuotaNoticeSubmit> QUOTA_NOTICE_SUBMIT	= new Str2ObjConstConverter<QuotaNoticeSubmit>(1109, "quotaNoticeSubmit") {
-		@Override
-		public QuotaNoticeSubmit convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuotaNoticeSubmit.class);
-		}
-	};
 	
 	final Str2ObjConstConverter<CustomerSearcher> CUSTOMER_SEARCHER	= new Str2ObjConstConverter<CustomerSearcher>(1110, "customerSearcher") {
 		@Override

@@ -2,15 +2,10 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.pojo.enums.CommercialInsuranceType;
-import org.btkj.pojo.enums.VehicleBizType;
-import org.btkj.pojo.enums.VehicleType;
-import org.btkj.pojo.enums.VehicleTypeCode;
-import org.btkj.pojo.enums.VehicleTypeDetailCode;
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.model.InsurUnit;
 import org.btkj.pojo.model.Insurance;
@@ -49,9 +44,6 @@ public class VehiclePolicyTips implements Serializable {
 	private String biHuJYId;								// 壁虎精友码
 	private String vehicleId;								// 乐保吧车型ID
 	private String leBaoBaJYId;								// 乐保吧精友ID
-	private VehicleType vehicleType;						// 车辆种类
-	private VehicleTypeCode vehicleTypeCode;				// 车辆种类类型
-	private VehicleTypeDetailCode vehicleTypeDetailCode;	// 特种车特有：特种车的详细分类
 	
 	// 主体信息
 	private InsurUnit owner;					// 车主信息
@@ -81,12 +73,8 @@ public class VehiclePolicyTips implements Serializable {
 		this.transmissionName = param.getTransmissionName();
 		this.seat = param.getSeat();
 		this.year = null == param.getYear() ? 0 : param.getYear();
-		if (null != vehicleInfo) {
+		if (null != vehicleInfo)
 			this.leBaoBaJYId = vehicleInfo.getInsVehicleId();
-			this.vehicleType = vehicleInfo.getVehicleType();
-			this.vehicleTypeCode = vehicleInfo.getVehicleTypeCode();
-			this.vehicleTypeDetailCode = vehicleInfo.getVehicleTypeDetailCode();
-		}
 		this.owner = new InsurUnit();
 		this.owner.setType(param.getOwner().getType());
 		this.owner.setName(param.getOwner().getName());
@@ -256,36 +244,12 @@ public class VehiclePolicyTips implements Serializable {
 		this.vehicleId = vehicleId;
 	}
 	
-	public VehicleType getVehicleType() {
-		return vehicleType;
-	}
-	
 	public String getLeBaoBaJYId() {
 		return leBaoBaJYId;
 	}
 	
 	public void setLeBaoBaJYId(String leBaoBaJYId) {
 		this.leBaoBaJYId = leBaoBaJYId;
-	}
-
-	public void setVehicleType(VehicleType vehicleType) {
-		this.vehicleType = vehicleType;
-	}
-
-	public VehicleTypeCode getVehicleTypeCode() {
-		return vehicleTypeCode;
-	}
-
-	public void setVehicleTypeCode(VehicleTypeCode vehicleTypeCode) {
-		this.vehicleTypeCode = vehicleTypeCode;
-	}
-
-	public VehicleTypeDetailCode getVehicleTypeDetailCode() {
-		return vehicleTypeDetailCode;
-	}
-
-	public void setVehicleTypeDetailCode(VehicleTypeDetailCode vehicleTypeDetailCode) {
-		this.vehicleTypeDetailCode = vehicleTypeDetailCode;
 	}
 
 	public InsurUnit getOwner() {
@@ -330,71 +294,5 @@ public class VehiclePolicyTips implements Serializable {
 		this.exhaust = vehicleInfo.getExhaust();
 		this.transmissionName = vehicleInfo.getTransmissionName();
 		this.vehicleId = vehicleInfo.getId();
-		this.vehicleType = vehicleInfo.getVehicleType();
-		this.vehicleTypeCode = vehicleInfo.getVehicleTypeCode();
-		this.vehicleTypeDetailCode = vehicleInfo.getVehicleTypeDetailCode();
-	}
-	
-	public LinkedList<String> commisionRoutePath() {
-		LinkedList<String> list = new LinkedList<String>();
-		switch (usedType) {
-		case HOME_USE:
-			list.addLast(VehicleBizType.NO_PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.HOME_USE.id());
-			break;
-		case ENTERPRISE:
-			list.addLast(VehicleBizType.NO_PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.ENTERPRISE.id());
-			break;
-		case ORGAN:
-			list.addLast(VehicleBizType.NO_PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.ORGAN.id());
-			break;
-		case LEASE:
-			list.addLast(VehicleBizType.PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.LEASE.id());
-			break;
-		case CITY_BUS:
-			list.addLast(VehicleBizType.PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.CITY_BUS.id());
-			break;
-		case HIGHWAY_TRANSPORT:
-			list.addLast(VehicleBizType.PROFIT.id());
-			list.addLast(VehicleType.COACH.name().toLowerCase());
-			list.addLast(VehicleUsedType.HIGHWAY_TRANSPORT.id());
-			break;
-		case BIZ_TRUCK:
-			list.addLast(VehicleBizType.PROFIT.id());
-			list.addLast(VehicleType.TRUCK.name().toLowerCase());
-			break;
-		case NO_BIZ_TRUCK:
-			list.addLast(VehicleBizType.NO_PROFIT.id());
-			list.addLast(VehicleType.TRUCK.name().toLowerCase());
-			break;
-		case PARTICULAR:
-			list.addLast(VehicleBizType.IGNROE_PROFIT.id());
-			list.addLast(VehicleType.PARTICULAR.name().toLowerCase());
-			break;
-		case MOTOR:
-			list.addLast(VehicleBizType.IGNROE_PROFIT.id());
-			list.addLast(VehicleType.MOTOR.name().toLowerCase());
-			break;
-		case TRACTOR:
-			list.addLast(VehicleBizType.IGNROE_PROFIT.id());
-			list.addLast(VehicleType.TRACTOR.name().toLowerCase());
-			break;
-		default:
-			return null;
-		}
-		if (null != vehicleTypeCode)
-			list.addLast(vehicleTypeCode.name());
-		if (null != vehicleTypeDetailCode)
-			list.addLast(vehicleTypeDetailCode.name().replaceAll("V", ""));
-		return list;
 	}
 }

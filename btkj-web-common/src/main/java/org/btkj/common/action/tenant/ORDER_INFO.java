@@ -2,12 +2,13 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.param.EmployeeSidParam;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -15,18 +16,19 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class ORDER_INFO extends TenantAction {
+public class ORDER_INFO extends EmployeeAction<EmployeeSidParam> {
 	
 	@Resource
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<VehicleOrder> execute(Request request, Employee employee) {
-		return vehicleService.orderInfo(employee, request.getParam(Params.ORDER_ID));
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeSidParam param) {
+		return vehicleService.orderInfo(tenant, employee, param.getId());
 	}
 	
 	@Override
 	protected boolean userLock() {
 		return true;
 	}
+
 }

@@ -8,7 +8,7 @@ import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
-import org.btkj.pojo.model.Bonus;
+import org.btkj.pojo.model.BonusPoundage;
 
 public class VehicleOrderListInfo implements Serializable {
 
@@ -42,7 +42,7 @@ public class VehicleOrderListInfo implements Serializable {
 		this.insurerIcon = order.getInsurerIcon();
 		this.owner = order.getTips().getOwner().getName();
 		this.license = order.getTips().getLicense();
-		Bonus bonus = order.getBonus();
+		BonusPoundage bonus = order.getBonus();
 		this.bonus = null != bonus ? new BigDecimal(bonus.getCommercialBonus()).add(new BigDecimal(bonus.getCompulsoryBonus())).setScale(2, RoundingMode.HALF_UP).toString() : "0";
 		if (state == VehicleOrderState.QUOTE_SUCCESS || state == VehicleOrderState.INSURE_FAILURE || state == VehicleOrderState.INSURE_SUCCESS)
 			this.price = VehicleUtil.totalPremium(order);

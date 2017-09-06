@@ -47,14 +47,14 @@ public class ModularsInfo {
 	
 	private class TenantModulars {
 		private int tid;
-		private int mod;
+		private int layer;
 		private String tname;
 		private int employeeId;
 		private Set<String> modulars;
 		public TenantModulars(EmployeeTip employee) {
 			this.tid = employee.getTid();
-			this.mod = employee.getMod();
-			this.tname = employee.getName();
+			this.tname = employee.getTname();
+			this.layer = employee.getLayer();
 			this.employeeId = employee.getId();
 		}
 		public TenantModulars(EmployeeTip employee, Set<String> modulars) {
@@ -67,11 +67,11 @@ public class ModularsInfo {
 		public void setTid(int tid) {
 			this.tid = tid;
 		}
-		public int getMod() {
-			return mod;
+		public int getLayer() {
+			return layer;
 		}
-		public void setMod(int mod) {
-			this.mod = mod;
+		public void setLayer(int layer) {
+			this.layer = layer;
 		}
 		public String getTname() {
 			return tname;

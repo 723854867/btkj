@@ -125,7 +125,7 @@ public class EntityGenerator {
 		policy.setIdNo(info.getCzZjhm());
 		
 		policy.setIssueDate(DateUtil.convert(vehicleInfo.getFzrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
-		policy.setEnrollDate(DateUtil.convert(vehicleInfo.getCdrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		policy.setEnrollDate(DateUtil.convert(vehicleInfo.getCdrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD, DateUtil.TIMEZONE_GMT_8));
 		policy.setName(vehicleInfo.getPpxh());
 		policy.setVehiclePrice(vehicleInfo.getNewCarCost());
 		policy.setNature(VehicleUtil.natureFromJianJie(info.getBaseStatus()));

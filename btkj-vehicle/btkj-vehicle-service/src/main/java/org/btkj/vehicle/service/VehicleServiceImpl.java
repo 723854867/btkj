@@ -105,23 +105,23 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	private Result<Renewal> _renewalByLicense(Employee employee, String license) {
 		Renewal renewal = renewalMapper.getByLicense(license);
-		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), employee.getRegion(), license) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), license) : Result.result(renewal);
 	}
 	
 	private Result<Renewal> _renewalByVinAndEngine(Employee employee, String vin, String engine) {
 		Renewal renewal = renewalMapper.getByKey(vin);
-		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), employee.getRegion(), vin, engine) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), vin, engine) : Result.result(renewal);
 	}
 	
-	private Result<Renewal> _flushRenewal(TenantPO tenant, int uid, int region, String license) {
-		Result<Renewal> result = biHuVehicle.renewal(tenant, uid, license, configService.area(region).getBiHuId());
+	private Result<Renewal> _flushRenewal(TenantPO tenant, int uid, String license) {
+		Result<Renewal> result = biHuVehicle.renewal(tenant, uid, license, configService.area(tenant.getRegion()).getBiHuId());
 		if (result.isSuccess())
 			_saveRenewal(result.attach());
 		return result;
 	}
 	
-	private Result<Renewal> _flushRenewal(TenantPO tenant, int uid, int region, String vin, String engine) {
-		Result<Renewal> result = biHuVehicle.renewal(tenant, uid, vin, engine, configService.area(region).getBiHuId());
+	private Result<Renewal> _flushRenewal(TenantPO tenant, int uid, String vin, String engine) {
+		Result<Renewal> result = biHuVehicle.renewal(tenant, uid, vin, engine, configService.area(tenant.getRegion()).getBiHuId());
 		if (result.isSuccess()) 
 			_saveRenewal(result.attach());
 		return result;
@@ -257,39 +257,39 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Pager<VehicleOrderListInfo> orders(TenantPO tenant,  VehicleOrdersParam param) {
+	public Pager<VehicleOrderListInfo> orders(TenantPO tenant, EmployeePO employee, VehicleOrdersParam param) {
 		Pager<VehicleOrder> pager = vehicleOrderMapper.orders(param);
 		List<VehicleOrderListInfo> result = new ArrayList<VehicleOrderListInfo>(pager.getList().size());
 		for (VehicleOrder order : pager.getList()) {
-			_orderInfo(tenant, param.getUid(), tenant.getRegion(), order);
+			_orderInfo(tenant, employee, order);
 			result.add(new VehicleOrderListInfo(order));
 		}
 		return new Pager<VehicleOrderListInfo>(pager.getTotal(), result);
 	}
 	
 	@Override
-	public Result<VehicleOrder> orderInfo(Employee employee, String id) {
+	public Result<VehicleOrder> orderInfo(TenantPO tenant, EmployeePO employee, String id) {
 		VehicleOrder order = vehicleOrderMapper.getByKey(id);
 		if (null == order)
 			return BtkjConsts.RESULT.ORDER_NOT_EXIST;
 		if (order.getEmployeeId() != employee.getId())
 			return Consts.RESULT.FORBID;
-		return _orderInfo(employee.getTenant(), employee.getUid(), employee.getRegion(), order);
+		return _orderInfo(tenant, employee, order);
 	}
 	
-	private Result<VehicleOrder> _orderInfo(TenantPO tenant, int uid, int region, VehicleOrder order) {
+	private Result<VehicleOrder> _orderInfo(TenantPO tenant, EmployeePO employee, VehicleOrder order) {
 		VehicleOrderState state = order.getState();
 		if (order.getLane() == Lane.BI_HU.mark()) {
 			if (order.getState() == VehicleOrderState.QUOTING) {
-				_quoteResult(tenant, uid, order);
+				_quoteResult(tenant, employee.getUid(), order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
-					poundage.calculate(order);							// 报价成功计算手续费
+					poundage.calculate(order, employee);							// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);
 				}
 			}
 			if (order.getState() == VehicleOrderState.INSURING)
-				_insureResult(tenant, uid, region, order);
+				_insureResult(tenant, employee.getUid(), order);
 			if (state != order.getState())								// 状态变了则更新保单
 				vehicleOrderMapper.insert(order);
 		}
@@ -310,7 +310,7 @@ public class VehicleServiceImpl implements VehicleService {
 		}
 	}
 	
-	private void _insureResult(TenantPO tenant, int uid, int region, VehicleOrder order) {
+	private void _insureResult(TenantPO tenant, int uid, VehicleOrder order) {
 		Result<VehicleAuditModel> result = biHuVehicle.insureResult(tenant, uid, order.getTips().getLicense(), configService.insurer(order.getInsurerId()).getBiHuId());
 		if (!result.isSuccess()) {
 			if (result.getCode() == BtkjCode.INSURE_FAILURE.id()) {
@@ -320,9 +320,9 @@ public class VehicleServiceImpl implements VehicleService {
 				order.setDesc(result.getDesc());
 				order.setState(VehicleOrderState.INSURE_FAILURE);
 				if (VehicleUtil.isNewVehicleLicense(order.getTips().getLicense()))
-					_flushRenewal(tenant, uid, region, order.getTips().getVin(), order.getTips().getEngine());
+					_flushRenewal(tenant, uid, order.getTips().getVin(), order.getTips().getEngine());
 				else
-					_flushRenewal(tenant, uid, region, order.getTips().getLicense());
+					_flushRenewal(tenant, uid, order.getTips().getLicense());
 			}
 		} else {
 			order.setDesc(result.getDesc());
