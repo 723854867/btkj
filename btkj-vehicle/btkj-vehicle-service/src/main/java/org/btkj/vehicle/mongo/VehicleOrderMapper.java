@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.Lane;
 import org.btkj.pojo.enums.VehicleOrderState;

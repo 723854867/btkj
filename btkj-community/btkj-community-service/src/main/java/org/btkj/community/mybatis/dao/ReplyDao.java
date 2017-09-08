@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.community.mybatis.provider.ReplySQLProvider;
-import org.btkj.pojo.entity.Reply;
+import org.btkj.pojo.entity.community.Reply;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface ReplyDao extends DBMapper<Integer, Reply> {

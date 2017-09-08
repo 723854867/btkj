@@ -1,4 +1,4 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.vehicle;
 
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.rapid.util.common.model.UniqueModel;

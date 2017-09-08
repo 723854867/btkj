@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.enums.Lane;
 import org.btkj.pojo.param.vehicle.TenantSetParam;

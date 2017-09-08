@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import org.btkj.community.mybatis.dao.QuizDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Quiz;
+import org.btkj.pojo.entity.community.Quiz;
 import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.info.QuizSearcher.SortCol;
 import org.btkj.pojo.model.Pager;

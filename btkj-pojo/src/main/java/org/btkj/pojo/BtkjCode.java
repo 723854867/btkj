@@ -40,11 +40,6 @@ public enum BtkjCode implements ICode {
 	RENEW_INFO_VEHICLE_ONLY(514, "获取车辆信息成功(车架号，发动机号，品牌型号，初登日期可以取到)，获取险种失败"),
 	
 	/**
-	 * 线路不存在
-	 */
-	LANE_NOT_EXIST(515, "lane not exist"),
-	
-	/**
 	 * 改险企不支持壁虎报价
 	 */
 	INSURER_UNSUPPORT_BI_HU(516, "insurer unsupport bi hu"),
@@ -88,11 +83,6 @@ public enum BtkjCode implements ICode {
 	INSURE_REPEAT(524, "insure repeat"),
 	
 	/**
-	 * 没有报价
-	 */
-	NOT_QUOTE(525, "not quote"),
-	
-	/**
 	 * 壁虎请求太频繁
 	 */
 	BIHU_REQUEST_FREQUENTLY(526, "bihu request frequently"),
@@ -117,11 +107,6 @@ public enum BtkjCode implements ICode {
 	 */
 	NOT_IN_RENEWAL_PERIOD(530, "not in renewal period"),
 	
-	/**
-	 * 路由不存在
-	 */
-	ROUTE_NOT_EXIST(531, "route not eixst"),
-	
 	ADMIN_NOT_EXIST(532, "管理员不存在"),
 	ADMIN_SEALED(533, "当前管理员已被禁用"),
 	APP_SEALED(534, "当前平台已被禁用"),
@@ -138,16 +123,6 @@ public enum BtkjCode implements ICode {
 	 * 地区
 	 */
 	AREA_NOT_EXIST(541, "area not exist"),
-	
-	/**
-	 * 车险系数不存在
-	 */
-	COEFFICIENT_NOT_EXIST(550, "coefficient not exist"),
-	
-	/**
-	 * 车险系数最大值
-	 */
-	COEFFICIENT_NUM_MAXMIUM(551, "coefficient num maxmium"),
 	
 	/**
 	 * 管理奖励配置项不存在
@@ -210,26 +185,6 @@ public enum BtkjCode implements ICode {
 	COMMENT_NOT_EXIST(604, "comment not exist"),
 	
 	/**
-	 * 汽车品牌不存在
-	 */
-	VEHICLE_BRAND_NOT_EXSIT(650, "vehicle brand not exist"),
-	
-	/**
-	 * 汽车车系不存在
-	 */
-	VEHICLE_DEPT_NOT_EXIST(651, "vehicle dept not exist"),
-	
-	/**
-	 * 汽车厂牌型号不存在
-	 */
-	VEHICLE_MODEL_NOT_EXIST(652, "vehicle model not exist"),
-	
-	/**
-	 * 车辆种类不存在
-	 */
-	VEHICLE_TYPE_NOT_EXIST(653, "vehicle type not exist"),
-	
-	/**
 	 * 客户不存在
 	 */
 	CUSTOMER_NOT_EXIST(660, "customer not exist"),
@@ -282,7 +237,6 @@ public enum BtkjCode implements ICode {
 	MODULAR_ROOT_EXIST(695, "modular root exist"),
 	
 	POUNDAGE_NODE_NOT_EXIST(700, "手续费节点不存在"),
-	POUNDAGE_CONFIG_NOT_EXIST(701, "手续费配置不存在"),
 	POUNDAGE_COEFFICIENT_NOT_EXIST(702, "手续费系数不存在"),
 	POUNDAGE_COEFFICIENT_NOT_CUSTOM(703, "手续费系数不允许自定义范围"),
 	POUNDAGE_COEFFICIENT_RANGE_NOT_EXIST(704, "手续费系数范围不存在"),

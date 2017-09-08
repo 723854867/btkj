@@ -2,8 +2,8 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Reply;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.community.Reply;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.UserTips;
 
 public class ReplyInfo implements Serializable {

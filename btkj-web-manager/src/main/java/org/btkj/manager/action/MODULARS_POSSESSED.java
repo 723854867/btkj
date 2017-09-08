@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.manager.pojo.info.ModularsInfo;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.param.NilParam;

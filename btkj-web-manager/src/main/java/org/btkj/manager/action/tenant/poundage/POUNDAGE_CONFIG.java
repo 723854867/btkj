@@ -4,10 +4,10 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.PoundageConfigParam;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.NodeConfigModel;
 import org.btkj.vehicle.api.BonusService;
 import org.rapid.util.common.message.Result;

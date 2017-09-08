@@ -3,7 +3,7 @@ package org.btkj.baotu.vehicle.service;
 import java.util.Set;
 
 import org.btkj.baotu.vehicle.api.BaoTuVehicle;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.identity.Employee;
 import org.rapid.util.common.consts.code.Code;

@@ -3,7 +3,7 @@ package org.btkj.pojo.info.user;
 import java.io.Serializable;
 
 import org.btkj.pojo.AliyunUtil;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.UserTips;
 
 public class LoginInfo implements Serializable {

@@ -3,7 +3,7 @@ package org.btkj.pojo.param.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.user.EmployeePO;
 
 public class EmployeeModValidator implements ConstraintValidator<EmployeeMod, Integer> {
 	

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.nonauto.NonAutoCategory;
+import org.btkj.pojo.entity.user.Banner;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.model.identity.User;
 
 /**

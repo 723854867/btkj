@@ -1,10 +1,10 @@
 package org.btkj.pojo;
 
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.master.Admin.Mod;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.SortField;
 import org.rapid.util.common.serializer.json.GsonEnumTypeAdapter;
 import org.rapid.util.math.tree.Node;
@@ -37,7 +37,7 @@ public class BtkjUtil {
 	}
 	
 	public static final boolean isTopRole(UserPO user) {
-		return (user.getMod() & org.btkj.pojo.entity.UserPO.Mod.TOP_ROLE.mark()) == org.btkj.pojo.entity.UserPO.Mod.TOP_ROLE.mark();
+		return (user.getMod() & org.btkj.pojo.entity.user.UserPO.Mod.TOP_ROLE.mark()) == org.btkj.pojo.entity.user.UserPO.Mod.TOP_ROLE.mark();
 	}
 	
 	public static final boolean isTopRole(EmployeePO employee) {

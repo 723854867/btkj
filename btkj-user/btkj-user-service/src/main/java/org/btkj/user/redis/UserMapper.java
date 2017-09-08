@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.UserPagingInfo;
 import org.btkj.pojo.info.user.UserPagingMasterInfo;

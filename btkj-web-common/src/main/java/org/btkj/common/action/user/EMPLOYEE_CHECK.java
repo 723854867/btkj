@@ -3,8 +3,8 @@ package org.btkj.common.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.web.util.action.UserAction;

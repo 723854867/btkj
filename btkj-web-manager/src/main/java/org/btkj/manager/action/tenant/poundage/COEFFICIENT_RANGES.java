@@ -5,10 +5,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.entity.vehicle.CoefficientRange;
 import org.btkj.pojo.param.EmployeeIdParam;
 import org.btkj.vehicle.api.BonusService;

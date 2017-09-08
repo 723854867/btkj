@@ -2,10 +2,10 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;

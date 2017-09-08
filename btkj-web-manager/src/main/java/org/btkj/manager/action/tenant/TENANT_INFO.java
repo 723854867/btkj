@@ -5,11 +5,11 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.TenantInfo;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.message.Result;
 

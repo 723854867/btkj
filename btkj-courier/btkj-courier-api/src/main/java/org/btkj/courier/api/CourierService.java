@@ -1,6 +1,6 @@
 package org.btkj.courier.api;
 
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.param.QuoteNoticeParam;
 import org.rapid.util.common.message.Result;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.model.identity.User;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;

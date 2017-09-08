@@ -1,14 +1,14 @@
 package org.btkj.vehicle;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.config.Insurer;
+import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.enums.BonusManageConfigType;
 import org.btkj.pojo.enums.InsuranceType;

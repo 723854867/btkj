@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.config.Area;
+import org.btkj.pojo.entity.config.Insurer;
+import org.btkj.pojo.entity.config.Region;
 
 public interface ConfigService {
 	

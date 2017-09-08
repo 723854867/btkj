@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.entity.nonauto.NonAutoProduct;
 import org.btkj.pojo.param.Param;
 import org.rapid.util.lang.DateUtil;
 

@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.model.identity.User;

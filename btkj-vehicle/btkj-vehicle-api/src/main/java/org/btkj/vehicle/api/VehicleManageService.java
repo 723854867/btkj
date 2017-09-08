@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.JianJiePoliciesInfo;

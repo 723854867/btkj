@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.BonusPoundage;
 

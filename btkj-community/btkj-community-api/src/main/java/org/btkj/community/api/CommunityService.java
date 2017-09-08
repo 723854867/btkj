@@ -1,9 +1,9 @@
 package org.btkj.community.api;
 
-import org.btkj.pojo.entity.Article;
-import org.btkj.pojo.entity.Comment;
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.Reply;
+import org.btkj.pojo.entity.community.Article;
+import org.btkj.pojo.entity.community.Comment;
+import org.btkj.pojo.entity.community.Quiz;
+import org.btkj.pojo.entity.community.Reply;
 import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.identity.User;

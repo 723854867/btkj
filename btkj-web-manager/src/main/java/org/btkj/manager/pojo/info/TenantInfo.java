@@ -2,9 +2,9 @@ package org.btkj.manager.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.TenantPO;
 
 public class TenantInfo implements Serializable {
 

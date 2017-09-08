@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.info.user.EmployeePagingInfo;
 import org.btkj.pojo.param.user.EmployeesParam;
 import org.btkj.user.mybatis.provider.EmployeeSQLProvider;

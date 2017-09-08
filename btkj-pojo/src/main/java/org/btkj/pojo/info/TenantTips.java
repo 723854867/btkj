@@ -2,7 +2,7 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
 
 /**
  * 代理公司 tips 信息，只显示name、tid

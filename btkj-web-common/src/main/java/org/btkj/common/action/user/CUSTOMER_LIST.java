@@ -2,7 +2,7 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.entity.user.Customer;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;

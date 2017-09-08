@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.test.persistence.mapper.UserSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 

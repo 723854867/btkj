@@ -1,5 +1,10 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.vehicle;
 
+import org.btkj.pojo.entity.config.Insurer;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.VehiclePolicyTips;

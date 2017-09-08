@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.btkj.bihu.vehicle.BaseTest;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.info.VehicleInfo;
 import org.junit.Test;
 import org.rapid.util.common.message.Result;

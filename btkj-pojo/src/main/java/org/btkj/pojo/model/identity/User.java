@@ -1,7 +1,7 @@
 package org.btkj.pojo.model.identity;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
 
 public class User extends Identity {

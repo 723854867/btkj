@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.test.persistence.dao.UserDao;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

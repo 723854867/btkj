@@ -1,13 +1,13 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.community;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class Reply implements UniqueModel<Integer> {
+public class Comment implements UniqueModel<Integer> {
 
-	private static final long serialVersionUID = -3510882237441432959L;
+	private static final long serialVersionUID = -7225396113472103909L;
 
 	private int id;
-	private int quizId;
+	private int articleId;
 	private int uid;
 	private String content;
 	private int created;
@@ -20,18 +20,18 @@ public class Reply implements UniqueModel<Integer> {
 		this.id = id;
 	}
 
-	public int getQuizId() {
-		return quizId;
+	public int getArticleId() {
+		return articleId;
 	}
 
-	public void setQuizId(int quizId) {
-		this.quizId = quizId;
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
 	}
 
 	public int getUid() {
 		return uid;
 	}
-
+	
 	public void setUid(int uid) {
 		this.uid = uid;
 	}

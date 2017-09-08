@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.config.Api;
 import org.btkj.pojo.entity.config.Area;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.config.Modular;
 import org.btkj.pojo.entity.config.Privilege;
 import org.btkj.pojo.enums.ModularType;

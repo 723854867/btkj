@@ -3,8 +3,8 @@ package org.btkj.pojo.enums;
 import java.math.BigDecimal;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.CoefficientRange;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.rapid.util.common.Consts;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.lang.DateUtil;

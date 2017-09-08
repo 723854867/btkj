@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.test.BaseTest;
 import org.btkj.vehicle.api.VehicleService;

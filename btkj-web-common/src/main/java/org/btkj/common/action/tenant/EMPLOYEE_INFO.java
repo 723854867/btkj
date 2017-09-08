@@ -1,10 +1,10 @@
 package org.btkj.common.action.tenant;
 
 import org.btkj.common.pojo.info.EmployeeInfo;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;

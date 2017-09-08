@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.entity.Customer;
+import org.btkj.pojo.entity.user.Customer;
 import org.btkj.user.mybatis.provider.CustomerSQLProvider;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mapper.DBMapper;

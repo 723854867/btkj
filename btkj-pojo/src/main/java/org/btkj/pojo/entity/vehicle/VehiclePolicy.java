@@ -3,9 +3,8 @@ package org.btkj.pojo.entity.vehicle;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Insurer;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.config.Insurer;
+import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;

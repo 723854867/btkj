@@ -2,8 +2,8 @@ package org.btkj.manager.action.user;
 
 import org.btkj.manager.action.UserAction;
 import org.btkj.manager.pojo.info.UserInfo;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;
 

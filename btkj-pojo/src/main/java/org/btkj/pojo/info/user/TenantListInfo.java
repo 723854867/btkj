@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
 
 public class TenantListInfo implements Serializable {
 

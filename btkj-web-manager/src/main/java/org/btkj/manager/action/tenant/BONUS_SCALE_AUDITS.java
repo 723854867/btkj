@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.BonusScaleInfo;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.model.Pager;

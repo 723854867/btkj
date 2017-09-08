@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.param.user.TenantAddParam;
 import org.btkj.user.api.TenantService;

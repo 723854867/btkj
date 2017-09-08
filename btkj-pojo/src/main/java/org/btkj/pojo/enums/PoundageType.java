@@ -2,8 +2,8 @@ package org.btkj.pojo.enums;
 
 import java.math.BigDecimal;
 
-import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.PoundageNode;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.rapid.util.lang.CollectionUtil;
 import org.rapid.util.math.compare.BigDecimalComparable;
 import org.rapid.util.math.compare.IntComparable;

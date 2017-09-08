@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.info.JianJieInsurerInfo;
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.param.IdParam;

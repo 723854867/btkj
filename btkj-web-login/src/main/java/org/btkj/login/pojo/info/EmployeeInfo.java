@@ -1,6 +1,6 @@
 package org.btkj.login.pojo.info;
 
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.info.UserTips;
 import org.btkj.pojo.model.identity.Employee;
 

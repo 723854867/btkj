@@ -3,8 +3,8 @@ package org.btkj.user.api;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.AppInfo;
 import org.btkj.pojo.info.user.ApplyPagingInfo;

@@ -1,7 +1,5 @@
 package org.btkj.web.util;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.TimeZone;
 
 import javax.validation.Validation;
@@ -9,13 +7,11 @@ import javax.validation.Validation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
-import org.btkj.pojo.enums.Lane;
 import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.consts.conveter.Str2BoolConstConverter;
 import org.rapid.util.common.consts.conveter.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.Str2ObjConstConverter;
 import org.rapid.util.common.consts.conveter.Str2StrConstConverter;
@@ -26,8 +22,6 @@ import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.PhoneUtil;
 import org.rapid.util.validator.Validator;
 
-import com.google.gson.reflect.TypeToken;
-
 /**
  * btkj 的所有请求参数
  * 
@@ -37,8 +31,6 @@ import com.google.gson.reflect.TypeToken;
 public interface Params {
 	
 	final javax.validation.Validator JSR_VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
-	
-	final Type INT_SET_TYPE								 = new TypeToken<List<Integer>>(){}.getType();
 	
 	/**
 	 * 头部信息是可选的，因此这里不需要 id, global session id
@@ -114,12 +106,6 @@ public interface Params {
 	
 	final Str2IntConstConverter REGION					= new Str2IntConstConverter(1017, "region");
 	
-	final Str2BoolConstConverter AGREE					= new Str2BoolConstConverter(1020, "agree", false) {
-		public Boolean convert(String value) throws ConstConvertFailureException {
-			return Boolean.valueOf(value);
-		};
-	};
-	
 	final Str2ObjConstConverter<Client> CLIENT			= new Str2ObjConstConverter<Client>(1021, "client", Client.APP) {
 		@Override
 		public Client convert(String k) throws ConstConvertFailureException {
@@ -159,7 +145,6 @@ public interface Params {
 	final Str2StrConstConverter IDENTITY_FACE						= new Str2StrConstConverter(1029, "identityFace");
 	final Str2StrConstConverter IDENTITY_BACK						= new Str2StrConstConverter(1030, "identityBack");
 	
-	final Str2StrConstConverter ICON					= new Str2StrConstConverter(1033, "icon");
 	final Str2IntConstConverter MOD						= new Str2IntConstConverter(1035, "mod");
 	final Str2IntConstConverter BEGIN_TIME				= new Str2IntConstConverter(1036, "beginTime") {
 		public Integer convert(String value) throws ConstConvertFailureException {
@@ -174,12 +159,6 @@ public interface Params {
 	};
 	
 	final Str2StrConstConverter ORDER_ID						= new Str2StrConstConverter(1038, "orderId");
-	
-	final Str2StrConstConverter VEHICLE_ID						= new Str2StrConstConverter(1041, "vehicleId");
-	final Str2StrConstConverter AGENT							= new Str2StrConstConverter(1042, "agent");
-	final Str2StrConstConverter KEY								= new Str2StrConstConverter(1043, "key");
-	
-	final Str2IntConstConverter JIAN_JIE_ID						= new Str2IntConstConverter(1050, "jianJieId");
 	
 	final Str2IntConstConverter PAGE					= new Str2IntConstConverter(1100, "page", 1);
 	final Str2IntConstConverter PAGE_SIZE				= new Str2IntConstConverter(1101, "pageSize", 10);
@@ -205,9 +184,6 @@ public interface Params {
 		}
 	};
 	
-	final Str2IntConstConverter QUOTE_GROUP					= new Str2IntConstConverter(1107, "quoteGroup");
-	final Str2IntConstConverter INSURE_GROUP				= new Str2IntConstConverter(1108, "insureGroup"); 
-	
 	final Str2ObjConstConverter<CustomerSearcher> CUSTOMER_SEARCHER	= new Str2ObjConstConverter<CustomerSearcher>(1110, "customerSearcher") {
 		@Override
 		public CustomerSearcher convert(String k) throws ConstConvertFailureException {
@@ -232,22 +208,6 @@ public interface Params {
 				throw ConstConvertFailureException.errorConstException(this);
 			}
 			CrudType type = org.rapid.util.common.enums.CrudType.match(value);
-			if (null == type)
-				throw ConstConvertFailureException.errorConstException(this);
-			return type;
-		}
-	};	
-	
-	final Str2ObjConstConverter<Lane> LANE = new Str2ObjConstConverter<Lane>(1216, "lane") {
-		@Override
-		public Lane convert(String k) throws ConstConvertFailureException {
-			int value;
-			try {
-				value = Integer.valueOf(k);
-			} catch (NumberFormatException e) {
-				throw ConstConvertFailureException.errorConstException(this);
-			}
-			Lane type = Lane.match(value);
 			if (null == type)
 				throw ConstConvertFailureException.errorConstException(this);
 			return type;

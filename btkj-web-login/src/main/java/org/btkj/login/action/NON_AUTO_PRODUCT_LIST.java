@@ -3,7 +3,7 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.entity.nonauto.NonAutoProduct;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.nonauto.NonAutoProductListParam;
 import org.btkj.web.util.action.Action;

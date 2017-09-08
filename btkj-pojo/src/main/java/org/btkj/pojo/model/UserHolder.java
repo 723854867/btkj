@@ -2,8 +2,8 @@ package org.btkj.pojo.model;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 
 public class UserHolder implements Serializable {
 

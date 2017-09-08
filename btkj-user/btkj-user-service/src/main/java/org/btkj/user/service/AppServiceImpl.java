@@ -6,11 +6,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.AppPO.Mod;
-import org.btkj.pojo.entity.Banner;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.Banner;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.AppPO.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.identity.App;

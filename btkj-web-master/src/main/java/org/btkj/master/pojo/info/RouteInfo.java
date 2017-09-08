@@ -2,7 +2,7 @@ package org.btkj.master.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.enums.Lane;
 

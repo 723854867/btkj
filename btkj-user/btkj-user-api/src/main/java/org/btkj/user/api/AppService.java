@@ -1,6 +1,6 @@
 package org.btkj.user.api;
 
-import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.identity.App;

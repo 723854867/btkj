@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.btkj.bihu.vehicle.RespHandler;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.Renewal;
+import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.InsurUnit;

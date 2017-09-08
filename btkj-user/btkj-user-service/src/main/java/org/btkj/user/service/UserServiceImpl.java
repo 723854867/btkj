@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Region;
-import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.entity.UserPO.Mod;
+import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.entity.user.Customer;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.UserPO.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserHolder;

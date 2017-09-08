@@ -2,12 +2,12 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.vehicle.Renewal;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Pager;

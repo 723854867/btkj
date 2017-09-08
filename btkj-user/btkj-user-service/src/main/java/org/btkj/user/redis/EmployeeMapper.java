@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.info.user.EmployeePagingInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.user.EmployeesParam;

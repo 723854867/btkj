@@ -2,8 +2,8 @@ package org.btkj.nonauto.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.NonAutoCategory;
-import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.entity.nonauto.NonAutoCategory;
+import org.btkj.pojo.entity.nonauto.NonAutoProduct;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.nonauto.NonAutoProductListParam;
 import org.rapid.util.common.message.Result;

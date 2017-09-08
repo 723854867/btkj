@@ -3,8 +3,8 @@ package org.btkj.common.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.param.community.ArticleListParam;
 import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;

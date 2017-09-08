@@ -9,8 +9,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.test.BaseTest;
 import org.btkj.test.persistence.dao.AppDao;
 import org.btkj.test.persistence.dao.UserDao;

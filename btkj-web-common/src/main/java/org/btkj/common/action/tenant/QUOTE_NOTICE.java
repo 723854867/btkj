@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.param.QuoteNoticeParam;
 import org.btkj.vehicle.api.VehicleService;

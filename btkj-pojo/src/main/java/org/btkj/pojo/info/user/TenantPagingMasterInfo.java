@@ -1,6 +1,6 @@
 package org.btkj.pojo.info.user;
 
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
 
 /**
  * 后台商户分页数据：(master 保途端)

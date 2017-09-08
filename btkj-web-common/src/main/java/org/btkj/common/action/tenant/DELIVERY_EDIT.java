@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Customer;
-import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.entity.user.Customer;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Recipient;

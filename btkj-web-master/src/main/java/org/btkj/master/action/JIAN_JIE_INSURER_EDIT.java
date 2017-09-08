@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;

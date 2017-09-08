@@ -1,4 +1,4 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.community;
 
 import org.rapid.util.common.model.UniqueModel;
 

@@ -2,8 +2,8 @@ package org.btkj.bihu.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.Renewal;
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.model.VehicleAuditModel;

@@ -3,7 +3,7 @@ package org.btkj.user.redis;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.TenantPagingInfo;
 import org.btkj.pojo.info.user.TenantPagingMasterInfo;

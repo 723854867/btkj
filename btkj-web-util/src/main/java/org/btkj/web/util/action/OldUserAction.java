@@ -3,7 +3,7 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;

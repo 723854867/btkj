@@ -10,8 +10,8 @@ import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.community.Quiz;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.identity.User;

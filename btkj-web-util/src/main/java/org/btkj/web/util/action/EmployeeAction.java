@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.AppPO;
-import org.btkj.pojo.entity.AppPO.Mod;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.AppPO.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.EmployeeHolder;
 import org.btkj.pojo.param.EmployeeParam;
@@ -59,11 +59,11 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 			EmployeePO employee = eh.getEmployee();
 			if (Mod.SEAL.satisfy(app.getMod()))
 				return BtkjConsts.RESULT.APP_SEALED;
-			if (org.btkj.pojo.entity.UserPO.Mod.SEAL.satisfy(user.getMod()))
+			if (org.btkj.pojo.entity.user.UserPO.Mod.SEAL.satisfy(user.getMod()))
 				return BtkjConsts.RESULT.USER_SEALED;
-			if (org.btkj.pojo.entity.TenantPO.Mod.SEAL.satisfy(tenant.getMod()))
+			if (org.btkj.pojo.entity.user.TenantPO.Mod.SEAL.satisfy(tenant.getMod()))
 				return BtkjConsts.RESULT.TENANT_SEALED;
-			if (org.btkj.pojo.entity.EmployeePO.Mod.SEAL.satisfy(employee.getMod()))
+			if (org.btkj.pojo.entity.user.EmployeePO.Mod.SEAL.satisfy(employee.getMod()))
 				return BtkjConsts.RESULT.EMPLOYEE_SEALED;
 			return execute(app, user, tenant, employee, param);
 		} finally {

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.NonAutoProduct;
+import org.btkj.pojo.entity.nonauto.NonAutoProduct;
 import org.rapid.data.storage.mongo.KeyMapper;
 import org.rapid.data.storage.mongo.Mongo;
 import org.rapid.util.lang.DateUtil;

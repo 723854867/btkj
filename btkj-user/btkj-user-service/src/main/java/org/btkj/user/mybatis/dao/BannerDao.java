@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.btkj.pojo.entity.Banner;
+import org.btkj.pojo.entity.user.Banner;
 import org.btkj.user.mybatis.provider.BannerSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 

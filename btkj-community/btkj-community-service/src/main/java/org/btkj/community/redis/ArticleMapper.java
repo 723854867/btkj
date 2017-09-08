@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import org.btkj.community.mybatis.dao.ArticleDao;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.Article;
+import org.btkj.pojo.entity.community.Article;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.community.ArticleListParam;
 import org.btkj.pojo.param.community.ArticleListParam.SortCol;

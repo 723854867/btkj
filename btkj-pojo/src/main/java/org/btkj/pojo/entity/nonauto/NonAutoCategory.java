@@ -1,4 +1,4 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.nonauto;
 
 import java.io.Serializable;
 import java.util.List;

@@ -10,15 +10,15 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.EmployeePO;
-import org.btkj.pojo.entity.VehicleOrder;
-import org.btkj.pojo.entity.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.EmployeePO.Mod;
 import org.btkj.pojo.entity.vehicle.CoefficientNode;
 import org.btkj.pojo.entity.vehicle.CoefficientRange;
 import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
 import org.btkj.pojo.entity.vehicle.PoundageConfig;
 import org.btkj.pojo.entity.vehicle.PoundageNode;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.PoundageConfig.NodeConfig;
 import org.btkj.pojo.model.CoefficientDocument;
 import org.btkj.pojo.model.NodeConfigModel;

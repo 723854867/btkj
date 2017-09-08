@@ -2,7 +2,7 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.user.AppPO;
 
 public class AppInfo implements Serializable {
 

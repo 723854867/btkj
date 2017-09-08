@@ -1,6 +1,6 @@
 package org.btkj.manager.pojo.info;
 
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 
 public class UserInfo {
 

@@ -3,7 +3,7 @@ package org.btkj.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.AliyunUtil;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.user.UserPO;
 
 public class UserTips implements Serializable {
 

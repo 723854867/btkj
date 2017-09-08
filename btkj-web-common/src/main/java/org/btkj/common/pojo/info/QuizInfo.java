@@ -2,8 +2,8 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.Quiz;
-import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.community.Quiz;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.UserTips;
 
 public class QuizInfo implements Serializable {

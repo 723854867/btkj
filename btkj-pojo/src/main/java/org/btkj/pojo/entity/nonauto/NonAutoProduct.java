@@ -1,4 +1,4 @@
-package org.btkj.pojo.entity;
+package org.btkj.pojo.entity.nonauto;
 
 import java.util.List;
 import java.util.Map;

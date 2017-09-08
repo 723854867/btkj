@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 
 public class VehicleOrderListInfo implements Serializable {
