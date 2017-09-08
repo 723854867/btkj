@@ -59,12 +59,6 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 			return;
 		Map<Integer, MatchNode> recursions = new HashMap<Integer, MatchNode>();
 		_recursionNode(recursions, documents, order, 0, map);
-		Iterator<Entry<Integer, MatchNode>> iterator = recursions.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<Integer, MatchNode> entry = iterator.next();
-			if (null == entry.getValue())
-				iterator.remove();
-		}
 		if (CollectionUtil.isEmpty(recursions))
 			return;
 		if (recursions.size() != 1) 
@@ -120,53 +114,43 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		for (Entry<Integer, PoundageDocument> entry : documents.entrySet()) {
 			PoundageNode node = entry.getValue().node();
 			PoundageType type = node.getType();
-			switch (type) {
-			case NO_BIZ_COACH_MODEL:
-				CfgVehicle cfgVehicle = cacheService.getById(CacheService.CFG_VEHICLE, order.getTips().getName());
-				if (null == cfgVehicle)
-					continue;
-				if (!cfgVehicle.getModel().equals(node.getCval()[0]))
-					continue;
-				break;
-			case NO_BIZ_COACH_DEPT:
-				cfgVehicle = cacheService.getById(CacheService.CFG_VEHICLE, order.getTips().getName());
-				if (null == cfgVehicle)
-					continue;
-				if (!cfgVehicle.getDept().equals(node.getCval()[0]))
-					continue;
-				break;
-			case NO_BIZ_COACH_BRAND:
-				cfgVehicle = cacheService.getById(CacheService.CFG_VEHICLE, order.getTips().getName());
-				if (null == cfgVehicle)
-					continue;
-				if (!cfgVehicle.getBrand().equals(node.getCval()[0]))
-					continue;
-				break;
-			default:
-				if (!type.matches(order, node))
-					continue;
-				break;
-			}
-			MatchNode current = recursions.remove(pmod);
-			int nmod = type.mod() | pmod;
-			NodeConfig config = configs.get(node.getId());
-			if (null != config) {
-				current = new MatchNode(nmod, config, node);
-				Iterator<MatchNode> iterator = recursions.values().iterator();
-				while (iterator.hasNext()) {
-					MatchNode temp = iterator.next();
-					if (null == temp || temp.getNode().getGid() != node.getGid())
+			int nmod = pmod;
+			if (!type.isPoly()) {
+				switch (type) {
+				case NO_BIZ_COACH_MODEL:
+				case NO_BIZ_COACH_DEPT:
+				case NO_BIZ_COACH_BRAND:
+					CfgVehicle cfgVehicle = cacheService.getById(CacheService.CFG_VEHICLE, order.getTips().getName());
+					if (null == cfgVehicle)
 						continue;
-					if (temp.getNode().getPriority() == node.getPriority()) {
-						logger.error("手续费配置异常，车险订单 - {} 同时匹配多组规则：[gid:{},priority:{}], 随机选择一组作为匹配条件！", order.get_id(), node.getGid(), node.getPriority());
-						current = null;
-					} else if (temp.getNode().getPriority() > node.getPriority())
-						iterator.remove();
-					else
-						current = null;
+					if (!cfgVehicle.match(node))
+						continue;
+					break;
+				default:
+					if (!type.matches(order, node))
+						continue;
+					break;
 				}
+				nmod = type.mod() | pmod;
+				MatchNode current = recursions.remove(pmod);
+				NodeConfig config = configs.get(node.getId());
+				if (null != config) {
+					Iterator<MatchNode> iterator = recursions.values().iterator();
+					while (iterator.hasNext()) {
+						MatchNode temp = iterator.next();
+						if (null == temp || temp.getNode().getGid() != node.getGid())
+							continue;
+						if (temp.getNode().getPriority() == node.getPriority()) 
+							logger.error("手续费配置异常，车险订单 - {} 同时匹配多组规则：[gid:{},priority:{}], 随机选择一组作为匹配条件！", order.get_id(), node.getGid(), node.getPriority());
+						else if (temp.getNode().getPriority() > node.getPriority()) {
+							iterator.remove();
+							current = new MatchNode(nmod, config, node);
+						}
+					}
+				}
+				if (null != current)
+					recursions.put(nmod, current);
 			}
-			recursions.put(nmod, current);
 			_recursionNode(recursions, entry.getValue().children(), order, nmod, configs);
 		}
 	}

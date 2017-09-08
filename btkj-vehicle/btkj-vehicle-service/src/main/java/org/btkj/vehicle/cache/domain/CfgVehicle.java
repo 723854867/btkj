@@ -1,5 +1,6 @@
 package org.btkj.vehicle.cache.domain;
 
+import org.btkj.pojo.entity.vehicle.PoundageNode;
 import org.rapid.util.common.model.UniqueModel;
 
 public class CfgVehicle implements UniqueModel<String> {
@@ -32,6 +33,19 @@ public class CfgVehicle implements UniqueModel<String> {
 	
 	public void setBrand(String brand) {
 		this.brand = brand;
+	}
+	
+	public boolean match(PoundageNode node) {
+		switch (node.getType()) {
+		case NO_BIZ_COACH_BRAND:
+			return this.brand.equals(node.getName());
+		case NO_BIZ_COACH_DEPT:
+			return this.dept.equals(node.getName());
+		case NO_BIZ_COACH_MODEL:
+			return this.model.equals(node.getName());
+		default:
+			return false;
+		}
 	}
 
 	@Override
