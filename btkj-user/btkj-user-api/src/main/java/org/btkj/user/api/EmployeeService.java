@@ -51,4 +51,24 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Map<Integer, EmployeeTip> employeeTips(AppPO app, UserPO user);
+	
+	/**
+	 * 禁用
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param employeeId
+	 * @return
+	 */
+	Result<Void> seal(int appId, int tid, int employeeId);
+	
+	/**
+	 * 解禁
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @param employeeId
+	 * @return
+	 */
+	Result<Void> unseal(int appId, int tid, int employeeId);
 }

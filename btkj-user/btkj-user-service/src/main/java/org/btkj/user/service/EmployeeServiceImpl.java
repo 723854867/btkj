@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
@@ -33,6 +34,7 @@ import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Service;
 
 @Service("employeeService")
@@ -192,5 +194,35 @@ public class EmployeeServiceImpl implements EmployeeService {
 		for (EmployeePO employee : employees.values())
 			map.put(employee.getId(), new EmployeeTip(employee, app, user, tenants.get(employee.getTid())));
 		return map;
+	}
+	
+	@Override
+	public Result<Void> seal(int appId, int tid, int employeeId) {
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		if (null == employee)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
+		if (employee.getAppId() != appId || employee.getTid() != tid)
+			return Consts.RESULT.FORBID;
+		if (!Mod.SEAL.satisfy(employee.getMod())) {
+			employee.setMod(employee.getMod() | Mod.SEAL.mark());
+			employee.setUpdated(DateUtil.currentTime());
+			employeeMapper.update(employee);
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> unseal(int appId, int tid, int employeeId) {
+		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		if (null == employee)
+			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
+		if (employee.getAppId() != appId || employee.getTid() != tid)
+			return Consts.RESULT.FORBID;
+		if (Mod.SEAL.satisfy(employee.getMod())) {
+			employee.setMod(employee.getMod() & (~Mod.SEAL.mark()));
+			employee.setUpdated(DateUtil.currentTime());
+			employeeMapper.update(employee);
+		}
+		return Consts.RESULT.OK;
 	}
 }

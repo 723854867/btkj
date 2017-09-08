@@ -3,7 +3,9 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.AppPO.Mod;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
@@ -51,7 +53,19 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 			return result;
 		try {
 			EmployeeHolder eh = result.attach();
-			return execute(eh.getApp(), eh.getUser(), eh.getTenant(), eh.getEmployee(), param);
+			AppPO app = eh.getApp();
+			UserPO user = eh.getUser();
+			TenantPO tenant = eh.getTenant();
+			EmployeePO employee = eh.getEmployee();
+			if (Mod.SEAL.satisfy(app.getMod()))
+				return BtkjConsts.RESULT.APP_SEALED;
+			if (org.btkj.pojo.entity.UserPO.Mod.SEAL.satisfy(user.getMod()))
+				return BtkjConsts.RESULT.USER_SEALED;
+			if (org.btkj.pojo.entity.TenantPO.Mod.SEAL.satisfy(tenant.getMod()))
+				return BtkjConsts.RESULT.TENANT_SEALED;
+			if (org.btkj.pojo.entity.EmployeePO.Mod.SEAL.satisfy(employee.getMod()))
+				return BtkjConsts.RESULT.EMPLOYEE_SEALED;
+			return execute(app, user, tenant, employee, param);
 		} finally {
 			if (userLock())
 				userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());

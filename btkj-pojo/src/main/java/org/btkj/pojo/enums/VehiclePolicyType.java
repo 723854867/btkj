@@ -1,4 +1,4 @@
-package org.btkj.vehicle.pojo.enums;
+package org.btkj.pojo.enums;
 
 /**
  * 车险保单类型

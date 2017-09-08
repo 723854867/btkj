@@ -43,13 +43,17 @@ public class TenantPO implements UniqueModel<Integer> {
 		RC_PT(1024),			// 奖励口径：营业货车
 		RC_OTHER(2048),			// 奖励口径：其他
 		RC_CM(4096),			// 奖励口径：商业险
-		RC_CP(8192);			// 奖励口径：交强险
+		RC_CP(8192),			// 奖励口径：交强险
+		SEAL(16384);			// 禁用
 		private int mark;
 		private Mod(int mark) {
 			this.mark = mark;
 		}
 		public int mark() {
 			return mark;
+		}
+		public boolean satisfy(int cmod) {
+			return (cmod & mark) == mark;
 		}
 		public static final boolean check(int mod) {
 			for (Mod temp : Mod.values()) {

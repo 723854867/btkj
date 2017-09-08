@@ -1,6 +1,6 @@
 package org.btkj.pojo.info;
 
-import org.rapid.util.common.enums.TIME_TYPE;
+import org.rapid.util.common.enums.TimeType;
 
 public class StatisticSearcher extends Page {
 
@@ -8,7 +8,7 @@ public class StatisticSearcher extends Page {
 
 	private int begin;
 	private int end;
-	private TIME_TYPE timeType;
+	private TimeType timeType;
 	
 	public int getBegin() {
 		return begin;
@@ -26,11 +26,11 @@ public class StatisticSearcher extends Page {
 		this.end = end;
 	}
 	
-	public TIME_TYPE getTimeType() {
+	public TimeType getTimeType() {
 		return timeType;
 	}
 	
-	public void setTimeType(TIME_TYPE timeType) {
+	public void setTimeType(TimeType timeType) {
 		this.timeType = timeType;
 	}
 }

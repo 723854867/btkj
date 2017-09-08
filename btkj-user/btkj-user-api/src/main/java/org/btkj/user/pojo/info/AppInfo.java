@@ -9,6 +9,7 @@ public class AppInfo implements Serializable {
 	private static final long serialVersionUID = 8437274110716771303L;
 
 	private int id;
+	private int mod;
 	private int region;
 	private String name;
 	private String regionName;
@@ -21,6 +22,7 @@ public class AppInfo implements Serializable {
 	
 	public AppInfo(AppPO po) {
 		this.id = po.getId();
+		this.mod = po.getMod();
 		this.region = po.getRegion();
 		this.name = po.getName();
 		this.maxTenantsCount = po.getMaxTenantsCount();
@@ -35,6 +37,14 @@ public class AppInfo implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 
 	public int getRegion() {

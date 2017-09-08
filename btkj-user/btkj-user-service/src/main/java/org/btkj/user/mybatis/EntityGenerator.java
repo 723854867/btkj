@@ -7,6 +7,7 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.EmployeePO;
+import org.btkj.pojo.entity.EmployeePO.Mod;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
@@ -48,6 +49,7 @@ public class EntityGenerator {
 		employee.setLevel(null == parent ? Node.ROOT_LAYER : parent.getLevel() + 1);
 		employee.setLeft(null == parent ? 1 : parent.getRight());
 		employee.setRight(employee.getLeft() + 1);
+		employee.setMod(Mod.PAY_FULL.mark());
 		if (null == parent)
 			employee.setRelationPath(StringUtil.EMPTY);
 		else {

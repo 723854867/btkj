@@ -11,6 +11,7 @@ import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.UserPO.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.identity.User;
@@ -226,6 +227,36 @@ public class UserServiceImpl implements UserService {
 		if (customer.getUid() != uid)
 			return Consts.RESULT.FORBID;
 		customerMapper.delete(customer);
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> seal(int appId, int uid) {
+		UserPO user = userMapper.getByKey(uid);
+		if (null == user)
+			return Consts.RESULT.USER_NOT_EXIST;
+		if (user.getAppId() != appId)
+			return Consts.RESULT.FORBID;
+		if (!Mod.SEAL.satisfy(user.getMod())) {
+			user.setMod(user.getMod() | Mod.SEAL.mark());
+			user.setUpdated(DateUtil.currentTime());
+			userMapper.update(user);
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> unseal(int appId, int uid) {
+		UserPO user = userMapper.getByKey(uid);
+		if (null == user)
+			return Consts.RESULT.USER_NOT_EXIST;
+		if (user.getAppId() != appId)
+			return Consts.RESULT.FORBID;
+		if (Mod.SEAL.satisfy(user.getMod())) {
+			user.setMod(user.getMod() & (~Mod.SEAL.mark()));
+			user.setUpdated(DateUtil.currentTime());
+			userMapper.update(user);
+		}
 		return Consts.RESULT.OK;
 	}
 }

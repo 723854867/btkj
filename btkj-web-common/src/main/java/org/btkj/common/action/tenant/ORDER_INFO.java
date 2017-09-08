@@ -30,5 +30,4 @@ public class ORDER_INFO extends EmployeeAction<EmployeeSidParam> {
 	protected boolean userLock() {
 		return true;
 	}
-
 }

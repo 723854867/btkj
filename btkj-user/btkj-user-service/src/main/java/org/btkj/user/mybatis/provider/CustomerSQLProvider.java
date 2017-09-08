@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.enums.SORT_TYPE;
+import org.rapid.util.common.enums.SortType;
 import org.rapid.util.lang.CollectionUtil;
 
 public class CustomerSQLProvider extends SQLProvider {
@@ -35,7 +35,7 @@ public class CustomerSQLProvider extends SQLProvider {
 				builder.append("AND ").append(entry.getKey()).append(Consts.SYMBOL_EQUAL).append(entry.getValue()).append(" ");
 		}
 		if (null != searcher.getSortCol())
-			builder.append("ORDER BY #{sortCol} ").append(searcher.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name()).append(" ");
+			builder.append("ORDER BY #{sortCol} ").append(searcher.isAsc() ? SortType.ASC.name() : SortType.DESC.name()).append(" ");
 		builder.append("LIMIT #{start}, #{pageSize}");
 		return builder.toString();
 	}

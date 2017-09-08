@@ -43,4 +43,18 @@ public interface AppService {
 	 * @return
 	 */
 	int tenantNum(AppPO app);
+	
+	/**
+	 * 禁用 app
+	 * @param app
+	 */
+	Result<Void> seal(int appId);
+	
+	/**
+	 * 解禁 app
+	 * 
+	 * @param appId
+	 * @return
+	 */
+	Result<Void> unseal(int appId);
 }

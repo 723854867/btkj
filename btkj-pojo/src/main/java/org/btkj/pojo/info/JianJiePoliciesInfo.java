@@ -43,8 +43,8 @@ public class JianJiePoliciesInfo implements Serializable {
 		private String CzZjhm;
 		private String Bbr;
 		private String BbrZjhm;
-		private double Bf;
-		private double CCS;
+		private String Bf;
+		private String CCS;
 		private String Qdrq;
 		private String Qbrq;
 		private String Skrq;
@@ -119,19 +119,19 @@ public class JianJiePoliciesInfo implements Serializable {
 			BbrZjhm = bbrZjhm;
 		}
 
-		public double getBf() {
+		public String getBf() {
 			return Bf;
 		}
 
-		public void setBf(double bf) {
+		public void setBf(String bf) {
 			Bf = bf;
 		}
 
-		public double getCCS() {
+		public String getCCS() {
 			return CCS;
 		}
 
-		public void setCCS(double cCS) {
+		public void setCCS(String cCS) {
 			CCS = cCS;
 		}
 

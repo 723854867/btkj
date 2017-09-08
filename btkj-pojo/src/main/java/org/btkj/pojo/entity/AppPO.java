@@ -7,6 +7,7 @@ public class AppPO implements UniqueModel<Integer> {
 	private static final long serialVersionUID = 1327257995085623868L;
 
 	private int id;
+	private int mod;
 	private int region;
 	private String name;
 	private int maxTenantsCount;
@@ -14,12 +15,34 @@ public class AppPO implements UniqueModel<Integer> {
 	private int created;
 	private int updated;
 	
+	public enum Mod {
+		SEAL(1);
+		private int mark;
+		private Mod(int mark) {
+			this.mark = mark;
+		}
+		public int mark() {
+			return mark;
+		}
+		public boolean satisfy(int cmod) {
+			return (cmod & mark) == mark;
+		}
+	}
+	
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 	
 	public int getRegion() {

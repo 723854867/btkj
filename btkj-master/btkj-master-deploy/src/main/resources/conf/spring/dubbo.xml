@@ -14,5 +14,6 @@
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" serialization="kryo" optimizer="org.btkj.pojo.SerializationOptimizerImpl"/>
 	
 	<dubbo:service interface="org.btkj.master.api.CloudService" ref="cloudService" loadbalance="${dubbo.service.loadbalance}"/>
+	<dubbo:service interface="org.btkj.master.api.AdminService" ref="adminService" loadbalance="${dubbo.service.loadbalance}"/>
 	<dubbo:service interface="org.btkj.master.api.MasterService" ref="masterService" loadbalance="${dubbo.service.loadbalance}"/>
 </beans>

@@ -29,6 +29,8 @@ public class EmployeeTip implements Serializable {
 	private String mobile;				// 手机号
 	private String avatar;
 	private String identity;			// 身份证号
+	private String identityFace;
+	private String identityBack;
 	private int layer;
 	private int CMRate;
 	private int CPRate;
@@ -50,6 +52,8 @@ public class EmployeeTip implements Serializable {
 		this.mobile = user.getMobile();
 		this.avatar = user.getAvatar();
 		this.identity = user.getIdentity();
+		this.identityFace = user.getIdentityFace();
+		this.identityBack = user.getIdentityBack();
 		this.CMRate = employee.getCommercialRate();
 		this.CPRate = employee.getCompulsoryRate();
 		this.created = employee.getCreated();
@@ -142,6 +146,22 @@ public class EmployeeTip implements Serializable {
 	
 	public void setIdentity(String identity) {
 		this.identity = identity;
+	}
+	
+	public String getIdentityBack() {
+		return identityBack;
+	}
+	
+	public void setIdentityBack(String identityBack) {
+		this.identityBack = identityBack;
+	}
+	
+	public String getIdentityFace() {
+		return identityFace;
+	}
+	
+	public void setIdentityFace(String identityFace) {
+		this.identityFace = identityFace;
 	}
 
 	public int getAregion() {

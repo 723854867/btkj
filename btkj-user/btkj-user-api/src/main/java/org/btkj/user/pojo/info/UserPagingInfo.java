@@ -9,6 +9,7 @@ public class UserPagingInfo implements Serializable {
 	private static final long serialVersionUID = 1993858725755535044L;
 
 	private int uid;
+	private int mod;
 	private String name;
 	private String avatar;
 	private String mobile;
@@ -21,6 +22,7 @@ public class UserPagingInfo implements Serializable {
 	
 	public UserPagingInfo(UserPO user) {
 		this.uid = user.getUid();
+		this.mod = user.getMod();
 		this.name = user.getName();
 		this.avatar = user.getAvatar();
 		this.mobile = user.getMobile();
@@ -36,6 +38,14 @@ public class UserPagingInfo implements Serializable {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	
+	public int getMod() {
+		return mod;
+	}
+	
+	public void setMod(int mod) {
+		this.mod = mod;
 	}
 
 	public String getName() {

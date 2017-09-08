@@ -1,6 +1,5 @@
 package org.btkj.vehicle.pojo.entity;
 
-import java.util.LinkedList;
 import java.util.Set;
 
 import org.btkj.vehicle.pojo.enums.PoundageType;
@@ -17,7 +16,6 @@ public class PoundageNode extends NodeImpl<Integer> implements UniqueModel<Integ
 	private String[] cval;
 	private PoundageType type;
 	private Comparison comparison;
-	private LinkedList<Integer> path;
 	private Set<Integer> coefficients;				// 系数节点
 	
 	public int getGid() {
@@ -58,14 +56,6 @@ public class PoundageNode extends NodeImpl<Integer> implements UniqueModel<Integ
 	
 	public void setComparison(Comparison comparison) {
 		this.comparison = comparison;
-	}
-	
-	public LinkedList<Integer> getPath() {
-		return path;
-	}
-	
-	public void setPath(LinkedList<Integer> path) {
-		this.path = path;
 	}
 	
 	public Set<Integer> getCoefficients() {

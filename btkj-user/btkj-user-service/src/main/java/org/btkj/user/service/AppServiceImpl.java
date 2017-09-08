@@ -5,7 +5,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.AppPO.Mod;
 import org.btkj.pojo.entity.Banner;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
@@ -21,7 +23,9 @@ import org.btkj.user.redis.BannerMapper;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Service;
 
 @Service("appService")
@@ -85,5 +89,31 @@ public class AppServiceImpl implements AppService {
 	@Override
 	public int tenantNum(AppPO app) {
 		return tenantMapper.countByAppId(app.getId());
+	}
+	
+	@Override
+	public Result<Void> seal(int appId) {
+		AppPO app = appMapper.getByKey(appId);
+		if (null == app)
+			return BtkjConsts.RESULT.APP_NOT_EXIST;
+		if (!Mod.SEAL.satisfy(app.getMod())) {
+			app.setMod(app.getMod() | Mod.SEAL.mark());
+			app.setUpdated(DateUtil.currentTime());
+			appMapper.update(app);
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> unseal(int appId) {
+		AppPO app = appMapper.getByKey(appId);
+		if (null == app)
+			return BtkjConsts.RESULT.APP_NOT_EXIST;
+		if (Mod.SEAL.satisfy(app.getMod())) {
+			app.setMod(app.getMod() & (~Mod.SEAL.mark()));
+			app.setUpdated(DateUtil.currentTime());
+			appMapper.update(app);
+		}
+		return Consts.RESULT.OK;
 	}
 }

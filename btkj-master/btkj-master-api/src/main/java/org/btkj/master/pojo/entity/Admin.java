@@ -14,13 +14,17 @@ public class Admin implements UniqueModel<Integer> {
 	private int updated;
 	
 	public enum Mod {
-		FULL_PRIVILEGES(1);					// 拥有保途所有权限
+		FULL_PRIVILEGES(1),					// 拥有保途所有权限
+		SEAL(2);
 		private int mark;
 		private Mod(int mark) {
 			this.mark = mark;
 		}
 		public int mark() {
 			return mark;
+		}
+		public boolean satisfy(int cmod) {
+			return (cmod & mark) == mark;
 		}
 	}
 

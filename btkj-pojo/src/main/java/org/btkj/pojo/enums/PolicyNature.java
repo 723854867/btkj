@@ -23,6 +23,10 @@ public enum PolicyNature {
 		this.mark = mark;
 	}
 	
+	public int mark() {
+		return mark;
+	}
+	
 	public static final PolicyNature match(int mark) {
 		for (PolicyNature temp : PolicyNature.values()) {
 			if (temp.mark == mark)

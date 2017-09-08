@@ -2,8 +2,11 @@ package org.btkj.master;
 
 import javax.annotation.Resource;
 
+import org.btkj.master.api.AdminService;
 import org.btkj.master.api.CloudService;
 import org.btkj.master.pojo.entity.Admin;
+import org.btkj.master.pojo.entity.Admin.Mod;
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.action.Action;
@@ -13,6 +16,8 @@ import org.rapid.util.common.message.Result;
 
 public abstract class AdminAction<PARAM extends Param> extends Action<PARAM> {
 	
+	@Resource
+	protected AdminService adminService;
 	@Resource
 	protected CloudService cloudService;
 	
@@ -29,6 +34,8 @@ public abstract class AdminAction<PARAM extends Param> extends Action<PARAM> {
 		Admin admin = cloudService.getAdministratorByToken(request().getHeader(Params.TOKEN));
 		if (null == admin)
 			return Consts.RESULT.TOKEN_INVALID;
+		if (Mod.SEAL.satisfy(admin.getMod()))
+			return BtkjConsts.RESULT.ADMIN_SEALED;
 		return execute(admin, param);
 	}
 	

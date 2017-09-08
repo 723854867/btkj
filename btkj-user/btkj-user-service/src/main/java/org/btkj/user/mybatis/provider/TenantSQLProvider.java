@@ -6,7 +6,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.btkj.user.pojo.param.TenantsParam;
 import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
-import org.rapid.util.common.enums.SORT_TYPE;
+import org.rapid.util.common.enums.SortType;
 
 public class TenantSQLProvider extends SQLProvider {
 	
@@ -47,7 +47,7 @@ public class TenantSQLProvider extends SQLProvider {
 			SqlUtil.appendWithWhere(builder, params);
 		if (null != param.getSortCol()) {
 			builder.append(" ORDER BY ").append(param.getSortCol()).append(" ");
-			builder.append(param.isAsc() ? SORT_TYPE.ASC.name() : SORT_TYPE.DESC.name());
+			builder.append(param.isAsc() ? SortType.ASC.name() : SortType.DESC.name());
 		}
 		builder.append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize());
 		return builder.toString();

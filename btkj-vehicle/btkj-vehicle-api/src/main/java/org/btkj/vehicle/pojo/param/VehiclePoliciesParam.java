@@ -4,8 +4,8 @@ import javax.validation.constraints.Min;
 
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
+import org.btkj.pojo.enums.VehiclePolicyType;
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
 
 public class VehiclePoliciesParam extends EmployeeParam {
 

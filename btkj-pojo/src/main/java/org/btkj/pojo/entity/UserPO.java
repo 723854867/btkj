@@ -22,13 +22,17 @@ public class UserPO implements UniqueModel<Integer> {
 	private int updated;
 	
 	public enum Mod {
-		FULL_PRIVILEGES(1);
+		FULL_PRIVILEGES(1),
+		SEAL(2);
 		private int mark;
 		private Mod(int mark) {
 			this.mark = mark;
 		}
 		public int mark() {
 			return mark;
+		}
+		public boolean satisfy(int cmod) {
+			return (cmod & mark) == mark;
 		}
 	}
 

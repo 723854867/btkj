@@ -3,7 +3,6 @@ package org.btkj.manager.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.payment.pojo.entity.Account;
-import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
 
 public class EmployeeInfo implements Serializable {
@@ -29,13 +28,13 @@ public class EmployeeInfo implements Serializable {
 	private int CMRate;
 	private int CPRate;
 
-	public EmployeeInfo(UserPO user, EmployeeTip employee, EmployeeTip parent, Account account) {
-		this.name = user.getName();
+	public EmployeeInfo(EmployeeTip employee, EmployeeTip parent, Account account) {
+		this.name = employee.getName();
 		this.employeeId = employee.getId();
-		this.identity = user.getIdentity();
-		this.identityFace = user.getIdentityFace();
-		this.identityBack = user.getIdentityBack();
-		this.mobile = user.getMobile();
+		this.identity = employee.getIdentity();
+		this.identityFace = employee.getIdentityFace();
+		this.identityBack = employee.getIdentityBack();
+		this.mobile = employee.getMobile();
 		this.parentId = null == parent ? 0 : parent.getId();
 		this.parentName = null == parent ? null : parent.getName();
 		this.mod = employee.getMod();

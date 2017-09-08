@@ -172,4 +172,22 @@ public interface UserService {
 	 * @return
 	 */
 	Result<Void> customerDelete(long id, int uid);
+	
+	/**
+	 * 用户禁用
+	 * 
+	 * @param appId
+	 * @param uid
+	 * @return
+	 */
+	Result<Void> seal(int appId, int uid);
+	
+	/**
+	 * 用户解禁
+	 * 
+	 * @param appId
+	 * @param uid
+	 * @return
+	 */
+	Result<Void> unseal(int appId, int uid);
 }

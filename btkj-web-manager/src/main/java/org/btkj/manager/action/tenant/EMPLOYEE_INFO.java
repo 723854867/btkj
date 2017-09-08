@@ -27,6 +27,6 @@ public class EMPLOYEE_INFO extends EmployeeAction<EmployeeIdParam> {
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		EmployeeTip parent = 0 == employee.getParentId() ? null : employeeService.employeeTip(employee.getParentId());
 		Account account = paymentService.account(param.getId());
-		return Result.result(new EmployeeInfo(user, tip, parent, account));
+		return Result.result(new EmployeeInfo(tip, parent, account));
 	}
 }

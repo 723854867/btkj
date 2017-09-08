@@ -35,7 +35,8 @@ public class EmployeePO implements UniqueModel<Integer> {
 		BONUS_OTHER(64),			// 其他车
 		PAY_FULL(128),				// 全额支付
 		PAY_NET(256),				// 净保费支付
-		PAY_ADVANCE(512);			// 公司垫付
+		PAY_ADVANCE(512),			// 公司垫付
+		SEAL(1024);					// 禁用
 		private static final int MOD_1 = 255;
 		private static final int MOD_2 = 383;
 		private static final int MOD_3 = 639;
@@ -45,6 +46,9 @@ public class EmployeePO implements UniqueModel<Integer> {
 		}
 		public int mark() {
 			return mark;
+		}
+		public boolean satisfy(int cmod) {
+			return (cmod & mark) == mark;
 		}
 		public static final boolean check(int mod) {
 			return (MOD_1 & mod) == mod

@@ -15,6 +15,7 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.TenantPO.Mod;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
@@ -35,6 +36,7 @@ import org.btkj.user.redis.UserMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.concurrent.ThreadLocalUtil;
+import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Service;
 
 @Service("tenantService")
@@ -111,5 +113,35 @@ public class TenantServiceImpl implements TenantService {
 	private boolean _tenantNumMax(int uid) {
 		int limit = employeeMapper.ownedTenants(uid).size() + applyMapper.applyTenants(uid).size();
 		return limit >= GlobalConfigContainer.getGlobalConfig().getMaxTenantNum();
+	}
+	
+	@Override
+	public Result<Void> seal(int appId, int tid) {
+		TenantPO tenant = tenantMapper.getByKey(tid);
+		if (null == tenant)
+			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
+		if (tenant.getAppId() != appId)
+			return Consts.RESULT.FORBID;
+		if (!Mod.SEAL.satisfy(tenant.getMod())) {
+			tenant.setMod(tenant.getMod() | Mod.SEAL.mark());
+			tenant.setUpdated(DateUtil.currentTime());
+			tenantMapper.update(tenant);
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Result<Void> unseal(int appId, int tid) {
+		TenantPO tenant = tenantMapper.getByKey(tid);
+		if (null == tenant)
+			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
+		if (tenant.getAppId() != appId)
+			return Consts.RESULT.FORBID;
+		if (Mod.SEAL.satisfy(tenant.getMod())) {
+			tenant.setMod(tenant.getMod() & (~Mod.SEAL.mark()));
+			tenant.setUpdated(DateUtil.currentTime());
+			tenantMapper.update(tenant);
+		}
+		return Consts.RESULT.OK;
 	}
 }

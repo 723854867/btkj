@@ -62,7 +62,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	void jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
+	Map<String, VehiclePolicy> jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
 	
 	/**
 	 * 车险订单详情:只能查看

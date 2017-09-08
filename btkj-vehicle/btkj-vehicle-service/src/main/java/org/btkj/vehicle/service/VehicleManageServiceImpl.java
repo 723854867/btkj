@@ -159,7 +159,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public void jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info) {
+	public Map<String, VehiclePolicy> jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info) {
 		Map<String, VehiclePolicy> policies = new HashMap<String, VehiclePolicy>();
 		Map<String, BaseInfo> cms = new HashMap<String, BaseInfo>();
 		Map<String, BaseInfo> cmps = new HashMap<String, BaseInfo>();
@@ -180,6 +180,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		_jianJiePolicyProcess(employees, employee, InsuranceType.COMPULSORY, cmpNos, cmps, cmNos, cms, updates, policies);
 		vehicleOrderMapper.issuedUpdate(updates);
 		vehiclePolicyMapper.batchInsert(policies);
+		return policies;
 	}
 	
 	private void _jianJiePolicyProcess(Map<Integer, EmployeeTip> employees, EmployeePO employee, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehicleOrder> updates, Map<String, VehiclePolicy> policies) {  
@@ -281,6 +282,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 					policy.setMark(SalesmanMark.UNSUITABLE);
 				} else 
 					policy.setMark(SalesmanMark.NORMAL);
+				policy.setUid(employee.getUid());
 				policy.setSalesman(employee.getName());
 				policy.setSalesmanMobile(employee.getMobile());
 			}

@@ -1,6 +1,13 @@
 package org.btkj.manager.action.tenant;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -12,11 +19,17 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.statistics.StatisticPolicy;
+import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.param.EmployeeParam;
+import org.btkj.statistics.api.StatisticsService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy.CommercialPolicyDetail;
+import org.btkj.vehicle.pojo.entity.VehiclePolicy.CompulsoryPolicyDetail;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -34,6 +47,8 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 	private JianJieService jianJieService;
 	@Resource
 	private UserManageService userManageService;
+	@Resource
+	private StatisticsService statisticsService;
 	@Resource
 	private VehicleManageService vehicleManageService;
 	
@@ -55,10 +70,73 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 				continue;
 			}
 		}
-		vehicleManageService.jianJieSynchronize(employee, employeeService.employeeTips(set), info);
+		Map<String, VehiclePolicy> policies = vehicleManageService.jianJieSynchronize(employee, employeeService.employeeTips(set), info);
+		List<StatisticPolicy> statsitics = _statistics(policies);
+		statisticsService.statisticPolicies(statsitics);
 		tenant.setJianJieFetchTime(DateUtil.currentTime());
 		tenant.setUpdated(DateUtil.currentTime());
 		userManageService.tenantUpdate(tenant);
 		return Consts.RESULT.OK;
+	}
+	
+	private List<StatisticPolicy> _statistics(Map<String, VehiclePolicy> policies) {
+		List<StatisticPolicy> list = new ArrayList<StatisticPolicy>();
+		for (VehiclePolicy policy : policies.values()) {
+			StatisticPolicy temp = _policy(policy, InsuranceType.COMMERCIAL);
+			if (null != temp)
+				list.add(temp);
+			temp = _policy(policy, InsuranceType.COMPULSORY);
+			if (null != temp)
+				list.add(temp);
+		}
+		return list;
+	}
+	
+	private StatisticPolicy _policy(VehiclePolicy policy, InsuranceType insuranceType) {
+		String id = null;
+		String premium = null;
+		String issueDate = null;
+		switch (insuranceType) {
+		case COMMERCIAL:
+			CommercialPolicyDetail cmdetail = policy.getCommercialDetail();
+			if (null == cmdetail)
+				return null;
+			id = cmdetail.getNo();
+			premium = cmdetail.getPrice();
+			issueDate = cmdetail.getIssueDate();
+			break;
+		case COMPULSORY:
+			CompulsoryPolicyDetail cpdetail = policy.getCompulsoryDetail();
+			if (null == cpdetail)
+				return null;
+			id = cpdetail.getNo();
+			premium = new BigDecimal(cpdetail.getPrice()).add(new BigDecimal(cpdetail.getVesselPrice())).setScale(2, RoundingMode.HALF_UP).toString();
+			issueDate = cpdetail.getIssueDate();
+			break;
+		default:
+			return null;
+		}
+		
+		StatisticPolicy temp = new StatisticPolicy();
+		temp.setId(id);
+		temp.setType(policy.getType().mark());
+		temp.setInsurerId(policy.getInsurerId());
+		temp.setInsuranceType(insuranceType.mark());
+		temp.setAppId(policy.getAppId());
+		temp.setTid(policy.getTid());
+		temp.setUid(policy.getUid());
+		temp.setEmployeeId(policy.getSalesmanId());
+		temp.setStatisticUsedType(policy.getBonusType().mark());
+		temp.setNature(policy.getNature().mark());
+		temp.setTransfer(policy.isTransfer());
+		temp.setPremium(premium);
+		Calendar calendar = GregorianCalendar.getInstance(DateUtil.TIMEZONE_GMT_8);
+		calendar.setTimeInMillis(DateUtil.getTime(issueDate, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
+		temp.setYear(calendar.get(Calendar.YEAR));
+		temp.setMonth(calendar.get(Calendar.MONTH));
+		temp.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+		temp.setWeek(calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH));
+		temp.setSeason(temp.getMonth() % 3);
+		return temp;
 	}
 }

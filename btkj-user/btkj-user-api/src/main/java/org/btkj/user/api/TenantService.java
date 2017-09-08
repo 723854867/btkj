@@ -41,4 +41,20 @@ public interface TenantService {
 	 * @return
 	 */
 	TenantListInfo tenantListInfo(UserPO user);
+	
+	/**
+	 * 禁用
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Result<Void> seal(int appId, int tid);
+	
+	/**
+	 * 解禁
+	 * 
+	 * @param tid
+	 * @return
+	 */
+	Result<Void> unseal(int appId, int tid);
 }

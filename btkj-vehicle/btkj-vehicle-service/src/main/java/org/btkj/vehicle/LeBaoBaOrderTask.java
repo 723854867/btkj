@@ -58,11 +58,7 @@ public class LeBaoBaOrderTask implements Runnable {
 			if (result.isSuccess())
 				order.getTips().setSchema(result.attach());
 			if (order.getState().mark() >= VehicleOrderState.QUOTE_SUCCESS.mark())
-				try {
-					poundage.calculate(order, employee);
-				} catch (Exception e) {
-					logger.error("手续费计算错误！", e);
-				}
+				poundage.calculate(order, employee);
 			vehicleOrderMapper.insert(order);
 		} catch (Exception e) {
 			order.setState(VehicleOrderState.SYSTEM_ERROR);

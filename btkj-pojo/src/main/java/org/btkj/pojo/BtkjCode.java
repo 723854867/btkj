@@ -122,6 +122,13 @@ public enum BtkjCode implements ICode {
 	 */
 	ROUTE_NOT_EXIST(531, "route not eixst"),
 	
+	ADMIN_NOT_EXIST(532, "管理员不存在"),
+	ADMIN_SEALED(533, "当前管理员已被禁用"),
+	APP_SEALED(534, "当前平台已被禁用"),
+	USER_SEALED(535, "当前用户已被禁用"),
+	TENANT_SEALED(536, "当前商户已被禁用"),
+	EMPLOYEE_SEALED(537, "当前员工已被禁用"),
+	
 	/**
 	 * 地区不存在
 	 */
@@ -130,7 +137,7 @@ public enum BtkjCode implements ICode {
 	/**
 	 * 地区
 	 */
-	AREA_NOT_EXIST(530, "area not exist"),
+	AREA_NOT_EXIST(541, "area not exist"),
 	
 	/**
 	 * 车险系数不存在

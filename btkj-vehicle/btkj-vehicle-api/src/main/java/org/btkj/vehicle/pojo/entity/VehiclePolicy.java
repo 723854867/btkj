@@ -10,10 +10,10 @@ import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehicleBonusType;
+import org.btkj.pojo.enums.VehiclePolicyType;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Insurance;
-import org.btkj.vehicle.pojo.enums.VehiclePolicyType;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.lang.DateUtil;
 
@@ -23,6 +23,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 
 	private String _id;
 	private int tid;									// 商户ID
+	private int uid;
 	private int appId;
 	private int insurerId;								// 险企ID
 	private String insurerName;
@@ -78,6 +79,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public void setAppId(int appId) {
 		this.appId = appId;
+	}
+	
+	public int getUid() {
+		return uid;
+	}
+	
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 	
 	public int getTid() {
@@ -323,16 +332,16 @@ public class VehiclePolicy implements UniqueModel<String> {
 	}
 	
 	public int commercialQuotaInCent() {
-		return null != commercialDetail ? (int) (commercialDetail.getPrice() * 100) : 0;
+		return null != commercialDetail ? (int) (Double.valueOf(commercialDetail.getPrice()) * 100) : 0;
 	}
 	
 	public int compulsoryQuotaInCent() {
-		return null != compulsoryDetail ? (int) ((compulsoryDetail.getPrice() + compulsoryDetail.getVesselPrice()) * 100) : 0;
+		return null != compulsoryDetail ? (int) ((Double.valueOf(compulsoryDetail.getPrice()) + Double.valueOf(compulsoryDetail.getVesselPrice())) * 100) : 0;
 	}
 	
 	public class CommercialPolicyDetail implements Serializable {
 		private static final long serialVersionUID = -9084610822609798686L;
-		private double price;							// 保费	
+		private String price;							// 保费	
 		private String no;								// 保单号
 		private String deliverNo;						// 投保单号
 		private String startDate;						// 起保时间
@@ -345,10 +354,10 @@ public class VehiclePolicy implements UniqueModel<String> {
 			this.startDate = DateUtil.convert(info.getQbrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8);
 			this.issueDate = DateUtil.convert(info.getSkrq(), DateUtil.YYYY_MM_DDTHH_MM_SS, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8);
 		}
-		public double getPrice() {
+		public String getPrice() {
 			return price;
 		}
-		public void setPrice(double price) {
+		public void setPrice(String price) {
 			this.price = price;
 		}
 		public String getNo() {
@@ -379,16 +388,16 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public class CompulsoryPolicyDetail extends CommercialPolicyDetail {
 		private static final long serialVersionUID = 861842819371203409L;
-		private double vesselPrice;						// 车船税
+		private String vesselPrice;						// 车船税
 		public CompulsoryPolicyDetail() {}
 		public CompulsoryPolicyDetail(BaseInfo info) {
 			super(info);
 			this.vesselPrice = info.getCCS();
 		}
-		public double getVesselPrice() {
+		public String getVesselPrice() {
 			return vesselPrice;
 		}
-		public void setVesselPrice(double vesselPrice) {
+		public void setVesselPrice(String vesselPrice) {
 			this.vesselPrice = vesselPrice;
 		}
 	}

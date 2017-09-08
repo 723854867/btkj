@@ -1,18 +1,24 @@
 package org.btkj.statistics.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.entity.statistics.StatisticPolicy;
+import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
+import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.mybatis.dao.LogExploitDao;
 import org.btkj.statistics.mybatis.dao.LogScoreDao;
+import org.btkj.statistics.mybatis.dao.StatisticPolicyDao;
 import org.btkj.statistics.pojo.entity.LogExploit;
 import org.btkj.statistics.pojo.entity.LogScore;
 import org.btkj.statistics.pojo.model.Exploit;
 import org.btkj.statistics.pojo.model.Exploits;
 import org.btkj.statistics.pojo.model.ScoreReward;
-import org.rapid.util.common.enums.TIME_TYPE;
+import org.rapid.util.common.enums.TimeType;
 import org.springframework.stereotype.Service;
 
 @Service("statisticsService")
@@ -22,9 +28,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private LogScoreDao logScoreDao;
 	@Resource
 	private LogExploitDao logExploitDao;
+	@Resource
+	private StatisticPolicyDao statisticPolicyDao;
 	
 	@Override
-	public List<Exploit> exploits(int employeeId, int begin, int end, int typeMod, TIME_TYPE timeType) {
+	public List<Exploit> exploits(int employeeId, int begin, int end, int typeMod, TimeType timeType) {
 		return logExploitDao.exploits(employeeId, begin, end, typeMod, timeType.name().toLowerCase());
 	}
 	
@@ -54,5 +62,20 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<LogExploit> recordLogExploits(List<LogExploit> list) {
 		logExploitDao.batchInsert(list);
 		return list;
+	}
+	
+	@Override
+	public void statisticPolicies(Collection<StatisticPolicy> policies) {
+		statisticPolicyDao.replace(policies);
+	}
+	
+	@Override
+	public Pager<PolicyStatisticInfo> statsiticPolicies(StatisticPoliciesParam param) {
+		int total = statisticPolicyDao.statisticPoliciesTotal(param);
+		if (0 == total)
+			return Pager.EMPLTY;
+		param.calculate(total);
+		List<PolicyStatisticInfo> list = statisticPolicyDao.statisticPolicies(param);
+		return new Pager<PolicyStatisticInfo>(total, list);
 	}
 }

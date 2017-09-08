@@ -1,7 +1,7 @@
 package org.btkj.pojo.info;
 
 import org.rapid.data.storage.redis.RedisConsts;
-import org.rapid.util.common.enums.SORT_TYPE;
+import org.rapid.util.common.enums.SortType;
 
 public class QuizSearcher extends Page {
 
@@ -9,7 +9,7 @@ public class QuizSearcher extends Page {
 
 	private Integer appId;
 	private SortCol sortCol;
-	private SORT_TYPE sortType;
+	private SortType sortType;
 	
 	public Integer getAppId() {
 		return appId;
@@ -27,16 +27,16 @@ public class QuizSearcher extends Page {
 		this.sortCol = sortCol;
 	}
 	
-	public SORT_TYPE getSortType() {
+	public SortType getSortType() {
 		return sortType;
 	}
 	
-	public void setSortType(SORT_TYPE sortType) {
+	public void setSortType(SortType sortType) {
 		this.sortType = sortType;
 	}
 	
 	public String redisZSortType() {
-		return null == sortType ? RedisConsts.OPTION_ZREVRANGE : sortType == SORT_TYPE.ASC ? RedisConsts.OPTION_ZRANGE : RedisConsts.OPTION_ZREVRANGE;
+		return null == sortType ? RedisConsts.OPTION_ZREVRANGE : sortType == SortType.ASC ? RedisConsts.OPTION_ZRANGE : RedisConsts.OPTION_ZREVRANGE;
 	}
 	
 	public enum SortCol {

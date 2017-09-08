@@ -73,7 +73,11 @@ public class Poundage {
 	 */
 	public void calculate(VehicleOrder order, EmployeePO employee) {
 		if ((employee.getMod() & Mod.PAY_FULL.mark()) == Mod.PAY_FULL.mark())
-			poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);
+			try {
+				poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);
+			} catch (Exception e) {
+				logger.error("手续费计算错误！", e);
+			}
 	}
 	
 	public Map<Integer, PoundageDocument> poundageDocuments() {

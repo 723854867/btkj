@@ -2,7 +2,9 @@ package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.AppPO;
+import org.btkj.pojo.entity.AppPO.Mod;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.Param;
@@ -35,7 +37,13 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 			if (!result.isSuccess())
 				return result;
 			try {
-				return execute(result.attach().getApp(), result.attach().getUser(), param);
+				AppPO app = result.attach().getApp();
+				UserPO user = result.attach().getUser();
+				if (Mod.SEAL.satisfy(app.getMod()))
+					return BtkjConsts.RESULT.APP_SEALED;
+				if (org.btkj.pojo.entity.UserPO.Mod.SEAL.satisfy(user.getMod()))
+					return BtkjConsts.RESULT.USER_SEALED;
+				return execute(app, user, param);
 			} finally {
 				userService.releaseUserLock(result.getDesc(), result.attach().getUser().getUid());
 			}

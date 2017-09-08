@@ -12,11 +12,17 @@ public interface BtkjConsts {
 	final int GLOBAL_TENANT_ID					= 0;
 	
 	interface RESULT {
+		Result APP_SEALED						= Result.result(BtkjCode.APP_SEALED);
+		Result USER_SEALED						= Result.result(BtkjCode.USER_SEALED);
 		Result APPLY_EXIST						= Result.result(BtkjCode.APPLY_EXIST);
+		Result ADMIN_SEALED						= Result.result(BtkjCode.ADMIN_SEALED);
+		Result TENANT_SEALED					= Result.result(BtkjCode.TENANT_SEALED);
 		Result APP_NOT_EXIST					= Result.result(BtkjCode.APP_NOT_EXIST);
 		Result QUIZ_NOT_EXIST					= Result.result(BtkjCode.QUIZ_NOT_EXIST);
 		Result LANE_NOT_EXIST					= Result.result(BtkjCode.LANE_NOT_EXIST);
 		Result AREA_NOT_EXIST					= Result.result(BtkjCode.AREA_NOT_EXIST);
+		Result EMPLOYEE_SEALED					= Result.result(BtkjCode.EMPLOYEE_SEALED);
+		Result ADMIN_NOT_EXIST					= Result.result(BtkjCode.ADMIN_NOT_EXIST);
 		Result ORDER_NOT_EXIST					= Result.result(BtkjCode.ORDER_NOT_EXIST);
 		Result REPLY_NOT_EXIST					= Result.result(BtkjCode.REPLY_NOT_EXIST);
 		Result ROUTE_NOT_EXIST					= Result.result(BtkjCode.ROUTE_NOT_EXIST);
@@ -74,10 +80,12 @@ public interface BtkjConsts {
 		String APP_ID							= "app_id";
 		String PARENT_ID						= "parent_id";
 		String EMPLOYEEID						= "employeeId";
+		String EMPLOYEE_ID						= "employee_id";
 		String STATE							= "state";
 		String CREATED							= "created";
 		String POLICYID							= "policyId";
 		String INSURERID						= "insurerId";
+		String INSURER_ID						= "insurer_id";
 		String LICENSE							= "license";
 		String OWNER							= "owner";
 		String SALESMAN							= "salesman";
@@ -88,6 +96,8 @@ public interface BtkjConsts {
 		String BONUSTYPE						= "bonusType";
 		String ISSUETIME						= "issueTime";
 		String MOBILE							= "mobile";
+		String INSURANCE_TYPE					= "insurance_type";
+		String STATISTIC_USED_TYPE				= "statistic_used_type";
 	}
 	
 	interface LIMITS {
