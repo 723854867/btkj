@@ -3,9 +3,9 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.nonauto.pojo.param.NonAutoProductListParam;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.param.nonauto.NonAutoProductListParam;
 import org.rapid.util.common.message.Result;
 
 public class NON_AUTO_PRODUCT_LIST extends AdminAction<NonAutoProductListParam> {

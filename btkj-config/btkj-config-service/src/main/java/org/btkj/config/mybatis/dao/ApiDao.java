@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.config.mybatis.provider.ApiSQLProvider;
-import org.btkj.config.pojo.entity.Api;
+import org.btkj.pojo.entity.config.Api;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface ApiDao extends DBMapper<Integer, Api> {

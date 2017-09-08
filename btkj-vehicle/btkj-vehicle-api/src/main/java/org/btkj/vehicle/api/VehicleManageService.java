@@ -6,20 +6,20 @@ import java.util.Map;
 
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleOrder;
+import org.btkj.pojo.entity.vehicle.BonusManageConfig;
+import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
+import org.btkj.pojo.entity.vehicle.JianJieInsurer;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.vehicle.pojo.entity.BonusManageConfig;
-import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
-import org.btkj.vehicle.pojo.entity.JianJieInsurer;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
-import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.param.BonusManageConfigEditParam;
-import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
-import org.btkj.vehicle.pojo.param.JianJieInsurerEditParam;
-import org.btkj.vehicle.pojo.param.TenantSetParam;
-import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
-import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
+import org.btkj.pojo.param.vehicle.BonusManageConfigEditParam;
+import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
+import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
+import org.btkj.pojo.param.vehicle.TenantSetParam;
+import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
+import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
 
 public interface VehicleManageService {

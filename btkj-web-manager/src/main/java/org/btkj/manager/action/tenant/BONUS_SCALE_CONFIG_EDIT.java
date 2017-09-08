@@ -7,8 +7,8 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.param.BonusScaleConfigEditParam;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 

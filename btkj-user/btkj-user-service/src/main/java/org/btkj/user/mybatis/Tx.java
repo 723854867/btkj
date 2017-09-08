@@ -14,16 +14,16 @@ import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
-import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.entity.TenantPO.Mod;
+import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.BonusScale;
+import org.btkj.pojo.param.user.TenantAddParam;
 import org.btkj.user.mybatis.dao.AppDao;
 import org.btkj.user.mybatis.dao.EmployeeDao;
 import org.btkj.user.mybatis.dao.TenantDao;
 import org.btkj.user.mybatis.dao.UserDao;
-import org.btkj.user.pojo.model.BonusScale;
-import org.btkj.user.pojo.param.TenantAddParam;
 import org.btkj.user.redis.EmployeeMapper;
 import org.btkj.user.redis.TenantMapper;
 import org.btkj.user.redis.UserMapper;
@@ -100,7 +100,7 @@ public class Tx {
 		EmployeePO employee = employees.get(employeeId);
 		if (null == employee)
 			throw new BusinessException(BtkjCode.EMPLOYEE_NOT_EXIST);
-		return employeeDao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLevel() + teamDepth - 1);
+		return employeeDao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLayer() + teamDepth - 1);
 	}
 
 	/**

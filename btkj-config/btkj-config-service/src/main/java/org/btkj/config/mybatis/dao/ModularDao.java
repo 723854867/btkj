@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.config.mybatis.provider.ModularSQLProvider;
-import org.btkj.config.pojo.entity.Modular;
+import org.btkj.pojo.entity.config.Modular;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface ModularDao extends DBMapper<Integer, Modular> {

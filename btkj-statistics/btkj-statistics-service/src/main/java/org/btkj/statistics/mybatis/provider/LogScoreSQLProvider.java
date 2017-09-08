@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.statistics.pojo.entity.LogScore;
+import org.btkj.pojo.entity.statistics.LogScore;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
 public class LogScoreSQLProvider extends SQLProvider {

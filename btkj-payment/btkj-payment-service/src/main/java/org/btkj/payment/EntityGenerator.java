@@ -1,6 +1,6 @@
 package org.btkj.payment;
 
-import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.entity.payment.Account;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {

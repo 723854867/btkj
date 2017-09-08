@@ -3,12 +3,12 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.param.JianJieInsurerEditParam;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 

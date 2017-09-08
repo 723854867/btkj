@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.config.pojo.entity.Area;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.AreaMapper;
 import org.btkj.config.redis.InsurerMapper;
@@ -16,6 +15,7 @@ import org.btkj.config.redis.PrivilegeMapper;
 import org.btkj.config.redis.RegionMapper;
 import org.btkj.pojo.entity.Insurer;
 import org.btkj.pojo.entity.Region;
+import org.btkj.pojo.entity.config.Area;
 import org.rapid.util.common.Consts;
 import org.springframework.stereotype.Service;
 

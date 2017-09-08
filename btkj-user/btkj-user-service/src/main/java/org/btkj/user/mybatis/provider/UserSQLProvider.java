@@ -3,7 +3,7 @@ package org.btkj.user.mybatis.provider;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.btkj.user.pojo.param.UsersParam;
+import org.btkj.pojo.param.user.UsersParam;
 import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
 import org.rapid.util.common.enums.SortType;

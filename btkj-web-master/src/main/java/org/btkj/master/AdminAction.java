@@ -4,9 +4,9 @@ import javax.annotation.Resource;
 
 import org.btkj.master.api.AdminService;
 import org.btkj.master.api.CloudService;
-import org.btkj.master.pojo.entity.Admin;
-import org.btkj.master.pojo.entity.Admin.Mod;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.entity.master.Admin.Mod;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.action.Action;

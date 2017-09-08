@@ -3,10 +3,11 @@ package org.btkj.master.service;
 import javax.annotation.Resource;
 
 import org.btkj.master.api.AdminService;
-import org.btkj.master.pojo.entity.Admin;
-import org.btkj.master.pojo.entity.Admin.Mod;
 import org.btkj.master.redis.AdminMapper;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.entity.master.Admin.Mod;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
@@ -23,6 +24,8 @@ public class AdminServiceImpl implements AdminService {
 		Admin admin = adminMapper.getByKey(id);
 		if (null == admin)
 			return BtkjConsts.RESULT.ADMIN_NOT_EXIST;
+		if (BtkjUtil.isTopRole(admin))
+			return Consts.RESULT.FORBID;
 		if (!Mod.SEAL.satisfy(admin.getMod())) {
 			admin.setMod(admin.getMod() | Mod.SEAL.mark());
 			admin.setUpdated(DateUtil.currentTime());

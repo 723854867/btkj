@@ -3,10 +3,10 @@ package org.btkj.user.api;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.info.user.TenantListInfo;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.model.identity.User;
-import org.btkj.user.pojo.info.TenantListInfo;
-import org.btkj.user.pojo.param.TenantAddParam;
+import org.btkj.pojo.param.user.TenantAddParam;
 import org.rapid.util.common.message.Result;
 
 public interface TenantService {

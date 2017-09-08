@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
+import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.AppService;
 import org.rapid.util.common.message.Result;

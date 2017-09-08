@@ -6,10 +6,10 @@ import org.btkj.manager.action.UserAction;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.user.UserPagingInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.user.UsersParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.UserPagingInfo;
-import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.util.common.message.Result;
 
 public class USERS extends UserAction<UsersParam> {

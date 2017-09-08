@@ -9,9 +9,9 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.util.common.message.Result;
 
 public class BONUS_SCALE_CONFIGS extends EmployeeAction<EmployeeParam> {

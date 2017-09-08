@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.config.mybatis.provider.PrivilegeSQLProvider;
-import org.btkj.config.pojo.entity.Privilege;
+import org.btkj.pojo.entity.config.Privilege;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface PrivilegeDao extends DBMapper<String, Privilege> {

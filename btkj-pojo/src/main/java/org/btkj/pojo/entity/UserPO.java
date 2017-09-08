@@ -22,7 +22,7 @@ public class UserPO implements UniqueModel<Integer> {
 	private int updated;
 	
 	public enum Mod {
-		FULL_PRIVILEGES(1),
+		TOP_ROLE(1),
 		SEAL(2);
 		private int mark;
 		private Mod(int mark) {

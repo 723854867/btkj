@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
 import org.btkj.vehicle.mybatis.provider.PoundageCoefficientRangeSQLProvider;
-import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface PoundageCoefficientRangeDao extends DBMapper<Integer, PoundageCoefficientRange> {

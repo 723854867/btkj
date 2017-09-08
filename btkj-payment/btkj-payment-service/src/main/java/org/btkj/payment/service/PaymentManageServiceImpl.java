@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.payment.mybatis.Tx;
-import org.btkj.payment.pojo.model.ScoreTips;
 import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.model.ScoreTips;
 import org.springframework.stereotype.Service;
 
 @Service("paymentManageService")

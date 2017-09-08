@@ -6,8 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
-import org.btkj.courier.pojo.info.StsInfo;
 import org.btkj.courier.redis.AliyunMapper;
+import org.btkj.pojo.info.courier.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
 import org.rapid.aliyun.policy.Action;

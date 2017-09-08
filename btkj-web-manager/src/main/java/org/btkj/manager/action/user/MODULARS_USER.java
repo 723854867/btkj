@@ -5,12 +5,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.config.pojo.info.ModularDocument;
-import org.btkj.manager.ManagerUtil;
 import org.btkj.manager.action.UserAction;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.ModularType;
+import org.btkj.pojo.info.config.ModularDocument;
 import org.btkj.pojo.param.IdParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
@@ -22,7 +22,7 @@ public class MODULARS_USER extends UserAction<IdParam> {
 
 	@Override
 	protected Result<Map<Integer, ModularDocument>> execute(AppPO app, UserPO user, IdParam param) {
-		if (!ManagerUtil.hasFullPrivileges(user))
+		if (!BtkjUtil.isTopRole(user))
 			return Consts.RESULT.NO_PRIVILEGE;
 		if (param.getId() == user.getUid())
 			return Consts.RESULT.FORBID;

@@ -7,10 +7,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.config.pojo.entity.Api;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.param.ApisParam;
+import org.btkj.pojo.entity.config.Api;
+import org.btkj.pojo.entity.master.Admin;
 import org.rapid.util.common.message.Result;
 
 public class APIS extends AdminAction<ApisParam> {

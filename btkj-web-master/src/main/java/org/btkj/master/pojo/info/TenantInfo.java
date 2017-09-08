@@ -8,7 +8,7 @@ import java.util.Map;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.TenantPO;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.rapid.util.lang.CollectionUtil;
 
 public class TenantInfo implements Serializable {

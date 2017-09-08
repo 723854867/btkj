@@ -1,6 +1,6 @@
 package org.btkj.courier.api;
 
-import org.btkj.courier.pojo.info.StsInfo;
+import org.btkj.pojo.info.courier.StsInfo;
 
 /**
  * aliyun 的一些服务

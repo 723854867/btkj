@@ -15,6 +15,6 @@ public class EMPLOYEE_SEAL extends EmployeeAction<EmployeeIdParam> {
 	protected Result<Void> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeIdParam param) {
 		if (employee.getId() == param.getId())
 			return Consts.RESULT.FORBID;
-		return employeeService.seal(app.getId(), tenant.getTid(), employee.getId());
+		return employeeService.seal(app.getId(), tenant.getTid(), param.getId());
 	}
 }

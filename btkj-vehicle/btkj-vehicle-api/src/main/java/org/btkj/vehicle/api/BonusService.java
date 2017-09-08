@@ -2,12 +2,12 @@ package org.btkj.vehicle.api;
 
 import java.util.Map;
 
-import org.btkj.vehicle.pojo.entity.CoefficientRange;
-import org.btkj.vehicle.pojo.model.CoefficientDocument;
-import org.btkj.vehicle.pojo.model.NodeConfigModel;
-import org.btkj.vehicle.pojo.model.PoundageDocument;
-import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
+import org.btkj.pojo.entity.vehicle.CoefficientRange;
+import org.btkj.pojo.model.CoefficientDocument;
+import org.btkj.pojo.model.NodeConfigModel;
+import org.btkj.pojo.model.PoundageDocument;
+import org.btkj.pojo.param.vehicle.CoefficientRangeEditParam;
+import org.btkj.pojo.param.vehicle.PoundageConfigEditParam;
 import org.rapid.util.common.message.Result;
 
 /**

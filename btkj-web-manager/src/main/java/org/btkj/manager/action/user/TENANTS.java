@@ -12,10 +12,10 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.user.TenantPagingInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.user.TenantsParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.TenantPagingInfo;
-import org.btkj.user.pojo.param.TenantsParam;
 import org.rapid.util.common.message.Result;
 
 public class TENANTS extends UserAction<TenantsParam> {

@@ -1,7 +1,7 @@
 package org.btkj.config.redis;
 
 import org.btkj.config.mybatis.dao.AreaDao;
-import org.btkj.config.pojo.entity.Area;
+import org.btkj.pojo.entity.config.Area;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 

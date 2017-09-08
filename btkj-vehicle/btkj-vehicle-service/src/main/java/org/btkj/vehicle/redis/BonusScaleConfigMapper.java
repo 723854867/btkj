@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
-import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;

@@ -13,20 +13,20 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.entity.EmployeePO.Mod;
+import org.btkj.pojo.entity.vehicle.CoefficientNode;
+import org.btkj.pojo.entity.vehicle.CoefficientRange;
+import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
+import org.btkj.pojo.entity.vehicle.PoundageConfig;
+import org.btkj.pojo.entity.vehicle.PoundageNode;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.entity.vehicle.PoundageConfig.NodeConfig;
+import org.btkj.pojo.model.CoefficientDocument;
+import org.btkj.pojo.model.NodeConfigModel;
+import org.btkj.pojo.model.PoundageDocument;
+import org.btkj.pojo.param.vehicle.PoundageConfigEditParam;
+import org.btkj.pojo.param.vehicle.PoundageConfigEditParam.NodeConfigInfo;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.mongo.PoundageConfigMapper;
-import org.btkj.vehicle.pojo.entity.CoefficientNode;
-import org.btkj.vehicle.pojo.entity.CoefficientRange;
-import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
-import org.btkj.vehicle.pojo.entity.PoundageConfig;
-import org.btkj.vehicle.pojo.entity.PoundageConfig.NodeConfig;
-import org.btkj.vehicle.pojo.entity.PoundageNode;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
-import org.btkj.vehicle.pojo.model.CoefficientDocument;
-import org.btkj.vehicle.pojo.model.NodeConfigModel;
-import org.btkj.vehicle.pojo.model.PoundageDocument;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam;
-import org.btkj.vehicle.pojo.param.PoundageConfigEditParam.NodeConfigInfo;
 import org.btkj.vehicle.redis.PoundageCoefficientRangeMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.rapid.util.common.Consts;
@@ -63,7 +63,7 @@ public class Poundage {
 		Map<Integer, PoundageNode> nodes = cacheService.getAll(CacheService.POUNDAGE_NODE);
 		if (!CollectionUtil.isEmpty(nodes))
 			poundageDocuments = poundageDocumentFactory.build(nodes);
-		Map<Integer, org.btkj.vehicle.pojo.entity.CoefficientNode> coefficientNodes = cacheService.getAll(CacheService.COEFFICIENT_NODE);
+		Map<Integer, org.btkj.pojo.entity.vehicle.CoefficientNode> coefficientNodes = cacheService.getAll(CacheService.COEFFICIENT_NODE);
 		if (!CollectionUtil.isEmpty(coefficientNodes))
 			coefficientDocuments = coefficientDocumentFactory.build(coefficientNodes);
 	}

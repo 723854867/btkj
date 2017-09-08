@@ -2,8 +2,8 @@ package org.btkj.vehicle.mybatis.dao;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.vehicle.BaseTest;
-import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.junit.Test;
 import org.rapid.util.lang.DateUtil;
 

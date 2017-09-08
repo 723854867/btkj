@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.user.TenantPagingInfo;
+import org.btkj.pojo.info.user.TenantPagingMasterInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.user.TenantsParam;
 import org.btkj.user.mybatis.dao.TenantDao;
-import org.btkj.user.pojo.info.TenantPagingInfo;
-import org.btkj.user.pojo.info.TenantPagingMasterInfo;
-import org.btkj.user.pojo.param.TenantsParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 

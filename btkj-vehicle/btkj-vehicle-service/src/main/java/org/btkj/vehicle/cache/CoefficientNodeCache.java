@@ -1,6 +1,6 @@
 package org.btkj.vehicle.cache;
 
-import org.btkj.vehicle.pojo.entity.CoefficientNode;
+import org.btkj.pojo.entity.vehicle.CoefficientNode;
 import org.rapid.util.common.cache.JsonCache;
 
 public class CoefficientNodeCache extends JsonCache<Integer, CoefficientNode> {

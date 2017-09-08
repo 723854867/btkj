@@ -3,9 +3,9 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
 import org.btkj.nonauto.api.NonAutoService;
-import org.btkj.nonauto.pojo.param.NonAutoEditParam;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.param.nonauto.NonAutoEditParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 

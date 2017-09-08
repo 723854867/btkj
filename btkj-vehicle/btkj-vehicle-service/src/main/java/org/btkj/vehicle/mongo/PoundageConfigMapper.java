@@ -1,6 +1,6 @@
 package org.btkj.vehicle.mongo;
 
-import org.btkj.vehicle.pojo.entity.PoundageConfig;
+import org.btkj.pojo.entity.vehicle.PoundageConfig;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.springframework.stereotype.Component;
 

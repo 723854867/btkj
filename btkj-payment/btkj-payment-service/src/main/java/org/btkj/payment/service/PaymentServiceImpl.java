@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.payment.api.PaymentService;
 import org.btkj.payment.mybatis.dao.AccountDao;
-import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.entity.payment.Account;
 import org.springframework.stereotype.Service;
 
 @Service("paymentService")

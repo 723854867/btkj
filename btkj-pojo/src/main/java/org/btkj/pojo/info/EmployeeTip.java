@@ -20,6 +20,8 @@ public class EmployeeTip implements Serializable {
 	private int mod;
 	private int uid;
 	private int tid;
+	private int tmod;
+	private int amod;
 	private int appId;
 	private int aregion;
 	private int tregion;
@@ -43,6 +45,8 @@ public class EmployeeTip implements Serializable {
 		this.mod = employee.getMod();
 		this.uid = employee.getUid();
 		this.tid = employee.getTid();
+		this.tmod = tenant.getMod();
+		this.amod = app.getMod();
 		this.appId = employee.getAppId();
 		this.aregion = app.getRegion();
 		this.tregion = tenant.getRegion();
@@ -57,7 +61,7 @@ public class EmployeeTip implements Serializable {
 		this.CMRate = employee.getCommercialRate();
 		this.CPRate = employee.getCompulsoryRate();
 		this.created = employee.getCreated();
-		this.layer = employee.getLevel();
+		this.layer = employee.getLayer();
 	}
 
 	public int getId() {
@@ -75,6 +79,14 @@ public class EmployeeTip implements Serializable {
 	public void setMod(int mod) {
 		this.mod = mod;
 	}
+	
+	public int getAmod() {
+		return amod;
+	}
+	
+	public void setAmod(int amod) {
+		this.amod = amod;
+	}
 
 	public int getUid() {
 		return uid;
@@ -90,6 +102,14 @@ public class EmployeeTip implements Serializable {
 
 	public void setTid(int tid) {
 		this.tid = tid;
+	}
+	
+	public int getTmod() {
+		return tmod;
+	}
+	
+	public void setTmod(int tmod) {
+		this.tmod = tmod;
 	}
 
 	public int getAppId() {

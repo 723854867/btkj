@@ -3,9 +3,9 @@ package org.btkj.manager.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.info.EmployeeTip;
-import org.btkj.vehicle.pojo.entity.VehiclePolicy;
 
 public class BonusScaleWaterInfo implements Serializable {
 

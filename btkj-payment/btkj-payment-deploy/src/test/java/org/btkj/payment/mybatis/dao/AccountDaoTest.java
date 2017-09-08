@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.payment.BaseTest;
-import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.entity.payment.Account;
 import org.junit.Test;
 
 public class AccountDaoTest extends BaseTest {

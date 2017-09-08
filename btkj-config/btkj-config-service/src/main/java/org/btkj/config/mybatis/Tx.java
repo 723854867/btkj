@@ -9,20 +9,20 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.btkj.config.ModularDocumentFactory;
 import org.btkj.config.mybatis.dao.ModularDao;
 import org.btkj.config.mybatis.dao.PrivilegeDao;
-import org.btkj.config.pojo.ModularDocumentFactory;
-import org.btkj.config.pojo.entity.Modular;
-import org.btkj.config.pojo.entity.Privilege;
-import org.btkj.config.pojo.info.ModularDocument;
-import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.config.redis.ApiMapper;
 import org.btkj.config.redis.ModularMapper;
 import org.btkj.config.redis.PrivilegeMapper;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
+import org.btkj.pojo.entity.config.Modular;
+import org.btkj.pojo.entity.config.Privilege;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.exception.BusinessException;
+import org.btkj.pojo.info.config.ModularDocument;
+import org.btkj.pojo.param.config.ModularEditParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.key.Pair;

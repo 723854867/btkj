@@ -1,7 +1,7 @@
 package org.btkj.master.pojo.info;
 
 import org.btkj.pojo.entity.Insurer;
-import org.btkj.vehicle.pojo.entity.JianJieInsurer;
+import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 
 public class JianJieInsurerInfo {
 

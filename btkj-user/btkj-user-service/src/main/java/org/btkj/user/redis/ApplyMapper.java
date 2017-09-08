@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.btkj.pojo.info.ApplyInfo;
+import org.btkj.pojo.info.user.ApplyPagingInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.user.pojo.info.ApplyPagingInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;

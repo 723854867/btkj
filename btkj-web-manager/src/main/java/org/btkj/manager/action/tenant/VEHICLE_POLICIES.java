@@ -7,10 +7,10 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
 
 public class VEHICLE_POLICIES extends EmployeeAction<VehiclePoliciesParam> {

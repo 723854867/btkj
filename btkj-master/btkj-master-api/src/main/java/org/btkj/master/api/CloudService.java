@@ -1,7 +1,7 @@
 package org.btkj.master.api;
 
-import org.btkj.master.pojo.entity.Admin;
-import org.btkj.master.pojo.info.LoginInfo;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.info.master.LoginInfo;
 import org.rapid.util.common.message.Result;
 
 /**

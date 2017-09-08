@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.vehicle.mybatis.provider.BonusScaleConfigSQLProvider;
-import org.btkj.vehicle.pojo.entity.BonusScaleConfig;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface BonusScaleConfigDao extends DBMapper<Integer, BonusScaleConfig> {

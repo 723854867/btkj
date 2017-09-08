@@ -5,15 +5,15 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.config.pojo.info.ModularDocument;
-import org.btkj.manager.ManagerUtil;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.ModularType;
+import org.btkj.pojo.info.config.ModularDocument;
 import org.btkj.pojo.param.EmployeeIdParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
@@ -25,7 +25,7 @@ public class MODULARS_EMPLOYEE extends EmployeeAction<EmployeeIdParam> {
 
 	@Override
 	protected Result<Map<Integer, ModularDocument>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeIdParam param) {
-		if (!ManagerUtil.hasFullPrivileges(employee))
+		if (!BtkjUtil.isTopRole(employee))
 			return Consts.RESULT.NO_PRIVILEGE;
 		if (param.getId() == employee.getId())
 			return Consts.RESULT.FORBID;

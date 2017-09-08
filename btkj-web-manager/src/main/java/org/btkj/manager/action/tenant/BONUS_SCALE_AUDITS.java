@@ -15,10 +15,10 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.model.BonusScale;
 import org.rapid.util.common.message.Result;
 
 public class BONUS_SCALE_AUDITS extends EmployeeAction<EmployeeParam> {

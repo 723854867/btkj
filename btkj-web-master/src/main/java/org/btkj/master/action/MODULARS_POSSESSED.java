@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
+import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.param.NilParam;
 import org.rapid.util.common.message.Result;

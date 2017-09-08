@@ -18,7 +18,7 @@ public class EmployeePO implements UniqueModel<Integer> {
 	private String relationPath;
 	private int left;
 	private int right;
-	private int level;
+	private int layer;
 	private int mod;
 	private int commercialRate;
 	private int compulsoryRate;
@@ -122,12 +122,12 @@ public class EmployeePO implements UniqueModel<Integer> {
 		this.right = right;
 	}
 	
-	public int getLevel() {
-		return level;
+	public int getLayer() {
+		return layer;
 	}
 	
-	public void setLevel(int level) {
-		this.level = level;
+	public void setLayer(int layer) {
+		this.layer = layer;
 	}
 	
 	public int getMod() {

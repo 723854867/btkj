@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.config.mybatis.dao.ApiDao;
-import org.btkj.config.pojo.entity.Api;
+import org.btkj.pojo.entity.config.Api;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;

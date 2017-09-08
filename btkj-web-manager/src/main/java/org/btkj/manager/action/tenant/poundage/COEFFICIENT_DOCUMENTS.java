@@ -9,9 +9,9 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.model.CoefficientDocument;
 import org.btkj.pojo.param.EmployeeIdParam;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.model.CoefficientDocument;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 

@@ -7,8 +7,8 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.param.vehicle.CoefficientRangeEditParam;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.param.CoefficientRangeEditParam;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 

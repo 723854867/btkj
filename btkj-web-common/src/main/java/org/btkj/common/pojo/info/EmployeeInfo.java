@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.entity.EmployeePO.Mod;
-import org.btkj.user.pojo.PayType;
+import org.btkj.pojo.enums.PayType;
 
 public class EmployeeInfo implements Serializable {
 

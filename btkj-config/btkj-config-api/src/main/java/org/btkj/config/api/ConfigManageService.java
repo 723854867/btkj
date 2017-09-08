@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.btkj.config.pojo.entity.Api;
-import org.btkj.config.pojo.info.AreaInfo;
-import org.btkj.config.pojo.info.ModularDocument;
-import org.btkj.config.pojo.param.ApiEditParam;
-import org.btkj.config.pojo.param.AreaEditParam;
-import org.btkj.config.pojo.param.InsurerEditParam;
-import org.btkj.config.pojo.param.ModularEditParam;
 import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.config.Api;
 import org.btkj.pojo.enums.ModularType;
+import org.btkj.pojo.info.config.AreaInfo;
+import org.btkj.pojo.info.config.ModularDocument;
+import org.btkj.pojo.param.config.ApiEditParam;
+import org.btkj.pojo.param.config.AreaEditParam;
+import org.btkj.pojo.param.config.InsurerEditParam;
+import org.btkj.pojo.param.config.ModularEditParam;
 import org.rapid.util.common.message.Result;
 
 public interface ConfigManageService {

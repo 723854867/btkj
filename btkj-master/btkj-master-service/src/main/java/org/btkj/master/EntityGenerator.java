@@ -1,7 +1,7 @@
 package org.btkj.master;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.btkj.master.pojo.entity.Admin;
+import org.btkj.pojo.entity.master.Admin;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {

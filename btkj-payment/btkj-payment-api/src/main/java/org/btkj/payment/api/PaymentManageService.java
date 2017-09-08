@@ -2,8 +2,8 @@ package org.btkj.payment.api;
 
 import java.util.Map;
 
-import org.btkj.payment.pojo.model.ScoreTips;
 import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.model.ScoreTips;
 
 public interface PaymentManageService {
 

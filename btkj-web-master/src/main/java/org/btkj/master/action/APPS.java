@@ -5,10 +5,10 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.info.user.AppInfo;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.AppInfo;
 import org.rapid.util.common.message.Result;
 
 public class APPS extends AdminAction<NilParam> {

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.Customer;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.Region;
@@ -14,10 +15,10 @@ import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.entity.UserPO.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
-import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
@@ -235,7 +236,7 @@ public class UserServiceImpl implements UserService {
 		UserPO user = userMapper.getByKey(uid);
 		if (null == user)
 			return Consts.RESULT.USER_NOT_EXIST;
-		if (user.getAppId() != appId)
+		if (user.getAppId() != appId || BtkjUtil.isTopRole(user))
 			return Consts.RESULT.FORBID;
 		if (!Mod.SEAL.satisfy(user.getMod())) {
 			user.setMod(user.getMod() | Mod.SEAL.mark());

@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.bson.conversions.Bson;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.Pager;
-import org.btkj.vehicle.pojo.entity.VehiclePolicy;
-import org.btkj.vehicle.pojo.param.VehiclePoliciesParam;
+import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.rapid.util.lang.CollectionUtil;
 import org.springframework.stereotype.Component;

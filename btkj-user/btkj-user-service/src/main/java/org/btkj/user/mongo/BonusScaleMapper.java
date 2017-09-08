@@ -3,9 +3,9 @@ package org.btkj.user.mongo;
 import java.util.List;
 import java.util.Map;
 
+import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.EmployeeParam;
-import org.btkj.user.pojo.model.BonusScale;
 import org.rapid.data.storage.mapper.MongoMapper;
 import org.springframework.stereotype.Service;
 

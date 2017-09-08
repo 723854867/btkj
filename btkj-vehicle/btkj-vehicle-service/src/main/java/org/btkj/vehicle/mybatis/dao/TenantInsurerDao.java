@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.vehicle.mybatis.provider.TenantInsurerSQLProvider;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface TenantInsurerDao extends DBMapper<String, TenantInsurer> {

@@ -11,10 +11,10 @@ import org.btkj.pojo.entity.VehicleOrder;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.param.VehicleOrderParam;
-import org.btkj.vehicle.pojo.model.VehicleOrderListInfo;
-import org.btkj.vehicle.pojo.param.VehicleOrdersParam;
+import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.rapid.util.common.message.Result;
 
 /**

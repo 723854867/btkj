@@ -7,9 +7,9 @@ import javax.annotation.Resource;
 
 import org.btkj.payment.EntityGenerator;
 import org.btkj.payment.mybatis.dao.AccountDao;
-import org.btkj.payment.pojo.entity.Account;
-import org.btkj.payment.pojo.model.ScoreTips;
+import org.btkj.pojo.entity.payment.Account;
 import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.model.ScoreTips;
 import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,8 +3,8 @@ package org.btkj.vehicle.realm;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.config.pojo.entity.Area;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.entity.config.Area;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.consts.code.ICode;

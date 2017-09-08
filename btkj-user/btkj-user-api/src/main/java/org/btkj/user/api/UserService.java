@@ -9,8 +9,8 @@ import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.model.identity.User;
-import org.btkj.user.pojo.model.UserHolder;
 import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.message.Result;
 

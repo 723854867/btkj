@@ -1,6 +1,6 @@
 package org.btkj.payment.api;
 
-import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.entity.payment.Account;
 
 public interface PaymentService {
 

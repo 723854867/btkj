@@ -8,17 +8,17 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.master.AdminAction;
-import org.btkj.master.pojo.entity.Admin;
 import org.btkj.master.pojo.info.TenantInfo;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.Region;
 import org.btkj.pojo.entity.TenantPO;
+import org.btkj.pojo.entity.master.Admin;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
 import org.rapid.util.common.message.Result;
 
 public class TENANT_INFO extends AdminAction<IdParam> {

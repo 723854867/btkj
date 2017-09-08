@@ -2,7 +2,7 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.payment.pojo.entity.Account;
+import org.btkj.pojo.entity.payment.Account;
 
 public class RewardInfo implements Serializable {
 

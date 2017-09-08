@@ -3,7 +3,7 @@ package org.btkj.master.action;
 import javax.annotation.Resource;
 
 import org.btkj.master.api.CloudService;
-import org.btkj.master.pojo.info.LoginInfo;
+import org.btkj.pojo.info.master.LoginInfo;
 import org.btkj.web.util.Params;
 import org.btkj.web.util.Request;
 import org.btkj.web.util.action.IAction;

@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.EmployeePO.Mod;
@@ -19,10 +20,10 @@ import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.model.EmployeeHolder;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.mybatis.Tx;
-import org.btkj.user.pojo.model.EmployeeHolder;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.EmployeeMapper;
@@ -201,7 +202,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		EmployeePO employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
-		if (employee.getAppId() != appId || employee.getTid() != tid)
+		if (employee.getAppId() != appId || employee.getTid() != tid || BtkjUtil.isTopRole(employee))
 			return Consts.RESULT.FORBID;
 		if (!Mod.SEAL.satisfy(employee.getMod())) {
 			employee.setMod(employee.getMod() | Mod.SEAL.mark());

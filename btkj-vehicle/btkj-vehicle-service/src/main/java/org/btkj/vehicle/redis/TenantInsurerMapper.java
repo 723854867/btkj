@@ -11,11 +11,11 @@ import java.util.Set;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.entity.Insurer;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
+import org.btkj.pojo.enums.Lane;
+import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.TenantInsurerDao;
-import org.btkj.vehicle.pojo.entity.TenantInsurer;
-import org.btkj.vehicle.pojo.enums.Lane;
-import org.btkj.vehicle.pojo.param.TenantSetParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;

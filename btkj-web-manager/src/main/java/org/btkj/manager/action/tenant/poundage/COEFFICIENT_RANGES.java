@@ -9,9 +9,9 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.entity.vehicle.CoefficientRange;
 import org.btkj.pojo.param.EmployeeIdParam;
 import org.btkj.vehicle.api.BonusService;
-import org.btkj.vehicle.pojo.entity.CoefficientRange;
 import org.rapid.util.common.message.Result;
 
 public class COEFFICIENT_RANGES extends EmployeeAction<EmployeeIdParam> {

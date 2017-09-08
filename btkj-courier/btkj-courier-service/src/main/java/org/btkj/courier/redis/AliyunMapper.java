@@ -1,6 +1,6 @@
 package org.btkj.courier.redis;
 
-import org.btkj.courier.pojo.info.StsInfo;
+import org.btkj.pojo.info.courier.StsInfo;
 import org.rapid.data.storage.mapper.RedisMapper;
 import org.rapid.util.common.serializer.impl.ByteJsonSerializer;
 import org.springframework.stereotype.Component;

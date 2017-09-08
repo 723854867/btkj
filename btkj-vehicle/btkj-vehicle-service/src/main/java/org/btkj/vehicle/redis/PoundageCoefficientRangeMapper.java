@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
 import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
-import org.btkj.vehicle.pojo.entity.PoundageCoefficientRange;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;

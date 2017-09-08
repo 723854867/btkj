@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.vehicle.mybatis.provider.BonusManageConfigSQLProvider;
-import org.btkj.vehicle.pojo.entity.BonusManageConfig;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface BonusManageConfigDao extends DBMapper<String, BonusManageConfig> {

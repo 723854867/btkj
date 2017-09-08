@@ -52,7 +52,7 @@ public class Employee extends Identity {
 	}
 	
 	public int getLevel() {
-		return entity.getLevel();
+		return entity.getLayer();
 	}
 	
 	public String getName() {

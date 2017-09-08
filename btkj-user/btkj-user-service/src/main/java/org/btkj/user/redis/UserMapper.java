@@ -6,15 +6,15 @@ import java.util.List;
 
 import org.btkj.pojo.entity.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.user.UserPagingInfo;
+import org.btkj.pojo.info.user.UserPagingMasterInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.user.UsersParam;
 import org.btkj.user.Config;
 import org.btkj.user.LuaCmd;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.dao.UserDao;
-import org.btkj.user.pojo.info.UserPagingInfo;
-import org.btkj.user.pojo.info.UserPagingMasterInfo;
-import org.btkj.user.pojo.param.UsersParam;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.consts.code.Code;

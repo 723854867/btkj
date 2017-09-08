@@ -7,8 +7,8 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.param.user.EmployeeEditParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.param.EmployeeEditParam;
 import org.rapid.util.common.message.Result;
 
 public class EMPLOYEE_EDIT extends EmployeeAction<EmployeeEditParam> {

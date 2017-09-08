@@ -12,8 +12,8 @@ import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.NonAutoCategory;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.param.user.TenantSetParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.param.TenantSetParam;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 

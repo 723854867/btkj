@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.btkj.config.mybatis.dao.PrivilegeDao;
-import org.btkj.config.pojo.entity.Privilege;
+import org.btkj.pojo.entity.config.Privilege;
 import org.btkj.pojo.enums.ModularType;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.key.Pair;

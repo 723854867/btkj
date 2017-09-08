@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.config.mybatis.provider.AreaSQLProvider;
-import org.btkj.config.pojo.entity.Area;
+import org.btkj.pojo.entity.config.Area;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface AreaDao extends DBMapper<Integer, Area> {

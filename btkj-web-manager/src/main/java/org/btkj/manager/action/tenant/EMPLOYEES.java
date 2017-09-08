@@ -7,10 +7,10 @@ import org.btkj.pojo.entity.AppPO;
 import org.btkj.pojo.entity.EmployeePO;
 import org.btkj.pojo.entity.TenantPO;
 import org.btkj.pojo.entity.UserPO;
+import org.btkj.pojo.info.user.EmployeePagingInfo;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.user.EmployeesParam;
 import org.btkj.user.api.UserManageService;
-import org.btkj.user.pojo.info.EmployeePagingInfo;
-import org.btkj.user.pojo.param.EmployeesParam;
 import org.rapid.util.common.message.Result;
 
 public class EMPLOYEES extends EmployeeAction<EmployeesParam> {
