@@ -10,7 +10,9 @@ import org.btkj.pojo.BtkjConsts;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;
+import org.springframework.stereotype.Service;
 
+@Service("adminService")
 public class AdminServiceImpl implements AdminService {
 	
 	@Resource
