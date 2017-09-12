@@ -174,7 +174,8 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 					}
 				}
 			}
-			record.put(nextPath, ratio);
+			if (null != ratio)
+				record.put(nextPath, ratio);
 			_recursionCoefficient(order, ratios, entry.getValue().children(), record, nextPath);
 		}
 	}

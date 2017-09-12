@@ -62,7 +62,7 @@ public enum CoefficientType {
 				return false;
 			int value = IdentityValidator.isMale(order.getTips().getOwner().getIdNo()) 
 					? org.rapid.util.common.enums.GENDER.MALE.mark() : org.rapid.util.common.enums.GENDER.FEMALE.mark();
-			return String.valueOf(value).equals(range.getComparison());
+			return String.valueOf(value).equals(range.getComparableValue());
 		}
 	},
 	
