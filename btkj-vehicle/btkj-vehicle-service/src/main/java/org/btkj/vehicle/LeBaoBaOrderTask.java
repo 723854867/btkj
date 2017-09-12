@@ -49,13 +49,17 @@ public class LeBaoBaOrderTask implements Runnable {
 			if (state != VehicleOrderState.QUOTING)
 				throw new RuntimeException("乐保吧订单状态异常，必须是报价中订单才可以进行后续操作，实际状态为：" + state);
 			order.setDesc(result.getDesc());
+			PolicySchema schema = null;
 			if (result.getCode() == BtkjCode.QUOTE_FAILURE.id())
 				order.setState(VehicleOrderState.QUOTE_FAILURE);
-			else if (result.getCode() == BtkjCode.INSURE_FAILURE.id())
+			else if (result.getCode() == BtkjCode.INSURE_FAILURE.id()) {
+				schema = result.attach();
 				order.setState(VehicleOrderState.INSURE_FAILURE);
-			else
+			} else {
+				schema = result.attach();
 				order.setState(insure ? VehicleOrderState.INSURE_SUCCESS : VehicleOrderState.QUOTE_SUCCESS);
-			if (result.isSuccess())
+			}
+			if (null != schema)
 				order.getTips().setSchema(result.attach());
 			if (order.getState().mark() >= VehicleOrderState.QUOTE_SUCCESS.mark())
 				poundage.calculate(order, employee);

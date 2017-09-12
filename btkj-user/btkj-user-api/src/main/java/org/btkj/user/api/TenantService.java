@@ -1,5 +1,8 @@
 package org.btkj.user.api;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.EmployeeTip;
@@ -18,6 +21,8 @@ public interface TenantService {
 	 * @return
 	 */
 	TenantPO tenant(int tid);
+	
+	Map<Integer, TenantPO> tenants(Collection<Integer> tenants);
 	
 	/**
 	 * 申请加入代理公司

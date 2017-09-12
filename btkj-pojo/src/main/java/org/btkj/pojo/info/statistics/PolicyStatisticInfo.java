@@ -6,14 +6,64 @@ public class PolicyStatisticInfo implements Serializable {
 
 	private static final long serialVersionUID = 7038656857239738825L;
 
+	private int appId;
+	private int uid;
+	private int tid;
+	private int employeeId;
+	private int insurerId;
 	private int year;
 	private int month;
 	private int day;
 	private int week;
 	private int season;
 	private int created;
-	private int amount;
+	private int total;
 	private String premium;
+	
+	private String aname;
+	private String uname;
+	private String tname;
+	private String insurerName;
+
+	public int getAppId() {
+		return appId;
+	}
+
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
+	public int getTid() {
+		return tid;
+	}
+
+	public void setTid(int tid) {
+		this.tid = tid;
+	}
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public int getInsurerId() {
+		return insurerId;
+	}
+
+	public void setInsurerId(int insurerId) {
+		this.insurerId = insurerId;
+	}
 
 	public int getYear() {
 		return year;
@@ -63,12 +113,12 @@ public class PolicyStatisticInfo implements Serializable {
 		this.created = created;
 	}
 
-	public int getAmount() {
-		return amount;
+	public int getTotal() {
+		return total;
 	}
 
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setTotal(int total) {
+		this.total = total;
 	}
 
 	public String getPremium() {
@@ -77,5 +127,37 @@ public class PolicyStatisticInfo implements Serializable {
 
 	public void setPremium(String premium) {
 		this.premium = premium;
+	}
+
+	public String getAname() {
+		return aname;
+	}
+
+	public void setAname(String aname) {
+		this.aname = aname;
+	}
+
+	public String getUname() {
+		return uname;
+	}
+
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+
+	public String getTname() {
+		return tname;
+	}
+
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
+
+	public String getInsurerName() {
+		return insurerName;
+	}
+
+	public void setInsurerName(String insurerName) {
+		this.insurerName = insurerName;
 	}
 }

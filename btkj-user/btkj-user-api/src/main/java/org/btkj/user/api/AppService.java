@@ -1,5 +1,8 @@
 package org.btkj.user.api;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.MainPageInfo;
@@ -17,6 +20,8 @@ public interface AppService {
 	 * @return
 	 */
 	AppPO app(int appId);
+	
+	Map<Integer, AppPO> apps(Collection<Integer> apps);
 	
 	/**
 	 * 通过 appId 获取 app

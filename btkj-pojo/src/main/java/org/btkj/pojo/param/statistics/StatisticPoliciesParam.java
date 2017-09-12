@@ -1,14 +1,15 @@
 package org.btkj.pojo.param.statistics;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
-import org.btkj.pojo.enums.StatisticUsedType;
 import org.btkj.pojo.enums.VehiclePolicyType;
 import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.enums.SortType;
@@ -18,47 +19,70 @@ public class StatisticPoliciesParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 663082610856371422L;
 
-	private Integer tid;
-	private Integer uid;
-	private Integer appId;
+	private Set<Integer> apps;
+	private Set<Integer> users;
+	private Set<Integer> tenants;
+	private Set<Integer> insurers;
+	private Set<Integer> employees;
+
 	private Boolean transfer;
 	@NotNull
 	private TimeType timeType;
-	private Integer insurerId;
-	private Integer salesmanId;
 	private PolicyNature nature;
 	private VehiclePolicyType type;
+	private Integer statisticUsedMod;
 	private InsuranceType insuranceType;
-	private StatisticUsedType statisticUsedType;
 	private SortType sortType = SortType.ASC;
-	private int beginTime;
-	private int endTime;
+	private Integer year;
+	private Integer month;
+	private Integer day;
+	private Integer week;
+	private Integer season;
+	private Integer beginTime;
+	private Integer endTime;
+	private Integer groupMod;
 
-	public Integer getTid() {
-		return tid;
+	public Set<Integer> getApps() {
+		return apps;
 	}
 
-	public void setTid(Integer tid) {
-		this.tid = tid;
+	public void setApps(Set<Integer> apps) {
+		this.apps = apps;
 	}
 
-	public Integer getUid() {
-		return uid;
+	public Set<Integer> getUsers() {
+		return users;
 	}
 
-	public void setUid(Integer uid) {
-		this.uid = uid;
+	public void setUsers(Set<Integer> users) {
+		this.users = users;
 	}
 
-	public Integer getAppId() {
-		return appId;
+	public Set<Integer> getTenants() {
+		return tenants;
 	}
 
-	public void setAppId(Integer appId) {
-		this.appId = appId;
+	public void setTenants(Set<Integer> tenants) {
+		this.tenants = tenants;
 	}
 
-	public Boolean isTransfer() {
+	public Set<Integer> getInsurers() {
+		return insurers;
+	}
+
+	public void setInsurers(Set<Integer> insurers) {
+		this.insurers = insurers;
+	}
+
+	public Set<Integer> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Set<Integer> employees) {
+		this.employees = employees;
+	}
+
+	public Boolean getTransfer() {
 		return transfer;
 	}
 
@@ -72,22 +96,6 @@ public class StatisticPoliciesParam extends EmployeeParam {
 
 	public void setTimeType(TimeType timeType) {
 		this.timeType = timeType;
-	}
-
-	public Integer getInsurerId() {
-		return insurerId;
-	}
-
-	public void setInsurerId(Integer insurerId) {
-		this.insurerId = insurerId;
-	}
-	
-	public Integer getSalesmanId() {
-		return salesmanId;
-	}
-	
-	public void setSalesmanId(Integer salesmanId) {
-		this.salesmanId = salesmanId;
 	}
 
 	public PolicyNature getNature() {
@@ -114,50 +122,96 @@ public class StatisticPoliciesParam extends EmployeeParam {
 		this.insuranceType = insuranceType;
 	}
 
-	public StatisticUsedType getStatisticUsedType() {
-		return statisticUsedType;
-	}
-
-	public void setStatisticUsedType(StatisticUsedType statisticUsedType) {
-		this.statisticUsedType = statisticUsedType;
+	public Integer getStatisticUsedMod() {
+		return statisticUsedMod;
 	}
 	
+	public void setStatisticUsedMod(Integer statisticUsedMod) {
+		this.statisticUsedMod = statisticUsedMod;
+	}
+
 	public SortType getSortType() {
 		return sortType;
 	}
-	
+
 	public void setSortType(SortType sortType) {
 		this.sortType = sortType;
 	}
-	
-	public int getBeginTime() {
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public Integer getDay() {
+		return day;
+	}
+
+	public void setDay(Integer day) {
+		this.day = day;
+	}
+
+	public Integer getWeek() {
+		return week;
+	}
+
+	public void setWeek(Integer week) {
+		this.week = week;
+	}
+
+	public Integer getSeason() {
+		return season;
+	}
+
+	public void setSeason(Integer season) {
+		this.season = season;
+	}
+
+	public Integer getBeginTime() {
 		return beginTime;
 	}
-	
-	public void setBeginTime(int beginTime) {
+
+	public void setBeginTime(Integer beginTime) {
 		this.beginTime = beginTime;
 	}
-	
-	public int getEndTime() {
+
+	public Integer getEndTime() {
 		return endTime;
 	}
-	
-	public void setEndTime(int endTime) {
+
+	public void setEndTime(Integer endTime) {
 		this.endTime = endTime;
 	}
 	
-	public Map<String, Object> params() { 
+	public Integer getGroupMod() {
+		return groupMod;
+	}
+	
+	public void setGroupMod(Integer groupMod) {
+		this.groupMod = groupMod;
+	}
+	
+	public void tenantFilter(int tid) { 
+		this.apps = null;
+		this.users = null;
+		this.tenants = null;
+		this.tenants = new HashSet<Integer>();
+		this.tenants.add(tid);
+	}
+	
+	public Map<String, Object> params() {
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (null != tid)
-			params.put(BtkjConsts.FIELD.TID, this.tid);
-		if (null != appId)
-			params.put(BtkjConsts.FIELD.APP_ID, this.appId);
-		if (null != uid)
-			params.put(BtkjConsts.FIELD.UID, this.uid);
-		if (null != salesmanId)
-			params.put(BtkjConsts.FIELD.EMPLOYEE_ID, this.salesmanId);
-		if (null != insurerId)
-			params.put(BtkjConsts.FIELD.INSURER_ID, this.insurerId);
 		if (null != transfer)
 			params.put(BtkjConsts.FIELD.TRANSFER, this.transfer);
 		if (null != nature)
@@ -166,8 +220,16 @@ public class StatisticPoliciesParam extends EmployeeParam {
 			params.put(BtkjConsts.FIELD.TYPE, this.type.mark());
 		if (null != insuranceType)
 			params.put(BtkjConsts.FIELD.INSURANCE_TYPE, this.insuranceType.mark());
-		if (null != statisticUsedType)
-			params.put(BtkjConsts.FIELD.STATISTIC_USED_TYPE, this.statisticUsedType.mark());
+		if (null != year)
+			params.put(BtkjConsts.FIELD.YEAR, this.year);
+		if (null != month)
+			params.put(BtkjConsts.FIELD.MONTH, this.month);
+		if (null != day)
+			params.put(BtkjConsts.FIELD.DAY, this.day);
+		if (null != season)
+			params.put(BtkjConsts.FIELD.SEASON, this.season);
+		if (null != week)
+			params.put(BtkjConsts.FIELD.WEEK, this.week);
 		return params;
 	}
 }

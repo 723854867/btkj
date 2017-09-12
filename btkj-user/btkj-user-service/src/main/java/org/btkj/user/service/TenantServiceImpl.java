@@ -1,6 +1,7 @@
 package org.btkj.user.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,14 @@ public class TenantServiceImpl implements TenantService {
 	@Resource
 	private EmployeeService employeeService;
 	
-
 	@Override
 	public TenantPO tenant(int tid) {
 		return tenantMapper.getByKey(tid);
+	}
+	
+	@Override
+	public Map<Integer, TenantPO> tenants(Collection<Integer> tenants) {
+		return tenantMapper.getByKeys(tenants);
 	}
 
 	@Override

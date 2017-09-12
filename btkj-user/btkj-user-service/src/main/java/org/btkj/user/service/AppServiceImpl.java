@@ -1,5 +1,6 @@
 package org.btkj.user.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,11 @@ public class AppServiceImpl implements AppService {
 	@Override
 	public AppPO app(int appId) {
 		return appMapper.getByKey(appId);
+	}
+	
+	@Override
+	public Map<Integer, AppPO> apps(Collection<Integer> apps) {
+		return appMapper.getByKeys(apps);
 	}
 	
 	@Override

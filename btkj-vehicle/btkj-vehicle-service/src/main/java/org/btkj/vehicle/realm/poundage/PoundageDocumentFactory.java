@@ -11,15 +11,15 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.vehicle.CoefficientRange;
-import org.btkj.pojo.entity.vehicle.PoundageConfig;
-import org.btkj.pojo.entity.vehicle.PoundageNode;
-import org.btkj.pojo.entity.vehicle.VehicleOrder;
-import org.btkj.pojo.entity.vehicle.PoundageConfig.NodeConfig;
-import org.btkj.pojo.enums.CoefficientType;
-import org.btkj.pojo.enums.PoundageType;
 import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.vehicle.CoefficientRange;
+import org.btkj.pojo.entity.vehicle.PoundageConfig;
+import org.btkj.pojo.entity.vehicle.PoundageConfig.NodeConfig;
+import org.btkj.pojo.entity.vehicle.PoundageNode;
+import org.btkj.pojo.entity.vehicle.VehicleOrder;
+import org.btkj.pojo.enums.CoefficientType;
+import org.btkj.pojo.enums.PoundageType;
 import org.btkj.pojo.model.BonusPoundage;
 import org.btkj.pojo.model.CoefficientDocument;
 import org.btkj.pojo.model.PoundageDocument;
@@ -54,11 +54,9 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 	public void caculatePoundage(Map<Integer, PoundageDocument> documents, VehicleOrder order, EmployeePO employee) {
 		PoundageConfig poundageConfig = poundageConfigMapper.getByKey(String.valueOf(order.getTid()));
 		Map<Integer, Map<Integer, NodeConfig>> insurersConfig = null == poundageConfig ? null : poundageConfig.getConfigs();
-		Map<Integer, NodeConfig> map = null == insurersConfig ? null : insurersConfig.get(order.getInsurerId());
-		if (null == map)
-			return;
+		Map<Integer, NodeConfig> configs = null == insurersConfig ? null : insurersConfig.get(order.getInsurerId());
 		Map<Integer, MatchNode> recursions = new HashMap<Integer, MatchNode>();
-		_recursionNode(recursions, documents, order, 0, map);
+		_recursionNode(recursions, documents, order, 0, null == configs ? null : new HashMap<Integer, NodeConfig>(configs));
 		if (CollectionUtil.isEmpty(recursions))
 			return;
 		if (recursions.size() != 1) 
@@ -109,13 +107,15 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 	}
 	
 	private void _recursionNode(Map<Integer, MatchNode> recursions, Map<Integer, PoundageDocument> documents, VehicleOrder order, int pmod, Map<Integer, NodeConfig> configs) {
-		if (CollectionUtil.isEmpty(documents))
+		if (CollectionUtil.isEmpty(documents) || CollectionUtil.isEmpty(configs))
 			return;
 		for (Entry<Integer, PoundageDocument> entry : documents.entrySet()) {
 			PoundageNode node = entry.getValue().node();
 			PoundageType type = node.getType();
-			int nmod = pmod;
-			if (!type.isPoly()) {
+			NodeConfig config = configs.remove(node.getId());
+			if (null == config || type.isPoly())
+				_recursionNode(recursions, entry.getValue().children(), order, pmod, configs);
+			else {
 				switch (type) {
 				case NO_BIZ_COACH_MODEL:
 				case NO_BIZ_COACH_DEPT:
@@ -131,27 +131,22 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 						continue;
 					break;
 				}
-				nmod = type.mod() | pmod;
-				MatchNode current = recursions.remove(pmod);
-				NodeConfig config = configs.get(node.getId());
-				if (null != config) {
-					Iterator<MatchNode> iterator = recursions.values().iterator();
-					while (iterator.hasNext()) {
-						MatchNode temp = iterator.next();
-						if (null == temp || temp.getNode().getGid() != node.getGid())
-							continue;
-						if (temp.getNode().getPriority() == node.getPriority()) 
-							logger.error("手续费配置异常，车险订单 - {} 同时匹配多组规则：[gid:{},priority:{}], 随机选择一组作为匹配条件！", order.get_id(), node.getGid(), node.getPriority());
-						else if (temp.getNode().getPriority() > node.getPriority()) {
-							iterator.remove();
-							current = new MatchNode(nmod, config, node);
-						}
+				recursions.remove(pmod);
+				Iterator<MatchNode> iterator = recursions.values().iterator();
+				while (iterator.hasNext()) {
+					MatchNode temp = iterator.next();
+					if (null == temp || temp.getNode().getGid() != node.getGid())
+						continue;
+					if (temp.getNode().getPriority() == node.getPriority()) 
+						logger.error("手续费配置异常，车险订单 - {} 同时匹配多组规则：[gid:{},priority:{}], 随机选择一组作为匹配条件！", order.get_id(), node.getGid(), node.getPriority());
+					else if (temp.getNode().getPriority() > node.getPriority()) {
+						iterator.remove();
+						pmod |= type.mod();
+						recursions.put(pmod, new MatchNode(pmod, config, node));
 					}
 				}
-				if (null != current)
-					recursions.put(nmod, current);
+				_recursionNode(recursions, entry.getValue().children(), order, pmod, configs);
 			}
-			_recursionNode(recursions, entry.getValue().children(), order, nmod, configs);
 		}
 	}
 	

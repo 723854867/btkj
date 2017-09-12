@@ -88,7 +88,11 @@ public interface BtkjConsts {
 		String ISSUETIME						= "issueTime";
 		String MOBILE							= "mobile";
 		String INSURANCE_TYPE					= "insurance_type";
-		String STATISTIC_USED_TYPE				= "statistic_used_type";
+		String YEAR								= "year";
+		String MONTH							= "month";
+		String DAY								= "day";
+		String WEEK								= "week";
+		String SEASON							= "season";
 	}
 	
 	interface LIMITS {

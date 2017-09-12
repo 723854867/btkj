@@ -25,17 +25,6 @@ public class Main {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-//					User user = new User();
-//					user.setAppId(102);
-//					user.setName("ss");
-//					user.setIdentity("123");
-//					user.setMobile("+8651");
-//					try {
-//						tx.insert(user);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
 			}
 		}).start();
 	}
