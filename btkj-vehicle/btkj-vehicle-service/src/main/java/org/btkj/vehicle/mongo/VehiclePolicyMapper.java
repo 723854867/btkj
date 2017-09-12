@@ -61,11 +61,11 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 		if (null != param.getTransfer()) 
 			filters.add(Filters.eq(BtkjConsts.FIELD.TRANSFER, param.getTransfer()));
 		if (null != param.getNature()) 
-			filters.add(Filters.eq(BtkjConsts.FIELD.NATURE, param.getNature()));
+			filters.add(Filters.eq(BtkjConsts.FIELD.NATURE, param.getNature().name()));
 		if (null != param.getType()) 
-			filters.add(Filters.eq(BtkjConsts.FIELD.TYPE, param.getType()));
+			filters.add(Filters.eq(BtkjConsts.FIELD.TYPE, param.getType().name()));
 		if (null != param.getBonusType()) 
-			filters.add(Filters.eq(BtkjConsts.FIELD.BONUSTYPE, param.getBonusType()));
+			filters.add(Filters.eq(BtkjConsts.FIELD.BONUSTYPE, param.getBonusType().name()));
 		total = filters.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(filters));
 		if (0 == total)
 			return Pager.EMPLTY;

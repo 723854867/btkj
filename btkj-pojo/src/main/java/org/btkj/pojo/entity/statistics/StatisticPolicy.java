@@ -16,7 +16,7 @@ public class StatisticPolicy implements UniqueModel<String> {
 	private int employeeId;
 	private int statisticUsedType;
 	private int nature;
-	private boolean transfer;
+	private int transfer;
 	private String premium;
 	private int year;
 	private int month;
@@ -105,11 +105,11 @@ public class StatisticPolicy implements UniqueModel<String> {
 		this.nature = nature;
 	}
 
-	public boolean isTransfer() {
+	public int getTransfer() {
 		return transfer;
 	}
-
-	public void setTransfer(boolean transfer) {
+	
+	public void setTransfer(int transfer) {
 		this.transfer = transfer;
 	}
 

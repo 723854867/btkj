@@ -44,16 +44,16 @@ public interface EmployeeDao extends DBMapper<Integer, EmployeePO> {
 	Map<Integer, EmployeePO> getByTidForUpdate(int tid);
 	
 	/**
-	 * 团队：自己和 level - 自己的 level 范围内的成员
+	 * 团队：自己和 layer - 自己的 layer 范围内的成员
 	 * 
 	 * @param id
 	 * @param left
 	 * @param right
-	 * @param level
+	 * @param layer
 	 * @return
 	 */
 	@SelectProvider(type = EmployeeSQLProvider.class, method = "team")
-	List<EmployeePO> team(@Param("id") int id, @Param("left") int left, @Param("right") int right, @Param("level") int level);
+	List<EmployeePO> team(@Param("id") int id, @Param("left") int left, @Param("right") int right, @Param("layer") int layer);
 	
 	/**
 	 * 新雇员加入代理公司，需要修改该代理公司一部分雇员的 left 和 right 值

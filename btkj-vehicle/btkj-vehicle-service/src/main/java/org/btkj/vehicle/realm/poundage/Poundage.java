@@ -166,6 +166,8 @@ public class Poundage {
 			node = cacheService.getById(CacheService.POUNDAGE_NODE, param.getNodeId());
 			if (null == node)
 				return BtkjConsts.RESULT.POUNDAGE_NODE_NOT_EXIST;
+			if (node.isPoly())
+				return Consts.RESULT.FORBID;
 			nodeConfig = new NodeConfig();
 			configs.put(node.getId(), nodeConfig);
 		}

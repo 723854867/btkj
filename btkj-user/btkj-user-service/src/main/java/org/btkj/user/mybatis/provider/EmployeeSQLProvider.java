@@ -14,7 +14,7 @@ public class EmployeeSQLProvider extends SQLProvider {
 	
 	public EmployeeSQLProvider() {
 		super(TABLE, "id");
-		addNoUpdateCol("created", "left", "right", "level", "relation_path, app_id, uid, tid, parent_id, id");
+		addNoUpdateCol("created", "left", "right", "layer", "relation_path, app_id, uid, tid, parent_id, id");
 	}
 
 	public String getByTidAndUid() {
@@ -40,7 +40,7 @@ public class EmployeeSQLProvider extends SQLProvider {
 	}
 	
 	public String team() {
-		return "SELECT * FROM employee WHERE (parent_id=#{id} AND `left`>#{left} AND `right`<#{right} AND `level`<=#{level}) OR id=#{id}";
+		return "SELECT * FROM employee WHERE (parent_id=#{id} AND `left`>#{left} AND `right`<#{right} AND `layer`<=#{layer}) OR id=#{id}";
 	}
 	
 	public String getByTidForUpdate() {

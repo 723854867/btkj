@@ -128,7 +128,7 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 		temp.setEmployeeId(policy.getSalesmanId());
 		temp.setStatisticUsedType(policy.getBonusType().mark());
 		temp.setNature(policy.getNature().mark());
-		temp.setTransfer(policy.isTransfer());
+		temp.setTransfer(policy.isTransfer() ? 1 : 0);
 		temp.setPremium(premium);
 		Calendar calendar = GregorianCalendar.getInstance(DateUtil.TIMEZONE_GMT_8);
 		calendar.setTimeInMillis(DateUtil.getTime(issueDate, DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.TIMEZONE_GMT_8));
