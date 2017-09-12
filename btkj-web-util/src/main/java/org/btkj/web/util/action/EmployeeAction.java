@@ -74,10 +74,6 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 	
 	protected abstract Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PARAM param);
 	
-	protected Client client() {
-		return request().getParam(Params.CLIENT);
-	}
-	
 	protected boolean userLock() {
 		return false;
 	}

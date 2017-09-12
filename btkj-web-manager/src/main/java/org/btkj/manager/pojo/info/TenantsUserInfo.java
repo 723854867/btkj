@@ -6,26 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 import org.btkj.pojo.info.EmployeeTip;
-import org.rapid.util.lang.CollectionUtil;
-import org.rapid.util.math.tree.Node;
 
-public class ModularsInfo {
+public class TenantsUserInfo {
 
 	private Set<String> pmodulars;
-	private List<TenantModulars> tmodulars;
+	private List<TenantInfo> tenants;
 	
-	public ModularsInfo(Set<String> pmodulars, Map<Integer, Set<String>> tmodulars, Map<Integer, EmployeeTip> employees) {
+	public TenantsUserInfo(Set<String> pmodulars, Map<Integer, Set<String>> tmodulars, Map<Integer, EmployeeTip> employees) {
 		this.pmodulars = pmodulars;
-		this.tmodulars = new ArrayList<TenantModulars>();
+		this.tenants = new ArrayList<TenantInfo>();
 		for (EmployeeTip employee : employees.values()) {
-			if (employee.getLayer() == Node.ROOT_LAYER) 
-				this.tmodulars.add(new TenantModulars(employee));
-			else {
-				Set<String> modulars = tmodulars.get(employee.getId());
-				if (CollectionUtil.isEmpty(modulars))
-					continue;
-				this.tmodulars.add(new TenantModulars(employee, modulars));
-			}
+			Set<String> modulars = tmodulars.get(employee.getId());
+			this.tenants.add(new TenantInfo(employee, modulars));
 		}
 	}
 	
@@ -37,15 +29,15 @@ public class ModularsInfo {
 		this.pmodulars = pmodulars;
 	}
 	
-	public List<TenantModulars> getTmodulars() {
-		return tmodulars;
+	public List<TenantInfo> getTenants() {
+		return tenants;
 	}
 	
-	public void setTmodulars(List<TenantModulars> tmodulars) {
-		this.tmodulars = tmodulars;
+	public void setTenants(List<TenantInfo> tenants) {
+		this.tenants = tenants;
 	}
 	
-	private class TenantModulars {
+	private class TenantInfo {
 		private int tid;
 		private int mod;
 		private int tmod;
@@ -53,16 +45,13 @@ public class ModularsInfo {
 		private String tname;
 		private int employeeId;
 		private Set<String> modulars;
-		public TenantModulars(EmployeeTip employee) {
+		public TenantInfo(EmployeeTip employee, Set<String> modulars) {
 			this.tid = employee.getTid();
 			this.mod = employee.getMod();
 			this.tmod = employee.getTmod();
 			this.tname = employee.getTname();
 			this.layer = employee.getLayer();
 			this.employeeId = employee.getId();
-		}
-		public TenantModulars(EmployeeTip employee, Set<String> modulars) {
-			this(employee);
 			this.modulars = modulars;
 		}
 		public int getTid() {

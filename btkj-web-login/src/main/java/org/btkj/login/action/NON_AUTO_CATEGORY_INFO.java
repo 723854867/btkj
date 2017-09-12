@@ -5,9 +5,8 @@ import javax.annotation.Resource;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.nonauto.NonAutoCategory;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.OldAction;
+import org.btkj.pojo.param.IdParam;
+import org.btkj.web.util.action.Action;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -15,14 +14,14 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class NON_AUTO_CATEGORY_INFO extends OldAction {
+public class NON_AUTO_CATEGORY_INFO extends Action<IdParam> {
 	
 	@Resource
 	private NonAutoService nonAutoService;
 
 	@Override
-	public Result<NonAutoCategory> execute(Request request) {
-		NonAutoCategory category = nonAutoService.category(request.getParam(Params.ID));
+	protected Result<NonAutoCategory> execute(IdParam param) {
+		NonAutoCategory category = nonAutoService.category(param.getId());
 		return null == category ? Result.result(BtkjCode.NON_AUTO_CATEGORY_NOT_EXIST) : Result.result(category);
 	}
 }

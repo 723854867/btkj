@@ -721,7 +721,7 @@ public class RenewInfo implements Serializable {
 		tips.setSchema(schema);
 		if (null != this.UserInfo) {
 			renewal.set_id(this.UserInfo.CarVin);
-			tips.setEnrollDate(this.UserInfo.RegisterDate);
+			tips.setEnrollDate(StringUtil.hasText(this.UserInfo.RegisterDate) ? this.UserInfo.RegisterDate : null);
 			tips.setVin(this.UserInfo.CarVin);
 			tips.setEngine(this.UserInfo.EngineNo);
 			tips.setName(this.UserInfo.ModleName);
@@ -786,7 +786,7 @@ public class RenewInfo implements Serializable {
 			renewal.setInsurerId(this.SaveQuote.Source);
 		}
 		renewal.setTips(tips);
-		if (null != this.UserInfo.ForceExpireDate)
+		if (StringUtil.hasText(this.UserInfo.ForceExpireDate))
 			renewal.setCreated((int) (DateUtil.getTime(this.UserInfo.ForceExpireDate, DateUtil.YYYY_MM_DD_HH_MM_SS) / 1000));
 		return renewal;
 	}

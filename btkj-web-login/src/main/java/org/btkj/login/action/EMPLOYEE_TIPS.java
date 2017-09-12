@@ -7,10 +7,9 @@ import org.btkj.login.pojo.info.EmployeeInfo;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.EmployeeService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.OldAction;
+import org.btkj.web.util.action.Action;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -18,7 +17,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class EMPLOYEE_TIPS extends OldAction {
+public class EMPLOYEE_TIPS extends Action<IdParam> {
 	
 	@Resource
 	private ConfigService configService;
@@ -26,8 +25,8 @@ public class EMPLOYEE_TIPS extends OldAction {
 	private EmployeeService employeeService;
 
 	@Override
-	public Result<EmployeeInfo> execute(Request request) {
-		Employee employee = employeeService.employee(request.getParam(Params.EMPLOYEE_ID));
+	protected Result<?> execute(IdParam param) {
+		Employee employee = employeeService.employee(param.getId());
 		if (null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);
 		Region region = configService.region(employee.getRegion());

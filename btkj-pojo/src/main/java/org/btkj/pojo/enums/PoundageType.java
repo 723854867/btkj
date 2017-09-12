@@ -119,10 +119,6 @@ public enum PoundageType {
 		public boolean matches(VehicleOrder order, PoundageNode node) {
 			return true;
 		}
-		@Override
-		public boolean isPoly() {
-			return true;
-		}
 	},
 	NO_BIZ_COACH_TRANSFER(2 << 11) {
 		@Override
@@ -201,13 +197,5 @@ public enum PoundageType {
 	
 	public int mod() {
 		return mod;
-	}
-	
-	/**
-	 * 是否是聚合节点
-	 * @return
-	 */
-	public boolean isPoly() {
-		return false;
 	}
 }

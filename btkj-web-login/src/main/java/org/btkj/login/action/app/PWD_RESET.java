@@ -2,13 +2,14 @@ package org.btkj.login.action.app;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.courier.api.CourierService;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.model.identity.App;
+import org.btkj.pojo.param.user.LoginParam;
 import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.OldAppAction;
+import org.btkj.web.util.action.AppAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -17,7 +18,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class PWD_RESET extends OldAppAction {
+public class PWD_RESET extends AppAction<LoginParam> {
 	
 	@Resource
 	private UserService userService;
@@ -25,16 +26,16 @@ public class PWD_RESET extends OldAppAction {
 	private CourierService courierService;
 
 	@Override
-	protected Result<?> execute(Request request, App app) {
-		String pwd = request.getParam(Params.PWD);
-		String mobile = request.getParam(Params.MOBILE);
-		if (courierService.captchaVerify(app.getId(), mobile, request.getParam(Params.CAPTCHA)).getCode() == -1)
+	protected Result<?> execute(AppPO app, LoginParam param) {
+		if (null == param.getCaptcha() || null == param.getPwd())
+			return Consts.RESULT.FORBID;
+		if (courierService.captchaVerify(app.getId(), param.getMobile(), param.getCaptcha()).getCode() == -1)
 			return Result.result(Code.CAPTCHA_ERROR);
-		return userService.pwdReset(app.getId(), mobile, pwd);
+		return userService.pwdReset(app.getId(), param.getMobile(), DigestUtils.md5Hex(param.getPwd()));
 	}
 	
 	@Override
-	public Client client(Request request) {
+	public Client client() {
 		return Client.TENANT_MANAGER;
 	}
 }

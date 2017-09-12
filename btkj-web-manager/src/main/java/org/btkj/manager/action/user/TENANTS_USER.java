@@ -1,4 +1,4 @@
-package org.btkj.manager.action;
+package org.btkj.manager.action.user;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
+import org.btkj.manager.action.UserAction;
 import org.btkj.manager.pojo.info.TenantsUserInfo;
 import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
@@ -17,7 +18,7 @@ import org.btkj.user.api.EmployeeService;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
-public class MODULARS_POSSESSED extends UserAction<NilParam> {
+public class TENANTS_USER extends UserAction<NilParam> {
 	
 	@Resource
 	private EmployeeService employeeService;

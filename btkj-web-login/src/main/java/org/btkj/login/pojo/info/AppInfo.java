@@ -2,7 +2,7 @@ package org.btkj.login.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.model.identity.App;
+import org.btkj.pojo.entity.user.AppPO;
 
 public class AppInfo implements Serializable {
 
@@ -13,7 +13,7 @@ public class AppInfo implements Serializable {
 	
 	public AppInfo() {}
 	
-	public AppInfo(App app) {
+	public AppInfo(AppPO app) {
 		this.appId = app.getId();
 		this.name = app.getName();
 	}

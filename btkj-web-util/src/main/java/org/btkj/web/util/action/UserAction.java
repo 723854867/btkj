@@ -58,15 +58,6 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 	protected abstract Result<?> execute(AppPO app, UserPO user, PARAM param);
 	
 	/**
-	 * 默认需要客户端传递 client 参数
-	 * 
-	 * @return
-	 */
-	public Client client() {
-		return request().getParam(Params.CLIENT);
-	}
-	
-	/**
 	 * 是否需要获取用户锁
 	 * 
 	 * @return

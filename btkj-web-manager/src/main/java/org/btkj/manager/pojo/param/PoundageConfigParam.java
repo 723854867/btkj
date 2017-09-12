@@ -12,7 +12,7 @@ public class PoundageConfigParam extends EmployeeParam {
 	private int insurerId;
 	@Min(1)
 	private int nodeId;
-	@Min(1)
+	@Min(0)
 	private int coefficientId;
 	
 	public int getInsurerId() {

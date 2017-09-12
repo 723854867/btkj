@@ -205,7 +205,7 @@ public class VehicleServiceImpl implements VehicleService {
 			VehicleOrder order = orders.get(Lane.LE_BAO_BA).get(entry.getKey());
 			executorService.execute(new LeBaoBaOrderTask(tenant, employee, poundage, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, vehicleOrderMapper));
 		}
-		return Result.success();
+		return Consts.RESULT.OK;
 	}
 	
 	private VehicleInfo _vehicleInfo(TenantPO tenant, VehicleOrderParam param) {

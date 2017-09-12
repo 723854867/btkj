@@ -7,11 +7,15 @@ import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.math.compare.Comparison;
 import org.rapid.util.math.tree.NodeImpl;
 
+import com.google.gson.annotations.Expose;
+
 public class PoundageNode extends NodeImpl<Integer> implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 4034992659956349660L;
 
 	private int gid;
+	@Expose
+	private boolean poly;
 	private int priority;
 	private String[] cval;
 	private PoundageType type;
@@ -24,6 +28,14 @@ public class PoundageNode extends NodeImpl<Integer> implements UniqueModel<Integ
 	
 	public void setGid(int gid) {
 		this.gid = gid;
+	}
+	
+	public boolean isPoly() {
+		return poly;
+	}
+	
+	public void setPoly(boolean poly) {
+		this.poly = poly;
 	}
 	
 	public int getPriority() {

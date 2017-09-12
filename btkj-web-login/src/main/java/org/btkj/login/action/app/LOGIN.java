@@ -2,12 +2,12 @@ package org.btkj.login.action.app;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.courier.api.CourierService;
-import org.btkj.pojo.model.identity.App;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.param.user.LoginParam;
 import org.btkj.user.api.LoginService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.OldAppAction;
+import org.btkj.web.util.action.AppAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
@@ -17,7 +17,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class LOGIN extends OldAppAction {
+public class LOGIN extends AppAction<LoginParam> {
 	
 	@Resource
 	private LoginService loginService;
@@ -25,16 +25,20 @@ public class LOGIN extends OldAppAction {
 	private CourierService courierService;
 	
 	@Override
-	protected Result<?> execute(Request request, App app) {
-		switch (app.getClient()) {
-		case TENANT_MANAGER:
-			return loginService.login(app, request.getParam(Params.MOBILE), request.getParam(Params.PWD));
+	protected Result<?> execute(AppPO app, LoginParam param) {
+		switch (client()) {
 		case APP:
 		case RECRUIT:
-			String mobile = request.getParam(Params.MOBILE);
-			if (courierService.captchaVerify(app.getId(), mobile, request.getParam(Params.CAPTCHA)).getCode() == -1)
+			if (null == param.getCaptcha())
+				return Consts.RESULT.FORBID;
+			String mobile = param.getMobile();
+			if (courierService.captchaVerify(app.getId(), mobile, param.getCaptcha()).getCode() == -1)
 				return Result.result(Code.CAPTCHA_ERROR);
-			return loginService.login(app, mobile);
+			return loginService.login(client(), app, mobile);
+		case TENANT_MANAGER:
+			if (null == param.getPwd())
+				return Consts.RESULT.FORBID;
+			return loginService.login(app, param.getMobile(), DigestUtils.md5Hex(param.getPwd()));
 		default:
 			return Consts.RESULT.FORBID;
 		}

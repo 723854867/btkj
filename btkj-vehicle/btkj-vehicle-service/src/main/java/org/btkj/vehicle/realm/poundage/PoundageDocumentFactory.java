@@ -113,7 +113,7 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 			PoundageNode node = entry.getValue().node();
 			PoundageType type = node.getType();
 			NodeConfig config = configs.remove(node.getId());
-			if (null == config || type.isPoly())
+			if (null == config || node.isPoly())
 				_recursionNode(recursions, entry.getValue().children(), order, pmod, configs);
 			else {
 				switch (type) {
@@ -132,19 +132,21 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 					break;
 				}
 				recursions.remove(pmod);
+				MatchNode matchNode = new MatchNode(pmod, config, node);
 				Iterator<MatchNode> iterator = recursions.values().iterator();
 				while (iterator.hasNext()) {
 					MatchNode temp = iterator.next();
 					if (null == temp || temp.getNode().getGid() != node.getGid())
 						continue;
-					if (temp.getNode().getPriority() == node.getPriority()) 
+					if (temp.getNode().getPriority() == node.getPriority()) {
 						logger.error("手续费配置异常，车险订单 - {} 同时匹配多组规则：[gid:{},priority:{}], 随机选择一组作为匹配条件！", order.get_id(), node.getGid(), node.getPriority());
-					else if (temp.getNode().getPriority() > node.getPriority()) {
+						matchNode = null;
+					} else if (temp.getNode().getPriority() > node.getPriority()) {
 						iterator.remove();
 						pmod |= type.mod();
-						recursions.put(pmod, new MatchNode(pmod, config, node));
 					}
 				}
+				recursions.put(pmod, matchNode);
 				_recursionNode(recursions, entry.getValue().children(), order, pmod, configs);
 			}
 		}

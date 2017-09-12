@@ -3,11 +3,10 @@ package org.btkj.login.action;
 import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
+import org.btkj.login.pojo.param.CaptchaObtainParam;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.user.api.AppService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
-import org.btkj.web.util.action.OldAction;
+import org.btkj.web.util.action.Action;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
@@ -16,7 +15,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class CAPTCHA_OBTAIN extends OldAction {
+public class CAPTCHA_OBTAIN extends Action<CaptchaObtainParam> {
 	
 	@Resource
 	private AppService appService;
@@ -24,12 +23,10 @@ public class CAPTCHA_OBTAIN extends OldAction {
 	private CourierService courierService;
 
 	@Override
-	public Result<String> execute(Request request) {
-		int appId = request.getParam(Params.APP_ID);
-		if (0 != appId && null == appService.app(appId))
+	protected Result<String> execute(CaptchaObtainParam param) {
+		if (0 != param.getAppId() && null == appService.app(param.getAppId()))
 			return Result.result(BtkjCode.APP_NOT_EXIST);
-		
-		Result<String> result = courierService.captchaObtain(appId, request.getParam(Params.MOBILE));
+		Result<String> result = courierService.captchaObtain(param.getAppId(), param.getMobile());
 		if (result.getCode() == -1)
 			result.setCode(Code.CAPTCHA_GET_CD.id());
 		if (result.getCode() == -2)

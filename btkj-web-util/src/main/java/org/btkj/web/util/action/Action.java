@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
+import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.param.Param;
@@ -78,6 +79,15 @@ public abstract class Action<PARAM extends Param> implements IAction {
 	}
 	
 	protected abstract Result<?> execute(PARAM param);
+	
+	/**
+	 * 默认需要客户端传递 client 参数
+	 * 
+	 * @return
+	 */
+	public Client client() {
+		return request().getParam(Params.CLIENT);
+	}
 	
 	protected Request request() {
 		return REQUEST_HOLDER.get();

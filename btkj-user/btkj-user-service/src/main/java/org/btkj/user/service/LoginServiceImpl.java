@@ -3,10 +3,10 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.LoginInfo;
-import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.LoginService;
 import org.btkj.user.model.TokenRemoveModel;
 import org.btkj.user.mybatis.EntityGenerator;
@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<?> login(App app, String mobile) {
+	public Result<?> login(Client client, AppPO app, String mobile) {
 		Result<UserPO> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		UserPO user = ru.attach();
 		String lockId = ru.getDesc();
@@ -66,14 +66,14 @@ public class LoginServiceImpl implements LoginService {
 		if (!ru.isSuccess())
 			return ru;
 		try {
-			return _doLogin(app.getClient(), user, mobile);
+			return _doLogin(client, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
 	}
 	
 	@Override
-	public Result<?> login(App app, String mobile, String pwd) {
+	public Result<?> login(AppPO app, String mobile, String pwd) {
 		Result<UserPO> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		if (!ru.isSuccess()) 
 			return ru;
