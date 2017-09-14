@@ -18,7 +18,7 @@ public class UPLOAD extends UploadAction<UploadParam> {
 	@Override
 	protected Result<?> execute(UploadParam param) {
 		InputStream input = param.getFile();
-		aliyunUploader.upload("test.png", input);
+		aliyunUploader.upload("common/user/test/test.png", input);
 		return Consts.RESULT.OK;
 	}
 }
