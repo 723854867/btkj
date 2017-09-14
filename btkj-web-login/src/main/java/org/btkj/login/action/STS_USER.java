@@ -1,4 +1,4 @@
-package org.btkj.login.action.user;
+package org.btkj.login.action;
 
 import javax.annotation.Resource;
 
@@ -12,7 +12,7 @@ import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
-public class ASSUME_ROLE extends UserAction<NilParam> {
+public class STS_USER extends UserAction<NilParam> {
 	
 	@Resource
 	private UserService userService;
@@ -20,7 +20,7 @@ public class ASSUME_ROLE extends UserAction<NilParam> {
 	private AliyunService aliyunService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, NilParam param) {
+	protected Result<StsInfo> execute(AppPO app, UserPO user, NilParam param) {
 		StsInfo stsInfo = aliyunService.assumeRole(user.getAppId(), user.getUid());
 		return null == stsInfo ? Result.result(Code.SYSTEM_ERROR) : Result.result(stsInfo);
 	}

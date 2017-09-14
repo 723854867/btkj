@@ -9,7 +9,7 @@ import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.api.TenantService;
-import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.message.Result;
 

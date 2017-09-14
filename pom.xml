@@ -50,5 +50,6 @@
 		<module>btkj-statistics</module>
 		<module>btkj-web-schedule</module>
     <module>btkj-payment</module>
+    <module>btkj-web-resources</module>
   </modules>
 </project>

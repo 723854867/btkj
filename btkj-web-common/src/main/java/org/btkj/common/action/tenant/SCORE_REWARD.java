@@ -7,7 +7,7 @@ import org.btkj.payment.api.PaymentService;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.exception.ConstConvertFailureException;

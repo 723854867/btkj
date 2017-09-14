@@ -6,7 +6,6 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.AppService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 

@@ -1,5 +1,7 @@
 package org.btkj.courier.api;
 
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.info.courier.StsInfo;
 
 /**
@@ -11,10 +13,18 @@ import org.btkj.pojo.info.courier.StsInfo;
 public interface AliyunService {
 
 	/**
-	 * STS assumeRole
+	 * 用户的 STS token
 	 * 
-	 * @param userModel
 	 * @return
 	 */
 	StsInfo assumeRole(int appId, int uid);
+	
+	/**
+	 * 商户的 STS token
+	 * 
+	 * @param appId
+	 * @param tid
+	 * @return
+	 */
+	StsInfo assumeRole(AppPO app, TenantPO tenant);
 }

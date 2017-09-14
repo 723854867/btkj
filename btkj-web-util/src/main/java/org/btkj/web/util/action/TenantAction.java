@@ -8,7 +8,6 @@ import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 

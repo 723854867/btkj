@@ -19,7 +19,7 @@ public class BiHuVehicleTest extends BaseTest {
 	
 	@Test
 	public void testRenewal() {
-		Result<Renewal> result = biHuVehicle.renewal(new TenantPO(), 1, "浙CD0W71", 9);
+		Result<Renewal> result = biHuVehicle.renewal(new TenantPO(), 1, "浙AW3Z26", 9);
 		System.out.println(result);
 	}
 	

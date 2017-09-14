@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.btkj.pojo.info.user.TenantListInfo;
 import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.TenantService;
-import org.btkj.web.util.Request;
 import org.btkj.web.util.action.OldUserAction;
+import org.btkj.web.util.action.Request;
 import org.rapid.util.common.message.Result;
 
 /**

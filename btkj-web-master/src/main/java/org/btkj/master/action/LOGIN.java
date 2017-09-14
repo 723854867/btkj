@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.btkj.master.api.CloudService;
 import org.btkj.pojo.info.master.LoginInfo;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.btkj.web.util.action.IAction;
+import org.btkj.web.util.action.Request;
 import org.rapid.util.common.message.Result;
 
 public class LOGIN implements IAction {

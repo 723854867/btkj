@@ -2,7 +2,6 @@ package org.btkj.web.util.action;
 
 import org.btkj.pojo.enums.Client;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 
 /**
  * 执行业务逻辑

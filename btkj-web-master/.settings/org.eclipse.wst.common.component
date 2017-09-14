@@ -37,9 +37,6 @@
         <dependent-module archiveName="btkj-statistics-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-statistics-api/btkj-statistics-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="btkj-bihu-vehicle-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/btkj-bihu-vehicle-api/btkj-bihu-vehicle-api">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="rapid-util-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rapid-util/rapid-util">
             <dependency-type>uses</dependency-type>
         </dependent-module>

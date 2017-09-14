@@ -1,18 +1,33 @@
-package org.btkj.web.util;
+package org.btkj.web.util.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
+import org.btkj.web.util.Params;
 import org.rapid.data.storage.redis.DistributeSession;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.Const;
-import org.rapid.util.common.consts.conveter.StrConstConverter;
+import org.rapid.util.common.consts.conveter.str.StrConstConverter;
+import org.rapid.util.common.converter.ConstConverter;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.lang.StringUtil;
+import org.rapid.util.net.http.HttpMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 /**
  * Http 请求
@@ -21,8 +36,11 @@ import org.springframework.http.HttpHeaders;
  */
 public class Request {
 	
+	private static final Logger logger = LoggerFactory.getLogger(Request.class);
+	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private Map<String, Object> params;
 	
 	/**
 	 * 默认采用 json/utf-8 编码
@@ -33,8 +51,35 @@ public class Request {
 	public Request(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
+		this.params = null == request.getParameterMap() ? new HashMap<String, Object>() : new HashMap<String, Object>(request.getParameterMap());
+		if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()))
+			_parseParam();
 		response.setHeader(HttpHeaders.CONTENT_TYPE, Consts.MimeType.TEXT_JSON_UTF_8);
 		response.setCharacterEncoding(Consts.UTF_8.name());
+	}
+	
+	private void _parseParam() {
+		MediaType mediaType = MediaType.parseMediaType(request.getContentType());
+		if (mediaType.includes(MediaType.MULTIPART_FORM_DATA)) {
+			ServletFileUpload upload = new ServletFileUpload();
+			FileItemIterator iter;
+			try {
+				iter = upload.getItemIterator(request);
+				while (iter.hasNext()) {
+				    FileItemStream item = iter.next();
+				    InputStream input = item.openStream();
+				    if (item.isFormField()) 
+				        params.put(item.getFieldName(), Streams.asString(input, Consts.UTF_8.name()));
+				    else {
+				    	byte[] buffer = new byte[input.available()];
+				    	input.read(buffer);
+				        params.put(item.getFieldName(), new ByteArrayInputStream(buffer));
+				    }
+				}
+			} catch (FileUploadException | IOException e) {
+				logger.warn("multipart request init failure！", e);
+			}
+		}
 	}
 	
 	/**
@@ -59,6 +104,14 @@ public class Request {
 		 return new DistributeSession(sessionId, redis);
 	}
 	
+	<T> T getParam(String name) {
+		try {
+			return null == this.params ? null : (T) this.params.get(name);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	/**
 	 * <pre>
 	 * 获取 key - value 形式的键值对，URL 之后的参数，以及 x-www-form-urlencoded 编码的参数可以使用此种方式来获取
@@ -69,11 +122,11 @@ public class Request {
 	 * @return
 	 * @throws IllegalConstException
 	 */
-	public <T> T getParam(StrConstConverter<T> constant) throws ConstConvertFailureException {
-		String val = request.getParameter(constant.key());
-		if (!StringUtil.hasText(val))
-			throw ConstConvertFailureException.nullConstException(constant);
+	public <S, T> T getParam(ConstConverter<S, T> constant) throws ConstConvertFailureException {
 		try {
+			S val = (S) this.params.get(constant.key());
+			if (null == val)
+				throw new Exception();
 			return constant.convert(val);
 		} catch (Exception e) {
 			throw new ConstConvertFailureException(constant, e);
@@ -86,7 +139,7 @@ public class Request {
 	 * @param constant
 	 * @return
 	 */
-	public <T> T getOptionalParam(StrConstConverter<T> constant) {
+	public <S, T> T getOptionalParam(ConstConverter<S, T> constant) {
 		try {
 			return getParam(constant);
 		} catch (ConstConvertFailureException e) {
@@ -121,6 +174,10 @@ public class Request {
 		} catch (ConstConvertFailureException e) {
 			return constant.value();
 		}
+	}
+	
+	public HttpServletRequest servletRequest() {
+		return this.request;
 	}
 	
 	/**

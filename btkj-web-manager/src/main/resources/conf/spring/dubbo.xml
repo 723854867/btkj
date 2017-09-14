@@ -18,6 +18,7 @@
 	<dubbo:reference id="jianJieService" interface="org.btkj.courier.api.JianJieService"> 
 		<dubbo:method name="addEmployee" async="true" />
 	</dubbo:reference>
+	<dubbo:reference id="aliyunService" interface="org.btkj.courier.api.AliyunService" />
 	<dubbo:reference id="courierService" interface="org.btkj.courier.api.CourierService" />
 	
 	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />

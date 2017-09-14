@@ -1,5 +1,7 @@
 package org.btkj.web.util.action;
 
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -11,20 +13,24 @@ import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
 import org.rapid.util.validator.ValidateGroups;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonSyntaxException;
 
 public abstract class Action<PARAM extends Param> implements IAction {
 	
+	private static final Logger logger = LoggerFactory.getLogger(Action.class);
+	
 	private static final ThreadLocal<Request> REQUEST_HOLDER	= new ThreadLocal<Request>();
 	
+	protected boolean upload;
 	protected Integer crudMod;
 	protected Class<PARAM> clazz;
 	
@@ -34,6 +40,11 @@ public abstract class Action<PARAM extends Param> implements IAction {
 			Type[] generics = ((ParameterizedType) superType).getActualTypeArguments();  
 			clazz = (Class<PARAM>) generics[0];
 		}
+	}
+	
+	public Action(boolean upload) {
+		this();
+		this.upload = upload;
 	}
 	
 	public Action(CrudType... crudTypes) {
@@ -50,8 +61,7 @@ public abstract class Action<PARAM extends Param> implements IAction {
 			if (clazz == NilParam.class)					// 没有参数体
 				return execute((PARAM) NilParam.INSTANCE);
 			else {
-				String payload = request.getParam(Params.PAYLOAD);
-				PARAM param = SerializeUtil.JsonUtil.GSON.fromJson(payload, clazz);
+				PARAM param = parseParam();
 				Set<ConstraintViolation<PARAM>> constraintViolations = validate(param);
 				if (!constraintViolations.isEmpty()) {
 					ConstConvertFailureException exception = ConstConvertFailureException.errorConstException(Params.PAYLOAD);
@@ -76,6 +86,33 @@ public abstract class Action<PARAM extends Param> implements IAction {
 		}finally {
 			REQUEST_HOLDER.remove();
 		}
+	}
+	
+	/**
+	 * 默认直接获取 name 为 payload 的字段
+	 * 
+	 * @return
+	 */
+	protected PARAM parseParam() { 
+		String payload = request().getParam(Params.PAYLOAD);
+		PARAM param = SerializeUtil.JsonUtil.GSON.fromJson(payload, clazz);
+		if (upload) {
+			Field[] fields = param.getClass().getDeclaredFields();
+			for (Field field : fields) {
+				if (!InputStream.class.isAssignableFrom(field.getType()))
+					continue;
+				InputStream input = request().getParam(field.getName());
+				if (null != input) {
+					field.setAccessible(true);
+					try {
+						field.set(param, input);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						logger.error("资源上传接口参数io流反射失败！", e);
+					}
+				}
+			}
+		}
+		return param;
 	}
 	
 	protected abstract Result<?> execute(PARAM param);

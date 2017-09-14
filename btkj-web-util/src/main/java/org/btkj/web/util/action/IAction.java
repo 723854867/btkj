@@ -1,7 +1,6 @@
 package org.btkj.web.util.action;
 
 import org.btkj.pojo.model.Version;
-import org.btkj.web.util.Request;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 

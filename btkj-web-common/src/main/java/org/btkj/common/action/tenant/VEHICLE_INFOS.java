@@ -8,7 +8,7 @@ import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.identity.Employee;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.message.Result;
 

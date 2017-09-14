@@ -15,7 +15,7 @@ import org.btkj.statistics.api.StatisticsService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.UserService;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.Request;
+import org.btkj.web.util.action.Request;
 import org.btkj.web.util.action.TenantAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;

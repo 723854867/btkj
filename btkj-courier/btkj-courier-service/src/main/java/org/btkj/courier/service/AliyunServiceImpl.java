@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.redis.AliyunMapper;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.info.courier.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
@@ -30,7 +32,7 @@ public class AliyunServiceImpl implements AliyunService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AliyunServiceImpl.class);
 	
-	private static final String USER_KEY			= "app:{0}_user:{1}";
+	private static final String USER_KEY			= "sts:app:{0}:user:{1}";
 	
 	@Resource
 	private StsService stsService;
@@ -62,6 +64,11 @@ public class AliyunServiceImpl implements AliyunService {
 			}
 		}
 		return stsInfo;
+	}
+	
+	@Override
+	public StsInfo assumeRole(AppPO app, TenantPO tenant) {
+		return null;
 	}
 
 	private StsInfo _doAssumeRole(int uid) {
