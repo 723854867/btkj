@@ -11,4 +11,8 @@
     <context:property-placeholder location="classpath:conf/aliyun.properties" trim-values="true"/>
         				
 	<bean class="org.rapid.util.common.SpringContextUtil" />
+	
+	<bean class="org.btkj.pojo.AliyunResourceUtil">
+		<property name="ossPrefix" value="${aliyun.oss.prefix}" />
+	</bean>
 </beans>

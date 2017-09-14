@@ -29,7 +29,7 @@
 		<property name="configPath" value="${zk.config.path}" />
 	</bean>
 	
-	<bean class="org.btkj.pojo.AliyunUtil">
+	<bean class="org.btkj.pojo.AliyunResourceUtil">
 		<property name="ossPrefix" value="${aliyun.oss.prefix}" />
 	</bean>
 	
