@@ -1,5 +1,6 @@
 package org.btkj.web.util.action;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -57,11 +58,12 @@ public abstract class Action<PARAM extends Param> implements IAction {
 	@Override
 	public final Result<?> execute(Request request) {
 		REQUEST_HOLDER.set(request);
+		PARAM param = null;
 		try {
 			if (clazz == NilParam.class)					// 没有参数体
 				return execute((PARAM) NilParam.INSTANCE);
 			else {
-				PARAM param = parseParam();
+				param = parseParam();
 				Set<ConstraintViolation<PARAM>> constraintViolations = validate(param);
 				if (!constraintViolations.isEmpty()) {
 					ConstConvertFailureException exception = ConstConvertFailureException.errorConstException(Params.PAYLOAD);
@@ -83,8 +85,14 @@ public abstract class Action<PARAM extends Param> implements IAction {
 			return Result.result(e.getCode());
 		} catch (JsonSyntaxException e) {
 			throw ConstConvertFailureException.errorConstException(Params.PAYLOAD);
-		}finally {
+		} finally {
 			REQUEST_HOLDER.remove();
+			if (null != param)
+				try {
+					param.dispose();
+				} catch (IOException e) {
+					logger.warn("Action 参数资源释放失败！");
+				}
 		}
 	}
 	

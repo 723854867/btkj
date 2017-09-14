@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+						
+	<dubbo:application name="btkj-manager" owner="btkj"/>
+	
+	<dubbo:registry address="${dubbo.registry.address}" file="${dubbo.register.file}" />
+	
+	<dubbo:reference id="cloudService" interface="org.btkj.master.api.CloudService" />
+	<dubbo:reference id="adminService" interface="org.btkj.master.api.AdminService" />
+	
+	<dubbo:reference id="userService" interface="org.btkj.user.api.UserService" />
+	<dubbo:reference id="tenantService" interface="org.btkj.user.api.TenantService" />
+	
+	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
+</beans>

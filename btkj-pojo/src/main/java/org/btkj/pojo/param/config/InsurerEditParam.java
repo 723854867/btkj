@@ -16,8 +16,6 @@ public class InsurerEditParam extends Param {
 	@Power(groups = { ValidateGroups.CRUD.class })
 	private Integer id;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
-	private String icon;
-	@NotNull(groups = { ValidateGroups.CREATE.class })
 	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
 	private String name;
 	@Power(groups = { ValidateGroups.CRUD.class })
@@ -32,14 +30,6 @@ public class InsurerEditParam extends Param {
 		this.id = id;
 	}
 
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-	
 	public String getName() {
 		return name;
 	}

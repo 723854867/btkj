@@ -5,12 +5,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
-import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.param.ModularsParam;
 import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.info.config.ModularDocument;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 

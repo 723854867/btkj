@@ -41,6 +41,11 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
+	public void updateInsurer(Insurer insurer) {
+		insurerMapper.update(insurer);
+	}
+	
+	@Override
 	public Map<Integer, Region> regions(Collection<Integer> regionIds) {
 		return regionMapper.getByKeys(regionIds);
 	}

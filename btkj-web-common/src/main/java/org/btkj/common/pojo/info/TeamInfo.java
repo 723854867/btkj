@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
@@ -18,7 +19,7 @@ public class TeamInfo implements Serializable{
 	private double total;					// 总业绩
 	private List<Employee> employees;		// 员工业绩排序列表
 	
-	public TeamInfo(Map<Integer, Integer> map, Exploits exploits, Map<Integer, UserPO> users) {
+	public TeamInfo(AppPO app, Map<Integer, Integer> map, Exploits exploits, Map<Integer, UserPO> users) {
 		this.total = exploits.getTotal();
 		this.employees = new ArrayList<Employee>(map.size());
 		List<Exploit> list = exploits.getEmployeeExploits();
@@ -37,9 +38,9 @@ public class TeamInfo implements Serializable{
 				exploit = temp;
 			}
 			if (null == exploit)
-				this.employees.add(new Employee(entry.getKey(), user));
+				this.employees.add(new Employee(app, entry.getKey(), user));
 			else
-				this.employees.add(new Employee(exploit, user));
+				this.employees.add(new Employee(app, exploit, user));
 		}
 	}
 	
@@ -49,18 +50,18 @@ public class TeamInfo implements Serializable{
 		private UserTips user;
 		private double performance;
 		
-		public Employee(int employeeId, UserPO user) {
+		public Employee(AppPO app, int employeeId, UserPO user) {
 			this.id = employeeId;
 			this.performance = 0;
 			if (null != user)
-				this.user = new UserTips(user);
+				this.user = new UserTips(app, user);
 		}
 		
-		public Employee(Exploit employee, UserPO user) {
+		public Employee(AppPO app, Exploit employee, UserPO user) {
 			this.id = employee.getEmployeeId();
 			this.performance = employee.getQuota();
 			if (null != user)
-				this.user = new UserTips(user);
+				this.user = new UserTips(app, user);
 		}
 		
 		public int getId() {
@@ -94,8 +95,8 @@ public class TeamInfo implements Serializable{
 		
 		private String mobile;
 		
-		public UserTips(UserPO user) {
-			super(user);
+		public UserTips(AppPO app, UserPO user) {
+			super(app, user);
 			this.mobile = user.getMobile();
 		}
 		

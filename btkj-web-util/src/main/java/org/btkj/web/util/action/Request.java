@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+import org.apache.commons.io.IOUtils;
 import org.btkj.web.util.Params;
 import org.rapid.data.storage.redis.DistributeSession;
 import org.rapid.data.storage.redis.Redis;
@@ -51,7 +53,17 @@ public class Request {
 	public Request(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		this.params = null == request.getParameterMap() ? new HashMap<String, Object>() : new HashMap<String, Object>(request.getParameterMap());
+		this.params = new HashMap<String, Object>();
+		Map<String, String[]> temp = request.getParameterMap();
+		if (null != temp) {
+			for (Entry<String, String[]> entry : temp.entrySet()) {
+				if (null == entry.getValue())
+					continue;
+				String[] arr = entry.getValue();
+				if (null != arr[0])
+					this.params.put(entry.getKey(), arr[0]);
+			}
+		}
 		if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()))
 			_parseParam();
 		response.setHeader(HttpHeaders.CONTENT_TYPE, Consts.MimeType.TEXT_JSON_UTF_8);
@@ -70,11 +82,8 @@ public class Request {
 				    InputStream input = item.openStream();
 				    if (item.isFormField()) 
 				        params.put(item.getFieldName(), Streams.asString(input, Consts.UTF_8.name()));
-				    else {
-				    	byte[] buffer = new byte[input.available()];
-				    	input.read(buffer);
-				        params.put(item.getFieldName(), new ByteArrayInputStream(buffer));
-				    }
+				    else 
+				        params.put(item.getFieldName(), new ByteArrayInputStream(IOUtils.toByteArray(input)));
 				}
 			} catch (FileUploadException | IOException e) {
 				logger.warn("multipart request init failure！", e);

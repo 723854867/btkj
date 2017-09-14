@@ -24,6 +24,8 @@ public interface TenantService {
 	
 	Map<Integer, TenantPO> tenants(Collection<Integer> tenants);
 	
+	void update(TenantPO tenant);
+	
 	/**
 	 * 申请加入代理公司
 	 * 

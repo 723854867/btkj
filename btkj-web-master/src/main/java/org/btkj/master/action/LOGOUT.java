@@ -1,9 +1,9 @@
 package org.btkj.master.action;
 
-import org.btkj.master.AdminAction;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.param.NilParam;
 import org.btkj.web.util.Params;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.message.Result;
 
 public class LOGOUT extends AdminAction<NilParam> {

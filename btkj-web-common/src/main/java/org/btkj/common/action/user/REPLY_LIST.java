@@ -12,13 +12,12 @@ import org.btkj.common.pojo.info.ReplyInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.community.Reply;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -27,7 +26,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class REPLY_LIST extends OldUserAction {
+public class REPLY_LIST extends UserAction<IdParam> {
 	
 	@Resource
 	private UserService userService;
@@ -35,9 +34,8 @@ public class REPLY_LIST extends OldUserAction {
 	private CommunityService communityService;
 	
 	@Override
-	protected Result<?> execute(Request request, User user) {
-		Result<Pager<Reply>> result = communityService.replies(user.getAppId(), request.getParam(Params.ID), 
-				request.getParam(Params.PAGE), request.getParam(Params.PAGE_SIZE));
+	protected Result<?> execute(AppPO app, UserPO user, IdParam param) {
+		Result<Pager<Reply>> result = communityService.replies(user.getAppId(), param.getId(), param.getPage(), param.getPageSize());
 		if (!result.isSuccess())
 			return result;
 		
@@ -51,13 +49,8 @@ public class REPLY_LIST extends OldUserAction {
 		List<ReplyInfo> l = new ArrayList<ReplyInfo>(list.size());
 		for (Reply reply : list) {
 			UserPO up = users.get(reply.getUid());
-			l.add(new ReplyInfo(up, reply));
+			l.add(new ReplyInfo(app, up, reply));
 		}
 		return Result.result(new Pager<ReplyInfo>(result.attach().getTotal(), l));
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
 	}
 }

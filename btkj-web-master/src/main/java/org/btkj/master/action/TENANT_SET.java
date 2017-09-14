@@ -2,7 +2,6 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.master.AdminAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.user.TenantPO;
@@ -10,6 +9,7 @@ import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserManageService;
 import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.DateUtil;

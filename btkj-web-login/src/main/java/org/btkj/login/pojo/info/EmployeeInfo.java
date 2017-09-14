@@ -22,7 +22,7 @@ public class EmployeeInfo extends UserTips {
 	public EmployeeInfo() {}
 	
 	public EmployeeInfo(Employee employee, Region region) {
-		super(employee.getUser());
+		super(employee.getApp(), employee.getUser());
 		this.id = employee.getId();
 		this.tid = employee.getTid();
 		this.tname = employee.tname();

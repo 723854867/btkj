@@ -1,4 +1,4 @@
-package org.btkj.master;
+package org.btkj.web.util.action;
 
 import javax.annotation.Resource;
 
@@ -9,7 +9,6 @@ import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.master.Admin.Mod;
 import org.btkj.pojo.param.Param;
 import org.btkj.web.util.Params;
-import org.btkj.web.util.action.Action;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;

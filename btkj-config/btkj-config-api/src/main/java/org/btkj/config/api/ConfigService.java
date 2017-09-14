@@ -17,6 +17,8 @@ public interface ConfigService {
 	 * @return
 	 */
 	Region region(int region);
+	
+	void updateInsurer(Insurer insurer);
 
 	/**
 	 * 一次性获取多条行政区划数据

@@ -11,23 +11,20 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.entity.community.Quiz;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.community.QuizListParam;
 import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
  * 问答分页
  * 
  * @author ahab
  */
-public class QUIZ_LIST extends OldUserAction {
+public class QUIZ_LIST extends UserAction<QuizListParam> {
 	
 	@Resource
 	private UserService userService;
@@ -35,14 +32,11 @@ public class QUIZ_LIST extends OldUserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, User user) {
-		QuizSearcher searcher = request.getParam(Params.QUIZ_SEARCHER);
-		if (null == searcher.getSortCol())
-			throw ConstConvertFailureException.errorConstException(Params.QUIZ_SEARCHER);
-		searcher.setAppId(user.getAppId());
-		switch (user.getClient()) {
+	protected Result<?> execute(AppPO app, UserPO user, QuizListParam param) {
+		param.setAppId(app.getId());
+		switch (client()) {
 		case TENANT_MANAGER:
-			Result<Pager<Quiz>> result = communityService.quizs(searcher);
+			Result<Pager<Quiz>> result = communityService.quizs(param);
 			Set<Integer> set = new HashSet<Integer>();
 			for (Quiz quiz : result.attach().getList())
 				set.add(quiz.getUid());
@@ -50,16 +44,11 @@ public class QUIZ_LIST extends OldUserAction {
 			List<QuizInfo> list = new ArrayList<QuizInfo>(result.attach().getList().size());
 			for (Quiz quiz : result.attach().getList()) {
 				UserPO up = users.get(quiz.getUid());
-				list.add(new QuizInfo(up, quiz));
+				list.add(new QuizInfo(app, up, quiz));
 			}
 			return Result.result(new Pager<QuizInfo>(result.attach().getTotal(), list));
 		default:
-			return communityService.quizs(searcher);
+			return communityService.quizs(param);
 		}
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
 	}
 }

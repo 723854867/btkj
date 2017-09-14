@@ -1,8 +1,8 @@
 package org.btkj.master.action;
 
-import org.btkj.master.AdminAction;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.param.IdParam;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 

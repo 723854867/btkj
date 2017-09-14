@@ -29,8 +29,6 @@ public class TenantAddParam extends Param {
 	@NotNull
 	private String servicePhone;
 	@NotNull
-	private String licenseImage;
-	@NotNull
 	@Mobile
 	private String contactsMobile;		// 联系人电弧
 	
@@ -88,14 +86,6 @@ public class TenantAddParam extends Param {
 
 	public void setServicePhone(String servicePhone) {
 		this.servicePhone = servicePhone;
-	}
-
-	public String getLicenseImage() {
-		return licenseImage;
-	}
-
-	public void setLicenseImage(String licenseImage) {
-		this.licenseImage = licenseImage;
 	}
 
 	public String getContactsMobile() {

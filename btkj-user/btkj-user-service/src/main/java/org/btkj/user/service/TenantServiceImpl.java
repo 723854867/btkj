@@ -16,8 +16,8 @@ import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.config.Area;
 import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.entity.user.TenantPO.Mod;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.TenantListInfo;
@@ -70,6 +70,11 @@ public class TenantServiceImpl implements TenantService {
 	@Override
 	public Map<Integer, TenantPO> tenants(Collection<Integer> tenants) {
 		return tenantMapper.getByKeys(tenants);
+	}
+	
+	@Override
+	public void update(TenantPO tenant) {
+		tenantMapper.update(tenant);		
 	}
 
 	@Override

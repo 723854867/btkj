@@ -66,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
 		if (!ru.isSuccess())
 			return ru;
 		try {
-			return _doLogin(client, user, mobile);
+			return _doLogin(client, app, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), lockId);
 		}
@@ -83,13 +83,13 @@ public class LoginServiceImpl implements LoginService {
 				return Result.result(Code.PWD_NOT_RESET);
 			if (!pwd.equals(user.getPwd()))
 				return Result.result(Code.PWD_ERROR);
-			return _doLogin(Client.TENANT_MANAGER, user, mobile);
+			return _doLogin(Client.TENANT_MANAGER, app, user, mobile);
 		} finally {
 			userMapper.releaseUserLock(user.getUid(), ru.getDesc());
 		}
 	}
 
-	private Result<LoginInfo> _doLogin(Client client, UserPO user, String mobile) {
+	private Result<LoginInfo> _doLogin(Client client, AppPO app, UserPO user, String mobile) {
 		String token = client == Client.RECRUIT ? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() : userMapper.tokenReplace(client, user.getUid(), mobile);
 		switch (client) {
 		case RECRUIT:
@@ -112,7 +112,7 @@ public class LoginServiceImpl implements LoginService {
 		default:
 			return Consts.RESULT.FORBID;
 		}
-		return Result.result(new LoginInfo(token, user));
+		return Result.result(new LoginInfo(app, user, token));
 	}
 	
 	@Override

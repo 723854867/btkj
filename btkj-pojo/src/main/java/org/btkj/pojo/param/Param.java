@@ -1,5 +1,6 @@
 package org.btkj.pojo.param;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.validation.constraints.Max;
@@ -77,4 +78,6 @@ public class Param implements Serializable {
 		this.page = Math.min(this.total, this.page);
 		this.start = (this.page - 1) * pageSize;
 	}
+	
+	public void dispose() throws IOException {}
 }

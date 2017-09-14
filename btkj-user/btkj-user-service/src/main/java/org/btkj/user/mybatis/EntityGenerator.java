@@ -85,7 +85,6 @@ public class EntityGenerator {
 		tenant.setAppId(appId);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
 		tenant.setLicense(param.getLicense());
-		tenant.setLicenseImage(param.getLicenseImage());
 		tenant.setServicePhone(param.getServicePhone());
 		tenant.setExpire(param.getExpire());
 		tenant.setContacts(param.getContacts());

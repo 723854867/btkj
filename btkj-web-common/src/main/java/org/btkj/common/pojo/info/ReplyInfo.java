@@ -3,6 +3,7 @@ package org.btkj.common.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.community.Reply;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.UserTips;
 
@@ -15,12 +16,12 @@ public class ReplyInfo implements Serializable {
 	private UserTips user;
 	private String content;
 	
-	public ReplyInfo(UserPO user, Reply reply) {
+	public ReplyInfo(AppPO app, UserPO user, Reply reply) {
 		this.id = reply.getId();
 		this.time = reply.getCreated();
 		this.content = reply.getContent();
 		if (null != user)
-			this.user = new UserTips(user);
+			this.user = new UserTips(app, user);
 	}
 
 	public int getId() {

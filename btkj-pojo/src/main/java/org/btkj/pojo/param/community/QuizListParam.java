@@ -1,16 +1,20 @@
-package org.btkj.pojo.info;
+package org.btkj.pojo.param.community;
 
+import javax.validation.constraints.NotNull;
+
+import org.btkj.pojo.param.Param;
 import org.rapid.data.storage.redis.RedisConsts;
 import org.rapid.util.common.enums.SortType;
 
-public class QuizSearcher extends Page {
+public class QuizListParam extends Param {
 
-	private static final long serialVersionUID = -4663590321300215965L;
+	private static final long serialVersionUID = -3608248219892643307L;
 
 	private Integer appId;
+	@NotNull
 	private SortCol sortCol;
 	private SortType sortType;
-	
+
 	public Integer getAppId() {
 		return appId;
 	}

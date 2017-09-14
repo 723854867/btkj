@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 import org.btkj.community.mybatis.dao.QuizDao;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.community.Quiz;
-import org.btkj.pojo.info.QuizSearcher;
-import org.btkj.pojo.info.QuizSearcher.SortCol;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.community.QuizListParam;
+import org.btkj.pojo.param.community.QuizListParam.SortCol;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
@@ -29,9 +29,9 @@ public class QuizMapper extends RedisDBAdapter<Integer, Quiz, QuizDao> {
 		super(new ByteProtostuffSerializer<Quiz>(), "hash:db:quiz");
 	}
 	
-	public Result<Pager<Quiz>> paging(QuizSearcher searcher) {
-		_checkLoad(searcher.getAppId());
-		List<byte[]> list = redis.hpaging(_setKey(searcher.getAppId(), searcher.getSortCol()), redisKey, searcher.getPage(), searcher.getPageSize(), searcher.redisZSortType());
+	public Result<Pager<Quiz>> paging(QuizListParam param) {
+		_checkLoad(param.getAppId());
+		List<byte[]> list = redis.hpaging(_setKey(param.getAppId(), param.getSortCol()), redisKey, param.getPage(), param.getPageSize(), param.redisZSortType());
 		if (null == list)
 			return BtkjConsts.RESULT.EMPTY_PAGING;
 		int total = Integer.valueOf(new String(list.remove(0)));

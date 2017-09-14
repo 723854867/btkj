@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.btkj.master.AdminAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.nonauto.NonAutoCategory;
 import org.btkj.pojo.param.NilParam;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.message.Result;
 
 /**

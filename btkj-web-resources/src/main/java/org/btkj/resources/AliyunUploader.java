@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.PutObjectResult;
 
 @Service("aliyunUploader")
 public class AliyunUploader {
@@ -37,14 +36,18 @@ public class AliyunUploader {
 		this.client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 	}
 	
-	public void upload(String key, InputStream input) {
-		PutObjectResult result;
+	public boolean upload(String key, InputStream input) {
 		try {
-			result = this.client.putObject(bucket, key, input);
-			System.out.println(result.getETag());
+			this.client.putObject(bucket, key, input);
+			return true;
 		} catch (OSSException | ClientException e) {
 			logger.error("阿里云资源上传失败!", e);
+			return false;
 		}
+	}
+	
+	public void delete(String key) {
+		this.client.deleteObject(bucket, key);
 	}
 	
 	@PreDestroy

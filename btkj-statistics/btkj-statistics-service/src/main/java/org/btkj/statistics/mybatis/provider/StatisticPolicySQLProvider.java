@@ -100,6 +100,7 @@ public class StatisticPolicySQLProvider extends SQLProvider {
 			orderBys = param.getSortType() == SortType.ASC ? "`created` ASC" : "`created` DESC";			
 			break;
 		}
+		sql.append("FROM statistic_policy ");
 		SqlUtil.appendWithWhere(sql, param.params());
 		if (!CollectionUtil.isEmpty(param.params())) {
 			if (null != param.getBeginTime())
@@ -115,8 +116,9 @@ public class StatisticPolicySQLProvider extends SQLProvider {
 		if (!CollectionUtil.isEmpty(groups)) {
 			sql.append(" GROUP BY ");
 			for (String col : groups)
-				sql.append("`").append(col).append("`, ");
+				sql.append("`").append(col).append("`,");
 		}
+		sql.deleteCharAt(sql.length() - 1);
 		return orderBys;
 	}
 }

@@ -2,7 +2,8 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.AliyunUtil;
+import org.btkj.pojo.AliyunResourceUtil;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.UserTips;
 
@@ -15,9 +16,9 @@ public class LoginInfo implements Serializable {
 	
 	public LoginInfo() {}
 	
-	public LoginInfo(String token, UserPO user) {
+	public LoginInfo(AppPO app, UserPO user, String token) {
 		this.token = token;
-		this.user = new UserDetailTips(user);
+		this.user = new UserDetailTips(app, user);
 	}
 	
 	public String getToken() {
@@ -42,13 +43,13 @@ public class LoginInfo implements Serializable {
 		private String identityFace;
 		private String identityBack;
 		public UserDetailTips() {}
-		public UserDetailTips(UserPO user) {
-			super(user);
+		public UserDetailTips(AppPO app, UserPO user) {
+			super(app, user);
 			this.identity = user.getIdentity();
 			if (null != user.getIdentityFace())
-				this.identityFace = AliyunUtil.userResource(user, user.getIdentityFace());
+				this.identityFace = AliyunResourceUtil.userResource(app, user, user.getIdentityFace());
 			if (null != user.getIdentityBack())
-				this.identityBack = AliyunUtil.userResource(user, user.getIdentityBack());
+				this.identityBack = AliyunResourceUtil.userResource(app, user, user.getIdentityBack());
 		}
 		public String getIdentity() {
 			return identity;

@@ -2,10 +2,10 @@ package org.btkj.master.action;
 
 import javax.annotation.Resource;
 
-import org.btkj.master.AdminAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.param.nonauto.NonAutoEditParam;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 

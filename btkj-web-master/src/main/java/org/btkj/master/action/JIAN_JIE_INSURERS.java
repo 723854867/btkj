@@ -10,13 +10,13 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
-import org.btkj.master.AdminAction;
 import org.btkj.master.pojo.info.JianJieInsurerInfo;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.param.IdParam;
 import org.btkj.vehicle.api.VehicleManageService;
+import org.btkj.web.util.action.AdminAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 

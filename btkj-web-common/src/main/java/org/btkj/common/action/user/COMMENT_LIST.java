@@ -12,13 +12,12 @@ import org.btkj.common.pojo.info.CommentInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.community.Comment;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -27,7 +26,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class COMMENT_LIST extends OldUserAction {
+public class COMMENT_LIST extends UserAction<IdParam> {
 	
 	@Resource
 	private UserService userService;
@@ -35,10 +34,8 @@ public class COMMENT_LIST extends OldUserAction {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(Request request, User user) {
-		int page = request.getParam(Params.PAGE);
-		int pageSize = request.getParam(Params.PAGE_SIZE);
-		Result<Pager<Comment>> result = communityService.comments(user.getAppId(), request.getParam(Params.ID), page, pageSize);
+	protected Result<?> execute(AppPO app, UserPO user, IdParam param) {
+		Result<Pager<Comment>> result = communityService.comments(user.getAppId(), param.getId(), param.getPage(), param.getPageSize());
 		if (!result.isSuccess())
 			return result;
 		List<Comment> list = result.attach().getList();
@@ -52,13 +49,8 @@ public class COMMENT_LIST extends OldUserAction {
 		List<CommentInfo> l = new ArrayList<CommentInfo>(list.size());
 		for (Comment comment : list) {
 			UserPO up =  users.get(comment.getUid());
-			l.add(new CommentInfo(up, comment));
+			l.add(new CommentInfo(app, up, comment));
 		}
 		return Result.result(new Pager<CommentInfo>(result.attach().getTotal(), l));
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
 	}
 }

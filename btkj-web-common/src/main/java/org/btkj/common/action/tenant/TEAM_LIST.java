@@ -46,6 +46,6 @@ public class TEAM_LIST extends TenantAction {
 		
 		Exploits exploits = statisticsService.multiExploits(new ArrayList<Integer>(map.keySet()), request.getParam(Params.BEGIN_TIME), 
 				request.getParam(Params.END_TIME), request.getParam(Params.MOD));
-		return Result.result(new TeamInfo(map, exploits, userService.users(new ArrayList<Integer>(map.values()))));
+		return Result.result(new TeamInfo(employee.getApp(), map, exploits, userService.users(new ArrayList<Integer>(map.values()))));
 	}
 }

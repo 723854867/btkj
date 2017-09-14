@@ -7,7 +7,6 @@ import javax.validation.Validation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
-import org.btkj.pojo.info.QuizSearcher;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
 import org.btkj.user.pojo.submit.CustomerSearcher;
@@ -188,13 +187,6 @@ public interface Params {
 		@Override
 		public CustomerSearcher convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, CustomerSearcher.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<QuizSearcher> QUIZ_SEARCHER				= new Str2ObjConstConverter<QuizSearcher>(1211, "quizSearcher") {
-		@Override
-		public QuizSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, QuizSearcher.class);
 		}
 	};
 	

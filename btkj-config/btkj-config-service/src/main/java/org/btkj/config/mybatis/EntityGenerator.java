@@ -24,7 +24,6 @@ public class EntityGenerator {
 		Insurer insurer = new Insurer();
 		insurer.setId(param.getId());
 		insurer.setName(param.getName());
-		insurer.setIcon(param.getIcon());
 		insurer.setBiHuId(param.getBiHuId());
 		insurer.setLeBaoBaId(param.getLeBaoBaId());
 		

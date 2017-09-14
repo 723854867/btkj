@@ -2,7 +2,8 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.AliyunUtil;
+import org.btkj.pojo.AliyunResourceUtil;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.UserPO;
 
 public class UserTips implements Serializable {
@@ -15,11 +16,11 @@ public class UserTips implements Serializable {
 	
 	public UserTips() {}
 	
-	public UserTips(UserPO user) {
+	public UserTips(AppPO app, UserPO user) {
 		this.uid = user.getUid();
 		this.name = user.getName();
 		if (null != user.getAvatar())
-			this.avatar = AliyunUtil.userResource(user, user.getAvatar());
+			this.avatar = AliyunResourceUtil.userResource(app, user, user.getAvatar());
 	}
 
 	public int getUid() {
