@@ -46,10 +46,8 @@
 		<module>btkj-web-util</module>
 		<module>btkj-web-login</module>
 		<module>btkj-web-master</module>
-		<module>btkj-web-callback</module>
 		<module>btkj-statistics</module>
-		<module>btkj-web-schedule</module>
-    <module>btkj-payment</module>
-    <module>btkj-web-resources</module>
+    	<module>btkj-payment</module>
+    	<module>btkj-web-resources</module>
   </modules>
 </project>
