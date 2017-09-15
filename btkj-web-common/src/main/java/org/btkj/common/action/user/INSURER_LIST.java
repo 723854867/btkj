@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -21,7 +21,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class INSURER_LIST extends OldUserAction {
+public class INSURER_LIST extends UserAction<IdParam> {
 	
 	@Resource
 	private ConfigService configService;
@@ -29,15 +29,10 @@ public class INSURER_LIST extends OldUserAction {
 	private VehicleService vehicleService;
 	
 	@Override
-	protected Result<List<Insurer>> execute(Request request, User user) {
-		List<Integer> tids = vehicleService.insurers(request.getParam(Params.TID));
+	protected Result<List<Insurer>> execute(AppPO app, UserPO user, IdParam param) {
+		List<Integer> tids = vehicleService.insurers(param.getId());
 		if (CollectionUtil.isEmpty(tids))
 			return Result.result(Collections.EMPTY_LIST);
 		return Result.result(new ArrayList<Insurer>(configService.insurers(tids).values()));
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
 	}
 }

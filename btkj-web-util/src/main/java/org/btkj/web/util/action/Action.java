@@ -2,6 +2,7 @@ package org.btkj.web.util.action;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,7 +20,10 @@ import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.exception.ConstConvertFailureException;
+import org.rapid.util.lang.PhoneUtil;
+import org.rapid.util.lang.StringUtil;
 import org.rapid.util.validator.ValidateGroups;
+import org.rapid.util.validator.custom.Mobile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,19 +108,33 @@ public abstract class Action<PARAM extends Param> implements IAction {
 	protected PARAM parseParam() { 
 		String payload = request().getParam(Params.PAYLOAD);
 		PARAM param = SerializeUtil.JsonUtil.GSON.fromJson(payload, clazz);
-		if (upload) {
-			Field[] fields = param.getClass().getDeclaredFields();
-			for (Field field : fields) {
-				if (!InputStream.class.isAssignableFrom(field.getType()))
-					continue;
-				InputStream input = request().getParam(field.getName());
-				if (null != input) {
+		Field[] fields = param.getClass().getDeclaredFields();
+		a : for (Field field : fields) {
+			Annotation[] annotations = field.getAnnotations();
+			if (null != annotations) {
+				for (Annotation annotation : annotations) {
+					if (null == annotation || !(annotation instanceof Mobile))
+						continue;
 					field.setAccessible(true);
 					try {
-						field.set(param, input);
+						String mobile = (String) field.get(param);
+						if (StringUtil.hasText(mobile) && PhoneUtil.isMobile(mobile))
+							field.set(param, PhoneUtil.entirelyMobile(mobile));
 					} catch (IllegalArgumentException | IllegalAccessException e) {
-						logger.error("资源上传接口参数io流反射失败！", e);
+						logger.error("接口参数mobile反射处理失败！", e);
 					}
+					continue a;
+				}
+			}
+			if (!InputStream.class.isAssignableFrom(field.getType()))
+				continue;
+			InputStream input = request().getParam(field.getName());
+			if (null != input) {
+				field.setAccessible(true);
+				try {
+					field.set(param, input);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					logger.error("接口参数io流反射失败！", e);
 				}
 			}
 		}

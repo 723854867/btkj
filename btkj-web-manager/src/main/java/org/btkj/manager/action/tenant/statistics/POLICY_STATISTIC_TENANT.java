@@ -31,7 +31,7 @@ public class POLICY_STATISTIC_TENANT extends EmployeeAction<StatisticPoliciesPar
 
 	@Override
 	protected Result<Pager<PolicyStatisticInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, StatisticPoliciesParam param) {
-		param.tenantFilter(tenant.getTid());
+		param.tenantFilter(tenant);
 		Pager<PolicyStatisticInfo> pager = statisticsService.statsiticPolicies(param);
 		if (!CollectionUtil.isEmpty(pager.getList())) {
 			Set<Integer> apps = new HashSet<Integer>();

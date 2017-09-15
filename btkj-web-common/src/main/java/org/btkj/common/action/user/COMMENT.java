@@ -2,11 +2,11 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
+import org.btkj.common.pojo.param.CommentParam;
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.model.identity.User;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,15 +14,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class COMMENT extends OldUserAction {
+public class COMMENT extends UserAction<CommentParam> {
 	
 	@Resource
 	private CommunityService communityService;
 
 	@Override
-	protected Result<Void> execute(Request request, User user) {
-		int articleId = request.getParam(Params.ID);
-		String content = request.getParam(Params.CONTENT);
-		return communityService.comment(user, articleId, content);
+	protected Result<Void> execute(AppPO app, UserPO user, CommentParam param) {
+		return communityService.comment(user, param.getId(), param.getContent());
 	}
 }

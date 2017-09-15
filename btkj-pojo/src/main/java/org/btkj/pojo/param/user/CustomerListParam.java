@@ -1,15 +1,15 @@
-package org.btkj.user.pojo.submit;
+package org.btkj.pojo.param.user;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.btkj.pojo.info.Page;
+import org.btkj.pojo.param.Param;
 import org.rapid.util.lang.StringUtil;
 
-public class CustomerSearcher extends Page {
+public class CustomerListParam extends Param {
 
-	private static final long serialVersionUID = -945733332802575737L;
-
+	private static final long serialVersionUID = 1378508672031039869L;
+	
 	private int uid;
 	private String name;
 	private String mobile;

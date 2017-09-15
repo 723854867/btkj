@@ -12,7 +12,6 @@ import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.VehicleOrderListInfo;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.rapid.util.common.message.Result;
@@ -31,7 +30,7 @@ public interface VehicleService {
 	 * @param license 车牌号
 	 * @param name 车主姓名
 	 */
-	Result<Renewal> renewal(Employee employee, String license, String name);
+	Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String license, String name);
 	
 	/**
 	 * 获取续保信息：通过车架号和发动机号(次新车)
@@ -42,7 +41,7 @@ public interface VehicleService {
 	 * @param name 车主姓名
 	 * @return
 	 */
-	Result<Renewal> renewal(Employee employee, String vin, String engine, String name);
+	Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String vin, String engine, String name);
 	
 	/**
 	 * 下单：包括报价、投保、报价并投保

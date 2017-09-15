@@ -21,8 +21,6 @@ import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.TenantListInfo;
-import org.btkj.pojo.model.identity.Employee;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.pojo.param.user.TenantAddParam;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
@@ -78,13 +76,13 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public Result<?> apply(User user, Employee chief) {
+	public Result<?> apply(UserPO user, EmployeeTip chief) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(chief.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (employeeMapper.isEmployee(chief.getTid(), user.getUid()))
 			return Result.result(BtkjCode.ALREADY_IS_EMPLOYEE);
-		applyMapper.insert(EntityGenerator.newApply(chief.getTenant(), user, chief));
+		applyMapper.insert(EntityGenerator.newApply(user, chief));
 		return Result.success();
 	}
 

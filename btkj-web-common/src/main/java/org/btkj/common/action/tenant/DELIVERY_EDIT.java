@@ -4,64 +4,56 @@ import java.util.LinkedList;
 
 import javax.annotation.Resource;
 
-import org.btkj.config.api.ConfigService;
+import org.btkj.common.pojo.param.DeliveryEditParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.Customer;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Recipient;
-import org.btkj.pojo.model.identity.Employee;
-import org.btkj.user.api.UserService;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
+import org.rapid.util.lang.StringUtil;
 
 /**
  * 编辑配送信息
  * 
  * @author ahab
  */
-public class DELIVERY_EDIT  extends TenantAction {
+public class DELIVERY_EDIT  extends EmployeeAction<DeliveryEditParam> {
 	
-	@Resource
-	private UserService userService;
-	@Resource
-	private ConfigService configService;
 	@Resource
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<Void> execute(Request request, Employee employee) {
-		String orderId = request.getParam(Params.ORDER_ID);
-		DeliveryType deliveryType = request.getParam(Params.DELIVERY_TYPE);
+	protected Result<Void> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, DeliveryEditParam param) {
 		DeliveryInfo deliveryInfo = null;
-		switch (deliveryType) {
+		switch (param.getType()) {
 		case ACTIVE_PICK:
 			deliveryInfo = new DeliveryInfo();
-			deliveryInfo.setType(deliveryType);
-			return vehicleService.deliveryEdit(orderId, deliveryInfo);
+			deliveryInfo.setType(param.getType());
+			return vehicleService.deliveryEdit(param.getOrderId(), deliveryInfo);
 		default:
-			int customerId = request.getOptionalParam(Params.CUSTOMER_ID);
-			if (0 != customerId) {							// 将一个已经存在的客户作为收件人
-				Customer customer = userService.getCustomerById(customerId);
+			if (null != param.getCustomerId()) {							// 将一个已经存在的客户作为收件人
+				Customer customer = userService.getCustomerById(param.getCustomerId());
 				if (null == customer)
 					return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
-				deliveryInfo = _build(customer, deliveryType);
+				deliveryInfo = _build(customer, param.getType());
 			} else {
-				String name = request.getParam(Params.NAME);
-				String mobile = request.getParam(Params.MOBILE);
-				String address = request.getParam(Params.ADDRESS);
-				int region = request.getParam(Params.REGION);
-				LinkedList<Region> regions = 0 == region ? null : configService.regionRoute(region);
+				if (!StringUtil.hasText(param.getName(), param.getMobile(), param.getAddress()) || null == param.getRegion())
+					return Consts.RESULT.FORBID;
+				LinkedList<Region> regions = configService.regionRoute(param.getRegion());
 				if (null == regions || regions.size() < 3)
-					throw ConstConvertFailureException.errorConstException(Params.REGION);
-				deliveryInfo = _build(name, mobile, address, regions, deliveryType);
+					return BtkjConsts.RESULT.REGION_NOT_EXIST;
+				deliveryInfo = _build(param.getName(), param.getMobile(), param.getAddress(), regions, param.getType());
 			}
-			return vehicleService.deliveryEdit(orderId, deliveryInfo);
+			return vehicleService.deliveryEdit(param.getOrderId(), deliveryInfo);
 		}
 	}
 	

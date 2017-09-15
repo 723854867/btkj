@@ -3,21 +3,22 @@ package org.btkj.common.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.RewardInfo;
+import org.btkj.common.pojo.param.ScoreRewardParam;
 import org.btkj.payment.api.PaymentService;
-import org.btkj.pojo.model.identity.Employee;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.statistics.api.StatisticsService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
 
 /**
  * 积分奖励
  * 
  * @author ahab
  */
-public class SCORE_REWARD extends TenantAction {
+public class SCORE_REWARD extends EmployeeAction<ScoreRewardParam> {
 	
 	@Resource
 	private PaymentService paymentService;
@@ -25,15 +26,12 @@ public class SCORE_REWARD extends TenantAction {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<?> execute(Request request, Employee employee) {
-		int type = request.getOptionalParam(Params.TYPE);
-		switch (type) {
-		case 0:									// 奖励首页：总计
-			return Result.result(new RewardInfo(paymentService.account(employee.getId())));
-		case 1:									// 按照时间统计积分雇员积分
-			return Result.result(statisticsService.scoreReward(employee.getId(), request.getParam(Params.BEGIN_TIME), request.getParam(Params.END_TIME)));
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, ScoreRewardParam param) {
+		switch (param.getType()) {
+		case 1:
+			return Result.result(statisticsService.scoreReward(employee.getId(), param.getBeginTime(), param.getEndTime()));
 		default:
-			throw ConstConvertFailureException.errorConstException(Params.TYPE);
+			return Result.result(new RewardInfo(paymentService.account(employee.getId())));
 		}
 	}
 }

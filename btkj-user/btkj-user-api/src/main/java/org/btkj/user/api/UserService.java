@@ -11,7 +11,7 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.model.identity.User;
-import org.btkj.user.pojo.submit.CustomerSearcher;
+import org.btkj.pojo.param.user.CustomerListParam;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -128,10 +128,10 @@ public interface UserService {
 	/**
 	 * 客户分页
 	 * 
-	 * @param searcher
+	 * @param param
 	 * @return
 	 */
-	Result<Pager<Customer>> customers(CustomerSearcher searcher);
+	Result<Pager<Customer>> customers(CustomerListParam param);
 	
 	/**
 	 * 新增客户

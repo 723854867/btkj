@@ -33,6 +33,7 @@ public class EmployeeTip implements Serializable {
 	private String identity;			// 身份证号
 	private String identityFace;
 	private String identityBack;
+	private String nonAutoBind;
 	private int layer;
 	private int CMRate;
 	private int CPRate;
@@ -50,6 +51,7 @@ public class EmployeeTip implements Serializable {
 		this.appId = employee.getAppId();
 		this.aregion = app.getRegion();
 		this.tregion = tenant.getRegion();
+		this.nonAutoBind = tenant.getNonAutoBind();
 		this.name = user.getName();
 		this.aname = app.getName();
 		this.tname = tenant.getName();
@@ -94,6 +96,14 @@ public class EmployeeTip implements Serializable {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	
+	public String getNonAutoBind() {
+		return nonAutoBind;
+	}
+	
+	public void setNonAutoBind(String nonAutoBind) {
+		this.nonAutoBind = nonAutoBind;
 	}
 
 	public int getTid() {

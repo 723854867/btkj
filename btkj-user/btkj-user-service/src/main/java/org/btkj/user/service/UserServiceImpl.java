@@ -17,9 +17,9 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.user.CustomerListParam;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
-import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.btkj.user.redis.AppMapper;
 import org.btkj.user.redis.ApplyMapper;
 import org.btkj.user.redis.CustomerMapper;
@@ -193,8 +193,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Result<Pager<Customer>> customers(CustomerSearcher searcher) {
-		return Result.result(customerMapper.paging(searcher));
+	public Result<Pager<Customer>> customers(CustomerListParam param) {
+		return Result.result(customerMapper.paging(param));
 	}
 	
 	@Override

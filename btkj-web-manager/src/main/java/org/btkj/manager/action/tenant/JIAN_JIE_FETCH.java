@@ -137,6 +137,7 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 		temp.setDay(calendar.get(Calendar.DAY_OF_MONTH));
 		temp.setWeek(calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH));
 		temp.setSeason(temp.getMonth() % 3);
+		temp.setCreated(policy.getIssuanceTime());
 		return temp;
 	}
 }

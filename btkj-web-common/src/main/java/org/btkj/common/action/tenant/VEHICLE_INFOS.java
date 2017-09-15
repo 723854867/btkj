@@ -1,15 +1,14 @@
 package org.btkj.common.action.tenant;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
-import org.btkj.pojo.info.VehicleInfo;
-import org.btkj.pojo.model.identity.Employee;
+import org.btkj.common.pojo.param.VehicleInfosParam;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -17,13 +16,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class VEHICLE_INFOS extends TenantAction {
+public class VEHICLE_INFOS extends EmployeeAction<VehicleInfosParam> {
 	
 	@Resource
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<List<VehicleInfo>> execute(Request request, Employee employee) {
-		return Result.result(vehicleService.vehicleInfos(employee.getTenant(), request.getParam(Params.VIN)));
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleInfosParam param) {
+		return Result.result(vehicleService.vehicleInfos(tenant, param.getVin()));
 	}
 }

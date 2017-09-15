@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.identity.App;
-import org.btkj.pojo.model.identity.Employee;
-import org.btkj.pojo.model.identity.User;
 import org.rapid.util.common.message.Result;
 
 public interface AppService {
@@ -39,7 +39,7 @@ public interface AppService {
 	 * @param em
 	 * @return
 	 */
-	Result<MainPageInfo> mainPage(User user, Employee employee);
+	Result<MainPageInfo> mainPage(UserPO user, EmployeeTip tip);
 
 	/**
 	 * 获取该 app 的代理公司数

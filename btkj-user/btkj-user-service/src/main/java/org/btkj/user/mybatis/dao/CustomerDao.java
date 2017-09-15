@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.pojo.entity.user.Customer;
+import org.btkj.pojo.param.user.CustomerListParam;
 import org.btkj.user.mybatis.provider.CustomerSQLProvider;
-import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.data.storage.mapper.DBMapper;
 
 public interface CustomerDao extends DBMapper<Long, Customer> {
@@ -24,10 +24,10 @@ public interface CustomerDao extends DBMapper<Long, Customer> {
 	void insert(Customer model);
 	
 	@SelectProvider(type = CustomerSQLProvider.class, method = "total")
-	int total(CustomerSearcher searcher);
+	int total(CustomerListParam param);
 	
 	@SelectProvider(type = CustomerSQLProvider.class, method = "paging")
-	List<Customer> paging(CustomerSearcher searcher);
+	List<Customer> paging(CustomerListParam param);
 	
 	@Override
 	@UpdateProvider(type = CustomerSQLProvider.class, method = "update")

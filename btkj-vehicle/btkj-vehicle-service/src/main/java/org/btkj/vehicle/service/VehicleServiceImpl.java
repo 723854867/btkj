@@ -33,7 +33,6 @@ import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.model.VehicleAuditModel;
 import org.btkj.pojo.model.VehicleOrderListInfo;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.btkj.vehicle.LeBaoBaOrderTask;
@@ -82,8 +81,8 @@ public class VehicleServiceImpl implements VehicleService {
 	private TenantInsurerMapper tenantInsurerMapper;
 	
 	@Override
-	public Result<Renewal> renewal(Employee employee, String license, String name) {
-		Result<Renewal> result = _renewalByLicense(employee, license);
+	public Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String license, String name) {
+		Result<Renewal> result = _renewalByLicense(user, tenant, employee, license);
 		if (!result.isSuccess())
 			return result;
 		Renewal renewal = result.attach();
@@ -93,8 +92,8 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public Result<Renewal> renewal(Employee employee, String vin, String engine, String name) {
-		Result<Renewal> result = _renewalByVinAndEngine(employee, vin, engine);
+	public Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String vin, String engine, String name) {
+		Result<Renewal> result = _renewalByVinAndEngine(user, tenant, employee, vin, engine);
 		if (!result.isSuccess())
 			return result;
 		Renewal renewal = result.attach();
@@ -103,14 +102,14 @@ public class VehicleServiceImpl implements VehicleService {
 		return Result.result(renewal);
 	}
 	
-	private Result<Renewal> _renewalByLicense(Employee employee, String license) {
+	private Result<Renewal> _renewalByLicense(UserPO user, TenantPO tenant, EmployeePO employee, String license) {
 		Renewal renewal = renewalMapper.getByLicense(license);
-		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), license) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(tenant, user.getUid(), license) : Result.result(renewal);
 	}
 	
-	private Result<Renewal> _renewalByVinAndEngine(Employee employee, String vin, String engine) {
+	private Result<Renewal> _renewalByVinAndEngine(UserPO user, TenantPO tenant, EmployeePO employee, String vin, String engine) {
 		Renewal renewal = renewalMapper.getByKey(vin);
-		return null == renewal ? _flushRenewal(employee.getTenant(), employee.getUid(), vin, engine) : Result.result(renewal);
+		return null == renewal ? _flushRenewal(tenant, user.getUid(), vin, engine) : Result.result(renewal);
 	}
 	
 	private Result<Renewal> _flushRenewal(TenantPO tenant, int uid, String license) {

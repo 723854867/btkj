@@ -8,15 +8,15 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.AppPO.Mod;
 import org.btkj.pojo.entity.user.Banner;
 import org.btkj.pojo.entity.user.EmployeePO;
 import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.AppPO.Mod;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.pojo.model.identity.App;
-import org.btkj.pojo.model.identity.Employee;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;
@@ -64,8 +64,8 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public Result<MainPageInfo> mainPage(User user, Employee em) {
-		return _mainPageInfo(user, em);
+	public Result<MainPageInfo> mainPage(UserPO user, EmployeeTip employee) {
+		return _mainPageInfo(user, employee);
 	}
 	
 	/**
@@ -75,10 +75,10 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<MainPageInfo> _mainPageInfo(User user, Employee employee) {
-		TenantPO tenant = null == employee ? null : employee.getTenant();
+	private Result<MainPageInfo> _mainPageInfo(UserPO user, EmployeeTip employee) {
 		int appId = user.getAppId();
-		if (null == tenant) {
+		TenantPO tenant = null;
+		if (null == employee) {
 			int mainTid = userMapper.mainTenant(user.getUid());
 			if (0 == mainTid) {
 				Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());

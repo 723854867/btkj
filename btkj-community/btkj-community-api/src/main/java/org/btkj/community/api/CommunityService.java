@@ -4,8 +4,8 @@ import org.btkj.pojo.entity.community.Article;
 import org.btkj.pojo.entity.community.Comment;
 import org.btkj.pojo.entity.community.Quiz;
 import org.btkj.pojo.entity.community.Reply;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.pojo.param.community.ArticleListParam;
 import org.btkj.pojo.param.community.QuizListParam;
 import org.rapid.util.common.message.Result;
@@ -38,7 +38,7 @@ public interface CommunityService {
 	 * @param content
 	 * @return
 	 */
-	Result<Void> comment(User user, int articleId, String content); 
+	Result<Void> comment(UserPO user, int articleId, String content); 
 	
 	/**
 	 * 提问

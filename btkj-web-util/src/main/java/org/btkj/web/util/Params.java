@@ -9,7 +9,6 @@ import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.enums.DeliveryType;
 import org.btkj.pojo.info.VehiclePolicyTips;
 import org.btkj.pojo.model.Version;
-import org.btkj.user.pojo.submit.CustomerSearcher;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.conveter.str.Str2IntConstConverter;
 import org.rapid.util.common.consts.conveter.str.Str2ObjConstConverter;
@@ -180,13 +179,6 @@ public interface Params {
 		@Override
 		public VehiclePolicyTips convert(String k) throws ConstConvertFailureException {
 			return SerializeUtil.JsonUtil.GSON.fromJson(k, VehiclePolicyTips.class);
-		}
-	};
-	
-	final Str2ObjConstConverter<CustomerSearcher> CUSTOMER_SEARCHER	= new Str2ObjConstConverter<CustomerSearcher>(1110, "customerSearcher") {
-		@Override
-		public CustomerSearcher convert(String k) throws ConstConvertFailureException {
-			return SerializeUtil.JsonUtil.GSON.fromJson(k, CustomerSearcher.class);
 		}
 	};
 	

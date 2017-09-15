@@ -2,12 +2,15 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
+import org.btkj.common.pojo.param.RenewalParam;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.entity.vehicle.Renewal;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.vehicle.api.VehicleService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.Request;
-import org.btkj.web.util.action.TenantAction;
+import org.btkj.web.util.action.EmployeeAction;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -15,25 +18,24 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class RENEWAL extends TenantAction {
+public class RENEWAL extends EmployeeAction<RenewalParam> {
 	
 	@Resource
 	private VehicleService vehicleService;
 	
 	@Override
-	protected Result<Renewal> execute(Request request, Employee employee) {
-		String name = request.getParam(Params.NAME);
-		int type = request.getOptionalParam(Params.TYPE);
+	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, RenewalParam param) {
 		Result<Renewal> result = null;
-		switch (type) {
+		switch (param.getType()) {
 		case 1:									// 根据车架号和发动机号获取
-			String vin = request.getParam(Params.VIN);
-			String engine = request.getParam(Params.ENGINE);
-			result = vehicleService.renewal(employee, vin, engine, name);
+			if (null == param.getVin() || null == param.getEngine())
+				return Consts.RESULT.FORBID;
+			result = vehicleService.renewal(user, tenant, employee, param.getVin(), param.getEngine(), param.getName());
 			break;
 		default:								// 默认根据车牌获取
-			String license = request.getParam(Params.LICENSE);
-			result = vehicleService.renewal(employee, license, name);
+			if (null == param.getLicense())
+				return Consts.RESULT.FORBID;
+			result = vehicleService.renewal(user, tenant, employee, param.getLicense(), param.getName());
 		}
 		return result;
 	}

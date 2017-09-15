@@ -4,14 +4,13 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.model.identity.Employee;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.info.EmployeeTip;
+import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.api.TenantService;
-import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
 
@@ -21,10 +20,8 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class APPLY extends OldUserAction {
+public class APPLY extends UserAction<IdParam> {
 	
-	@Resource
-	private UserService userService;
 	@Resource
 	private TenantService tenantService;
 	@Resource
@@ -33,9 +30,8 @@ public class APPLY extends OldUserAction {
 	private EmployeeService employeeService;
 	
 	@Override
-	protected Result<?> execute(Request request, User user) {
-		int employeeId = request.getParam(Params.EMPLOYEE_ID);
-		Employee chief = employeeService.employee(employeeId);
+	protected Result<?> execute(AppPO app, UserPO user, IdParam param) {
+		EmployeeTip chief = employeeService.employeeTip(param.getId());
 		if (null == chief)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (chief.getAppId() != user.getAppId())

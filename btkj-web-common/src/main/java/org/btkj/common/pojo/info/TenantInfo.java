@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.model.identity.Employee;
 
 public class TenantInfo implements Serializable {
 
@@ -24,19 +23,17 @@ public class TenantInfo implements Serializable {
 	
 	public TenantInfo() {}
 	
-	public TenantInfo(Employee employee, Region region) {
-		TenantPO po = employee.getTenant();
-		AppPO app = employee.getApp();
-		this.tid = po.getTid();
-		this.name = po.getName();
+	public TenantInfo(AppPO app, TenantPO tenant, Region region) {
+		this.tid = tenant.getTid();
+		this.name = tenant.getName();
 		this.appId = app.getId();
 		this.appName = app.getName();
 		this.region = region.getId();
 		this.regionName = region.getName();
-		this.license = po.getLicense();
-		this.licenseImage = po.getLicenseImage();
-		this.nonAutoBind = po.getNonAutoBind();
-		this.servicePhone = po.getServicePhone();
+		this.license = tenant.getLicense();
+		this.licenseImage = tenant.getLicenseImage();
+		this.nonAutoBind = tenant.getNonAutoBind();
+		this.servicePhone = tenant.getServicePhone();
 	}
 
 	public int getTid() {

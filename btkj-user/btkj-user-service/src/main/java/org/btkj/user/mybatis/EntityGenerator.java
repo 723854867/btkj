@@ -8,13 +8,12 @@ import org.btkj.pojo.entity.user.AppPO;
 import org.btkj.pojo.entity.user.Banner;
 import org.btkj.pojo.entity.user.Customer;
 import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.EmployeePO.Mod;
 import org.btkj.pojo.entity.user.TenantPO;
 import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.identity.Employee;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.pojo.param.user.BannerEditParam;
 import org.btkj.pojo.param.user.TenantAddParam;
 import org.rapid.util.common.Consts;
@@ -98,12 +97,12 @@ public class EntityGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(TenantPO tenant, User user, Employee chief) { 
+	public static final ApplyInfo newApply(UserPO user, EmployeeTip chief) { 
 		ApplyInfo ai = new ApplyInfo();
-		ai.setTid(tenant.getTid());
+		ai.setTid(chief.getTid());
 		ai.setUid(user.getUid());
 		ai.setChief(chief.getId());
-		ai.setChiefUid(chief.getUser().getUid());
+		ai.setChiefUid(chief.getUid());
 		ai.setTime(DateUtil.currentTime());
 		return ai;
 	}

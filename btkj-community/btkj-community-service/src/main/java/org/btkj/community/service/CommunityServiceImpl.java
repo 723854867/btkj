@@ -14,9 +14,9 @@ import org.btkj.pojo.entity.community.Article;
 import org.btkj.pojo.entity.community.Comment;
 import org.btkj.pojo.entity.community.Quiz;
 import org.btkj.pojo.entity.community.Reply;
+import org.btkj.pojo.entity.user.UserPO;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.pojo.param.community.ArticleListParam;
 import org.btkj.pojo.param.community.QuizListParam;
 import org.rapid.util.common.Consts;
@@ -51,7 +51,7 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
-	public Result<Void> comment(User user, int articleId, String content) {
+	public Result<Void> comment(UserPO user, int articleId, String content) {
 		try {
 			tx.comment(user, articleId, content).finish();;
 		} catch (BusinessException e) {
