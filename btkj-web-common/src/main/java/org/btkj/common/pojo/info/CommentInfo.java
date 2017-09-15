@@ -3,8 +3,8 @@ package org.btkj.common.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.community.Comment;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.UserTips;
 
 public class CommentInfo implements Serializable {
@@ -16,7 +16,7 @@ public class CommentInfo implements Serializable {
 	private UserTips user;
 	private String content;
 	
-	public CommentInfo(AppPO app, UserPO user, Comment comment) {
+	public CommentInfo(App app, User user, Comment comment) {
 		this.id = comment.getId();
 		this.time = comment.getCreated();
 		this.content = comment.getContent();

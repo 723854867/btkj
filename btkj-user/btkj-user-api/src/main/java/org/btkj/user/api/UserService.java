@@ -1,16 +1,14 @@
 package org.btkj.user.api;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Map;
 
-import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.Customer;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserHolder;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.user.CustomerEditParam;
 import org.btkj.pojo.param.user.CustomerListParam;
 import org.rapid.util.common.message.Result;
 
@@ -27,7 +25,7 @@ public interface UserService {
 	 * @param uid
 	 * @return
 	 */
-	UserPO user(int uid);
+	User user(int uid);
 	
 	/**
 	 * 一次获取多个用户
@@ -35,16 +33,7 @@ public interface UserService {
 	 * @param uids
 	 * @return
 	 */
-	Map<Integer, UserPO> users(Collection<Integer> uids);
-	
-	/**
-	 * 通过账号和 appId 获取用户
-	 * 
-	 * @param mobile
-	 * @param appId
-	 * @return
-	 */
-	User user(String mobile, int appId);
+	Map<Integer, User> users(Collection<Integer> uids);
 	
 	UserHolder userByToken(Client client, String token);
 	
@@ -64,32 +53,14 @@ public interface UserService {
 	 * @param mobile
 	 * @return
 	 */
-	Result<UserPO> userLockByMobile(int appId, String mobile);
+	Result<User> userLockByMobile(int appId, String mobile);
 	
-	/**
-	 * 通过 token 获取用户
-	 * 
-	 * @param client
-	 * @param toke
-	 * @return
-	 */
-	User getUserByToken(Client client, String token);
-	
-	/**
-	 * 获取用户的同时获取用户锁
-	 * 
-	 * @param client
-	 * @param token
-	 * @return
-	 */
-	Result<User> lockUserByToken(Client client, String token);
-
 	/**
 	 * 通过雇员 ID 获取用户
 	 * 
 	 * @return
 	 */
-	UserPO getUserByEmployeeId(int employeeId);
+	User getUserByEmployeeId(int employeeId);
 	
 	/**
 	 * 释放用户锁
@@ -105,7 +76,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	Result<Void> update(UserPO user);
+	Result<Void> update(User user);
 	
 	/**
 	 * 密码重置
@@ -133,45 +104,7 @@ public interface UserService {
 	 */
 	Result<Pager<Customer>> customers(CustomerListParam param);
 	
-	/**
-	 * 新增客户
-	 * 
-	 * @param uid
-	 * @param name
-	 * @param identity
-	 * @param mobile
-	 * @param license
-	 * @param regions
-	 * @param address
-	 * @param memo
-	 * @return
-	 */
-	Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo);
-
-	/**
-	 * 修改客户
-	 * 
-	 * @param id
-	 * @param uid
-	 * @param name
-	 * @param identity
-	 * @param mobile
-	 * @param license
-	 * @param regions
-	 * @param address
-	 * @param memo
-	 * @return
-	 */
-	Result<Void> customerUpdate(long id, int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo);
-	
-	/**
-	 * 删除客户
-	 * 
-	 * @param id
-	 * @param uid
-	 * @return
-	 */
-	Result<Void> customerDelete(long id, int uid);
+	Result<Void> customerEdit(CustomerEditParam param);
 	
 	/**
 	 * 用户禁用

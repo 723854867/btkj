@@ -7,10 +7,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
@@ -30,7 +30,7 @@ public class POLICY_STATISTIC_TENANT extends EmployeeAction<StatisticPoliciesPar
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<Pager<PolicyStatisticInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, StatisticPoliciesParam param) {
+	protected Result<Pager<PolicyStatisticInfo>> execute(App app, User user, Tenant tenant, Employee employee, StatisticPoliciesParam param) {
 		param.tenantFilter(tenant);
 		Pager<PolicyStatisticInfo> pager = statisticsService.statsiticPolicies(param);
 		if (!CollectionUtil.isEmpty(pager.getList())) {
@@ -46,25 +46,25 @@ public class POLICY_STATISTIC_TENANT extends EmployeeAction<StatisticPoliciesPar
 					tenants.add(info.getTid());
 			}
 			if (!CollectionUtil.isEmpty(apps)) {
-				Map<Integer, AppPO> map = appService.apps(apps);
+				Map<Integer, App> map = appService.apps(apps);
 				for (PolicyStatisticInfo info : pager.getList()) {
-					AppPO temp = null == map ? null : map.get(info.getAppId());
+					App temp = null == map ? null : map.get(info.getAppId());
 					if (null != temp)
 						info.setAname(temp.getName());
 				}
 			}
 			if (!CollectionUtil.isEmpty(users)) {
-				Map<Integer, UserPO> map = userService.users(users);
+				Map<Integer, User> map = userService.users(users);
 				for (PolicyStatisticInfo info : pager.getList()) {
-					UserPO temp = null == map ? null : map.get(info.getUid());
+					User temp = null == map ? null : map.get(info.getUid());
 					if (null != temp)
 						info.setUname(temp.getName());
 				}
 			}
 			if (!CollectionUtil.isEmpty(tenants)) {
-				Map<Integer, TenantPO> map = tenantService.tenants(tenants);
+				Map<Integer, Tenant> map = tenantService.tenants(tenants);
 				for (PolicyStatisticInfo info : pager.getList()) {
-					TenantPO temp = null == map ? null : map.get(info.getTid());
+					Tenant temp = null == map ? null : map.get(info.getTid());
 					if (null != temp)
 						info.setTname(temp.getName());
 				}

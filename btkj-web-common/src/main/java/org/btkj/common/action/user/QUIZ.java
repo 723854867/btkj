@@ -2,21 +2,21 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
+import org.btkj.common.pojo.param.QuizParam;
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.model.identity.User;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.consts.code.Code;
 import org.rapid.util.common.message.Result;
 
-public class QUIZ extends OldUserAction {
+public class QUIZ extends UserAction<QuizParam> {
 	
 	@Resource
 	private CommunityService communityService;
 
 	@Override
-	protected Result<Integer> execute(Request request, User user) {
-		return Result.result(Code.OK, communityService.quiz(user.getAppId(), user.getUid(), request.getParam(Params.CONTENT)));
+	protected Result<Integer> execute(App app, User user, QuizParam param) {
+		return Result.result(Code.OK, communityService.quiz(user.getAppId(), user.getUid(), param.getContent()));
 	}
 }

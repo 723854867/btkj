@@ -5,8 +5,8 @@ import java.io.InputStream;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.AliyunResourceUtil;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.FileType;
 import org.btkj.resources.AliyunUploader;
 import org.btkj.resources.pojo.info.UploadUserInfo;
@@ -27,7 +27,7 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 	private AliyunUploader aliyunUploader;
 
 	@Override
-	protected Result<UploadUserInfo> execute(AppPO app, UserPO user, UploadUserInfoParam param) {
+	protected Result<UploadUserInfo> execute(App app, User user, UploadUserInfoParam param) {
 		UploadUserInfo info = new UploadUserInfo();
 		if (null != param.getAvatar())
 			info.setAvatar(_uploadAvatar(app, user, param.getAvatar()));
@@ -38,7 +38,7 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 		return Result.result(info);
 	}
 	
-	private String _uploadAvatar(AppPO app, UserPO user, InputStream avatar) { 
+	private String _uploadAvatar(App app, User user, InputStream avatar) { 
 		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
 		if (!aliyunUploader.upload(resource, avatar))
 			return null;
@@ -50,7 +50,7 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 		return AliyunResourceUtil.userResource(app, user, resource);
 	}
 	
-	private String _uploadIdentityFace(AppPO app, UserPO user, InputStream identityFace) {
+	private String _uploadIdentityFace(App app, User user, InputStream identityFace) {
 		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
 		if (!aliyunUploader.upload(resource, identityFace))
 			return null;
@@ -62,7 +62,7 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 		return AliyunResourceUtil.userResource(app, user, resource);
 	}
 	
-	private String _uploadIdentityBack(AppPO app, UserPO user, InputStream identityBack) {
+	private String _uploadIdentityBack(App app, User user, InputStream identityBack) {
 		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
 		if (!aliyunUploader.upload(resource, identityBack))
 			return null;

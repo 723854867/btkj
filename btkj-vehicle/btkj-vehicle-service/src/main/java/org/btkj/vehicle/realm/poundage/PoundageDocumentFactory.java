@@ -11,8 +11,8 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Employee.Mod;
 import org.btkj.pojo.entity.vehicle.CoefficientRange;
 import org.btkj.pojo.entity.vehicle.PoundageConfig;
 import org.btkj.pojo.entity.vehicle.PoundageConfig.NodeConfig;
@@ -51,7 +51,7 @@ public class PoundageDocumentFactory extends PBTreeFactory<Integer, PoundageNode
 		return new PoundageDocument(node);
 	}
 	
-	public void caculatePoundage(Map<Integer, PoundageDocument> documents, VehicleOrder order, EmployeePO employee) {
+	public void caculatePoundage(Map<Integer, PoundageDocument> documents, VehicleOrder order, Employee employee) {
 		PoundageConfig poundageConfig = poundageConfigMapper.getByKey(String.valueOf(order.getTid()));
 		Map<Integer, Map<Integer, NodeConfig>> insurersConfig = null == poundageConfig ? null : poundageConfig.getConfigs();
 		Map<Integer, NodeConfig> configs = null == insurersConfig ? null : insurersConfig.get(order.getInsurerId());

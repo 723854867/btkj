@@ -3,7 +3,7 @@ package org.btkj.user.redis;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.TenantPagingInfo;
 import org.btkj.pojo.info.user.TenantPagingMasterInfo;
@@ -13,10 +13,10 @@ import org.btkj.user.mybatis.dao.TenantDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 
-public class TenantMapper extends RedisDBAdapter<Integer, TenantPO, TenantDao> {
+public class TenantMapper extends RedisDBAdapter<Integer, Tenant, TenantDao> {
 	
 	public TenantMapper() {
-		super(new ByteProtostuffSerializer<TenantPO>(), "hash:db:tenant");
+		super(new ByteProtostuffSerializer<Tenant>(), "hash:db:tenant");
 	}
 	
 	public int countByAppId(int appId) {
@@ -28,9 +28,9 @@ public class TenantMapper extends RedisDBAdapter<Integer, TenantPO, TenantDao> {
 		if (0 == total)
 			return Pager.EMPLTY;
 		param.calculate(total);
-		List<TenantPO> tenants = dao.tenants(param);
+		List<Tenant> tenants = dao.tenants(param);
 		List<TenantPagingInfo> list = new ArrayList<TenantPagingInfo>(); 
-		for (TenantPO tenant : tenants) 
+		for (Tenant tenant : tenants) 
 			list.add(param.getClient() == Client.TENANT_MANAGER ? new TenantPagingInfo(tenant) : new TenantPagingMasterInfo(tenant));
 		return new Pager<TenantPagingInfo>(total, list);
 	}

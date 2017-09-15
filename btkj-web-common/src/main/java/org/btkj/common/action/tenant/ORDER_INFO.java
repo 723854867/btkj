@@ -2,10 +2,10 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.EmployeeSidParam;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.action.EmployeeAction;
@@ -22,7 +22,7 @@ public class ORDER_INFO extends EmployeeAction<EmployeeSidParam> {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeSidParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, EmployeeSidParam param) {
 		return vehicleService.orderInfo(tenant, employee, param.getId());
 	}
 	

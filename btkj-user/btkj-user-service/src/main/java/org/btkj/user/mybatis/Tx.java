@@ -11,11 +11,11 @@ import javax.annotation.Resource;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.TxCallback;
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.TenantPO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.Tenant.Mod;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
@@ -62,16 +62,16 @@ public class Tx {
 	private EmployeeMapper employeeMapper;
 	
 	@Transactional
-	public TxCallback tenantAdd(UserPO user, TenantAddParam param) {
-		AppPO apo = appDao.getByKeyForUpdate(user.getAppId());
+	public TxCallback tenantAdd(User user, TenantAddParam param) {
+		App apo = appDao.getByKeyForUpdate(user.getAppId());
 		if (0 < apo.getMaxTenantsCount()) {			// 如果有代理商个数限制，则需要检查是否已经超出代理商的个数限制了
 			int tenantNum = tenantDao.countByAppIdForUpdate(user.getAppId());
 			if (tenantNum >= apo.getMaxTenantsCount())
 				throw new BusinessException(BtkjCode.APP_TENANT_NUM_MAXIMUM);
 		}
-		TenantPO tenant = EntityGenerator.newTenant(user.getAppId(), param);
+		Tenant tenant = EntityGenerator.newTenant(user.getAppId(), param);
 		tenantDao.insert(tenant);
-		EmployeePO ep = EntityGenerator.newEmployee(user.getUid(), tenant, null);
+		Employee ep = EntityGenerator.newEmployee(user.getUid(), tenant, null);
 		employeeDao.insert(ep);
 		EntityGenerator.EMPLOYEETIP_HOLDER.set(new EmployeeTip(ep, apo, user, tenant));
 		return new TxCallback() {
@@ -84,20 +84,20 @@ public class Tx {
 	}
 	
 	@Transactional
-	public EmployeePO employeeAdd(int tid, int uid, int chiefId) {
-		TenantPO tenant = tenantMapper.getByKey(tid);
-		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid); 
-		EmployeePO chief = employees.get(chiefId);
-		EmployeePO employee = EntityGenerator.newEmployee(uid, tenant, chief);
+	public Employee employeeAdd(int tid, int uid, int chiefId) {
+		Tenant tenant = tenantMapper.getByKey(tid);
+		Map<Integer, Employee> employees = employeeDao.getByTidForUpdate(tid); 
+		Employee chief = employees.get(chiefId);
+		Employee employee = EntityGenerator.newEmployee(uid, tenant, chief);
 		employeeDao.updateForJoin(employee.getTid(), employee.getLeft());
 		employeeDao.insert(employee);
 		return employee;
 	}
 	
 	@Transactional
-	public List<EmployeePO> team(int tid, int employeeId, int teamDepth) {
-		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid); 
-		EmployeePO employee = employees.get(employeeId);
+	public List<Employee> team(int tid, int employeeId, int teamDepth) {
+		Map<Integer, Employee> employees = employeeDao.getByTidForUpdate(tid); 
+		Employee employee = employees.get(employeeId);
 		if (null == employee)
 			throw new BusinessException(BtkjCode.EMPLOYEE_NOT_EXIST);
 		return employeeDao.team(employee.getId(), employee.getLeft(), employee.getRight(), employee.getLayer() + teamDepth - 1);
@@ -110,18 +110,18 @@ public class Tx {
 	 * @param personalExploits
 	 */
 	@Transactional
-	public Map<String, BonusScale> calculateTeamExploits(int time, TenantPO tenant, Map<Integer, BonusScale> personalExploits) {
+	public Map<String, BonusScale> calculateTeamExploits(int time, Tenant tenant, Map<Integer, BonusScale> personalExploits) {
 		int tid = tenant.getTid();
 		int teamDepth = tenant.getTeamDepth();
-		Map<Integer, EmployeePO> employees = employeeDao.getByTidForUpdate(tid);
+		Map<Integer, Employee> employees = employeeDao.getByTidForUpdate(tid);
 		Map<String, BonusScale> teamExploits = new HashMap<String, BonusScale>();
 		for (Entry<Integer, BonusScale> entry : personalExploits.entrySet()) {
-			EmployeePO employee = employees.get(entry.getKey());
+			Employee employee = employees.get(entry.getKey());
 			if (null == employee) {
 				logger.error("规模佣金计算：商户 - {} 业务员 - {} 不存在，本人业务被忽略", tid, entry.getKey());
 				continue;
 			}
-			if ((employee.getMod() & EmployeePO.Mod.BONUS_SCALE.mark()) != EmployeePO.Mod.BONUS_SCALE.mark()) {
+			if ((employee.getMod() & Employee.Mod.BONUS_SCALE.mark()) != Employee.Mod.BONUS_SCALE.mark()) {
 				logger.info("规模佣金计算：商户  - {} 业务员 - {} 没有设置规模奖励！", tid, entry.getKey());
 				continue;
 			}
@@ -129,12 +129,12 @@ public class Tx {
 			if (CollectionUtil.isEmpty(list))
 				continue;
 			for (int employeeId : list) {
-				EmployeePO temp = employees.get(employeeId);
+				Employee temp = employees.get(employeeId);
 				if (null == employee) {
 					logger.error("规模佣金计算：商户 - {} 业务员 - {} 不存在，下级业务被忽略", tid, entry.getKey());
 					continue;
 				}
-				if ((temp.getMod() & EmployeePO.Mod.BONUS_SCALE.mark()) != EmployeePO.Mod.BONUS_SCALE.mark()) {
+				if ((temp.getMod() & Employee.Mod.BONUS_SCALE.mark()) != Employee.Mod.BONUS_SCALE.mark()) {
 					logger.info("规模佣金计算：商户  - {} 业务员 - {} 没有设置规模奖励！", tid, entry.getKey());
 					continue;
 				}

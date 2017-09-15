@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.btkj.pojo.entity.nonauto.NonAutoCategory;
 import org.btkj.pojo.entity.user.Banner;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 
 /**
  * app 首页信息
@@ -24,7 +24,7 @@ public class MainPageInfo implements Serializable {
 	
 	public MainPageInfo() {}
 	
-	public MainPageInfo(UserPO user, TenantPO tenant, List<Banner> banners) {
+	public MainPageInfo(User user, Tenant tenant, List<Banner> banners) {
 		this.uid = user.getUid();
 		mainTenant = new MainTenantInfo(tenant, banners);
 	}
@@ -77,7 +77,7 @@ public class MainPageInfo implements Serializable {
 		private List<BannerInfo> banners;											// banner 列表
 		private List<NonAutoBindInfo> nonAutoBindList;								// 非车险信息
 		public MainTenantInfo() {}
-		public MainTenantInfo(TenantPO tenant, List<Banner> banners) {
+		public MainTenantInfo(Tenant tenant, List<Banner> banners) {
 			if (null != tenant) {
 				this.tid = tenant.getTid();
 				this.tname = tenant.getName();

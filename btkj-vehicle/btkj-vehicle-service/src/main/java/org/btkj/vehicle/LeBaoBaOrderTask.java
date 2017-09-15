@@ -2,8 +2,8 @@ package org.btkj.vehicle;
 
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.PolicySchema;
@@ -20,8 +20,8 @@ public class LeBaoBaOrderTask implements Runnable {
 	
 	private String insurer;
 	private boolean insure;
-	private TenantPO tenant;
-	private EmployeePO employee;
+	private Tenant tenant;
+	private Employee employee;
 	private VehicleOrder order;
 	private VehicleOrderParam param;
 	
@@ -29,7 +29,7 @@ public class LeBaoBaOrderTask implements Runnable {
 	private LeBaoBaVehicle leBaoBaVehicle;
 	private VehicleOrderMapper vehicleOrderMapper;
 	
-	public LeBaoBaOrderTask(TenantPO tenant, EmployeePO employee, Poundage poundage, String insurer, boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, VehicleOrderMapper vehicleOrderMapper) {
+	public LeBaoBaOrderTask(Tenant tenant, Employee employee, Poundage poundage, String insurer, boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, VehicleOrderMapper vehicleOrderMapper) {
 		this.order = order;
 		this.param = param;
 		this.tenant = tenant;

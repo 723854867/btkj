@@ -24,7 +24,7 @@ import org.btkj.bihu.vehicle.domain.RenewInfo;
 import org.btkj.bihu.vehicle.domain.RequestType;
 import org.btkj.bihu.vehicle.exception.RequestFrequently;
 import org.btkj.pojo.BtkjCode;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
@@ -91,21 +91,21 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	private int insureResultTimeout;
 
 	@Override
-	public Result<Renewal> renewal(TenantPO tenant, int uid, String license, int cityCode) {
+	public Result<Renewal> renewal(Tenant tenant, int uid, String license, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setLicenseNo(license);
 		return _doRenewal(tenant, uid, params, cityCode, LicenseType.RENEWAL_CAR);
 	}
 	
 	@Override
-	public Result<Renewal> renewal(TenantPO tenant, int uid, String vin, String engine, int cityCode) {
+	public Result<Renewal> renewal(Tenant tenant, int uid, String vin, String engine, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.RENEWL);
 		params.setCarVin(vin);
 		params.setEngineNo(engine);
 		return _doRenewal(tenant, uid, params, cityCode, LicenseType.SECONDARY_CAR);
 	}
 	
-	private Result<Renewal> _doRenewal(TenantPO tenant, int uid, BiHuParams params, int cityCode, LicenseType licenseType) {
+	private Result<Renewal> _doRenewal(Tenant tenant, int uid, BiHuParams params, int cityCode, LicenseType licenseType) {
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))	// 用 uid 作为 custkey
 				.setCityCode(cityCode);
 		if (StringUtil.hasText(tenant.getBiHuAgent(), tenant.getBiHuKey()))
@@ -159,7 +159,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<List<VehicleInfo>> vehicleInfos(int uid, TenantPO tenant, String license, String moldName, int cityCode) {
+	public Result<List<VehicleInfo>> vehicleInfos(int uid, Tenant tenant, String license, String moldName, int cityCode) {
 		BiHuParams params = new BiHuParams(RequestType.VEHICLE_INFO);
 		params.setCustKey(DigestUtils.md5Hex(String.valueOf(uid))).setCityCode(cityCode).setLicenseNo(license).setMoldName(moldName);
 		if (StringUtil.hasText(tenant.getBiHuAgent(), tenant.getBiHuKey()))
@@ -345,7 +345,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<PolicySchema> quoteResult(TenantPO tenant, int uid, String license, int insurer) {
+	public Result<PolicySchema> quoteResult(Tenant tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.QUOTE_RESULT);
 		params.setLicenseNo(license).setCustKey(DigestUtils.md5Hex(String.valueOf(uid))).setAgent(tenant.getBiHuAgent())
 				.setKey(tenant.getBiHuKey()).setQuoteGroup(insurer);
@@ -366,7 +366,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 	}
 	
 	@Override
-	public Result<VehicleAuditModel> insureResult(TenantPO tenant, int uid, String license, int insurer) {
+	public Result<VehicleAuditModel> insureResult(Tenant tenant, int uid, String license, int insurer) {
 		BiHuParams params = new BiHuParams(RequestType.INSURE_RESULT);
 		params.setLicenseNo(license).setCustKey(DigestUtils.md5Hex(String.valueOf(uid)))
 			.setAgent(tenant.getBiHuAgent()).setKey(tenant.getBiHuKey()).setSubmitGroup(insurer);

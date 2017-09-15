@@ -2,11 +2,11 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
+import org.btkj.common.pojo.param.ReplyParam;
 import org.btkj.community.api.CommunityService;
-import org.btkj.pojo.model.identity.User;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,15 +14,13 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class REPLY extends OldUserAction {
+public class REPLY extends UserAction<ReplyParam> {
 	
 	@Resource
 	private CommunityService communityService;
 
 	@Override
-	protected Result<Void> execute(Request request, User user) {
-		int quizId = request.getParam(Params.ID);
-		String content = request.getParam(Params.CONTENT);
-		return communityService.reply(user.getAppId(), user.getUid(), quizId, content);
+	protected Result<Void> execute(App app, User user, ReplyParam param) {
+		return communityService.reply(user.getAppId(), user.getUid(), param.getId(), param.getContent());
 	}
 }

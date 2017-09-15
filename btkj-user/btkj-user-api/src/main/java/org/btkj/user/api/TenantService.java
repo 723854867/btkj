@@ -3,8 +3,8 @@ package org.btkj.user.api;
 import java.util.Collection;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.TenantListInfo;
 import org.btkj.pojo.param.user.TenantAddParam;
@@ -18,11 +18,11 @@ public interface TenantService {
 	 * @param tid
 	 * @return
 	 */
-	TenantPO tenant(int tid);
+	Tenant tenant(int tid);
 	
-	Map<Integer, TenantPO> tenants(Collection<Integer> tenants);
+	Map<Integer, Tenant> tenants(Collection<Integer> tenants);
 	
-	void update(TenantPO tenant);
+	void update(Tenant tenant);
 	
 	/**
 	 * 申请加入代理公司
@@ -31,7 +31,7 @@ public interface TenantService {
 	 * @param chief
 	 * @return
 	 */
-	Result<?> apply(UserPO user, EmployeeTip chief);
+	Result<?> apply(User user, EmployeeTip chief);
 	
 	/**
 	 * 添加代理公司
@@ -45,7 +45,7 @@ public interface TenantService {
 	 * 
 	 * @return
 	 */
-	TenantListInfo tenantListInfo(UserPO user);
+	TenantListInfo tenantListInfo(User user);
 	
 	/**
 	 * 禁用

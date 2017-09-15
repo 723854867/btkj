@@ -2,7 +2,7 @@ package org.btkj.bihu.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.PolicySchema;
@@ -25,7 +25,7 @@ public interface BiHuVehicle {
 	 * @param name 车主姓名
 	 * @return
 	 */
-	Result<Renewal> renewal(TenantPO tenant, int uid, String license, int cityCode);
+	Result<Renewal> renewal(Tenant tenant, int uid, String license, int cityCode);
 	
 	/**
 	 * 获取续保信息：通过车架号和发动机号
@@ -36,14 +36,14 @@ public interface BiHuVehicle {
 	 * @param name
 	 * @return
 	 */
-	Result<Renewal> renewal(TenantPO tenant, int uid, String vin, String engine, int cityCode);
+	Result<Renewal> renewal(Tenant tenant, int uid, String vin, String engine, int cityCode);
 	
 	/**
 	 * 获取车辆信息
 	 * 
 	 * @return
 	 */
-	Result<List<VehicleInfo>> vehicleInfos(int uid, TenantPO tenant, String license, String modelName, int cityCode);
+	Result<List<VehicleInfo>> vehicleInfos(int uid, Tenant tenant, String license, String modelName, int cityCode);
 	
 	/**
 	 * 报价/投保接口:理解为下单
@@ -56,7 +56,7 @@ public interface BiHuVehicle {
 	 * @param insurId
 	 * @return
 	 */
-	Result<PolicySchema> quoteResult(TenantPO tenant, int uid, String license, int insurer);
+	Result<PolicySchema> quoteResult(Tenant tenant, int uid, String license, int insurer);
 	
 	/**
 	 * 获取投保结果(核保信息)
@@ -64,5 +64,5 @@ public interface BiHuVehicle {
 	 * @param employeeForm
 	 * @return
 	 */
-	Result<VehicleAuditModel> insureResult(TenantPO tenant, int uid, String license, int insurer);
+	Result<VehicleAuditModel> insureResult(Tenant tenant, int uid, String license, int insurer);
 }

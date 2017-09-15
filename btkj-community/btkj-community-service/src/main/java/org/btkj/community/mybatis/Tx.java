@@ -16,7 +16,7 @@ import org.btkj.pojo.entity.community.Article;
 import org.btkj.pojo.entity.community.Comment;
 import org.btkj.pojo.entity.community.Quiz;
 import org.btkj.pojo.entity.community.Reply;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ public class Tx {
 	private CommentMapper commentMapper;
 
 	@Transactional
-	public TxCallback comment(UserPO user, int articleId, String content) {
+	public TxCallback comment(User user, int articleId, String content) {
 		Article article = articleMapper.getByKey(articleId);
 		if (null == article || article.getAppId() != user.getAppId())
 			throw new BusinessException(BtkjCode.ARTICLE_NOT_EXIST);

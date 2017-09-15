@@ -6,10 +6,10 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.VehicleUnitType;
 import org.btkj.pojo.enums.VehicleUsedType;
@@ -33,7 +33,7 @@ public class ORDER extends EmployeeAction<VehicleOrderParam> {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleOrderParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, VehicleOrderParam param) {
 		if ((param.getQuoteMod() & param.getInsureMod()) != param.getInsureMod())
 			return BtkjConsts.RESULT.INSURER_MOD_NOT_SUBSET_OF_QUOTE;
 		Result<Void> result = _check(param);

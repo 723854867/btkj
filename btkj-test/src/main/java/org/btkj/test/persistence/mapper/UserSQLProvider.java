@@ -3,7 +3,7 @@ package org.btkj.test.persistence.mapper;
 import java.util.Collection;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
 public class UserSQLProvider extends SQLProvider {
@@ -13,11 +13,11 @@ public class UserSQLProvider extends SQLProvider {
 	}
 	
 	public String batchInsert(Map<String, Object> params) {
-		Collection<UserPO> list = (Collection<UserPO>) params.get(COLLECTION);
+		Collection<User> list = (Collection<User>) params.get(COLLECTION);
 		StringBuilder builder = new StringBuilder("INSERT INTO `").append(table).append("`(`app_id`, `mobile`,")
 				.append("`app_login_time`, `pc_login_time`, `created`, `updated`) VALUES");
 		for (Object temp : list) {
-			UserPO user = (UserPO) temp;
+			User user = (User) temp;
 			builder.append("(").append(user.getAppId()).append(",'").append(user.getMobile()).append("',").append(user.getAppLoginTime())
 			.append(",").append(user.getPcLoginTime()).append(",").append(user.getCreated()).append(",").append(user.getUpdated()).append("),");
 		}

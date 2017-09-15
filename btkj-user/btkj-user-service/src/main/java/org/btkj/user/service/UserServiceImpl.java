@@ -1,22 +1,20 @@
 package org.btkj.user.service;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.Customer;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.UserPO.Mod;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.User.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.UserHolder;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.user.CustomerEditParam;
 import org.btkj.pojo.param.user.CustomerListParam;
 import org.btkj.user.api.UserService;
 import org.btkj.user.mybatis.EntityGenerator;
@@ -54,24 +52,18 @@ public class UserServiceImpl implements UserService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public UserPO user(int uid) {
+	public User user(int uid) {
 		return userMapper.getByKey(uid);
 	}
 	
 	@Override
-	public Map<Integer, UserPO> users(Collection<Integer> uids) {
+	public Map<Integer, User> users(Collection<Integer> uids) {
 		return userMapper.getByKeys(uids);
 	}
 	
 	@Override
-	public User user(String mobile, int appId) {
-		UserPO po = userMapper.getUserByMobile(appId, mobile);
-		return null == po ? null : new User(appMapper.getByKey(po.getAppId()), po);
-	}
-	
-	@Override
 	public UserHolder userByToken(Client client, String token) {
-		UserPO user = null;
+		User user = null;
 		switch (client) {
 		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
@@ -89,7 +81,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<UserHolder> userLockByToken(Client client, String token) {
-		UserPO user = null;
+		User user = null;
 		String lockId = null;
 		switch (client) {
 		case RECRUIT:
@@ -101,7 +93,7 @@ public class UserServiceImpl implements UserService {
 				return Consts.RESULT.TOKEN_INVALID;
 			break;
 		default:
-			Result<UserPO> result = userMapper.userLockByToken(client, token);
+			Result<User> result = userMapper.userLockByToken(client, token);
 			if (!result.isSuccess())
 				return Result.result(result.getCode(), result.getDesc(), null);
 			user = result.attach();
@@ -112,46 +104,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<UserPO> userLockByMobile(int appId, String mobile) {
+	public Result<User> userLockByMobile(int appId, String mobile) {
 		return userMapper.lockUserByMobile(appId, mobile);
 	}
 	
 	@Override
-	public User getUserByToken(Client client, String token) {
-		switch (client) {
-		case RECRUIT:
-			DistributeSession session = new DistributeSession(token, redis);
-			String uid = session.get(BtkjConsts.FIELD.UID);
-			if (null == uid)
-				return null;
-			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
-			return new User(client, appMapper.getByKey(user.getAppId()), user);
-		default:
-			return userMapper.getUserByToken(client, token);
-		}
-	}
-	
-	@Override
-	public Result<User> lockUserByToken(Client client, String token) {
-		switch (client) {
-		case RECRUIT:
-			DistributeSession session = new DistributeSession(token, redis);
-			String uid = session.get(BtkjConsts.FIELD.UID);
-			if (null == uid)
-				return null;
-			UserPO user = userMapper.getByKey(Integer.valueOf(uid));
-			String lockId = userMapper.lockUser(user.getUid());
-			if (null == lockId)
-				return Consts.RESULT.LOCK_CONFLICT;
-			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
-		default:
-			return userMapper.lockUserByToken(client, token);
-		}
-	}
-	
-	@Override
-	public UserPO getUserByEmployeeId(int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
+	public User getUserByEmployeeId(int employeeId) {
+		Employee employee = employeeMapper.getByKey(employeeId);
 		return null == employee ? null : userMapper.getByKey(employee.getUid());
 	}
 	
@@ -161,7 +120,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<Void> update(UserPO user) {
+	public Result<Void> update(User user) {
 		user.setUpdated(DateUtil.currentTime());
 		try {
 			userMapper.update(user);
@@ -173,11 +132,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<?> pwdReset(int appId, String mobile, String pwd) {
-		Result<UserPO> result = userMapper.lockUserByMobile(appId, mobile);
+		Result<User> result = userMapper.lockUserByMobile(appId, mobile);
 		if (!result.isSuccess())
 			return result;
 		try {
-			UserPO user = result.attach();
+			User user = result.attach();
 			user.setPwd(pwd);
 			user.setUpdated(DateUtil.currentTime());
 			userMapper.update(user);
@@ -198,42 +157,41 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Result<Void> customerAdd(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
-		Customer customer = EntityGenerator.newCustomer(uid, name, identity, mobile, license, regions, address, memo);
-		try {
-			customerMapper.insert(customer);
-		} catch (DuplicateKeyException e) {
-			return BtkjConsts.RESULT.CUSTOMER_IDENTITY_DUPLICATE;
+	public Result<Void> customerEdit(CustomerEditParam param) {
+		switch (param.getCrudType()) {
+		case CREATE:
+			Customer customer = EntityGenerator.newCustomer(param);
+			try {
+				customerMapper.insert(customer);
+			} catch (DuplicateKeyException e) {
+				return BtkjConsts.RESULT.CUSTOMER_IDENTITY_DUPLICATE;
+			}
+			return Consts.RESULT.OK;
+		case UPDATE:
+			customer = customerMapper.getByKey(param.getId());
+			if (null == customer)
+				return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
+			if (customer.getUid() != param.getUid())
+				return Consts.RESULT.FORBID;
+			EntityGenerator.updateCustomer(customer, param);
+			customerMapper.update(customer);
+			return Consts.RESULT.OK;
+		case DELETE:
+			customer = customerMapper.getByKey(param.getId());
+			if (null == customer)
+				return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
+			if (customer.getUid() != param.getUid())
+				return Consts.RESULT.FORBID;
+			customerMapper.delete(customer);
+			return Consts.RESULT.OK;
+		default:
+			return Consts.RESULT.FORBID;
 		}
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> customerUpdate(long id, int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
-		Customer customer = customerMapper.getByKey(id);
-		if (null == customer)
-			return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
-		if (customer.getUid() != uid)
-			return Consts.RESULT.FORBID;
-		EntityGenerator.updateCustomer(customer, name, identity, mobile, license, regions, address, memo);
-		customerMapper.update(customer);
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public Result<Void> customerDelete(long id, int uid) {
-		Customer customer = customerMapper.getByKey(id);
-		if (null == customer)
-			return BtkjConsts.RESULT.CUSTOMER_NOT_EXIST;
-		if (customer.getUid() != uid)
-			return Consts.RESULT.FORBID;
-		customerMapper.delete(customer);
-		return Consts.RESULT.OK;
 	}
 	
 	@Override
 	public Result<Void> seal(int appId, int uid) {
-		UserPO user = userMapper.getByKey(uid);
+		User user = userMapper.getByKey(uid);
 		if (null == user)
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (user.getAppId() != appId || BtkjUtil.isTopRole(user))
@@ -248,7 +206,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Result<Void> unseal(int appId, int uid) {
-		UserPO user = userMapper.getByKey(uid);
+		User user = userMapper.getByKey(uid);
 		if (null == user)
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (user.getAppId() != appId)

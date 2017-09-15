@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.IOUtils;
@@ -71,11 +70,11 @@ public class Request {
 	}
 	
 	private void _parseParam() {
-		MediaType mediaType = MediaType.parseMediaType(request.getContentType());
-		if (mediaType.includes(MediaType.MULTIPART_FORM_DATA)) {
-			ServletFileUpload upload = new ServletFileUpload();
-			FileItemIterator iter;
-			try {
+		try {
+			MediaType mediaType = MediaType.parseMediaType(request.getContentType());
+			if (mediaType.includes(MediaType.MULTIPART_FORM_DATA)) {
+				ServletFileUpload upload = new ServletFileUpload();
+				FileItemIterator iter;
 				iter = upload.getItemIterator(request);
 				while (iter.hasNext()) {
 				    FileItemStream item = iter.next();
@@ -85,9 +84,9 @@ public class Request {
 				    else 
 				        params.put(item.getFieldName(), new ByteArrayInputStream(IOUtils.toByteArray(input)));
 				}
-			} catch (FileUploadException | IOException e) {
-				logger.warn("multipart request init failure！", e);
 			}
+		} catch (Exception e) {
+			logger.warn("请求 content-type 错误！", e);
 		}
 	}
 	

@@ -16,10 +16,10 @@ import org.btkj.courier.api.JianJieService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy.CommercialPolicyDetail;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy.CompulsoryPolicyDetail;
@@ -53,7 +53,7 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 	private VehicleManageService vehicleManageService;
 	
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
 		if (!StringUtil.hasText(tenant.getJianJieId()))
 			return BtkjConsts.RESULT.JIAN_JIE_ID_NEEDED;
 		JianJiePoliciesInfo info = jianJieService.vehiclePolicies(tenant.getJianJieId(),

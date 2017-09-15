@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import org.btkj.pojo.VehicleUtil;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.BonusPoundage;
@@ -30,7 +30,7 @@ public class VehicleOrderListInfo implements Serializable {
 	private String bonus;
 	private String price;
 
-	public VehicleOrderListInfo(UserPO user, VehicleOrder order) {
+	public VehicleOrderListInfo(User user, VehicleOrder order) {
 		this.uid = order.getUid();
 		this.employeeId = order.getEmployeeId();
 		this.id = order.get_id();

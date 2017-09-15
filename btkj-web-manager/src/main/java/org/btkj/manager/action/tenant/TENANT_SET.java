@@ -8,10 +8,10 @@ import org.btkj.manager.action.EmployeeAction;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.nonauto.NonAutoCategory;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.user.TenantSetParam;
 import org.btkj.user.api.UserManageService;
 import org.rapid.util.common.message.Result;
@@ -31,7 +31,7 @@ public class TENANT_SET extends EmployeeAction<TenantSetParam> {
 	private UserManageService userManageService;
 	
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, TenantSetParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, TenantSetParam param) {
 		if (!CollectionUtil.isEmpty(param.getNonAutoBind())){
 			List<NonAutoCategory> categories = nonAutoService.categories();
 			a : for (Long cid : param.getNonAutoBind()){

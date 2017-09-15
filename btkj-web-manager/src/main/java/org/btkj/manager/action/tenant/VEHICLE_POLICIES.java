@@ -3,10 +3,10 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
@@ -19,7 +19,7 @@ public class VEHICLE_POLICIES extends EmployeeAction<VehiclePoliciesParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<Pager<VehiclePolicy>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehiclePoliciesParam param) {
+	protected Result<Pager<VehiclePolicy>> execute(App app, User user, Tenant tenant, Employee employee, VehiclePoliciesParam param) {
 		param.setTid(tenant.getTid());
 		return Result.result(vehicleManageService.policies(param));
 	}

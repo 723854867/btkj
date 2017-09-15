@@ -5,10 +5,10 @@ import javax.annotation.Resource;
 import org.btkj.courier.api.JianJieService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.ApplyAuditParam;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.user.api.UserManageService;
 import org.rapid.util.common.message.Result;
@@ -21,7 +21,7 @@ public class APPLY_AUDIT extends EmployeeAction<ApplyAuditParam> {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, ApplyAuditParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, ApplyAuditParam param) {
 		Result<EmployeeTip> result = userManageService.applyAudit(tenant.getTid(), param.getUid(), param.isReject());
 		if (!param.isReject() && result.isSuccess()) {
 			String tname = result.attach().getTname();

@@ -11,8 +11,8 @@ import org.btkj.master.pojo.info.TenantInfo;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.master.Admin;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.param.IdParam;
 import org.btkj.user.api.AppService;
@@ -34,11 +34,11 @@ public class TENANT_INFO extends AdminAction<IdParam> {
 
 	@Override
 	protected Result<TenantInfo> execute(Admin admin, IdParam param) {
-		TenantPO tenant = tenantService.tenant(param.getId());
+		Tenant tenant = tenantService.tenant(param.getId());
 		if (null == tenant)
 			return Result.result(BtkjCode.TENANT_NOT_EXIST);
 		Region region = configService.region(tenant.getRegion());
-		AppPO app = appService.app(tenant.getAppId());
+		App app = appService.app(tenant.getAppId());
 		Map<String, TenantInsurer> insurers = vehicleManageService.insurers(tenant.getTid());
 		Set<Integer> set = new HashSet<Integer>();
 		for (TenantInsurer insurer : insurers.values())

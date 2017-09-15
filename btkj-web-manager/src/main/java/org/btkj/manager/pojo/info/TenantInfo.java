@@ -3,8 +3,8 @@ package org.btkj.manager.pojo.info;
 import java.io.Serializable;
 
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Tenant;
 
 public class TenantInfo implements Serializable {
 
@@ -23,7 +23,7 @@ public class TenantInfo implements Serializable {
 	private String servicePhone;
 	private int teamDepth;
 	
-	public TenantInfo(AppPO app, TenantPO tenant, Region region) {
+	public TenantInfo(App app, Tenant tenant, Region region) {
 		this.tid = tenant.getTid();
 		this.mod = tenant.getMod();
 		this.name = tenant.getName();

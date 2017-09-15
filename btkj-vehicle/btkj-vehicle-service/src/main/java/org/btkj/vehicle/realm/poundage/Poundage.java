@@ -10,8 +10,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Employee.Mod;
 import org.btkj.pojo.entity.vehicle.CoefficientNode;
 import org.btkj.pojo.entity.vehicle.CoefficientRange;
 import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
@@ -71,7 +71,7 @@ public class Poundage {
 	/**
 	 * 计算手续费
 	 */
-	public void calculate(VehicleOrder order, EmployeePO employee) {
+	public void calculate(VehicleOrder order, Employee employee) {
 		if ((employee.getMod() & Mod.PAY_FULL.mark()) == Mod.PAY_FULL.mark())
 			try {
 				poundageDocumentFactory.caculatePoundage(poundageDocuments, order, employee);

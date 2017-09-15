@@ -6,60 +6,32 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.model.identity.User;
-import org.btkj.user.api.UserService;
-import org.btkj.web.util.Params;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.param.user.CustomerEditParam;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
-import org.rapid.util.exception.ConstConvertFailureException;
 
-public class CUSTOMER_EDIT extends OldUserAction {
+public class CUSTOMER_EDIT extends UserAction<CustomerEditParam> {
 	
-	@Resource
-	private UserService userService;
 	@Resource
 	private ConfigService configService;
+	
+	public CUSTOMER_EDIT() {
+		super(CrudType.CREATE, CrudType.UPDATE, CrudType.DELETE);
+	}
 
 	@Override
-	protected Result<Void> execute(Request request, User user) {
-		CrudType crudType = request.getParam(Params.CRUD_TYPE);
-		switch (crudType) {
-		case CREATE:
-			String name = request.getParam(Params.NAME);
-			String identity = request.getParam(Params.IDENTITY);
-			String mobile = request.getParam(Params.MOBILE);
-			String license = request.getParam(Params.LICENSE);
-			int region = request.getParam(Params.REGION);
-			String address = request.getParam(Params.ADDRESS);
-			String memo = request.getParam(Params.CONTENT);
-			LinkedList<Region> regions = 0 == region ? null : configService.regionRoute(region);
-			if (null == regions || regions.size() < 4)
-				throw ConstConvertFailureException.errorConstException(Params.REGION);
-				return userService.customerAdd(user.getUid(), name, identity, mobile, license, regions, address, memo);
-		case UPDATE:
-			name = request.getOptionalParam(Params.NAME);
-			identity = request.getOptionalParam(Params.IDENTITY);
-			mobile = request.getOptionalParam(Params.MOBILE);
-			license = request.getOptionalParam(Params.LICENSE);
-			region = request.getOptionalParam(Params.REGION);
-			address = request.getOptionalParam(Params.ADDRESS);
-			memo = request.getOptionalParam(Params.CONTENT);
-			regions = 0 == region ? null : configService.regionRoute(region);
+	protected Result<Void> execute(App app, User user, CustomerEditParam param) {
+		if (null != param.getRegion()) {
+			LinkedList<Region> regions = configService.regionRoute(param.getRegion());
 			if (null != regions && regions.size() < 4)
-				throw ConstConvertFailureException.errorConstException(Params.REGION);
-			return userService.customerUpdate(request.getParam(Params.ID), user.getUid(), name, identity, mobile, license, regions, address, memo);
-		case DELETE:
-			return userService.customerDelete(request.getParam(Params.ID), user.getUid());
-		default:
-			return Consts.RESULT.FORBID;
+				return Consts.RESULT.FORBID;
+			param.setRegions(regions);
 		}
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
+		param.setUid(user.getUid());
+		return userService.customerEdit(param);
 	}
 }

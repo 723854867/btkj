@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 
@@ -19,7 +19,7 @@ public class TeamInfo implements Serializable{
 	private double total;					// 总业绩
 	private List<Employee> employees;		// 员工业绩排序列表
 	
-	public TeamInfo(AppPO app, Map<Integer, Integer> map, Exploits exploits, Map<Integer, UserPO> users) {
+	public TeamInfo(App app, Map<Integer, Integer> map, Exploits exploits, Map<Integer, User> users) {
 		this.total = exploits.getTotal();
 		this.employees = new ArrayList<Employee>(map.size());
 		List<Exploit> list = exploits.getEmployeeExploits();
@@ -27,7 +27,7 @@ public class TeamInfo implements Serializable{
 		while (itr.hasNext()) {
 			Entry<Integer, Integer> entry = itr.next();
 			itr.remove();
-			UserPO user = users.remove(entry.getValue());
+			User user = users.remove(entry.getValue());
 			Iterator<Exploit> titr = list.iterator();
 			Exploit exploit = null;
 			while (titr.hasNext()) {
@@ -50,14 +50,14 @@ public class TeamInfo implements Serializable{
 		private UserTips user;
 		private double performance;
 		
-		public Employee(AppPO app, int employeeId, UserPO user) {
+		public Employee(App app, int employeeId, User user) {
 			this.id = employeeId;
 			this.performance = 0;
 			if (null != user)
 				this.user = new UserTips(app, user);
 		}
 		
-		public Employee(AppPO app, Exploit employee, UserPO user) {
+		public Employee(App app, Exploit employee, User user) {
 			this.id = employee.getEmployeeId();
 			this.performance = employee.getQuota();
 			if (null != user)
@@ -95,7 +95,7 @@ public class TeamInfo implements Serializable{
 		
 		private String mobile;
 		
-		public UserTips(AppPO app, UserPO user) {
+		public UserTips(App app, User user) {
 			super(app, user);
 			this.mobile = user.getMobile();
 		}

@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.VehicleOrderListInfo;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
@@ -32,7 +32,7 @@ public class VEHICLE_ORDERS extends EmployeeAction<VehicleOrdersParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleOrdersParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, VehicleOrdersParam param) {
 		param.setAppId(app.getId());
 		param.setTid(tenant.getTid());
 		Pager<VehicleOrder> pager = vehicleManageService.orders(param);
@@ -43,7 +43,7 @@ public class VEHICLE_ORDERS extends EmployeeAction<VehicleOrdersParam> {
 			uids.add(info.getUid());
 		
 		List<VehicleOrderListInfo> list = new ArrayList<VehicleOrderListInfo>();
-		Map<Integer, UserPO> users = userService.users(uids);
+		Map<Integer, User> users = userService.users(uids);
 		for (VehicleOrder order : pager.getList()) 
 			list.add(new VehicleOrderListInfo(users.get(order.getUid()), order));
 		return Result.result(new Pager<VehicleOrderListInfo>(pager.getTotal(), list));

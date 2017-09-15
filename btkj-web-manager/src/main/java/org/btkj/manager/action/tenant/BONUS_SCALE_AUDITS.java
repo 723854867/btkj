@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.info.BonusScaleInfo;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.model.Pager;
@@ -27,7 +27,7 @@ public class BONUS_SCALE_AUDITS extends EmployeeAction<EmployeeParam> {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Pager<BonusScaleInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeParam param) {
+	protected Result<Pager<BonusScaleInfo>> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
 		Pager<BonusScale> pager = userManageService.bonusScales(tenant.getTid(), param);
 		Set<Integer> set = new HashSet<Integer>();
 		for (BonusScale scale : pager.getList())

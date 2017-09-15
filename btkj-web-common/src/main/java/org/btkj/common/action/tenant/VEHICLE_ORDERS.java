@@ -2,10 +2,10 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
@@ -19,7 +19,7 @@ public class VEHICLE_ORDERS extends EmployeeAction<VehicleOrdersParam> {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<Pager<VehicleOrderListInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleOrdersParam param) {
+	protected Result<Pager<VehicleOrderListInfo>> execute(App app, User user, Tenant tenant, Employee employee, VehicleOrdersParam param) {
 		param.setUid(user.getUid());
 		param.setAppId(app.getId());
 		param.setTid(tenant.getTid());

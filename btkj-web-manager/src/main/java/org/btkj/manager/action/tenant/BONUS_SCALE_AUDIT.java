@@ -8,13 +8,13 @@ import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.BonusScaleAuditParam;
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.pojo.entity.statistics.LogScore;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.user.api.UserManageService;
 import org.rapid.util.common.Consts;
@@ -31,7 +31,7 @@ public class BONUS_SCALE_AUDIT extends EmployeeAction<BonusScaleAuditParam> {
 	private PaymentManageService paymentManageService;
 	
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, BonusScaleAuditParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, BonusScaleAuditParam param) {
 		Result<BonusScale> result = userManageService.bonusScaleAudit(tenant.getTid(), param.getKey(), param.isAggree());
 		if (!result.isSuccess() || !param.isAggree())
 			return result;
@@ -41,7 +41,7 @@ public class BONUS_SCALE_AUDIT extends EmployeeAction<BonusScaleAuditParam> {
 			rate = bonusScale.getCpRate();
 		int quota = rate * bonusScale.getQuota() / 1000;
 		if (0 != quota) {
-			Employee ep = employeeService.employee(bonusScale.getEmployeeId());
+			EmployeeTip ep = employeeService.employeeTip(bonusScale.getEmployeeId());
 			paymentManageService.gainScore(bonusScale.getEmployeeId(), quota, BizType.VEHICLE_BONUS_SCALE);
 			LogScore logScore = new LogScore();
 			logScore.setEmployeeId(ep.getId());

@@ -15,10 +15,10 @@ import org.btkj.manager.pojo.info.BonusScaleWaterInfo;
 import org.btkj.manager.pojo.param.BonusScaleDetailsParam;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
@@ -38,7 +38,7 @@ public class BONUS_SCALE_DETAILS extends EmployeeAction<BonusScaleDetailsParam> 
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<List<BonusScaleWaterInfo>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, BonusScaleDetailsParam param) {
+	protected Result<List<BonusScaleWaterInfo>> execute(App app, User user, Tenant tenant, Employee employee, BonusScaleDetailsParam param) {
 		BonusScale bonusScale = userManageService.bonusScale(param.getKey());
 		if (null == bonusScale)
 			return BtkjConsts.RESULT.BONUS_SCALE_NOT_EXIST;

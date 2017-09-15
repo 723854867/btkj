@@ -3,10 +3,10 @@ package org.btkj.manager.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
 import org.btkj.vehicle.api.VehicleManageService;
 import org.rapid.util.common.enums.CrudType;
@@ -22,7 +22,7 @@ public class BONUS_SCALE_CONFIG_EDIT extends EmployeeAction<BonusScaleConfigEdit
 	}
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, BonusScaleConfigEditParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, BonusScaleConfigEditParam param) {
 		return vehicleManageService.bonusScaleConfigEdit(tenant.getTid(), param);
 	}
 }

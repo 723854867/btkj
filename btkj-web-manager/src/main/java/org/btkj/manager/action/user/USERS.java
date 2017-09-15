@@ -3,8 +3,8 @@ package org.btkj.manager.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.UserPagingInfo;
 import org.btkj.pojo.model.Pager;
@@ -18,7 +18,7 @@ public class USERS extends UserAction<UsersParam> {
 	private UserManageService userManageService;
 
 	@Override
-	protected Result<Pager<UserPagingInfo>> execute(AppPO app, UserPO user, UsersParam param) {
+	protected Result<Pager<UserPagingInfo>> execute(App app, User user, UsersParam param) {
 		param.setAppId(app.getId());
 		param.setClient(Client.TENANT_MANAGER);
 		return userManageService.users(param);

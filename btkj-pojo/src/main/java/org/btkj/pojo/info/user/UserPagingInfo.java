@@ -2,7 +2,7 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 
 public class UserPagingInfo implements Serializable {
 
@@ -20,7 +20,7 @@ public class UserPagingInfo implements Serializable {
 	
 	public UserPagingInfo() {}
 	
-	public UserPagingInfo(UserPO user) {
+	public UserPagingInfo(User user) {
 		this.uid = user.getUid();
 		this.mod = user.getMod();
 		this.name = user.getName();

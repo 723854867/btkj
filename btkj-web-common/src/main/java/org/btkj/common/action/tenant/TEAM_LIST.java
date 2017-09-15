@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 
 import org.btkj.common.pojo.info.TeamInfo;
 import org.btkj.common.pojo.param.TeamListParam;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.user.api.EmployeeService;
@@ -38,12 +38,12 @@ public class TEAM_LIST extends EmployeeAction<TeamListParam> {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<TeamInfo> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, TeamListParam param) {
-		List<EmployeePO> list = employeeService.team(employee.getTid(), employee.getId(), tenant.getTeamDepth());
+	protected Result<TeamInfo> execute(App app, User user, Tenant tenant, Employee employee, TeamListParam param) {
+		List<Employee> list = employeeService.team(employee.getTid(), employee.getId(), tenant.getTeamDepth());
 		if (CollectionUtil.isEmpty(list))
 			return Consts.RESULT.EMPTY_LIST;
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-		for (EmployeePO temp : list)
+		for (Employee temp : list)
 			map.put(temp.getId(), temp.getUid());
 		
 		Exploits exploits = statisticsService.multiExploits(new ArrayList<Integer>(map.keySet()), param.getBeginTime(), param.getEndTime(), param.getMod());

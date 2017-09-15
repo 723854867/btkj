@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.info.user.EmployeePagingInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.user.EmployeesParam;
@@ -23,7 +23,7 @@ import org.rapid.util.lang.CollectionUtil;
  * 
  * @author ahab
  */
-public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, EmployeeDao> {
+public class EmployeeMapper extends RedisDBAdapter<Integer, Employee, EmployeeDao> {
 	
 	private final String USER_SET				= "set:employee：user:{0}";
 	private final String CONTROLLER				= "employee：controller:{0}:";			// 基于用户的缓存控制键
@@ -32,7 +32,7 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	private UserMapper userMapper;
 	
 	public EmployeeMapper() {
-		super(new ByteProtostuffSerializer<EmployeePO>(), "hash:db:employee");
+		super(new ByteProtostuffSerializer<Employee>(), "hash:db:employee");
 	}
 	
 	/**
@@ -58,47 +58,47 @@ public class EmployeeMapper extends RedisDBAdapter<Integer, EmployeePO, Employee
 	 * 
 	 * @return
 	 */
-	public Map<Integer, EmployeePO> ownedTenants(int uid) {
-		Map<Integer, EmployeePO> map =_checkLoad(uid);
+	public Map<Integer, Employee> ownedTenants(int uid) {
+		Map<Integer, Employee> map =_checkLoad(uid);
 		if (null != map)
 			return map;
 		List<byte[]> list = redis.hmsget(redisKey, _userSetKey(uid));
 		if (null == list)
 			return CollectionUtil.emptyHashMap();
-		map = new HashMap<Integer, EmployeePO>();
+		map = new HashMap<Integer, Employee>();
 		for (byte[] buffer : list) {
-			EmployeePO employee = serializer.antiConvet(buffer);
+			Employee employee = serializer.antiConvet(buffer);
 			map.put(employee.getId(), employee);
 		}
 		return map;
 	}
 	
-	private Map<Integer, EmployeePO> _checkLoad(int uid) {
+	private Map<Integer, Employee> _checkLoad(int uid) {
 		if (!checkLoad(_controllerField(uid)))
 			return null;
-		Map<Integer, EmployeePO> map = dao.getByUid(uid);
+		Map<Integer, Employee> map = dao.getByUid(uid);
 		if (!CollectionUtil.isEmpty(map))
 			flush(map);
 		return map;
 	}
 	
 	@Override
-	public void flush(EmployeePO entity) {
+	public void flush(Employee entity) {
 		redis.hmsset(redisKey, entity, serializer, _userSetKey(entity.getUid()));
 	}
 	
 	@Override
-	public void flush(Map<Integer, EmployeePO> entities) {
-		Map<Integer, List<EmployeePO>> map = new HashMap<Integer, List<EmployeePO>>();
-		for (EmployeePO temp : entities.values()) {
-			List<EmployeePO> list = map.get(temp.getUid());
+	public void flush(Map<Integer, Employee> entities) {
+		Map<Integer, List<Employee>> map = new HashMap<Integer, List<Employee>>();
+		for (Employee temp : entities.values()) {
+			List<Employee> list = map.get(temp.getUid());
 			if (null == list) {
-				list = new ArrayList<EmployeePO>();
+				list = new ArrayList<Employee>();
 				map.put(temp.getUid(), list);
 			}
 			list.add(temp);
 		}
-		for (Entry<Integer, List<EmployeePO>> entry : map.entrySet())
+		for (Entry<Integer, List<Employee>> entry : map.entrySet())
 			redis.hmsset(redisKey, entry.getValue(), serializer, _userSetKey(entry.getKey()));
 	}
 	

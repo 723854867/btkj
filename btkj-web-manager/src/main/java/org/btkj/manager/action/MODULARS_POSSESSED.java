@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.manager.pojo.info.TenantsUserInfo;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.param.NilParam;
@@ -25,7 +25,7 @@ public class MODULARS_POSSESSED extends UserAction<NilParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<TenantsUserInfo> execute(AppPO app, UserPO user, NilParam param) {
+	protected Result<TenantsUserInfo> execute(App app, User user, NilParam param) {
 		Set<String> pset = configManageService.modularsPossessed(user.getUid(), ModularType.USER);
 		Map<Integer, EmployeeTip> employees = employeeService.employeeTips(app, user);
 		Map<Integer, Set<String>> tsets = CollectionUtil.isEmpty(employees) ? null : configManageService.modularsPossessed(new HashSet<Integer>(employees.keySet()));

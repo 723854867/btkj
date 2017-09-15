@@ -4,7 +4,7 @@ import org.btkj.pojo.entity.community.Article;
 import org.btkj.pojo.entity.community.Comment;
 import org.btkj.pojo.entity.community.Quiz;
 import org.btkj.pojo.entity.community.Reply;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.rapid.util.lang.DateUtil;
 
 public class EntityGenerator {
@@ -19,7 +19,7 @@ public class EntityGenerator {
 		return article;
 	}
 	
-	public static final Comment comment(UserPO user, int articleId, String content) {
+	public static final Comment comment(User user, int articleId, String content) {
 		Comment comment = new Comment();
 		comment.setArticleId(articleId);
 		comment.setContent(content);

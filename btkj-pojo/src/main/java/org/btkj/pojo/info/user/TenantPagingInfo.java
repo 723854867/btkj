@@ -2,7 +2,7 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 
 /**
  * 后台商户分页列表数据：(平台端)
@@ -35,7 +35,7 @@ public class TenantPagingInfo implements Serializable {
 	
 	public TenantPagingInfo() {}
 	
-	public TenantPagingInfo(TenantPO tenant) {
+	public TenantPagingInfo(Tenant tenant) {
 		this.tid = tenant.getTid();
 		this.mod = tenant.getMod();
 		this.name = tenant.getName();

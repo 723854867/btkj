@@ -4,12 +4,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.UserPagingInfo;
 import org.btkj.pojo.info.user.UserPagingMasterInfo;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.identity.User;
 import org.btkj.pojo.param.user.UsersParam;
 import org.btkj.user.Config;
 import org.btkj.user.LuaCmd;
@@ -27,7 +26,7 @@ import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
  * 对应关系 hash:{0}:token:user - 用户 id 和用户 token 对应关系 hash:{0}:user:token - 用户
  * token 和用户 id 对应关系
  */
-public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
+public class UserMapper extends RedisDBAdapter<Integer, User, UserDao> {
 
 	private final String USER_LOCK 						= "string:user:{0}:lock"; 			
 
@@ -40,7 +39,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	private DistributeLock distributeLock;
 
 	public UserMapper() {
-		super(new ByteProtostuffSerializer<UserPO>(), "hash:db:user");
+		super(new ByteProtostuffSerializer<User>(), "hash:db:user");
 	}
 	
 	public Pager<UserPagingInfo> users(UsersParam param) {
@@ -48,16 +47,16 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		if (0 == total)
 			return Pager.EMPLTY;
 		param.calculate(total);
-		List<UserPO> users = dao.users(param);
+		List<User> users = dao.users(param);
 		List<UserPagingInfo> list = new ArrayList<UserPagingInfo>();
-		for (UserPO user : users) 
+		for (User user : users) 
 			list.add(param.getClient() == Client.TENANT_MANAGER ? new UserPagingInfo(user) : new UserPagingMasterInfo(user));
 		return new Pager(total, list);
 	}
 	
-	public UserPO getUserByMobile(int appId, String mobile) {
+	public User getUserByMobile(int appId, String mobile) {
 		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE, _mobileUserKey(appId), redisKey, mobile);
-		UserPO user = null;
+		User user = null;
 		if (null == data) {
 			user = dao.getByMobile(appId, mobile);
 			if (null != user)
@@ -67,14 +66,14 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		return user;
 	}
 	
-	public Result<UserPO> lockUserByMobile(int appId, String mobile) {
+	public Result<User> lockUserByMobile(int appId, String mobile) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_MOBILE_LOCK, _mobileUserKey(appId), redisKey, mobile, USER_LOCK,
 						lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) 
 			return Result.result(Code.OK, lockId, serializer.antiConvet((byte[]) data));
 		if ((long) data == -2) {
-			UserPO user = dao.getByMobile(appId, mobile);
+			User user = dao.getByMobile(appId, mobile);
 			if (null == user)
 				return Result.result(Code.USER_NOT_EXIST);
 			flush(user);
@@ -95,37 +94,18 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 		return distributeLock.tryLock(_userLockKey(uid));
 	}
 	
-	public UserPO userByToken(Client client, String token) {
+	public User userByToken(Client client, String token) {
 		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
 		return null == data ? null : serializer.antiConvet(data);
 	}
 	
-	public Result<UserPO> userLockByToken(Client client, String token) {
+	public Result<User> userLockByToken(Client client, String token) {
 		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
 		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
 						USER_LOCK, lockId, Config.getUserLockExpire());
 		if (data instanceof byte[]) {
-			UserPO user = serializer.antiConvet((byte[]) data);
+			User user = serializer.antiConvet((byte[]) data);
 			return Result.result(Code.OK.id(), lockId, user);
-		}
-		if ((long) data == 1)
-			return Result.result(Code.TOKEN_INVALID);
-		return Result.result(Code.LOCK_CONFLICT);
-	}
-
-	/**
-	 * 通过 token 获取用户并且同时获取用户的资
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public Result<User> lockUserByToken(Client client, String token) {
-		String lockId = AlternativeJdkIdGenerator.INSTANCE.generateId().toString();
-		Object data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN_LOCK, _tokenUserKey(client), redisKey, token, 
-						USER_LOCK, lockId, Config.getUserLockExpire());
-		if (data instanceof byte[]) {
-			UserPO user = serializer.antiConvet((byte[]) data);
-			return Result.result(Code.OK.id(), lockId, new User(client, appMapper.getByKey(user.getAppId()), user));
 		}
 		if ((long) data == 1)
 			return Result.result(Code.TOKEN_INVALID);
@@ -141,22 +121,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	public void releaseUserLock(int uid, String lockId) {
 		distributeLock.unLock(_userLockKey(uid), lockId);
 	}
-
-	/**
-	 * 通过 token 获取用户，不会获取用户锁
-	 * 
-	 * @param app
-	 * @param token
-	 * @return
-	 */
-	public User getUserByToken(Client client, String token) {
-		byte[] data = redis.invokeLua(LuaCmd.USER_LOAD_BY_TOKEN, _tokenUserKey(client), redisKey, token);
-		if (null == data)
-			return null;
-		UserPO user = serializer.antiConvet(data);
-		return new User(client, appMapper.getByKey(user.getAppId()), user);
-	}
-
+	
 	public String tokenReplace(Client client, int uid, String mobile) {
 		return redis.tokenReplace(_userTokenKey(client), _tokenUserKey(client), uid);
 	}
@@ -172,7 +137,7 @@ public class UserMapper extends RedisDBAdapter<Integer, UserPO, UserDao> {
 	}
 	
 	@Override
-	public void flush(UserPO entity) {
+	public void flush(User entity) {
 		redis.invokeLua(LuaCmd.USER_FLUSH, redisKey, _mobileUserKey(entity.getAppId()),
 						entity.getMobile(), entity.getUid(), serializer.convert(entity));
 	}

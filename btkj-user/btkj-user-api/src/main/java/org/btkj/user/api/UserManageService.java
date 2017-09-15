@@ -3,8 +3,8 @@ package org.btkj.user.api;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.AppInfo;
 import org.btkj.pojo.info.user.ApplyPagingInfo;
@@ -47,7 +47,7 @@ public interface UserManageService {
 	 * 
 	 * @param tenant
 	 */
-	void tenantUpdate(TenantPO tenant);
+	void tenantUpdate(Tenant tenant);
 	
 	/**
 	 * 雇员分页列表
@@ -102,7 +102,7 @@ public interface UserManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<Void> tenantSet(TenantPO tenant, TenantSetParam param);
+	Result<Void> tenantSet(Tenant tenant, TenantSetParam param);
 	
 	/**
 	 * 商家设置(平台)
@@ -110,7 +110,7 @@ public interface UserManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<Void> tenantSet(UserPO user, TenantSetPTParam param);
+	Result<Void> tenantSet(User user, TenantSetPTParam param);
 	
 	/**
 	 * 所有平台
@@ -133,7 +133,7 @@ public interface UserManageService {
 	 * @param personalExploits
 	 * @return
 	 */
-	void calculateTeamExploits(int time, TenantPO tenant, Map<Integer, BonusScale> personalExploits);
+	void calculateTeamExploits(int time, Tenant tenant, Map<Integer, BonusScale> personalExploits);
 	
 	/**
 	 * 获取指定规模奖励审核数据

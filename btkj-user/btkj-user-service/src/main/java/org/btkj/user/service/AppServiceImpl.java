@@ -7,16 +7,14 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.AppPO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.App.Mod;
 import org.btkj.pojo.entity.user.Banner;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.enums.Client;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.MainPageInfo;
-import org.btkj.pojo.model.identity.App;
 import org.btkj.user.api.AppService;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.redis.AppMapper;
@@ -46,25 +44,17 @@ public class AppServiceImpl implements AppService {
 	private EmployeeService employeeService;
 	
 	@Override
-	public AppPO app(int appId) {
+	public App app(int appId) {
 		return appMapper.getByKey(appId);
 	}
 	
 	@Override
-	public Map<Integer, AppPO> apps(Collection<Integer> apps) {
+	public Map<Integer, App> apps(Collection<Integer> apps) {
 		return appMapper.getByKeys(apps);
 	}
 	
 	@Override
-	public App app(Client client, int appId) {
-		AppPO entity = appMapper.getByKey(appId);
-		if (null == entity)
-			return null;
-		return new App(entity, client);
-	}
-	
-	@Override
-	public Result<MainPageInfo> mainPage(UserPO user, EmployeeTip employee) {
+	public Result<MainPageInfo> mainPage(User user, EmployeeTip employee) {
 		return _mainPageInfo(user, employee);
 	}
 	
@@ -75,13 +65,13 @@ public class AppServiceImpl implements AppService {
 	 * @param tid
 	 * @return
 	 */
-	private Result<MainPageInfo> _mainPageInfo(UserPO user, EmployeeTip employee) {
+	private Result<MainPageInfo> _mainPageInfo(User user, EmployeeTip employee) {
 		int appId = user.getAppId();
-		TenantPO tenant = null;
+		Tenant tenant = null;
 		if (null == employee) {
 			int mainTid = userMapper.mainTenant(user.getUid());
 			if (0 == mainTid) {
-				Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
+				Map<Integer, Employee> employees = employeeMapper.ownedTenants(user.getUid());
 				if (null != employees && !employees.isEmpty()) 
 					mainTid = employees.values().iterator().next().getTid();
 			}
@@ -93,13 +83,13 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public int tenantNum(AppPO app) {
+	public int tenantNum(App app) {
 		return tenantMapper.countByAppId(app.getId());
 	}
 	
 	@Override
 	public Result<Void> seal(int appId) {
-		AppPO app = appMapper.getByKey(appId);
+		App app = appMapper.getByKey(appId);
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
 		if (!Mod.SEAL.satisfy(app.getMod())) {
@@ -112,7 +102,7 @@ public class AppServiceImpl implements AppService {
 	
 	@Override
 	public Result<Void> unseal(int appId) {
-		AppPO app = appMapper.getByKey(appId);
+		App app = appMapper.getByKey(appId);
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
 		if (Mod.SEAL.satisfy(app.getMod())) {

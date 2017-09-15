@@ -2,10 +2,10 @@ package org.btkj.vehicle.api;
 
 import java.util.List;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.info.VehicleInfo;
@@ -30,7 +30,7 @@ public interface VehicleService {
 	 * @param license 车牌号
 	 * @param name 车主姓名
 	 */
-	Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String license, String name);
+	Result<Renewal> renewal(User user, Tenant tenant, Employee employee, String license, String name);
 	
 	/**
 	 * 获取续保信息：通过车架号和发动机号(次新车)
@@ -41,12 +41,12 @@ public interface VehicleService {
 	 * @param name 车主姓名
 	 * @return
 	 */
-	Result<Renewal> renewal(UserPO user, TenantPO tenant, EmployeePO employee, String vin, String engine, String name);
+	Result<Renewal> renewal(User user, Tenant tenant, Employee employee, String vin, String engine, String name);
 	
 	/**
 	 * 下单：包括报价、投保、报价并投保
 	 */
-	Result<Void> order(AppPO app, TenantPO tenant, UserPO user, EmployeePO employee, VehicleOrderParam param);
+	Result<Void> order(App app, Tenant tenant, User user, Employee employee, VehicleOrderParam param);
 	
 	/**
 	 * 查看订单详情
@@ -55,7 +55,7 @@ public interface VehicleService {
 	 * @param id
 	 * @return
 	 */
-	Result<VehicleOrder> orderInfo(TenantPO tenant, EmployeePO employee, String id);
+	Result<VehicleOrder> orderInfo(Tenant tenant, Employee employee, String id);
 	
 	/**
 	 * 获取商户的险企列表
@@ -69,14 +69,14 @@ public interface VehicleService {
 	 * 
 	 * @return
 	 */
-	Pager<VehicleOrderListInfo> orders(TenantPO tenant, EmployeePO employee, VehicleOrdersParam param);
+	Pager<VehicleOrderListInfo> orders(Tenant tenant, Employee employee, VehicleOrdersParam param);
 	
 	/**
 	 * 根据车架号获取车辆信息
 	 * @param vin
 	 * @return
 	 */
-	List<VehicleInfo> vehicleInfos(TenantPO tenant, String vin);
+	List<VehicleInfo> vehicleInfos(Tenant tenant, String vin);
 	
 	/**
 	 * 编辑配送信息

@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.redis.AliyunMapper;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.info.courier.StsInfo;
 import org.rapid.aliyun.AliyunConfig;
 import org.rapid.aliyun.AliyunOptions;
@@ -67,7 +67,7 @@ public class AliyunServiceImpl implements AliyunService {
 	}
 	
 	@Override
-	public StsInfo assumeRole(AppPO app, TenantPO tenant) {
+	public StsInfo assumeRole(App app, Tenant tenant) {
 		return null;
 	}
 

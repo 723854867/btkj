@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
@@ -62,7 +62,7 @@ public interface VehicleManageService {
 	 * 
 	 * @return
 	 */
-	Map<String, VehiclePolicy> jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
+	Map<String, VehiclePolicy> jianJieSynchronize(Employee employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info);
 	
 	/**
 	 * 车险订单详情:只能查看

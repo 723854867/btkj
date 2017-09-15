@@ -4,22 +4,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.EmployeeHolder;
-import org.btkj.pojo.model.identity.Employee;
 import org.rapid.util.common.message.Result;
 
 public interface EmployeeService {
 	
-	EmployeePO employeeById(int employeeId);
+	Employee employeeById(int employeeId);
 	
-	Employee employee(int employeeId);
-	
-	Map<Integer, EmployeePO> employees(Collection<Integer> ids);
+	Map<Integer, Employee> employees(Collection<Integer> ids);
 	
 	EmployeeTip employeeTip(int id);
 	
@@ -28,21 +25,12 @@ public interface EmployeeService {
 	Result<EmployeeHolder> employeeByToken(Client client, String token, int employeeId);
 	
 	Result<EmployeeHolder> employeeLockByToken(Client client, String token, int employeeId);
-	
-	/**
-	 * 加入商户检测
-	 * 
-	 * @param uid
-	 * @param parentId
-	 * @return
-	 */
-	Result<Void> tenantJoinCheck(int uid, int parentId);
 	 
 	/**
 	 * 我的团队
 	 * @return
 	 */
-	List<EmployeePO> team(int tid, int employeeId, int teamDepth);
+	List<Employee> team(int tid, int employeeId, int teamDepth);
 	
 	/**
 	 * 获取用户拥有的雇员信息
@@ -50,7 +38,7 @@ public interface EmployeeService {
 	 * @param user
 	 * @return
 	 */
-	Map<Integer, EmployeeTip> employeeTips(AppPO app, UserPO user);
+	Map<Integer, EmployeeTip> employeeTips(App app, User user);
 	
 	/**
 	 * 禁用

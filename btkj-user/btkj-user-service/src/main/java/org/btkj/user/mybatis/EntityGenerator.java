@@ -1,20 +1,18 @@
 package org.btkj.user.mybatis;
 
-import java.util.LinkedList;
-
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Banner;
 import org.btkj.pojo.entity.user.Customer;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Employee.Mod;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.pojo.param.user.BannerEditParam;
+import org.btkj.pojo.param.user.CustomerEditParam;
 import org.btkj.pojo.param.user.TenantAddParam;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.enums.REGION_TYPE;
@@ -24,12 +22,11 @@ import org.rapid.util.math.tree.Node;
 
 public class EntityGenerator {
 	
-	public static final ThreadLocal<Employee> EMPLOYEE_HOLDER	= new ThreadLocal<Employee>();
 	public static final ThreadLocal<EmployeeTip> EMPLOYEETIP_HOLDER	= new ThreadLocal<EmployeeTip>();
 
 	
-	public static final UserPO newUser(int appId, String mobile) { 
-		UserPO user = new UserPO();
+	public static final User newUser(int appId, String mobile) { 
+		User user = new User();
 		user.setAppId(appId);
 		user.setMobile(mobile);
 		
@@ -39,8 +36,8 @@ public class EntityGenerator {
 		return user;
 	} 
 	
-	public static final EmployeePO newEmployee(int uid, TenantPO tenant, EmployeePO parent) {
-		EmployeePO employee = new EmployeePO();
+	public static final Employee newEmployee(int uid, Tenant tenant, Employee parent) {
+		Employee employee = new Employee();
 		employee.setUid(uid);
 		employee.setTid(tenant.getTid());
 		employee.setAppId(tenant.getAppId());
@@ -65,8 +62,8 @@ public class EntityGenerator {
 		return employee;
 	}
 	
-	public static final AppPO newApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
-		AppPO app = new AppPO();
+	public static final App newApp(int region, String name, int maxTenantsCount, int maxArticlesCount) {
+		App app = new App();
 		app.setRegion(region);
 		app.setName(name);
 		app.setMaxTenantsCount(Math.max(0, maxTenantsCount));
@@ -78,8 +75,8 @@ public class EntityGenerator {
 		return app;
 	}
 	
-	public static final TenantPO newTenant(int appId, TenantAddParam param) {
-		TenantPO tenant = new TenantPO();
+	public static final Tenant newTenant(int appId, TenantAddParam param) {
+		Tenant tenant = new Tenant();
 		tenant.setName(param.getTname());
 		tenant.setAppId(appId);
 		tenant.setTeamDepth(GlobalConfigContainer.getGlobalConfig().getTeamDepth());
@@ -97,7 +94,7 @@ public class EntityGenerator {
 		return tenant;
 	}
 	
-	public static final ApplyInfo newApply(UserPO user, EmployeeTip chief) { 
+	public static final ApplyInfo newApply(User user, EmployeeTip chief) { 
 		ApplyInfo ai = new ApplyInfo();
 		ai.setTid(chief.getTid());
 		ai.setUid(user.getUid());
@@ -121,32 +118,32 @@ public class EntityGenerator {
 		return banner;
 	}
 	
-	public static final Customer newCustomer(int uid, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
+	public static final Customer newCustomer(CustomerEditParam param) {
 		Customer customer = new Customer();
-		customer.setUid(uid);
-		updateCustomer(customer, name, identity, mobile, license, regions, address, memo);
+		customer.setUid(param.getUid());
+		updateCustomer(customer, param);
 		int time = DateUtil.currentTime();
 		customer.setCreated(time);
 		customer.setUpdated(time);
 		return customer;
 	}
 	
-	public static final void updateCustomer(Customer customer, String name, String identity, String mobile, String license, LinkedList<Region> regions, String address, String memo) {
-		if (null != name)
-			customer.setName(name);
-		if (null != address)
-			customer.setAddress(address);
-		if (null != identity)
-			customer.setIdentity(identity);
-		if (null != memo)
-			customer.setMemo(memo);
-		if (null != mobile)
-			customer.setMobile(mobile);
-		if (null != license)
-			customer.setLicense(license);
-		if (null != regions) {
-			while (null != regions.peek()) {
-				Region region = regions.poll();
+	public static final void updateCustomer(Customer customer, CustomerEditParam param) {
+		if (null != param.getName())
+			customer.setName(param.getName());
+		if (null != param.getAddress())
+			customer.setAddress(param.getAddress());
+		if (null != param.getIdentity())
+			customer.setIdentity(param.getIdentity());
+		if (null != param.getMemo())
+			customer.setMemo(param.getMemo());
+		if (null != param.getMobile())
+			customer.setMobile(param.getMobile());
+		if (null != param.getLicense())
+			customer.setLicense(param.getLicense());
+		if (null != param.getRegions()) {
+			while (null != param.getRegions().peek()) {
+				Region region = param.getRegions().poll();
 				REGION_TYPE type = REGION_TYPE.match(region.getLevel());
 				switch (type) {
 				case PROVINCE:

@@ -11,8 +11,8 @@ import javax.annotation.Resource;
 import org.btkj.common.pojo.info.QuizInfo;
 import org.btkj.community.api.CommunityService;
 import org.btkj.pojo.entity.community.Quiz;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.community.QuizListParam;
 import org.btkj.user.api.UserService;
@@ -32,7 +32,7 @@ public class QUIZ_LIST extends UserAction<QuizListParam> {
 	private CommunityService communityService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, QuizListParam param) {
+	protected Result<?> execute(App app, User user, QuizListParam param) {
 		param.setAppId(app.getId());
 		switch (client()) {
 		case TENANT_MANAGER:
@@ -40,10 +40,10 @@ public class QUIZ_LIST extends UserAction<QuizListParam> {
 			Set<Integer> set = new HashSet<Integer>();
 			for (Quiz quiz : result.attach().getList())
 				set.add(quiz.getUid());
-			Map<Integer, UserPO> users = userService.users(new ArrayList<Integer>(set));
+			Map<Integer, User> users = userService.users(new ArrayList<Integer>(set));
 			List<QuizInfo> list = new ArrayList<QuizInfo>(result.attach().getList().size());
 			for (Quiz quiz : result.attach().getList()) {
-				UserPO up = users.get(quiz.getUid());
+				User up = users.get(quiz.getUid());
 				list.add(new QuizInfo(app, up, quiz));
 			}
 			return Result.result(new Pager<QuizInfo>(result.attach().getTotal(), list));

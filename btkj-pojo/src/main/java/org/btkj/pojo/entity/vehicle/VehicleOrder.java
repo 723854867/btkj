@@ -1,10 +1,10 @@
 package org.btkj.pojo.entity.vehicle;
 
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.info.VehiclePolicyTips;
@@ -47,7 +47,7 @@ public class VehicleOrder implements UniqueModel<String> {
 	
 	public VehicleOrder() {}
 	
-	public VehicleOrder(AppPO app, TenantPO tenant, UserPO user, EmployeePO employee, Insurer insurer, 
+	public VehicleOrder(App app, Tenant tenant, User user, Employee employee, Insurer insurer, 
 			int lane, boolean insure, VehicleOrderParam param, VehicleInfo vehicleInfo) {
 		this.lane = lane;
 		this.insure = insure;

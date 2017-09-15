@@ -4,10 +4,10 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.CourierService;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.param.QuoteNoticeParam;
@@ -24,7 +24,7 @@ public class QUOTE_NOTICE extends EmployeeAction<QuoteNoticeParam> {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, QuoteNoticeParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, QuoteNoticeParam param) {
 		Result<VehicleOrder> result = vehicleService.orderInfo(tenant, employee, param.getOrderId());
 		if (!result.isSuccess())
 			return result;

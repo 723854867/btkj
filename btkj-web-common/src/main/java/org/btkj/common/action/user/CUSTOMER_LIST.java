@@ -2,9 +2,9 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Customer;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.user.CustomerListParam;
 import org.btkj.user.api.UserService;
@@ -23,7 +23,7 @@ public class CUSTOMER_LIST extends UserAction<CustomerListParam> {
 	private UserService userService;
 
 	@Override
-	protected Result<Pager<Customer>> execute(AppPO app, UserPO user, CustomerListParam param) {
+	protected Result<Pager<Customer>> execute(App app, User user, CustomerListParam param) {
 		param.setUid(user.getUid());
 		if (null != param.getSortCol()) {
 			if (!param.getSortCol().equalsIgnoreCase(SORT_COL.CREATED.name()) && !param.getSortCol().equalsIgnoreCase(SORT_COL.UPDATED.name()))

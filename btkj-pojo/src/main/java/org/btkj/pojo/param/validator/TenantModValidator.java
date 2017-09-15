@@ -3,7 +3,7 @@ package org.btkj.pojo.param.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 
 public class TenantModValidator implements ConstraintValidator<TenantMod, Integer> {
 
@@ -14,6 +14,6 @@ public class TenantModValidator implements ConstraintValidator<TenantMod, Intege
 	public boolean isValid(Integer value, ConstraintValidatorContext context) {
 		if (null == value)
 			return false;
-		return value <= 0 ? false : TenantPO.Mod.check(value);
+		return value <= 0 ? false : Tenant.Mod.check(value);
 	}
 }

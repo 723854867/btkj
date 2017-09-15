@@ -14,10 +14,10 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.config.Area;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.TenantPO.Mod;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.Tenant.Mod;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.user.TenantListInfo;
@@ -61,22 +61,22 @@ public class TenantServiceImpl implements TenantService {
 	private EmployeeService employeeService;
 	
 	@Override
-	public TenantPO tenant(int tid) {
+	public Tenant tenant(int tid) {
 		return tenantMapper.getByKey(tid);
 	}
 	
 	@Override
-	public Map<Integer, TenantPO> tenants(Collection<Integer> tenants) {
+	public Map<Integer, Tenant> tenants(Collection<Integer> tenants) {
 		return tenantMapper.getByKeys(tenants);
 	}
 	
 	@Override
-	public void update(TenantPO tenant) {
+	public void update(Tenant tenant) {
 		tenantMapper.update(tenant);		
 	}
 
 	@Override
-	public Result<?> apply(UserPO user, EmployeeTip chief) {
+	public Result<?> apply(User user, EmployeeTip chief) {
 		ApplyInfo ai = applyMapper.getByTidAndUid(chief.getTid(), user.getUid());
 		if (null != ai)
 			return Result.result(BtkjCode.APPLY_EXIST);
@@ -91,10 +91,10 @@ public class TenantServiceImpl implements TenantService {
 		Area area = configService.area(param.getRegion());
 		if (null == area)
 			return BtkjConsts.RESULT.AREA_NOT_EXIST;
-		Result<UserPO> ru = userMapper.lockUserByMobile(appId, param.getMobile());
+		Result<User> ru = userMapper.lockUserByMobile(appId, param.getMobile());
 		if (!ru.isSuccess())
 			return Consts.RESULT.USER_NOT_EXIST;
-		UserPO user = ru.attach();
+		User user = ru.attach();
 		try {
 			if (null == user.getName() || null == user.getIdentity())				// 资料不齐的用户不能作为商户顶级雇员
 				return BtkjConsts.RESULT.USER_DATA_INCOMPLETE;
@@ -108,13 +108,13 @@ public class TenantServiceImpl implements TenantService {
 	}
 
 	@Override
-	public TenantListInfo tenantListInfo(UserPO user) {
-		Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
+	public TenantListInfo tenantListInfo(User user) {
+		Map<Integer, Employee> employees = employeeMapper.ownedTenants(user.getUid());
 		Set<Integer> set = new HashSet<Integer>();
-		for (EmployeePO employee : employees.values())
+		for (Employee employee : employees.values())
 			set.add(employee.getTid());
-		List<TenantPO> own = new ArrayList<TenantPO>(tenantMapper.getByKeys(set).values());
-		List<TenantPO> audit = new ArrayList<TenantPO>(tenantMapper.getByKeys(applyMapper.applyTenants(user.getUid())).values());
+		List<Tenant> own = new ArrayList<Tenant>(tenantMapper.getByKeys(set).values());
+		List<Tenant> audit = new ArrayList<Tenant>(tenantMapper.getByKeys(applyMapper.applyTenants(user.getUid())).values());
 		return new TenantListInfo(own, employees, audit);
 	}
 	
@@ -125,7 +125,7 @@ public class TenantServiceImpl implements TenantService {
 	
 	@Override
 	public Result<Void> seal(int appId, int tid) {
-		TenantPO tenant = tenantMapper.getByKey(tid);
+		Tenant tenant = tenantMapper.getByKey(tid);
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != appId)
@@ -140,7 +140,7 @@ public class TenantServiceImpl implements TenantService {
 	
 	@Override
 	public Result<Void> unseal(int appId, int tid) {
-		TenantPO tenant = tenantMapper.getByKey(tid);
+		Tenant tenant = tenantMapper.getByKey(tid);
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != appId)

@@ -1,6 +1,6 @@
 package org.btkj.manager.pojo.info;
 
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 
 public class UserInfo {
 
@@ -8,7 +8,7 @@ public class UserInfo {
 	private String name;
 	private String avatar;
 	
-	public UserInfo(UserPO user) {
+	public UserInfo(User user) {
 		this.mod = user.getMod();
 		this.name = user.getName();
 		this.avatar = user.getAvatar();

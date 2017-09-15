@@ -6,7 +6,7 @@ import org.rapid.util.common.model.UniqueModel;
  * 
  * @author ahab
  */
-public class EmployeePO implements UniqueModel<Integer> {
+public class Employee implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = -315073031541553807L;
 

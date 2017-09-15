@@ -2,10 +2,10 @@ package org.btkj.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 
 /**
  * 雇员基本信息
@@ -41,7 +41,7 @@ public class EmployeeTip implements Serializable {
 	
 	public EmployeeTip() {}
 	
-	public EmployeeTip(EmployeePO employee, AppPO app, UserPO user, TenantPO tenant) {
+	public EmployeeTip(Employee employee, App app, User user, Tenant tenant) {
 		this.id = employee.getId();
 		this.mod = employee.getMod();
 		this.uid = employee.getUid();

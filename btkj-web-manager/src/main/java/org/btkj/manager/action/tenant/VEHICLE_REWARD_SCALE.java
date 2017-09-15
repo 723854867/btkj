@@ -11,11 +11,11 @@ import javax.annotation.Resource;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.statistics.LogExploit;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.TenantPO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.Tenant.Mod;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.enums.BizType;
@@ -52,8 +52,8 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<Void> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeParam param) {
-		if (!TenantPO.Mod.isScaleStatisticSupport(tenant.getMod()) || !TenantPO.Mod.isScaleRewardSupport(tenant.getMod()) )
+	protected Result<Void> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
+		if (!Tenant.Mod.isScaleStatisticSupport(tenant.getMod()) || !Tenant.Mod.isScaleRewardSupport(tenant.getMod()) )
 			return BtkjConsts.RESULT.BONUS_SCALE_SETTINGS_ERROR;
 		List<BonusScaleConfig> configs = vehicleManageService.bonusScaleConfigs(tenant.getTid());
 		if (CollectionUtil.isEmpty(configs))
@@ -141,7 +141,7 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 		}
 	}
 	
-	private void _recordScale(TenantPO tenant, BonusScale bs, VehiclePolicy policy, InsuranceType type, boolean statistic) {
+	private void _recordScale(Tenant tenant, BonusScale bs, VehiclePolicy policy, InsuranceType type, boolean statistic) {
 		int quota = type == InsuranceType.COMMERCIAL ? policy.commercialQuotaInCent() : policy.compulsoryQuotaInCent();
 		if (0 == quota)
 			return;

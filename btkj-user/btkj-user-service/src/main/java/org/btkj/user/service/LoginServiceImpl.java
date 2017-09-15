@@ -3,8 +3,8 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.user.LoginInfo;
 import org.btkj.user.api.LoginService;
@@ -42,9 +42,9 @@ public class LoginServiceImpl implements LoginService {
 	private EmployeeMapper employeeMapper;
 
 	@Override
-	public Result<?> login(Client client, AppPO app, String mobile) {
-		Result<UserPO> ru = userMapper.lockUserByMobile(app.getId(), mobile);
-		UserPO user = ru.attach();
+	public Result<?> login(Client client, App app, String mobile) {
+		Result<User> ru = userMapper.lockUserByMobile(app.getId(), mobile);
+		User user = ru.attach();
 		String lockId = ru.getDesc();
 		// 用户不存在则创建用户
 		if (ru.getCode() == Code.USER_NOT_EXIST.id()) {
@@ -73,11 +73,11 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public Result<?> login(AppPO app, String mobile, String pwd) {
-		Result<UserPO> ru = userMapper.lockUserByMobile(app.getId(), mobile);
+	public Result<?> login(App app, String mobile, String pwd) {
+		Result<User> ru = userMapper.lockUserByMobile(app.getId(), mobile);
 		if (!ru.isSuccess()) 
 			return ru;
-		UserPO user = ru.attach();
+		User user = ru.attach();
 		try {
 			if (null == user.getPwd())
 				return Result.result(Code.PWD_NOT_RESET);
@@ -89,7 +89,7 @@ public class LoginServiceImpl implements LoginService {
 		}
 	}
 
-	private Result<LoginInfo> _doLogin(Client client, AppPO app, UserPO user, String mobile) {
+	private Result<LoginInfo> _doLogin(Client client, App app, User user, String mobile) {
 		String token = client == Client.RECRUIT ? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() : userMapper.tokenReplace(client, user.getUid(), mobile);
 		switch (client) {
 		case RECRUIT:

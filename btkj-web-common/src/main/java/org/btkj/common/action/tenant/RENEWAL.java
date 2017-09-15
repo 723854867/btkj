@@ -3,10 +3,10 @@ package org.btkj.common.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.common.pojo.param.RenewalParam;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.Renewal;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.action.EmployeeAction;
@@ -24,7 +24,7 @@ public class RENEWAL extends EmployeeAction<RenewalParam> {
 	private VehicleService vehicleService;
 	
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, RenewalParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, RenewalParam param) {
 		Result<Renewal> result = null;
 		switch (param.getType()) {
 		case 1:									// 根据车架号和发动机号获取

@@ -2,7 +2,7 @@ package org.btkj.pojo.entity.user;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class UserPO implements UniqueModel<Integer> {
+public class User implements UniqueModel<Integer> {
 
 	private static final long serialVersionUID = 524781447550935468L;
 	

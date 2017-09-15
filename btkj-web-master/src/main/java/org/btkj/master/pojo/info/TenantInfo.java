@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.rapid.util.lang.CollectionUtil;
 
@@ -37,7 +37,7 @@ public class TenantInfo implements Serializable {
 	private int created;
 	private List<Insurer> insurers;
 	
-	public TenantInfo(TenantPO tenant, AppPO app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.entity.config.Insurer> insurers) {
+	public TenantInfo(Tenant tenant, App app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.entity.config.Insurer> insurers) {
 		this.tid = tenant.getTid();
 		this.name = tenant.getName();
 		this.contacts = tenant.getContacts();

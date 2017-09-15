@@ -2,58 +2,58 @@ package org.btkj.pojo.model;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 
 public class EmployeeHolder implements Serializable {
 
 	private static final long serialVersionUID = -1667633673051579348L;
 
-	private AppPO app;
-	private UserPO user;
-	private TenantPO tenant;
-	private EmployeePO employee;
+	private App app;
+	private User user;
+	private Tenant tenant;
+	private Employee employee;
 	
 	public EmployeeHolder() {}
 
-	public EmployeeHolder(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee) {
+	public EmployeeHolder(App app, User user, Tenant tenant, Employee employee) {
 		this.app = app;
 		this.user = user;
 		this.tenant = tenant;
 		this.employee = employee;
 	}
 
-	public AppPO getApp() {
+	public App getApp() {
 		return app;
 	}
 
-	public void setApp(AppPO app) {
+	public void setApp(App app) {
 		this.app = app;
 	}
 
-	public UserPO getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserPO user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public TenantPO getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 
-	public void setTenant(TenantPO tenant) {
+	public void setTenant(Tenant tenant) {
 		this.tenant = tenant;
 	}
 
-	public EmployeePO getEmployee() {
+	public Employee getEmployee() {
 		return employee;
 	}
 
-	public void setEmployee(EmployeePO employee) {
+	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
 }

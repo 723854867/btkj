@@ -2,7 +2,7 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.App;
 
 public class AppInfo implements Serializable {
 
@@ -20,7 +20,7 @@ public class AppInfo implements Serializable {
 	
 	public AppInfo() {}
 	
-	public AppInfo(AppPO po) {
+	public AppInfo(App po) {
 		this.id = po.getId();
 		this.mod = po.getMod();
 		this.region = po.getRegion();

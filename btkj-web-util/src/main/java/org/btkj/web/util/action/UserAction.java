@@ -3,9 +3,9 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.AppPO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.App.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.param.Param;
@@ -37,11 +37,11 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 			if (!result.isSuccess())
 				return result;
 			try {
-				AppPO app = result.attach().getApp();
-				UserPO user = result.attach().getUser();
+				App app = result.attach().getApp();
+				User user = result.attach().getUser();
 				if (Mod.SEAL.satisfy(app.getMod()))
 					return BtkjConsts.RESULT.APP_SEALED;
-				if (org.btkj.pojo.entity.user.UserPO.Mod.SEAL.satisfy(user.getMod()))
+				if (org.btkj.pojo.entity.user.User.Mod.SEAL.satisfy(user.getMod()))
 					return BtkjConsts.RESULT.USER_SEALED;
 				return execute(app, user, param);
 			} finally {
@@ -55,7 +55,7 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 		}
 	}
 	
-	protected abstract Result<?> execute(AppPO app, UserPO user, PARAM param);
+	protected abstract Result<?> execute(App app, User user, PARAM param);
 	
 	/**
 	 * 是否需要获取用户锁

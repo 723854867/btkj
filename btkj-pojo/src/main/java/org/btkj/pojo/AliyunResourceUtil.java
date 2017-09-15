@@ -2,9 +2,9 @@ package org.btkj.pojo;
 
 import java.text.MessageFormat;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.FileType;
 import org.rapid.util.common.uuid.AlternativeJdkIdGenerator;
 
@@ -28,27 +28,27 @@ public class AliyunResourceUtil {
 		return btPrefix + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
 	}
 	
-	public static String userResource(AppPO app, UserPO user, String resource) {
+	public static String userResource(App app, User user, String resource) {
 		return ossPrefix + MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + resource;
 	}
 	
-	public static String userResourceSuffix(AppPO app, UserPO user, String resource) {
+	public static String userResourceSuffix(App app, User user, String resource) {
 		return MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + resource;
 	}
 	
-	public static String userResourceSuffix(AppPO app, UserPO user, FileType fileType) {
+	public static String userResourceSuffix(App app, User user, FileType fileType) {
 		return MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
 	}
 	
-	public static String tenantResource(AppPO app, TenantPO tenant, String resource) {
+	public static String tenantResource(App app, Tenant tenant, String resource) {
 		return ossPrefix + MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + resource;
 	}
 	
-	public static String tenantResourceSuffix(AppPO app, TenantPO tenant, String resource) {
+	public static String tenantResourceSuffix(App app, Tenant tenant, String resource) {
 		return MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + resource;
 	}
 	
-	public static String tenantResourceSuffix(AppPO app, TenantPO tenant, FileType fileType) {
+	public static String tenantResourceSuffix(App app, Tenant tenant, FileType fileType) {
 		return MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
 	}
 	

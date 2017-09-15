@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.courier.api.CourierService;
-import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.param.user.LoginParam;
 import org.btkj.user.api.UserService;
@@ -26,7 +26,7 @@ public class PWD_RESET extends AppAction<LoginParam> {
 	private CourierService courierService;
 
 	@Override
-	protected Result<?> execute(AppPO app, LoginParam param) {
+	protected Result<?> execute(App app, LoginParam param) {
 		if (null == param.getCaptcha() || null == param.getPwd())
 			return Consts.RESULT.FORBID;
 		if (courierService.captchaVerify(app.getId(), param.getMobile(), param.getCaptcha()).getCode() == -1)

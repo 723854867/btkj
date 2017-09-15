@@ -12,16 +12,14 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Employee.Mod;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.EmployeeHolder;
-import org.btkj.pojo.model.identity.Employee;
 import org.btkj.user.api.EmployeeService;
 import org.btkj.user.mybatis.Tx;
 import org.btkj.user.redis.AppMapper;
@@ -57,65 +55,54 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeMapper employeeMapper;
 	
 	@Override
-	public EmployeePO employeeById(int employeeId) {
+	public Employee employeeById(int employeeId) {
 		return employeeMapper.getByKey(employeeId);
 	}
 	
 	@Override
-	public Employee employee(int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
-		if (null == employee)
-			return null;
-		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
-		AppPO app = appMapper.getByKey(tenant.getAppId());
-		UserPO user = userMapper.getByKey(employee.getUid());
-		return new Employee(app, user, tenant, employee);
-	}
-	
-	@Override
-	public Map<Integer, EmployeePO> employees(Collection<Integer> ids) {
+	public Map<Integer, Employee> employees(Collection<Integer> ids) {
 		return employeeMapper.getByKeys(ids);
 	}
 	
 	@Override
 	public EmployeeTip employeeTip(int id) {
-		EmployeePO employee = employeeMapper.getByKey(id);
+		Employee employee = employeeMapper.getByKey(id);
 		if (null == employee)
 			return null;
-		AppPO app = appMapper.getByKey(employee.getAppId());
-		UserPO user = userMapper.getByKey(employee.getUid());
-		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		App app = appMapper.getByKey(employee.getAppId());
+		User user = userMapper.getByKey(employee.getUid());
+		Tenant tenant = tenantMapper.getByKey(employee.getTid());
 		return new EmployeeTip(employee, app, user, tenant);
 	}
 	
 	@Override
 	public Map<Integer, EmployeeTip> employeeTips(Collection<Integer> ids) {
-		Map<Integer, EmployeePO> employees = employeeMapper.getByKeys(ids);
+		Map<Integer, Employee> employees = employeeMapper.getByKeys(ids);
 		Map<Integer, EmployeeTip> tips = new HashMap<Integer, EmployeeTip>();
 		if (CollectionUtil.isEmpty(employees))
 			return tips;
 		Set<Integer> uids = new HashSet<Integer>();
 		Set<Integer> tids = new HashSet<Integer>();
 		Set<Integer> appIds = new HashSet<Integer>();
-		for (EmployeePO po : employees.values()) {
+		for (Employee po : employees.values()) {
 			uids.add(po.getUid());
 			tids.add(po.getTid());
 			appIds.add(po.getAppId());
 		}
-		Map<Integer, AppPO> apps = appMapper.getByKeys(appIds);
-		Map<Integer, UserPO> users = userMapper.getByKeys(uids);
-		Map<Integer, TenantPO> tenants = tenantMapper.getByKeys(tids);
-		for (EmployeePO po : employees.values()) 
+		Map<Integer, App> apps = appMapper.getByKeys(appIds);
+		Map<Integer, User> users = userMapper.getByKeys(uids);
+		Map<Integer, Tenant> tenants = tenantMapper.getByKeys(tids);
+		for (Employee po : employees.values()) 
 			tips.put(po.getId(), new EmployeeTip(po, apps.get(po.getAppId()), users.get(po.getUid()), tenants.get(po.getTid())));
 		return tips;
 	}
 	
 	@Override
 	public Result<EmployeeHolder> employeeByToken(Client client, String token, int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		Employee employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
-		UserPO user = null;
+		User user = null;
 		switch (client) {
 		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
@@ -128,20 +115,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return Consts.RESULT.TOKEN_INVALID;
 		if (user.getUid() != employee.getUid())
 			return Consts.RESULT.FORBID;
-		AppPO app = appMapper.getByKey(employee.getAppId());
-		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		App app = appMapper.getByKey(employee.getAppId());
+		Tenant tenant = tenantMapper.getByKey(employee.getTid());
 		return Result.result(new EmployeeHolder(app, user, tenant, employee));
 	}
 	
 	@Override
 	public Result<EmployeeHolder> employeeLockByToken(Client client, String token, int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		Employee employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
-		UserPO user = null;
+		User user = null;
 		String lockId = null;
-		AppPO app = appMapper.getByKey(employee.getAppId());
-		TenantPO tenant = tenantMapper.getByKey(employee.getTid());
+		App app = appMapper.getByKey(employee.getAppId());
+		Tenant tenant = tenantMapper.getByKey(employee.getTid());
 		switch (client) {
 		case RECRUIT:
 			DistributeSession session = new DistributeSession(token, redis);
@@ -152,7 +139,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				return Consts.RESULT.TOKEN_INVALID;
 			break;
 		default:
-			Result<UserPO> result = userMapper.userLockByToken(client, token);
+			Result<User> result = userMapper.userLockByToken(client, token);
 			if (!result.isSuccess())
 				return Result.result(result.getCode(), result.getDesc(), null);
 			user = result.attach();
@@ -165,41 +152,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public Result<Void> tenantJoinCheck(int uid, int parentId) {
-		EmployeePO parent = employeeMapper.getByKey(parentId);
-		if (null == parent)
-			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
-		ApplyInfo ai = applyMapper.getByTidAndUid(parent.getTid(), uid);
-		if (null != ai)
-			return BtkjConsts.RESULT.APPLY_EXIST;
-		if (employeeMapper.isEmployee(parent.getTid(), uid))
-			return BtkjConsts.RESULT.ALREADY_IS_EMPLOYEE;
-		return Consts.RESULT.OK;
-	}
-	
-	@Override
-	public List<EmployeePO> team(int tid, int employeeId, int teamDepth) {
+	public List<Employee> team(int tid, int employeeId, int teamDepth) {
 		return tx.team(tid, employeeId, teamDepth);
 	}
 	
 	@Override
-	public Map<Integer, EmployeeTip> employeeTips(AppPO app, UserPO user) {
-		Map<Integer, EmployeePO> employees = employeeMapper.ownedTenants(user.getUid());
+	public Map<Integer, EmployeeTip> employeeTips(App app, User user) {
+		Map<Integer, Employee> employees = employeeMapper.ownedTenants(user.getUid());
 		if (CollectionUtil.isEmpty(employees))
 			return Collections.EMPTY_MAP;
 		Set<Integer> set = new HashSet<Integer>();
-		for (EmployeePO employee : employees.values())
+		for (Employee employee : employees.values())
 			set.add(employee.getTid());
-		Map<Integer, TenantPO> tenants = tenantMapper.getByKeys(set);
+		Map<Integer, Tenant> tenants = tenantMapper.getByKeys(set);
 		Map<Integer, EmployeeTip> map = new HashMap<Integer, EmployeeTip>();
-		for (EmployeePO employee : employees.values())
+		for (Employee employee : employees.values())
 			map.put(employee.getId(), new EmployeeTip(employee, app, user, tenants.get(employee.getTid())));
 		return map;
 	}
 	
 	@Override
 	public Result<Void> seal(int appId, int tid, int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		Employee employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (employee.getAppId() != appId || employee.getTid() != tid || BtkjUtil.isTopRole(employee))
@@ -214,7 +188,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Result<Void> unseal(int appId, int tid, int employeeId) {
-		EmployeePO employee = employeeMapper.getByKey(employeeId);
+		Employee employee = employeeMapper.getByKey(employeeId);
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (employee.getAppId() != appId || employee.getTid() != tid)

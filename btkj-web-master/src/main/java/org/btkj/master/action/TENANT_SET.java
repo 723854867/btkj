@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.master.Admin;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.user.api.UserManageService;
@@ -25,7 +25,7 @@ public class TENANT_SET extends AdminAction<TenantSetParam> {
 
 	@Override
 	protected Result<Void> execute(Admin admin, TenantSetParam param) {
-		TenantPO tenant = tenantService.tenant(param.getTid());
+		Tenant tenant = tenantService.tenant(param.getTid());
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		tenant.setJianJieId(param.getJianJieId());

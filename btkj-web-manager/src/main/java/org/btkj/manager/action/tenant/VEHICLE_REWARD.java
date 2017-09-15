@@ -17,11 +17,11 @@ import org.btkj.manager.action.EmployeeAction;
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.statistics.LogScore;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.Employee.Mod;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.BizType;
@@ -52,7 +52,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 	private VehicleManageService vehicleManageService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
 		Result<Map<String, VehicleOrder>> result = vehicleManageService.orderRewardStandby(tenant.getTid());
 		if (!result.isSuccess())
 			return result;
@@ -62,14 +62,14 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		Set<Integer> set = new HashSet<Integer>();
 		for (VehicleOrder order : orders.values()) 
 			set.add(order.getEmployeeId());
-		Map<Integer, EmployeePO> employees = employeeService.employees(set);						
+		Map<Integer, Employee> employees = employeeService.employees(set);						
 		Map<Integer, LinkedList<Integer>> manageMap = new HashMap<Integer, LinkedList<Integer>>();
 		int teamDepth = tenant.getTeamDepth();
 		Map<String, BonusManageConfig> configs = null;
 		if (teamDepth > 1) {								// 如果层级设置为小于 1 则不会有管理奖励
 			set.clear();
 			configs = vehicleManageService.bonusManageConfigs(tenant.getTid());
-			for (EmployeePO temp : employees.values()) {
+			for (Employee temp : employees.values()) {
 				LinkedList<Integer> list = VehicleUtil.relationEmployees(temp.getRelationPath(), teamDepth);
 				if (!list.isEmpty()) {
 					manageMap.put(temp.getId(), list);
@@ -86,7 +86,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		Map<Integer, Map<BizType, ScoreTips>> scores = new HashMap<Integer, Map<BizType, ScoreTips>>();
 		List<LogScore> logScores = new ArrayList<LogScore>();
 		for (VehicleOrder order : orders.values()) {
-			EmployeePO ep = employees.get(order.getEmployeeId());
+			Employee ep = employees.get(order.getEmployeeId());
 			if (null != order.getBonus()) {					// 获取手续费
 				LogScore logScore = _vehicleBonuslogScore(order);
 				logScores.add(logScore);
@@ -98,7 +98,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 				while (!list.isEmpty()) {
 					depth++;
 					int employeeId = list.pollLast();
-					EmployeePO temp = employees.get(employeeId);
+					Employee temp = employees.get(employeeId);
 					if ((temp.getMod() & Mod.BONUS_MANAGE.mark()) == Mod.BONUS_MANAGE.mark())		// 没有管理奖
 						continue;
 					LogScore logScore = _managerLogScore(configs, employeeId, order, InsuranceType.COMMERCIAL, depth);

@@ -14,11 +14,11 @@ import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.entity.user.AppPO;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Banner;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.info.ApplyInfo;
 import org.btkj.pojo.info.EmployeeTip;
@@ -101,12 +101,12 @@ public class UserManageServiceImpl implements UserManageService {
 				set2.add(((TenantPagingMasterInfo) info).getAppId());
 		}
 		Map<Integer, Region> regions = configService.regions(set1);
-		Map<Integer, AppPO> apps = param.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
+		Map<Integer, App> apps = param.getClient() == Client.BAO_TU_MANAGER ? appMapper.getByKeys(set2) : null;
 		for (TenantPagingInfo info : pager.getList()) {
 			Region region = regions.get(info.getRegionId());
 			info.setRegionName(null == region ? null : region.getName());
 			if (info instanceof TenantPagingMasterInfo) {
-				AppPO app = apps.get(((TenantPagingMasterInfo) info).getAppId());
+				App app = apps.get(((TenantPagingMasterInfo) info).getAppId());
 				((TenantPagingMasterInfo) info).setAppName(null == app ? null : app.getName());
 			}
 		}
@@ -114,7 +114,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public void tenantUpdate(TenantPO tenant) {
+	public void tenantUpdate(Tenant tenant) {
 		tenantMapper.update(tenant);
 	}
 	
@@ -122,7 +122,7 @@ public class UserManageServiceImpl implements UserManageService {
 	public Result<Pager<EmployeePagingInfo>> employees(EmployeesParam param) {
 		Pager<EmployeePagingInfo> pager = null;
 		if (null != param.getMobile()) {
-			UserPO user = userMapper.getUserByMobile(param.getAppId(), param.getMobile());
+			User user = userMapper.getUserByMobile(param.getAppId(), param.getMobile());
 			if (null == user)
 				return Result.result(Pager.EMPLTY);
 			param.setUid(user.getUid());
@@ -133,9 +133,9 @@ public class UserManageServiceImpl implements UserManageService {
 		Set<Integer> set = new HashSet<Integer>();
 		for (EmployeePagingInfo info : pager.getList()) 
 			set.add(info.getParentId());
-		Map<Integer, EmployeePO> parents = employeeMapper.getByKeys(set);
+		Map<Integer, Employee> parents = employeeMapper.getByKeys(set);
 		for (EmployeePagingInfo info : pager.getList()) {
-			EmployeePO parent = parents.get(info.getParentId());
+			Employee parent = parents.get(info.getParentId());
 			if (null != parent)
 				info.setParentUid(parent.getUid());
 		}
@@ -144,9 +144,9 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getUid());
 			set.add(info.getParentUid());
 		}
-		Map<Integer, UserPO> users = userMapper.getByKeys(set);
+		Map<Integer, User> users = userMapper.getByKeys(set);
 		for (EmployeePagingInfo info : pager.getList()) {
-			UserPO user = users.get(info.getUid());
+			User user = users.get(info.getUid());
 			if (null != user) {
 				info.setName(user.getName());
 				info.setMobile(user.getMobile());
@@ -169,9 +169,9 @@ public class UserManageServiceImpl implements UserManageService {
 			set.add(info.getParentUid());
 		}
 		
-		List<UserPO> users = new ArrayList<UserPO>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
+		List<User> users = new ArrayList<User>(userMapper.getByKeys(new ArrayList<Integer>(set)).values());
 		for (ApplyPagingInfo info : pager.getList()) {
-			for (UserPO user : users) {
+			for (User user : users) {
 				if (user.getUid() == info.getUid()) {
 					info.setName(user.getName());
 					info.setMobile(user.getMobile());
@@ -195,13 +195,13 @@ public class UserManageServiceImpl implements UserManageService {
 			return Result.result(BtkjCode.APPLY_EXIST);
 		if (reject) // 拒绝申请直接返回即可
 			return Result.success();
-		EmployeePO employee = tx.employeeAdd(tid, uid, info.getChief());
+		Employee employee = tx.employeeAdd(tid, uid, info.getChief());
 		return Result.result(employeeService.employeeTip(employee.getId()));
 	}
 	
 	@Override
 	public Result<Void> employeeEdit(int tid, int employeeId, EmployeeEditParam param) {
-		EmployeePO employee = employeeMapper.getByKey(param.getTargetId());
+		Employee employee = employeeMapper.getByKey(param.getTargetId());
 		if (null == employee)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (employee.getTid() != tid)
@@ -246,7 +246,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(TenantPO tenant, TenantSetParam param) {
+	public Result<Void> tenantSet(Tenant tenant, TenantSetParam param) {
 		if (null != param.getNonAutoBind()) {
 			if (param.getNonAutoBind().isEmpty())
 				tenant.setNonAutoBind(null);
@@ -270,8 +270,8 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public Result<Void> tenantSet(UserPO user, TenantSetPTParam param) {
-		TenantPO tenant = tenantMapper.getByKey(param.getTid());
+	public Result<Void> tenantSet(User user, TenantSetPTParam param) {
+		Tenant tenant = tenantMapper.getByKey(param.getTid());
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != user.getAppId())
@@ -295,10 +295,10 @@ public class UserManageServiceImpl implements UserManageService {
 	
 	@Override
 	public List<AppInfo> apps() {
-		Map<Integer, AppPO> apps = appMapper.getAll();
+		Map<Integer, App> apps = appMapper.getAll();
 		List<AppInfo> list = new ArrayList<AppInfo>();
 		Set<Integer> set = new HashSet<Integer>();
-		for (AppPO po : apps.values()) {
+		for (App po : apps.values()) {
 			list.add(new AppInfo(po));
 			set.add(po.getRegion());
 		}
@@ -316,7 +316,7 @@ public class UserManageServiceImpl implements UserManageService {
 		case CREATE:
 			if (null == configService.region(param.getRegion()))
 				return BtkjConsts.RESULT.REGION_NOT_EXIST;
-			AppPO app = EntityGenerator.newApp(param.getRegion(), param.getName(), param.getMaxTenantsCount(), param.getMaxArticlesCount());
+			App app = EntityGenerator.newApp(param.getRegion(), param.getName(), param.getMaxTenantsCount(), param.getMaxArticlesCount());
 			appMapper.insert(app);
 			return Result.result(Code.OK, app.getId());
 		default:
@@ -339,7 +339,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	@Override
-	public void calculateTeamExploits(int time, TenantPO tenant, Map<Integer, BonusScale> personalExploits) {
+	public void calculateTeamExploits(int time, Tenant tenant, Map<Integer, BonusScale> personalExploits) {
 		Map<String, BonusScale> exploits = tx.calculateTeamExploits(time, tenant, personalExploits);
 		bonusScaleMapper.insert(exploits);
 		tenant.setScaleRewardTime(time);

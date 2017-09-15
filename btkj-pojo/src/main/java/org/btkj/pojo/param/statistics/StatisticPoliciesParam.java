@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.enums.GroupType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
@@ -204,7 +204,7 @@ public class StatisticPoliciesParam extends EmployeeParam {
 		this.groupMod = groupMod;
 	}
 	
-	public void tenantFilter(TenantPO tenant) { 
+	public void tenantFilter(Tenant tenant) { 
 		this.apps = null;
 		this.users = null;
 		this.tenants = null;

@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.AliyunService;
 import org.btkj.courier.deploy.BaseTest;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.User;
 import org.junit.Test;
 
 public class AliyunServiceTest extends BaseTest {
@@ -14,7 +14,7 @@ public class AliyunServiceTest extends BaseTest {
 
 	@Test
 	public void testAssumeRole() { 
-		UserPO user = new UserPO();
+		User user = new User();
 		user.setAppId(100);
 		user.setUid(1);
 	}

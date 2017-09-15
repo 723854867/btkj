@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
@@ -54,7 +54,7 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public VehiclePolicy() {}
 	
-	public VehiclePolicy(EmployeePO employee, Insurer insurer, String id) {
+	public VehiclePolicy(Employee employee, Insurer insurer, String id) {
 		this._id = id;
 		if (null != insurer) {
 			this.insurerId = insurer.getId();

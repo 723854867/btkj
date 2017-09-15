@@ -9,10 +9,10 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.api.VehicleService;
 import org.rapid.util.common.message.Result;
@@ -26,7 +26,7 @@ public class INSURERS extends EmployeeAction<EmployeeParam> {
 	private VehicleService vehicleService;
 	
 	@Override
-	protected Result<List<Insurer>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeParam param) {
+	protected Result<List<Insurer>> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
 		List<Integer> tids = vehicleService.insurers(tenant.getTid());
 		if (CollectionUtil.isEmpty(tids))
 			return Result.result(Collections.EMPTY_LIST);

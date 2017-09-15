@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
 
 public class TenantListInfo implements Serializable {
 
@@ -16,15 +16,15 @@ public class TenantListInfo implements Serializable {
 	private List<OwnedTenants> own;			// 已经拥有的代理公司列表
 	private List<AuditTenants> audit;		// 正在审核的代理公司列表
 	
-	public TenantListInfo(List<TenantPO> own, Map<Integer, EmployeePO> employees, List<TenantPO> audit) {
+	public TenantListInfo(List<Tenant> own, Map<Integer, Employee> employees, List<Tenant> audit) {
 		this.own = new ArrayList<OwnedTenants>();
 		this.audit = new ArrayList<AuditTenants>();
-		Map<Integer, EmployeePO> map = new HashMap<Integer, EmployeePO>();
-		for (EmployeePO employee : employees.values()) 
+		Map<Integer, Employee> map = new HashMap<Integer, Employee>();
+		for (Employee employee : employees.values()) 
 			map.put(employee.getTid(), employee);
-		for (TenantPO tenant : own) 
+		for (Tenant tenant : own) 
 			this.own.add(new OwnedTenants(tenant, map.get(tenant.getTid())));
-		for (TenantPO tenant : audit)
+		for (Tenant tenant : audit)
 			this.audit.add(new AuditTenants(tenant));
 	}
 	
@@ -34,7 +34,7 @@ public class TenantListInfo implements Serializable {
 		
 		private int employeeId;
 		
-		public OwnedTenants(TenantPO tenant, EmployeePO employee) {
+		public OwnedTenants(Tenant tenant, Employee employee) {
 			super(tenant);
 			this.employeeId = employee.getId();
 		}
@@ -55,7 +55,7 @@ public class TenantListInfo implements Serializable {
 		private int tid;
 		private String tname;
 		
-		public AuditTenants(TenantPO tenant) {
+		public AuditTenants(Tenant tenant) {
 			this.tid = tenant.getTid();
 			this.tname = tenant.getName();
 		}

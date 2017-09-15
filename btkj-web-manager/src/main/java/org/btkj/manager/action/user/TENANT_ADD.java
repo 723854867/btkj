@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.btkj.courier.api.JianJieService;
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.param.user.TenantAddParam;
 import org.btkj.user.api.TenantService;
@@ -21,7 +21,7 @@ public class TENANT_ADD extends UserAction<TenantAddParam> {
 	private JianJieService jianJieService;
 
 	@Override
-	protected Result<EmployeeTip> execute(AppPO app, UserPO user, TenantAddParam param) {
+	protected Result<EmployeeTip> execute(App app, User user, TenantAddParam param) {
 		String mobile = param.getMobile();
 		mobile = Consts.SYMBOL_PLUS + PhoneUtil.getCountryCode(mobile) + PhoneUtil.getNationalNumber(mobile);
 		param.setMobile(mobile);

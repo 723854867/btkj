@@ -6,10 +6,10 @@ import org.btkj.config.api.ConfigManageService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.manager.pojo.param.AuthorizeEmployeeParam;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.ModularType;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.message.Result;
@@ -20,10 +20,10 @@ public class AUTHORIZE_EMPLOYEE extends EmployeeAction<AuthorizeEmployeeParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Void> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, AuthorizeEmployeeParam param) {
+	protected Result<Void> execute(App app, User user, Tenant tenant, Employee employee, AuthorizeEmployeeParam param) {
 		if (employee.getId() == param.getTarId())
 			return Consts.RESULT.FORBID;
-		EmployeePO target = employeeService.employeeById(param.getTarId());
+		Employee target = employeeService.employeeById(param.getTarId());
 		if (null == target) 
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (target.getTid() != tenant.getTid())

@@ -2,9 +2,9 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.UserPO;
-import org.btkj.pojo.entity.user.EmployeePO.Mod;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.user.Employee.Mod;
 import org.btkj.pojo.enums.PayType;
 
 public class EmployeeInfo implements Serializable {
@@ -21,7 +21,7 @@ public class EmployeeInfo implements Serializable {
 	private String identityBack;
 	private PayType payType;
 	
-	public EmployeeInfo(UserPO user, EmployeePO employee) {
+	public EmployeeInfo(User user, Employee employee) {
 		this.uid = user.getUid();
 		this.employeeId = employee.getId();
 		this.avatar = user.getAvatar();

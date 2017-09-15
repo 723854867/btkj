@@ -2,11 +2,12 @@ package org.btkj.common.action.user;
 
 import javax.annotation.Resource;
 
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.user.TenantListInfo;
-import org.btkj.pojo.model.identity.User;
+import org.btkj.pojo.param.NilParam;
 import org.btkj.user.api.TenantService;
-import org.btkj.web.util.action.OldUserAction;
-import org.btkj.web.util.action.Request;
+import org.btkj.web.util.action.UserAction;
 import org.rapid.util.common.message.Result;
 
 /**
@@ -14,18 +15,14 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class TENANT_LIST extends OldUserAction {
+public class TENANT_LIST extends UserAction<NilParam> {
 	
 	@Resource
 	private TenantService tenantService;
 
+
 	@Override
-	protected Result<TenantListInfo> execute(Request request, User user) {
-		return Result.result(tenantService.tenantListInfo(user.getEntity()));
-	}
-	
-	@Override
-	protected boolean userIntegrityVerify(User user) {
-		return true;
+	protected Result<TenantListInfo> execute(App app, User user, NilParam param) {
+		return Result.result(tenantService.tenantListInfo(user));
 	}
 }

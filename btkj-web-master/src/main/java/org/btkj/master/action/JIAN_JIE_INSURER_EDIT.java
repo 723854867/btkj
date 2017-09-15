@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.master.Admin;
-import org.btkj.pojo.entity.user.TenantPO;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleManageService;
@@ -26,7 +26,7 @@ public class JIAN_JIE_INSURER_EDIT extends AdminAction<JianJieInsurerEditParam> 
 	@Override
 	protected Result<?> execute(Admin admin, JianJieInsurerEditParam param) {
 		if (param.getCrudType() == CrudType.CREATE) {
-			TenantPO tenant = tenantService.tenant(param.getTid());
+			Tenant tenant = tenantService.tenant(param.getTid());
 			if (null == tenant)
 				return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		}

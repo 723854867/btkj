@@ -2,7 +2,7 @@ package org.btkj.vehicle;
 
 import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
@@ -93,7 +93,7 @@ public class EntityGenerator {
 		return config;
 	}
 	
-	public static final VehiclePolicy newVehiclePolicy(EmployeePO employee, Insurer insurer, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
+	public static final VehiclePolicy newVehiclePolicy(Employee employee, Insurer insurer, String policyId, VehicleOrder order, BaseInfo info, BaseInfo relationInfo) {
 		VehiclePolicy policy = new VehiclePolicy(employee, insurer, policyId);
 		VehicleInfomation vehicleInfo = info.getVehicleInfomation();
 		if (null != order) {

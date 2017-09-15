@@ -3,10 +3,10 @@ package org.btkj.manager.action.tenant.poundage;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.vehicle.CoefficientRangeEditParam;
 import org.btkj.vehicle.api.BonusService;
 import org.rapid.util.common.enums.CrudType;
@@ -22,7 +22,7 @@ public class COEFFICIENT_RANGE_EDIT extends EmployeeAction<CoefficientRangeEditP
 	}
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, CoefficientRangeEditParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, CoefficientRangeEditParam param) {
 		param.setTid(tenant.getTid());
 		return bonusService.coefficientRangeEdit(param);
 	}

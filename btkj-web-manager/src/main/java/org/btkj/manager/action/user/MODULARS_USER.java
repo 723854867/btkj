@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigManageService;
 import org.btkj.manager.action.UserAction;
 import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.info.config.ModularDocument;
 import org.btkj.pojo.param.IdParam;
@@ -21,12 +21,12 @@ public class MODULARS_USER extends UserAction<IdParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Map<Integer, ModularDocument>> execute(AppPO app, UserPO user, IdParam param) {
+	protected Result<Map<Integer, ModularDocument>> execute(App app, User user, IdParam param) {
 		if (!BtkjUtil.isTopRole(user))
 			return Consts.RESULT.NO_PRIVILEGE;
 		if (param.getId() == user.getUid())
 			return Consts.RESULT.FORBID;
-		UserPO target = userService.user(param.getId());
+		User target = userService.user(param.getId());
 		if (null == target)
 			return Consts.RESULT.USER_NOT_EXIST;
 		if (target.getAppId() != user.getAppId())

@@ -16,7 +16,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.config.Insurer;
-import org.btkj.pojo.entity.user.EmployeePO;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.JianJieInsurer;
@@ -159,7 +159,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	}
 	
 	@Override
-	public Map<String, VehiclePolicy> jianJieSynchronize(EmployeePO employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info) {
+	public Map<String, VehiclePolicy> jianJieSynchronize(Employee employee, Map<Integer, EmployeeTip> employees, JianJiePoliciesInfo info) {
 		Map<String, VehiclePolicy> policies = new HashMap<String, VehiclePolicy>();
 		Map<String, BaseInfo> cms = new HashMap<String, BaseInfo>();
 		Map<String, BaseInfo> cmps = new HashMap<String, BaseInfo>();
@@ -183,7 +183,7 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 		return policies;
 	}
 	
-	private void _jianJiePolicyProcess(Map<Integer, EmployeeTip> employees, EmployeePO employee, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehicleOrder> updates, Map<String, VehiclePolicy> policies) {  
+	private void _jianJiePolicyProcess(Map<Integer, EmployeeTip> employees, Employee employee, InsuranceType insuranceType, Set<String> deliverNos, Map<String, BaseInfo> processing, Set<String> relationDeliverNos, Map<String, BaseInfo> relation, List<VehicleOrder> updates, Map<String, VehiclePolicy> policies) {  
 		List<VehicleOrder> orders = CollectionUtil.isEmpty(deliverNos) ? CollectionUtil.emptyArrayList() : vehicleOrderMapper.getByDeliverNos(insuranceType, deliverNos);
 		Iterator<Entry<String, BaseInfo>> iterator = processing.entrySet().iterator();
 		while (iterator.hasNext()) {

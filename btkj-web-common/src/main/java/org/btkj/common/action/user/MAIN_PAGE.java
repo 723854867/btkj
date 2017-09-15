@@ -7,8 +7,8 @@ import org.btkj.config.api.ConfigService;
 import org.btkj.nonauto.api.NonAutoService;
 import org.btkj.pojo.BtkjCode;
 import org.btkj.pojo.entity.config.Region;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.MainPageInfo;
 import org.btkj.user.api.AppService;
@@ -40,7 +40,7 @@ public class MAIN_PAGE extends UserAction<MainPageParam> {
 	private EmployeeService employeeService;
 	
 	@Override
-	protected Result<MainPageInfo> execute(AppPO app, UserPO user, MainPageParam param) {
+	protected Result<MainPageInfo> execute(App app, User user, MainPageParam param) {
 		EmployeeTip employee = null == param.getEmployeeId() ? null : employeeService.employeeTip(param.getEmployeeId());
 		if (null != param.getEmployeeId() && null == employee)
 			return Result.result(BtkjCode.EMPLOYEE_NOT_EXIST);

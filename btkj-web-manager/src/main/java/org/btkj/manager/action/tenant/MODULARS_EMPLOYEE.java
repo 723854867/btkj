@@ -8,10 +8,10 @@ import org.btkj.config.api.ConfigManageService;
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.BtkjUtil;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.ModularType;
 import org.btkj.pojo.info.config.ModularDocument;
 import org.btkj.pojo.param.EmployeeIdParam;
@@ -24,12 +24,12 @@ public class MODULARS_EMPLOYEE extends EmployeeAction<EmployeeIdParam> {
 	private ConfigManageService configManageService;
 
 	@Override
-	protected Result<Map<Integer, ModularDocument>> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, EmployeeIdParam param) {
+	protected Result<Map<Integer, ModularDocument>> execute(App app, User user, Tenant tenant, Employee employee, EmployeeIdParam param) {
 		if (!BtkjUtil.isTopRole(employee))
 			return Consts.RESULT.NO_PRIVILEGE;
 		if (param.getId() == employee.getId())
 			return Consts.RESULT.FORBID;
-		EmployeePO target = employeeService.employeeById(param.getId());
+		Employee target = employeeService.employeeById(param.getId());
 		if (null == target)
 			return BtkjConsts.RESULT.EMPLOYEE_NOT_EXIST;
 		if (target.getTid() != employee.getTid())

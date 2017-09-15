@@ -9,8 +9,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.test.BaseTest;
 import org.btkj.test.persistence.dao.AppDao;
 import org.btkj.test.persistence.dao.UserDao;
@@ -25,15 +25,15 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testGetAll() {
-		Map<Integer, UserPO> map = userDao.getAll();
-		for (Entry<Integer, UserPO> entry : map.entrySet()) {
+		Map<Integer, User> map = userDao.getAll();
+		for (Entry<Integer, User> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 		}
 		Set<Integer> set = new HashSet<Integer>();
 		set.add(1);
 		set.add(2);
 		map = userDao.getByKeys(set);
-		for (Entry<Integer, UserPO> entry : map.entrySet()) {
+		for (Entry<Integer, User> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 		}
 	}
@@ -52,22 +52,22 @@ public class UserServiceTest extends BaseTest {
 //			System.out.println(entry.getValue().getAppId() + " " + entry.getValue().getMobile() + " " + entry.getValue().getUid());
 //		}
 		
-		Map<Integer, AppPO> map = appDao.getAll();
-		for (Entry<Integer, AppPO> entry : map.entrySet()) {
+		Map<Integer, App> map = appDao.getAll();
+		for (Entry<Integer, App> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getId() + " " + entry.getValue().getName() + " " + entry.getValue().getRegion());
 		}
 		Set<Integer> set = new HashSet<Integer>();
 		set.add(1);
 		set.add(2);
 		map = appDao.getByKeys(set);
-		for (Entry<Integer, AppPO> entry : map.entrySet()) {
+		for (Entry<Integer, App> entry : map.entrySet()) {
 			System.out.println(entry.getValue().getId() + " " + entry.getValue().getName() + " " + entry.getValue().getRegion());
 		}
 	}
 	
 	@Test
 	public void testGetByKey() {
-		UserPO user = userDao.getByKey(1);
+		User user = userDao.getByKey(1);
 		System.out.println(user.getAppId() + " " + user.getName() + " " + user.getMobile());
 	}
 	
@@ -78,14 +78,14 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testInsert() {
-		UserPO user = new UserPO();
+		User user = new User();
 		user.setAppId(10);
 		userDao.insert(user);
 	}
 	
 	@Test
 	public void testUpdate() {
-		UserPO user = new UserPO();
+		User user = new User();
 		user.setUid(60);
 		user.setAppId(1);
 		user.setMobile("+8617826877008");
@@ -96,9 +96,9 @@ public class UserServiceTest extends BaseTest {
 	
 	@Test
 	public void testBatchInsert() {
-		List<UserPO> users = new ArrayList<UserPO>();
+		List<User> users = new ArrayList<User>();
 		for (int i = 0; i < 3; i++) {
-			UserPO user = new UserPO();
+			User user = new User();
 			user.setAppId(i);
 			user.setMobile("+sss");
 			user.setCreated(i);

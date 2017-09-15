@@ -3,8 +3,8 @@ package org.btkj.manager.action.user;
 import javax.annotation.Resource;
 
 import org.btkj.manager.action.UserAction;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.user.BannerEditParam;
 import org.btkj.user.api.UserManageService;
 import org.rapid.util.common.enums.CrudType;
@@ -25,7 +25,7 @@ public class BANNER_EDIT extends UserAction<BannerEditParam> {
 	}
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, BannerEditParam param) {
+	protected Result<?> execute(App app, User user, BannerEditParam param) {
 		param.setAppId(app.getId());
 		return userManageService.bannerEdit(param);
 	}

@@ -1,8 +1,8 @@
 package org.btkj.login.pojo.info;
 
 import org.btkj.pojo.entity.config.Region;
+import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.info.UserTips;
-import org.btkj.pojo.model.identity.Employee;
 
 public class EmployeeInfo extends UserTips {
 
@@ -21,11 +21,11 @@ public class EmployeeInfo extends UserTips {
 	
 	public EmployeeInfo() {}
 	
-	public EmployeeInfo(Employee employee, Region region) {
-		super(employee.getApp(), employee.getUser());
+	public EmployeeInfo(EmployeeTip employee, Region region) {
+		super(employee);
 		this.id = employee.getId();
 		this.tid = employee.getTid();
-		this.tname = employee.tname();
+		this.tname = employee.getTname();
 		this.regionId = region.getId();
 		this.regionName = region.getName();
 	}

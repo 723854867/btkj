@@ -3,10 +3,10 @@ package org.btkj.common.action.tenant;
 import javax.annotation.Resource;
 
 import org.btkj.common.pojo.param.VehicleInfosParam;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
@@ -22,7 +22,7 @@ public class VEHICLE_INFOS extends EmployeeAction<VehicleInfosParam> {
 	private VehicleService vehicleService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, VehicleInfosParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, VehicleInfosParam param) {
 		return Result.result(vehicleService.vehicleInfos(tenant, param.getVin()));
 	}
 }

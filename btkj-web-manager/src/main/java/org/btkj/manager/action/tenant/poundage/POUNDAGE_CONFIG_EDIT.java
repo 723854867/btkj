@@ -4,10 +4,10 @@ import javax.annotation.Resource;
 
 import org.btkj.manager.action.EmployeeAction;
 import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.AppPO;
-import org.btkj.pojo.entity.user.EmployeePO;
-import org.btkj.pojo.entity.user.TenantPO;
-import org.btkj.pojo.entity.user.UserPO;
+import org.btkj.pojo.entity.user.App;
+import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.param.vehicle.PoundageConfigEditParam;
 import org.btkj.pojo.param.vehicle.PoundageConfigEditParam.NodeConfigInfo;
 import org.btkj.vehicle.api.BonusService;
@@ -19,7 +19,7 @@ public class POUNDAGE_CONFIG_EDIT extends EmployeeAction<PoundageConfigEditParam
 	private BonusService bonusService;
 
 	@Override
-	protected Result<?> execute(AppPO app, UserPO user, TenantPO tenant, EmployeePO employee, PoundageConfigEditParam param) {
+	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, PoundageConfigEditParam param) {
 		param.setTid(tenant.getTid());
 		NodeConfigInfo config = param.getConfig();
 		if (null != config) {
