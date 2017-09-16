@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
-import org.btkj.pojo.entity.user.App.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.EmployeeHolder;
 import org.btkj.pojo.param.EmployeeParam;
@@ -57,13 +57,13 @@ public abstract class EmployeeAction<PARAM extends EmployeeParam> extends Action
 			User user = eh.getUser();
 			Tenant tenant = eh.getTenant();
 			Employee employee = eh.getEmployee();
-			if (Mod.SEAL.satisfy(app.getMod()))
+			if (BtkjUtil.isSeal(app))
 				return BtkjConsts.RESULT.APP_SEALED;
-			if (org.btkj.pojo.entity.user.User.Mod.SEAL.satisfy(user.getMod()))
+			if (BtkjUtil.isSeal(user))
 				return BtkjConsts.RESULT.USER_SEALED;
-			if (org.btkj.pojo.entity.user.Tenant.Mod.SEAL.satisfy(tenant.getMod()))
+			if (BtkjUtil.isSeal(tenant))
 				return BtkjConsts.RESULT.TENANT_SEALED;
-			if (org.btkj.pojo.entity.user.Employee.Mod.SEAL.satisfy(employee.getMod()))
+			if (BtkjUtil.isSeal(employee))
 				return BtkjConsts.RESULT.EMPLOYEE_SEALED;
 			return execute(app, user, tenant, employee, param);
 		} finally {

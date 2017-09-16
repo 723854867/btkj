@@ -3,6 +3,7 @@ package org.btkj.user.service;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
@@ -90,6 +91,8 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	private Result<LoginInfo> _doLogin(Client client, App app, User user, String mobile) {
+		if (BtkjUtil.isSeal(user))
+			return BtkjConsts.RESULT.USER_SEALED;
 		String token = client == Client.RECRUIT ? AlternativeJdkIdGenerator.INSTANCE.generateId().toString() : userMapper.tokenReplace(client, user.getUid(), mobile);
 		switch (client) {
 		case RECRUIT:

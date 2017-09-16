@@ -3,6 +3,7 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.param.AppParam;
 import org.btkj.user.api.AppService;
@@ -18,6 +19,8 @@ public abstract class AppAction<PARAM extends AppParam> extends Action<PARAM> {
 		App app = appService.app(param.getAppId());
 		if (null == app)
 			return BtkjConsts.RESULT.APP_NOT_EXIST;
+		if (BtkjUtil.isSeal(app))
+			return BtkjConsts.RESULT.APP_SEALED;
 		return execute(app, param);
 	}
 	

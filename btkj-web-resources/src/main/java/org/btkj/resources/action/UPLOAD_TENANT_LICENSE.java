@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
@@ -31,6 +32,10 @@ public class UPLOAD_TENANT_LICENSE extends UserAction<UploadTenantLicenseParam> 
 	
 	@Override
 	protected Result<String> execute(App app, User user, UploadTenantLicenseParam param) {
+		if (BtkjUtil.isSeal(app))
+			return BtkjConsts.RESULT.APP_SEALED;
+		if (BtkjUtil.isSeal(user))
+			return BtkjConsts.RESULT.USER_SEALED;
 		Tenant tenant = tenantService.tenant(param.getTid());
 		if (null == tenant)
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;

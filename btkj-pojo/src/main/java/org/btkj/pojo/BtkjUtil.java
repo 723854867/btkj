@@ -3,7 +3,9 @@ package org.btkj.pojo;
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.entity.master.Admin.Mod;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.SortField;
 import org.rapid.util.common.serializer.json.GsonEnumTypeAdapter;
@@ -42,5 +44,25 @@ public class BtkjUtil {
 	
 	public static final boolean isTopRole(Employee employee) {
 		return employee.getLayer() == Node.ROOT_LAYER;
+	}
+	
+	public static final boolean isSeal(Admin admin) {
+		return Mod.SEAL.satisfy(admin.getMod());
+	}
+	
+	public static final boolean isSeal(App app) {
+		return org.btkj.pojo.entity.user.App.Mod.SEAL.satisfy(app.getMod());
+	}
+	
+	public static final boolean isSeal(User user) {
+		return org.btkj.pojo.entity.user.User.Mod.SEAL.satisfy(user.getMod());
+	}
+	
+	public static final boolean isSeal(Tenant tenant) { 
+		return org.btkj.pojo.entity.user.Tenant.Mod.SEAL.satisfy(tenant.getMod());
+	}
+	
+	public static final boolean isSeal(Employee employee) {
+		return org.btkj.pojo.entity.user.Employee.Mod.SEAL.satisfy(employee.getMod());
 	}
 }

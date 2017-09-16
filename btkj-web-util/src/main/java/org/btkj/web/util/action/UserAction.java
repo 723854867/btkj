@@ -3,9 +3,9 @@ package org.btkj.web.util.action;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.User;
-import org.btkj.pojo.entity.user.App.Mod;
 import org.btkj.pojo.enums.Client;
 import org.btkj.pojo.model.UserHolder;
 import org.btkj.pojo.param.Param;
@@ -39,9 +39,9 @@ public abstract class UserAction<PARAM extends Param> extends Action<PARAM> {
 			try {
 				App app = result.attach().getApp();
 				User user = result.attach().getUser();
-				if (Mod.SEAL.satisfy(app.getMod()))
+				if (BtkjUtil.isSeal(app))
 					return BtkjConsts.RESULT.APP_SEALED;
-				if (org.btkj.pojo.entity.user.User.Mod.SEAL.satisfy(user.getMod()))
+				if (BtkjUtil.isSeal(user))
 					return BtkjConsts.RESULT.USER_SEALED;
 				return execute(app, user, param);
 			} finally {

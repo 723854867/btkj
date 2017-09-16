@@ -5,6 +5,8 @@ import java.io.InputStream;
 import javax.annotation.Resource;
 
 import org.btkj.pojo.AliyunResourceUtil;
+import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.resources.AliyunUploader;
@@ -27,6 +29,10 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 
 	@Override
 	protected Result<UploadUserInfo> execute(App app, User user, UploadUserInfoParam param) {
+		if (BtkjUtil.isSeal(app))
+			return BtkjConsts.RESULT.APP_SEALED;
+		if (BtkjUtil.isSeal(user))
+			return BtkjConsts.RESULT.USER_SEALED;
 		UploadUserInfo info = new UploadUserInfo();
 		if (null != param.getAvatar())
 			info.setAvatar(_uploadAvatar(app, user, param.getAvatar()));

@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.BtkjConsts;
+import org.btkj.pojo.BtkjUtil;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.enums.Client;
@@ -25,6 +26,8 @@ public class UPLOAD_INSURER_ICON extends AdminAction<UploadInsurerIconParam> {
 
 	@Override
 	protected Result<String> execute(Admin admin, UploadInsurerIconParam param) {
+		if (BtkjUtil.isSeal(admin))
+			return BtkjConsts.RESULT.ADMIN_SEALED;
 		Insurer insurer = configService.insurer(param.getId());
 		if (null == insurer)
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
