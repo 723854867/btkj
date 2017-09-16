@@ -2,6 +2,7 @@ package org.btkj.manager.pojo.info;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Tenant;
@@ -32,7 +33,7 @@ public class TenantInfo implements Serializable {
 		this.region = region.getId();
 		this.regionName = region.getName();
 		this.license = tenant.getLicense();
-		this.licenseImage = tenant.getLicenseImage();
+		this.licenseImage = AliyunResourceUtil.tenantResource(tenant, tenant.getLicenseImage());
 		this.nonAutoBind = tenant.getNonAutoBind();
 		this.servicePhone = tenant.getServicePhone();
 		this.teamDepth = tenant.getTeamDepth();

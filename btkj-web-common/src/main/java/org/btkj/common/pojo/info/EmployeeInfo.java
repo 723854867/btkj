@@ -2,6 +2,8 @@ package org.btkj.common.pojo.info;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.AliyunResourceUtil;
+import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.user.Employee.Mod;
@@ -21,15 +23,15 @@ public class EmployeeInfo implements Serializable {
 	private String identityBack;
 	private PayType payType;
 	
-	public EmployeeInfo(User user, Employee employee) {
+	public EmployeeInfo(App app, User user, Employee employee) {
 		this.uid = user.getUid();
 		this.employeeId = employee.getId();
-		this.avatar = user.getAvatar();
+		this.avatar = AliyunResourceUtil.userResource(user, user.getAvatar());
 		this.name = user.getName();
 		this.mobile = user.getMobile();
 		this.identity = user.getIdentity();
-		this.identityFace = user.getIdentityFace();
-		this.identityBack = user.getIdentityBack();
+		this.identityFace = AliyunResourceUtil.userResource(user, user.getIdentityFace());
+		this.identityBack = AliyunResourceUtil.userResource(user, user.getIdentityBack());
 		if ((Mod.PAY_NET.mark() & employee.getMod()) == Mod.PAY_NET.mark())
 			this.payType = PayType.PAY_NET;
 		else if ((Mod.PAY_ADVANCE.mark() & employee.getMod()) == Mod.PAY_ADVANCE.mark())

@@ -9,11 +9,13 @@ import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.statistics.LogScore;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
+import org.btkj.pojo.info.statistics.StatisticScoreInfo;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.ScoreReward;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
+import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.mybatis.dao.LogExploitDao;
 import org.btkj.statistics.mybatis.dao.LogScoreDao;
@@ -46,6 +48,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Override
 	public List<ScoreReward> scoreReward(int employeeId, int begin, int end) {
 		return logScoreDao.scoreReward(employeeId, begin, end);
+	}
+	
+	@Override
+	public Pager<StatisticScoreInfo> scores(StatisticScoreParam param) {
+		int total = logScoreDao.total(param);
+		if (0 == total)
+			return Pager.EMPLTY;
+		param.calculate(total);
+		return new Pager<StatisticScoreInfo>(total, logScoreDao.scores(param));
 	}
 	
 	@Override

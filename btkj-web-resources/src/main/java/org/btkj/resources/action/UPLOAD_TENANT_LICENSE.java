@@ -8,7 +8,6 @@ import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.enums.FileType;
 import org.btkj.resources.AliyunUploader;
 import org.btkj.resources.pojo.param.UploadTenantLicenseParam;
 import org.btkj.user.api.TenantService;
@@ -37,15 +36,16 @@ public class UPLOAD_TENANT_LICENSE extends UserAction<UploadTenantLicenseParam> 
 			return BtkjConsts.RESULT.TENANT_NOT_EXIST;
 		if (tenant.getAppId() != app.getId())
 			return Consts.RESULT.FORBID;
-		String resource = AliyunResourceUtil.tenantResourceSuffix(app, tenant, FileType.PNG);
-		if (!aliyunUploader.upload(resource, param.getLicense()))
+		String license = AliyunResourceUtil.pngResource();
+		String key = AliyunResourceUtil.tenantResourceKey(tenant, license);
+		if (!aliyunUploader.upload(key, param.getLicense()))
 			return Consts.RESULT.FAILURE;
 		if (StringUtil.hasText(tenant.getLicenseImage()))
-			aliyunUploader.delete(AliyunResourceUtil.tenantResourceSuffix(app, tenant, tenant.getLicenseImage()));
-		tenant.setLicenseImage(resource);
+			aliyunUploader.delete(AliyunResourceUtil.tenantResourceKey(tenant, tenant.getLicenseImage()));
+		tenant.setLicenseImage(license);
 		tenant.setUpdated(DateUtil.currentTime());
 		tenantService.update(tenant);
-		return Result.result(AliyunResourceUtil.tenantResource(app, tenant, resource));
+		return Result.result(AliyunResourceUtil.tenantResource(tenant, license));
 	}
 	
 	@Override

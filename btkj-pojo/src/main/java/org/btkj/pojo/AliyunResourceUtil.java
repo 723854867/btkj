@@ -2,7 +2,6 @@ package org.btkj.pojo;
 
 import java.text.MessageFormat;
 
-import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.enums.FileType;
@@ -20,36 +19,28 @@ public class AliyunResourceUtil {
 		return ossPrefix + btPrefix + resource;
 	}
 	
-	public static String btResourceSuffix(String resource) {
-		return btPrefix + resource;
+	public static String btResourceKey(String suffix) {
+		return btPrefix + suffix;
 	}
 	
-	public static String btResourceSuffix(FileType fileType) {
-		return btPrefix + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
+	public static String userResource(User user, String resource) {
+		return null == resource ? null : ossPrefix + MessageFormat.format(userPrefix, String.valueOf(user.getAppId()), String.valueOf(user.getUid())) + resource;
 	}
 	
-	public static String userResource(App app, User user, String resource) {
-		return ossPrefix + MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + resource;
+	public static String userResourceKey(User user, String suffix) {
+		return MessageFormat.format(userPrefix, String.valueOf(user.getAppId()), String.valueOf(user.getUid())) + suffix;
 	}
 	
-	public static String userResourceSuffix(App app, User user, String resource) {
-		return MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + resource;
+	public static String tenantResource(Tenant tenant, String resource) {
+		return null == resource ? null : ossPrefix + MessageFormat.format(tenantPrefix, String.valueOf(tenant.getAppId()), String.valueOf(tenant.getTid())) + resource;
 	}
 	
-	public static String userResourceSuffix(App app, User user, FileType fileType) {
-		return MessageFormat.format(userPrefix, String.valueOf(app.getId()), String.valueOf(user.getUid())) + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
+	public static String tenantResourceKey(Tenant tenant, String suffix) {
+		return MessageFormat.format(tenantPrefix, String.valueOf(tenant.getAppId()), String.valueOf(tenant.getTid())) + suffix;
 	}
 	
-	public static String tenantResource(App app, Tenant tenant, String resource) {
-		return ossPrefix + MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + resource;
-	}
-	
-	public static String tenantResourceSuffix(App app, Tenant tenant, String resource) {
-		return MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + resource;
-	}
-	
-	public static String tenantResourceSuffix(App app, Tenant tenant, FileType fileType) {
-		return MessageFormat.format(tenantPrefix, String.valueOf(app.getId()), String.valueOf(tenant.getTid())) + AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + fileType.suffix();
+	public static String pngResource() {
+		return AlternativeJdkIdGenerator.INSTANCE.generateId().toString() + FileType.PNG.suffix();
 	}
 	
 	public static void setOssPrefix(String ossPrefix) {

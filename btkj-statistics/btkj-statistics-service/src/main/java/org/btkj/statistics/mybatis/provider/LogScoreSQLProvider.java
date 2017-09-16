@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.entity.statistics.LogScore;
+import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
 public class LogScoreSQLProvider extends SQLProvider {
@@ -40,6 +41,74 @@ public class LogScoreSQLProvider extends SQLProvider {
 				AND();
 				WHERE("created BETWEEN #{begin} AND #{end}");
 				GROUP_BY("`type`");
+			}
+		}.toString();
+	}
+	
+	public String total(StatisticScoreParam param) { 
+		String sql = _statisticSql(param, true);
+		switch (param.getTimeType()) {
+		case HOUR:
+		case MINUTES:
+		case SECOND:
+		case MILLISECOND:
+		case NANOSECOND:
+			return sql;
+		default:
+			return new StringBuilder("SELECT COUNT(*) FROM(").append(sql).append(") t").toString();
+		}
+	}
+	
+	public String scores(StatisticScoreParam param) { 
+		String sql = _statisticSql(param, false);
+		return new StringBuilder(sql).append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize()).toString();	
+	}
+	
+	private String _statisticSql(StatisticScoreParam param, boolean count) {
+		return new SQL() {
+			{
+				switch (param.getTimeType()) {
+				case YEAR:
+					SELECT("`year`, SUM(`quota`) quota");
+					GROUP_BY("`year`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC" : "`year` DESC");
+					break;
+				case MONTH:
+					SELECT("`year`, `month`, SUM(`quota`) quota");
+					GROUP_BY("`year`, `month`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC" : "`year` DESC, `month` DESC");
+					break;
+				case DAY:
+					SELECT("`year`, `month`, `day`, SUM(`quota`) quota");
+					GROUP_BY("`year`, `month`, `day`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `day` ASC" : "`year` DESC, `month` DESC, `day` DESC");
+					break;
+				case WEEK:
+					SELECT("`year`, `month`, `week`, SUM(`quota`) quota");
+					GROUP_BY("`year`, `month`, `week`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `week` ASC" : "`year` DESC, `month` DESC, `week` DESC");
+					break;
+				case SEASON:
+					SELECT("`year`, `season`, SUM(`quota`) quota");
+					GROUP_BY("`year`, `season`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `season` ASC" : "`year` DESC, `season` DESC");
+					break;
+				default:
+					if (count)
+						SELECT("COUNT(*)");
+					else {
+						SELECT("*");
+						ORDER_BY(param.isAsc() ? "`created` ASC" : "`created` DESC");
+					}
+					break;
+				}
+				FROM(table);
+				WHERE(param.conditions());
 			}
 		}.toString();
 	}

@@ -13,6 +13,6 @@ public class EMPLOYEE_INFO extends EmployeeAction<EmployeeParam> {
 
 	@Override
 	protected Result<EmployeeInfo> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
-		return Result.result(new EmployeeInfo(user, employee));
+		return Result.result(new EmployeeInfo(app, user, employee));
 	}
 }

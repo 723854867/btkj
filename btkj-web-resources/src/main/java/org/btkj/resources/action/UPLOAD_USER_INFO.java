@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.User;
-import org.btkj.pojo.enums.FileType;
 import org.btkj.resources.AliyunUploader;
 import org.btkj.resources.pojo.info.UploadUserInfo;
 import org.btkj.resources.pojo.param.UploadUserInfoParam;
@@ -33,44 +32,47 @@ public class UPLOAD_USER_INFO extends UserAction<UploadUserInfoParam> {
 			info.setAvatar(_uploadAvatar(app, user, param.getAvatar()));
 		if (null != param.getIdentityFace())
 			info.setIdentityFace(_uploadIdentityFace(app, user, param.getIdentityFace()));
-		if (null != info.getIdentityBack())
+		if (null != param.getIdentityBack())
 			info.setIdentityBack(_uploadIdentityBack(app, user, param.getIdentityBack()));
 		return Result.result(info);
 	}
 	
-	private String _uploadAvatar(App app, User user, InputStream avatar) { 
-		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
-		if (!aliyunUploader.upload(resource, avatar))
+	private String _uploadAvatar(App app, User user, InputStream avatarFile) { 
+		String avatar = AliyunResourceUtil.pngResource();
+		String key = AliyunResourceUtil.userResourceKey(user, avatar);
+		if (!aliyunUploader.upload(key, avatarFile))
 			return null;
 		if (StringUtil.hasText(user.getAvatar()))
-			aliyunUploader.delete(AliyunResourceUtil.userResourceSuffix(app, user, user.getAvatar()));
-		user.setAvatar(resource);
+			aliyunUploader.delete(AliyunResourceUtil.userResourceKey(user, user.getAvatar()));
+		user.setAvatar(avatar);
 		user.setUpdated(DateUtil.currentTime());
 		userService.update(user);
-		return AliyunResourceUtil.userResource(app, user, resource);
+		return AliyunResourceUtil.userResource(user, avatar);
 	}
 	
-	private String _uploadIdentityFace(App app, User user, InputStream identityFace) {
-		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
-		if (!aliyunUploader.upload(resource, identityFace))
+	private String _uploadIdentityFace(App app, User user, InputStream identityFaceFile) {
+		String identityFace = AliyunResourceUtil.pngResource();
+		String key = AliyunResourceUtil.userResourceKey(user, identityFace);
+		if (!aliyunUploader.upload(key, identityFaceFile))
 			return null;
 		if (StringUtil.hasText(user.getIdentityFace()))
-			aliyunUploader.delete(AliyunResourceUtil.userResourceSuffix(app, user, user.getIdentityFace()));
-		user.setIdentityFace(resource);
+			aliyunUploader.delete(AliyunResourceUtil.userResourceKey(user, user.getIdentityFace()));
+		user.setIdentityFace(identityFace);
 		user.setUpdated(DateUtil.currentTime());
 		userService.update(user);
-		return AliyunResourceUtil.userResource(app, user, resource);
+		return AliyunResourceUtil.userResource(user, identityFace);
 	}
 	
-	private String _uploadIdentityBack(App app, User user, InputStream identityBack) {
-		String resource = AliyunResourceUtil.userResourceSuffix(app, user, FileType.PNG);
-		if (!aliyunUploader.upload(resource, identityBack))
+	private String _uploadIdentityBack(App app, User user, InputStream identityBackFile) {
+		String identityBack = AliyunResourceUtil.pngResource();
+		String key = AliyunResourceUtil.userResourceKey(user, identityBack);
+		if (!aliyunUploader.upload(key, identityBackFile))
 			return null;
 		if (StringUtil.hasText(user.getIdentityBack()))
-			aliyunUploader.delete(AliyunResourceUtil.userResourceSuffix(app, user, user.getIdentityBack()));
-		user.setIdentityBack(resource);
+			aliyunUploader.delete(AliyunResourceUtil.userResourceKey(user, user.getIdentityBack()));
+		user.setIdentityBack(identityBack);
 		user.setUpdated(DateUtil.currentTime());
 		userService.update(user);
-		return AliyunResourceUtil.userResource(app, user, resource);
+		return AliyunResourceUtil.userResource(user, identityBack);
 	}
 }

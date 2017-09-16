@@ -83,6 +83,8 @@ public interface BtkjConsts {
 		String TRANSFER							= "transfer";
 		String NATURE							= "nature";
 		String TYPE								= "type";
+		String DETAIL_TYPE						= "detail_type";
+		String BIZ_ID							= "biz_id";
 		String NAME								= "name";
 		String BONUSTYPE						= "bonusType";
 		String ISSUETIME						= "issueTime";
@@ -93,6 +95,7 @@ public interface BtkjConsts {
 		String DAY								= "day";
 		String WEEK								= "week";
 		String SEASON							= "season";
+		String INCOME							= "income";
 	}
 	
 	interface LIMITS {

@@ -24,7 +24,7 @@ public class EntityGenerator {
 		Insurer insurer = new Insurer();
 		insurer.setId(param.getId());
 		insurer.setName(param.getName());
-		insurer.setBiHuId(param.getBiHuId());
+		insurer.setBiHuId(null == param.getBiHuId() ? 0 : param.getBiHuId());
 		insurer.setLeBaoBaId(param.getLeBaoBaId());
 		
 		int time = DateUtil.currentTime();

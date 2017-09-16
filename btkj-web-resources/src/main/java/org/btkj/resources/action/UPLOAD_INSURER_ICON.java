@@ -8,7 +8,6 @@ import org.btkj.pojo.BtkjConsts;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.enums.Client;
-import org.btkj.pojo.enums.FileType;
 import org.btkj.resources.AliyunUploader;
 import org.btkj.resources.pojo.param.UploadInsurerIconParam;
 import org.btkj.web.util.action.AdminAction;
@@ -29,15 +28,16 @@ public class UPLOAD_INSURER_ICON extends AdminAction<UploadInsurerIconParam> {
 		Insurer insurer = configService.insurer(param.getId());
 		if (null == insurer)
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
-		String resource = AliyunResourceUtil.btResourceSuffix(FileType.PNG);
-		if (!aliyunUploader.upload(resource, param.getIcon()))
+		String suffix = AliyunResourceUtil.pngResource();
+		String icon = AliyunResourceUtil.btResourceKey(suffix);
+		if (!aliyunUploader.upload(icon, param.getIcon()))
 			return Consts.RESULT.FAILURE;
 		if (StringUtil.hasText(insurer.getIcon()))
-			aliyunUploader.delete(AliyunResourceUtil.btResourceSuffix(insurer.getIcon()));
-		insurer.setIcon(resource);
+			aliyunUploader.delete(AliyunResourceUtil.btResourceKey(insurer.getIcon()));
+		insurer.setIcon(suffix);
 		insurer.setUpdated(DateUtil.currentTime());
 		configService.updateInsurer(insurer);
-		return Result.result(AliyunResourceUtil.btResource(resource));
+		return Result.result(AliyunResourceUtil.btResource(suffix));
 	}
 	
 	@Override

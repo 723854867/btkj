@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.btkj.pojo.entity.statistics.LogScore;
+import org.btkj.pojo.info.statistics.StatisticScoreInfo;
 import org.btkj.pojo.model.ScoreReward;
+import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.btkj.statistics.mybatis.provider.LogScoreSQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 
@@ -28,4 +30,10 @@ public interface LogScoreDao extends DBMapper<Long, LogScore> {
 	 */
 	@SelectProvider(type = LogScoreSQLProvider.class, method = "scoreReward")
 	List<ScoreReward> scoreReward(@Param("employeeId") int employeeId, @Param("begin") int begin, @Param("end") int end);
+	
+	@SelectProvider(type = LogScoreSQLProvider.class, method = "total")
+	int total(StatisticScoreParam param);
+	
+	@SelectProvider(type = LogScoreSQLProvider.class, method = "scores")
+	List<StatisticScoreInfo> scores(StatisticScoreParam param);
 }

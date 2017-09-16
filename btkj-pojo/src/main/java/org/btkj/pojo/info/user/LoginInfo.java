@@ -47,9 +47,9 @@ public class LoginInfo implements Serializable {
 			super(app, user);
 			this.identity = user.getIdentity();
 			if (null != user.getIdentityFace())
-				this.identityFace = AliyunResourceUtil.userResource(app, user, user.getIdentityFace());
+				this.identityFace = AliyunResourceUtil.userResource(user, user.getIdentityFace());
 			if (null != user.getIdentityBack())
-				this.identityBack = AliyunResourceUtil.userResource(app, user, user.getIdentityBack());
+				this.identityBack = AliyunResourceUtil.userResource(user, user.getIdentityBack());
 		}
 		public String getIdentity() {
 			return identity;

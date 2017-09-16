@@ -26,7 +26,7 @@ public class UserTips implements Serializable {
 		this.uid = user.getUid();
 		this.name = user.getName();
 		if (null != user.getAvatar())
-			this.avatar = AliyunResourceUtil.userResource(app, user, user.getAvatar());
+			this.avatar = AliyunResourceUtil.userResource(user, user.getAvatar());
 	}
 
 	public int getUid() {

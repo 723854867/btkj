@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.btkj.config.api.ConfigManageService;
+import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.master.Admin;
 import org.btkj.pojo.param.NilParam;
@@ -18,6 +19,9 @@ public class INSURERS extends AdminAction<NilParam> {
 
 	@Override
 	protected Result<List<Insurer>> execute(Admin admin, NilParam param) {
-		return Result.result(configManageService.insurers());
+		List<Insurer> insurers = configManageService.insurers();
+		for (Insurer insurer : insurers)
+			insurer.setIcon(AliyunResourceUtil.btResource(insurer.getIcon()));
+		return Result.result(insurers);
 	}
 }

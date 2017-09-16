@@ -2,6 +2,7 @@ package org.btkj.pojo.info.user;
 
 import java.io.Serializable;
 
+import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.entity.user.Tenant;
 
 /**
@@ -42,7 +43,7 @@ public class TenantPagingInfo implements Serializable {
 		this.teamDepth = tenant.getTeamDepth();
 		this.regionId = tenant.getRegion();
 		this.license = tenant.getLicense();
-		this.licenseImage = tenant.getLicenseImage();
+		this.licenseImage = AliyunResourceUtil.tenantResource(tenant, tenant.getLicenseImage());
 		this.created = tenant.getCreated();
 		this.updated = tenant.getUpdated();
 		this.contacts = tenant.getContacts();

@@ -77,7 +77,8 @@ public class AppServiceImpl implements AppService {
 			}
 			if (0 != mainTid)
 				tenant = tenantMapper.getByKey(mainTid);
-		}
+		} else 
+			tenant = tenantMapper.getByKey(employee.getTid());
 		List<Banner> banners = bannerMapper.getByAppIdAndTid(appId, null == tenant ? 0 : tenant.getTid());
 		return Result.result(new MainPageInfo(user, tenant, banners));
 	}
