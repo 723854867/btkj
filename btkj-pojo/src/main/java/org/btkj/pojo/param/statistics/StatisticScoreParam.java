@@ -3,7 +3,9 @@ package org.btkj.pojo.param.statistics;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.btkj.pojo.enums.BizType;
+import javax.validation.constraints.NotNull;
+
+import org.btkj.pojo.enums.ScoreType;
 import org.btkj.pojo.param.EmployeeParam;
 import org.rapid.util.common.enums.TimeType;
 
@@ -16,11 +18,12 @@ public class StatisticScoreParam extends EmployeeParam {
 	private Integer tid;
 	private Integer tarId;
 	private Boolean income;
-	private BizType type;
+	private ScoreType type;
 	private Integer detailType;
 	private String bizId;
 	private boolean asc;
 	
+	@NotNull
 	private TimeType timeType;
 	private Integer endTime;
 	private Integer beginTime;
@@ -70,11 +73,11 @@ public class StatisticScoreParam extends EmployeeParam {
 		this.income = income;
 	}
 
-	public BizType getType() {
+	public ScoreType getType() {
 		return type;
 	}
 
-	public void setType(BizType type) {
+	public void setType(ScoreType type) {
 		this.type = type;
 	}
 

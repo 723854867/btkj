@@ -24,7 +24,7 @@ import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.user.Employee.Mod;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ScoreType;
 import org.btkj.pojo.enums.BonusManageConfigType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.PolicySchema;
@@ -83,14 +83,14 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 			if (!set.isEmpty())
 				employees.putAll(employeeService.employees(set));
 		}
-		Map<Integer, Map<BizType, ScoreTips>> scores = new HashMap<Integer, Map<BizType, ScoreTips>>();
+		Map<Integer, Map<ScoreType, ScoreTips>> scores = new HashMap<Integer, Map<ScoreType, ScoreTips>>();
 		List<LogScore> logScores = new ArrayList<LogScore>();
 		for (VehicleOrder order : orders.values()) {
 			Employee ep = employees.get(order.getEmployeeId());
 			if (null != order.getBonus()) {					// 获取手续费
 				LogScore logScore = _vehicleBonuslogScore(order);
 				logScores.add(logScore);
-				_scoreTips(ep.getId(), scores, logScore, BizType.VEHICLE_POUNDAGE);
+				_scoreTips(ep.getId(), scores, logScore, ScoreType.VEHICLE_POUNDAGE);
 			}
 			LinkedList<Integer> list = manageMap.get(order.getEmployeeId());
 			if (!CollectionUtil.isEmpty(list)) {			// 获取管理费
@@ -104,12 +104,12 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 					LogScore logScore = _managerLogScore(configs, employeeId, order, InsuranceType.COMMERCIAL, depth);
 					if (null != logScore) {
 						logScores.add(logScore);
-						_scoreTips(employeeId, scores, logScore, BizType.VEHICLE_BOUNS_MANAGE);
+						_scoreTips(employeeId, scores, logScore, ScoreType.VEHICLE_BOUNS_MANAGE);
 					}
 					logScore = _managerLogScore(configs, employeeId, order, InsuranceType.COMPULSORY, depth);
 					if (null != logScore) {
 						logScores.add(logScore);
-						_scoreTips(employeeId, scores, logScore, BizType.VEHICLE_BOUNS_MANAGE);
+						_scoreTips(employeeId, scores, logScore, ScoreType.VEHICLE_BOUNS_MANAGE);
 					}
 				}
 			}
@@ -129,7 +129,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setEmployeeId(order.getEmployeeId());
 		logScore.setBizId(order.get_id());
 		logScore.setIncome(true);
-		logScore.setType(BizType.VEHICLE_POUNDAGE.mark());
+		logScore.setType(ScoreType.VEHICLE_POUNDAGE.mark());
 		logScore.setQuota(VehicleUtil.getTotalQuotaInCent(order));
 		int time = order.getCreated() * 1000;
 		logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
@@ -149,7 +149,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setEmployeeId(employeeId);
 		logScore.setBizId(order.get_id());
 		logScore.setIncome(true);
-		logScore.setType(BizType.VEHICLE_POUNDAGE.mark());
+		logScore.setType(ScoreType.VEHICLE_POUNDAGE.mark());
 		logScore.setQuota(VehicleUtil.getTotalQuotaInCent(order));
 		int time = order.getCreated() * 1000;
 		logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
@@ -195,7 +195,7 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		logScore.setEmployeeId(employeeId);
 		logScore.setBizId(order.get_id());
 		logScore.setIncome(true);
-		logScore.setType(BizType.VEHICLE_BOUNS_MANAGE.mark());
+		logScore.setType(ScoreType.VEHICLE_BOUNS_MANAGE.mark());
 		logScore.setDetailType(manageConfigType.mark());
 		logScore.setQuota(new BigDecimal(quota).multiply(new BigDecimal(config.getRate())).divide(new BigDecimal(10)).setScale(0, RoundingMode.HALF_UP).intValue());
 		int time = order.getCreated() * 1000;
@@ -208,10 +208,10 @@ public class VEHICLE_REWARD extends EmployeeAction<EmployeeParam> {
 		return logScore;
 	}
 	
-	private void _scoreTips(int employeeId, Map<Integer, Map<BizType, ScoreTips>> scores, LogScore logScore, BizType type) {
-		Map<BizType, ScoreTips> map = scores.get(employeeId);
+	private void _scoreTips(int employeeId, Map<Integer, Map<ScoreType, ScoreTips>> scores, LogScore logScore, ScoreType type) {
+		Map<ScoreType, ScoreTips> map = scores.get(employeeId);
 		if (null == map) {
-			map = new HashMap<BizType, ScoreTips>();
+			map = new HashMap<ScoreType, ScoreTips>();
 			scores.put(employeeId, map);
 		}
 		ScoreTips tips = map.get(type);

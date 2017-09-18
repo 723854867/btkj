@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.btkj.payment.api.PaymentManageService;
 import org.btkj.payment.mybatis.Tx;
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ScoreType;
 import org.btkj.pojo.model.ScoreTips;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,12 @@ public class PaymentManageServiceImpl implements PaymentManageService {
 	private Tx tx;
 	
 	@Override
-	public void gainScores(Map<Integer, Map<BizType, ScoreTips>> map) {
+	public void gainScores(Map<Integer, Map<ScoreType, ScoreTips>> map) {
 		tx.gainScores(map);
 	}
 	
 	@Override
-	public void gainScore(int employeeId, int score, BizType type) {
+	public void gainScore(int employeeId, int score, ScoreType type) {
 		tx.gainScore(employeeId, score, type);
 	}
 }

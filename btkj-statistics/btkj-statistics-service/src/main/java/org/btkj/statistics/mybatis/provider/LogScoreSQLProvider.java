@@ -32,19 +32,6 @@ public class LogScoreSQLProvider extends SQLProvider {
 		return builder.toString();
 	}
 	
-	public String scoreReward() {
-		return new SQL() {
-			{
-				SELECT("SUM(quota) quota, `type`");
-				FROM(TABLE);
-				WHERE("employee_id=#{employeeId}");
-				AND();
-				WHERE("created BETWEEN #{begin} AND #{end}");
-				GROUP_BY("`type`");
-			}
-		}.toString();
-	}
-	
 	public String total(StatisticScoreParam param) { 
 		String sql = _statisticSql(param, true);
 		switch (param.getTimeType()) {
@@ -69,32 +56,32 @@ public class LogScoreSQLProvider extends SQLProvider {
 			{
 				switch (param.getTimeType()) {
 				case YEAR:
-					SELECT("`year`, SUM(`quota`) quota");
-					GROUP_BY("`year`");
+					SELECT("`year`, SUM(`quota`) quota, `type`");
+					GROUP_BY("`year`, `type`");
 					if (!count)
 						ORDER_BY(param.isAsc() ? "`year` ASC" : "`year` DESC");
 					break;
 				case MONTH:
-					SELECT("`year`, `month`, SUM(`quota`) quota");
-					GROUP_BY("`year`, `month`");
+					SELECT("`year`, `month`, SUM(`quota`) quota, `type`");
+					GROUP_BY("`year`, `month`, `type`");
 					if (!count)
 						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC" : "`year` DESC, `month` DESC");
 					break;
 				case DAY:
-					SELECT("`year`, `month`, `day`, SUM(`quota`) quota");
-					GROUP_BY("`year`, `month`, `day`");
+					SELECT("`year`, `month`, `day`, SUM(`quota`) quota, `type`");
+					GROUP_BY("`year`, `month`, `day`, `type`");
 					if (!count)
 						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `day` ASC" : "`year` DESC, `month` DESC, `day` DESC");
 					break;
 				case WEEK:
-					SELECT("`year`, `month`, `week`, SUM(`quota`) quota");
-					GROUP_BY("`year`, `month`, `week`");
+					SELECT("`year`, `month`, `week`, SUM(`quota`) quota, `type`");
+					GROUP_BY("`year`, `month`, `week`, `type`");
 					if (!count)
 						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `week` ASC" : "`year` DESC, `month` DESC, `week` DESC");
 					break;
 				case SEASON:
-					SELECT("`year`, `season`, SUM(`quota`) quota");
-					GROUP_BY("`year`, `season`");
+					SELECT("`year`, `season`, SUM(`quota`) quota, `type`");
+					GROUP_BY("`year`, `season`, `type`");
 					if (!count)
 						ORDER_BY(param.isAsc() ? "`year` ASC, `season` ASC" : "`year` DESC, `season` DESC");
 					break;

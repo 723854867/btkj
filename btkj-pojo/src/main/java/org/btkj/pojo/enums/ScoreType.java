@@ -1,6 +1,6 @@
 package org.btkj.pojo.enums;
 
-public enum BizType {
+public enum ScoreType {
 
 	/**
 	 * 车险手续费
@@ -20,7 +20,7 @@ public enum BizType {
 	
 	private int mark;
 	
-	private BizType(int mark) {
+	private ScoreType(int mark) {
 		this.mark = mark;
 	}
 	

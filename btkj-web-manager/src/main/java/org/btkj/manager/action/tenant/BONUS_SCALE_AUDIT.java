@@ -12,7 +12,7 @@ import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ScoreType;
 import org.btkj.pojo.info.EmployeeTip;
 import org.btkj.pojo.model.BonusScale;
 import org.btkj.statistics.api.StatisticsService;
@@ -42,13 +42,13 @@ public class BONUS_SCALE_AUDIT extends EmployeeAction<BonusScaleAuditParam> {
 		int quota = rate * bonusScale.getQuota() / 1000;
 		if (0 != quota) {
 			EmployeeTip ep = employeeService.employeeTip(bonusScale.getEmployeeId());
-			paymentManageService.gainScore(bonusScale.getEmployeeId(), quota, BizType.VEHICLE_BONUS_SCALE);
+			paymentManageService.gainScore(bonusScale.getEmployeeId(), quota, ScoreType.VEHICLE_BONUS_SCALE);
 			LogScore logScore = new LogScore();
 			logScore.setEmployeeId(ep.getId());
 			logScore.setUid(ep.getUid());
 			logScore.setTid(ep.getTid());
 			logScore.setAppId(ep.getAppId());
-			logScore.setType(BizType.VEHICLE_BONUS_SCALE.mark());
+			logScore.setType(ScoreType.VEHICLE_BONUS_SCALE.mark());
 			logScore.setBizId(bonusScale.get_id());
 			logScore.setQuota(quota);
 			logScore.setIncome(true);

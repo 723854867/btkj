@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.btkj.payment.EntityGenerator;
 import org.btkj.payment.mybatis.dao.AccountDao;
 import org.btkj.pojo.entity.payment.Account;
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ScoreType;
 import org.btkj.pojo.model.ScoreTips;
 import org.rapid.util.lang.DateUtil;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,15 @@ public class Tx {
 	private AccountDao accountDao;
 	
 	@Transactional
-	public void gainScores(Map<Integer, Map<BizType, ScoreTips>> map) {
+	public void gainScores(Map<Integer, Map<ScoreType, ScoreTips>> map) {
 		Map<Integer, Account> accounts = accountDao.getByKeysForUpdate(map.keySet());
-		for (Entry<Integer, Map<BizType, ScoreTips>> entry : map.entrySet()) {
+		for (Entry<Integer, Map<ScoreType, ScoreTips>> entry : map.entrySet()) {
 			Account account = accounts.get(entry.getKey());
 			if (null == account) {
 				account = EntityGenerator.newAccount(entry.getKey()); 
 				accounts.put(entry.getKey(), account);
 			}
-			for (Entry<BizType, ScoreTips> temp : entry.getValue().entrySet()) {
+			for (Entry<ScoreType, ScoreTips> temp : entry.getValue().entrySet()) {
 				int score = temp.getValue().getScore();
 				account.setScoreAvailable(account.getScoreAvailable() + score);
 				account.setScorePersonal(account.getScorePersonal() + score);
@@ -50,7 +50,7 @@ public class Tx {
 	}
 	
 	@Transactional
-	public void gainScore(int employeeId, int score, BizType type) {
+	public void gainScore(int employeeId, int score, ScoreType type) {
 		Account account = accountDao.getByKeyForUpdate(employeeId);
 		if (null == account) 
 			account = EntityGenerator.newAccount(employeeId); 

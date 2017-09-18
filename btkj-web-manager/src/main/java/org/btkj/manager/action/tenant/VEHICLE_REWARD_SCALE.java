@@ -14,11 +14,11 @@ import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
-import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.user.Tenant.Mod;
+import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ExploitType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.param.EmployeeParam;
@@ -53,12 +53,6 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 
 	@Override
 	protected Result<Void> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
-		if (!Tenant.Mod.isScaleStatisticSupport(tenant.getMod()) || !Tenant.Mod.isScaleRewardSupport(tenant.getMod()) )
-			return BtkjConsts.RESULT.BONUS_SCALE_SETTINGS_ERROR;
-		List<BonusScaleConfig> configs = vehicleManageService.bonusScaleConfigs(tenant.getTid());
-		if (CollectionUtil.isEmpty(configs))
-			return BtkjConsts.RESULT.BONUS_SCALE_SETTINGS_ERROR;
-		
 		int currentYear = DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, System.currentTimeMillis());
 		int currentMonth = DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, System.currentTimeMillis());
 		if (currentMonth == 0) {				// 如果当前是1月，则统计的时去年的12月的数据
@@ -68,10 +62,8 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 		int start = DateUtil.boundaryTimeOfMonth(currentYear, currentMonth, true);
 		int end = DateUtil.boundaryTimeOfMonth(currentYear, currentMonth, false);
 		int time = Integer.valueOf(DateUtil.getDate(DateUtil.YYYYMM, start));				// 当前年月 201405 格式
-		if (tenant.getScaleRewardTime() != 0) {					// 需要判断是否已经统计过
-			if (tenant.getScaleRewardTime() >= time)
+		if (tenant.getScaleRewardTime() >= time)
 				return BtkjConsts.RESULT.BONUS_SCALE_REWARDED;
-		}
 		Map<String, VehiclePolicy> policies = vehicleManageService.policies(tenant.getTid(), start, end);
 		if (!CollectionUtil.isEmpty(policies)) {
 			List<LogExploit> exploits = new ArrayList<LogExploit>();
@@ -90,27 +82,25 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 					map.put(exploit.getEmployeeId(), bs);
 				}
 				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, true);			// 商业-统计口径
-				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);		// 商业-奖励孔径
+				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);			// 商业-奖励孔径
 				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, true);			// 交强-统计口径	
-				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);		// 交强-奖励口径
+				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);			// 交强-奖励口径
 			}
-			exploits = statisticsService.recordLogExploits(exploits);
-			for (BonusScale bs : map.values()) {
-				int SCQuota = bs.getSCQuota();
-				for (BonusScaleConfig config : configs) {
-					Comparison symbol = Comparison.match(config.getComparison());
-					if (null == symbol)
-						continue;
-					String[] params = config.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
-					if (!IntComparable.SINGLETON.compare(symbol, SCQuota, CollectionUtil.toIntegerArray(params)))
-						continue;
-					bs.setCmRate(config.getRate());
-					break;
+			if (!CollectionUtil.isEmpty(exploits)) {
+				exploits = statisticsService.recordLogExploits(exploits);
+				List<BonusScaleConfig> configs = vehicleManageService.bonusScaleConfigs(tenant.getTid());
+				for (BonusScale bs : map.values()) {
+					int SCQuota = bs.getSCQuota();
+					for (BonusScaleConfig config : configs) {
+						String[] params = config.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
+						if (!IntComparable.SINGLETON.compare(Comparison.match(config.getComparison()), SCQuota, CollectionUtil.toIntegerArray(params)))
+							continue;
+						bs.setCmRate(config.getRate());
+						break;
+					}
 				}
+				userManageService.calculateTeamExploits(time, tenant, map);
 			}
-			if (map.isEmpty())
-				return Consts.RESULT.OK;
-			userManageService.calculateTeamExploits(time, tenant, map);
 		}
 		return Consts.RESULT.OK;
 	}
@@ -120,17 +110,17 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 		case NONE:
 		case NOT_EXIST:
 		case UNSUITABLE:
-			logger.info("业务员归属存在异议的保单不参与业务统计");
+			logger.info("非保途平台保单不参与规模奖励计算");
 			return null;
 		default:
 			LogExploit exploit = new LogExploit();
 			exploit.setTid(policy.getTid());
 			exploit.setAppId(policy.getAppId());
 			exploit.setEmployeeId(policy.getSalesmanId());
-			exploit.setType(BizType.VEHICLE_BONUS_SCALE.mark());
+			exploit.setType(ExploitType.VEHICLE.mark());
 			exploit.setDetailType(policy.getBonusType().mark());
 			exploit.setBizId(policy.get_id());
-			exploit.setQuota(policy.quotaInCent());
+			exploit.setQuota(policy.commercialQuotaInCent() + policy.compulsoryQuotaInCent());
 			exploit.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setDay(DateUtil.dayOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));

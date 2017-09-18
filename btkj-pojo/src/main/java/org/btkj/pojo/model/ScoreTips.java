@@ -2,18 +2,18 @@ package org.btkj.pojo.model;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.enums.BizType;
+import org.btkj.pojo.enums.ScoreType;
 
 public class ScoreTips implements Serializable {
 
 	private static final long serialVersionUID = 3345968518203099275L;
 
 	private int score;
-	private BizType type;
+	private ScoreType type;
 	
 	public ScoreTips() {}
 	
-	public ScoreTips(BizType type, int score) {
+	public ScoreTips(ScoreType type, int score) {
 		this.type = type;
 		this.score = score;
 	}
@@ -26,11 +26,11 @@ public class ScoreTips implements Serializable {
 		this.score = score;
 	}
 	
-	public BizType getType() {
+	public ScoreType getType() {
 		return type;
 	}
 	
-	public void setType(BizType type) {
+	public void setType(ScoreType type) {
 		this.type = type;
 	}
 }

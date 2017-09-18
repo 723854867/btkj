@@ -12,7 +12,6 @@ import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.ScoreReward;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.btkj.statistics.api.StatisticsService;
@@ -42,11 +41,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 		List<Exploit> employees = logExploitDao.multiExploits(employeeIds, begin, end, bizTypeMod);
 		double performance = logExploitDao.totalExploit(employeeIds, begin, end, bizTypeMod);
 		return new Exploits(performance, employees);
-	}
-	
-	@Override
-	public List<ScoreReward> scoreReward(int employeeId, int begin, int end) {
-		return logScoreDao.scoreReward(employeeId, begin, end);
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Insurance;
 import org.rapid.util.common.model.UniqueModel;
 import org.rapid.util.lang.DateUtil;
+import org.rapid.util.lang.StringUtil;
 
 public class VehiclePolicy implements UniqueModel<String> {
 
@@ -326,16 +327,17 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.orderDetail.setOrderId(order.get_id());
 	}
 	
-	public int quotaInCent() {
-		return commercialQuotaInCent() + compulsoryQuotaInCent();
-	}
-	
 	public int commercialQuotaInCent() {
-		return null != commercialDetail ? (int) (Double.valueOf(commercialDetail.getPrice()) * 100) : 0;
+		String price = null == commercialDetail ? null : commercialDetail.price;
+		return StringUtil.hasText(price) ? (int) (Double.valueOf(commercialDetail.price) * 100) : 0;
 	}
 	
 	public int compulsoryQuotaInCent() {
-		return null != compulsoryDetail ? (int) ((Double.valueOf(compulsoryDetail.getPrice()) + Double.valueOf(compulsoryDetail.getVesselPrice())) * 100) : 0;
+		String price = null == compulsoryDetail ? null : compulsoryDetail.getPrice();
+		String price1 = null == compulsoryDetail ? null : compulsoryDetail.vesselPrice;
+		int p = StringUtil.hasText(price) ? (int) (Double.valueOf(compulsoryDetail.getPrice()) * 100) : 0;
+		int p1 = StringUtil.hasText(price1) ? (int) (Double.valueOf(compulsoryDetail.vesselPrice) * 100) : 0;
+		return p + p1;
 	}
 	
 	public class CommercialPolicyDetail implements Serializable {

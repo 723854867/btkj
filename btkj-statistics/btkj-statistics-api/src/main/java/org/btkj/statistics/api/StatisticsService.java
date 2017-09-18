@@ -10,7 +10,6 @@ import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.model.ScoreReward;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.rapid.util.common.enums.TimeType;
@@ -38,16 +37,6 @@ public interface StatisticsService {
 	 * @return
 	 */
 	Exploits multiExploits(List<Integer> employeeIds, int begin, int end, int bizType);
-	
-	/**
-	 * 雇员奖励统计
-	 * 
-	 * @param employeeId
-	 * @param begin
-	 * @param end
-	 * @return
-	 */
-	List<ScoreReward> scoreReward(int employeeId, int begin, int end);
 	
 	Pager<LogScore> scores(StatisticScoreParam param);
 	
