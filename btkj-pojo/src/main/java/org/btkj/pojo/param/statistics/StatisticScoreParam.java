@@ -168,6 +168,14 @@ public class StatisticScoreParam extends EmployeeParam {
 
 	public String[] conditions() {
 		Set<String> conditions = new HashSet<String>();
+		if (null != tid)
+			conditions.add("`tid`=" + tid);
+		if (null != uid)
+			conditions.add("`uid`=" + uid);
+		if (null != appId)
+			conditions.add("`app_id`=" + appId);
+		if (null != tarId)
+			conditions.add("`employee_id`=" + tarId);
 		if (null != income)
 			conditions.add("`income`=" + (income ? 1 : 0));
 		if (null != type)

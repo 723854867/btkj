@@ -7,7 +7,6 @@ import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.statistics.LogScore;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
-import org.btkj.pojo.info.statistics.StatisticScoreInfo;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
@@ -50,7 +49,7 @@ public interface StatisticsService {
 	 */
 	List<ScoreReward> scoreReward(int employeeId, int begin, int end);
 	
-	Pager<StatisticScoreInfo> scores(StatisticScoreParam param);
+	Pager<LogScore> scores(StatisticScoreParam param);
 	
 	/**
 	 * 统计积分日志
