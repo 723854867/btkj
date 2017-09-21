@@ -21,8 +21,9 @@ import org.btkj.pojo.info.statistics.Report_1_Info;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.param.statistics.StatisticActsParam;
-import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
+import org.btkj.pojo.param.statistics.Report3Param;
+import org.btkj.pojo.param.statistics.Report1Param;
+import org.btkj.pojo.param.statistics.Report2Param;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.mybatis.dao.LogExploitDao;
@@ -95,12 +96,17 @@ public class StatisticsServiceImpl implements StatisticsService {
 	}
 	
 	@Override
-	public Pager<PolicyStatisticInfo> statsiticPolicies(StatisticPoliciesParam param) {
-		int total = statisticPolicyDao.statisticPoliciesTotal(param);
+	public List<PolicyStatisticInfo> report_1(Report1Param param) {
+		return statisticPolicyDao.report_1(param);
+	}
+	
+	@Override
+	public Pager<PolicyStatisticInfo> report_2(Report2Param param) {
+		int total = statisticPolicyDao.report_2_total(param);
 		if (0 == total)
 			return Pager.EMPLTY;
 		param.calculate(total);
-		List<PolicyStatisticInfo> list = statisticPolicyDao.statisticPolicies(param);
+		List<PolicyStatisticInfo> list = statisticPolicyDao.report_2(param);
 		return new Pager<PolicyStatisticInfo>(total, list);
 	}
 	
@@ -128,7 +134,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	}
 	
 	@Override
-	public Pager<Report_1_Info> report_1(StatisticActsParam param) {
+	public Pager<Report_1_Info> report_3(Report3Param param) {
 		switch (param.getTimeType()) {
 		case HOUR:
 		case SECOND:
@@ -141,10 +147,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 			break;
 		}
 		Map<String, Report_1_Info> map = new HashMap<String, Report_1_Info>();
-		int total = statisticActDao.report_1_total(param);
+		int total = statisticActDao.report_3_total(param);
 		if (0 != total) {
 			param.calculate(total);
-			List<StatisticAct> list = statisticActDao.report_1(param);
+			List<StatisticAct> list = statisticActDao.report_3(param);
 			for (StatisticAct act : list) {
 				String key = StringUtil.underlineLink(act.getEmployeeId(), act.getYear(), act.getMonth(), act.getDay(), act.getWeek(), act.getSeason());
 				Report_1_Info info = map.get(key);
@@ -157,23 +163,23 @@ public class StatisticsServiceImpl implements StatisticsService {
 				info.addStatisticAct(act);
 			}
 		}
-		StatisticPoliciesParam param2 = new StatisticPoliciesParam(param);
-		int total1 = statisticPolicyDao.statisticPoliciesTotal(param2);
-		if (0 != total) {
-			param2.calculate(total1);
-			param2.setGroupMod(StatisticPoliciesParam.GroupType.EMPLOYEE_ID.mark() | StatisticPoliciesParam.GroupType.UID.mark());
-			List<PolicyStatisticInfo> list = statisticPolicyDao.statisticPolicies(param2);
-			for (PolicyStatisticInfo info : list) {
-				String key = StringUtil.underlineLink(info.getEmployeeId(), info.getYear(), info.getMonth(), info.getDay(), info.getWeek(), info.getSeason());
-				Report_1_Info temp = map.get(key);
-				if (null == temp) {
-					temp = new Report_1_Info();
-					temp.setEmployeeId(info.getEmployeeId());
-					map.put(key, temp);
-				}
-				temp.addStatisticPolicy(info);
-			}
-		}
-		return new Pager<Report_1_Info>(Math.max(total, total1), new ArrayList<Report_1_Info>(map.values()));
+//		Report2Param param2 = new Report2Param(param);
+//		int total1 = statisticPolicyDao.statisticPoliciesTotal(param2);
+//		if (0 != total) {
+//			param2.calculate(total1);
+//			param2.setGroupMod(Report2Param.GroupType.EMPLOYEE_ID.mark() | Report2Param.GroupType.UID.mark());
+//			List<PolicyStatisticInfo> list = statisticPolicyDao.statisticPolicies(param2);
+//			for (PolicyStatisticInfo info : list) {
+//				String key = StringUtil.underlineLink(info.getEmployeeId(), info.getYear(), info.getMonth(), info.getDay(), info.getWeek(), info.getSeason());
+//				Report_1_Info temp = map.get(key);
+//				if (null == temp) {
+//					temp = new Report_1_Info();
+//					temp.setEmployeeId(info.getEmployeeId());
+//					map.put(key, temp);
+//				}
+//				temp.addStatisticPolicy(info);
+//			}
+//		}
+		return new Pager<Report_1_Info>(Math.max(total, 0), new ArrayList<Report_1_Info>(map.values()));
 	}
 }

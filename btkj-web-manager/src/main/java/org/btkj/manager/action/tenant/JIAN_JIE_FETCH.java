@@ -24,6 +24,8 @@ import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy.CommercialPolicyDetail;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy.CompulsoryPolicyDetail;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.StatisticUsedType;
+import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.param.EmployeeParam;
@@ -126,7 +128,7 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 		temp.setTid(policy.getTid());
 		temp.setUid(policy.getUid());
 		temp.setEmployeeId(policy.getSalesmanId());
-		temp.setStatisticUsedType(policy.getBonusType().mark());
+		temp.setUsedType(_statisticUsedType(policy.getBonusType()).mark());
 		temp.setNature(policy.getNature().mark());
 		temp.setTransfer(policy.isTransfer() ? 1 : 0);
 		temp.setPremium(premium);
@@ -139,5 +141,18 @@ public class JIAN_JIE_FETCH extends EmployeeAction<EmployeeParam> {
 		temp.setSeason(temp.getMonth() % 3);
 		temp.setCreated(policy.getIssuanceTime());
 		return temp;
+	}
+	
+	private StatisticUsedType _statisticUsedType(VehicleBonusType bonustype) {
+		switch (bonustype) {
+		case PC:
+		case PT:
+			return StatisticUsedType.BIZ;
+		case NPC:
+		case NPT:
+			return StatisticUsedType.NO_BIZ;
+		default:
+			return StatisticUsedType.OTHER;
+		}
 	}
 }

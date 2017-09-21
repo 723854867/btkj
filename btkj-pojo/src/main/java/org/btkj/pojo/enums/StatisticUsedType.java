@@ -7,11 +7,9 @@ package org.btkj.pojo.enums;
  */
 public enum StatisticUsedType {
 
-	BIZ_COACH(1),						// 营利客车
-	BIZ_TRUCK(2),						// 营利货车
-	NO_BIZ_COACH(4),					// 非营利客车
-	NO_BIZ_TRUCK(8),					// 非营利货车
-	OTHER(16);							// 其他
+	BIZ(1),								// 营利
+	NO_BIZ(2),							// 非营利
+	OTHER(4);							// 其它
 	
 	private int mark;
 	

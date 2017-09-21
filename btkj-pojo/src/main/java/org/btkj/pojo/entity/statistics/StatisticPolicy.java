@@ -14,7 +14,7 @@ public class StatisticPolicy implements UniqueModel<String> {
 	private int tid;
 	private int uid;
 	private int employeeId;
-	private int statisticUsedType;
+	private int usedType;
 	private int nature;
 	private int transfer;
 	private String premium;
@@ -89,12 +89,12 @@ public class StatisticPolicy implements UniqueModel<String> {
 		this.employeeId = employeeId;
 	}
 
-	public int getStatisticUsedType() {
-		return statisticUsedType;
+	public int getUsedType() {
+		return usedType;
 	}
-
-	public void setStatisticUsedType(int statisticUsedType) {
-		this.statisticUsedType = statisticUsedType;
+	
+	public void setUsedType(int usedType) {
+		this.usedType = usedType;
 	}
 
 	public int getNature() {

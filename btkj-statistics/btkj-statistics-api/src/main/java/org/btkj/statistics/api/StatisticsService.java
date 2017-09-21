@@ -12,8 +12,9 @@ import org.btkj.pojo.info.statistics.Report_1_Info;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.param.statistics.StatisticActsParam;
-import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
+import org.btkj.pojo.param.statistics.Report3Param;
+import org.btkj.pojo.param.statistics.Report1Param;
+import org.btkj.pojo.param.statistics.Report2Param;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.rapid.util.common.enums.TimeType;
 
@@ -71,14 +72,11 @@ public interface StatisticsService {
 	 */
 	void statisticPolicies(Collection<StatisticPolicy> policies);
 	
-	/**
-	 * 保单统计
-	 * 
-	 * @param param
-	 */
-	Pager<PolicyStatisticInfo> statsiticPolicies(StatisticPoliciesParam param);
+	List<PolicyStatisticInfo> report_1(Report1Param param);
+	
+	Pager<PolicyStatisticInfo> report_2(Report2Param param);
 	
 	void quoteRecord(Employee employee, String vin);
 	
-	Pager<Report_1_Info> report_1(StatisticActsParam param);
+	Pager<Report_1_Info> report_3(Report3Param param);
 }
