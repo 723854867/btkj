@@ -123,8 +123,8 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			exploit.setQuota(policy.commercialQuotaInCent() + policy.compulsoryQuotaInCent());
 			exploit.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
-			exploit.setDay(DateUtil.dayOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
-			exploit.setWeek(DateUtil.weekOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setDay(DateUtil.dayOfMonth(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
+			exploit.setWeek(DateUtil.weekOfMonth(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setSeason(DateUtil.season(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setCreated(policy.getIssuanceTime());
 			return exploit;

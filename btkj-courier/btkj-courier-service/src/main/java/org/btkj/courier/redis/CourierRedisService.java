@@ -102,7 +102,7 @@ public class CourierRedisService {
 		}
 	}
 	
-	public Result<String> captchaVerifier(int appId, String mobile, String captcha) {
+	public Result<Void> captchaVerifier(int appId, String mobile, String captcha) {
 		if (!redis.delIfEquals(_captchaKey(appId, mobile), captcha))
 			return Result.result(-1);
 		return Result.result(0);

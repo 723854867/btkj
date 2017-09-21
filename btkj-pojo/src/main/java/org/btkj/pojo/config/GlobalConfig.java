@@ -1,5 +1,7 @@
 package org.btkj.pojo.config;
 
+import org.rapid.util.lang.DateUtil;
+
 /**
  * 全局配置
  * 
@@ -16,6 +18,7 @@ public class GlobalConfig {
 		DEFAULT_CONFIG.setTeamDepth(3);
 		DEFAULT_CONFIG.setMaxBonusScaleConfig(4);
 		DEFAULT_CONFIG.setEmployeeInviteUrl("http://www.baidu.com");
+		DEFAULT_CONFIG.setQuoteActExpires(DateUtil.SECONDS_HALF_YEAR);
 	}
 
 	private int maxTenantNum;
@@ -24,6 +27,7 @@ public class GlobalConfig {
 	private int teamDepth;				// 团队深度表示团队下限的层数：自己算一层
 	private int maxBonusScaleConfig;	// 规模奖励配置项最大记录条数
 	private String employeeInviteUrl;	// 邀请h5地址
+	private int quoteActExpires;		// 报价次数计算重置时间
 	
 	public int getMaxTenantNum() {
 		return maxTenantNum;
@@ -63,5 +67,13 @@ public class GlobalConfig {
 	
 	public void setEmployeeInviteUrl(String employeeInviteUrl) {
 		this.employeeInviteUrl = employeeInviteUrl;
+	}
+	
+	public int getQuoteActExpires() {
+		return quoteActExpires;
+	}
+	
+	public void setQuoteActExpires(int quoteActExpires) {
+		this.quoteActExpires = quoteActExpires;
 	}
 }

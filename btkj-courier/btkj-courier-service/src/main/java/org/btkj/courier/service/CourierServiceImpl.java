@@ -21,7 +21,7 @@ public class CourierServiceImpl implements CourierService {
 	}
 	
 	@Override
-	public Result<String> captchaVerify(int appId, String mobile, String captcha) {
+	public Result<Void> captchaVerify(int appId, String mobile, String captcha) {
 		return courierRedisService.captchaVerifier(appId, mobile, captcha);
 	}
 	

@@ -35,6 +35,7 @@ import org.btkj.pojo.model.VehicleAuditModel;
 import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.param.VehicleOrderParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
+import org.btkj.statistics.api.StatisticsService;
 import org.btkj.vehicle.LeBaoBaOrderTask;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
@@ -75,6 +76,8 @@ public class VehicleServiceImpl implements VehicleService {
 	private LeBaoBaVehicle leBaoBaVehicle;		// 乐宝吧车险
 	@Resource
 	private ExecutorService executorService;
+	@Resource
+	private StatisticsService statisticsService;
 	@Resource
 	private VehicleOrderMapper vehicleOrderMapper;
 	@Resource
@@ -202,7 +205,7 @@ public class VehicleServiceImpl implements VehicleService {
 		vehicleOrderMapper.insert(orders);			// 因为乐保吧报价是异步的，因此在报价之前要先把数据入库
 		for (Entry<String, Boolean> entry : leBaoBa.entrySet()) {
 			VehicleOrder order = orders.get(Lane.LE_BAO_BA).get(entry.getKey());
-			executorService.execute(new LeBaoBaOrderTask(tenant, employee, poundage, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, vehicleOrderMapper));
+			executorService.execute(new LeBaoBaOrderTask(tenant, employee, poundage, entry.getKey(), entry.getValue(), order, param, leBaoBaVehicle, statisticsService, vehicleOrderMapper));
 		}
 		return Consts.RESULT.OK;
 	}
@@ -285,6 +288,7 @@ public class VehicleServiceImpl implements VehicleService {
 			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(tenant, employee.getUid(), order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
+					statisticsService.quoteRecord(employee, order.getTips().getVin());
 					poundage.calculate(order, employee);							// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);

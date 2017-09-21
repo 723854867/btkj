@@ -19,7 +19,10 @@ public class BiHuVehicleTest extends BaseTest {
 	
 	@Test
 	public void testRenewal() {
-		Result<Renewal> result = biHuVehicle.renewal(new Tenant(), 1, "浙AW3Z26", 9);
+		Tenant tenant = new Tenant();
+		tenant.setBiHuAgent("92352");
+		tenant.setBiHuKey("71055b7e91b");
+		Result<Renewal> result = biHuVehicle.renewal(new Tenant(), 1, "浙A888XQ", 9);
 		System.out.println(result);
 	}
 	

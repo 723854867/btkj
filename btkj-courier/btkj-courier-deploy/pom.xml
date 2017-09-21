@@ -13,6 +13,10 @@
 	<artifactId>btkj-courier-deploy</artifactId>
 	<name>btkj-courier-deploy</name>
 	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<getui.version>4.0.1.9</getui.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -91,7 +95,20 @@
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.gexin.platform</groupId>
+			<artifactId>gexin-rp-sdk-http</artifactId>
+			<version>${getui.version}</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>getui-nexus</id>
+			<url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<finalName>courier-service</finalName>
@@ -125,7 +142,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 	<profiles>
 		<profile>

@@ -6,10 +6,13 @@ import java.util.List;
 import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.statistics.LogScore;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
+import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
+import org.btkj.pojo.info.statistics.Report_1_Info;
 import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
+import org.btkj.pojo.param.statistics.StatisticActsParam;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.rapid.util.common.enums.TimeType;
@@ -74,4 +77,8 @@ public interface StatisticsService {
 	 * @param param
 	 */
 	Pager<PolicyStatisticInfo> statsiticPolicies(StatisticPoliciesParam param);
+	
+	void quoteRecord(Employee employee, String vin);
+	
+	Pager<Report_1_Info> report_1(StatisticActsParam param);
 }

@@ -55,8 +55,8 @@ public class BONUS_SCALE_AUDIT extends EmployeeAction<BonusScaleAuditParam> {
 			int time = DateUtil.currentTime();
 			logScore.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
 			logScore.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
-			logScore.setDay(DateUtil.dayOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
-			logScore.setWeek(DateUtil.weekOfYear(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
+			logScore.setDay(DateUtil.dayOfMonth(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
+			logScore.setWeek(DateUtil.weekOfMonth(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
 			logScore.setSeason(DateUtil.season(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, time));
 			logScore.setCreated(time);
 			statisticsService.logScore(logScore);

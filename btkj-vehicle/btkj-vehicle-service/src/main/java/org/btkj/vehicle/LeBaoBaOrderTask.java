@@ -8,6 +8,7 @@ import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.VehicleOrderState;
 import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.statistics.api.StatisticsService;
 import org.btkj.vehicle.mongo.VehicleOrderMapper;
 import org.btkj.vehicle.realm.poundage.Poundage;
 import org.rapid.util.common.message.Result;
@@ -27,9 +28,12 @@ public class LeBaoBaOrderTask implements Runnable {
 	
 	private Poundage poundage;
 	private LeBaoBaVehicle leBaoBaVehicle;
+	private StatisticsService statisticsService;
 	private VehicleOrderMapper vehicleOrderMapper;
 	
-	public LeBaoBaOrderTask(Tenant tenant, Employee employee, Poundage poundage, String insurer, boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, VehicleOrderMapper vehicleOrderMapper) {
+	public LeBaoBaOrderTask(Tenant tenant, Employee employee, Poundage poundage, String insurer, 
+			boolean insure, VehicleOrder order, VehicleOrderParam param, LeBaoBaVehicle leBaoBaVehicle, 
+			StatisticsService statisticsService, VehicleOrderMapper vehicleOrderMapper) {
 		this.order = order;
 		this.param = param;
 		this.tenant = tenant;
@@ -38,6 +42,7 @@ public class LeBaoBaOrderTask implements Runnable {
 		this.employee = employee;
 		this.poundage = poundage;
 		this.leBaoBaVehicle = leBaoBaVehicle;
+		this.statisticsService = statisticsService;
 		this.vehicleOrderMapper = vehicleOrderMapper;
 	}
 
@@ -58,6 +63,7 @@ public class LeBaoBaOrderTask implements Runnable {
 			} else {
 				schema = result.attach();
 				order.setState(insure ? VehicleOrderState.INSURE_SUCCESS : VehicleOrderState.QUOTE_SUCCESS);
+				statisticsService.quoteRecord(employee, param.getVin());
 			}
 			if (null != schema)
 				order.getTips().setSchema(result.attach());

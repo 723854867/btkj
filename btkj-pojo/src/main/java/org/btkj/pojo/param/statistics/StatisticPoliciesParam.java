@@ -1,15 +1,10 @@
 package org.btkj.pojo.param.statistics;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.entity.user.Tenant;
-import org.btkj.pojo.enums.GroupType;
 import org.btkj.pojo.enums.InsuranceType;
 import org.btkj.pojo.enums.PolicyNature;
 import org.btkj.pojo.enums.VehiclePolicyType;
@@ -21,11 +16,11 @@ public class StatisticPoliciesParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 663082610856371422L;
 
-	private Set<Integer> apps;
-	private Set<Integer> users;
-	private Set<Integer> tenants;
-	private Set<Integer> insurers;
-	private Set<Integer> employees;
+	private Integer appId;
+	private Integer uid;
+	private Integer tid;
+	private Integer tarId;
+	private Integer insurerId;
 
 	private Boolean transfer;
 	@NotNull
@@ -43,45 +38,61 @@ public class StatisticPoliciesParam extends EmployeeParam {
 	private Integer beginTime;
 	private Integer endTime;
 	private Integer groupMod;
-
-	public Set<Integer> getApps() {
-		return apps;
+	private boolean asc;
+	
+	public StatisticPoliciesParam() {}
+	
+	public StatisticPoliciesParam(StatisticActsParam param) {
+		this.tid = param.getTid();
+		this.asc = param.isAsc();
+		this.year = param.getYear();
+		this.month = param.getMonth();
+		this.day = param.getDay();
+		this.week = param.getWeek();
+		this.season = param.getSeason();
+		this.endTime = param.getEndTime();
+		this.beginTime = param.getBeginTime();
+		this.timeType = param.getTimeType();
+	}
+	
+	public Integer getAppId() {
+		return appId;
 	}
 
-	public void setApps(Set<Integer> apps) {
-		this.apps = apps;
+	public void setAppId(Integer appId) {
+		this.appId = appId;
 	}
 
-	public Set<Integer> getUsers() {
-		return users;
+	public Integer getUid() {
+		return uid;
 	}
 
-	public void setUsers(Set<Integer> users) {
-		this.users = users;
+	public void setUid(Integer uid) {
+		this.uid = uid;
 	}
 
-	public Set<Integer> getTenants() {
-		return tenants;
+	public Integer getTid() {
+		return tid;
 	}
 
-	public void setTenants(Set<Integer> tenants) {
-		this.tenants = tenants;
+	public void setTid(Integer tid) {
+		this.tid = tid;
 	}
 
-	public Set<Integer> getInsurers() {
-		return insurers;
+	public Integer getTarId() {
+		return tarId;
 	}
 
-	public void setInsurers(Set<Integer> insurers) {
-		this.insurers = insurers;
+	public void setTarId(Integer tarId) {
+		this.tarId = tarId;
 	}
 
-	public Set<Integer> getEmployees() {
-		return employees;
+	public Integer getInsurerId() {
+		return insurerId;
 	}
 
-	public void setEmployees(Set<Integer> employees) {
-		this.employees = employees;
+	public void setInsurerId(Integer insurerId) {
+		this.insurerId = insurerId;
 	}
 
 	public Boolean getTransfer() {
@@ -196,6 +207,14 @@ public class StatisticPoliciesParam extends EmployeeParam {
 		this.endTime = endTime;
 	}
 	
+	public boolean isAsc() {
+		return asc;
+	}
+	
+	public void setAsc(boolean asc) {
+		this.asc = asc;
+	}
+	
 	public Integer getGroupMod() {
 		return groupMod;
 	}
@@ -204,36 +223,65 @@ public class StatisticPoliciesParam extends EmployeeParam {
 		this.groupMod = groupMod;
 	}
 	
-	public void tenantFilter(Tenant tenant) { 
-		this.apps = null;
-		this.users = null;
-		this.tenants = null;
-		this.tenants = new HashSet<Integer>();
-		this.tenants.add(tenant.getTid());
-		this.groupMod = null == this.groupMod ?  GroupType.APP.mod() : this.groupMod | GroupType.APP.mod();
-		this.groupMod |= GroupType.TENANT.mod();
+	public String[] groups() {
+		Set<String> conditions = new HashSet<String>();
+		if (null != groupMod) {
+			for (GroupType type : GroupType.values()) {
+				if ((type.mark & groupMod) == type.mark)
+					conditions.add(type.name().toLowerCase());
+			}
+		}
+		return conditions.toArray(new String[]{});
 	}
 	
-	public Map<String, Object> params() {
-		Map<String, Object> params = new HashMap<String, Object>();
-		if (null != transfer)
-			params.put(BtkjConsts.FIELD.TRANSFER, this.transfer);
-		if (null != nature)
-			params.put(BtkjConsts.FIELD.NATURE, this.nature.mark());
+	public String[] conditions() {
+		Set<String> conditions = new HashSet<String>();
+		if (null != tid)
+			conditions.add("`tid`=" + tid);
+		if (null != uid)
+			conditions.add("`uid`=" + uid);
+		if (null != appId)
+			conditions.add("`app_id`=" + appId);
+		if (null != tarId)
+			conditions.add("`employee_id`=" + tarId);
+		if (null != insurerId)
+			conditions.add("`insurer_id`=" + insurerId);
 		if (null != type)
-			params.put(BtkjConsts.FIELD.TYPE, this.type.mark());
-		if (null != insuranceType)
-			params.put(BtkjConsts.FIELD.INSURANCE_TYPE, this.insuranceType.mark());
+			conditions.add("`type`=" + type.mark());
 		if (null != year)
-			params.put(BtkjConsts.FIELD.YEAR, this.year);
+			conditions.add("`year`=" + year);
 		if (null != month)
-			params.put(BtkjConsts.FIELD.MONTH, this.month);
+			conditions.add("`month`=" + month);
 		if (null != day)
-			params.put(BtkjConsts.FIELD.DAY, this.day);
-		if (null != season)
-			params.put(BtkjConsts.FIELD.SEASON, this.season);
+			conditions.add("`day`=" + day);
 		if (null != week)
-			params.put(BtkjConsts.FIELD.WEEK, this.week);
-		return params;
+			conditions.add("`week`=" + week);
+		if (null != season)
+			conditions.add("`season`=" + season);
+		if (null != beginTime)
+			conditions.add("`created`>=" + beginTime);
+		if (null != endTime)
+			conditions.add("`created`<=" + endTime);
+		if (null != transfer)
+			conditions.add("`transfer`=" + (transfer ? 1 : 0));
+		if (null != nature)
+			conditions.add("`nature`=" + nature.mark());
+		if (null != insuranceType)
+			conditions.add("`nature`=" + insuranceType.mark());
+		if (null != statisticUsedMod) 
+			conditions.add("`statistic_used_type&`" + statisticUsedMod + "=`statistic_used_type`");
+		return conditions.toArray(new String[]{});
+	}
+	
+	public enum GroupType {
+		EMPLOYEE_ID(1),
+		UID(2);
+		private int mark;
+		private GroupType(int mark) {
+			this.mark = mark;
+		}
+		public int mark() {
+			return mark;
+		}
 	}
 }

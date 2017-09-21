@@ -23,7 +23,7 @@ public interface CourierService {
 	 * 
 	 * @return
 	 */
-	Result<String> captchaVerify(int appId, String mobile, String captcha);
+	Result<Void> captchaVerify(int appId, String mobile, String captcha);
 	
 	/**
 	 * 报价通知：发送给客户的

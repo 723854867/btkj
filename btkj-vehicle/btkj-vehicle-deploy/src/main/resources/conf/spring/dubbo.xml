@@ -29,4 +29,8 @@
 	<dubbo:reference id="baoTuVehicle" interface="org.btkj.baotu.vehicle.api.BaoTuVehicle" />
 	
 	<dubbo:reference id="configService" interface="org.btkj.config.api.ConfigService" />
+	
+	<dubbo:reference id="statisticsService" interface="org.btkj.statistics.api.StatisticsService"> 
+		<dubbo:method name="quoteRecord" async="true" />
+	</dubbo:reference>
 </beans>

@@ -11,6 +11,10 @@
         				
 	<bean class="org.rapid.util.common.SpringContextUtil" />
 	
+	<bean class="org.btkj.pojo.AliyunResourceUtil">
+		<property name="ossPrefix" value="${aliyun.oss.prefix}" />
+	</bean>
+	
 	<bean class="org.btkj.pojo.config.GlobalConfigContainer" init-method="init">
 		<property name="zkClient">
 			<bean class="org.I0Itec.zkclient.ZkClient">

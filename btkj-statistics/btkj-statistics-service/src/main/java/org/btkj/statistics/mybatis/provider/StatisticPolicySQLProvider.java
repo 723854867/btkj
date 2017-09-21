@@ -1,15 +1,8 @@
 package org.btkj.statistics.mybatis.provider;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.btkj.pojo.BtkjConsts;
-import org.btkj.pojo.enums.GroupType;
+import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.param.statistics.StatisticPoliciesParam;
-import org.rapid.data.storage.SqlUtil;
 import org.rapid.data.storage.mybatis.SQLProvider;
-import org.rapid.util.common.enums.SortType;
-import org.rapid.util.lang.CollectionUtil;
 
 public class StatisticPolicySQLProvider extends SQLProvider {
 	
@@ -20,105 +13,75 @@ public class StatisticPolicySQLProvider extends SQLProvider {
 	}
 	
 	public String statisticPoliciesTotal(StatisticPoliciesParam param) {
-		StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM (SELECT ");
-		_statisticSql(sql, param);
-		sql.append(") t");
-		return sql.toString();
+		String sql = _statisticSql(param, true);
+		switch (param.getTimeType()) {
+		case HOUR:
+		case MINUTES:
+		case SECOND:
+		case MILLISECOND:
+		case NANOSECOND:
+			return sql;
+		default:
+			return new StringBuilder("SELECT COUNT(*) FROM(").append(sql).append(") t").toString();
+		}
 	}
 	
 	public String statisticPolicies(StatisticPoliciesParam param) {
-		StringBuilder sql = new StringBuilder("SELECT ");
-		String orderBys = _statisticSql(sql, param);
-		sql.append(" ORDER BY ").append(orderBys).append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize());
-		return sql.toString();
+		String sql = _statisticSql(param, false);
+		return new StringBuilder(sql).append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize()).toString();	
 	}
 	
-	private String _statisticSql(StringBuilder sql, StatisticPoliciesParam param) { 
-		Set<String> groups = new HashSet<String>();
-		String orderBys = null;
-		if (null != param.getGroupMod()) {
-			for (GroupType type : GroupType.values()) {
-				if ((type.mod() & param.getGroupMod()) != type.mod())
-					continue;
-				switch (type) {
-				case APP:
-					groups.add(BtkjConsts.FIELD.APP_ID);
+	private String _statisticSql(StatisticPoliciesParam param, boolean count) { 
+		return new SQL() {
+			{
+				String[] groups = param.groups();
+				if (groups.length > 0) {
+					SELECT(groups);
+					GROUP_BY(groups);
+				}
+				switch (param.getTimeType()) {
+				case YEAR:
+					SELECT("`year`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "COUNT(*) total");
+					GROUP_BY("`year`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC" : "`year` DESC");
 					break;
-				case USER:
-					groups.add(BtkjConsts.FIELD.UID);
+				case MONTH:
+					SELECT("`year`", "`month`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "COUNT(*) total");
+					GROUP_BY("`year`, `month`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC" : "`year` DESC, `month` DESC");
 					break;
-				case TENANT:
-					groups.add(BtkjConsts.FIELD.TID);
+				case DAY:
+					SELECT("`year`", "`month`", "`day`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "COUNT(*) total");
+					GROUP_BY("`year`, `month`, `day`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `day` ASC" : "`year` DESC, `month` DESC, `day` DESC");
 					break;
-				case INSURER:
-					groups.add(BtkjConsts.FIELD.INSURER_ID);
+				case WEEK:
+					SELECT("`year`", "`month`", "`week`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "COUNT(*) total");
+					GROUP_BY("`year`, `month`, `week`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `month` ASC, `week` ASC" : "`year` DESC, `month` DESC, `week` DESC");
 					break;
-				case EMPLOYEE:
-					groups.add(BtkjConsts.FIELD.EMPLOYEE_ID);
+				case SEASON:
+					SELECT("`year`", "`season`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "COUNT(*) total");
+					GROUP_BY("`year`, `season`");
+					if (!count)
+						ORDER_BY(param.isAsc() ? "`year` ASC, `season` ASC" : "`year` DESC, `season` DESC");
 					break;
 				default:
+					if (count)
+						SELECT("COUNT(*)");
+					else {
+						SELECT("*");
+						ORDER_BY(param.isAsc() ? "`created` ASC" : "`created` DESC");
+					}
 					break;
 				}
+				FROM(table);
+				WHERE(param.conditions());
 			}
-			for (String col : groups)
-				sql.append("`").append(col).append("`, ");
-		}
-		switch (param.getTimeType()) {
-		case YEAR:
-			sql.append("`year`, SUM(CAST(`premium` AS DECIMAL(10,2))) premium, COUNT(*) total ");
-			groups.add(BtkjConsts.FIELD.YEAR);
-			orderBys = param.getSortType() == SortType.ASC ? "`year` ASC" : "`year` DESC";
-			break;
-		case MONTH:
-			sql.append("`year`, `month`, SUM(CAST(`premium` AS DECIMAL(10,2))) premium, COUNT(*) total ");
-			groups.add(BtkjConsts.FIELD.YEAR);
-			groups.add(BtkjConsts.FIELD.MONTH);
-			orderBys = param.getSortType() == SortType.ASC ? "`year` ASC, `month` ASC" : "`year` DESC, `month` DESC";			
-			break;
-		case DAY:
-			sql.append("`year`, `month`, `day`, SUM(CAST(`premium` AS DECIMAL(10,2))) premium, COUNT(*) total ");
-			groups.add(BtkjConsts.FIELD.YEAR);
-			groups.add(BtkjConsts.FIELD.MONTH);
-			groups.add(BtkjConsts.FIELD.DAY);
-			orderBys = param.getSortType() == SortType.ASC ? "`year` ASC, `month` ASC, `day` ASC" : "`year` DESC, `month` DESC, `day` DESC";			
-			break;
-		case WEEK:
-			sql.append("`year`, `month`, `week`, SUM(CAST(`premium` AS DECIMAL(10,2))) premium, COUNT(*) total ");
-			groups.add(BtkjConsts.FIELD.YEAR);
-			groups.add(BtkjConsts.FIELD.MONTH);
-			groups.add(BtkjConsts.FIELD.WEEK);
-			orderBys = param.getSortType() == SortType.ASC ? "`year` ASC, `month` ASC, `week` ASC" : "`year` DESC, `month` DESC, `week` DESC";			
-			break;
-		case SEASON:
-			sql.append("`year`, `season`, SUM(CAST(`premium` AS DECIMAL(10,2))) premium, COUNT(*) total ");
-			groups.add(BtkjConsts.FIELD.YEAR);
-			groups.add(BtkjConsts.FIELD.SEASON);
-			orderBys = param.getSortType() == SortType.ASC ? "`year` ASC, `season` ASC" : "`year` DESC, `season` DESC";			
-			break;
-		default:
-			sql.append("`created`, CAST(`premium` AS DECIMAL(10,2)) premium ");
-			orderBys = param.getSortType() == SortType.ASC ? "`created` ASC" : "`created` DESC";			
-			break;
-		}
-		sql.append("FROM statistic_policy ");
-		SqlUtil.appendWithWhere(sql, param.params());
-		if (!CollectionUtil.isEmpty(param.params())) {
-			if (null != param.getBeginTime())
-				sql.append(" AND `created`>=").append(param.getBeginTime());
-			if (null != param.getEndTime())
-				sql.append(" AND `created`<=").append(param.getEndTime());
-		} else {
-			if (null != param.getBeginTime())
-				sql.append(" WHERE `created`>=").append(param.getBeginTime());
-			if (null != param.getEndTime())
-				sql.append(" AND `created`<=").append(param.getEndTime());
-		}
-		if (!CollectionUtil.isEmpty(groups)) {
-			sql.append(" GROUP BY ");
-			for (String col : groups)
-				sql.append("`").append(col).append("`,");
-		}
-		sql.deleteCharAt(sql.length() - 1);
-		return orderBys;
+		}.toString();
 	}
 }
