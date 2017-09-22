@@ -30,6 +30,7 @@ public class REPORT_3 extends EmployeeAction<Report3Param> {
 
 	@Override
 	protected Result<Pager<Report_1_Info>> execute(App app, User user, Tenant tenant, Employee employee, Report3Param param) {
+		param.setTid(tenant.getTid());
 		Pager<Report_1_Info> pager = statisticsService.report_3(param);
 		Set<Integer> set = new HashSet<Integer>();
 		for (Report_1_Info info : pager.getList())

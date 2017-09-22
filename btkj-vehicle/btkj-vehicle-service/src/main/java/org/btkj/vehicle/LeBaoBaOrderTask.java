@@ -2,6 +2,7 @@ package org.btkj.vehicle;
 
 import org.btkj.lebaoba.vehicle.api.LeBaoBaVehicle;
 import org.btkj.pojo.BtkjCode;
+import org.btkj.pojo.VehicleUtil;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
@@ -63,7 +64,7 @@ public class LeBaoBaOrderTask implements Runnable {
 			} else {
 				schema = result.attach();
 				order.setState(insure ? VehicleOrderState.INSURE_SUCCESS : VehicleOrderState.QUOTE_SUCCESS);
-				statisticsService.quoteRecord(employee, param.getVin());
+				statisticsService.quoteRecord(employee, param.getVin(), VehicleUtil.statisticUsedType(order.getTips().getUsedType()).mark());
 			}
 			if (null != schema)
 				order.getTips().setSchema(result.attach());

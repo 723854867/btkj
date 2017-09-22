@@ -2,7 +2,7 @@ package org.btkj.pojo.info.statistics;
 
 import java.io.Serializable;
 
-import org.btkj.pojo.entity.statistics.StatisticAct;
+import org.btkj.pojo.entity.statistics.VehicleStatisticAct;
 import org.btkj.pojo.enums.ActType;
 
 public class Report_1_Info implements Serializable {
@@ -64,7 +64,7 @@ public class Report_1_Info implements Serializable {
 		this.premium = premium;
 	}
 	
-	public void addStatisticAct(StatisticAct act) {
+	public void addStatisticAct(VehicleStatisticAct act) {
 		ActType type = ActType.match(act.getType());
 		switch (type) {
 		case VEHICLE_POLICY_ISSUED:

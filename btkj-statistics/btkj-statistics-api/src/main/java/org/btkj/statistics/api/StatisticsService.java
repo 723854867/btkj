@@ -76,7 +76,7 @@ public interface StatisticsService {
 	
 	Pager<PolicyStatisticInfo> report_2(Report2Param param);
 	
-	void quoteRecord(Employee employee, String vin);
+	void quoteRecord(Employee employee, String vin, int usedType);
 	
 	Pager<Report_1_Info> report_3(Report3Param param);
 }

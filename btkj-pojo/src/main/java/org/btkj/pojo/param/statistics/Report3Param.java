@@ -61,9 +61,11 @@ public class Report3Param extends EmployeeParam {
 		this.timeType = timeType;
 	}
 
-	public String[] conditions() {
+	public String[] conditions(boolean act) {
 		Set<String> conditions = new HashSet<String>();
 		conditions.add("`tid`=" + tid);
+		if (act)
+			conditions.add("`type` IN(1, 2)");
 		if (null != year)
 			conditions.add("`year`=" + year);
 		if (null != month)

@@ -67,7 +67,7 @@ public class Report1Param extends EmployeeParam {
 		if (null != beginTime)
 			set.add("`created`>=" + beginTime);
 		if (!CollectionUtil.isEmpty(insurers)) {
-			StringBuilder builder = new StringBuilder("`insurer_id IN(`");
+			StringBuilder builder = new StringBuilder("`insurer_id` IN(");
 			for (int insurerId : insurers)
 				builder.append(insurerId).append(",");
 			builder.deleteCharAt(builder.length() - 1);

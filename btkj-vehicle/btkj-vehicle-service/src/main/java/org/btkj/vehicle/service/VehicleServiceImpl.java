@@ -288,7 +288,7 @@ public class VehicleServiceImpl implements VehicleService {
 			if (order.getState() == VehicleOrderState.QUOTING) {
 				_quoteResult(tenant, employee.getUid(), order);
 				if (order.getState() == VehicleOrderState.QUOTE_SUCCESS) {
-					statisticsService.quoteRecord(employee, order.getTips().getVin());
+					statisticsService.quoteRecord(employee, order.getTips().getVin(), VehicleUtil.statisticUsedType(order.getTips().getUsedType()).mark());
 					poundage.calculate(order, employee);							// 报价成功计算手续费
 					if (order.isInsure())								// 如果是核保了则状态变为核保中
 						order.setState(VehicleOrderState.INSURING);

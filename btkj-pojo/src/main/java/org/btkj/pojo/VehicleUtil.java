@@ -13,6 +13,7 @@ import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.enums.CommercialInsuranceType;
 import org.btkj.pojo.enums.IDType;
 import org.btkj.pojo.enums.PolicyNature;
+import org.btkj.pojo.enums.StatisticUsedType;
 import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.enums.VehicleUsedType;
 import org.btkj.pojo.info.JianJiePoliciesInfo.Insurance;
@@ -312,5 +313,20 @@ public class VehicleUtil {
 		while (list.size() > teamDepth)
 			list.poll();
 		return list;
+	}
+	
+	public static StatisticUsedType statisticUsedType(VehicleUsedType usedType) {
+		switch (usedType) {
+		case ORGAN:
+		case HOME_USE:
+		case ENTERPRISE:
+			return StatisticUsedType.NO_BIZ;
+		case LEASE:
+		case CITY_BUS:
+		case HIGHWAY_TRANSPORT:
+			return StatisticUsedType.BIZ;
+		default:
+			return StatisticUsedType.OTHER;
+		}
 	}
 }

@@ -3,6 +3,7 @@ package org.btkj.statistics.mybatis.provider;
 import org.apache.ibatis.jdbc.SQL;
 import org.btkj.pojo.param.statistics.Report1Param;
 import org.btkj.pojo.param.statistics.Report2Param;
+import org.btkj.pojo.param.statistics.Report3Param;
 import org.rapid.data.storage.mybatis.SQLProvider;
 
 public class StatisticPolicySQLProvider extends SQLProvider {
@@ -53,6 +54,39 @@ public class StatisticPolicySQLProvider extends SQLProvider {
 				}
 				FROM(table);
 				WHERE(param.conditions());
+			}
+		}.toString();
+	}
+	
+	public String report_3_total(Report3Param param) {
+		String sql = _report_3_sql(param, true);
+		return new StringBuilder("SELECT COUNT(*) FROM(").append(sql).append(") t").toString();
+	}
+	
+	public String report_3(Report3Param param) {
+		String sql = _report_3_sql(param, false);
+		return new StringBuilder(sql).append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize()).toString();	
+	}
+	
+	private String _report_3_sql(Report3Param param, boolean count) { 
+		return new SQL() {
+			{
+				switch (param.getTimeType()) {
+				case YEAR:
+					SELECT("`year`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "`employee_id`", "`uid`");
+					GROUP_BY("`year`", "`employee_id`", "`uid`");
+					break;
+				case DAY:
+					SELECT("`year`", "`month`", "`day`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "`employee_id`", "`uid`");
+					GROUP_BY("`year`", "`month`", "`day`", "`employee_id`", "`uid`");
+					break;
+				default:
+					SELECT("`year`", "`month`", "SUM(CAST(`premium` AS DECIMAL(10,2))) premium", "`employee_id`", "`uid`");
+					GROUP_BY("`year`", "`month`", "`employee_id`", "`uid`");
+					break;
+				}
+				FROM(table);
+				WHERE(param.conditions(false));
 			}
 		}.toString();
 	}

@@ -2,7 +2,7 @@ package org.btkj.pojo.entity.statistics;
 
 import org.rapid.util.common.model.UniqueModel;
 
-public class StatisticAct implements UniqueModel<Long> {
+public class VehicleStatisticAct implements UniqueModel<Long> {
 
 	private static final long serialVersionUID = -457360223617952250L;
 
@@ -12,6 +12,7 @@ public class StatisticAct implements UniqueModel<Long> {
 	private int tid;
 	private int employeeId;
 	private int type;
+	private int usedType;
 	private int year;
 	private int month;
 	private int day;
@@ -67,6 +68,14 @@ public class StatisticAct implements UniqueModel<Long> {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	public int getUsedType() {
+		return usedType;
+	}
+	
+	public void setUsedType(int usedType) {
+		this.usedType = usedType;
 	}
 
 	public int getYear() {

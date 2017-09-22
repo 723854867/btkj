@@ -9,6 +9,7 @@ import org.btkj.pojo.entity.statistics.StatisticPolicy;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.param.statistics.Report1Param;
 import org.btkj.pojo.param.statistics.Report2Param;
+import org.btkj.pojo.param.statistics.Report3Param;
 import org.btkj.statistics.mybatis.provider.StatisticPolicySQLProvider;
 import org.rapid.data.storage.mapper.DBMapper;
 
@@ -26,4 +27,10 @@ public interface StatisticPolicyDao extends DBMapper<String, StatisticPolicy> {
 	
 	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_2")
 	List<PolicyStatisticInfo> report_2(Report2Param param);
+	
+	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_3_total")
+	int report_3_total(Report3Param param);
+	
+	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_3")
+	List<PolicyStatisticInfo> report_3(Report3Param param);
 }
