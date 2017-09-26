@@ -41,7 +41,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 	private boolean transfer;							// 是否过户车
 	private VehiclePolicyType type;						// 保单类型
 	private VehicleBonusType bonusType;					// 奖励类型
-	private String vehiclePrice;						// 购置价
 	private SalesmanMark mark;							// 保单标记类型
 	private int salesmanId;								// 业务员ID
 	private String salesman;							// 业务员姓名
@@ -185,14 +184,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 		this.seat = seat;
 	}
 	
-	public String getPrice() {
-		return price;
-	}
-	
-	public void setPrice(String price) {
-		this.price = price;
-	}
-
 	public PolicyNature getNature() {
 		return nature;
 	}
@@ -224,14 +215,6 @@ public class VehiclePolicy implements UniqueModel<String> {
 	public void setBonusType(VehicleBonusType bonusType) {
 		this.bonusType = bonusType;
 	}
-
-	public String getVehiclePrice() {
-		return vehiclePrice;
-	}
-
-	public void setVehiclePrice(String vehiclePrice) {
-		this.vehiclePrice = vehiclePrice;
-	}
 	
 	public SalesmanMark getMark() {
 		return mark;
@@ -247,6 +230,14 @@ public class VehiclePolicy implements UniqueModel<String> {
 	
 	public void setSalesmanId(int salesmanId) {
 		this.salesmanId = salesmanId;
+	}
+	
+	public String getPrice() {
+		return price;
+	}
+	
+	public void setPrice(String price) {
+		this.price = price;
 	}
 	
 	public String getSalesman() {
