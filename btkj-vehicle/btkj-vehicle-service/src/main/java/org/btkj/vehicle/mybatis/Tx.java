@@ -12,13 +12,11 @@ import org.btkj.pojo.entity.vehicle.PoundageCoefficientRange;
 import org.btkj.pojo.exception.BusinessException;
 import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
 import org.btkj.pojo.param.vehicle.CoefficientRangeEditParam;
-import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.cache.CacheService;
 import org.btkj.vehicle.mybatis.dao.BonusScaleConfigDao;
 import org.btkj.vehicle.mybatis.dao.PoundageCoefficientRangeDao;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
-import org.btkj.vehicle.redis.JianJieInsurerMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.rapid.util.common.Consts;
 import org.rapid.util.common.consts.code.Code;
@@ -42,8 +40,6 @@ public class Tx {
 	private BonusScaleConfigDao bonusScaleConfigDao;
 	@Resource
 	private TenantInsurerMapper tenantInsurerMapper;
-	@Resource
-	private JianJieInsurerMapper jianJieInsurerMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -148,10 +144,5 @@ public class Tx {
 		config.setUpdated(DateUtil.currentTime());
 		bonusScaleConfigDao.update(config);
 		return config;
-	}
-	
-	@Transactional
-	public void insurerEdit(TenantSetParam param) {
-		tenantInsurerMapper.insurerEdit(param);
 	}
 }

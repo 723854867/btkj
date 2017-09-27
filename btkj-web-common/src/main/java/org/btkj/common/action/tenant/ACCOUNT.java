@@ -2,13 +2,13 @@ package org.btkj.common.action.tenant;
 
 import javax.annotation.Resource;
 
-import org.btkj.common.pojo.param.ScoreRewardParam;
 import org.btkj.payment.api.PaymentService;
 import org.btkj.pojo.entity.payment.Account;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.web.util.action.EmployeeAction;
 import org.rapid.util.common.message.Result;
@@ -18,7 +18,7 @@ import org.rapid.util.common.message.Result;
  * 
  * @author ahab
  */
-public class ACCOUNT extends EmployeeAction<ScoreRewardParam> {
+public class ACCOUNT extends EmployeeAction<EmployeeParam> {
 	
 	@Resource
 	private PaymentService paymentService;
@@ -26,7 +26,7 @@ public class ACCOUNT extends EmployeeAction<ScoreRewardParam> {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<Account> execute(App app, User user, Tenant tenant, Employee employee, ScoreRewardParam param) {
+	protected Result<Account> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
 		return Result.result(paymentService.account(employee.getId()));
 	}
 }

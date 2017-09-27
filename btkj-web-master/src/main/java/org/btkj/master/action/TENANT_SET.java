@@ -35,7 +35,6 @@ public class TENANT_SET extends AdminAction<TenantSetParam> {
 		tenant.setLeBaoBaPassword(param.getLeBaoBaPassword());
 		tenant.setUpdated(DateUtil.currentTime());
 		userManageService.tenantUpdate(tenant);
-		vehicleManageService.insurerEdit(param);
 		return Consts.RESULT.OK;
 	}
 }

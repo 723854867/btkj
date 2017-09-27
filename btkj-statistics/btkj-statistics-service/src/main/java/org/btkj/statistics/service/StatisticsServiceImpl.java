@@ -12,10 +12,11 @@ import javax.annotation.Resource;
 import org.btkj.pojo.config.GlobalConfigContainer;
 import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.statistics.LogScore;
-import org.btkj.pojo.entity.statistics.VehicleStatisticAct;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
+import org.btkj.pojo.entity.statistics.VehicleStatisticAct;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.enums.ActType;
+import org.btkj.pojo.info.statistics.ExploitInfo;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.info.statistics.Report_1_Info;
 import org.btkj.pojo.model.Exploit;
@@ -28,12 +29,11 @@ import org.btkj.pojo.param.statistics.StatisticScoreParam;
 import org.btkj.statistics.api.StatisticsService;
 import org.btkj.statistics.mybatis.dao.LogExploitDao;
 import org.btkj.statistics.mybatis.dao.LogScoreDao;
-import org.btkj.statistics.mybatis.dao.VehicleStatisticActDao;
 import org.btkj.statistics.mybatis.dao.StatisticPolicyDao;
+import org.btkj.statistics.mybatis.dao.VehicleStatisticActDao;
 import org.btkj.statistics.redis.KeyGenerator;
 import org.rapid.data.storage.redis.Redis;
 import org.rapid.util.common.Consts;
-import org.rapid.util.common.enums.TimeType;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.lang.StringUtil;
@@ -49,13 +49,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Resource
 	private LogExploitDao logExploitDao;
 	@Resource
-	private VehicleStatisticActDao statisticActDao;
+	private VehicleStatisticActDao vehicleStatisticActDao;
 	@Resource
 	private StatisticPolicyDao statisticPolicyDao;
 	
 	@Override
-	public List<Exploit> exploits(int employeeId, int begin, int end, int typeMod, TimeType timeType) {
-		return logExploitDao.exploits(employeeId, begin, end, typeMod, timeType.name().toLowerCase());
+	public ExploitInfo exploits(int employeeId, int begin, int end) {
+		List<LogExploit> exploits = logExploitDao.exploits(employeeId, begin, end);
+		return new ExploitInfo(vehicleStatisticActDao.orderNum(employeeId, begin, end), exploits);
 	}
 	
 	@Override
@@ -130,16 +131,16 @@ public class StatisticsServiceImpl implements StatisticsService {
 				SerializeUtil.JsonUtil.GSON.toJson(act), GlobalConfigContainer.getGlobalConfig().getQuoteActExpires());
 		if (!flag)
 			return;
-		statisticActDao.insert(act);
+		vehicleStatisticActDao.insert(act);
 	}
 	
 	@Override
 	public Pager<Report_1_Info> report_3(Report3Param param) {
 		Map<String, Report_1_Info> map = new HashMap<String, Report_1_Info>();
-		int total = statisticActDao.report_3_total(param);
+		int total = vehicleStatisticActDao.report_3_total(param);
 		if (0 != total) {
 			param.calculate(total);
-			List<VehicleStatisticAct> list = statisticActDao.report_3(param);
+			List<VehicleStatisticAct> list = vehicleStatisticActDao.report_3(param);
 			for (VehicleStatisticAct act : list) {
 				String key = StringUtil.underlineLink(act.getEmployeeId(), act.getYear(), act.getMonth(), act.getDay());
 				Report_1_Info info = map.get(key);

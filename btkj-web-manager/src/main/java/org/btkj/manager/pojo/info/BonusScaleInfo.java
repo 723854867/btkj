@@ -14,27 +14,31 @@ public class BonusScaleInfo implements Serializable {
 	private String name;
 	private int employeeId;
 	private int quota;
-	private int SCQuota;
-	private int RCQuota;
+	private int SCCMQuota;
+	private int SCCPQuota;
+	private int RCCMQuota;
+	private int RCCPQuota;
 	private int CMRate;
 	private int CPRate;
 	private State state;
-	
+
 	public BonusScaleInfo(EmployeeTip et, BonusScale scale) {
 		this.name = null != et ? et.getName() : null;
 		this.employeeId = scale.getEmployeeId();
 		this.quota = scale.getQuota();
-		this.SCQuota = scale.getSCQuota();
-		this.RCQuota = scale.getRCQuota();
+		this.SCCMQuota = scale.getSCCMQuota();
+		this.SCCPQuota = scale.getSCCPQuota();
+		this.RCCMQuota = scale.getRCCMQuota();
+		this.RCCPQuota = scale.getRCCPQuota();
 		this.CMRate = scale.getCmRate();
 		this.CPRate = scale.getCpRate();
 		this.state = scale.getState();
 	}
-	
+
 	public String getKey() {
 		return key;
 	}
-	
+
 	public void setKey(String key) {
 		this.key = key;
 	}
@@ -63,20 +67,36 @@ public class BonusScaleInfo implements Serializable {
 		this.quota = quota;
 	}
 
-	public int getSCQuota() {
-		return SCQuota;
+	public int getSCCMQuota() {
+		return SCCMQuota;
 	}
 
-	public void setSCQuota(int sCQuota) {
-		SCQuota = sCQuota;
+	public void setSCCMQuota(int sCCMQuota) {
+		SCCMQuota = sCCMQuota;
 	}
 
-	public int getRCQuota() {
-		return RCQuota;
+	public int getSCCPQuota() {
+		return SCCPQuota;
 	}
 
-	public void setRCQuota(int rCQuota) {
-		RCQuota = rCQuota;
+	public void setSCCPQuota(int sCCPQuota) {
+		SCCPQuota = sCCPQuota;
+	}
+
+	public int getRCCMQuota() {
+		return RCCMQuota;
+	}
+
+	public void setRCCMQuota(int rCCMQuota) {
+		RCCMQuota = rCCMQuota;
+	}
+
+	public int getRCCPQuota() {
+		return RCCPQuota;
+	}
+
+	public void setRCCPQuota(int rCCPQuota) {
+		RCCPQuota = rCCPQuota;
 	}
 
 	public int getCMRate() {

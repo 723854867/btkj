@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.btkj.config.mybatis.provider.InsurerSQLProvider;
@@ -15,6 +16,7 @@ public interface InsurerDao extends DBMapper<Integer, Insurer> {
 	
 	@Override
 	@InsertProvider(type = InsurerSQLProvider.class, method = "insert")
+	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void insert(Insurer model);
 
 	@Override

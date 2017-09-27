@@ -22,10 +22,11 @@ public class EntityGenerator {
 
 	public static final Insurer newInsurer(InsurerEditParam param) { 
 		Insurer insurer = new Insurer();
-		insurer.setId(param.getId());
 		insurer.setName(param.getName());
 		insurer.setBiHuId(null == param.getBiHuId() ? 0 : param.getBiHuId());
 		insurer.setLeBaoBaId(param.getLeBaoBaId());
+		insurer.setMinor(param.isMinor());
+		insurer.setParentId(null == param.getParentId() ? 0 : param.getParentId());
 		
 		int time = DateUtil.currentTime();
 		insurer.setCreated(time);

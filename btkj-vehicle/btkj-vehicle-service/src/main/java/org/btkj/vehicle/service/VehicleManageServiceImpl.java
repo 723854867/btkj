@@ -19,7 +19,6 @@ import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
-import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
@@ -33,8 +32,6 @@ import org.btkj.pojo.info.JianJiePoliciesInfo.BaseInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.vehicle.BonusManageConfigEditParam;
 import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
-import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
-import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
 import org.btkj.vehicle.EntityGenerator;
@@ -44,7 +41,6 @@ import org.btkj.vehicle.mongo.VehiclePolicyMapper;
 import org.btkj.vehicle.mybatis.Tx;
 import org.btkj.vehicle.redis.BonusManageConfigMapper;
 import org.btkj.vehicle.redis.BonusScaleConfigMapper;
-import org.btkj.vehicle.redis.JianJieInsurerMapper;
 import org.btkj.vehicle.redis.TenantInsurerMapper;
 import org.rapid.data.storage.redis.DistributeLock;
 import org.rapid.util.common.Consts;
@@ -75,8 +71,6 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	private VehiclePolicyMapper vehiclePolicyMapper;
 	@Resource
 	private TenantInsurerMapper tenantInsurerMapper;
-	@Resource
-	private JianJieInsurerMapper jianJieInsurerMapper;
 	@Resource
 	private BonusScaleConfigMapper bonusScaleConfigMapper;
 	@Resource
@@ -223,17 +217,17 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 				itr.remove();
 				break;
 			}
-			JianJieInsurer jianJieInsurer = jianJieInsurerMapper.getByCompanyId(employee.getTid(), info.getCompanyId());
-			if (null == jianJieInsurer)
+			TenantInsurer tenantInsurer = tenantInsurerMapper.getByTidAndJianJieId(employee.getTid(), info.getCompanyId());
+			if (null == tenantInsurer)
 				logger.error("简捷保单 - {} 险企 - {} 不存在对应的保途险企映射", policyId, info.getCompanyId());
 			else {
-				if (null != order && jianJieInsurer.getInsurerId() != order.getInsurerId())
+				if (null != order && tenantInsurer.getInsurerId() != order.getInsurerId())
 					logger.error("简捷保单 - {} 险企 - {} 和保途订单 险企ID不匹配, 以保途订单险企为准！", policyId, info.getCompanyId());
 			}
 			if (null != policy)
 				policy.setDetail(info);
 			else {
-				Insurer insurer = null == jianJieInsurer ? null : configService.insurer(jianJieInsurer.getInsurerId());
+				Insurer insurer = null == tenantInsurer ? null : configService.insurer(tenantInsurer.getInsurerId());
 				policy = EntityGenerator.newVehiclePolicy(employee, insurer, policyId, order, info, relationInfo);
 			}
 			_internalPolicyProcess(employee.getTid(), employees, policy, order, info.getGsUser());
@@ -360,33 +354,5 @@ public class VehicleManageServiceImpl implements VehicleManageService {
 	@Override
 	public Map<String, TenantInsurer> insurers(int tid) {
 		return tenantInsurerMapper.getByTid(tid);
-	}
-	
-	@Override
-	public void insurerEdit(TenantSetParam param) {
-		tx.insurerEdit(param);
-	}
-	
-	@Override
-	public Map<Integer, JianJieInsurer> jianJieInsurers(int tid) {
-		return jianJieInsurerMapper.getByTid(tid);
-	}
-	
-	@Override
-	public Result<?> jianJieInsurerEdit(JianJieInsurerEditParam param) {
-		switch (param.getCrudType()) {
-		case CREATE:
-			Insurer insurer = configService.insurer(param.getInsurerId());
-			if (null == insurer)
-				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
-			JianJieInsurer temp = EntityGenerator.newJianJieInsurer(param.getTid(), param.getInsurerId(), param.getCompanyId());
-			jianJieInsurerMapper.insert(temp);
-			return Result.result(Code.OK, temp.getId());
-		case DELETE:
-			jianJieInsurerMapper.delete(param.getId());
-			return Consts.RESULT.OK;
-		default:
-			return Consts.RESULT.FORBID;
-		}
 	}
 }

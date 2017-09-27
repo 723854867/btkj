@@ -7,16 +7,15 @@ import org.btkj.pojo.entity.statistics.LogExploit;
 import org.btkj.pojo.entity.statistics.LogScore;
 import org.btkj.pojo.entity.statistics.StatisticPolicy;
 import org.btkj.pojo.entity.user.Employee;
+import org.btkj.pojo.info.statistics.ExploitInfo;
 import org.btkj.pojo.info.statistics.PolicyStatisticInfo;
 import org.btkj.pojo.info.statistics.Report_1_Info;
-import org.btkj.pojo.model.Exploit;
 import org.btkj.pojo.model.Exploits;
 import org.btkj.pojo.model.Pager;
-import org.btkj.pojo.param.statistics.Report3Param;
 import org.btkj.pojo.param.statistics.Report1Param;
 import org.btkj.pojo.param.statistics.Report2Param;
+import org.btkj.pojo.param.statistics.Report3Param;
 import org.btkj.pojo.param.statistics.StatisticScoreParam;
-import org.rapid.util.common.enums.TimeType;
 
 public interface StatisticsService {
 	
@@ -29,7 +28,7 @@ public interface StatisticsService {
 	 * @param typeMod
 	 * @return
 	 */
-	List<Exploit> exploits(int employeeId, int begin, int end, int typeMod, TimeType timeType);
+	ExploitInfo exploits(int employeeId, int begin, int end);
 
 	/**
 	 * 团队业绩

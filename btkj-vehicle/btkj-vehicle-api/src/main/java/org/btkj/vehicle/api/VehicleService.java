@@ -1,18 +1,21 @@
 package org.btkj.vehicle.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.entity.vehicle.Renewal;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.info.VehicleInfo;
 import org.btkj.pojo.model.DeliveryInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.pojo.param.vehicle.TenantInsurerEditParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.rapid.util.common.message.Result;
 
@@ -58,13 +61,6 @@ public interface VehicleService {
 	Result<VehicleOrder> orderInfo(Tenant tenant, Employee employee, String id);
 	
 	/**
-	 * 获取商户的险企列表
-	 * 
-	 * @return
-	 */
-	List<Integer> insurers(int tid);
-	
-	/**
 	 * 保单分页
 	 * 
 	 * @return
@@ -87,14 +83,7 @@ public interface VehicleService {
 	 */
 	Result<Void> deliveryEdit(String orderId, DeliveryInfo deliveryInfo);
 	
-	/**
-	 * 获取指定状态的保单数量
-	 * 
-	 * @param employeeId
-	 * @param begin
-	 * @param end
-	 * @param stateMod
-	 * @return
-	 */
-	long orderNum(int employeeId, int begin, int end, int stateMod);
+	Result<Void> insurerEdit(TenantInsurerEditParam param);
+	
+	Map<String, TenantInsurer> insurers(int tid, Boolean minor);
 }

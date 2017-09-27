@@ -34,8 +34,6 @@ public class ORDER extends EmployeeAction<VehicleOrderParam> {
 
 	@Override
 	protected Result<?> execute(App app, User user, Tenant tenant, Employee employee, VehicleOrderParam param) {
-		if ((param.getQuoteMod() & param.getInsureMod()) != param.getInsureMod())
-			return BtkjConsts.RESULT.INSURER_MOD_NOT_SUBSET_OF_QUOTE;
 		Result<Void> result = _check(param);
 		if (!result.isSuccess())
 			return result;

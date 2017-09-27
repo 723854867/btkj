@@ -7,7 +7,6 @@ import java.util.Map;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.vehicle.BonusManageConfig;
 import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
-import org.btkj.pojo.entity.vehicle.JianJieInsurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.entity.vehicle.VehicleOrder;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
@@ -16,8 +15,6 @@ import org.btkj.pojo.info.JianJiePoliciesInfo;
 import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.vehicle.BonusManageConfigEditParam;
 import org.btkj.pojo.param.vehicle.BonusScaleConfigEditParam;
-import org.btkj.pojo.param.vehicle.JianJieInsurerEditParam;
-import org.btkj.pojo.param.vehicle.TenantSetParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.btkj.pojo.param.vehicle.VehiclePoliciesParam;
 import org.rapid.util.common.message.Result;
@@ -136,25 +133,4 @@ public interface VehicleManageService {
 	 * @return
 	 */
 	Map<String, TenantInsurer> insurers(int tid);
-	
-	/**
-	 * 商户车险险企设置
-	 */
-	void insurerEdit(TenantSetParam param);
-	
-	/**
-	 * 获取指定商户开通的所有简捷险企
-	 * 
-	 * @param tid
-	 * @return
-	 */
-	Map<Integer, JianJieInsurer> jianJieInsurers(int tid);
-	
-	/**
-	 * 简捷险企编辑
-	 * 
-	 * @param param
-	 * @return
-	 */
-	Result<?> jianJieInsurerEdit(JianJieInsurerEditParam param);
 }

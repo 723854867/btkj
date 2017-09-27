@@ -2,7 +2,10 @@ package org.btkj.manager.action.tenant;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -13,6 +16,7 @@ import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
+import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.vehicle.api.VehicleService;
 import org.rapid.util.common.message.Result;
@@ -27,9 +31,13 @@ public class INSURERS extends EmployeeAction<EmployeeParam> {
 	
 	@Override
 	protected Result<List<Insurer>> execute(App app, User user, Tenant tenant, Employee employee, EmployeeParam param) {
-		List<Integer> tids = vehicleService.insurers(tenant.getTid());
-		if (CollectionUtil.isEmpty(tids))
+		Map<String, TenantInsurer> map = vehicleService.insurers(tenant.getTid(), false);
+		if (CollectionUtil.isEmpty(map))
 			return Result.result(Collections.EMPTY_LIST);
-		return Result.result(new ArrayList<Insurer>(configService.insurers(tids).values()));
+		Set<Integer> set = new HashSet<Integer>();
+		for (TenantInsurer temp : map.values()) 
+			set.add(temp.getInsurerId());
+		Map<Integer, Insurer> insurers = configService.insurers(set);
+		return Result.result(new ArrayList<Insurer>(insurers.values()));
 	}
 }

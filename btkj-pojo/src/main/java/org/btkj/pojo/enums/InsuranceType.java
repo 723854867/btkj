@@ -28,6 +28,14 @@ public enum InsuranceType {
 		return title;
 	}
 	
+	public static final InsuranceType match(int mark) {
+		for (InsuranceType type : InsuranceType.values()) {
+			if (type.mark == mark)
+				return type;
+		}
+		return null;
+	}
+	
 	public static final boolean illegalMod(int mod) {
 		int cmod = 0;
 		for (InsuranceType type : InsuranceType.values())

@@ -7,6 +7,6 @@ public class InsurerSQLProvider extends SQLProvider {
 	private static final String TABLE			= "insurer";
 	
 	public InsurerSQLProvider() {
-		super(TABLE, "id", false);
+		super(TABLE, "id");
 	}
 }

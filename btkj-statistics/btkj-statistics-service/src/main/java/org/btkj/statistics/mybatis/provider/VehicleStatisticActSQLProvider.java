@@ -44,4 +44,20 @@ public class VehicleStatisticActSQLProvider extends SQLProvider {
 			}
 		}.toString();
 	}
+	
+	public String orderNum() {
+		return new SQL() {
+			{
+				SELECT("COUNT(*)");
+				FROM(table);
+				WHERE("employee_id=#{employeeId}");
+				AND();
+				WHERE("created>=#{beginTime}");
+				AND();
+				WHERE("created<=#{endTime}");
+				AND();
+				WHERE("`type`=2");
+			}
+		}.toString();
+	}
 }

@@ -2,6 +2,7 @@ package org.btkj.vehicle.redis;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,14 +13,10 @@ import java.util.Set;
 import org.btkj.config.api.ConfigService;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
-import org.btkj.pojo.enums.Lane;
-import org.btkj.pojo.param.vehicle.TenantSetParam;
-import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.mybatis.dao.TenantInsurerDao;
 import org.rapid.data.storage.mapper.RedisDBAdapter;
 import org.rapid.util.common.serializer.impl.ByteProtostuffSerializer;
 import org.rapid.util.lang.CollectionUtil;
-import org.rapid.util.lang.DateUtil;
 
 public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, TenantInsurerDao> {
 	
@@ -32,6 +29,19 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 		super(new ByteProtostuffSerializer<TenantInsurer>(), "hash:db:tenant_insurer");
 	}
 	
+	public TenantInsurer getByTidAndJianJieId(int tid, int jianJieId) {
+		if (0 == jianJieId)
+			return null;
+		Map<String, TenantInsurer> map = getByTid(tid);
+		if (CollectionUtil.isEmpty(map))
+			return null;
+		for (TenantInsurer insurer : map.values()) {
+			if (insurer.getJianJieId() == jianJieId)
+				return insurer;
+		}
+		return null;
+	}
+	
 	public TenantInsurer getByTidAndInsurerId(int tid, int insurerId) {
 		Map<String, TenantInsurer> map = getByTid(tid);
 		if (CollectionUtil.isEmpty(map))
@@ -41,6 +51,23 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 				return insurer;
 		}
 		return null;
+	}
+	
+	public Map<String, TenantInsurer> getByTidAndMinor(int tid, boolean minor) {
+		Map<String, TenantInsurer> map = getByTid(tid);
+		if (CollectionUtil.isEmpty(map))
+			return Collections.EMPTY_MAP;
+		Set<Integer> set = new HashSet<Integer>();
+		for (TenantInsurer insurer : map.values()) 
+			set.add(insurer.getInsurerId());
+		Map<Integer, Insurer> insurers = configService.insurers(set);
+		Map<String, TenantInsurer> temp = new HashMap<String, TenantInsurer>();
+		for (TenantInsurer tenantInsurer : map.values()) {
+			Insurer insurer = insurers.get(tenantInsurer.getInsurerId());
+			if (!(minor ^ insurer.isMinor()))
+				temp.put(tenantInsurer.getKey(), tenantInsurer);
+		}
+		return temp;
 	}
 	
 	public Map<String, TenantInsurer> getByTid(int tid) {
@@ -75,46 +102,6 @@ public class TenantInsurerMapper extends RedisDBAdapter<String, TenantInsurer, T
 	@Override
 	public void remove(TenantInsurer entity) {
 		redis.hmsdel(redisKey, entity.key(), _tenantSetKey(entity.getTid()));
-	}
-	
-	public void insurerEdit(TenantSetParam param) {
-		if (!CollectionUtil.isEmpty(param.getInsurersDelete())) {
-			redis.hmsdel(redisKey, param.getInsurersDelete(), _tenantSetKey(param.getTid()));
-			dao.deleteByKeys(param.getInsurersDelete());
-		}
-		int time = DateUtil.currentTime();
-		Map<String, TenantInsurer> insurers = null;
-		if (!CollectionUtil.isEmpty(param.getInsurersUpdate())) {
-			insurers = getByKeys(new HashSet<String>(param.getInsurersUpdate().keySet()));
-			for (TenantInsurer insurer : insurers.values()) {
-				TenantInsurer update = param.getInsurersUpdate().get(insurer.getKey());
-				if (update.getLane() != insurer.getLane() && null != Lane.match(update.getLane())) 
-					insurer.setLane(update.getLane());
-				insurer.setUpdated(time);
-			}
-		}
-		if (!CollectionUtil.isEmpty(param.getInsurersInsert())) {
-			if (null == insurers)
-				insurers = new HashMap<String, TenantInsurer>();
-			Set<Integer> set = new HashSet<Integer>();
-			for (TenantInsurer insert : param.getInsurersInsert().values())
-				set.add(insert.getInsurerId());
-			Map<Integer, Insurer> map = configService.insurers(set);
-			for (TenantInsurer insert : param.getInsurersInsert().values()) {
-				Insurer insurer = map.get(insert.getInsurerId());
-				if (null == insurer)
-					continue;
-				Lane lane = Lane.match(insert.getLane());
-				if (null == lane)
-					continue;
-				TenantInsurer ti = EntityGenerator.newTenantInsurer(param.getTid(), insert.getInsurerId(), lane, time);
-				insurers.put(ti.getKey(), ti);
-			}
-		}
-		if (!CollectionUtil.isEmpty(insurers)) {
-			dao.replace(insurers.values());
-			flush(insurers);
-		}
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package org.btkj.pojo.entity.vehicle;
 
+import java.util.Set;
+
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
@@ -27,8 +29,8 @@ public class VehicleOrder implements UniqueModel<String> {
 	private int appId;					// 平台ID
 	private int created; 				// 创建时间
 	private String desc; 				// 描述
-	private int quoteMod;				// 报价模值，用来决定本次报价同时和几家公司一起报价
-	private int insureMod;				// 核保模值
+	private Set<Integer> quoteGroup;	// 报价模值，用来决定本次报价同时和几家公司一起报价
+	private Set<Integer> insureGroup;	// 核保模值
 	private boolean insure; 			// 是否投保
 	private int employeeId;				// 雇员ID
 	private String policyId;			// 保单ID
@@ -57,10 +59,10 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.salesman = user.getName();
 		this.insurerId = insurer.getId();
 		this.employeeId = employee.getId();
-		this.quoteMod = param.getQuoteMod();
+		this.quoteGroup = param.getQuoteGroup();
 		this.insurerName = insurer.getName();
 		this.insurerIcon = insurer.getIcon();
-		this.insureMod = param.getInsureMod();
+		this.insureGroup = param.getInsureGroup();
 		this.created = DateUtil.currentTime();
 		this.salesmanMobile = user.getMobile();
 		this.state = VehicleOrderState.QUOTING;
@@ -76,20 +78,20 @@ public class VehicleOrder implements UniqueModel<String> {
 		this._id = _id;
 	}
 	
-	public int getQuoteMod() {
-		return quoteMod;
-	}
-
-	public void setQuoteMod(int quoteMod) {
-		this.quoteMod = quoteMod;
+	public Set<Integer> getQuoteGroup() {
+		return quoteGroup;
 	}
 	
-	public int getInsureMod() {
-		return insureMod;
+	public void setQuoteGroup(Set<Integer> quoteGroup) {
+		this.quoteGroup = quoteGroup;
 	}
 	
-	public void setInsureMod(int insureMod) {
-		this.insureMod = insureMod;
+	public Set<Integer> getInsureGroup() {
+		return insureGroup;
+	}
+	
+	public void setInsureGroup(Set<Integer> insureGroup) {
+		this.insureGroup = insureGroup;
 	}
 	
 	public int getEmployeeId() {

@@ -34,8 +34,10 @@ import org.btkj.pojo.model.PolicySchema;
 import org.btkj.pojo.model.VehicleAuditModel;
 import org.btkj.pojo.model.VehicleOrderListInfo;
 import org.btkj.pojo.param.VehicleOrderParam;
+import org.btkj.pojo.param.vehicle.TenantInsurerEditParam;
 import org.btkj.pojo.param.vehicle.VehicleOrdersParam;
 import org.btkj.statistics.api.StatisticsService;
+import org.btkj.vehicle.EntityGenerator;
 import org.btkj.vehicle.LeBaoBaOrderTask;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.vehicle.mongo.RenewalMapper;
@@ -49,10 +51,10 @@ import org.rapid.util.common.consts.code.ICode;
 import org.rapid.util.common.message.Result;
 import org.rapid.util.concurrent.ExecutorService;
 import org.rapid.util.lang.CollectionUtil;
-import org.rapid.util.lang.NumberUtil;
 import org.rapid.util.lang.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service("vehicleService")
@@ -154,10 +156,10 @@ public class VehicleServiceImpl implements VehicleService {
 			param.bindVehicleInfo(vehicleInfo);
 		if (null == param.getPrice() || null == param.getSeat() || null == param.getName())
 			return BtkjConsts.RESULT.VEHICLE_INFO_NILL;
-		Set<Integer> insures = NumberUtil.splitIntoPowerOfTwoSet(param.getInsureMod());
-		Map<Integer, Insurer> insurers = configService.insurers(NumberUtil.splitIntoPowerOfTwoSet(param.getQuoteMod()));
+		Set<Integer> insures = param.getInsureGroup();
+		Map<Integer, Insurer> insurers = configService.insurers(param.getQuoteGroup());
 		Map<Lane, Map<Object, VehicleOrder>> orders = new HashMap<Lane, Map<Object, VehicleOrder>>();
-		for (TenantInsurer tinsurer : tenantInsurerMapper.getByTid(tenant.getTid()).values()) {
+		for (TenantInsurer tinsurer : tenantInsurerMapper.getByTidAndMinor(tenant.getTid(), false).values()) {
 			Insurer insurer = insurers.remove(tinsurer.getInsurerId());
 			if (null == insurer)										
 				continue;
@@ -340,17 +342,6 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public List<Integer> insurers(int tid) {
-		Map<String, TenantInsurer> map = tenantInsurerMapper.getByTid(tid);
-		if (CollectionUtil.isEmpty(map))
-			return CollectionUtil.emptyArrayList();
-		List<Integer> l = new ArrayList<Integer>();
-		for (TenantInsurer route : map.values())
-			l.add(route.getInsurerId());
-		return l;
-	}
-	
-	@Override
 	public List<VehicleInfo> vehicleInfos(Tenant tenant, String vin) {
 		return leBaoBaVehicle.vehicleInfos(tenant.getLeBaoBaUsername(), tenant.getLeBaoBaPassword(), vin);
 	}
@@ -369,7 +360,46 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 	
 	@Override
-	public long orderNum(int employeeId, int begin, int end, int stateMod) {
-		return vehicleOrderMapper.orderNum(employeeId, begin, end, stateMod);
+	public Result<Void> insurerEdit(TenantInsurerEditParam param) {
+		Insurer insurer = configService.insurer(param.getInsurerId());
+		if (null == insurer)
+			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
+		switch (param.getCrudType()) {
+		case CREATE:
+			TenantInsurer tenantInsurer = EntityGenerator.newTenantInsurer(param.getTid(), param.getLane(), param.getJianJieId(), insurer);
+			if (null == tenantInsurer)
+				return Consts.RESULT.FORBID;
+			try {
+				tenantInsurerMapper.insert(tenantInsurer);
+			} catch (DuplicateKeyException e) {
+				return Consts.RESULT.KEY_DUPLICATED;
+			}
+			break;
+		case UPDATE:
+			tenantInsurer = tenantInsurerMapper.getByKey(param.getTid() + Consts.SYMBOL_UNDERLINE + insurer.getId());
+			if (null == tenantInsurer)
+				return Consts.RESULT.FORBID;
+			tenantInsurer.setJianJieId(param.getJianJieId());
+			if (!insurer.isMinor()) {
+				if (null != param.getLane())
+					tenantInsurer.setLane(param.getLane().mark());
+			}
+			tenantInsurerMapper.update(tenantInsurer);
+			break;
+		case DELETE:
+			tenantInsurerMapper.delete(param.getTid() + Consts.SYMBOL_UNDERLINE + insurer.getId());
+			break;
+		default:
+			return Consts.RESULT.FORBID;
+		}
+		return Consts.RESULT.OK;
+	}
+	
+	@Override
+	public Map<String, TenantInsurer> insurers(int tid, Boolean minor) {
+		Map<String, TenantInsurer> map = null == minor ? tenantInsurerMapper.getByTid(tid) : tenantInsurerMapper.getByTidAndMinor(tid, minor);
+		if (CollectionUtil.isEmpty(map))
+			return CollectionUtil.emptyHashMap();
+		return map;
 	}
 }

@@ -15,49 +15,50 @@ public class BonusScale implements UniqueModel<String> {
 	private int employeeId;
 	private int tid;
 	private int quota;
-	private int SCQuota;
-	private int RCQuota;
-	private int cpRate;						// 交强险比例
-	private int cmRate;						// 商业险比例
-	private State state;					// 状态
+	private int SCCMQuota;
+	private int SCCPQuota;
+	private int RCCMQuota;
+	private int RCCPQuota;
+	private int cpRate; // 交强险比例
+	private int cmRate; // 商业险比例
+	private State state; // 状态
 	private Set<String> policies;
 	private int created;
 	private int updated;
-	
+
 	public enum State {
-		AUDIT,
-		AGREE,
-		REJECT;
+		AUDIT, AGREE, REJECT;
 	}
-	
-	public BonusScale() {}
-	
+
+	public BonusScale() {
+	}
+
 	public BonusScale(String key) {
 		this._id = key;
 		this.created = DateUtil.currentTime();
 		this.updated = created;
 	}
-	
+
 	public String get_id() {
 		return _id;
 	}
-	
+
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	
+
 	public int getEmployeeId() {
 		return employeeId;
 	}
-	
+
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
 	}
-	
+
 	public int getTid() {
 		return tid;
 	}
-	
+
 	public void setTid(int tid) {
 		this.tid = tid;
 	}
@@ -70,42 +71,58 @@ public class BonusScale implements UniqueModel<String> {
 		this.quota = quota;
 	}
 
-	public int getSCQuota() {
-		return SCQuota;
+	public int getSCCMQuota() {
+		return SCCMQuota;
 	}
 
-	public void setSCQuota(int sCQuota) {
-		SCQuota = sCQuota;
+	public void setSCCMQuota(int sCCMQuota) {
+		SCCMQuota = sCCMQuota;
 	}
 
-	public int getRCQuota() {
-		return RCQuota;
+	public int getSCCPQuota() {
+		return SCCPQuota;
 	}
 
-	public void setRCQuota(int rCQuota) {
-		RCQuota = rCQuota;
+	public void setSCCPQuota(int sCCPQuota) {
+		SCCPQuota = sCCPQuota;
 	}
-	
+
+	public int getRCCMQuota() {
+		return RCCMQuota;
+	}
+
+	public void setRCCMQuota(int rCCMQuota) {
+		RCCMQuota = rCCMQuota;
+	}
+
+	public int getRCCPQuota() {
+		return RCCPQuota;
+	}
+
+	public void setRCCPQuota(int rCCPQuota) {
+		RCCPQuota = rCCPQuota;
+	}
+
 	public int getCmRate() {
 		return cmRate;
 	}
-	
+
 	public void setCmRate(int cmRate) {
 		this.cmRate = cmRate;
 	}
-	
+
 	public int getCpRate() {
 		return cpRate;
 	}
-	
+
 	public void setCpRate(int cpRate) {
 		this.cpRate = cpRate;
 	}
-	
+
 	public State getState() {
 		return state;
 	}
-	
+
 	public void setState(State state) {
 		this.state = state;
 	}
@@ -113,33 +130,33 @@ public class BonusScale implements UniqueModel<String> {
 	public Set<String> getPolicies() {
 		return policies;
 	}
-	
+
 	public void setPolicies(Set<String> policies) {
 		this.policies = policies;
 	}
-	
+
 	public int getUpdated() {
 		return updated;
 	}
-	
+
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
-	
+
 	public int getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(int created) {
 		this.created = created;
 	}
-	
+
 	public void addPolicy(String id) {
 		if (null == this.policies)
 			this.policies = new HashSet<String>();
 		this.policies.add(id);
 	}
-	
+
 	public void addPolicies(Collection<String> collection) {
 		if (null == this.policies)
 			this.policies = new HashSet<String>();

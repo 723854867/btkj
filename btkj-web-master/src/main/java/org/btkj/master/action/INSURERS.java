@@ -1,6 +1,8 @@
 package org.btkj.master.action;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -19,9 +21,9 @@ public class INSURERS extends AdminAction<NilParam> {
 
 	@Override
 	protected Result<List<Insurer>> execute(Admin admin, NilParam param) {
-		List<Insurer> insurers = configManageService.insurers();
-		for (Insurer insurer : insurers)
+		Map<Integer, Insurer> insurers = configManageService.insurers();
+		for (Insurer insurer : insurers.values())
 			insurer.setIcon(AliyunResourceUtil.btResource(insurer.getIcon()));
-		return Result.result(insurers);
+		return Result.result(new ArrayList<Insurer>(insurers.values()));
 	}
 }

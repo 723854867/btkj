@@ -2,6 +2,7 @@ package org.btkj.pojo.param;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -31,10 +32,11 @@ public class VehicleOrderParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 5252138275575928498L;
 
-	@Min(1)
-	private int quoteMod;									// 报价险企模值
+	@Size(min = 1)
+	@NotNull
+	private Set<Integer> quoteGroup;						// 报价险企模值
 	@Min(0)
-	private int insureMod;									// 核保险企模值
+	private Set<Integer> insureGroup;						// 核保险企模值
 	
 	@CarLicense
 	@NotNull
@@ -89,22 +91,22 @@ public class VehicleOrderParam extends EmployeeParam {
 	@Size(min = 1, max = 30)
 	private Map<CommercialInsuranceType, InsuranceItem> insurances;
 	
-	public int getQuoteMod() {
-		return quoteMod;
+	public Set<Integer> getQuoteGroup() {
+		return quoteGroup;
 	}
 	
-	public void setQuoteMod(int quoteMod) {
-		this.quoteMod = quoteMod;
+	public void setQuoteGroup(Set<Integer> quoteGroup) {
+		this.quoteGroup = quoteGroup;
 	}
-
-	public int getInsureMod() {
-		return insureMod;
+	
+	public Set<Integer> getInsureGroup() {
+		return insureGroup;
 	}
-
-	public void setInsureMod(int insureMod) {
-		this.insureMod = insureMod;
+	
+	public void setInsureGroup(Set<Integer> insureGroup) {
+		this.insureGroup = insureGroup;
 	}
-
+	
 	public String getLicense() {
 		return license;
 	}

@@ -59,21 +59,6 @@ public class VehicleOrderMapper extends MongoMapper<String, VehicleOrder> {
 		mongo.deleteMany(collection, Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.eq(FIELD_LICENSE, license)));
 	}
 	
-	public long orderNum(int employeeId, int begin, int end, int stateMod) {
-		Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), 
-				Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end));
-		List<Bson> states = new ArrayList<Bson>();
-		for (VehicleOrderState state : VehicleOrderState.values()) {
-			if ((state.mark() & stateMod) != state.mark())
-				continue;
-			states.add(Filters.eq(BtkjConsts.FIELD.STATE, state.name()));
-		}
-		Bson filter = CollectionUtil.isEmpty(states) 
-				? Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end)) 
-				: Filters.and(Filters.eq(BtkjConsts.FIELD.EMPLOYEEID, employeeId), Filters.gte(BtkjConsts.FIELD.CREATED, begin), Filters.lte(BtkjConsts.FIELD.CREATED, end), Filters.or(states));
-		return mongo.count(collection, filter);
-	}
-	
 	public Pager<VehicleOrder> orders(VehicleOrdersParam param) {
 		List<VehicleOrder> orders = null;
 		long total = 0;

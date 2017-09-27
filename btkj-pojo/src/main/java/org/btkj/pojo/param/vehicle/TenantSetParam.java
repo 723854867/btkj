@@ -1,11 +1,7 @@
 package org.btkj.pojo.param.vehicle;
 
-import java.util.Map;
-import java.util.Set;
-
 import javax.validation.constraints.Min;
 
-import org.btkj.pojo.entity.vehicle.TenantInsurer;
 import org.btkj.pojo.param.Param;
 
 public class TenantSetParam extends Param {
@@ -19,9 +15,6 @@ public class TenantSetParam extends Param {
 	private String biHuAgent;
 	private String leBaoBaUsername;
 	private String leBaoBaPassword;
-	private Set<String> insurersDelete;
-	private Map<String, TenantInsurer> insurersUpdate;
-	private Map<String, TenantInsurer> insurersInsert;
 	
 	public int getTid() {
 		return tid;
@@ -70,29 +63,5 @@ public class TenantSetParam extends Param {
 	
 	public void setBiHuAgent(String biHuAgent) {
 		this.biHuAgent = biHuAgent;
-	}
-	
-	public Set<String> getInsurersDelete() {
-		return insurersDelete;
-	}
-	
-	public void setInsurersDelete(Set<String> insurersDelete) {
-		this.insurersDelete = insurersDelete;
-	}
-	
-	public Map<String, TenantInsurer> getInsurersInsert() {
-		return insurersInsert;
-	}
-	
-	public void setInsurersInsert(Map<String, TenantInsurer> insurersInsert) {
-		this.insurersInsert = insurersInsert;
-	}
-	
-	public Map<String, TenantInsurer> getInsurersUpdate() {
-		return insurersUpdate;
-	}
-	
-	public void setInsurersUpdate(Map<String, TenantInsurer> insurersUpdate) {
-		this.insurersUpdate = insurersUpdate;
 	}
 }

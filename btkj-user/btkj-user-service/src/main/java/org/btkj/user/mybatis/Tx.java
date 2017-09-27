@@ -146,13 +146,15 @@ public class Tx {
 					teamExploits.put(bs.get_id(), bs);
 				}
 				bs.setQuota(entry.getValue().getQuota());
-				bs.setRCQuota(entry.getValue().getRCQuota());
-				bs.setSCQuota(entry.getValue().getSCQuota());
+				bs.setSCCMQuota(entry.getValue().getSCCMQuota());
+				bs.setSCCPQuota(entry.getValue().getSCCPQuota());
+				bs.setRCCMQuota(entry.getValue().getRCCMQuota());
+				bs.setRCCPQuota(entry.getValue().getRCCPQuota());
 				bs.addPolicies(entry.getValue().getPolicies());
 				if ((tenant.getMod() & Mod.RC_CM.mark()) == Mod.RC_CM.mark())
 					bs.setCmRate(entry.getValue().getCmRate());
 				if ((tenant.getMod() & Mod.RC_CP.mark()) == Mod.RC_CP.mark())
-					bs.setCpRate(entry.getValue().getCmRate());
+					bs.setCpRate(entry.getValue().getCpRate());
 			}
 		}
 		return teamExploits;

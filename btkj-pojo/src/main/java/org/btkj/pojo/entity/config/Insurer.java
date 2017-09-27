@@ -9,6 +9,8 @@ public class Insurer implements UniqueModel<Integer> {
 	private int id;
 	private String name;
 	private String icon;
+	private boolean minor;
+	private int parentId;
 	private int biHuId;
 	private String leBaoBaId;
 	private int created;
@@ -36,6 +38,22 @@ public class Insurer implements UniqueModel<Integer> {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+	
+	public boolean isMinor() {
+		return minor;
+	}
+	
+	public void setMinor(boolean minor) {
+		this.minor = minor;
+	}
+	
+	public int getParentId() {
+		return parentId;
+	}
+	
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 	
 	public int getBiHuId() {

@@ -20,6 +20,7 @@ import org.btkj.pojo.entity.vehicle.BonusScaleConfig;
 import org.btkj.pojo.entity.vehicle.VehiclePolicy;
 import org.btkj.pojo.enums.ExploitType;
 import org.btkj.pojo.enums.InsuranceType;
+import org.btkj.pojo.enums.VehicleBonusType;
 import org.btkj.pojo.model.BonusScale;
 import org.btkj.pojo.param.EmployeeParam;
 import org.btkj.statistics.api.StatisticsService;
@@ -69,33 +70,36 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			List<LogExploit> exploits = new ArrayList<LogExploit>();
 			Map<Integer, BonusScale> map = new HashMap<Integer, BonusScale>();
 			for (VehiclePolicy policy : policies.values()) {
-				LogExploit exploit = _exploit(policy);
-				if (null == exploit)
+				LogExploit cm = _exploit(policy, InsuranceType.COMMERCIAL);
+				LogExploit cp = _exploit(policy, InsuranceType.COMPULSORY);
+				if (null == cm && null == cp)
 					continue;
-				exploits.add(exploit);
+				exploits.add(cm);
+				exploits.add(cp);
 				
-				BonusScale bs = map.get(exploit.getEmployeeId());
+				BonusScale bs = map.get(policy.getSalesmanId());
 				if (null == bs) {
 					bs = new BonusScale();
 					bs.addPolicy(policy.get_id());
-					bs.setEmployeeId(exploit.getEmployeeId());
-					map.put(exploit.getEmployeeId(), bs);
+					bs.setEmployeeId(policy.getSalesmanId());
+					map.put(policy.getSalesmanId(), bs);
 				}
-				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, true);			// 商业-统计口径
-				_recordScale(tenant, bs, policy, InsuranceType.COMMERCIAL, false);			// 商业-奖励孔径
-				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, true);			// 交强-统计口径	
-				_recordScale(tenant, bs, policy, InsuranceType.COMPULSORY, false);			// 交强-奖励口径
+				if (null != cm)
+					_recordScale(tenant, bs, cm, InsuranceType.COMMERCIAL);			// 商业
+				if (null != cp)
+					_recordScale(tenant, bs, cp, InsuranceType.COMPULSORY);			// 交强
 			}
 			if (!CollectionUtil.isEmpty(exploits)) {
 				exploits = statisticsService.recordLogExploits(exploits);
 				List<BonusScaleConfig> configs = vehicleManageService.bonusScaleConfigs(tenant.getTid());
 				for (BonusScale bs : map.values()) {
-					int SCQuota = bs.getSCQuota();
+					int SCQuota = bs.getSCCMQuota() + bs.getSCCPQuota();
 					for (BonusScaleConfig config : configs) {
 						String[] params = config.getComparableValue().split(Consts.SYMBOL_UNDERLINE);
 						if (!IntComparable.SINGLETON.compare(Comparison.match(config.getComparison()), SCQuota, CollectionUtil.toIntegerArray(params)))
 							continue;
 						bs.setCmRate(config.getRate());
+						bs.setCpRate(config.getRate());
 						break;
 					}
 				}
@@ -105,7 +109,7 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 		return Consts.RESULT.OK;
 	}
 	
-	private LogExploit _exploit(VehiclePolicy policy) {
+	private LogExploit _exploit(VehiclePolicy policy, InsuranceType type) {
 		switch (policy.getMark()) {
 		case NONE:
 		case NOT_EXIST:
@@ -114,13 +118,28 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 			return null;
 		default:
 			LogExploit exploit = new LogExploit();
+			
+			switch (type) {
+			case COMMERCIAL:
+				if (null == policy.getCommercialDetail() || 0 == policy.commercialQuotaInCent())
+					return null;
+				exploit.setType(ExploitType.VEHICLE_COMMERCIAL.mark());
+				exploit.setQuota(policy.commercialQuotaInCent());
+				break;
+			case COMPULSORY:
+				if (null == policy.getCompulsoryDetail() || 0 == policy.compulsoryQuotaInCent())
+					return null;
+				exploit.setType(ExploitType.VEHICLE_COMPULSORY.mark());
+				exploit.setQuota(policy.compulsoryQuotaInCent());
+				break;
+			default:
+				return null;
+			}
 			exploit.setTid(policy.getTid());
 			exploit.setAppId(policy.getAppId());
 			exploit.setEmployeeId(policy.getSalesmanId());
-			exploit.setType(ExploitType.VEHICLE.mark());
 			exploit.setDetailType(policy.getBonusType().mark());
 			exploit.setBizId(policy.get_id());
-			exploit.setQuota(policy.commercialQuotaInCent() + policy.compulsoryQuotaInCent());
 			exploit.setYear(DateUtil.year(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setMonth(DateUtil.month(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
 			exploit.setDay(DateUtil.dayOfMonth(DateUtil.TIMEZONE_GMT_8, Locale.CHINA, policy.getIssuanceTime()));
@@ -131,49 +150,73 @@ public class VEHICLE_REWARD_SCALE extends EmployeeAction<EmployeeParam> {
 		}
 	}
 	
-	private void _recordScale(Tenant tenant, BonusScale bs, VehiclePolicy policy, InsuranceType type, boolean statistic) {
-		int quota = type == InsuranceType.COMMERCIAL ? policy.commercialQuotaInCent() : policy.compulsoryQuotaInCent();
-		if (0 == quota)
-			return;
-		bs.setQuota(bs.getQuota() + quota);
-		int mod = 0;
-		switch (policy.getBonusType()) {
+	private void _recordScale(Tenant tenant, BonusScale bs, LogExploit exploit, InsuranceType type) {
+		bs.setQuota(bs.getQuota() + exploit.getQuota());
+		int smod = 0;
+		int rmod = 0;
+		switch (VehicleBonusType.match(exploit.getDetailType())) {
 		case PC:
-			if (type == InsuranceType.COMMERCIAL)
-				mod = statistic ? Mod.SC_PC.mark() | Mod.SC_CM.mark() : Mod.RC_PC.mark() | Mod.SC_CM.mark();
-			else 
-				mod = statistic ? Mod.SC_PC.mark() | Mod.SC_CP.mark() : Mod.RC_PC.mark() | Mod.SC_CP.mark();
+			if (type == InsuranceType.COMMERCIAL) {
+				smod = Mod.SC_PC.mark() | Mod.SC_CM.mark();
+				rmod = Mod.RC_PC.mark() | Mod.RC_CM.mark();
+			} else {
+				smod = Mod.SC_PC.mark() | Mod.SC_CP.mark();
+				rmod = Mod.RC_PC.mark() | Mod.RC_CP.mark();
+			}
 			break;
 		case PT:
-			if (type == InsuranceType.COMMERCIAL)
-				mod = statistic ? Mod.SC_PT.mark() | Mod.SC_CM.mark() : Mod.RC_PT.mark() | Mod.SC_CM.mark();
-			else 
-				mod = statistic ? Mod.SC_PT.mark() | Mod.SC_CP.mark() : Mod.RC_PT.mark() | Mod.SC_CP.mark();
+			if (type == InsuranceType.COMMERCIAL) {
+				smod = Mod.SC_PT.mark() | Mod.SC_CM.mark();
+				rmod = Mod.RC_PT.mark() | Mod.RC_CM.mark();
+			} else {
+				smod = Mod.SC_PT.mark() | Mod.SC_CP.mark();
+				rmod = Mod.RC_PT.mark() | Mod.RC_CP.mark();
+			}
 			break;
 		case NPC:
-			if (type == InsuranceType.COMMERCIAL)
-				mod = statistic ? Mod.SC_NPC.mark() | Mod.SC_CM.mark() : Mod.RC_NPC.mark() | Mod.SC_CM.mark();
-			else 
-				mod = statistic ? Mod.SC_NPC.mark() | Mod.SC_CP.mark() : Mod.RC_NPC.mark() | Mod.SC_CP.mark();
+			if (type == InsuranceType.COMMERCIAL) {
+				smod = Mod.SC_NPC.mark() | Mod.SC_CM.mark();
+				rmod = Mod.RC_NPC.mark() | Mod.RC_CM.mark();
+			} else {
+				smod = Mod.SC_NPC.mark() | Mod.SC_CP.mark();
+				rmod = Mod.RC_NPC.mark() | Mod.RC_CP.mark();
+			}
 			break;
 		case NPT:
-			if (type == InsuranceType.COMMERCIAL)
-				mod = statistic ? Mod.SC_NPT.mark() | Mod.SC_CM.mark() : Mod.RC_NPT.mark() | Mod.SC_CM.mark();
-			else 
-				mod = statistic ? Mod.SC_NPT.mark() | Mod.SC_CP.mark() : Mod.RC_NPT.mark() | Mod.SC_CP.mark();
+			if (type == InsuranceType.COMMERCIAL) {
+				smod = Mod.SC_NPT.mark() | Mod.SC_CM.mark();
+				rmod = Mod.RC_NPT.mark() | Mod.RC_CM.mark();
+			} else {
+				smod = Mod.SC_NPT.mark() | Mod.SC_CP.mark();
+				rmod = Mod.RC_NPT.mark() | Mod.RC_CP.mark();
+			}
 			break;
 		default:
-			if (type == InsuranceType.COMMERCIAL)
-				mod = statistic ? Mod.SC_OTHER.mark() | Mod.SC_CM.mark() : Mod.RC_OTHER.mark() | Mod.SC_CM.mark();
-			else 
-				mod = statistic ? Mod.SC_OTHER.mark() | Mod.SC_CP.mark() : Mod.RC_OTHER.mark() | Mod.SC_CP.mark();
+			if (type == InsuranceType.COMMERCIAL) {
+				smod = Mod.SC_OTHER.mark() | Mod.SC_CM.mark();
+				rmod = Mod.RC_OTHER.mark() | Mod.RC_CM.mark();
+			} else {
+				smod = Mod.SC_OTHER.mark() | Mod.SC_CP.mark();
+				rmod = Mod.RC_OTHER.mark() | Mod.RC_CP.mark();
+			}
 			break;
 		}
-		if ((tenant.getMod() & mod) != mod)
-			return;
-		if (statistic)
-			bs.setSCQuota(bs.getSCQuota() + quota);
-		else
-			bs.setRCQuota(bs.getRCQuota() + quota);
+		InsuranceType it = InsuranceType.match(exploit.getType());
+		switch (it) {
+		case COMMERCIAL:
+			if ((tenant.getMod() & smod) == smod) 
+				bs.setSCCMQuota(bs.getSCCMQuota() + exploit.getQuota());
+			if ((tenant.getMod() & rmod) == rmod)
+				bs.setRCCMQuota(bs.getSCCMQuota() + exploit.getQuota());
+			break;
+		case COMPULSORY:
+			if ((tenant.getMod() & smod) == smod) 
+				bs.setSCCPQuota(bs.getSCCMQuota() + exploit.getQuota());
+			if ((tenant.getMod() & rmod) == rmod)
+				bs.setRCCPQuota(bs.getSCCMQuota() + exploit.getQuota());
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package org.btkj.config.api;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public interface ConfigManageService {
 	 * 
 	 * @return
 	 */
-	List<Insurer> insurers();
+	Map<Integer, Insurer> insurers();
 	
 	/**
 	 * 险企编辑

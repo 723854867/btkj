@@ -1,9 +1,7 @@
 package org.btkj.config.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,37 +65,39 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	private ModularDocumentFactory modularDocumentFactory;
 
 	@Override
-	public List<Insurer> insurers() {
-		return new ArrayList<Insurer>(insurerMapper.getAll().values());
+	public Map<Integer, Insurer> insurers() {
+		return insurerMapper.getAll();
 	}
 	
 	@Override
 	public Result<Void> insurerEdit(InsurerEditParam param) {
 		switch (param.getCrudType()) {
 		case CREATE:
-			Insurer insurer = EntityGenerator.newInsurer(param);
-			try {
-				insurerMapper.insert(insurer);
-				return Consts.RESULT.OK;
-			} catch (DuplicateKeyException e) {
-				return Consts.RESULT.KEY_DUPLICATED;
+			if (param.isMinor()) {
+				if (null == param.getParentId())
+					return Consts.RESULT.FORBID;
+				Map<Integer, Insurer> insurers = insurerMapper.getAll();
+				Insurer parent = insurers.get(param.getParentId());
+				if (null == parent)
+					return BtkjConsts.RESULT.INSURER_NOT_EXIST;
 			}
+			Insurer insurer = EntityGenerator.newInsurer(param);
+			insurerMapper.insert(insurer);
+			return Consts.RESULT.OK;
 		case UPDATE:
 			insurer = insurerMapper.getByKey(param.getId());
 			if (null == insurer)
 				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
 			if (StringUtil.hasText(param.getName()))
 				insurer.setName(param.getName());
-			if (null != param.getBiHuId())
-				insurer.setBiHuId(param.getBiHuId());
-			if (null != param.getLeBaoBaId())
-				insurer.setLeBaoBaId(param.getLeBaoBaId());
-			insurer.setUpdated(DateUtil.currentTime());
-			try {
-				insurerMapper.update(insurer);
-			} catch (DuplicateKeyException e) {
-				return Consts.RESULT.KEY_DUPLICATED;
+			if (insurer.isMinor()) {
+				if (null != param.getBiHuId())
+					insurer.setBiHuId(param.getBiHuId());
+				if (null != param.getLeBaoBaId())
+					insurer.setLeBaoBaId(param.getLeBaoBaId());
+				insurer.setUpdated(DateUtil.currentTime());
 			}
+			insurerMapper.update(insurer);
 			return Consts.RESULT.OK;
 		default:
 			return Consts.RESULT.FORBID;

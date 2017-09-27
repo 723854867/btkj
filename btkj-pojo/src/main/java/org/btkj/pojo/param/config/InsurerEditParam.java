@@ -12,8 +12,7 @@ public class InsurerEditParam extends Param {
 
 	private static final long serialVersionUID = -2982522728695577267L;
 
-	@NotNull(groups = { ValidateGroups.CRUD.class })
-	@Power(groups = { ValidateGroups.CRUD.class })
+	@NotNull(groups = { ValidateGroups.UPDATE.class })
 	private Integer id;
 	@NotNull(groups = { ValidateGroups.CREATE.class })
 	@Size(min = BtkjConsts.LIMITS.NAME_MIN, max = BtkjConsts.LIMITS.NAME_MAX, groups = { ValidateGroups.CRUD.class })
@@ -21,6 +20,8 @@ public class InsurerEditParam extends Param {
 	@Power(groups = { ValidateGroups.CRUD.class })
 	private Integer biHuId;
 	private String leBaoBaId;
+	private boolean minor;
+	private Integer parentId;
 
 	public Integer getId() {
 		return id;
@@ -52,5 +53,21 @@ public class InsurerEditParam extends Param {
 
 	public void setLeBaoBaId(String leBaoBaId) {
 		this.leBaoBaId = leBaoBaId;
+	}
+	
+	public boolean isMinor() {
+		return minor;
+	}
+	
+	public void setMinor(boolean minor) {
+		this.minor = minor;
+	}
+	
+	public Integer getParentId() {
+		return parentId;
+	}
+	
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
 	}
 }
