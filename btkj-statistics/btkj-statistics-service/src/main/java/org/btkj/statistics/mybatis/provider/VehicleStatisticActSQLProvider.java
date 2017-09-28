@@ -13,17 +13,7 @@ public class VehicleStatisticActSQLProvider extends SQLProvider {
 		addNoUpdateCol("total");
 	}
 	
-	public String report_3_total(Report3Param param) {
-		String sql = _report_3_sql(param, true);
-		return new StringBuilder("SELECT COUNT(*) FROM(").append(sql).append(") t").toString();
-	}
-	
 	public String report_3(Report3Param param) {
-		String sql = _report_3_sql(param, false);
-		return new StringBuilder(sql).append(" LIMIT ").append(param.getStart()).append(",").append(param.getPageSize()).toString();	
-	}
-	
-	private String _report_3_sql(Report3Param param, boolean count) {
 		return new SQL() {
 			{
 				switch (param.getTimeType()) {

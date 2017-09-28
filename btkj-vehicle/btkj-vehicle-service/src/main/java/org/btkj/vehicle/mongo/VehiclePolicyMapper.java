@@ -66,14 +66,18 @@ public class VehiclePolicyMapper extends MongoMapper<String, VehiclePolicy> {
 			filters.add(Filters.eq(BtkjConsts.FIELD.TYPE, param.getType().name()));
 		if (null != param.getBonusType()) 
 			filters.add(Filters.eq(BtkjConsts.FIELD.BONUSTYPE, param.getBonusType().name()));
+		if (null != param.getBeginTime())
+			filters.add(Filters.gte("issuanceTime", param.getBeginTime()));
+		if (null != param.getEndTime())
+			filters.add(Filters.lte("issuanceTime", param.getEndTime()));
 		total = filters.isEmpty() ? mongo.count(collection) : mongo.count(collection, Filters.and(filters));
 		if (0 == total)
 			return Pager.EMPLTY;
 		param.calculate((int) total);
 		list = filters.isEmpty() ?
-				mongo.pagingAndSort(collection, Sorts.descending(BtkjConsts.FIELD.CREATED), 
+				mongo.pagingAndSort(collection, Sorts.descending("issuanceTime"), 
 							param.getStart(), param.getPageSize(), VehiclePolicy.class):
-				mongo.pagingAndSort(collection, Filters.and(filters), Sorts.descending(BtkjConsts.FIELD.CREATED),
+				mongo.pagingAndSort(collection, Filters.and(filters), Sorts.descending("issuanceTime"),
 							param.getStart(), param.getPageSize(), VehiclePolicy.class);
 		return new Pager<VehiclePolicy>(total, list);
 	}

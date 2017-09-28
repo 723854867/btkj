@@ -77,5 +77,5 @@ public interface StatisticsService {
 	
 	void quoteRecord(Employee employee, String vin, int usedType);
 	
-	Pager<Report_1_Info> report_3(Report3Param param);
+	List<Report_1_Info> report_3(Report3Param param);
 }

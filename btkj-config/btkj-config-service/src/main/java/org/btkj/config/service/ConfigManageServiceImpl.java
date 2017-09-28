@@ -90,7 +90,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 				return BtkjConsts.RESULT.INSURER_NOT_EXIST;
 			if (StringUtil.hasText(param.getName()))
 				insurer.setName(param.getName());
-			if (insurer.isMinor()) {
+			if (!insurer.isMinor()) {
 				if (null != param.getBiHuId())
 					insurer.setBiHuId(param.getBiHuId());
 				if (null != param.getLeBaoBaId())

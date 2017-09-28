@@ -135,39 +135,31 @@ public class StatisticsServiceImpl implements StatisticsService {
 	}
 	
 	@Override
-	public Pager<Report_1_Info> report_3(Report3Param param) {
+	public List<Report_1_Info> report_3(Report3Param param) {
 		Map<String, Report_1_Info> map = new HashMap<String, Report_1_Info>();
-		int total = vehicleStatisticActDao.report_3_total(param);
-		if (0 != total) {
-			param.calculate(total);
-			List<VehicleStatisticAct> list = vehicleStatisticActDao.report_3(param);
-			for (VehicleStatisticAct act : list) {
-				String key = StringUtil.underlineLink(act.getEmployeeId(), act.getYear(), act.getMonth(), act.getDay());
-				Report_1_Info info = map.get(key);
-				if (null == info) {
-					info = new Report_1_Info();
-					info.setUid(act.getUid());
-					info.setEmployeeId(act.getEmployeeId());
-					map.put(key, info);
-				}
-				info.addStatisticAct(act);
+		List<VehicleStatisticAct> list = vehicleStatisticActDao.report_3(param);
+		for (VehicleStatisticAct act : list) {
+			String key = StringUtil.underlineLink(act.getEmployeeId(), act.getYear(), act.getMonth(), act.getDay());
+			Report_1_Info info = map.get(key);
+			if (null == info) {
+				info = new Report_1_Info();
+				info.setUid(act.getUid());
+				info.setEmployeeId(act.getEmployeeId());
+				map.put(key, info);
 			}
+			info.addStatisticAct(act);
 		}
-		int total1 = statisticPolicyDao.report_3_total(param);
-		if (0 != total1) {
-			param.calculate(total1);
-			List<PolicyStatisticInfo> list = statisticPolicyDao.report_3(param);
-			for (PolicyStatisticInfo info : list) {
-				String key = StringUtil.underlineLink(info.getEmployeeId(), info.getYear(), info.getMonth(), info.getDay());
-				Report_1_Info temp = map.get(key);
-				if (null == temp) {
-					temp = new Report_1_Info();
-					temp.setEmployeeId(info.getEmployeeId());
-					map.put(key, temp);
-				}
-				temp.addStatisticPolicy(info);
+		List<PolicyStatisticInfo> list1 = statisticPolicyDao.report_3(param);
+		for (PolicyStatisticInfo info : list1) {
+			String key = StringUtil.underlineLink(info.getEmployeeId(), info.getYear(), info.getMonth(), info.getDay());
+			Report_1_Info temp = map.get(key);
+			if (null == temp) {
+				temp = new Report_1_Info();
+				temp.setEmployeeId(info.getEmployeeId());
+				map.put(key, temp);
 			}
+			temp.addStatisticPolicy(info);
 		}
-		return new Pager<Report_1_Info>(Math.max(total, total1), new ArrayList<Report_1_Info>(map.values()));
+		return new ArrayList<Report_1_Info>(map.values());
 	}
 }

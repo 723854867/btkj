@@ -28,6 +28,8 @@ public class VehiclePoliciesParam extends EmployeeParam {
 	private VehicleBonusType bonusType;		// 奖励类型
 	private Boolean transfer;				// 是否过户车
 	private PolicyNature nature;			// 转续保状态
+	private Integer beginTime;
+	private Integer endTime;
 	
 	public Integer getTid() {
 		return tid;
@@ -123,5 +125,21 @@ public class VehiclePoliciesParam extends EmployeeParam {
 
 	public void setNature(PolicyNature nature) {
 		this.nature = nature;
+	}
+	
+	public Integer getBeginTime() {
+		return beginTime;
+	}
+	
+	public void setBeginTime(Integer beginTime) {
+		this.beginTime = beginTime;
+	}
+	
+	public Integer getEndTime() {
+		return endTime;
+	}
+	
+	public void setEndTime(Integer endTime) {
+		this.endTime = endTime;
 	}
 }

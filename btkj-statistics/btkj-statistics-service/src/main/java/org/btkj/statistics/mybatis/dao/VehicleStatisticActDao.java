@@ -18,9 +18,6 @@ public interface VehicleStatisticActDao extends DBMapper<Long, VehicleStatisticA
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	void insert(VehicleStatisticAct model);
 	
-	@SelectProvider(type = VehicleStatisticActSQLProvider.class, method = "report_3_total")
-	int report_3_total(Report3Param param);
-	
 	@SelectProvider(type = VehicleStatisticActSQLProvider.class, method = "report_3")
 	List<VehicleStatisticAct> report_3(Report3Param param);
 

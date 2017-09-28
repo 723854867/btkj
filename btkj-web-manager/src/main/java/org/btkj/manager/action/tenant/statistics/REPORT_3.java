@@ -1,6 +1,7 @@
 package org.btkj.manager.action.tenant.statistics;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import org.btkj.pojo.entity.user.Employee;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.user.User;
 import org.btkj.pojo.info.statistics.Report_1_Info;
-import org.btkj.pojo.model.Pager;
 import org.btkj.pojo.param.statistics.Report3Param;
 import org.btkj.statistics.api.StatisticsService;
 import org.rapid.util.common.message.Result;
@@ -29,20 +29,20 @@ public class REPORT_3 extends EmployeeAction<Report3Param> {
 	private StatisticsService statisticsService;
 
 	@Override
-	protected Result<Pager<Report_1_Info>> execute(App app, User user, Tenant tenant, Employee employee, Report3Param param) {
+	protected Result<List<Report_1_Info>> execute(App app, User user, Tenant tenant, Employee employee, Report3Param param) {
 		param.setTid(tenant.getTid());
-		Pager<Report_1_Info> pager = statisticsService.report_3(param);
+		List<Report_1_Info> list = statisticsService.report_3(param);
 		Set<Integer> set = new HashSet<Integer>();
-		for (Report_1_Info info : pager.getList())
+		for (Report_1_Info info : list)
 			set.add(info.getUid());
 		if (!CollectionUtil.isEmpty(set)) {
 			Map<Integer, User> users = userService.users(set);
-			for (Report_1_Info info : pager.getList()) {
+			for (Report_1_Info info : list) {
 				User temp = users.get(info.getUid());
 				if (null != temp)
 					info.setName(temp.getName());
 			}
 		}
- 		return Result.result(pager);
+ 		return Result.result(list);
 	}
 }

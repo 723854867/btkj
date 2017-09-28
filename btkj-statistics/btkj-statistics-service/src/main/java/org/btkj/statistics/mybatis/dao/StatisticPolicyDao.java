@@ -28,9 +28,6 @@ public interface StatisticPolicyDao extends DBMapper<String, StatisticPolicy> {
 	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_2")
 	List<PolicyStatisticInfo> report_2(Report2Param param);
 	
-	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_3_total")
-	int report_3_total(Report3Param param);
-	
 	@SelectProvider(type = StatisticPolicySQLProvider.class, method = "report_3")
 	List<PolicyStatisticInfo> report_3(Report3Param param);
 }
