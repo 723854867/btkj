@@ -12,7 +12,6 @@ public class VehicleStatisticAct implements UniqueModel<Long> {
 	private int tid;
 	private int employeeId;
 	private int type;
-	private int usedType;
 	private int year;
 	private int month;
 	private int day;
@@ -70,14 +69,6 @@ public class VehicleStatisticAct implements UniqueModel<Long> {
 		this.type = type;
 	}
 	
-	public int getUsedType() {
-		return usedType;
-	}
-	
-	public void setUsedType(int usedType) {
-		this.usedType = usedType;
-	}
-
 	public int getYear() {
 		return year;
 	}

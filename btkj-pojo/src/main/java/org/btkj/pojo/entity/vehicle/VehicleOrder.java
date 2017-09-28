@@ -2,6 +2,7 @@ package org.btkj.pojo.entity.vehicle;
 
 import java.util.Set;
 
+import org.btkj.pojo.AliyunResourceUtil;
 import org.btkj.pojo.entity.config.Insurer;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Employee;
@@ -61,7 +62,7 @@ public class VehicleOrder implements UniqueModel<String> {
 		this.employeeId = employee.getId();
 		this.quoteGroup = param.getQuoteGroup();
 		this.insurerName = insurer.getName();
-		this.insurerIcon = insurer.getIcon();
+		this.insurerIcon = AliyunResourceUtil.btResource(insurer.getIcon());
 		this.insureGroup = param.getInsureGroup();
 		this.created = DateUtil.currentTime();
 		this.salesmanMobile = user.getMobile();

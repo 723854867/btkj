@@ -70,7 +70,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 	}
 	
 	@Override
-	public Result<Void> insurerEdit(InsurerEditParam param) {
+	public Result<?> insurerEdit(InsurerEditParam param) {
 		switch (param.getCrudType()) {
 		case CREATE:
 			if (param.isMinor()) {
@@ -83,7 +83,7 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 			}
 			Insurer insurer = EntityGenerator.newInsurer(param);
 			insurerMapper.insert(insurer);
-			return Consts.RESULT.OK;
+			return Result.result(Code.OK, insurer.getId());
 		case UPDATE:
 			insurer = insurerMapper.getByKey(param.getId());
 			if (null == insurer)

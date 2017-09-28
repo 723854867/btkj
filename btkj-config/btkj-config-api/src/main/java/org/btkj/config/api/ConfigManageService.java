@@ -29,7 +29,7 @@ public interface ConfigManageService {
 	 * @param param
 	 * @return
 	 */
-	Result<Void> insurerEdit(InsurerEditParam param);
+	Result<?> insurerEdit(InsurerEditParam param);
 	
 	/**
 	 * 获取所有地区配置信息

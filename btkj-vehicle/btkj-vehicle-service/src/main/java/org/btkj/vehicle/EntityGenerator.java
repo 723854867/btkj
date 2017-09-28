@@ -38,9 +38,10 @@ public class EntityGenerator {
 		temp.setInsurerId(insurer.getId());
 		temp.setJianJieId(jianJieId);
 		if (!insurer.isMinor()) {
-			if (null == lane)
+			if (0 == jianJieId && null == lane)
 				return null;
-			temp.setLane(lane.mark());
+			if (null != lane)
+				temp.setLane(lane.mark());
 		}
 		
 		int time = DateUtil.currentTime();

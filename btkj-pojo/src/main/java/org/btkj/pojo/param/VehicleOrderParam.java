@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,10 +31,9 @@ public class VehicleOrderParam extends EmployeeParam {
 
 	private static final long serialVersionUID = 5252138275575928498L;
 
-	@Size(min = 1)
 	@NotNull
+	@Size(min = 1)
 	private Set<Integer> quoteGroup;						// 报价险企模值
-	@Min(0)
 	private Set<Integer> insureGroup;						// 核保险企模值
 	
 	@CarLicense

@@ -1,15 +1,11 @@
 package org.btkj.master.pojo.info;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import org.btkj.pojo.entity.config.Region;
 import org.btkj.pojo.entity.user.App;
 import org.btkj.pojo.entity.user.Tenant;
 import org.btkj.pojo.entity.vehicle.TenantInsurer;
-import org.rapid.util.lang.CollectionUtil;
 
 public class TenantInfo implements Serializable {
 
@@ -35,9 +31,8 @@ public class TenantInfo implements Serializable {
 	private String leBaoBaPassword;
 	private int expire;
 	private int created;
-	private List<Insurer> insurers;
 	
-	public TenantInfo(Tenant tenant, App app, Region region, Map<String, TenantInsurer> tinsurers, Map<Integer, org.btkj.pojo.entity.config.Insurer> insurers) {
+	public TenantInfo(Tenant tenant, App app, Region region) {
 		this.tid = tenant.getTid();
 		this.name = tenant.getName();
 		this.contacts = tenant.getContacts();
@@ -58,11 +53,6 @@ public class TenantInfo implements Serializable {
 		this.biHuKey = tenant.getBiHuKey();
 		this.leBaoBaUsername = tenant.getLeBaoBaUsername();
 		this.leBaoBaPassword = tenant.getLeBaoBaPassword();
-		if (!CollectionUtil.isEmpty(tinsurers)) {
-			this.insurers = new ArrayList<Insurer>();
-			for (TenantInsurer tinsurer : tinsurers.values()) 
-				this.insurers.add(new Insurer(tinsurer, insurers.get(tinsurer.getInsurerId())));
-		}
 	}
 
 	public int getTid() {
@@ -207,14 +197,6 @@ public class TenantInfo implements Serializable {
 
 	public void setCreated(int created) {
 		this.created = created;
-	}
-	
-	public List<Insurer> getInsurers() {
-		return insurers;
-	}
-	
-	public void setInsurers(List<Insurer> insurers) {
-		this.insurers = insurers;
 	}
 	
 	private class Insurer implements Serializable {

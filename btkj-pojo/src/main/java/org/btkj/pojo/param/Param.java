@@ -20,7 +20,7 @@ public class Param implements Serializable {
 	@Min(1)
 	private int page = 1;
 	@Min(1)
-	@Max(50)
+	@Max(1000)
 	private int pageSize = 10;
 	private int start;
 	private int total;

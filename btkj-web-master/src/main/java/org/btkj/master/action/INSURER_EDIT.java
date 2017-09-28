@@ -19,7 +19,7 @@ public class INSURER_EDIT extends AdminAction<InsurerEditParam> {
 	}
 
 	@Override
-	protected Result<Void> execute(Admin admin, InsurerEditParam param) {
+	protected Result<?> execute(Admin admin, InsurerEditParam param) {
 		return configManageService.insurerEdit(param);
 	}
 }

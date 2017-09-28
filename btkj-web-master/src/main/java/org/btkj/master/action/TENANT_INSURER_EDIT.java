@@ -9,6 +9,7 @@ import org.btkj.pojo.param.vehicle.TenantInsurerEditParam;
 import org.btkj.user.api.TenantService;
 import org.btkj.vehicle.api.VehicleService;
 import org.btkj.web.util.action.AdminAction;
+import org.rapid.util.common.enums.CrudType;
 import org.rapid.util.common.message.Result;
 
 public class TENANT_INSURER_EDIT extends AdminAction<TenantInsurerEditParam> {
@@ -17,6 +18,10 @@ public class TENANT_INSURER_EDIT extends AdminAction<TenantInsurerEditParam> {
 	private TenantService tenantService;
 	@Resource
 	private VehicleService vehicleService;
+	
+	public TENANT_INSURER_EDIT() {
+		super(CrudType.CREATE, CrudType.UPDATE, CrudType.DELETE);
+	}
 
 	@Override
 	protected Result<Void> execute(Admin admin, TenantInsurerEditParam param) {

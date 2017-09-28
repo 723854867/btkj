@@ -10,6 +10,7 @@ public class VehicleStatisticActSQLProvider extends SQLProvider {
 
 	public VehicleStatisticActSQLProvider() {
 		super(TABLE, "id");
+		addNoUpdateCol("total");
 	}
 	
 	public String report_3_total(Report3Param param) {

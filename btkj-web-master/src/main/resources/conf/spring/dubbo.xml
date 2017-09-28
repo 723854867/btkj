@@ -26,5 +26,6 @@
 	
 	<dubbo:reference id="nonAutoService" interface="org.btkj.nonauto.api.NonAutoService" />
 	
+	<dubbo:reference id="vehicleService" interface="org.btkj.vehicle.api.VehicleService" /> 
 	<dubbo:reference id="vehicleManageService" interface="org.btkj.vehicle.api.VehicleManageService" /> 
 </beans>

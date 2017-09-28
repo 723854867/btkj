@@ -31,6 +31,8 @@ public class UPLOAD_INSURER_ICON extends AdminAction<UploadInsurerIconParam> {
 		Insurer insurer = configService.insurer(param.getId());
 		if (null == insurer)
 			return BtkjConsts.RESULT.INSURER_NOT_EXIST;
+		if (insurer.isMinor())
+			return Consts.RESULT.FORBID;
 		String suffix = AliyunResourceUtil.pngResource();
 		String icon = AliyunResourceUtil.btResourceKey(suffix);
 		if (!aliyunUploader.upload(icon, param.getIcon()))
