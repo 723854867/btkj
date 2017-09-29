@@ -113,6 +113,8 @@ public enum BtkjCode implements ICode {
 	USER_SEALED(535, "当前用户已被禁用"),
 	TENANT_SEALED(536, "当前商户已被禁用"),
 	EMPLOYEE_SEALED(537, "当前员工已被禁用"),
+	APPLY_NOT_EXIST(538, "申请不存在"),
+
 	
 	/**
 	 * 地区不存在

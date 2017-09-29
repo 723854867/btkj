@@ -10,7 +10,26 @@ public class VehicleStatisticActSQLProvider extends SQLProvider {
 
 	public VehicleStatisticActSQLProvider() {
 		super(TABLE, "id");
-		addNoUpdateCol("total");
+	}
+	
+	@Override
+	public String insert(Object entity) {
+		return new SQL() {
+			{
+				INSERT_INTO(table);
+				VALUES("app_id", "#{appId}");
+				VALUES("uid", "#{uid}");
+				VALUES("tid", "#{tid}");
+				VALUES("employee_id", "#{employeeId}");
+				VALUES("type", "#{type}");
+				VALUES("year", "#{year}");
+				VALUES("month", "#{month}");
+				VALUES("day", "#{day}");
+				VALUES("week", "#{week}");
+				VALUES("season", "#{season}");
+				VALUES("created", "#{created}");
+			}
+		}.toString();
 	}
 	
 	public String report_3(Report3Param param) {

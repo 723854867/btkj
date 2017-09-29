@@ -192,7 +192,7 @@ public class UserManageServiceImpl implements UserManageService {
 	public Result<EmployeeTip> applyAudit(int tid, int uid, boolean reject) {
 		ApplyInfo info = applyMapper.getAndDel(tid, uid);
 		if (null == info)
-			return Result.result(BtkjCode.APPLY_EXIST);
+			return Result.result(BtkjCode.APPLY_NOT_EXIST);
 		if (reject) // 拒绝申请直接返回即可
 			return Result.success();
 		Employee employee = tx.employeeAdd(tid, uid, info.getChief());
