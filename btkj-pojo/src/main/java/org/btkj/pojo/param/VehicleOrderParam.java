@@ -60,8 +60,11 @@ public class VehicleOrderParam extends EmployeeParam {
 	private String vehicleId;								// 乐保吧车型ID(如果有该ID，那么车辆信息肯定是齐全的)
 	
 	// 下面这些参数如果不为null则以传递的为准，如果为 null，则以 vehicleId 读取出来的车型为准
+	@NotNull
 	private Integer seat;									// 座位数
+	@NotNull
 	private Integer year;									// 年款
+	@NotNull
 	private String name;									// 厂牌型号
 	@Numeric
 	private String price;									// 价格(含税)
@@ -291,16 +294,22 @@ public class VehicleOrderParam extends EmployeeParam {
 	
 	public void bindVehicleInfo(VehicleInfo vehicleInfo) { 
 		this.vehicleId = vehicleInfo.getId();
-		this.seat = vehicleInfo.getSeat();
-		this.year = vehicleInfo.getYear();
-		if (null != vehicleInfo.getPrice())
+		if (null == this.seat)
+			this.seat = vehicleInfo.getSeat();
+		if (null == this.year)
+			this.year = vehicleInfo.getYear();
+		if (null == vehicleInfo.getPrice())
 			this.price = vehicleInfo.getPrice();
-		if (null != vehicleInfo.getPriceNoTax())
+		if (null == vehicleInfo.getPriceNoTax())
 			this.priceNoTax = vehicleInfo.getPriceNoTax();
-		this.name = vehicleInfo.getName();
-		this.transmissionName = vehicleInfo.getTransmissionName();
-		this.load = vehicleInfo.getLoad();
-		this.exhaust = vehicleInfo.getExhaust();
+		if (null == this.name)
+			this.name = vehicleInfo.getName();
+		if (null == this.transmissionName)
+			this.transmissionName = vehicleInfo.getTransmissionName();
+		if (null == this.load)
+			this.load = vehicleInfo.getLoad();
+		if (null == exhaust)
+			this.exhaust = vehicleInfo.getExhaust();
 	}
 	
 	public class Unit implements Serializable {

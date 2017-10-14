@@ -3,6 +3,7 @@ package org.btkj.vehicle.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -217,6 +218,20 @@ public class VehicleServiceImpl implements VehicleService {
 		if (CollectionUtil.isEmpty(vehicleInfos)) {
 			logger.warn("车架号 - {} 获取不到乐保吧车型");
 			return null;
+		}
+		if (StringUtil.hasText(param.getEnrollDate())) {
+			int pyear = Integer.valueOf(String.valueOf(param.getYear()).substring(0, 4));
+			Iterator<VehicleInfo> iterator = vehicleInfos.iterator();
+			while (iterator.hasNext()) {
+				VehicleInfo temp = iterator.next();
+				if (temp.getYear() == 0 || temp.getYear() > pyear) {
+					iterator.remove();
+					continue;
+				}
+				int oyear = Integer.valueOf(String.valueOf(temp.getYear()).substring(0, 4));
+				if (oyear > pyear)
+					iterator.remove();
+			}
 		}
 		VehicleInfo vehicleInfo = null;
 		if (StringUtil.hasText(param.getVehicleId())) {				// 指定了乐保吧ID

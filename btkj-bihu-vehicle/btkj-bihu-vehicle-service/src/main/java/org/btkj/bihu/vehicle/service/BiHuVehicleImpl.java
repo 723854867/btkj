@@ -17,6 +17,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.btkj.bihu.vehicle.api.BiHuVehicle;
 import org.btkj.bihu.vehicle.domain.BiHuParams;
 import org.btkj.bihu.vehicle.domain.BiHuVehicleInfo;
+import org.btkj.bihu.vehicle.domain.BiHuVehicleInfo.Item;
 import org.btkj.bihu.vehicle.domain.InsureResult;
 import org.btkj.bihu.vehicle.domain.QuoteResp;
 import org.btkj.bihu.vehicle.domain.QuoteResult;
@@ -122,8 +123,11 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 			Renewal renewal = info.toRenewal();
 			if (null != renewal.getTips() && StringUtil.hasText(renewal.getTips().getName())) {
 				BiHuVehicleInfo vehicleInfo = _vehicleInfo(params, renewal.getTips().getName(), licenseType);
-				if (null != vehicleInfo)
-					renewal.getTips().setTransmissionName(vehicleInfo.searchAlia(renewal.getTips().getBiHuJYId()));
+				if (null != vehicleInfo) {
+					Item item = vehicleInfo.match(renewal.getTips().getBiHuJYId());
+					renewal.getTips().setTransmissionName(item.getVehicleAlias());
+					renewal.getTips().setYear(Integer.valueOf(item.getVehicleYear()));
+				}
 			}
 			return status == 3 ? Result.result(BtkjCode.RENEW_INFO_VEHICLE_ONLY, renewal) : Result.result(renewal);
 		} catch (IOException e) {
@@ -249,7 +253,7 @@ public class BiHuVehicleImpl implements BiHuVehicle {
 		params.setLicenseNo(param.getLicense());
 		params.setEngineNo(param.getEngine());
 		params.setCarVin(param.getVin());
-		params.setRegisterDate(DateUtil.convert(param.getEnrollDate(), DateUtil.YYYY_MM_DD_HH_MM_SS, DateUtil.YYYY_MM_DD, DateUtil.TIMEZONE_GMT_8));
+		params.setRegisterDate(param.getEnrollDate());
 		params.setMoldName(param.getName());
 		if (null != param.getIssueDate())
 			params.setTransferDate(param.getIssueDate());

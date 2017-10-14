@@ -283,16 +283,4 @@ public class VehiclePolicyTips implements Serializable {
 	public void setSchema(PolicySchema schema) {
 		this.schema = schema;
 	}
-
-	public void bind(VehicleInfo vehicleInfo) {
-		this.seat = vehicleInfo.getSeat();
-		this.year = vehicleInfo.getYear();
-		this.name = vehicleInfo.getName();
-		this.price = vehicleInfo.getPrice();
-		this.priceNoTax = vehicleInfo.getPriceNoTax();
-		this.load = vehicleInfo.getLoad();
-		this.exhaust = vehicleInfo.getExhaust();
-		this.transmissionName = vehicleInfo.getTransmissionName();
-		this.vehicleId = vehicleInfo.getId();
-	}
 }

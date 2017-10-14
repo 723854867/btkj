@@ -1,7 +1,6 @@
 package org.btkj.courier.service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -22,6 +21,7 @@ import org.btkj.courier.api.JianJieService;
 import org.btkj.courier.pojo.JianJieResp;
 import org.btkj.courier.pojo.JianJieUser;
 import org.btkj.pojo.info.JianJiePoliciesInfo;
+import org.rapid.util.common.Consts;
 import org.rapid.util.common.serializer.SerializeUtil;
 import org.rapid.util.lang.DateUtil;
 import org.rapid.util.net.http.HttpProxy;
@@ -54,8 +54,10 @@ public class JianJieServiceImpl implements JianJieService {
 			uriBuilder.addParameter("Sign", _userAddSign(timestamp));
 			URI uri = uriBuilder.build();
 			HttpPost request = new HttpPost(uri);
-			request.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE);
-			request.setEntity(new StringEntity(SerializeUtil.JsonUtil.GSON.toJson(new JianJieUser(name, identity, employeeId))));
+			request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
+			StringEntity content = new StringEntity(SerializeUtil.JsonUtil.GSON.toJson(new JianJieUser(name, identity, employeeId)), Consts.UTF_8);
+			content.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+			request.setEntity(content);
 			httpProxy.asyncRequest(request, new AsyncRespHandler() {
 				@Override
 				public void cancelled() {
@@ -90,7 +92,7 @@ public class JianJieServiceImpl implements JianJieService {
 					}
 				}
 			});
-		} catch (URISyntaxException | UnsupportedEncodingException e) {
+		} catch (URISyntaxException e) {
 			logger.error("简捷业务员添加失败！", e);
 			return;
 		}

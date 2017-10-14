@@ -39,7 +39,7 @@ public class BiHuVehicleInfo {
 		Items = items;
 	}
 	
-	public String searchAlia(String biHuJYId) { 
+	public Item match(String biHuJYId) { 
 		if (CollectionUtil.isEmpty(Items))
 			return null;
 		if (StringUtil.hasText(biHuJYId)) {
@@ -47,31 +47,31 @@ public class BiHuVehicleInfo {
 				if (!StringUtil.hasText(item.VehicleNo))
 					continue;
 				if (item.VehicleNo.equals(biHuJYId))
-					return item.VehicleAlias;
+					return item;
 			}
 		} 
 		BigDecimal price = null;
-		String alias = null;
+		Item result = null;
 		for (Item item : Items) {
 			if (!StringUtil.hasText(item.PurchasePrice) && StringUtil.hasText(item.VehicleAlias)) {
 				price = new BigDecimal("0");
-				alias = item.VehicleAlias;
+				result = item;
 			}
 			if (null == price) {
 				price = new BigDecimal(item.PurchasePrice);
-				alias = item.VehicleAlias;
+				result = item;
 			} else {
 				BigDecimal temp = new BigDecimal(item.PurchasePrice);
 				if (price.compareTo(temp) > 0) {
 					price = temp;
-					alias = item.VehicleAlias;
+					result = item;
 				}
 			}
 		}
-		return alias;
+		return result;
 	}
 
-	private class Item {
+	public static class Item {
 		private String VehicleNo;
 		private String PurchasePrice;
 		private String VehicleAlias;

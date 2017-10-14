@@ -102,7 +102,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.THIRD, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.THIRD_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("车辆损失") || name.contains("车损失") && !name.contains("三方") && !name.contains("特约")) {
 				if (_isDeductible(name))
@@ -110,7 +110,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.DAMAGE, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.DAMAGE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("司机") || name.contains("驾驶员") || name.contains("驾驶人")) {
 				if (_isDeductible(name))
@@ -118,7 +118,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.DRIVER, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.DRIVER_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("乘客")) {
 				if (_isDeductible(name))
@@ -126,7 +126,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.PASSENGER, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.PASSENGER_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("盗抢")) {
 				if (_isDeductible(name))
@@ -134,7 +134,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.ROBBERY, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.ROBBERY_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("玻璃")) 
 				map.put(CommercialInsuranceType.GLASS, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
@@ -144,7 +144,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.AUTO_FIRE, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.AUTO_FIRE_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("划痕")) {
 				if (_isDeductible(name))
@@ -152,7 +152,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.SCRATCH, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.SCRATCH_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			} else if (name.contains("无法")) 
 				map.put(CommercialInsuranceType.UNKNOWN_THIRD, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
@@ -162,7 +162,7 @@ public class VehicleUtil {
 				else {
 					map.put(CommercialInsuranceType.WADDING, new org.btkj.pojo.model.Insurance(temp.getBe(), temp.getBf()));
 					if (null != temp.getMpBf() && Double.valueOf(temp.getMpBf()) != 0) 
-						map.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getBf()));
+						map.put(CommercialInsuranceType.WADDING_DEDUCTIBLE, new org.btkj.pojo.model.Insurance("1", temp.getMpBf()));
 				}
 			}
 		}
